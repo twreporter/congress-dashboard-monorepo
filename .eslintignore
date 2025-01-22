@@ -1,0 +1,7 @@
+node_modules
+migrations
+public
+.keystone
+.git
+schema.graphql
+schema.prisma
