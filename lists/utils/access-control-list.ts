@@ -1,21 +1,19 @@
 import envVars from '../../environment-variables'
+import { BaseListTypeInfo, ListOperationAccessControl } from '@keystone-6/core/types'
 
-type Session = {
-  data: {
-    name: string
-    email: string
-    role: string
-  }
-}
 
 export const RoleEnum = {
   Owner: 'owner',
   Admin: 'admin',
   Editor: 'editor',
-}
+} as const
 
-export const allowRoles = (roles: string[]) => {
-  return ({ session }: { session: Session }) => {
+type AccessOperation = 'query' | 'create' | 'update' | 'delete'
+
+export const allowRoles = <Operation extends AccessOperation>(
+  roles: string[]
+): ListOperationAccessControl<Operation, BaseListTypeInfo> => 
+  ({ session }) => {
     if (envVars.nodeEnv === 'test') {
       return true
     }
@@ -23,12 +21,10 @@ export const allowRoles = (roles: string[]) => {
     if (!Array.isArray(roles)) {
       return false
     }
-    return Boolean(roles.indexOf(session?.data.role) > -1)
+    return Boolean(roles.indexOf(session?.data?.role) > -1)
   }
-}
 
 export const allowAllRoles = () => {
-  // Preview is not included in the list because it should not have access to the CMS
   const roles = [
     RoleEnum.Owner,
     RoleEnum.Admin,
@@ -37,11 +33,12 @@ export const allowAllRoles = () => {
   return allowRoles(roles)
 }
 
-export const denyRoles = (roles: string[]) => {
-  return ({ session }: { session: Session }) => {
+export const denyRoles = <Operation extends AccessOperation>(
+  roles: string[]
+): ListOperationAccessControl<Operation, BaseListTypeInfo> => 
+  ({ session }) => {
     if (!Array.isArray(roles)) {
       return true
     }
-    return roles.indexOf(session?.data.role) === -1
+    return roles.indexOf(session?.data?.role) === -1
   }
-}
