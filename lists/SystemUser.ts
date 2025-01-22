@@ -4,7 +4,6 @@ import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
-  denyRoles,
 } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 
@@ -47,9 +46,13 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT,
   },
   ui: {
-    isHidden: denyRoles([RoleEnum.Owner, RoleEnum.Admin]),
-    hideCreate: denyRoles([RoleEnum.Owner, RoleEnum.Admin]),
-    hideDelete: denyRoles([RoleEnum.Owner, RoleEnum.Admin]),
+    isHidden: ({session}) => {
+      if ([RoleEnum.Owner, RoleEnum.Admin].indexOf(session?.data.role) > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
     listView: {
       initialColumns: ['name', 'role'],
     },
