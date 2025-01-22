@@ -192,6 +192,72 @@ input PhotoCreateInput {
   updatedAt: DateTime
 }
 
+type Party {
+  id: ID!
+  name: String
+  slug: String
+  image: Photo
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PartyWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input PartyWhereInput {
+  AND: [PartyWhereInput!]
+  OR: [PartyWhereInput!]
+  NOT: [PartyWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  image: PhotoWhereInput
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PartyOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PartyUpdateInput {
+  name: String
+  slug: String
+  image: PhotoRelateToOneForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PhotoRelateToOneForUpdateInput {
+  create: PhotoCreateInput
+  connect: PhotoWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PartyUpdateArgs {
+  where: PartyWhereUniqueInput!
+  data: PartyUpdateInput!
+}
+
+input PartyCreateInput {
+  name: String
+  slug: String
+  image: PhotoRelateToOneForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PhotoRelateToOneForCreateInput {
+  create: PhotoCreateInput
+  connect: PhotoWhereUniqueInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -210,6 +276,12 @@ type Mutation {
   updatePhotos(data: [PhotoUpdateArgs!]!): [Photo]
   deletePhoto(where: PhotoWhereUniqueInput!): Photo
   deletePhotos(where: [PhotoWhereUniqueInput!]!): [Photo]
+  createParty(data: PartyCreateInput!): Party
+  createParties(data: [PartyCreateInput!]!): [Party]
+  updateParty(where: PartyWhereUniqueInput!, data: PartyUpdateInput!): Party
+  updateParties(data: [PartyUpdateArgs!]!): [Party]
+  deleteParty(where: PartyWhereUniqueInput!): Party
+  deleteParties(where: [PartyWhereUniqueInput!]!): [Party]
   endSession: Boolean!
   authenticateSystemUserWithPassword(email: String!, password: String!): SystemUserAuthenticationWithPasswordResult
   createInitialSystemUser(data: CreateInitialSystemUserInput!): SystemUserAuthenticationWithPasswordSuccess!
@@ -240,6 +312,9 @@ type Query {
   photo(where: PhotoWhereUniqueInput!): Photo
   photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int
+  party(where: PartyWhereUniqueInput!): Party
+  parties(where: PartyWhereInput! = {}, orderBy: [PartyOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PartyWhereUniqueInput): [Party!]
+  partiesCount(where: PartyWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

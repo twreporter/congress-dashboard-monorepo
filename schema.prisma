@@ -31,6 +31,19 @@ model Photo {
   imageFile_extension String?
   createdAt           DateTime? @default(now())
   updatedAt           DateTime? @updatedAt
+  from_Party_image    Party[]   @relation("Party_image")
 
   @@index([name])
+}
+
+model Party {
+  id        Int       @id @default(autoincrement())
+  name      String    @default("")
+  slug      String    @unique @default("")
+  image     Photo?    @relation("Party_image", fields: [imageId], references: [id])
+  imageId   Int?      @map("image")
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([imageId])
 }

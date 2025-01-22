@@ -48,9 +48,9 @@ const listConfigurations = list({
   ui: {
     isHidden: ({ session }) => {
       if ([RoleEnum.Owner, RoleEnum.Admin].indexOf(session?.data.role) > -1) {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     listView: {
