@@ -37,12 +37,26 @@ model Photo {
 }
 
 model LegislativeMeeting {
-  id        Int       @id @default(autoincrement())
-  term      Int
-  startTime DateTime  @mysql.Date
-  endTime   DateTime  @mysql.Date
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id                                                Int                         @id @default(autoincrement())
+  term                                              Int
+  startTime                                         DateTime                    @mysql.Date
+  endTime                                           DateTime                    @mysql.Date
+  createdAt                                         DateTime?                   @default(now())
+  updatedAt                                         DateTime?                   @updatedAt
+  from_LegislativeMeetingSession_legislativeMeeting LegislativeMeetingSession[] @relation("LegislativeMeetingSession_legislativeMeeting")
+}
+
+model LegislativeMeetingSession {
+  id                   Int                 @id @default(autoincrement())
+  legislativeMeeting   LegislativeMeeting? @relation("LegislativeMeetingSession_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
+  legislativeMeetingId Int?                @map("legislativeMeeting")
+  term                 Int
+  startTime            DateTime            @mysql.Date
+  endTime              DateTime            @mysql.Date
+  createdAt            DateTime?           @default(now())
+  updatedAt            DateTime?           @updatedAt
+
+  @@index([legislativeMeetingId])
 }
 
 model Party {

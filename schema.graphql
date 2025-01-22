@@ -271,6 +271,76 @@ input LegislativeMeetingCreateInput {
   updatedAt: DateTime
 }
 
+type LegislativeMeetingSession {
+  id: ID!
+  legislativeMeeting: LegislativeMeeting
+  term: Int
+  startTime: CalendarDay
+  endTime: CalendarDay
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislativeMeetingSessionWhereUniqueInput {
+  id: ID
+}
+
+input LegislativeMeetingSessionWhereInput {
+  AND: [LegislativeMeetingSessionWhereInput!]
+  OR: [LegislativeMeetingSessionWhereInput!]
+  NOT: [LegislativeMeetingSessionWhereInput!]
+  id: IDFilter
+  legislativeMeeting: LegislativeMeetingWhereInput
+  term: IntFilter
+  startTime: CalendarDayFilter
+  endTime: CalendarDayFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input LegislativeMeetingSessionOrderByInput {
+  id: OrderDirection
+  term: OrderDirection
+  startTime: OrderDirection
+  endTime: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input LegislativeMeetingSessionUpdateInput {
+  legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  term: Int
+  startTime: CalendarDay
+  endTime: CalendarDay
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislativeMeetingRelateToOneForUpdateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislativeMeetingSessionUpdateArgs {
+  where: LegislativeMeetingSessionWhereUniqueInput!
+  data: LegislativeMeetingSessionUpdateInput!
+}
+
+input LegislativeMeetingSessionCreateInput {
+  legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  term: Int
+  startTime: CalendarDay
+  endTime: CalendarDay
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislativeMeetingRelateToOneForCreateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+}
+
 type Party {
   id: ID!
   name: String
@@ -361,6 +431,12 @@ type Mutation {
   updateLegislativeMeetings(data: [LegislativeMeetingUpdateArgs!]!): [LegislativeMeeting]
   deleteLegislativeMeeting(where: LegislativeMeetingWhereUniqueInput!): LegislativeMeeting
   deleteLegislativeMeetings(where: [LegislativeMeetingWhereUniqueInput!]!): [LegislativeMeeting]
+  createLegislativeMeetingSession(data: LegislativeMeetingSessionCreateInput!): LegislativeMeetingSession
+  createLegislativeMeetingSessions(data: [LegislativeMeetingSessionCreateInput!]!): [LegislativeMeetingSession]
+  updateLegislativeMeetingSession(where: LegislativeMeetingSessionWhereUniqueInput!, data: LegislativeMeetingSessionUpdateInput!): LegislativeMeetingSession
+  updateLegislativeMeetingSessions(data: [LegislativeMeetingSessionUpdateArgs!]!): [LegislativeMeetingSession]
+  deleteLegislativeMeetingSession(where: LegislativeMeetingSessionWhereUniqueInput!): LegislativeMeetingSession
+  deleteLegislativeMeetingSessions(where: [LegislativeMeetingSessionWhereUniqueInput!]!): [LegislativeMeetingSession]
   createParty(data: PartyCreateInput!): Party
   createParties(data: [PartyCreateInput!]!): [Party]
   updateParty(where: PartyWhereUniqueInput!, data: PartyUpdateInput!): Party
@@ -400,6 +476,9 @@ type Query {
   legislativeMeeting(where: LegislativeMeetingWhereUniqueInput!): LegislativeMeeting
   legislativeMeetings(where: LegislativeMeetingWhereInput! = {}, orderBy: [LegislativeMeetingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingWhereUniqueInput): [LegislativeMeeting!]
   legislativeMeetingsCount(where: LegislativeMeetingWhereInput! = {}): Int
+  legislativeMeetingSession(where: LegislativeMeetingSessionWhereUniqueInput!): LegislativeMeetingSession
+  legislativeMeetingSessions(where: LegislativeMeetingSessionWhereInput! = {}, orderBy: [LegislativeMeetingSessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingSessionWhereUniqueInput): [LegislativeMeetingSession!]
+  legislativeMeetingSessionsCount(where: LegislativeMeetingSessionWhereInput! = {}): Int
   party(where: PartyWhereUniqueInput!): Party
   parties(where: PartyWhereInput! = {}, orderBy: [PartyOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PartyWhereUniqueInput): [Party!]
   partiesCount(where: PartyWhereInput! = {}): Int
