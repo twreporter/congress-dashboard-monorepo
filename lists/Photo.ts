@@ -1,10 +1,7 @@
 import { list } from '@keystone-6/core'
 import { image, text } from '@keystone-6/core/fields'
-import {
-  allowAllRoles,
-} from './utils/access-control-list'
+import { allowAllRoles } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
-
 
 const listConfigurations = list({
   fields: {

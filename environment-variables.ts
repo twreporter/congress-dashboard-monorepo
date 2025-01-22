@@ -11,7 +11,8 @@ const {
 const environmentVariables = {
   nodeEnv: NODE_ENV || 'development', // value could be 'development', 'production' or 'test'
   database: {
-    url: DATABASE_URL || 'mysql://root:password@localhost:3306/congress-dashboard',
+    url:
+      DATABASE_URL || 'mysql://root:password@localhost:3306/congress-dashboard',
   },
   gcs: {
     origin: GCS_ORIGIN || 'http://localhost:3000',

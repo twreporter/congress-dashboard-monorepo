@@ -46,7 +46,7 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT,
   },
   ui: {
-    isHidden: ({session}) => {
+    isHidden: ({ session }) => {
       if ([RoleEnum.Owner, RoleEnum.Admin].indexOf(session?.data.role) > -1) {
         return true
       } else {

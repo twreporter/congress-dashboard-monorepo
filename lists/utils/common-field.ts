@@ -1,7 +1,4 @@
-import {
-  text,
-  timestamp,
-} from '@keystone-6/core/fields'
+import { text, timestamp } from '@keystone-6/core/fields'
 
 export const SLUG = text({
   validation: {
