@@ -192,6 +192,72 @@ input PhotoCreateInput {
   updatedAt: DateTime
 }
 
+type Legislator {
+  id: ID!
+  name: String
+  slug: String
+  image: Photo
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislatorWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input LegislatorWhereInput {
+  AND: [LegislatorWhereInput!]
+  OR: [LegislatorWhereInput!]
+  NOT: [LegislatorWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  image: PhotoWhereInput
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input LegislatorOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input LegislatorUpdateInput {
+  name: String
+  slug: String
+  image: PhotoRelateToOneForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PhotoRelateToOneForUpdateInput {
+  create: PhotoCreateInput
+  connect: PhotoWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislatorUpdateArgs {
+  where: LegislatorWhereUniqueInput!
+  data: LegislatorUpdateInput!
+}
+
+input LegislatorCreateInput {
+  name: String
+  slug: String
+  image: PhotoRelateToOneForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PhotoRelateToOneForCreateInput {
+  create: PhotoCreateInput
+  connect: PhotoWhereUniqueInput
+}
+
 type LegislativeMeeting {
   id: ID!
   term: Int
@@ -384,12 +450,6 @@ input PartyUpdateInput {
   updatedAt: DateTime
 }
 
-input PhotoRelateToOneForUpdateInput {
-  create: PhotoCreateInput
-  connect: PhotoWhereUniqueInput
-  disconnect: Boolean
-}
-
 input PartyUpdateArgs {
   where: PartyWhereUniqueInput!
   data: PartyUpdateInput!
@@ -401,11 +461,6 @@ input PartyCreateInput {
   image: PhotoRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input PhotoRelateToOneForCreateInput {
-  create: PhotoCreateInput
-  connect: PhotoWhereUniqueInput
 }
 
 """
@@ -426,6 +481,12 @@ type Mutation {
   updatePhotos(data: [PhotoUpdateArgs!]!): [Photo]
   deletePhoto(where: PhotoWhereUniqueInput!): Photo
   deletePhotos(where: [PhotoWhereUniqueInput!]!): [Photo]
+  createLegislator(data: LegislatorCreateInput!): Legislator
+  createLegislators(data: [LegislatorCreateInput!]!): [Legislator]
+  updateLegislator(where: LegislatorWhereUniqueInput!, data: LegislatorUpdateInput!): Legislator
+  updateLegislators(data: [LegislatorUpdateArgs!]!): [Legislator]
+  deleteLegislator(where: LegislatorWhereUniqueInput!): Legislator
+  deleteLegislators(where: [LegislatorWhereUniqueInput!]!): [Legislator]
   createLegislativeMeeting(data: LegislativeMeetingCreateInput!): LegislativeMeeting
   createLegislativeMeetings(data: [LegislativeMeetingCreateInput!]!): [LegislativeMeeting]
   updateLegislativeMeeting(where: LegislativeMeetingWhereUniqueInput!, data: LegislativeMeetingUpdateInput!): LegislativeMeeting
@@ -474,6 +535,9 @@ type Query {
   photo(where: PhotoWhereUniqueInput!): Photo
   photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int
+  legislator(where: LegislatorWhereUniqueInput!): Legislator
+  legislators(where: LegislatorWhereInput! = {}, orderBy: [LegislatorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislatorWhereUniqueInput): [Legislator!]
+  legislatorsCount(where: LegislatorWhereInput! = {}): Int
   legislativeMeeting(where: LegislativeMeetingWhereUniqueInput!): LegislativeMeeting
   legislativeMeetings(where: LegislativeMeetingWhereInput! = {}, orderBy: [LegislativeMeetingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingWhereUniqueInput): [LegislativeMeeting!]
   legislativeMeetingsCount(where: LegislativeMeetingWhereInput! = {}): Int
