@@ -192,6 +192,85 @@ input PhotoCreateInput {
   updatedAt: DateTime
 }
 
+type LegislativeMeeting {
+  id: ID!
+  term: Int
+  startTime: CalendarDay
+  endTime: CalendarDay
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+scalar CalendarDay @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
+
+input LegislativeMeetingWhereUniqueInput {
+  id: ID
+}
+
+input LegislativeMeetingWhereInput {
+  AND: [LegislativeMeetingWhereInput!]
+  OR: [LegislativeMeetingWhereInput!]
+  NOT: [LegislativeMeetingWhereInput!]
+  id: IDFilter
+  term: IntFilter
+  startTime: CalendarDayFilter
+  endTime: CalendarDayFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input CalendarDayFilter {
+  equals: CalendarDay
+  in: [CalendarDay!]
+  notIn: [CalendarDay!]
+  lt: CalendarDay
+  lte: CalendarDay
+  gt: CalendarDay
+  gte: CalendarDay
+  not: CalendarDayFilter
+}
+
+input LegislativeMeetingOrderByInput {
+  id: OrderDirection
+  term: OrderDirection
+  startTime: OrderDirection
+  endTime: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input LegislativeMeetingUpdateInput {
+  term: Int
+  startTime: CalendarDay
+  endTime: CalendarDay
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislativeMeetingUpdateArgs {
+  where: LegislativeMeetingWhereUniqueInput!
+  data: LegislativeMeetingUpdateInput!
+}
+
+input LegislativeMeetingCreateInput {
+  term: Int
+  startTime: CalendarDay
+  endTime: CalendarDay
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type Party {
   id: ID!
   name: String
@@ -276,6 +355,12 @@ type Mutation {
   updatePhotos(data: [PhotoUpdateArgs!]!): [Photo]
   deletePhoto(where: PhotoWhereUniqueInput!): Photo
   deletePhotos(where: [PhotoWhereUniqueInput!]!): [Photo]
+  createLegislativeMeeting(data: LegislativeMeetingCreateInput!): LegislativeMeeting
+  createLegislativeMeetings(data: [LegislativeMeetingCreateInput!]!): [LegislativeMeeting]
+  updateLegislativeMeeting(where: LegislativeMeetingWhereUniqueInput!, data: LegislativeMeetingUpdateInput!): LegislativeMeeting
+  updateLegislativeMeetings(data: [LegislativeMeetingUpdateArgs!]!): [LegislativeMeeting]
+  deleteLegislativeMeeting(where: LegislativeMeetingWhereUniqueInput!): LegislativeMeeting
+  deleteLegislativeMeetings(where: [LegislativeMeetingWhereUniqueInput!]!): [LegislativeMeeting]
   createParty(data: PartyCreateInput!): Party
   createParties(data: [PartyCreateInput!]!): [Party]
   updateParty(where: PartyWhereUniqueInput!, data: PartyUpdateInput!): Party
@@ -312,6 +397,9 @@ type Query {
   photo(where: PhotoWhereUniqueInput!): Photo
   photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int
+  legislativeMeeting(where: LegislativeMeetingWhereUniqueInput!): LegislativeMeeting
+  legislativeMeetings(where: LegislativeMeetingWhereInput! = {}, orderBy: [LegislativeMeetingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingWhereUniqueInput): [LegislativeMeeting!]
+  legislativeMeetingsCount(where: LegislativeMeetingWhereInput! = {}): Int
   party(where: PartyWhereUniqueInput!): Party
   parties(where: PartyWhereInput! = {}, orderBy: [PartyOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PartyWhereUniqueInput): [Party!]
   partiesCount(where: PartyWhereInput! = {}): Int
