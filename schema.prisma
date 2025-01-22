@@ -38,7 +38,7 @@ model Photo {
 
 model LegislativeMeeting {
   id                                                Int                         @id @default(autoincrement())
-  term                                              Int
+  term                                              Int                         @unique
   startTime                                         DateTime                    @mysql.Date
   endTime                                           DateTime                    @mysql.Date
   createdAt                                         DateTime?                   @default(now())

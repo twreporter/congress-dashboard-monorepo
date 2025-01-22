@@ -7,19 +7,20 @@ const listConfigurations = list({
   fields: {
     term: integer({
       label: '屆期',
+      isIndexed: 'unique',
       validation: {
         isRequired: true,
         min: 1,
       },
     }),
     startTime: calendarDay({
-      label: '任期起始時間',
+      label: '屆期起始時間',
       validation: {
         isRequired: true,
       },
     }),
     endTime: calendarDay({
-      label: '任期結束時間',
+      label: '屆期結束時間',
       validation: {
         isRequired: true,
       },

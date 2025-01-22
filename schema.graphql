@@ -205,6 +205,7 @@ scalar CalendarDay @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3
 
 input LegislativeMeetingWhereUniqueInput {
   id: ID
+  term: Int
 }
 
 input LegislativeMeetingWhereInput {
