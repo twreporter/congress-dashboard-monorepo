@@ -258,6 +258,185 @@ input PhotoRelateToOneForCreateInput {
   connect: PhotoWhereUniqueInput
 }
 
+type LegislativeYuanMember {
+  id: ID!
+  legislator: Legislator
+  party: Party
+  legislativeMeeting: LegislativeMeeting
+  type: String
+  constituency: String
+  city: String
+  tooltip: String
+  note: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislativeYuanMemberWhereUniqueInput {
+  id: ID
+}
+
+input LegislativeYuanMemberWhereInput {
+  AND: [LegislativeYuanMemberWhereInput!]
+  OR: [LegislativeYuanMemberWhereInput!]
+  NOT: [LegislativeYuanMemberWhereInput!]
+  id: IDFilter
+  legislator: LegislatorWhereInput
+  party: PartyWhereInput
+  legislativeMeeting: LegislativeMeetingWhereInput
+  type: StringFilter
+  constituency: StringNullableFilter
+  city: StringNullableFilter
+  tooltip: StringFilter
+  note: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: StringNullableFilter
+}
+
+input LegislativeYuanMemberOrderByInput {
+  id: OrderDirection
+  type: OrderDirection
+  constituency: OrderDirection
+  city: OrderDirection
+  tooltip: OrderDirection
+  note: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input LegislativeYuanMemberUpdateInput {
+  legislator: LegislatorRelateToOneForUpdateInput
+  party: PartyRelateToOneForUpdateInput
+  legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  type: String
+  constituency: String
+  city: String
+  tooltip: String
+  note: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislatorRelateToOneForUpdateInput {
+  create: LegislatorCreateInput
+  connect: LegislatorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PartyRelateToOneForUpdateInput {
+  create: PartyCreateInput
+  connect: PartyWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislativeMeetingRelateToOneForUpdateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislativeYuanMemberUpdateArgs {
+  where: LegislativeYuanMemberWhereUniqueInput!
+  data: LegislativeYuanMemberUpdateInput!
+}
+
+input LegislativeYuanMemberCreateInput {
+  legislator: LegislatorRelateToOneForCreateInput
+  party: PartyRelateToOneForCreateInput
+  legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  type: String
+  constituency: String
+  city: String
+  tooltip: String
+  note: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislatorRelateToOneForCreateInput {
+  create: LegislatorCreateInput
+  connect: LegislatorWhereUniqueInput
+}
+
+input PartyRelateToOneForCreateInput {
+  create: PartyCreateInput
+  connect: PartyWhereUniqueInput
+}
+
+input LegislativeMeetingRelateToOneForCreateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+}
+
+type Party {
+  id: ID!
+  name: String
+  slug: String
+  image: Photo
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PartyWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input PartyWhereInput {
+  AND: [PartyWhereInput!]
+  OR: [PartyWhereInput!]
+  NOT: [PartyWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  image: PhotoWhereInput
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PartyOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PartyUpdateInput {
+  name: String
+  slug: String
+  image: PhotoRelateToOneForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PartyUpdateArgs {
+  where: PartyWhereUniqueInput!
+  data: PartyUpdateInput!
+}
+
+input PartyCreateInput {
+  name: String
+  slug: String
+  image: PhotoRelateToOneForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type LegislativeMeeting {
   id: ID!
   term: Int
@@ -383,12 +562,6 @@ input LegislativeMeetingSessionUpdateInput {
   updatedAt: DateTime
 }
 
-input LegislativeMeetingRelateToOneForUpdateInput {
-  create: LegislativeMeetingCreateInput
-  connect: LegislativeMeetingWhereUniqueInput
-  disconnect: Boolean
-}
-
 input LegislativeMeetingSessionUpdateArgs {
   where: LegislativeMeetingSessionWhereUniqueInput!
   data: LegislativeMeetingSessionUpdateInput!
@@ -399,66 +572,6 @@ input LegislativeMeetingSessionCreateInput {
   term: Int
   startTime: CalendarDay
   endTime: CalendarDay
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input LegislativeMeetingRelateToOneForCreateInput {
-  create: LegislativeMeetingCreateInput
-  connect: LegislativeMeetingWhereUniqueInput
-}
-
-type Party {
-  id: ID!
-  name: String
-  slug: String
-  image: Photo
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input PartyWhereUniqueInput {
-  id: ID
-  slug: String
-}
-
-input PartyWhereInput {
-  AND: [PartyWhereInput!]
-  OR: [PartyWhereInput!]
-  NOT: [PartyWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  slug: StringFilter
-  image: PhotoWhereInput
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input PartyOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-  slug: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input PartyUpdateInput {
-  name: String
-  slug: String
-  image: PhotoRelateToOneForUpdateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input PartyUpdateArgs {
-  where: PartyWhereUniqueInput!
-  data: PartyUpdateInput!
-}
-
-input PartyCreateInput {
-  name: String
-  slug: String
-  image: PhotoRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -487,6 +600,18 @@ type Mutation {
   updateLegislators(data: [LegislatorUpdateArgs!]!): [Legislator]
   deleteLegislator(where: LegislatorWhereUniqueInput!): Legislator
   deleteLegislators(where: [LegislatorWhereUniqueInput!]!): [Legislator]
+  createLegislativeYuanMember(data: LegislativeYuanMemberCreateInput!): LegislativeYuanMember
+  createLegislativeYuanMembers(data: [LegislativeYuanMemberCreateInput!]!): [LegislativeYuanMember]
+  updateLegislativeYuanMember(where: LegislativeYuanMemberWhereUniqueInput!, data: LegislativeYuanMemberUpdateInput!): LegislativeYuanMember
+  updateLegislativeYuanMembers(data: [LegislativeYuanMemberUpdateArgs!]!): [LegislativeYuanMember]
+  deleteLegislativeYuanMember(where: LegislativeYuanMemberWhereUniqueInput!): LegislativeYuanMember
+  deleteLegislativeYuanMembers(where: [LegislativeYuanMemberWhereUniqueInput!]!): [LegislativeYuanMember]
+  createParty(data: PartyCreateInput!): Party
+  createParties(data: [PartyCreateInput!]!): [Party]
+  updateParty(where: PartyWhereUniqueInput!, data: PartyUpdateInput!): Party
+  updateParties(data: [PartyUpdateArgs!]!): [Party]
+  deleteParty(where: PartyWhereUniqueInput!): Party
+  deleteParties(where: [PartyWhereUniqueInput!]!): [Party]
   createLegislativeMeeting(data: LegislativeMeetingCreateInput!): LegislativeMeeting
   createLegislativeMeetings(data: [LegislativeMeetingCreateInput!]!): [LegislativeMeeting]
   updateLegislativeMeeting(where: LegislativeMeetingWhereUniqueInput!, data: LegislativeMeetingUpdateInput!): LegislativeMeeting
@@ -499,12 +624,6 @@ type Mutation {
   updateLegislativeMeetingSessions(data: [LegislativeMeetingSessionUpdateArgs!]!): [LegislativeMeetingSession]
   deleteLegislativeMeetingSession(where: LegislativeMeetingSessionWhereUniqueInput!): LegislativeMeetingSession
   deleteLegislativeMeetingSessions(where: [LegislativeMeetingSessionWhereUniqueInput!]!): [LegislativeMeetingSession]
-  createParty(data: PartyCreateInput!): Party
-  createParties(data: [PartyCreateInput!]!): [Party]
-  updateParty(where: PartyWhereUniqueInput!, data: PartyUpdateInput!): Party
-  updateParties(data: [PartyUpdateArgs!]!): [Party]
-  deleteParty(where: PartyWhereUniqueInput!): Party
-  deleteParties(where: [PartyWhereUniqueInput!]!): [Party]
   endSession: Boolean!
   authenticateSystemUserWithPassword(email: String!, password: String!): SystemUserAuthenticationWithPasswordResult
   createInitialSystemUser(data: CreateInitialSystemUserInput!): SystemUserAuthenticationWithPasswordSuccess!
@@ -538,15 +657,18 @@ type Query {
   legislator(where: LegislatorWhereUniqueInput!): Legislator
   legislators(where: LegislatorWhereInput! = {}, orderBy: [LegislatorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislatorWhereUniqueInput): [Legislator!]
   legislatorsCount(where: LegislatorWhereInput! = {}): Int
+  legislativeYuanMember(where: LegislativeYuanMemberWhereUniqueInput!): LegislativeYuanMember
+  legislativeYuanMembers(where: LegislativeYuanMemberWhereInput! = {}, orderBy: [LegislativeYuanMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeYuanMemberWhereUniqueInput): [LegislativeYuanMember!]
+  legislativeYuanMembersCount(where: LegislativeYuanMemberWhereInput! = {}): Int
+  party(where: PartyWhereUniqueInput!): Party
+  parties(where: PartyWhereInput! = {}, orderBy: [PartyOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PartyWhereUniqueInput): [Party!]
+  partiesCount(where: PartyWhereInput! = {}): Int
   legislativeMeeting(where: LegislativeMeetingWhereUniqueInput!): LegislativeMeeting
   legislativeMeetings(where: LegislativeMeetingWhereInput! = {}, orderBy: [LegislativeMeetingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingWhereUniqueInput): [LegislativeMeeting!]
   legislativeMeetingsCount(where: LegislativeMeetingWhereInput! = {}): Int
   legislativeMeetingSession(where: LegislativeMeetingSessionWhereUniqueInput!): LegislativeMeetingSession
   legislativeMeetingSessions(where: LegislativeMeetingSessionWhereInput! = {}, orderBy: [LegislativeMeetingSessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingSessionWhereUniqueInput): [LegislativeMeetingSession!]
   legislativeMeetingSessionsCount(where: LegislativeMeetingSessionWhereInput! = {}): Int
-  party(where: PartyWhereUniqueInput!): Party
-  parties(where: PartyWhereInput! = {}, orderBy: [PartyOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PartyWhereUniqueInput): [Party!]
-  partiesCount(where: PartyWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

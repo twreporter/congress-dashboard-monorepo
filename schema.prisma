@@ -38,13 +38,48 @@ model Photo {
 }
 
 model Legislator {
-  id        Int       @id @default(autoincrement())
-  name      String    @default("")
-  slug      String    @unique @default("")
-  image     Photo?    @relation("Legislator_image", fields: [imageId], references: [id])
-  imageId   Int?      @map("image")
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id                                    Int                     @id @default(autoincrement())
+  name                                  String                  @default("")
+  slug                                  String                  @unique @default("")
+  image                                 Photo?                  @relation("Legislator_image", fields: [imageId], references: [id])
+  imageId                               Int?                    @map("image")
+  createdAt                             DateTime?               @default(now())
+  updatedAt                             DateTime?               @updatedAt
+  from_LegislativeYuanMember_legislator LegislativeYuanMember[] @relation("LegislativeYuanMember_legislator")
+
+  @@index([imageId])
+}
+
+model LegislativeYuanMember {
+  id                   Int                 @id @default(autoincrement())
+  legislator           Legislator?         @relation("LegislativeYuanMember_legislator", fields: [legislatorId], references: [id])
+  legislatorId         Int?                @map("legislator")
+  party                Party?              @relation("LegislativeYuanMember_party", fields: [partyId], references: [id])
+  partyId              Int?                @map("party")
+  legislativeMeeting   LegislativeMeeting? @relation("LegislativeYuanMember_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
+  legislativeMeetingId Int?                @map("legislativeMeeting")
+  type                 String
+  constituency         String?
+  city                 String?
+  tooltip              String              @default("")
+  note                 String              @default("")
+  createdAt            DateTime?           @default(now())
+  updatedAt            DateTime?           @updatedAt
+
+  @@index([legislatorId])
+  @@index([partyId])
+  @@index([legislativeMeetingId])
+}
+
+model Party {
+  id                               Int                     @id @default(autoincrement())
+  name                             String                  @default("")
+  slug                             String                  @unique @default("")
+  image                            Photo?                  @relation("Party_image", fields: [imageId], references: [id])
+  imageId                          Int?                    @map("image")
+  createdAt                        DateTime?               @default(now())
+  updatedAt                        DateTime?               @updatedAt
+  from_LegislativeYuanMember_party LegislativeYuanMember[] @relation("LegislativeYuanMember_party")
 
   @@index([imageId])
 }
@@ -56,6 +91,7 @@ model LegislativeMeeting {
   endTime                                           DateTime                    @mysql.Date
   createdAt                                         DateTime?                   @default(now())
   updatedAt                                         DateTime?                   @updatedAt
+  from_LegislativeYuanMember_legislativeMeeting     LegislativeYuanMember[]     @relation("LegislativeYuanMember_legislativeMeeting")
   from_LegislativeMeetingSession_legislativeMeeting LegislativeMeetingSession[] @relation("LegislativeMeetingSession_legislativeMeeting")
 }
 
@@ -70,16 +106,4 @@ model LegislativeMeetingSession {
   updatedAt            DateTime?           @updatedAt
 
   @@index([legislativeMeetingId])
-}
-
-model Party {
-  id        Int       @id @default(autoincrement())
-  name      String    @default("")
-  slug      String    @unique @default("")
-  image     Photo?    @relation("Party_image", fields: [imageId], references: [id])
-  imageId   Int?      @map("image")
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-
-  @@index([imageId])
 }
