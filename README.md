@@ -6,6 +6,7 @@ This is the monorepo of twreporter congress dashboard.
 This monorepo containing follow sub-packages:
 
 - [@twreporter-congress-dashboard/frontend](./packages/frontend/): see `packages/frontend`
+- [@twreporter-congress-dashboard/cms](./packages/cms/): see `packages/cms`
 
 ### Monorepo management
 
