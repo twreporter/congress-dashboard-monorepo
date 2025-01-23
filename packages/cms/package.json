@@ -1,0 +1,24 @@
+{
+  "name": "congress-dashboard-cms",
+  "version": "0.0.1-beta.0",
+  "private": true,
+  "scripts": {
+    "dev": "keystone dev",
+    "start": "keystone start",
+    "build": "keystone build --no-prisma",
+    "db-migrate": "keystone prisma migrate deploy",
+    "postinstall": "keystone postinstall --fix",
+    "generate-migrate": "keystone prisma migrate dev",
+    "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown"
+  },
+  "dependencies": {
+    "@keystone-6/auth": "^8.0.0",
+    "@keystone-6/core": "^6.0.0",
+    "@keystone-6/fields-document": "^9.0.0",
+    "lodash": "^4.17.21",
+    "typescript": "^5.5.0"
+  },
+  "devDependencies": {
+    "changelog-maker": "^4.1.1"
+  }
+}
