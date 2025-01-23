@@ -1,6 +1,6 @@
 {
   "name": "congress-dashboard-cms",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.0",
   "private": true,
   "scripts": {
     "dev": "keystone dev",
@@ -8,7 +8,8 @@
     "build": "keystone build --no-prisma",
     "db-migrate": "keystone prisma migrate deploy",
     "postinstall": "keystone postinstall --fix",
-    "generate-migrate": "keystone prisma migrate dev"
+    "generate-migrate": "keystone prisma migrate dev",
+    "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown"
   },
   "dependencies": {
     "@keystone-6/auth": "^8.0.0",
