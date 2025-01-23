@@ -4,8 +4,25 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "prepare": "husky install"
+  },
   "dependencies": {},
   "devDependencies": {
-    "lerna": "^8.1.9"
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "eslint": "^7.7.0",
+    "eslint-config-next": "13.4.9",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
+    "lerna": "^8.1.9",
+    "lint-staged": "^12.4.2",
+    "prettier": "^2.0.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ]
   }
 }

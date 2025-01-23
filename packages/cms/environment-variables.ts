@@ -3,7 +3,6 @@ const {
   DATABASE_URL,
   GCS_ORIGIN,
   IMAGES_BASE_URL,
-  IMAGES_RESIZED_URL,
   IMAGES_STORAGE_PATH,
   RELEASE_BRANCH,
 } = process.env
@@ -19,7 +18,6 @@ const environmentVariables = {
   },
   images: {
     baseUrl: IMAGES_BASE_URL || '/images',
-    resizedUrl: IMAGES_RESIZED_URL || '/resized-images',
     storagePath: IMAGES_STORAGE_PATH || 'public/images',
   },
   releaseBranch: RELEASE_BRANCH || 'master',

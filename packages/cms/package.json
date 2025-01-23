@@ -8,32 +8,16 @@
     "build": "keystone build --no-prisma",
     "db-migrate": "keystone prisma migrate deploy",
     "postinstall": "keystone postinstall --fix",
-    "generate-migrate": "keystone prisma migrate dev",
-    "prepare": "husky install",
-    "changelog-maker": "changelog-maker twreporter twreporter-cms --markdown"
+    "generate-migrate": "keystone prisma migrate dev"
   },
   "dependencies": {
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "eslint": "^7.7.0",
-    "eslint-config-next": "13.4.9",
-    "eslint-config-prettier": "^6.9.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "lint-staged": "^12.4.2",
     "lodash": "^4.17.21",
-    "prettier": "^2.0.0",
     "typescript": "^5.5.0"
   },
-  "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "eslint --cache --fix",
-      "prettier --write"
-    ]
-  },
   "devDependencies": {
-    "changelog-maker": "^4.1.1",
-    "husky": "^8.0.1"
+    "changelog-maker": "^4.1.1"
   }
 }
