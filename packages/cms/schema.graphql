@@ -197,6 +197,7 @@ type Legislator {
   name: String
   slug: String
   image: Photo
+  imageLink: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -214,6 +215,7 @@ input LegislatorWhereInput {
   name: StringFilter
   slug: StringFilter
   image: PhotoWhereInput
+  imageLink: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -222,6 +224,7 @@ input LegislatorOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
+  imageLink: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -230,6 +233,7 @@ input LegislatorUpdateInput {
   name: String
   slug: String
   image: PhotoRelateToOneForUpdateInput
+  imageLink: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -249,6 +253,7 @@ input LegislatorCreateInput {
   name: String
   slug: String
   image: PhotoRelateToOneForCreateInput
+  imageLink: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -387,6 +392,7 @@ type Party {
   name: String
   slug: String
   image: Photo
+  imageLink: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -404,6 +410,7 @@ input PartyWhereInput {
   name: StringFilter
   slug: StringFilter
   image: PhotoWhereInput
+  imageLink: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -412,6 +419,7 @@ input PartyOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
+  imageLink: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -420,6 +428,7 @@ input PartyUpdateInput {
   name: String
   slug: String
   image: PhotoRelateToOneForUpdateInput
+  imageLink: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -433,6 +442,7 @@ input PartyCreateInput {
   name: String
   slug: String
   image: PhotoRelateToOneForCreateInput
+  imageLink: String
   createdAt: DateTime
   updatedAt: DateTime
 }

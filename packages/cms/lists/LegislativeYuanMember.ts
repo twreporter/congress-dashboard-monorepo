@@ -5,6 +5,7 @@ import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import {
   MEMBER_TYPE_OPTIONS,
   CONSTITUENCY_OPTIONS,
+  CITY_OPTIONS,
 } from '../../shared/constants/legislative-yuan-member'
 
 const listConfigurations = list({
@@ -43,13 +44,7 @@ const listConfigurations = list({
     }),
     city: select({
       label: '所屬城市',
-      // TODO: use public constant
-      options: [
-        {
-          label: '臺北市',
-          value: 'taipei-city',
-        },
-      ],
+      options: CITY_OPTIONS,
     }),
     tooltip: text({
       label: '人物備註',

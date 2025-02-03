@@ -43,6 +43,7 @@ model Legislator {
   slug                                  String                  @unique @default("")
   image                                 Photo?                  @relation("Legislator_image", fields: [imageId], references: [id])
   imageId                               Int?                    @map("image")
+  imageLink                             String                  @default("")
   createdAt                             DateTime?               @default(now())
   updatedAt                             DateTime?               @updatedAt
   from_LegislativeYuanMember_legislator LegislativeYuanMember[] @relation("LegislativeYuanMember_legislator")
@@ -77,6 +78,7 @@ model Party {
   slug                             String                  @unique @default("")
   image                            Photo?                  @relation("Party_image", fields: [imageId], references: [id])
   imageId                          Int?                    @map("image")
+  imageLink                        String                  @default("")
   createdAt                        DateTime?               @default(now())
   updatedAt                        DateTime?               @updatedAt
   from_LegislativeYuanMember_party LegislativeYuanMember[] @relation("LegislativeYuanMember_party")

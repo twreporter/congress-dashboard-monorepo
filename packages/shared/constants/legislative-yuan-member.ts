@@ -177,3 +177,65 @@ export const CONSTITUENCY_OPTIONS = Object.freeze(
     value: CONSTITUENCY[key as keyof typeof CONSTITUENCY],
   }))
 )
+
+// ref: https://github.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON
+export const CITY = Object.freeze({
+  taipei: 'taipei',
+  keelung: 'keelung',
+  newTaipei: 'new-taipei',
+  lienchiang: 'lienchiang',
+  yilan: 'yilan',
+  diauyutai: 'diauyutai',
+  hsinchuCity: 'hsinchu-city',
+  hsinchuCounty: 'hsinchu-county',
+  taoyuan: 'taoyuan',
+  miaoli: 'miaoli',
+  taichung: 'taichung',
+  changhua: 'changhua',
+  nantou: 'nantou',
+  chiayiCity: 'chiayi-city',
+  chiayiCounty: 'chiayi-county',
+  yunlin: 'yunlin',
+  tainan: 'tainan',
+  kaohsiung: 'kaohsiung',
+  nanhai: 'nanhai',
+  penghu: 'penghu',
+  kinmen: 'kinmen',
+  pingtung: 'pingtung',
+  taitung: 'taitung',
+  hualien: 'hualien',
+})
+
+export const CITY_LABEL = Object.freeze({
+  taipei: '臺北市',
+  keelung: '基隆市',
+  newTaipei: '新北市',
+  lienchiang: '連江縣',
+  yilan: '宜蘭縣',
+  diauyutai: '釣魚臺',
+  hsinchuCity: '新竹市',
+  hsinchuCounty: '新竹縣',
+  taoyuan: '桃園市',
+  miaoli: '苗栗縣',
+  taichung: '臺中市',
+  changhua: '彰化縣',
+  nantou: '南投縣',
+  chiayiCity: '嘉義市',
+  chiayiCounty: '嘉義縣',
+  yunlin: '雲林縣',
+  tainan: '臺南市',
+  kaohsiung: '高雄市',
+  nanhai: '南海島',
+  penghu: '澎湖縣',
+  kinmen: '金門縣',
+  pingtung: '屏東縣',
+  taitung: '臺東縣',
+  hualien: '花蓮縣',
+})
+
+export const CITY_OPTIONS = Object.freeze(
+  Object.keys(CITY).map((key) => ({
+    label: CITY_LABEL[key as keyof typeof CITY_LABEL],
+    value: CITY[key as keyof typeof CITY],
+  }))
+)
