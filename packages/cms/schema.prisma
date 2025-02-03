@@ -91,6 +91,7 @@ model LegislativeMeeting {
   term                                              Int                         @unique
   startTime                                         DateTime                    @mysql.Date
   endTime                                           DateTime                    @mysql.Date
+  committees                                        Committee[]                 @relation("LegislativeMeeting_committees")
   createdAt                                         DateTime?                   @default(now())
   updatedAt                                         DateTime?                   @updatedAt
   from_LegislativeYuanMember_legislativeMeeting     LegislativeYuanMember[]     @relation("LegislativeYuanMember_legislativeMeeting")
@@ -108,4 +109,17 @@ model LegislativeMeetingSession {
   updatedAt            DateTime?           @updatedAt
 
   @@index([legislativeMeetingId])
+}
+
+model Committee {
+  id                                 Int                  @id @default(autoincrement())
+  name                               String               @default("")
+  slug                               String               @unique @default("")
+  type                               String?
+  createdAt                          DateTime?            @default(now())
+  updatedAt                          DateTime?            @updatedAt
+  from_LegislativeMeeting_committees LegislativeMeeting[] @relation("LegislativeMeeting_committees")
+
+  @@index([name])
+  @@index([type])
 }

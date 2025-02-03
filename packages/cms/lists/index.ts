@@ -5,6 +5,7 @@ import LegislativeMeeting from './LegislativeMeeting'
 import LegislativeMeetingSession from './LegislativeMeetingSession'
 import Legislator from './Legislator'
 import LegislativeYuanMember from './LegislativeYuanMember'
+import Committee from './Committee'
 
 export const listDefinition = {
   SystemUser,
@@ -14,4 +15,5 @@ export const listDefinition = {
   Party,
   LegislativeMeeting,
   LegislativeMeetingSession,
+  Committee,
 }

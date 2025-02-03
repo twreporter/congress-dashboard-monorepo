@@ -452,6 +452,8 @@ type LegislativeMeeting {
   term: Int
   startTime: CalendarDay
   endTime: CalendarDay
+  committees(where: CommitteeWhereInput! = {}, orderBy: [CommitteeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeWhereUniqueInput): [Committee!]
+  committeesCount(where: CommitteeWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -471,6 +473,7 @@ input LegislativeMeetingWhereInput {
   term: IntFilter
   startTime: CalendarDayFilter
   endTime: CalendarDayFilter
+  committees: CommitteeManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -497,6 +500,12 @@ input CalendarDayFilter {
   not: CalendarDayFilter
 }
 
+input CommitteeManyRelationFilter {
+  every: CommitteeWhereInput
+  some: CommitteeWhereInput
+  none: CommitteeWhereInput
+}
+
 input LegislativeMeetingOrderByInput {
   id: OrderDirection
   term: OrderDirection
@@ -510,8 +519,16 @@ input LegislativeMeetingUpdateInput {
   term: Int
   startTime: CalendarDay
   endTime: CalendarDay
+  committees: CommitteeRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input CommitteeRelateToManyForUpdateInput {
+  disconnect: [CommitteeWhereUniqueInput!]
+  set: [CommitteeWhereUniqueInput!]
+  create: [CommitteeCreateInput!]
+  connect: [CommitteeWhereUniqueInput!]
 }
 
 input LegislativeMeetingUpdateArgs {
@@ -523,8 +540,14 @@ input LegislativeMeetingCreateInput {
   term: Int
   startTime: CalendarDay
   endTime: CalendarDay
+  committees: CommitteeRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input CommitteeRelateToManyForCreateInput {
+  create: [CommitteeCreateInput!]
+  connect: [CommitteeWhereUniqueInput!]
 }
 
 type LegislativeMeetingSession {
@@ -586,6 +609,62 @@ input LegislativeMeetingSessionCreateInput {
   updatedAt: DateTime
 }
 
+type Committee {
+  id: ID!
+  name: String
+  slug: String
+  type: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CommitteeWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input CommitteeWhereInput {
+  AND: [CommitteeWhereInput!]
+  OR: [CommitteeWhereInput!]
+  NOT: [CommitteeWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  type: StringNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CommitteeOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  type: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CommitteeUpdateInput {
+  name: String
+  slug: String
+  type: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CommitteeUpdateArgs {
+  where: CommitteeWhereUniqueInput!
+  data: CommitteeUpdateInput!
+}
+
+input CommitteeCreateInput {
+  name: String
+  slug: String
+  type: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -634,6 +713,12 @@ type Mutation {
   updateLegislativeMeetingSessions(data: [LegislativeMeetingSessionUpdateArgs!]!): [LegislativeMeetingSession]
   deleteLegislativeMeetingSession(where: LegislativeMeetingSessionWhereUniqueInput!): LegislativeMeetingSession
   deleteLegislativeMeetingSessions(where: [LegislativeMeetingSessionWhereUniqueInput!]!): [LegislativeMeetingSession]
+  createCommittee(data: CommitteeCreateInput!): Committee
+  createCommittees(data: [CommitteeCreateInput!]!): [Committee]
+  updateCommittee(where: CommitteeWhereUniqueInput!, data: CommitteeUpdateInput!): Committee
+  updateCommittees(data: [CommitteeUpdateArgs!]!): [Committee]
+  deleteCommittee(where: CommitteeWhereUniqueInput!): Committee
+  deleteCommittees(where: [CommitteeWhereUniqueInput!]!): [Committee]
   endSession: Boolean!
   authenticateSystemUserWithPassword(email: String!, password: String!): SystemUserAuthenticationWithPasswordResult
   createInitialSystemUser(data: CreateInitialSystemUserInput!): SystemUserAuthenticationWithPasswordSuccess!
@@ -679,6 +764,9 @@ type Query {
   legislativeMeetingSession(where: LegislativeMeetingSessionWhereUniqueInput!): LegislativeMeetingSession
   legislativeMeetingSessions(where: LegislativeMeetingSessionWhereInput! = {}, orderBy: [LegislativeMeetingSessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingSessionWhereUniqueInput): [LegislativeMeetingSession!]
   legislativeMeetingSessionsCount(where: LegislativeMeetingSessionWhereInput! = {}): Int
+  committee(where: CommitteeWhereUniqueInput!): Committee
+  committees(where: CommitteeWhereInput! = {}, orderBy: [CommitteeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeWhereUniqueInput): [Committee!]
+  committeesCount(where: CommitteeWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

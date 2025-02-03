@@ -1,5 +1,5 @@
 import { list } from '@keystone-6/core'
-import { integer, calendarDay } from '@keystone-6/core/fields'
+import { integer, calendarDay, relationship } from '@keystone-6/core/fields'
 import { allowAllRoles } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 
@@ -24,6 +24,11 @@ const listConfigurations = list({
       validation: {
         isRequired: true,
       },
+    }),
+    committees: relationship({
+      ref: 'Committee',
+      label: '委員會',
+      many: true,
     }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,
