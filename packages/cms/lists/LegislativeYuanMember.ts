@@ -2,6 +2,10 @@ import { list } from '@keystone-6/core'
 import { text, relationship, select } from '@keystone-6/core/fields'
 import { allowAllRoles } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
+import {
+  MEMBER_TYPE_OPTIONS,
+  CONSTITUENCY_OPTIONS,
+} from '../../shared/constants/legislative-yuan-member'
 
 const listConfigurations = list({
   fields: {
@@ -28,38 +32,14 @@ const listConfigurations = list({
     }),
     type: select({
       label: '類別',
-      // TODO: use public constant
-      options: [
-        {
-          label: '區域',
-          value: 'constituency',
-        },
-        {
-          label: '不分區',
-          value: 'nationwide-and-overseas',
-        },
-        {
-          label: '山地原住民',
-          value: 'highland-aboriginal',
-        },
-        {
-          label: '平地原住民',
-          value: 'lowland-aboriginal',
-        },
-      ],
+      options: MEMBER_TYPE_OPTIONS,
       validation: {
         isRequired: true,
       },
     }),
     constituency: select({
       label: '選區',
-      // TODO: use public constant
-      options: [
-        {
-          label: '臺北市第一選區',
-          value: 'taipei-city-constituency-1',
-        },
-      ],
+      options: CONSTITUENCY_OPTIONS,
     }),
     city: select({
       label: '所屬城市',
