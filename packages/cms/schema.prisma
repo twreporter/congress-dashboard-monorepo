@@ -47,6 +47,7 @@ model Legislator {
   createdAt                             DateTime?               @default(now())
   updatedAt                             DateTime?               @updatedAt
   from_LegislativeYuanMember_legislator LegislativeYuanMember[] @relation("LegislativeYuanMember_legislator")
+  from_Speech_legislator                Speech[]                @relation("Speech_legislator")
 
   @@index([imageId])
 }
@@ -96,17 +97,19 @@ model LegislativeMeeting {
   updatedAt                                         DateTime?                   @updatedAt
   from_LegislativeYuanMember_legislativeMeeting     LegislativeYuanMember[]     @relation("LegislativeYuanMember_legislativeMeeting")
   from_LegislativeMeetingSession_legislativeMeeting LegislativeMeetingSession[] @relation("LegislativeMeetingSession_legislativeMeeting")
+  from_Speech_legislativeMeeting                    Speech[]                    @relation("Speech_legislativeMeeting")
 }
 
 model LegislativeMeetingSession {
-  id                   Int                 @id @default(autoincrement())
-  legislativeMeeting   LegislativeMeeting? @relation("LegislativeMeetingSession_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
-  legislativeMeetingId Int?                @map("legislativeMeeting")
-  term                 Int
-  startTime            DateTime            @mysql.Date
-  endTime              DateTime            @mysql.Date
-  createdAt            DateTime?           @default(now())
-  updatedAt            DateTime?           @updatedAt
+  id                                    Int                 @id @default(autoincrement())
+  legislativeMeeting                    LegislativeMeeting? @relation("LegislativeMeetingSession_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
+  legislativeMeetingId                  Int?                @map("legislativeMeeting")
+  term                                  Int
+  startTime                             DateTime            @mysql.Date
+  endTime                               DateTime            @mysql.Date
+  createdAt                             DateTime?           @default(now())
+  updatedAt                             DateTime?           @updatedAt
+  from_Speech_legislativeMeetingSession Speech[]            @relation("Speech_legislativeMeetingSession")
 
   @@index([legislativeMeetingId])
 }
@@ -122,4 +125,43 @@ model Committee {
 
   @@index([name])
   @@index([type])
+}
+
+model Topic {
+  id        Int       @id @default(autoincrement())
+  title     String    @default("")
+  slug      String    @unique @default("")
+  speeches  Speech[]  @relation("Speech_topics")
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([title])
+}
+
+model Speech {
+  id                          Int                        @id @default(autoincrement())
+  legislativeMeeting          LegislativeMeeting?        @relation("Speech_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
+  legislativeMeetingId        Int?                       @map("legislativeMeeting")
+  legislativeMeetingSession   LegislativeMeetingSession? @relation("Speech_legislativeMeetingSession", fields: [legislativeMeetingSessionId], references: [id])
+  legislativeMeetingSessionId Int?                       @map("legislativeMeetingSession")
+  legislator                  Legislator?                @relation("Speech_legislator", fields: [legislatorId], references: [id])
+  legislatorId                Int?                       @map("legislator")
+  date                        DateTime                   @mysql.Date
+  title                       String                     @default("")
+  slug                        String                     @unique @default("")
+  summary                     String                     @default("")
+  content                     String                     @default("")
+  attendee                    String                     @default("")
+  ivodLink                    String                     @default("")
+  ivodStartTime               String                     @default("")
+  ivodEndTime                 String                     @default("")
+  topics                      Topic[]                    @relation("Speech_topics")
+  createdAt                   DateTime?                  @default(now())
+  updatedAt                   DateTime?                  @updatedAt
+
+  @@index([legislativeMeetingId])
+  @@index([legislativeMeetingSessionId])
+  @@index([legislatorId])
+  @@index([date])
+  @@index([title])
 }
