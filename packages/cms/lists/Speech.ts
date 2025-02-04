@@ -16,7 +16,7 @@ const listConfigurations = list({
       ref: 'LegislativeMeetingSession',
       label: '所屬會期',
       ui: {
-        labelField: 'term',
+        labelField: 'labelForCMS',
       },
     }),
     legislator: relationship({

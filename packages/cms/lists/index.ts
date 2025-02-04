@@ -8,6 +8,7 @@ import LegislativeYuanMember from './LegislativeYuanMember'
 import Committee from './Committee'
 import Topic from './Topic'
 import Speech from './Speech'
+import CommitteeMember from './CommitteeMember'
 
 export const listDefinition = {
   SystemUser,
@@ -18,6 +19,7 @@ export const listDefinition = {
   LegislativeMeeting,
   LegislativeMeetingSession,
   Committee,
+  CommitteeMember,
   Topic,
   Speech,
 }

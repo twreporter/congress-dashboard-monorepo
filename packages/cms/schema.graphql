@@ -266,6 +266,7 @@ input PhotoRelateToOneForCreateInput {
 type LegislativeYuanMember {
   id: ID!
   legislator: Legislator
+  labelForCMS: String
   party: Party
   legislativeMeeting: LegislativeMeeting
   type: String
@@ -287,6 +288,7 @@ input LegislativeYuanMemberWhereInput {
   NOT: [LegislativeYuanMemberWhereInput!]
   id: IDFilter
   legislator: LegislatorWhereInput
+  labelForCMS: StringFilter
   party: PartyWhereInput
   legislativeMeeting: LegislativeMeetingWhereInput
   type: StringFilter
@@ -314,6 +316,7 @@ input StringNullableFilter {
 
 input LegislativeYuanMemberOrderByInput {
   id: OrderDirection
+  labelForCMS: OrderDirection
   type: OrderDirection
   constituency: OrderDirection
   city: OrderDirection
@@ -325,6 +328,7 @@ input LegislativeYuanMemberOrderByInput {
 
 input LegislativeYuanMemberUpdateInput {
   legislator: LegislatorRelateToOneForUpdateInput
+  labelForCMS: String
   party: PartyRelateToOneForUpdateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
   type: String
@@ -361,6 +365,7 @@ input LegislativeYuanMemberUpdateArgs {
 
 input LegislativeYuanMemberCreateInput {
   legislator: LegislatorRelateToOneForCreateInput
+  labelForCMS: String
   party: PartyRelateToOneForCreateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
   type: String
@@ -553,6 +558,7 @@ input CommitteeRelateToManyForCreateInput {
 type LegislativeMeetingSession {
   id: ID!
   legislativeMeeting: LegislativeMeeting
+  labelForCMS: String
   term: Int
   startTime: CalendarDay
   endTime: CalendarDay
@@ -570,6 +576,7 @@ input LegislativeMeetingSessionWhereInput {
   NOT: [LegislativeMeetingSessionWhereInput!]
   id: IDFilter
   legislativeMeeting: LegislativeMeetingWhereInput
+  labelForCMS: StringFilter
   term: IntFilter
   startTime: CalendarDayFilter
   endTime: CalendarDayFilter
@@ -579,6 +586,7 @@ input LegislativeMeetingSessionWhereInput {
 
 input LegislativeMeetingSessionOrderByInput {
   id: OrderDirection
+  labelForCMS: OrderDirection
   term: OrderDirection
   startTime: OrderDirection
   endTime: OrderDirection
@@ -588,6 +596,7 @@ input LegislativeMeetingSessionOrderByInput {
 
 input LegislativeMeetingSessionUpdateInput {
   legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  labelForCMS: String
   term: Int
   startTime: CalendarDay
   endTime: CalendarDay
@@ -602,6 +611,7 @@ input LegislativeMeetingSessionUpdateArgs {
 
 input LegislativeMeetingSessionCreateInput {
   legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  labelForCMS: String
   term: Int
   startTime: CalendarDay
   endTime: CalendarDay
@@ -663,6 +673,81 @@ input CommitteeCreateInput {
   type: String
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+type CommitteeMember {
+  id: ID!
+  legislativeMeetingSession: LegislativeMeetingSession
+  legislativeYuanMember: LegislativeYuanMember
+  committee(where: CommitteeWhereInput! = {}, orderBy: [CommitteeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeWhereUniqueInput): [Committee!]
+  committeeCount(where: CommitteeWhereInput! = {}): Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CommitteeMemberWhereUniqueInput {
+  id: ID
+}
+
+input CommitteeMemberWhereInput {
+  AND: [CommitteeMemberWhereInput!]
+  OR: [CommitteeMemberWhereInput!]
+  NOT: [CommitteeMemberWhereInput!]
+  id: IDFilter
+  legislativeMeetingSession: LegislativeMeetingSessionWhereInput
+  legislativeYuanMember: LegislativeYuanMemberWhereInput
+  committee: CommitteeManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CommitteeMemberOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CommitteeMemberUpdateInput {
+  legislativeMeetingSession: LegislativeMeetingSessionRelateToOneForUpdateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForUpdateInput
+  committee: CommitteeRelateToManyForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislativeMeetingSessionRelateToOneForUpdateInput {
+  create: LegislativeMeetingSessionCreateInput
+  connect: LegislativeMeetingSessionWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislativeYuanMemberRelateToOneForUpdateInput {
+  create: LegislativeYuanMemberCreateInput
+  connect: LegislativeYuanMemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CommitteeMemberUpdateArgs {
+  where: CommitteeMemberWhereUniqueInput!
+  data: CommitteeMemberUpdateInput!
+}
+
+input CommitteeMemberCreateInput {
+  legislativeMeetingSession: LegislativeMeetingSessionRelateToOneForCreateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForCreateInput
+  committee: CommitteeRelateToManyForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislativeMeetingSessionRelateToOneForCreateInput {
+  create: LegislativeMeetingSessionCreateInput
+  connect: LegislativeMeetingSessionWhereUniqueInput
+}
+
+input LegislativeYuanMemberRelateToOneForCreateInput {
+  create: LegislativeYuanMemberCreateInput
+  connect: LegislativeYuanMemberWhereUniqueInput
 }
 
 type Topic {
@@ -825,12 +910,6 @@ input SpeechUpdateInput {
   updatedAt: DateTime
 }
 
-input LegislativeMeetingSessionRelateToOneForUpdateInput {
-  create: LegislativeMeetingSessionCreateInput
-  connect: LegislativeMeetingSessionWhereUniqueInput
-  disconnect: Boolean
-}
-
 input TopicRelateToManyForUpdateInput {
   disconnect: [TopicWhereUniqueInput!]
   set: [TopicWhereUniqueInput!]
@@ -859,11 +938,6 @@ input SpeechCreateInput {
   topics: TopicRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input LegislativeMeetingSessionRelateToOneForCreateInput {
-  create: LegislativeMeetingSessionCreateInput
-  connect: LegislativeMeetingSessionWhereUniqueInput
 }
 
 input TopicRelateToManyForCreateInput {
@@ -925,6 +999,12 @@ type Mutation {
   updateCommittees(data: [CommitteeUpdateArgs!]!): [Committee]
   deleteCommittee(where: CommitteeWhereUniqueInput!): Committee
   deleteCommittees(where: [CommitteeWhereUniqueInput!]!): [Committee]
+  createCommitteeMember(data: CommitteeMemberCreateInput!): CommitteeMember
+  createCommitteeMembers(data: [CommitteeMemberCreateInput!]!): [CommitteeMember]
+  updateCommitteeMember(where: CommitteeMemberWhereUniqueInput!, data: CommitteeMemberUpdateInput!): CommitteeMember
+  updateCommitteeMembers(data: [CommitteeMemberUpdateArgs!]!): [CommitteeMember]
+  deleteCommitteeMember(where: CommitteeMemberWhereUniqueInput!): CommitteeMember
+  deleteCommitteeMembers(where: [CommitteeMemberWhereUniqueInput!]!): [CommitteeMember]
   createTopic(data: TopicCreateInput!): Topic
   createTopics(data: [TopicCreateInput!]!): [Topic]
   updateTopic(where: TopicWhereUniqueInput!, data: TopicUpdateInput!): Topic
@@ -985,6 +1065,9 @@ type Query {
   committee(where: CommitteeWhereUniqueInput!): Committee
   committees(where: CommitteeWhereInput! = {}, orderBy: [CommitteeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeWhereUniqueInput): [Committee!]
   committeesCount(where: CommitteeWhereInput! = {}): Int
+  committeeMember(where: CommitteeMemberWhereUniqueInput!): CommitteeMember
+  committeeMembers(where: CommitteeMemberWhereInput! = {}, orderBy: [CommitteeMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeMemberWhereUniqueInput): [CommitteeMember!]
+  committeeMembersCount(where: CommitteeMemberWhereInput! = {}): Int
   topic(where: TopicWhereUniqueInput!): Topic
   topics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
   topicsCount(where: TopicWhereInput! = {}): Int

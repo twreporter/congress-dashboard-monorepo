@@ -17,6 +17,57 @@ const listConfigurations = list({
         labelField: 'name',
       },
     }),
+    labelForCMS: text({
+      hooks: {
+        resolveInput: async ({ resolvedData, item, context }) => {
+          const { legislator, legislativeMeeting, labelForCMS } = resolvedData
+
+          const fetchLegislatorName = async (id: NonNullable<unknown>) => {
+            const legislator = await context.query.Legislator.findOne({
+              where: { id: Number(id) },
+              query: 'name',
+            })
+            return legislator?.name
+          }
+          let legislatorName
+          if (legislator?.connect?.id) {
+            legislatorName = await fetchLegislatorName(legislator.connect.id)
+          } else if (item?.legislatorId) {
+            legislatorName = await fetchLegislatorName(item.legislatorId)
+          }
+
+          const fetchLegislativeMeetingTerm = async (
+            id: NonNullable<unknown>
+          ) => {
+            const legislativeMeeting =
+              await context.query.LegislativeMeeting.findOne({
+                where: { id: Number(id) },
+                query: 'term',
+              })
+            return legislativeMeeting?.term
+          }
+          let legislativeMeetingTerm
+          if (legislativeMeeting?.connect?.id) {
+            legislativeMeetingTerm = await fetchLegislativeMeetingTerm(
+              legislativeMeeting.connect.id
+            )
+          } else if (item?.legislativeMeetingId) {
+            legislativeMeetingTerm = await fetchLegislativeMeetingTerm(
+              item.legislativeMeetingId
+            )
+          }
+
+          return legislatorName && legislativeMeetingTerm
+            ? `${legislatorName} | 第 ${legislativeMeetingTerm} 屆`
+            : labelForCMS
+        },
+      },
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
     party: relationship({
       ref: 'Party',
       label: '所屬政黨',
@@ -57,10 +108,10 @@ const listConfigurations = list({
   },
   ui: {
     label: '立委屆資',
-    labelField: 'id',
+    labelField: 'labelForCMS',
     listView: {
       initialColumns: ['legislator', 'party', 'legislativeMeeting', 'type'],
-      initialSort: { field: 'id', direction: 'DESC' },
+      initialSort: { field: 'labelForCMS', direction: 'DESC' },
       pageSize: 50,
     },
   },

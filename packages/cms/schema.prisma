@@ -53,20 +53,22 @@ model Legislator {
 }
 
 model LegislativeYuanMember {
-  id                   Int                 @id @default(autoincrement())
-  legislator           Legislator?         @relation("LegislativeYuanMember_legislator", fields: [legislatorId], references: [id])
-  legislatorId         Int?                @map("legislator")
-  party                Party?              @relation("LegislativeYuanMember_party", fields: [partyId], references: [id])
-  partyId              Int?                @map("party")
-  legislativeMeeting   LegislativeMeeting? @relation("LegislativeYuanMember_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
-  legislativeMeetingId Int?                @map("legislativeMeeting")
-  type                 String
-  constituency         String?
-  city                 String?
-  tooltip              String              @default("")
-  note                 String              @default("")
-  createdAt            DateTime?           @default(now())
-  updatedAt            DateTime?           @updatedAt
+  id                                         Int                 @id @default(autoincrement())
+  legislator                                 Legislator?         @relation("LegislativeYuanMember_legislator", fields: [legislatorId], references: [id])
+  legislatorId                               Int?                @map("legislator")
+  labelForCMS                                String              @default("")
+  party                                      Party?              @relation("LegislativeYuanMember_party", fields: [partyId], references: [id])
+  partyId                                    Int?                @map("party")
+  legislativeMeeting                         LegislativeMeeting? @relation("LegislativeYuanMember_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
+  legislativeMeetingId                       Int?                @map("legislativeMeeting")
+  type                                       String
+  constituency                               String?
+  city                                       String?
+  tooltip                                    String              @default("")
+  note                                       String              @default("")
+  createdAt                                  DateTime?           @default(now())
+  updatedAt                                  DateTime?           @updatedAt
+  from_CommitteeMember_legislativeYuanMember CommitteeMember[]   @relation("CommitteeMember_legislativeYuanMember")
 
   @@index([legislatorId])
   @@index([partyId])
@@ -101,15 +103,17 @@ model LegislativeMeeting {
 }
 
 model LegislativeMeetingSession {
-  id                                    Int                 @id @default(autoincrement())
-  legislativeMeeting                    LegislativeMeeting? @relation("LegislativeMeetingSession_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
-  legislativeMeetingId                  Int?                @map("legislativeMeeting")
-  term                                  Int
-  startTime                             DateTime            @mysql.Date
-  endTime                               DateTime            @mysql.Date
-  createdAt                             DateTime?           @default(now())
-  updatedAt                             DateTime?           @updatedAt
-  from_Speech_legislativeMeetingSession Speech[]            @relation("Speech_legislativeMeetingSession")
+  id                                             Int                 @id @default(autoincrement())
+  legislativeMeeting                             LegislativeMeeting? @relation("LegislativeMeetingSession_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
+  legislativeMeetingId                           Int?                @map("legislativeMeeting")
+  labelForCMS                                    String              @default("")
+  term                                           Int
+  startTime                                      DateTime            @mysql.Date
+  endTime                                        DateTime            @mysql.Date
+  createdAt                                      DateTime?           @default(now())
+  updatedAt                                      DateTime?           @updatedAt
+  from_CommitteeMember_legislativeMeetingSession CommitteeMember[]   @relation("CommitteeMember_legislativeMeetingSession")
+  from_Speech_legislativeMeetingSession          Speech[]            @relation("Speech_legislativeMeetingSession")
 
   @@index([legislativeMeetingId])
 }
@@ -122,9 +126,24 @@ model Committee {
   createdAt                          DateTime?            @default(now())
   updatedAt                          DateTime?            @updatedAt
   from_LegislativeMeeting_committees LegislativeMeeting[] @relation("LegislativeMeeting_committees")
+  from_CommitteeMember_committee     CommitteeMember[]    @relation("CommitteeMember_committee")
 
   @@index([name])
   @@index([type])
+}
+
+model CommitteeMember {
+  id                          Int                        @id @default(autoincrement())
+  legislativeMeetingSession   LegislativeMeetingSession? @relation("CommitteeMember_legislativeMeetingSession", fields: [legislativeMeetingSessionId], references: [id])
+  legislativeMeetingSessionId Int?                       @map("legislativeMeetingSession")
+  legislativeYuanMember       LegislativeYuanMember?     @relation("CommitteeMember_legislativeYuanMember", fields: [legislativeYuanMemberId], references: [id])
+  legislativeYuanMemberId     Int?                       @map("legislativeYuanMember")
+  committee                   Committee[]                @relation("CommitteeMember_committee")
+  createdAt                   DateTime?                  @default(now())
+  updatedAt                   DateTime?                  @updatedAt
+
+  @@index([legislativeMeetingSessionId])
+  @@index([legislativeYuanMemberId])
 }
 
 model Topic {
