@@ -82,6 +82,21 @@ const listConfigurations = list({
         labelField: 'term',
       },
     }),
+    sessionAndCommittee: relationship({
+      ref: 'CommitteeMember.legislativeYuanMember',
+      many: true,
+      ui: {
+        listView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'hidden',
+        },
+        createView: {
+          fieldMode: 'hidden',
+        },
+      },
+    }),
     type: select({
       label: '類別',
       options: MEMBER_TYPE_OPTIONS,

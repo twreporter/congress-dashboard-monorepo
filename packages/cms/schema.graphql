@@ -269,6 +269,8 @@ type LegislativeYuanMember {
   labelForCMS: String
   party: Party
   legislativeMeeting: LegislativeMeeting
+  sessionAndCommittee(where: CommitteeMemberWhereInput! = {}, orderBy: [CommitteeMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeMemberWhereUniqueInput): [CommitteeMember!]
+  sessionAndCommitteeCount(where: CommitteeMemberWhereInput! = {}): Int
   type: String
   constituency: String
   city: String
@@ -291,6 +293,7 @@ input LegislativeYuanMemberWhereInput {
   labelForCMS: StringFilter
   party: PartyWhereInput
   legislativeMeeting: LegislativeMeetingWhereInput
+  sessionAndCommittee: CommitteeMemberManyRelationFilter
   type: StringFilter
   constituency: StringNullableFilter
   city: StringNullableFilter
@@ -298,6 +301,12 @@ input LegislativeYuanMemberWhereInput {
   note: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
+}
+
+input CommitteeMemberManyRelationFilter {
+  every: CommitteeMemberWhereInput
+  some: CommitteeMemberWhereInput
+  none: CommitteeMemberWhereInput
 }
 
 input StringNullableFilter {
@@ -331,6 +340,7 @@ input LegislativeYuanMemberUpdateInput {
   labelForCMS: String
   party: PartyRelateToOneForUpdateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  sessionAndCommittee: CommitteeMemberRelateToManyForUpdateInput
   type: String
   constituency: String
   city: String
@@ -358,6 +368,13 @@ input LegislativeMeetingRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input CommitteeMemberRelateToManyForUpdateInput {
+  disconnect: [CommitteeMemberWhereUniqueInput!]
+  set: [CommitteeMemberWhereUniqueInput!]
+  create: [CommitteeMemberCreateInput!]
+  connect: [CommitteeMemberWhereUniqueInput!]
+}
+
 input LegislativeYuanMemberUpdateArgs {
   where: LegislativeYuanMemberWhereUniqueInput!
   data: LegislativeYuanMemberUpdateInput!
@@ -368,6 +385,7 @@ input LegislativeYuanMemberCreateInput {
   labelForCMS: String
   party: PartyRelateToOneForCreateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  sessionAndCommittee: CommitteeMemberRelateToManyForCreateInput
   type: String
   constituency: String
   city: String
@@ -390,6 +408,11 @@ input PartyRelateToOneForCreateInput {
 input LegislativeMeetingRelateToOneForCreateInput {
   create: LegislativeMeetingCreateInput
   connect: LegislativeMeetingWhereUniqueInput
+}
+
+input CommitteeMemberRelateToManyForCreateInput {
+  create: [CommitteeMemberCreateInput!]
+  connect: [CommitteeMemberWhereUniqueInput!]
 }
 
 type Party {
@@ -828,7 +851,7 @@ type Speech {
   id: ID!
   legislativeMeeting: LegislativeMeeting
   legislativeMeetingSession: LegislativeMeetingSession
-  legislator: Legislator
+  legislativeYuanMember: LegislativeYuanMember
   date: CalendarDay
   title: String
   slug: String
@@ -856,7 +879,7 @@ input SpeechWhereInput {
   id: IDFilter
   legislativeMeeting: LegislativeMeetingWhereInput
   legislativeMeetingSession: LegislativeMeetingSessionWhereInput
-  legislator: LegislatorWhereInput
+  legislativeYuanMember: LegislativeYuanMemberWhereInput
   date: CalendarDayFilter
   title: StringFilter
   slug: StringFilter
@@ -895,7 +918,7 @@ input SpeechOrderByInput {
 input SpeechUpdateInput {
   legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
   legislativeMeetingSession: LegislativeMeetingSessionRelateToOneForUpdateInput
-  legislator: LegislatorRelateToOneForUpdateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForUpdateInput
   date: CalendarDay
   title: String
   slug: String
@@ -925,7 +948,7 @@ input SpeechUpdateArgs {
 input SpeechCreateInput {
   legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
   legislativeMeetingSession: LegislativeMeetingSessionRelateToOneForCreateInput
-  legislator: LegislatorRelateToOneForCreateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForCreateInput
   date: CalendarDay
   title: String
   slug: String

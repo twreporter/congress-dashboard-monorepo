@@ -13,7 +13,7 @@ const listConfigurations = list({
       },
     }),
     legislativeYuanMember: relationship({
-      ref: 'LegislativeYuanMember',
+      ref: 'LegislativeYuanMember.sessionAndCommittee',
       label: '委員',
       ui: {
         labelField: 'labelForCMS',
