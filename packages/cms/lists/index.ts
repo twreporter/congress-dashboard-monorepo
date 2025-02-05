@@ -9,6 +9,7 @@ import Committee from './Committee'
 import Topic from './Topic'
 import Speech from './Speech'
 import CommitteeMember from './CommitteeMember'
+import Selected from './Selected'
 
 export const listDefinition = {
   SystemUser,
@@ -22,4 +23,5 @@ export const listDefinition = {
   CommitteeMember,
   Topic,
   Speech,
+  Selected,
 }

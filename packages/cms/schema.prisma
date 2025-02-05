@@ -47,6 +47,7 @@ model Legislator {
   createdAt                             DateTime?               @default(now())
   updatedAt                             DateTime?               @updatedAt
   from_LegislativeYuanMember_legislator LegislativeYuanMember[] @relation("LegislativeYuanMember_legislator")
+  from_Selected_legislator              Selected[]              @relation("Selected_legislator")
 
   @@index([imageId])
 }
@@ -147,12 +148,13 @@ model CommitteeMember {
 }
 
 model Topic {
-  id        Int       @id @default(autoincrement())
-  title     String    @default("")
-  slug      String    @unique @default("")
-  speeches  Speech[]  @relation("Speech_topics")
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id                  Int        @id @default(autoincrement())
+  title               String     @default("")
+  slug                String     @unique @default("")
+  speeches            Speech[]   @relation("Speech_topics")
+  createdAt           DateTime?  @default(now())
+  updatedAt           DateTime?  @updatedAt
+  from_Selected_topic Selected[] @relation("Selected_topic")
 
   @@index([title])
 }
@@ -183,4 +185,18 @@ model Speech {
   @@index([legislativeYuanMemberId])
   @@index([date])
   @@index([title])
+}
+
+model Selected {
+  id           Int         @id @default(autoincrement())
+  legislator   Legislator? @relation("Selected_legislator", fields: [legislatorId], references: [id])
+  legislatorId Int?        @map("legislator")
+  topic        Topic?      @relation("Selected_topic", fields: [topicId], references: [id])
+  topicId      Int?        @map("topic")
+  order        Int
+  createdAt    DateTime?   @default(now())
+  updatedAt    DateTime?   @updatedAt
+
+  @@index([legislatorId])
+  @@index([topicId])
 }

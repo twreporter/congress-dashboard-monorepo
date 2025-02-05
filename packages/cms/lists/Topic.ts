@@ -23,7 +23,7 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT,
   },
   ui: {
-    label: '主題',
+    label: '議題',
     labelField: 'title',
     listView: {
       initialColumns: ['title', 'slug'],

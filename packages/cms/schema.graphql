@@ -968,6 +968,71 @@ input TopicRelateToManyForCreateInput {
   connect: [TopicWhereUniqueInput!]
 }
 
+type Selected {
+  id: ID!
+  legislator: Legislator
+  topic: Topic
+  order: Int
+  labelField: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input SelectedWhereUniqueInput {
+  id: ID
+}
+
+input SelectedWhereInput {
+  AND: [SelectedWhereInput!]
+  OR: [SelectedWhereInput!]
+  NOT: [SelectedWhereInput!]
+  id: IDFilter
+  legislator: LegislatorWhereInput
+  topic: TopicWhereInput
+  order: IntFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input SelectedOrderByInput {
+  id: OrderDirection
+  order: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input SelectedUpdateInput {
+  legislator: LegislatorRelateToOneForUpdateInput
+  topic: TopicRelateToOneForUpdateInput
+  order: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input TopicRelateToOneForUpdateInput {
+  create: TopicCreateInput
+  connect: TopicWhereUniqueInput
+  disconnect: Boolean
+}
+
+input SelectedUpdateArgs {
+  where: SelectedWhereUniqueInput!
+  data: SelectedUpdateInput!
+}
+
+input SelectedCreateInput {
+  legislator: LegislatorRelateToOneForCreateInput
+  topic: TopicRelateToOneForCreateInput
+  order: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input TopicRelateToOneForCreateInput {
+  create: TopicCreateInput
+  connect: TopicWhereUniqueInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -1040,6 +1105,12 @@ type Mutation {
   updateSpeeches(data: [SpeechUpdateArgs!]!): [Speech]
   deleteSpeech(where: SpeechWhereUniqueInput!): Speech
   deleteSpeeches(where: [SpeechWhereUniqueInput!]!): [Speech]
+  createSelected(data: SelectedCreateInput!): Selected
+  createSelecteds(data: [SelectedCreateInput!]!): [Selected]
+  updateSelected(where: SelectedWhereUniqueInput!, data: SelectedUpdateInput!): Selected
+  updateSelecteds(data: [SelectedUpdateArgs!]!): [Selected]
+  deleteSelected(where: SelectedWhereUniqueInput!): Selected
+  deleteSelecteds(where: [SelectedWhereUniqueInput!]!): [Selected]
   endSession: Boolean!
   authenticateSystemUserWithPassword(email: String!, password: String!): SystemUserAuthenticationWithPasswordResult
   createInitialSystemUser(data: CreateInitialSystemUserInput!): SystemUserAuthenticationWithPasswordSuccess!
@@ -1097,6 +1168,9 @@ type Query {
   speech(where: SpeechWhereUniqueInput!): Speech
   speeches(where: SpeechWhereInput! = {}, orderBy: [SpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SpeechWhereUniqueInput): [Speech!]
   speechesCount(where: SpeechWhereInput! = {}): Int
+  selected(where: SelectedWhereUniqueInput!): Selected
+  selecteds(where: SelectedWhereInput! = {}, orderBy: [SelectedOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SelectedWhereUniqueInput): [Selected!]
+  selectedsCount(where: SelectedWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
