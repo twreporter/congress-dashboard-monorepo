@@ -16,6 +16,9 @@ const listConfigurations = list({
       ref: 'Photo',
       label: '委員照片',
     }),
+    imageLink: text({
+      label: 'ImageLink',
+    }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,
   },

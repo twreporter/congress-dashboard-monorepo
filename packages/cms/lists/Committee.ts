@@ -1,31 +1,38 @@
 import { list } from '@keystone-6/core'
-import { text, relationship } from '@keystone-6/core/fields'
+import { text, select } from '@keystone-6/core/fields'
 import { allowAllRoles } from './utils/access-control-list'
 import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
 
 const listConfigurations = list({
   fields: {
     name: text({
-      label: '政黨名稱',
-      validation: { isRequired: true },
+      label: '委員會名稱',
+      isIndexed: true,
     }),
     slug: SLUG,
-    image: relationship({
-      label: '政黨照片',
-      ref: 'Photo',
-    }),
-    imageLink: text({
-      label: 'ImageLink',
+    type: select({
+      label: '委員會類型',
+      options: [
+        {
+          label: '常設委員會',
+          value: 'standing',
+        },
+        {
+          label: '特種委員會',
+          value: 'ad-hoc',
+        },
+      ],
+      isIndexed: true,
     }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,
   },
   ui: {
-    label: '政黨',
+    label: '委員會',
     labelField: 'name',
     listView: {
-      initialColumns: ['name', 'slug'],
-      initialSort: { field: 'createdAt', direction: 'DESC' },
+      initialColumns: ['name', 'slug', 'type'],
+      initialSort: { field: 'name', direction: 'ASC' },
       pageSize: 50,
     },
   },
