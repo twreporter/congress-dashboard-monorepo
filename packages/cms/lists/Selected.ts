@@ -80,6 +80,31 @@ const listConfigurations = list({
       delete: allowAllRoles(),
     },
   },
+  hooks: {
+    validate: {
+      create: ({ resolvedData, addValidationError }) => {
+        const { legislator, topic } = resolvedData
+        if (legislator && topic) addValidationError('不能同時選擇委員和議題')
+        if (!legislator && !topic) addValidationError('必須選擇委員或議題')
+      },
+      update: ({ resolvedData, item, addValidationError }) => {
+        const { legislator, topic } = resolvedData
+        const { legislatorId, topicId } = item
+
+        // Check if we have either current or new relationships
+        const hasLegislator =
+          !legislator?.disconnect && (legislator || legislatorId)
+        const hasTopic = !topic?.disconnect && (topic || topicId)
+
+        // Validate that exactly one option is selected
+        if (!hasLegislator && !hasTopic) {
+          addValidationError('必須選擇委員或議題') // Must select either legislator or topic
+        } else if (hasLegislator && hasTopic) {
+          addValidationError('不能同時選擇委員和議題') // Cannot select both legislator and topic
+        }
+      },
+    },
+  },
 })
 
 export default listConfigurations

@@ -19,13 +19,6 @@ const listConfigurations = list({
         labelField: 'labelForCMS',
       },
     }),
-    // legislator: relationship({
-    //   ref: 'Legislator',
-    //   label: '委員',
-    //   ui: {
-    //     labelField: 'name',
-    //   },
-    // }),
     legislativeYuanMember: relationship({
       ref: 'LegislativeYuanMember',
       label: '委員',
