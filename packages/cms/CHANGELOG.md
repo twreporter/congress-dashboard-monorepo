@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.0.1-beta.1, 2025-02-06
+
+### Notable Changes
+
+- feat
+  - add legislative-yuan-member options constant
+  - ignore eslintcache
+  - add imageLink for party and member
+  - add city constant
+  - create imageLink migration file
+  - create committee list
+  - create topic and speech list
+  - create committeeMember list
+  - use legislative yuan member for relation
+  - create selected list
+  - use typescript enum for export constants
+- fix
+  - add validation for selected
+
+### Commits
+
+- [[`cb700b8c3d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cb700b8c3d)] - **fix(cms)**: add validation for selected (Lucien)
+- [[`e3f9ad3a71`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e3f9ad3a71)] - **feat(shared)**: use typescript enum for export constants (Lucien)
+- [[`7bc71836bc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7bc71836bc)] - **feat(cms)**: create selected list (Lucien)
+- [[`7e72793c09`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7e72793c09)] - **feat(cms)**: use legislative yuan member for relation (Lucien)
+- [[`f6b6d624c0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f6b6d624c0)] - **feat(cms)**: create committeeMember list (Lucien)
+- [[`e09da297bc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e09da297bc)] - **feat(cms)**: create topic and speech list (Lucien)
+- [[`2c32fa5deb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2c32fa5deb)] - **feat(cms)**: create committee list (Lucien)
+- [[`030bcf1769`](https://github.com/twreporter/congress-dashboard-monorepo/commit/030bcf1769)] - **feat(cms)**: create imageLink migration file (Lucien)
+- [[`94037d9129`](https://github.com/twreporter/congress-dashboard-monorepo/commit/94037d9129)] - **feat**: add city constant (Lucien)
+- [[`bfdb83bbaa`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bfdb83bbaa)] - **feat(cms)**: add imageLink for party and member (Lucien)
+- [[`8508af454e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8508af454e)] - **feat**: ignore eslintcache (Lucien)
+- [[`ae9d6f7d95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ae9d6f7d95)] - **feat(cms)**: add legislative-yuan-member options constant (Lucien)
+
 ## 0.0.1-beta.0, 2025-01-23
 
 ### Notable Changes
