@@ -1,5 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import {
+  MEMBER_TYPE_LABEL,
+  MemberType,
+} from 'shared/lib/esm/constants/legislative-yuan-member'
 // @twreporter
 import {
   colorGrayscale,
@@ -13,12 +17,6 @@ import {
   TabletAndBelow,
 } from '@twreporter/react-components/lib/rwd'
 
-export enum LegislatorType {
-  Constituency = '區域',
-  NationwideAndOverseas = '不分區',
-  HighlandAboriginal = '高山原住民',
-  LowlandAboriginal = '平地原住民',
-}
 export enum CardSize {
   S,
   L,
@@ -101,7 +99,7 @@ export type Tag = {
 export type CardHumanProps = {
   name?: string
   tooltip?: string
-  type?: LegislatorType
+  type?: typeof MEMBER_TYPE_LABEL
   tags?: Tag[]
   avatar?: string
   partyAvatar?: string
@@ -112,7 +110,7 @@ export type CardHumanProps = {
 const CardHuman: React.FC<CardHumanProps> = ({
   name = '',
   //tooltip = '',
-  type = LegislatorType.Constituency,
+  type = MEMBER_TYPE_LABEL[MemberType.Constituency],
   tags = [],
   avatar = '',
   partyAvatar = '',
