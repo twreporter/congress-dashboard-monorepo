@@ -6,7 +6,7 @@ import {
   MEMBER_TYPE_OPTIONS,
   CONSTITUENCY_OPTIONS,
   CITY_OPTIONS,
-} from '@lucien-twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+} from '@twreporter/congress-dashboard-shared/lib/esm/constants/legislative-yuan-member'
 
 const listConfigurations = list({
   fields: {
