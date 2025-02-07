@@ -1,5 +1,9 @@
 import { Legislator, CardIssueProps } from './issue'
-import { LegislatorType, CardHumanProps, Tag } from './human'
+import { CardHumanProps, Tag } from './human'
+import {
+  MEMBER_TYPE_LABEL,
+  MemberType,
+} from '@twreporter/congress-dashboard-shared/lib/cjs/constants/legislative-yuan-member'
 
 const DDP = 'https://dev-congress-dashboard-storage.twreporter.org/tmp/ddp.png'
 const KMT = 'https://dev-congress-dashboard-storage.twreporter.org/tmp/kmt.png'
@@ -100,84 +104,85 @@ const defaultTag: Tag[] = [
 export const mockHumans: CardHumanProps[] = [
   {
     name: '沈伯洋',
-    type: LegislatorType.NationwideAndOverseas,
+    type: MEMBER_TYPE_LABEL[MemberType.NationwideAndOverseas],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: DDP,
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.Constituency,
+    type: MEMBER_TYPE_LABEL[MemberType.Constituency],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: KMT,
+    tooltip: '我是藍色的',
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.HighlandAboriginal,
-    tags: defaultTag,
+    type: MEMBER_TYPE_LABEL[MemberType.HighlandAboriginal],
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: TPP,
+    note: '我的名字叫 PUMA，喜歡黑熊。',
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.LowlandAboriginal,
+    type: MEMBER_TYPE_LABEL[MemberType.LowlandAboriginal],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: NONE,
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.NationwideAndOverseas,
+    type: MEMBER_TYPE_LABEL[MemberType.NationwideAndOverseas],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: DDP,
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.NationwideAndOverseas,
+    type: MEMBER_TYPE_LABEL[MemberType.NationwideAndOverseas],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: DDP,
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.NationwideAndOverseas,
+    type: MEMBER_TYPE_LABEL[MemberType.NationwideAndOverseas],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: DDP,
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.NationwideAndOverseas,
+    type: MEMBER_TYPE_LABEL[MemberType.NationwideAndOverseas],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: DDP,
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.NationwideAndOverseas,
+    type: MEMBER_TYPE_LABEL[MemberType.NationwideAndOverseas],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: DDP,
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.NationwideAndOverseas,
+    type: MEMBER_TYPE_LABEL[MemberType.NationwideAndOverseas],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: DDP,
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.NationwideAndOverseas,
+    type: MEMBER_TYPE_LABEL[MemberType.NationwideAndOverseas],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: DDP,
   },
   {
     name: '沈伯洋',
-    type: LegislatorType.NationwideAndOverseas,
+    type: MEMBER_TYPE_LABEL[MemberType.NationwideAndOverseas],
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
     partyAvatar: DDP,

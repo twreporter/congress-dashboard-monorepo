@@ -3,9 +3,9 @@ import styled from 'styled-components'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 
-export const Triangle = styled.div<{ $width: string; $height: string }>`
-  width: ${(props) => props.$width};
-  height: ${(props) => props.$height};
+export const Triangle = styled.div<{ $width?: string; $height?: string }>`
+  width: ${(props) => props.$width || 'auto'};
+  height: ${(props) => props.$height || 'auto'};
   background: ${colorGrayscale.gray200};
   border-radius: 2px;
 `
@@ -24,3 +24,7 @@ export const Circle: React.FC = ({ width = 56, height = 56 }: CircleProps) => (
     <circle cx="28" cy="28" r="28" fill={colorGrayscale.gray200} />
   </svg>
 )
+
+export const Gap = styled.div<{ $gap: number }>`
+  height: ${(props) => props.$gap}px;
+`

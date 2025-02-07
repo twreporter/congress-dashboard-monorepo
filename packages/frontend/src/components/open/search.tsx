@@ -3,10 +3,13 @@
 import React from 'react'
 import styled from 'styled-components'
 // twreporter
-import { colorGrayscale, colorOpacity } from '@twreporter/core/lib/constants/color'
+import {
+  colorGrayscale,
+  colorOpacity,
+} from '@twreporter/core/lib/constants/color'
 import { IconButton } from '@twreporter/react-components/lib/button'
 import { Search } from '@twreporter/react-components/lib/icon'
-import  mq from '@twreporter/core/lib/utils/media-query'
+import mq from '@twreporter/core/lib/utils/media-query'
 
 const Bar = styled.div`
   padding: 8px 20px;
@@ -30,11 +33,13 @@ const Input = styled.input`
   flex: 1 0 0;
   line-height: 24px;
   padding: 0 2px;
-  &, &:active, &:focus-visible {
+  &,
+  &:active,
+  &:focus-visible {
     border: none;
     outline: none;
   }
-  
+
   ::placeholder {
     color: ${colorGrayscale.gray500};
   }
@@ -44,10 +49,10 @@ const SearchButton = styled(IconButton)`
   height: 24px;
 `
 
-const SearchBar = () => {
+const SearchBar: React.FC = () => {
   return (
     <Bar>
-      <Input type='text' placeholder='搜尋議題或立委' />
+      <Input type="text" placeholder="搜尋議題或立委" />
       <SearchButton
         type={IconButton.Type.PRIMARY}
         theme={IconButton.THEME.normal}
