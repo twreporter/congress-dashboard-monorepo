@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.0.1-beta.2, 2025-02-07
+
+### Notable Changes
+
+- chore
+  - use twreporter repo
+  - sync dev
+
+### Commits
+
+- [[`7c68cbd28f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c68cbd28f)] - **chore**: use twreporter repo (Lucien)
+- [[`434b64072e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/434b64072e)] - **chore**: sync dev (Lucien)
+
 ## 0.0.1-beta.1, 2025-02-06
 
 ### Notable Changes
