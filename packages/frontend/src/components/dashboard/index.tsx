@@ -11,6 +11,7 @@ import { CardHumanRWD, CardHumanProps } from './card/human'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
+import { PillButton } from '@twreporter/react-components/lib/button'
 
 const Box = styled.div`
   background: ${colorGrayscale.gray100};
@@ -51,6 +52,16 @@ const CardHumanBox = styled.div<{ $active: boolean }>`
     grid-gap: 20px;
   `}
 `
+const LoadMore = styled(PillButton)`
+  margin: 64px 0 120px 0;
+  justify-content: center;
+  width: 300px !important;
+
+  ${mq.mobileOnly`
+    margin: 32px 0 64px 0;
+    width: calc(100% - 32px) !important;
+  `}
+`
 
 const Dashboard = () => {
   const [selectedType, setSelectedType] = useState(Option.Issue)
@@ -59,6 +70,10 @@ const Dashboard = () => {
     setActiveCard(-1)
     setSelectedType(value)
   }
+  const loadMore = () => {
+    alert('load more')
+  }
+
   return (
     <Box>
       <FunctionBar currentTab={selectedType} setTab={setTab} />
@@ -82,6 +97,14 @@ const Dashboard = () => {
           />
         ))}
       </CardHumanBox>
+      <LoadMore
+        text={'載入更多'}
+        theme={PillButton.THEME.normal}
+        style={PillButton.Style.DARK}
+        type={PillButton.Type.PRIMARY}
+        size={PillButton.Size.L}
+        onClick={loadMore}
+      />
     </Box>
   )
 }

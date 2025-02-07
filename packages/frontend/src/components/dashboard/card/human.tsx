@@ -1,17 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
+// components
+import Tooltip from './tooltip'
+// @twreporter
 import {
   MEMBER_TYPE_LABEL,
   MemberType,
 } from '@twreporter/congress-dashboard-shared/lib/cjs/constants/legislative-yuan-member'
-// @twreporter
 import {
   colorGrayscale,
   colorOpacity,
   colorBrand,
 } from '@twreporter/core/lib/constants/color'
 import { H4 } from '@twreporter/react-components/lib/text/headline'
-import { P2 } from '@twreporter/react-components/lib/text/paragraph'
+import { P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
 import {
   DesktopAndAbove,
   TabletAndBelow,
@@ -23,7 +25,7 @@ export enum CardSize {
 }
 
 const Box = styled.div<{ $selected: boolean; $size: CardSize }>`
-  width: ${(props) => (props.$size === CardSize.S ? 327 : 452)}px;
+  width: 100%;
   height: ${(props) => (props.$size === CardSize.S ? 154 : 196)}px;
   display: flex;
   border-radius: 4px;
@@ -45,6 +47,8 @@ const Box = styled.div<{ $selected: boolean; $size: CardSize }>`
 `
 const Title = styled.div`
   display: flex;
+  align-items: center;
+  gap: 4px;
 `
 const Name = styled(H4)`
   color: ${colorGrayscale.gray800};
@@ -52,10 +56,11 @@ const Name = styled(H4)`
 const Type = styled(P2)`
   color: ${colorGrayscale.gray800};
 `
-const DetailContainer = styled.div`
+const DetailContainer = styled.div<{ $isShowTag: boolean }>`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: ${(props) =>
+    props.$isShowTag ? 'flex-start' : 'space-between'};
   padding: 16px;
   gap: 14px;
 `
@@ -74,6 +79,9 @@ const TagItem = styled.div`
   color: ${colorGrayscale.gray800};
   font-size: 14px;
   line-height: 150%;
+`
+const Note = styled(P3)`
+  color: ${colorGrayscale.gray600};
 `
 const AvatarContainer = styled.div`
   position: relative;
@@ -99,6 +107,7 @@ export type Tag = {
 export type CardHumanProps = {
   name?: string
   tooltip?: string
+  note?: string
   type?: typeof MEMBER_TYPE_LABEL
   tags?: Tag[]
   avatar?: string
@@ -109,7 +118,8 @@ export type CardHumanProps = {
 }
 const CardHuman: React.FC<CardHumanProps> = ({
   name = '',
-  //tooltip = '',
+  tooltip = '',
+  note = '',
   type = MEMBER_TYPE_LABEL[MemberType.Constituency],
   tags = [],
   avatar = '',
@@ -118,28 +128,34 @@ const CardHuman: React.FC<CardHumanProps> = ({
   selected = false,
   onClick,
 }: CardHumanProps) => {
+  const isShowTag = tags.length > 0
   return (
     <Box $selected={selected} $size={size} onClick={onClick}>
       <AvatarContainer>
         <Avatar src={avatar} $size={size} />
         <Party src={partyAvatar} />
       </AvatarContainer>
-      <DetailContainer>
+      <DetailContainer $isShowTag={isShowTag}>
         <div>
           <Title>
             <Name text={name} />
+            {tooltip ? <Tooltip tooltip={tooltip} /> : null}
           </Title>
           <Type text={type} />
         </div>
-        <TagContainer $size={size}>
-          {tags.map(({ name, count }: Tag, index: number) => {
-            return (
-              <TagItem key={`legislator-${name}-tag-${index}`}>
-                {`${name}(${count})`}
-              </TagItem>
-            )
-          })}
-        </TagContainer>
+        {isShowTag ? (
+          <TagContainer $size={size}>
+            {tags.map(({ name, count }: Tag, index: number) => {
+              return (
+                <TagItem key={`legislator-${name}-tag-${index}`}>
+                  {`${name}(${count})`}
+                </TagItem>
+              )
+            })}
+          </TagContainer>
+        ) : (
+          <Note text={note} />
+        )}
       </DetailContainer>
     </Box>
   )

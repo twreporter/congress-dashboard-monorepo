@@ -18,7 +18,9 @@ const textCss = css`
   font-size: 16px;
   font-weight: 700;
   line-height: 150%;
-
+`
+const SelectedTag = styled.div`
+  display: flex;
 `
 const Text = styled.div`
   ${textCss}
@@ -29,10 +31,10 @@ const Item = styled.a`
 `
 
 type SelectedProps = {
-  className?: string, 
+  className?: string
 }
 
-const Selected = ({ className }: SelectedProps) => {
+const Selected: React.FC<SelectedProps> = ({ className }: SelectedProps) => {
   if (!selected || selected.length === 0) {
     return null
   }
@@ -40,10 +42,10 @@ const Selected = ({ className }: SelectedProps) => {
     <Container className={className}>
       <Text key="selected-intro">編輯精選：</Text>
       {selected.map(({ label, path }, index) => (
-        <>
-          {index === 0 ? null : <Text key={`selected-prefix-${index}`}>、</Text>}
-          <Item href={path} key={`selected-${index}`}>{label}</Item>
-        </>
+        <SelectedTag key={`selected-${index}`}>
+          {index === 0 ? null : <Text>、</Text>}
+          <Item href={path}>{label}</Item>
+        </SelectedTag>
       ))}
     </Container>
   )
