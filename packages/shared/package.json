@@ -13,7 +13,7 @@
     "build": "yarn clean && yarn build:cjs && yarn build:esm",
     "show-config": "tsc --showConfig"
   },
-  "type": "module",
+  "type": "commonjs",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "license": "MIT",

@@ -10,12 +10,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.18.5",
-    "@babel/eslint-parser": "^7.11.4",
-    "@babel/preset-env": "^7.18.2",
-    "@babel/preset-react": "^7.17.12",
-    "@babel/preset-typescript": "^7.17.12",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "changelog-maker": "^4.3.3",
     "eslint": "^7.7.0",

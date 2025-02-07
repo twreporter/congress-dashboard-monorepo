@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {
   MEMBER_TYPE_LABEL,
   MemberType,
-} from 'shared/lib/esm/constants/legislative-yuan-member'
+} from '@twreporter/congress-dashboard-shared/lib/cjs/constants/legislative-yuan-member'
 // @twreporter
 import {
   colorGrayscale,
