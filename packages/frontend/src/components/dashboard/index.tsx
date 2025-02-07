@@ -56,7 +56,6 @@ const Dashboard = () => {
   const [selectedType, setSelectedType] = useState(Option.Issue)
   const [activeCard, setActiveCard] = useState(-1)
   const setTab = (value: Option) => {
-    console.log('set tab', value)
     setActiveCard(-1)
     setSelectedType(value)
   }
