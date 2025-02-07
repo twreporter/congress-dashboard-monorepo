@@ -1,3 +1,7 @@
 # dependency
 node_modules
 .eslintcache
+
+# generated files
+packages/**/lib
+packages/**/dist

@@ -1,6 +1,6 @@
 {
-  "name": "congress-dashboard-cms",
-  "version": "0.0.1-beta.1",
+  "name": "@twreporter/congress-dashboard-cms",
+  "version": "0.0.1-beta.2",
   "private": true,
   "scripts": {
     "dev": "keystone dev",
@@ -12,6 +12,7 @@
     "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown"
   },
   "dependencies": {
+    "@twreporter/congress-dashboard-shared": "^0.0.1",
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",

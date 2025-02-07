@@ -1,6 +1,11 @@
 {
-  "name": "shared",
+  "name": "@twreporter/congress-dashboard-shared",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/twreporter/congress-dashboard-monorepo.git",
+    "directory": "packages/shared"
+  },
   "scripts": {
     "clean": "rm -rf lib",
     "build:cjs": "tsc --project tsconfig.cjs.json",
@@ -8,11 +13,14 @@
     "build": "yarn clean && yarn build:cjs && yarn build:esm",
     "show-config": "tsc --showConfig"
   },
-  "type": "module",
+  "type": "commonjs",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "license": "MIT",
   "devDependencies": {
     "typescript": "^5.7.3"
-  }
+  },
+  "files": [
+    "lib"
+  ]
 }

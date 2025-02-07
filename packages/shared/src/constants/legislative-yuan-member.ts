@@ -242,3 +242,15 @@ export const CONSTITUENCY_OPTIONS = createOptions(
   CONSTITUENCY_LABEL
 )
 export const CITY_OPTIONS = createOptions(City, CITY_LABEL)
+
+export default {
+  MemberType,
+  MEMBER_TYPE_LABEL,
+  Constituency,
+  CONSTITUENCY_LABEL,
+  City,
+  CITY_LABEL,
+  MEMBER_TYPE_OPTIONS,
+  CONSTITUENCY_OPTIONS,
+  CITY_OPTIONS,
+}
