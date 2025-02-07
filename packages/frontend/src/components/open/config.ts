@@ -1,5 +1,3 @@
-import Loadable from "next/dist/shared/lib/loadable.shared-runtime"
-
 export const title = '議會透視板'
 export const description = [
   '你家立委關心什麼？你關注的議題有誰在討論？',

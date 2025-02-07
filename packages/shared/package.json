@@ -1,0 +1,18 @@
+{
+  "name": "shared",
+  "version": "0.0.1",
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build:cjs": "tsc --project tsconfig.cjs.json",
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "build": "yarn clean && yarn build:cjs && yarn build:esm",
+    "show-config": "tsc --showConfig"
+  },
+  "type": "module",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
