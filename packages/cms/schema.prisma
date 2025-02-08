@@ -37,6 +37,60 @@ model Photo {
   @@index([name])
 }
 
+model Selected {
+  id           Int         @id @default(autoincrement())
+  legislator   Legislator? @relation("Selected_legislator", fields: [legislatorId], references: [id])
+  legislatorId Int?        @map("legislator")
+  topic        Topic?      @relation("Selected_topic", fields: [topicId], references: [id])
+  topicId      Int?        @map("topic")
+  order        Int
+  createdAt    DateTime?   @default(now())
+  updatedAt    DateTime?   @updatedAt
+
+  @@index([legislatorId])
+  @@index([topicId])
+}
+
+model Speech {
+  id                          Int                        @id @default(autoincrement())
+  legislativeMeeting          LegislativeMeeting?        @relation("Speech_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
+  legislativeMeetingId        Int?                       @map("legislativeMeeting")
+  legislativeMeetingSession   LegislativeMeetingSession? @relation("Speech_legislativeMeetingSession", fields: [legislativeMeetingSessionId], references: [id])
+  legislativeMeetingSessionId Int?                       @map("legislativeMeetingSession")
+  legislativeYuanMember       LegislativeYuanMember?     @relation("Speech_legislativeYuanMember", fields: [legislativeYuanMemberId], references: [id])
+  legislativeYuanMemberId     Int?                       @map("legislativeYuanMember")
+  date                        DateTime                   @mysql.Date
+  title                       String                     @default("")
+  slug                        String                     @unique @default("")
+  summary                     String                     @default("")
+  content                     String                     @default("")
+  attendee                    String                     @default("")
+  ivodLink                    String                     @default("")
+  ivodStartTime               String                     @default("")
+  ivodEndTime                 String                     @default("")
+  topics                      Topic[]                    @relation("Speech_topics")
+  createdAt                   DateTime?                  @default(now())
+  updatedAt                   DateTime?                  @updatedAt
+
+  @@index([legislativeMeetingId])
+  @@index([legislativeMeetingSessionId])
+  @@index([legislativeYuanMemberId])
+  @@index([date])
+  @@index([title])
+}
+
+model Topic {
+  id                  Int        @id @default(autoincrement())
+  title               String     @default("")
+  slug                String     @unique @default("")
+  speeches            Speech[]   @relation("Speech_topics")
+  createdAt           DateTime?  @default(now())
+  updatedAt           DateTime?  @updatedAt
+  from_Selected_topic Selected[] @relation("Selected_topic")
+
+  @@index([title])
+}
+
 model Legislator {
   id                                    Int                     @id @default(autoincrement())
   name                                  String                  @default("")
@@ -46,8 +100,8 @@ model Legislator {
   imageLink                             String                  @default("")
   createdAt                             DateTime?               @default(now())
   updatedAt                             DateTime?               @updatedAt
-  from_LegislativeYuanMember_legislator LegislativeYuanMember[] @relation("LegislativeYuanMember_legislator")
   from_Selected_legislator              Selected[]              @relation("Selected_legislator")
+  from_LegislativeYuanMember_legislator LegislativeYuanMember[] @relation("LegislativeYuanMember_legislator")
 
   @@index([imageId])
 }
@@ -98,9 +152,9 @@ model LegislativeMeeting {
   committees                                        Committee[]                 @relation("LegislativeMeeting_committees")
   createdAt                                         DateTime?                   @default(now())
   updatedAt                                         DateTime?                   @updatedAt
+  from_Speech_legislativeMeeting                    Speech[]                    @relation("Speech_legislativeMeeting")
   from_LegislativeYuanMember_legislativeMeeting     LegislativeYuanMember[]     @relation("LegislativeYuanMember_legislativeMeeting")
   from_LegislativeMeetingSession_legislativeMeeting LegislativeMeetingSession[] @relation("LegislativeMeetingSession_legislativeMeeting")
-  from_Speech_legislativeMeeting                    Speech[]                    @relation("Speech_legislativeMeeting")
 }
 
 model LegislativeMeetingSession {
@@ -113,8 +167,8 @@ model LegislativeMeetingSession {
   endTime                                        DateTime            @mysql.Date
   createdAt                                      DateTime?           @default(now())
   updatedAt                                      DateTime?           @updatedAt
-  from_CommitteeMember_legislativeMeetingSession CommitteeMember[]   @relation("CommitteeMember_legislativeMeetingSession")
   from_Speech_legislativeMeetingSession          Speech[]            @relation("Speech_legislativeMeetingSession")
+  from_CommitteeMember_legislativeMeetingSession CommitteeMember[]   @relation("CommitteeMember_legislativeMeetingSession")
 
   @@index([legislativeMeetingId])
 }
@@ -145,58 +199,4 @@ model CommitteeMember {
 
   @@index([legislativeMeetingSessionId])
   @@index([legislativeYuanMemberId])
-}
-
-model Topic {
-  id                  Int        @id @default(autoincrement())
-  title               String     @default("")
-  slug                String     @unique @default("")
-  speeches            Speech[]   @relation("Speech_topics")
-  createdAt           DateTime?  @default(now())
-  updatedAt           DateTime?  @updatedAt
-  from_Selected_topic Selected[] @relation("Selected_topic")
-
-  @@index([title])
-}
-
-model Speech {
-  id                          Int                        @id @default(autoincrement())
-  legislativeMeeting          LegislativeMeeting?        @relation("Speech_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
-  legislativeMeetingId        Int?                       @map("legislativeMeeting")
-  legislativeMeetingSession   LegislativeMeetingSession? @relation("Speech_legislativeMeetingSession", fields: [legislativeMeetingSessionId], references: [id])
-  legislativeMeetingSessionId Int?                       @map("legislativeMeetingSession")
-  legislativeYuanMember       LegislativeYuanMember?     @relation("Speech_legislativeYuanMember", fields: [legislativeYuanMemberId], references: [id])
-  legislativeYuanMemberId     Int?                       @map("legislativeYuanMember")
-  date                        DateTime                   @mysql.Date
-  title                       String                     @default("")
-  slug                        String                     @unique @default("")
-  summary                     String                     @default("")
-  content                     String                     @default("")
-  attendee                    String                     @default("")
-  ivodLink                    String                     @default("")
-  ivodStartTime               String                     @default("")
-  ivodEndTime                 String                     @default("")
-  topics                      Topic[]                    @relation("Speech_topics")
-  createdAt                   DateTime?                  @default(now())
-  updatedAt                   DateTime?                  @updatedAt
-
-  @@index([legislativeMeetingId])
-  @@index([legislativeMeetingSessionId])
-  @@index([legislativeYuanMemberId])
-  @@index([date])
-  @@index([title])
-}
-
-model Selected {
-  id           Int         @id @default(autoincrement())
-  legislator   Legislator? @relation("Selected_legislator", fields: [legislatorId], references: [id])
-  legislatorId Int?        @map("legislator")
-  topic        Topic?      @relation("Selected_topic", fields: [topicId], references: [id])
-  topicId      Int?        @map("topic")
-  order        Int
-  createdAt    DateTime?   @default(now())
-  updatedAt    DateTime?   @updatedAt
-
-  @@index([legislatorId])
-  @@index([topicId])
 }
