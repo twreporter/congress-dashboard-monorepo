@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.1-beta.3, 2025-02-08
+
+### Notable Changes
+
+- fix
+  - list order and label name and dependency for cms
+
+### Commits
+
+- [[`efe8fbca37`](https://github.com/twreporter/congress-dashboard-monorepo/commit/efe8fbca37)] - **fix(cms)**: list order and label name and dependency for cms (Lucien)
+
 ## 0.0.1-beta.2, 2025-02-07
 
 ### Notable Changes
