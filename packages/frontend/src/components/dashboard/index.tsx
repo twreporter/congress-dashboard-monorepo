@@ -77,15 +77,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [mockIssue, setMockIssue] = useState<CardIssueProps[]>([])
   const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
-  /*
-  useEffect(() => {
-    window.setTimeout(() => {
-      setMockIssue(mockIssues)
-      setMockHuman(mockHumans)
-      setIsLoading(false)
-    }, 2000)
-  }, [])
-  */
+
   useEffect(() => {
     if (isLoading) {
       window.setTimeout(() => {
