@@ -1,5 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+// components
+import { Triangle, Circle, Gap } from './skeleton'
 // @twreporter
 import {
   colorGrayscale,
@@ -26,7 +28,7 @@ export enum CardSize {
   L,
 }
 
-const Box = styled.div<{ $selected: boolean; $size: CardSize }>`
+const boxCss = css<{ $size: CardSize }>`
   width: calc(100% - 48px);
   display: flex;
   flex-direction: ${(props) => (props.$size === CardSize.S ? 'column' : 'row')};
@@ -34,8 +36,13 @@ const Box = styled.div<{ $selected: boolean; $size: CardSize }>`
     props.$size === CardSize.S ? 'center' : 'space-between'};
   align-items: ${(props) =>
     props.$size === CardSize.S ? 'flex-start' : 'center'};
-  gap: ${(props) => (props.$size === CardSize.S ? 20 : 48)}px;
   border-radius: 4px;
+  background-color: ${colorGrayscale.white};
+  padding: 24px;
+`
+const Box = styled.div<{ $selected: boolean; $size: CardSize }>`
+  ${boxCss}
+  gap: ${(props) => (props.$size === CardSize.S ? 20 : 48)}px;
   border: 1px solid ${colorOpacity['black_0.1']};
   background-color: ${colorGrayscale.white};
   padding: 24px;
@@ -69,10 +76,13 @@ const LegislatorContainer = styled.div<{ $size: CardSize }>`
   display: flex;
   gap: ${(props) => (props.$size === CardSize.S ? 16 : 24)}px;
 `
-const LegislatorItem = styled.div`
+const legislatorItemCss = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+`
+const LegislatorItem = styled.div`
+  ${legislatorItemCss}
 `
 const AvatarContainer = styled.div`
   position: relative;
@@ -159,6 +169,69 @@ export const CardIssueRWD: React.FC<CardIssueProps> = (props) => (
     </TabletOnly>
     <MobileOnly>
       <CardIssue {...props} size={CardSize.S} />
+    </MobileOnly>
+  </RwdBox>
+)
+
+// skeleton
+const BoxSkeleton = styled.div<{ $size: CardSize }>`
+  ${boxCss}
+`
+const LegislatorItemSkeleton = styled.div`
+  ${legislatorItemCss}
+`
+
+type CardIssueSkeletonProps = {
+  size?: CardSize
+}
+export const CardIssueSkeleton: React.FC<CardIssueSkeletonProps> = ({
+  size = CardSize.L,
+}: CardIssueSkeletonProps) => (
+  <BoxSkeleton $size={size}>
+    <TitleContainer>
+      {size === CardSize.L || size === CardSize.S ? (
+        <>
+          <Triangle $width={'360px'} $height={'33px'} />
+          <Gap $gap={4} />
+          <Triangle $width={'160px'} $height={'21px'} />
+        </>
+      ) : (
+        <>
+          <Triangle $width={'240px'} $height={'27px'} />
+          <Gap $gap={4} />
+          <Triangle $width={'120px'} $height={'21px'} />
+        </>
+      )}
+    </TitleContainer>
+    {size === CardSize.S ? (
+      <>
+        <Gap $gap={20} />
+      </>
+    ) : null}
+    <LegislatorContainer $size={size}>
+      {[1, 2, 3, 4].map((value: number) => (
+        <LegislatorItemSkeleton key={`legislator-skeleton-${value}`}>
+          <Circle />
+          <Gap $gap={8} />
+          <Triangle $width={'44px'} $height={'17px'} />
+          <Gap $gap={2} />
+          <Triangle $width={'44px'} $height={'17px'} />
+        </LegislatorItemSkeleton>
+      ))}
+    </LegislatorContainer>
+  </BoxSkeleton>
+)
+
+export const CardIssueSkeletonRWD: React.FC = () => (
+  <RwdBox>
+    <DesktopAndAbove>
+      <CardIssueSkeleton size={CardSize.L} />
+    </DesktopAndAbove>
+    <TabletOnly>
+      <CardIssueSkeleton size={CardSize.M} />
+    </TabletOnly>
+    <MobileOnly>
+      <CardIssueSkeleton size={CardSize.S} />
     </MobileOnly>
   </RwdBox>
 )

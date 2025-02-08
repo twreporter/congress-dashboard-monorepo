@@ -8,7 +8,7 @@ import { title, description } from './config'
 import SeachBar from './search'
 import Selected from './selected'
 // @twreporter
-import  mq from '@twreporter/core/lib/utils/media-query'
+import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { H4 } from '@twreporter/react-components/lib/text/headline'
 
@@ -62,14 +62,14 @@ const StyledSelected = styled(Selected)`
   `}
 `
 
-const Open = () => {
-  const descriptJSX = description.map((text, index) => <H4 text={text} key={`open-desc-${index}`} />)
+const Open: React.FC = () => {
+  const descriptJSX = description.map((text, index) => (
+    <H4 text={text} key={`open-desc-${index}`} />
+  ))
   return (
     <Box>
       <Title>{title}</Title>
-      <Description>
-        {descriptJSX}
-      </Description>
+      <Description>{descriptJSX}</Description>
       <SeachBar />
       <StyledSelected />
     </Box>
