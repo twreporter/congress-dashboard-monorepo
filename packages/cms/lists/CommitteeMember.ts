@@ -14,7 +14,7 @@ const listConfigurations = list({
     }),
     legislativeYuanMember: relationship({
       ref: 'LegislativeYuanMember.sessionAndCommittee',
-      label: '委員',
+      label: '立委屆資',
       ui: {
         labelField: 'labelForCMS',
       },

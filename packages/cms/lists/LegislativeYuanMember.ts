@@ -3,6 +3,7 @@ import { text, relationship, select } from '@keystone-6/core/fields'
 import { allowAllRoles } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import {
+  MemberType,
   MEMBER_TYPE_OPTIONS,
   CONSTITUENCY_OPTIONS,
   CITY_OPTIONS,
@@ -12,7 +13,7 @@ const listConfigurations = list({
   fields: {
     legislator: relationship({
       ref: 'Legislator',
-      label: '委員資料',
+      label: '立法委員',
       ui: {
         labelField: 'name',
       },
@@ -136,6 +137,38 @@ const listConfigurations = list({
       create: allowAllRoles(),
       update: allowAllRoles(),
       delete: allowAllRoles(),
+    },
+  },
+  hooks: {
+    validate: {
+      create: ({ resolvedData, addValidationError }) => {
+        const { legislator, legislativeMeeting, type, constituency } =
+          resolvedData
+        if (!legislator) addValidationError('立法委員為必填')
+        if (!legislativeMeeting) addValidationError('所屬屆期為必填')
+        if (type === MemberType.Constituency && !constituency)
+          addValidationError('類別為區域時選區為必填')
+      },
+      update: ({ resolvedData, item, addValidationError }) => {
+        const { legislator, legislativeMeeting, type, constituency } =
+          resolvedData
+        const { legislatorId, legislativeMeetingId, type: typeFromItem } = item
+
+        const hasLegislator =
+          !legislator?.disconnect && (legislator || legislatorId)
+        const hasLegislativeMeeting =
+          !legislativeMeeting?.disconnect &&
+          (legislativeMeeting || legislativeMeetingId)
+
+        if (!hasLegislator) addValidationError('立法委員為必填')
+        if (!hasLegislativeMeeting) addValidationError('所屬屆期為必填')
+        if (
+          (type === MemberType.Constituency ||
+            typeFromItem === MemberType.Constituency) &&
+          !constituency
+        )
+          addValidationError('類別為區域時選區為必填')
+      },
     },
   },
 })

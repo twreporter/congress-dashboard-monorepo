@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-cms",
-  "version": "0.0.1-beta.2",
+  "version": "0.0.1-beta.3",
   "private": true,
   "scripts": {
     "dev": "keystone dev",
@@ -17,8 +17,9 @@
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
     "lodash": "^4.17.21",
-    "typescript": "^5.5.0",
-    "shared": "*"
+    "next": "^14.2.0",
+    "react-transition-group": "^4.4.2",
+    "typescript": "^5.5.0"
   },
   "devDependencies": {
     "changelog-maker": "^4.1.1"

@@ -21,7 +21,7 @@ const listConfigurations = list({
     }),
     legislativeYuanMember: relationship({
       ref: 'LegislativeYuanMember',
-      label: '委員',
+      label: '立委屆資',
       ui: {
         labelField: 'labelForCMS',
       },
@@ -40,7 +40,7 @@ const listConfigurations = list({
     }),
     slug: SLUG,
     summary: text({
-      label: '簡介',
+      label: '摘要',
     }),
     // TODO: change to editor
     content: text({
@@ -60,7 +60,7 @@ const listConfigurations = list({
     }),
     topics: relationship({
       ref: 'Topic.speeches',
-      label: '所屬主題',
+      label: '所屬議題',
       many: true,
       ui: {
         labelField: 'title',

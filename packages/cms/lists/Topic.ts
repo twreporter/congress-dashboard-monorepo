@@ -6,7 +6,7 @@ import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
 const listConfigurations = list({
   fields: {
     title: text({
-      label: '主題',
+      label: '議題名稱',
       validation: { isRequired: true },
       isIndexed: true,
     }),

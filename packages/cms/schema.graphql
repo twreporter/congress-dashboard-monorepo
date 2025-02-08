@@ -192,6 +192,334 @@ input PhotoCreateInput {
   updatedAt: DateTime
 }
 
+type Selected {
+  id: ID!
+  legislator: Legislator
+  topic: Topic
+  order: Int
+  labelField: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input SelectedWhereUniqueInput {
+  id: ID
+}
+
+input SelectedWhereInput {
+  AND: [SelectedWhereInput!]
+  OR: [SelectedWhereInput!]
+  NOT: [SelectedWhereInput!]
+  id: IDFilter
+  legislator: LegislatorWhereInput
+  topic: TopicWhereInput
+  order: IntFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input SelectedOrderByInput {
+  id: OrderDirection
+  order: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input SelectedUpdateInput {
+  legislator: LegislatorRelateToOneForUpdateInput
+  topic: TopicRelateToOneForUpdateInput
+  order: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislatorRelateToOneForUpdateInput {
+  create: LegislatorCreateInput
+  connect: LegislatorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input TopicRelateToOneForUpdateInput {
+  create: TopicCreateInput
+  connect: TopicWhereUniqueInput
+  disconnect: Boolean
+}
+
+input SelectedUpdateArgs {
+  where: SelectedWhereUniqueInput!
+  data: SelectedUpdateInput!
+}
+
+input SelectedCreateInput {
+  legislator: LegislatorRelateToOneForCreateInput
+  topic: TopicRelateToOneForCreateInput
+  order: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislatorRelateToOneForCreateInput {
+  create: LegislatorCreateInput
+  connect: LegislatorWhereUniqueInput
+}
+
+input TopicRelateToOneForCreateInput {
+  create: TopicCreateInput
+  connect: TopicWhereUniqueInput
+}
+
+type Speech {
+  id: ID!
+  legislativeMeeting: LegislativeMeeting
+  legislativeMeetingSession: LegislativeMeetingSession
+  legislativeYuanMember: LegislativeYuanMember
+  date: CalendarDay
+  title: String
+  slug: String
+  summary: String
+  content: String
+  attendee: String
+  ivodLink: String
+  ivodStartTime: String
+  ivodEndTime: String
+  topics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
+  topicsCount(where: TopicWhereInput! = {}): Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+scalar CalendarDay @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
+
+input SpeechWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input SpeechWhereInput {
+  AND: [SpeechWhereInput!]
+  OR: [SpeechWhereInput!]
+  NOT: [SpeechWhereInput!]
+  id: IDFilter
+  legislativeMeeting: LegislativeMeetingWhereInput
+  legislativeMeetingSession: LegislativeMeetingSessionWhereInput
+  legislativeYuanMember: LegislativeYuanMemberWhereInput
+  date: CalendarDayFilter
+  title: StringFilter
+  slug: StringFilter
+  summary: StringFilter
+  content: StringFilter
+  attendee: StringFilter
+  ivodLink: StringFilter
+  ivodStartTime: StringFilter
+  ivodEndTime: StringFilter
+  topics: TopicManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CalendarDayFilter {
+  equals: CalendarDay
+  in: [CalendarDay!]
+  notIn: [CalendarDay!]
+  lt: CalendarDay
+  lte: CalendarDay
+  gt: CalendarDay
+  gte: CalendarDay
+  not: CalendarDayFilter
+}
+
+input TopicManyRelationFilter {
+  every: TopicWhereInput
+  some: TopicWhereInput
+  none: TopicWhereInput
+}
+
+input SpeechOrderByInput {
+  id: OrderDirection
+  date: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  summary: OrderDirection
+  content: OrderDirection
+  attendee: OrderDirection
+  ivodLink: OrderDirection
+  ivodStartTime: OrderDirection
+  ivodEndTime: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input SpeechUpdateInput {
+  legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  legislativeMeetingSession: LegislativeMeetingSessionRelateToOneForUpdateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForUpdateInput
+  date: CalendarDay
+  title: String
+  slug: String
+  summary: String
+  content: String
+  attendee: String
+  ivodLink: String
+  ivodStartTime: String
+  ivodEndTime: String
+  topics: TopicRelateToManyForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislativeMeetingRelateToOneForUpdateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislativeMeetingSessionRelateToOneForUpdateInput {
+  create: LegislativeMeetingSessionCreateInput
+  connect: LegislativeMeetingSessionWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislativeYuanMemberRelateToOneForUpdateInput {
+  create: LegislativeYuanMemberCreateInput
+  connect: LegislativeYuanMemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input TopicRelateToManyForUpdateInput {
+  disconnect: [TopicWhereUniqueInput!]
+  set: [TopicWhereUniqueInput!]
+  create: [TopicCreateInput!]
+  connect: [TopicWhereUniqueInput!]
+}
+
+input SpeechUpdateArgs {
+  where: SpeechWhereUniqueInput!
+  data: SpeechUpdateInput!
+}
+
+input SpeechCreateInput {
+  legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  legislativeMeetingSession: LegislativeMeetingSessionRelateToOneForCreateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForCreateInput
+  date: CalendarDay
+  title: String
+  slug: String
+  summary: String
+  content: String
+  attendee: String
+  ivodLink: String
+  ivodStartTime: String
+  ivodEndTime: String
+  topics: TopicRelateToManyForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LegislativeMeetingRelateToOneForCreateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+}
+
+input LegislativeMeetingSessionRelateToOneForCreateInput {
+  create: LegislativeMeetingSessionCreateInput
+  connect: LegislativeMeetingSessionWhereUniqueInput
+}
+
+input LegislativeYuanMemberRelateToOneForCreateInput {
+  create: LegislativeYuanMemberCreateInput
+  connect: LegislativeYuanMemberWhereUniqueInput
+}
+
+input TopicRelateToManyForCreateInput {
+  create: [TopicCreateInput!]
+  connect: [TopicWhereUniqueInput!]
+}
+
+type Topic {
+  id: ID!
+  title: String
+  slug: String
+  speeches(where: SpeechWhereInput! = {}, orderBy: [SpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SpeechWhereUniqueInput): [Speech!]
+  speechesCount(where: SpeechWhereInput! = {}): Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input TopicWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input TopicWhereInput {
+  AND: [TopicWhereInput!]
+  OR: [TopicWhereInput!]
+  NOT: [TopicWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  speeches: SpeechManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input SpeechManyRelationFilter {
+  every: SpeechWhereInput
+  some: SpeechWhereInput
+  none: SpeechWhereInput
+}
+
+input TopicOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input TopicUpdateInput {
+  title: String
+  slug: String
+  speeches: SpeechRelateToManyForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input SpeechRelateToManyForUpdateInput {
+  disconnect: [SpeechWhereUniqueInput!]
+  set: [SpeechWhereUniqueInput!]
+  create: [SpeechCreateInput!]
+  connect: [SpeechWhereUniqueInput!]
+}
+
+input TopicUpdateArgs {
+  where: TopicWhereUniqueInput!
+  data: TopicUpdateInput!
+}
+
+input TopicCreateInput {
+  title: String
+  slug: String
+  speeches: SpeechRelateToManyForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input SpeechRelateToManyForCreateInput {
+  create: [SpeechCreateInput!]
+  connect: [SpeechWhereUniqueInput!]
+}
+
 type Legislator {
   id: ID!
   name: String
@@ -350,21 +678,9 @@ input LegislativeYuanMemberUpdateInput {
   updatedAt: DateTime
 }
 
-input LegislatorRelateToOneForUpdateInput {
-  create: LegislatorCreateInput
-  connect: LegislatorWhereUniqueInput
-  disconnect: Boolean
-}
-
 input PartyRelateToOneForUpdateInput {
   create: PartyCreateInput
   connect: PartyWhereUniqueInput
-  disconnect: Boolean
-}
-
-input LegislativeMeetingRelateToOneForUpdateInput {
-  create: LegislativeMeetingCreateInput
-  connect: LegislativeMeetingWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -395,19 +711,9 @@ input LegislativeYuanMemberCreateInput {
   updatedAt: DateTime
 }
 
-input LegislatorRelateToOneForCreateInput {
-  create: LegislatorCreateInput
-  connect: LegislatorWhereUniqueInput
-}
-
 input PartyRelateToOneForCreateInput {
   create: PartyCreateInput
   connect: PartyWhereUniqueInput
-}
-
-input LegislativeMeetingRelateToOneForCreateInput {
-  create: LegislativeMeetingCreateInput
-  connect: LegislativeMeetingWhereUniqueInput
 }
 
 input CommitteeMemberRelateToManyForCreateInput {
@@ -486,8 +792,6 @@ type LegislativeMeeting {
   updatedAt: DateTime
 }
 
-scalar CalendarDay @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
-
 input LegislativeMeetingWhereUniqueInput {
   id: ID
   term: Int
@@ -504,28 +808,6 @@ input LegislativeMeetingWhereInput {
   committees: CommitteeManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
-}
-
-input IntFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntFilter
-}
-
-input CalendarDayFilter {
-  equals: CalendarDay
-  in: [CalendarDay!]
-  notIn: [CalendarDay!]
-  lt: CalendarDay
-  lte: CalendarDay
-  gt: CalendarDay
-  gte: CalendarDay
-  not: CalendarDayFilter
 }
 
 input CommitteeManyRelationFilter {
@@ -738,18 +1020,6 @@ input CommitteeMemberUpdateInput {
   updatedAt: DateTime
 }
 
-input LegislativeMeetingSessionRelateToOneForUpdateInput {
-  create: LegislativeMeetingSessionCreateInput
-  connect: LegislativeMeetingSessionWhereUniqueInput
-  disconnect: Boolean
-}
-
-input LegislativeYuanMemberRelateToOneForUpdateInput {
-  create: LegislativeYuanMemberCreateInput
-  connect: LegislativeYuanMemberWhereUniqueInput
-  disconnect: Boolean
-}
-
 input CommitteeMemberUpdateArgs {
   where: CommitteeMemberWhereUniqueInput!
   data: CommitteeMemberUpdateInput!
@@ -761,276 +1031,6 @@ input CommitteeMemberCreateInput {
   committee: CommitteeRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input LegislativeMeetingSessionRelateToOneForCreateInput {
-  create: LegislativeMeetingSessionCreateInput
-  connect: LegislativeMeetingSessionWhereUniqueInput
-}
-
-input LegislativeYuanMemberRelateToOneForCreateInput {
-  create: LegislativeYuanMemberCreateInput
-  connect: LegislativeYuanMemberWhereUniqueInput
-}
-
-type Topic {
-  id: ID!
-  title: String
-  slug: String
-  speeches(where: SpeechWhereInput! = {}, orderBy: [SpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SpeechWhereUniqueInput): [Speech!]
-  speechesCount(where: SpeechWhereInput! = {}): Int
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input TopicWhereUniqueInput {
-  id: ID
-  slug: String
-}
-
-input TopicWhereInput {
-  AND: [TopicWhereInput!]
-  OR: [TopicWhereInput!]
-  NOT: [TopicWhereInput!]
-  id: IDFilter
-  title: StringFilter
-  slug: StringFilter
-  speeches: SpeechManyRelationFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input SpeechManyRelationFilter {
-  every: SpeechWhereInput
-  some: SpeechWhereInput
-  none: SpeechWhereInput
-}
-
-input TopicOrderByInput {
-  id: OrderDirection
-  title: OrderDirection
-  slug: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input TopicUpdateInput {
-  title: String
-  slug: String
-  speeches: SpeechRelateToManyForUpdateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input SpeechRelateToManyForUpdateInput {
-  disconnect: [SpeechWhereUniqueInput!]
-  set: [SpeechWhereUniqueInput!]
-  create: [SpeechCreateInput!]
-  connect: [SpeechWhereUniqueInput!]
-}
-
-input TopicUpdateArgs {
-  where: TopicWhereUniqueInput!
-  data: TopicUpdateInput!
-}
-
-input TopicCreateInput {
-  title: String
-  slug: String
-  speeches: SpeechRelateToManyForCreateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input SpeechRelateToManyForCreateInput {
-  create: [SpeechCreateInput!]
-  connect: [SpeechWhereUniqueInput!]
-}
-
-type Speech {
-  id: ID!
-  legislativeMeeting: LegislativeMeeting
-  legislativeMeetingSession: LegislativeMeetingSession
-  legislativeYuanMember: LegislativeYuanMember
-  date: CalendarDay
-  title: String
-  slug: String
-  summary: String
-  content: String
-  attendee: String
-  ivodLink: String
-  ivodStartTime: String
-  ivodEndTime: String
-  topics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
-  topicsCount(where: TopicWhereInput! = {}): Int
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input SpeechWhereUniqueInput {
-  id: ID
-  slug: String
-}
-
-input SpeechWhereInput {
-  AND: [SpeechWhereInput!]
-  OR: [SpeechWhereInput!]
-  NOT: [SpeechWhereInput!]
-  id: IDFilter
-  legislativeMeeting: LegislativeMeetingWhereInput
-  legislativeMeetingSession: LegislativeMeetingSessionWhereInput
-  legislativeYuanMember: LegislativeYuanMemberWhereInput
-  date: CalendarDayFilter
-  title: StringFilter
-  slug: StringFilter
-  summary: StringFilter
-  content: StringFilter
-  attendee: StringFilter
-  ivodLink: StringFilter
-  ivodStartTime: StringFilter
-  ivodEndTime: StringFilter
-  topics: TopicManyRelationFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input TopicManyRelationFilter {
-  every: TopicWhereInput
-  some: TopicWhereInput
-  none: TopicWhereInput
-}
-
-input SpeechOrderByInput {
-  id: OrderDirection
-  date: OrderDirection
-  title: OrderDirection
-  slug: OrderDirection
-  summary: OrderDirection
-  content: OrderDirection
-  attendee: OrderDirection
-  ivodLink: OrderDirection
-  ivodStartTime: OrderDirection
-  ivodEndTime: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input SpeechUpdateInput {
-  legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
-  legislativeMeetingSession: LegislativeMeetingSessionRelateToOneForUpdateInput
-  legislativeYuanMember: LegislativeYuanMemberRelateToOneForUpdateInput
-  date: CalendarDay
-  title: String
-  slug: String
-  summary: String
-  content: String
-  attendee: String
-  ivodLink: String
-  ivodStartTime: String
-  ivodEndTime: String
-  topics: TopicRelateToManyForUpdateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input TopicRelateToManyForUpdateInput {
-  disconnect: [TopicWhereUniqueInput!]
-  set: [TopicWhereUniqueInput!]
-  create: [TopicCreateInput!]
-  connect: [TopicWhereUniqueInput!]
-}
-
-input SpeechUpdateArgs {
-  where: SpeechWhereUniqueInput!
-  data: SpeechUpdateInput!
-}
-
-input SpeechCreateInput {
-  legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
-  legislativeMeetingSession: LegislativeMeetingSessionRelateToOneForCreateInput
-  legislativeYuanMember: LegislativeYuanMemberRelateToOneForCreateInput
-  date: CalendarDay
-  title: String
-  slug: String
-  summary: String
-  content: String
-  attendee: String
-  ivodLink: String
-  ivodStartTime: String
-  ivodEndTime: String
-  topics: TopicRelateToManyForCreateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input TopicRelateToManyForCreateInput {
-  create: [TopicCreateInput!]
-  connect: [TopicWhereUniqueInput!]
-}
-
-type Selected {
-  id: ID!
-  legislator: Legislator
-  topic: Topic
-  order: Int
-  labelField: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input SelectedWhereUniqueInput {
-  id: ID
-}
-
-input SelectedWhereInput {
-  AND: [SelectedWhereInput!]
-  OR: [SelectedWhereInput!]
-  NOT: [SelectedWhereInput!]
-  id: IDFilter
-  legislator: LegislatorWhereInput
-  topic: TopicWhereInput
-  order: IntFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input SelectedOrderByInput {
-  id: OrderDirection
-  order: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input SelectedUpdateInput {
-  legislator: LegislatorRelateToOneForUpdateInput
-  topic: TopicRelateToOneForUpdateInput
-  order: Int
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input TopicRelateToOneForUpdateInput {
-  create: TopicCreateInput
-  connect: TopicWhereUniqueInput
-  disconnect: Boolean
-}
-
-input SelectedUpdateArgs {
-  where: SelectedWhereUniqueInput!
-  data: SelectedUpdateInput!
-}
-
-input SelectedCreateInput {
-  legislator: LegislatorRelateToOneForCreateInput
-  topic: TopicRelateToOneForCreateInput
-  order: Int
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input TopicRelateToOneForCreateInput {
-  create: TopicCreateInput
-  connect: TopicWhereUniqueInput
 }
 
 """
@@ -1051,6 +1051,24 @@ type Mutation {
   updatePhotos(data: [PhotoUpdateArgs!]!): [Photo]
   deletePhoto(where: PhotoWhereUniqueInput!): Photo
   deletePhotos(where: [PhotoWhereUniqueInput!]!): [Photo]
+  createSelected(data: SelectedCreateInput!): Selected
+  createSelecteds(data: [SelectedCreateInput!]!): [Selected]
+  updateSelected(where: SelectedWhereUniqueInput!, data: SelectedUpdateInput!): Selected
+  updateSelecteds(data: [SelectedUpdateArgs!]!): [Selected]
+  deleteSelected(where: SelectedWhereUniqueInput!): Selected
+  deleteSelecteds(where: [SelectedWhereUniqueInput!]!): [Selected]
+  createSpeech(data: SpeechCreateInput!): Speech
+  createSpeeches(data: [SpeechCreateInput!]!): [Speech]
+  updateSpeech(where: SpeechWhereUniqueInput!, data: SpeechUpdateInput!): Speech
+  updateSpeeches(data: [SpeechUpdateArgs!]!): [Speech]
+  deleteSpeech(where: SpeechWhereUniqueInput!): Speech
+  deleteSpeeches(where: [SpeechWhereUniqueInput!]!): [Speech]
+  createTopic(data: TopicCreateInput!): Topic
+  createTopics(data: [TopicCreateInput!]!): [Topic]
+  updateTopic(where: TopicWhereUniqueInput!, data: TopicUpdateInput!): Topic
+  updateTopics(data: [TopicUpdateArgs!]!): [Topic]
+  deleteTopic(where: TopicWhereUniqueInput!): Topic
+  deleteTopics(where: [TopicWhereUniqueInput!]!): [Topic]
   createLegislator(data: LegislatorCreateInput!): Legislator
   createLegislators(data: [LegislatorCreateInput!]!): [Legislator]
   updateLegislator(where: LegislatorWhereUniqueInput!, data: LegislatorUpdateInput!): Legislator
@@ -1093,24 +1111,6 @@ type Mutation {
   updateCommitteeMembers(data: [CommitteeMemberUpdateArgs!]!): [CommitteeMember]
   deleteCommitteeMember(where: CommitteeMemberWhereUniqueInput!): CommitteeMember
   deleteCommitteeMembers(where: [CommitteeMemberWhereUniqueInput!]!): [CommitteeMember]
-  createTopic(data: TopicCreateInput!): Topic
-  createTopics(data: [TopicCreateInput!]!): [Topic]
-  updateTopic(where: TopicWhereUniqueInput!, data: TopicUpdateInput!): Topic
-  updateTopics(data: [TopicUpdateArgs!]!): [Topic]
-  deleteTopic(where: TopicWhereUniqueInput!): Topic
-  deleteTopics(where: [TopicWhereUniqueInput!]!): [Topic]
-  createSpeech(data: SpeechCreateInput!): Speech
-  createSpeeches(data: [SpeechCreateInput!]!): [Speech]
-  updateSpeech(where: SpeechWhereUniqueInput!, data: SpeechUpdateInput!): Speech
-  updateSpeeches(data: [SpeechUpdateArgs!]!): [Speech]
-  deleteSpeech(where: SpeechWhereUniqueInput!): Speech
-  deleteSpeeches(where: [SpeechWhereUniqueInput!]!): [Speech]
-  createSelected(data: SelectedCreateInput!): Selected
-  createSelecteds(data: [SelectedCreateInput!]!): [Selected]
-  updateSelected(where: SelectedWhereUniqueInput!, data: SelectedUpdateInput!): Selected
-  updateSelecteds(data: [SelectedUpdateArgs!]!): [Selected]
-  deleteSelected(where: SelectedWhereUniqueInput!): Selected
-  deleteSelecteds(where: [SelectedWhereUniqueInput!]!): [Selected]
   endSession: Boolean!
   authenticateSystemUserWithPassword(email: String!, password: String!): SystemUserAuthenticationWithPasswordResult
   createInitialSystemUser(data: CreateInitialSystemUserInput!): SystemUserAuthenticationWithPasswordSuccess!
@@ -1141,6 +1141,15 @@ type Query {
   photo(where: PhotoWhereUniqueInput!): Photo
   photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int
+  selected(where: SelectedWhereUniqueInput!): Selected
+  selecteds(where: SelectedWhereInput! = {}, orderBy: [SelectedOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SelectedWhereUniqueInput): [Selected!]
+  selectedsCount(where: SelectedWhereInput! = {}): Int
+  speech(where: SpeechWhereUniqueInput!): Speech
+  speeches(where: SpeechWhereInput! = {}, orderBy: [SpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SpeechWhereUniqueInput): [Speech!]
+  speechesCount(where: SpeechWhereInput! = {}): Int
+  topic(where: TopicWhereUniqueInput!): Topic
+  topics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
+  topicsCount(where: TopicWhereInput! = {}): Int
   legislator(where: LegislatorWhereUniqueInput!): Legislator
   legislators(where: LegislatorWhereInput! = {}, orderBy: [LegislatorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislatorWhereUniqueInput): [Legislator!]
   legislatorsCount(where: LegislatorWhereInput! = {}): Int
@@ -1162,15 +1171,6 @@ type Query {
   committeeMember(where: CommitteeMemberWhereUniqueInput!): CommitteeMember
   committeeMembers(where: CommitteeMemberWhereInput! = {}, orderBy: [CommitteeMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeMemberWhereUniqueInput): [CommitteeMember!]
   committeeMembersCount(where: CommitteeMemberWhereInput! = {}): Int
-  topic(where: TopicWhereUniqueInput!): Topic
-  topics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
-  topicsCount(where: TopicWhereInput! = {}): Int
-  speech(where: SpeechWhereUniqueInput!): Speech
-  speeches(where: SpeechWhereInput! = {}, orderBy: [SpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SpeechWhereUniqueInput): [Speech!]
-  speechesCount(where: SpeechWhereInput! = {}): Int
-  selected(where: SelectedWhereUniqueInput!): Selected
-  selecteds(where: SelectedWhereInput! = {}, orderBy: [SelectedOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SelectedWhereUniqueInput): [Selected!]
-  selectedsCount(where: SelectedWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

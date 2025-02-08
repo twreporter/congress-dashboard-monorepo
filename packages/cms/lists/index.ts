@@ -14,6 +14,9 @@ import Selected from './Selected'
 export const listDefinition = {
   SystemUser,
   Photo,
+  Selected,
+  Speech,
+  Topic,
   Legislator,
   LegislativeYuanMember,
   Party,
@@ -21,7 +24,4 @@ export const listDefinition = {
   LegislativeMeetingSession,
   Committee,
   CommitteeMember,
-  Topic,
-  Speech,
-  Selected,
 }
