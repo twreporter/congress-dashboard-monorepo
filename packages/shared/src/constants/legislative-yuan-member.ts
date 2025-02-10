@@ -229,7 +229,7 @@ function createOptions<T extends string>(
   enumObj: Record<string, T>,
   labels: Record<T, string>
 ): Option[] {
-  return Object.entries(enumObj).map(([, value]) => ({
+  return Object.values(enumObj).map((value: T) => ({
     label: labels[value],
     value,
   }))

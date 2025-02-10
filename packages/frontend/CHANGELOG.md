@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.1-beta.3, 2025-02-10
+
+### Notable Changes
+
+- fix
+  - missing eslint config file
+- chore
+  - update `shared` package version
+
+### Commits
+
+* \[[`6ff95ff493`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6ff95ff493)] - **chore**: update `shared` package version (Aylie Chou)
+* \[[`f7174adc0f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f7174adc0f)] - **fix**: missing eslint config file (Aylie Chou)
+
 ## 0.0.1-beta.2, 2025-02-08
 
 ### Notable Changes
