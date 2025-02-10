@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.0.1-beta.4, 2025-02-11
+
+### Notable Changes
+
+- fix
+  - .stories files fail at commit stage
+- chore
+  - build `shared` lib with `tsup`
+  - update dependency version
+
+### Commit
+
+* \[[`b31a1ca02d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b31a1ca02d)] - **fix**: .stories files fail at commit stage (Aylie Chou)
+* \[[`f332f4d9b0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f332f4d9b0)] - **fix**: use correct shared package version (Aylie Chou)
+* \[[`26a80b8de8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/26a80b8de8)] - **fix**: build `shared` lib with `tsup` (Aylie Chou)
+
 ## 0.0.1-beta.3, 2025-02-10
 
 ### Notable Changes

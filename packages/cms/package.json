@@ -12,10 +12,10 @@
     "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown"
   },
   "dependencies": {
-    "@twreporter/congress-dashboard-shared": "^0.0.2",
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
+    "@twreporter/congress-dashboard-shared": "0.0.2-beta.0",
     "lodash": "^4.17.21",
     "next": "^14.2.0",
     "react-transition-group": "^4.4.2",
@@ -23,5 +23,6 @@
   },
   "devDependencies": {
     "changelog-maker": "^4.1.1"
-  }
+  },
+  "packageManager": "yarn@1.22.18"
 }
