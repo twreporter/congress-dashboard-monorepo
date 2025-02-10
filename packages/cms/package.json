@@ -12,7 +12,7 @@
     "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown"
   },
   "dependencies": {
-    "@twreporter/congress-dashboard-shared": "^0.0.1",
+    "@twreporter/congress-dashboard-shared": "^0.0.2",
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",

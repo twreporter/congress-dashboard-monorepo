@@ -11,7 +11,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@twreporter/congress-dashboard-shared": "^0.0.1",
+    "@twreporter/congress-dashboard-shared": "^0.0.2",
     "@twreporter/core": "^1.24.1",
     "@twreporter/react-components": "^9.4.3",
     "next": "15.1.5",

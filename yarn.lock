@@ -4491,6 +4491,11 @@
     "@tufjs/canonical-json" "2.0.0"
     minimatch "^9.0.4"
 
+"@twreporter/congress-dashboard-shared@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@twreporter/congress-dashboard-shared/-/congress-dashboard-shared-0.0.2.tgz#589eb66295a55e4017e862d92847059905806ade"
+  integrity sha512-GyR9dPHBLn7azv7sjvKHjN4SudChPiGmTbB8E45aNFoP1HXVX4CFx96HLRrf+MEjVf1qKBXzSZcpksLC/2jZSQ==
+
 "@twreporter/core@^1.24.1":
   version "1.24.1"
   resolved "https://registry.yarnpkg.com/@twreporter/core/-/core-1.24.1.tgz#16df6d732c07926c4c10bec365ec9e992e5841f1"
@@ -14932,7 +14937,7 @@ typedarray@^0.0.6:
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
-"typescript@>=3 < 6", typescript@^5, typescript@^5.5.0, typescript@^5.7.3:
+"typescript@>=3 < 6", typescript@^5, typescript@^5.5.0:
   version "5.7.3"
   resolved "https://registry.npmjs.org/typescript/-/typescript-5.7.3.tgz"
   integrity sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==
