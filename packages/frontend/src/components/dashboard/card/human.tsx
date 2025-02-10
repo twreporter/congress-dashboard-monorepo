@@ -7,7 +7,7 @@ import { Triangle, Gap } from './skeleton'
 import {
   MEMBER_TYPE_LABEL,
   MemberType,
-} from '@twreporter/congress-dashboard-shared/lib/cjs/constants/legislative-yuan-member'
+} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 import {
   colorGrayscale,
   colorOpacity,
@@ -116,7 +116,7 @@ export type CardHumanProps = {
   name?: string
   tooltip?: string
   note?: string
-  type?: typeof MEMBER_TYPE_LABEL
+  type?: MemberType
   tags?: Tag[]
   avatar?: string
   partyAvatar?: string
@@ -128,7 +128,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
   name = '',
   tooltip = '',
   note = '',
-  type = MEMBER_TYPE_LABEL[MemberType.Constituency],
+  type = MemberType.Constituency,
   tags = [],
   avatar = '',
   partyAvatar = '',
@@ -149,7 +149,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
             <Name text={name} />
             {tooltip ? <Tooltip tooltip={tooltip} /> : null}
           </Title>
-          <Type text={type} />
+          <Type text={MEMBER_TYPE_LABEL[type]} />
         </div>
         {isShowTag ? (
           <TagContainer $size={size}>
