@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.1-beta.4, 2025-02-13
+
+### Notable Changes
+
+- chore
+  - update monorepo related config
+
+### Commits
+
+- \[[`9969e7dfef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9969e7dfef)] - **chore**: update monorepo related config (Aylie Chou)
+
 ## 0.0.1-beta.3, 2025-02-08
 
 ### Notable Changes
