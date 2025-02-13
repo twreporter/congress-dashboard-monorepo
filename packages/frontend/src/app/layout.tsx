@@ -4,6 +4,7 @@ import StyledComponentsRegistry from '../lib/style-registry'
 import GlobalStyles from '@/styles/global-styles'
 // component
 import Header from '@/components/header'
+import Footer from '@/components/footer'
 
 /* todo
  *   add fonts
@@ -28,6 +29,7 @@ export default function RootLayout({
           <GlobalStyles />
           <Header />
           <main>{children}</main>
+          <Footer />
         </StyledComponentsRegistry>
       </body>
     </html>
