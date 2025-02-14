@@ -25,7 +25,7 @@ const Container = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 64px;
   left: -100%;
-  z-index: ${ZIndex.header};
+  z-index: ${ZIndex.HamburgerMenu};
   padding: 16px 32px 0px 32px;
   transition: transform 300ms ease-in-out;
   transform: translateX(${(props) => (props.$isOpen ? '100%' : '-100%')});

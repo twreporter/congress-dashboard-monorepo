@@ -30,8 +30,10 @@ import {
   COMMON_MENU_LINKS,
   COMPACT_PILL_BUTTON_LINKS,
 } from '@/constants/navigation-link'
+// context
+import { useScrollContext } from '@/contexts/scroll-context'
 
-const Container = styled.header`
+const Container = styled.header<{ $isHidden: boolean }>`
   display: flex;
   width: -webkit-fill-available;
   height: 64px;
@@ -39,7 +41,9 @@ const Container = styled.header`
   position: fixed;
   top: 0px;
   left: 0px;
-  z-index: ${ZIndex.header};
+  z-index: ${ZIndex.Header};
+  transition: transform 300ms ease-in-out;
+  transform: translateY(${(props) => (props.$isHidden ? '-100%' : '0')});
 
   ${mq.desktopOnly`
     padding: 0 48px;
@@ -108,6 +112,7 @@ const menuLinks = COMMON_MENU_LINKS
 const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS
 
 const Header: React.FC = () => {
+  const { isHeaderHidden } = useScrollContext()
   const windowWidth = useWindowWidth()
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
   const hamburgerIcon = <Hamburger releaseBranch={'master'} /> //TODO: releaseBranch
@@ -135,7 +140,7 @@ const Header: React.FC = () => {
   }, [isHamburgerOpen])
 
   return (
-    <Container>
+    <Container $isHidden={isHeaderHidden}>
       <HeaderSection>
         <LogoContainer>
           {/* TODO: releaseBranch */}

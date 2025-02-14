@@ -1,4 +1,5 @@
 export enum ZIndex {
-  header = 1000,
-  hamburgerMenu = header,
+  Header = 1000,
+  HamburgerMenu = Header,
+  Bar = Header,
 }

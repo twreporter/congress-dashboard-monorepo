@@ -5,6 +5,8 @@ import GlobalStyles from '@/styles/global-styles'
 // component
 import Header from '@/components/header'
 import Footer from '@/components/footer'
+// context
+import { ScrollProvider } from '@/contexts/scroll-context'
 
 /* todo
  *   add fonts
@@ -26,10 +28,12 @@ export default function RootLayout({
     <html lang="zh-tw">
       <body>
         <StyledComponentsRegistry>
-          <GlobalStyles />
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <ScrollProvider>
+            <GlobalStyles />
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </ScrollProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
