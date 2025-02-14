@@ -2,10 +2,17 @@ import { Legislator, CardIssueProps } from './issue'
 import { CardHumanProps, Tag } from './human'
 import { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 
-const DDP = 'https://dev-congress-dashboard-storage.twreporter.org/tmp/ddp.png'
-const KMT = 'https://dev-congress-dashboard-storage.twreporter.org/tmp/kmt.png'
-const TPP = 'https://dev-congress-dashboard-storage.twreporter.org/tmp/tpp.png'
-const NONE =
+export const DPP =
+  'https://dev-congress-dashboard-storage.twreporter.org/tmp/dpp.png'
+export const KMT =
+  'https://dev-congress-dashboard-storage.twreporter.org/tmp/kmt.png'
+export const TPP =
+  'https://dev-congress-dashboard-storage.twreporter.org/tmp/tpp.png'
+export const NPP =
+  'https://dev-congress-dashboard-storage.twreporter.org/tmp/npp.png'
+export const TSP =
+  'https://dev-congress-dashboard-storage.twreporter.org/tmp/tsp.png'
+export const NONE =
   'https://dev-congress-dashboard-storage.twreporter.org/tmp/none.png'
 
 export const mockLegislators: Legislator[] = [
@@ -13,7 +20,7 @@ export const mockLegislators: Legislator[] = [
     name: '沈伯洋',
     count: 16,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1.png',
-    partyAvatar: DDP,
+    partyAvatar: DPP,
   },
   {
     name: '黃國昌',
@@ -31,7 +38,7 @@ export const mockLegislators: Legislator[] = [
     name: '吳思瑤',
     count: 4,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/4.png',
-    partyAvatar: DDP,
+    partyAvatar: DPP,
   },
   {
     name: '高金素梅',
@@ -45,7 +52,7 @@ export const mockIssues: CardIssueProps[] = [
   {
     title: 'NCC執法效能與正當性',
     subTitle: '共 36 筆相關發言（5人）',
-    legislators: mockLegislators,
+    legislators: mockLegislators.concat(mockLegislators),
   },
   {
     title: '人工智慧發展',
@@ -97,6 +104,9 @@ export const mockIssues: CardIssueProps[] = [
 const defaultTag: Tag[] = [
   { name: '人工智慧發展', count: 16 },
   { name: '國家科技發展', count: 12 },
+  { name: '大學治理與人才培育', count: 9 },
+  { name: '文化預算', count: 5 },
+  { name: '藝文產業', count: 4 },
 ]
 export const mockHumans: CardHumanProps[] = [
   {
@@ -104,7 +114,7 @@ export const mockHumans: CardHumanProps[] = [
     type: MemberType.NationwideAndOverseas,
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
-    partyAvatar: DDP,
+    partyAvatar: DPP,
   },
   {
     name: '沈伯洋',
@@ -133,55 +143,55 @@ export const mockHumans: CardHumanProps[] = [
     type: MemberType.NationwideAndOverseas,
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
-    partyAvatar: DDP,
+    partyAvatar: NPP,
   },
   {
     name: '沈伯洋',
     type: MemberType.NationwideAndOverseas,
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
-    partyAvatar: DDP,
+    partyAvatar: TSP,
   },
   {
     name: '沈伯洋',
     type: MemberType.NationwideAndOverseas,
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
-    partyAvatar: DDP,
+    partyAvatar: DPP,
   },
   {
     name: '沈伯洋',
     type: MemberType.NationwideAndOverseas,
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
-    partyAvatar: DDP,
+    partyAvatar: DPP,
   },
   {
     name: '沈伯洋',
     type: MemberType.NationwideAndOverseas,
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
-    partyAvatar: DDP,
+    partyAvatar: DPP,
   },
   {
     name: '沈伯洋',
     type: MemberType.NationwideAndOverseas,
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
-    partyAvatar: DDP,
+    partyAvatar: DPP,
   },
   {
     name: '沈伯洋',
     type: MemberType.NationwideAndOverseas,
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
-    partyAvatar: DDP,
+    partyAvatar: DPP,
   },
   {
     name: '沈伯洋',
     type: MemberType.NationwideAndOverseas,
     tags: defaultTag,
     avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
-    partyAvatar: DDP,
+    partyAvatar: DPP,
   },
 ]

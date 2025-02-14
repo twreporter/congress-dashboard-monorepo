@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled, { css } from 'styled-components'
+// hooks
+import useResizeObserver from '@/hooks/use-resize-observer'
 // components
 import { Triangle, Circle, Gap } from './skeleton'
+import PartyTag, { TagSize } from './party-tag'
 // @twreporter
 import {
   colorGrayscale,
@@ -27,6 +30,8 @@ export enum CardSize {
   M,
   L,
 }
+
+const legislatorWidth = 56 + 16 //px
 
 const boxCss = css<{ $size: CardSize }>`
   width: calc(100% - 48px);
@@ -75,11 +80,17 @@ const SubTitle = styled(P2)`
 const LegislatorContainer = styled.div<{ $size: CardSize }>`
   display: flex;
   gap: ${(props) => (props.$size === CardSize.S ? 16 : 24)}px;
+
+  ${mq.mobileOnly`
+    width: 100%;
+    overflow: hidden;
+  `}
 `
 const legislatorItemCss = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 56px;
 `
 const LegislatorItem = styled.div`
   ${legislatorItemCss}
@@ -92,10 +103,9 @@ const Avatar = styled.img`
   height: 56px;
   border-radius: 50%;
 `
-const Party = styled.img`
+const Party = styled(PartyTag)`
   width: 16px;
   height: 16px;
-  border-radius: 50%;
   position: absolute;
   right: 0;
   top: 40px; // 56px - 16px
@@ -120,7 +130,14 @@ const CardIssue: React.FC<CardIssueProps> = ({
   selected = false,
   onClick,
 }: CardIssueProps) => {
-  const activeCount = size === CardSize.L ? 5 : 4
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { width } = useResizeObserver(containerRef)
+  const activeCount =
+    size === CardSize.L
+      ? 5
+      : size === CardSize.M
+      ? 4
+      : Math.floor(width / legislatorWidth)
   const activeLegistor = legislators.slice(0, activeCount)
 
   return (
@@ -129,14 +146,14 @@ const CardIssue: React.FC<CardIssueProps> = ({
         <Title text={title} />
         <SubTitle text={subTitle} />
       </TitleContainer>
-      <LegislatorContainer $size={size}>
+      <LegislatorContainer $size={size} ref={containerRef}>
         {activeLegistor.map(
           ({ name, count, avatar, partyAvatar }: Legislator, index: number) => {
             return (
               <LegislatorItem key={`legislator-${index}`}>
                 <AvatarContainer>
                   <Avatar src={avatar} />
-                  <Party src={partyAvatar} />
+                  <Party avatar={partyAvatar} size={TagSize.S} />
                 </AvatarContainer>
                 <Text text={name} />
                 <Text text={`(${count})`} />
