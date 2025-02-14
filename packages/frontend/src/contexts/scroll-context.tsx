@@ -1,5 +1,12 @@
 'use client'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  ReactNode,
+} from 'react'
 // lodash
 import { throttle } from 'lodash'
 
@@ -11,64 +18,68 @@ type ScrollContextType = {
   isHeaderHidden: boolean
   isHeaderAboveTab: boolean
   setTabElement: (element: HTMLDivElement) => void
+  tabTop: number
 }
 
 const ScrollContext = createContext<ScrollContextType>({
   isHeaderHidden: false,
   isHeaderAboveTab: false,
   setTabElement: () => {},
+  tabTop: 0,
 })
 
-export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
+export const ScrollProvider = ({ children }: { children: ReactNode }) => {
   const [isHeaderHidden, setIsHeaderHidden] = useState(false)
   const [isHeaderAboveTab, setIsHeaderAboveTab] = useState(false)
-  const [TabElement, setTabElement] = useState<HTMLDivElement | null>(null)
-  const lastScrollPosition = useRef(0)
-  const headerHeight = 64
+  const [tabElement, setTabElement] = useState<HTMLDivElement | null>(null)
+  const [tabTop, setTabTop] = useState(0)
+
+  const lastScrollY = useRef(0)
+  const HEADER_HEIGHT = 64
+
+  const handleScroll = _.throttle(() => {
+    const currentScrollY = window.scrollY
+    const tabRect = tabElement?.getBoundingClientRect()
+
+    if (tabRect) {
+      setTabTop(tabRect.top)
+    }
+
+    if (currentScrollY === 0) {
+      if (isHeaderHidden) setIsHeaderHidden(false)
+      if (isHeaderAboveTab) setIsHeaderAboveTab(false)
+      return
+    }
+
+    if (tabRect?.top !== undefined) {
+      setIsHeaderAboveTab(tabRect.top <= HEADER_HEIGHT)
+    }
+
+    if (currentScrollY < lastScrollY.current - 5) {
+      if (isHeaderHidden) setIsHeaderHidden(false)
+    } else if (
+      currentScrollY > lastScrollY.current &&
+      tabRect?.top !== undefined
+    ) {
+      if (tabRect.top <= HEADER_HEIGHT && currentScrollY > HEADER_HEIGHT) {
+        if (!isHeaderHidden) setIsHeaderHidden(true)
+      }
+    }
+
+    lastScrollY.current = currentScrollY
+  }, 10)
 
   useEffect(() => {
-    const handleScroll = _.throttle(() => {
-      const currentScroll = window.scrollY
-      const tabRect = TabElement?.getBoundingClientRect()
-
-      // Always show header at top of page
-      if (currentScroll === 0) {
-        setIsHeaderHidden(false)
-        setIsHeaderAboveTab(false)
-        return
-      }
-
-      // Check if header is close to search bar
-      if (tabRect && tabRect.top <= headerHeight) {
-        setIsHeaderAboveTab(true)
-      } else {
-        setIsHeaderAboveTab(false)
-      }
-
-      // When scrolling up
-      if (currentScroll < lastScrollPosition.current) {
-        setIsHeaderHidden(false)
-      }
-      // When scrolling down
-      else if (
-        currentScroll > lastScrollPosition.current &&
-        tabRect &&
-        tabRect.top <= headerHeight &&
-        currentScroll > headerHeight
-      ) {
-        setIsHeaderHidden(true)
-      }
-
-      lastScrollPosition.current = currentScroll
-    }, 500)
-
     window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [TabElement])
+    return () => {
+      handleScroll.cancel()
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [tabElement])
 
   return (
     <ScrollContext.Provider
-      value={{ isHeaderHidden, isHeaderAboveTab, setTabElement }}
+      value={{ isHeaderHidden, isHeaderAboveTab, setTabElement, tabTop }}
     >
       {children}
     </ScrollContext.Provider>

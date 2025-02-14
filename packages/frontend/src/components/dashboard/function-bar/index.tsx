@@ -27,7 +27,7 @@ const Bar = styled.div<{
   background-color: ${colorGrayscale.gray100};
   z-index: ${ZIndex.Bar};
   border-top: ${(props) =>
-    props.$isHeaderAboveTab && !props.$isHeaderHidden
+    props.$isHeaderAboveTab
       ? `1px solid ${colorGrayscale.gray300}`
       : '1px solid transparent'};
 `
