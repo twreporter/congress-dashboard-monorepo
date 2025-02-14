@@ -5,6 +5,7 @@ import {
   colorGrayscale,
   colorBrand,
 } from '@twreporter/core/lib/constants/color'
+import mq from '@twreporter/core/lib/utils/media-query'
 
 const Item = styled.div<{ $selected: boolean }>`
   display: inline-flex;
@@ -15,6 +16,10 @@ const Item = styled.div<{ $selected: boolean }>`
   font-weight: 700;
   line-height: 150%;
   cursor: pointer;
+
+  ${mq.tabletAndBelow`
+    font-size: 18px;  
+  `}
 
   ${(props) =>
     props.$selected

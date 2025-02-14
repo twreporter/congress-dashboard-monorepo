@@ -41,10 +41,13 @@ const defaultArgs = {
   name: '沈伯洋',
   type: MemberType.NationwideAndOverseas,
   size: CardSize.L,
-  tags: mockHuman.tags,
   avatar: mockHuman.avatar,
   partyAvatar: mockHuman.partyAvatar,
   selected: false,
 }
 
-export const Basic: Story = { args: defaultArgs }
+export const Basic: Story = { args: { tags: mockHuman.tags, ...defaultArgs } }
+
+export const WithNote: Story = {
+  args: { note: "To be or not to be, that's the question", ...defaultArgs },
+}

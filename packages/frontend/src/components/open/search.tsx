@@ -21,6 +21,12 @@ const Bar = styled.div`
   align-items: center;
   gap: 8px;
   background-color: ${colorOpacity['white_0.8']};
+
+  &:has(input:active),
+  &:has(input:focus-visible) {
+    border: 1px solid ${colorGrayscale.gray600};
+    background-color: ${colorGrayscale.white};
+  }
   ${mq.tabletOnly`
     width: 440px;
   `}
@@ -33,6 +39,8 @@ const Input = styled.input`
   flex: 1 0 0;
   line-height: 24px;
   padding: 0 2px;
+  color: ${colorGrayscale.gray800};
+
   &,
   &:active,
   &:focus-visible {

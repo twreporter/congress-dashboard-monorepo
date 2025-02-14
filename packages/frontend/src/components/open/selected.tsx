@@ -5,13 +5,18 @@ import styled, { css } from 'styled-components'
 // config
 import { selected } from './config'
 // @twreporter
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import {
+  colorGrayscale,
+  colorBrand,
+} from '@twreporter/core/lib/constants/color'
+import { TextButton } from '@twreporter/react-components/lib/button'
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   align-self: stretch;
+  flex-wrap: wrap;
 `
 const textCss = css`
   color: ${colorGrayscale.gray600};
@@ -26,8 +31,10 @@ const Text = styled.div`
   ${textCss}
   cursor: default;
 `
-const Item = styled.a`
-  ${textCss}
+const Item = styled(TextButton)`
+  &:hover {
+    color: ${colorBrand.heavy} !important; //override default color
+  }
 `
 
 type SelectedProps = {
@@ -35,6 +42,10 @@ type SelectedProps = {
 }
 
 const Selected: React.FC<SelectedProps> = ({ className }: SelectedProps) => {
+  const openLink = (link: string) => {
+    window.open(link, '_self')
+  }
+
   if (!selected || selected.length === 0) {
     return null
   }
@@ -44,7 +55,13 @@ const Selected: React.FC<SelectedProps> = ({ className }: SelectedProps) => {
       {selected.map(({ label, path }, index) => (
         <SelectedTag key={`selected-${index}`}>
           {index === 0 ? null : <Text>、</Text>}
-          <Item href={path}>{label}</Item>
+          <Item
+            text={label}
+            theme={TextButton.THEME.normal}
+            style={TextButton.Style.LIGHT}
+            size={TextButton.Size.L}
+            onClick={() => openLink(path)}
+          />
         </SelectedTag>
       ))}
     </Container>

@@ -1,9 +1,11 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import React, { useState, useEffect, useContext } from 'react'
+import styled, { css } from 'styled-components'
 // config
 import { mockHumans, mockIssues } from './card/config'
+// context
+import { CoreContext } from '@/contexts'
 // components
 import FunctionBar, { Option } from './function-bar'
 import {
@@ -41,15 +43,22 @@ const Box = styled.div`
     gap: 20px;  
   `}
 `
+const cardCss = css`
+  width: 928px;
+
+  ${mq.tabletAndBelow`
+    width: 100%;
+  `}
+`
 const CardIssueBox = styled.div<{ $active: boolean }>`
-  width: 100%;
+  ${cardCss}
   display: flex;
   flex-direction: column;
   gap: 24px;
   ${(props) => (props.$active ? '' : 'display: none !important;')}
 `
 const CardHumanBox = styled.div<{ $active: boolean }>`
-  width: 100%;
+  ${cardCss}
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 24px;
@@ -77,6 +86,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [mockIssue, setMockIssue] = useState<CardIssueProps[]>([])
   const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
+  const { toastr } = useContext(CoreContext)
 
   useEffect(() => {
     if (isLoading) {
@@ -84,6 +94,9 @@ const Dashboard = () => {
         setMockIssue(mockIssues)
         setMockHuman(mockHumans)
         setIsLoading(false)
+        if (selectedType === Option.Human) {
+          toastr({ text: '隨機！' })
+        }
       }, 2000)
     }
   }, [isLoading])
@@ -92,6 +105,7 @@ const Dashboard = () => {
     setMockIssue([])
     setMockHuman([])
   }, [selectedType])
+
   const setTab = (value: Option) => {
     setActiveCard(-1)
     setSelectedType(value)
