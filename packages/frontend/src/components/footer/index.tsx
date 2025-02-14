@@ -16,6 +16,8 @@ import origins from '@twreporter/core/lib/constants/request-origins'
 // component
 import Logo from '@/components/footer/logo'
 import FooterLink, { TextSize } from '@/components/footer/link'
+// constants
+import { InternalRoutes, ExternalRoutes } from '@/constants/navigation-link'
 
 const StyledFooter = styled.footer`
   width: 100%;
@@ -175,19 +177,25 @@ const Footer: React.FC = () => {
           </InfoContainer>
           <LinksContainer>
             <LinkGroup>
-              <FooterLink href="/about" text="關於儀表板" target="_self" />
-              {/* TODO: need to change */}
-              <FooterLink href="/" text="意見回饋" target="_self" />
+              <FooterLink
+                href={InternalRoutes.About}
+                text="關於儀表板"
+                target="_self"
+              />
+              <FooterLink
+                href={InternalRoutes.Feedback}
+                text="意見回饋"
+                target="_self"
+              />
             </LinkGroup>
             <LinkGroup>
               <FooterLink
-                href="https://medium.com/twreporter"
+                href={ExternalRoutes.Medium}
                 text="報導者開放實驗室"
                 target="_blank"
               />
               <FooterLink
-                // TODO: releaseBranch */
-                href="https://support.twreporter.org/"
+                href={ExternalRoutes.Support}
                 text="贊助支持"
                 target="_self"
               />
@@ -202,10 +210,10 @@ const Footer: React.FC = () => {
             <P3Gray600 text={fundraisingId} />
             <DesktopAndAboveWithFlex>
               <P3Gray600 text="｜" />
-              <BottomLinks />
+              <BottomLinks releaseBranch={releaseBranchConsts.release} />
             </DesktopAndAboveWithFlex>
             <TabletAndBelowWithFlex>
-              <BottomLinks />
+              <BottomLinks releaseBranch={releaseBranchConsts.release} />
             </TabletAndBelowWithFlex>
           </BottomSection>
           <BottomSection>

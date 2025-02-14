@@ -8,10 +8,14 @@ import { MenuButton, PillButton } from '@twreporter/react-components/lib/button'
 import Divider from '@twreporter/react-components/lib/divider'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-// types
-import type { NavigationLink, PillBtnNavigationLink } from '@/components/header'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+// constants
+import {
+  COMMON_MENU_LINKS,
+  SECONDARY_LINKS,
+  PILL_BUTTON_LINKS,
+} from '@/constants/navigation-link'
 
 const Container = styled.div<{ $isOpen: boolean }>`
   flex-direction: column;
@@ -57,34 +61,9 @@ const StyledPillButton = styled(PillButton)`
   justify-content: center;
 `
 
-const menuLinks: NavigationLink[] = [
-  { text: '發言主頁', href: '/', target: '_self' },
-  { text: '關於透視板', href: '/about', target: '_self' },
-]
-
-const secondaryLinks: NavigationLink[] = [
-  { text: '意見回饋', href: '/', target: '_self' }, //TODO: need to change
-  {
-    text: '報導者開放實驗室',
-    href: 'https://medium.com/twreporter',
-    target: '_blank',
-  },
-]
-
-const pillButtonLinks: PillBtnNavigationLink[] = [
-  {
-    text: '訂閱電子報',
-    href: 'https://www.twreporter.org/account/email-subscription',
-    target: '_blank',
-    type: PillButton.Type.SECONDARY,
-  }, //TODO: need to change by releaseBranch
-  {
-    text: '贊助我們',
-    href: 'https://support.twreporter.org/',
-    target: '_blank',
-    type: PillButton.Type.PRIMARY,
-  }, //TODO: need to change by releaseBranch
-]
+const menuLinks = COMMON_MENU_LINKS
+const secondaryLinks = SECONDARY_LINKS
+const pillButtonLinks = PILL_BUTTON_LINKS
 
 type HamburgerMenuProps = {
   isOpen: boolean

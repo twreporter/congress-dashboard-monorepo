@@ -25,6 +25,11 @@ import HamburgerMenu from '@/components/hamburger-menu'
 import useWindowWidth from '@/hooks/use-window-width'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+// constants
+import {
+  COMMON_MENU_LINKS,
+  COMPACT_PILL_BUTTON_LINKS,
+} from '@/constants/navigation-link'
 
 const Container = styled.header`
   display: flex;
@@ -98,36 +103,9 @@ const Spacing = styled.div<{ $width?: number; $height?: number }>`
   height: ${(props) => (props.$height ? props.$height : 0)}px;
 `
 
-export interface NavigationLink {
-  text: string
-  href: string
-  target: '_blank' | '_parent' | '_self' | '_top'
-}
-
-export interface PillBtnNavigationLink extends NavigationLink {
-  type: PillButton.Type
-}
-
 // Constants
-const menuLinks: NavigationLink[] = [
-  { text: '發言主頁', href: '/', target: '_self' },
-  { text: '關於透視板', href: '/about', target: '_self' },
-]
-
-const pillButtonLinks: PillBtnNavigationLink[] = [
-  {
-    text: '電子報',
-    href: 'https://www.twreporter.org/account/email-subscription',
-    target: '_blank',
-    type: PillButton.Type.SECONDARY,
-  }, //TODO: need to change by releaseBranch
-  {
-    text: '贊助',
-    href: 'https://support.twreporter.org/',
-    target: '_blank',
-    type: PillButton.Type.PRIMARY,
-  }, //TODO: need to change by releaseBranch
-]
+const menuLinks = COMMON_MENU_LINKS
+const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS
 
 const Header: React.FC = () => {
   const windowWidth = useWindowWidth()
