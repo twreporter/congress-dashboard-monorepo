@@ -1,4 +1,4 @@
-import Open from '../components/open'
+import Open from '@/components/open'
 import Dashboard from '@/components/dashboard'
 
 export default function Home() {

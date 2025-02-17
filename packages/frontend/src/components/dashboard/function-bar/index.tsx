@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 // components
 import Tab from './tab'
@@ -7,13 +7,31 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { PillButton } from '@twreporter/react-components/lib/button'
 import { Hamburger } from '@twreporter/react-components/lib/icon'
 import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
+// context
+import { useScrollContext } from '@/contexts/scroll-context'
+// z-index
+import { ZIndex } from '@/styles/z-index'
+// constants
+import { HEADER_HEIGHT } from '@/constants/header'
 
-const Bar = styled.div`
+const Bar = styled.div<{
+  $isHeaderHidden: boolean
+  $isHeaderAboveTab: boolean
+}>`
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${colorGrayscale.gray300};
+  position: sticky;
+  transition: all 300ms ease-in-out;
+  top: ${(props) => (props.$isHeaderHidden ? '0px' : `${HEADER_HEIGHT}px`)};
+  background-color: ${colorGrayscale.gray100};
+  z-index: ${ZIndex.Bar};
+  border-top: ${(props) =>
+    props.$isHeaderAboveTab
+      ? `1px solid ${colorGrayscale.gray300}`
+      : '1px solid transparent'};
 `
 const TabItem = styled(Tab)`
   margin-left: 40px;
@@ -55,9 +73,21 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   const openFilter = () => {
     window.alert(`current filter: ${filterString}`)
   }
+  const searchRef = useRef<HTMLDivElement>(null)
+  const { setTabElement, isHeaderHidden, isHeaderAboveTab } = useScrollContext()
+
+  useEffect(() => {
+    if (searchRef.current) {
+      setTabElement(searchRef.current)
+    }
+  }, [setTabElement])
 
   return (
-    <Bar>
+    <Bar
+      $isHeaderHidden={isHeaderHidden}
+      $isHeaderAboveTab={isHeaderAboveTab}
+      ref={searchRef}
+    >
       <Tabs>
         <TabItem
           text={'看議題'}
