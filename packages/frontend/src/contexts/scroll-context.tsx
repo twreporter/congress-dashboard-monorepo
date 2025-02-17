@@ -9,6 +9,8 @@ import {
 } from 'react'
 // lodash
 import { throttle } from 'lodash'
+// constants
+import { HEADER_HEIGHT } from '@/constants/header'
 
 const _ = {
   throttle,
@@ -35,7 +37,6 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
   const [tabTop, setTabTop] = useState(0)
 
   const lastScrollY = useRef(0)
-  const HEADER_HEIGHT = 64
 
   const handleScroll = _.throttle(() => {
     const currentScrollY = window.scrollY
@@ -46,36 +47,42 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
     }
 
     if (currentScrollY === 0) {
-      if (isHeaderHidden) setIsHeaderHidden(false)
-      if (isHeaderAboveTab) setIsHeaderAboveTab(false)
+      setIsHeaderHidden(false)
+      setIsHeaderAboveTab(false)
       return
     }
 
     if (tabRect?.top !== undefined) {
-      setIsHeaderAboveTab(tabRect.top <= HEADER_HEIGHT)
+      setIsHeaderAboveTab(
+        tabRect.top > 0 ? tabRect.top <= HEADER_HEIGHT : false
+      )
     }
 
-    if (currentScrollY < lastScrollY.current - 5) {
-      if (isHeaderHidden) setIsHeaderHidden(false)
-    } else if (
+    // When scrolling up
+    if (currentScrollY < lastScrollY.current) {
+      setIsHeaderHidden(false)
+    }
+    // When scrolling down
+    else if (
       currentScrollY > lastScrollY.current &&
-      tabRect?.top !== undefined
+      tabRect &&
+      tabRect.top <= HEADER_HEIGHT &&
+      currentScrollY > HEADER_HEIGHT
     ) {
-      if (tabRect.top <= HEADER_HEIGHT && currentScrollY > HEADER_HEIGHT) {
-        if (!isHeaderHidden) setIsHeaderHidden(true)
-      }
+      setIsHeaderHidden(true)
     }
 
     lastScrollY.current = currentScrollY
-  }, 10)
+  }, 100)
 
   useEffect(() => {
+    handleScroll()
     window.addEventListener('scroll', handleScroll)
     return () => {
       handleScroll.cancel()
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [tabElement])
+  }, [tabElement, handleScroll])
 
   return (
     <ScrollContext.Provider

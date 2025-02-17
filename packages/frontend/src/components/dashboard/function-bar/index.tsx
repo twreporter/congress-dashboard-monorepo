@@ -11,6 +11,8 @@ import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 import { useScrollContext } from '@/contexts/scroll-context'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+// constants
+import { HEADER_HEIGHT } from '@/constants/header'
 
 const Bar = styled.div<{
   $isHeaderHidden: boolean
@@ -23,7 +25,7 @@ const Bar = styled.div<{
   border-bottom: 1px solid ${colorGrayscale.gray300};
   position: sticky;
   transition: all 300ms ease-in-out;
-  top: ${(props) => (props.$isHeaderHidden ? '0px' : '64px')};
+  top: ${(props) => (props.$isHeaderHidden ? '0px' : `${HEADER_HEIGHT}px`)};
   background-color: ${colorGrayscale.gray100};
   z-index: ${ZIndex.Bar};
   border-top: ${(props) =>
@@ -73,7 +75,6 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   }
   const searchRef = useRef<HTMLDivElement>(null)
   const { setTabElement, isHeaderHidden, isHeaderAboveTab } = useScrollContext()
-  console.log('isHeaderAboveTab: ', isHeaderAboveTab)
 
   useEffect(() => {
     if (searchRef.current) {

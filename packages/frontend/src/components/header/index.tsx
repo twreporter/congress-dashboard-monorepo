@@ -30,22 +30,27 @@ import {
   COMMON_MENU_LINKS,
   COMPACT_PILL_BUTTON_LINKS,
 } from '@/constants/navigation-link'
+import { HEADER_HEIGHT } from '@/constants/header'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 
-const Container = styled.header<{ $isHidden: boolean; $tabTop: number }>`
+const Container = styled.header.attrs<{ $isHidden: boolean; $tabTop: number }>(
+  (props) => ({
+    style: {
+      top: props.$isHidden
+        ? `calc(${props.$tabTop}px - ${HEADER_HEIGHT}px)`
+        : '0px',
+      transition: !props.$isHidden ? 'top 300ms ease-in-out' : 'none',
+    },
+  })
+)`
   display: flex;
   width: -webkit-fill-available;
-  height: 64px;
+  height: ${HEADER_HEIGHT}px;
   background-color: ${colorGrayscale.gray100};
   position: fixed;
   left: 0px;
   z-index: ${ZIndex.Header};
-  top: ${(props) =>
-    props.$isHidden ? `calc(${props.$tabTop}px - 64px)` : '0px'};
-  /* top: 0px; */
-  /* transition: transform 300ms ease-in-out;
-  transform: translateY(${(props) => (props.$isHidden ? '-100%' : '0')}); */
 
   ${mq.desktopOnly`
     padding: 0 48px;
@@ -142,79 +147,81 @@ const Header: React.FC = () => {
   }, [isHamburgerOpen])
 
   return (
-    <Container $isHidden={isHeaderHidden} $tabTop={tabTop}>
-      <HeaderSection>
-        <LogoContainer>
-          {/* TODO: releaseBranch */}
-          <Link href={'https://www.twreporter.org/'} target={'_blank'}>
-            <LogoHeader />
-          </Link>
-        </LogoContainer>
-        <TabletAndAbove>
-          <ButtonContainer>
-            {menuLinks.map(({ href, text, target }, idx) => (
-              <React.Fragment key={`link-btn-${idx}`}>
-                <Button>
-                  <Link href={href} target={target}>
-                    <TextButton
-                      text={text}
-                      size={TextButton.Size.L}
-                      style={TextButton.Style.DARK}
-                    />
-                  </Link>
-                </Button>
-                <Spacing $width={24} />
-              </React.Fragment>
-            ))}
+    <React.Fragment>
+      <Container $isHidden={isHeaderHidden} $tabTop={tabTop}>
+        <HeaderSection>
+          <LogoContainer>
+            {/* TODO: releaseBranch */}
+            <Link href={'https://www.twreporter.org/'} target={'_blank'}>
+              <LogoHeader />
+            </Link>
+          </LogoContainer>
+          <TabletAndAbove>
+            <ButtonContainer>
+              {menuLinks.map(({ href, text, target }, idx) => (
+                <React.Fragment key={`link-btn-${idx}`}>
+                  <Button>
+                    <Link href={href} target={target}>
+                      <TextButton
+                        text={text}
+                        size={TextButton.Size.L}
+                        style={TextButton.Style.DARK}
+                      />
+                    </Link>
+                  </Button>
+                  <Spacing $width={24} />
+                </React.Fragment>
+              ))}
 
-            {pillButtonLinks.map(({ href, text, target, type }, idx) => (
-              <React.Fragment key={`pill-btn-${idx}`}>
-                <Button>
-                  <Link href={href} target={target}>
-                    <PillButton
-                      text={text}
-                      size={PillButton.Size.S}
-                      type={type}
-                    />
-                  </Link>
-                </Button>
-                {idx < pillButtonLinks.length - 1 ? (
+              {pillButtonLinks.map(({ href, text, target, type }, idx) => (
+                <React.Fragment key={`pill-btn-${idx}`}>
+                  <Button>
+                    <Link href={href} target={target}>
+                      <PillButton
+                        text={text}
+                        size={PillButton.Size.S}
+                        type={type}
+                      />
+                    </Link>
+                  </Button>
+                  {idx < pillButtonLinks.length - 1 ? (
+                    <Spacing $width={16} />
+                  ) : null}
+                </React.Fragment>
+              ))}
+            </ButtonContainer>
+          </TabletAndAbove>
+          <MobileOnly>
+            <ButtonContainer>
+              {!isHamburgerOpen ? (
+                <>
+                  <Button>
+                    <Link
+                      href={pillButtonLinks[1].href}
+                      target={pillButtonLinks[1].target}
+                    >
+                      <PillButton
+                        text={pillButtonLinks[1].text}
+                        size={PillButton.Size.S}
+                        type={pillButtonLinks[1].type}
+                      />
+                    </Link>
+                  </Button>
                   <Spacing $width={16} />
-                ) : null}
-              </React.Fragment>
-            ))}
-          </ButtonContainer>
-        </TabletAndAbove>
-        <MobileOnly>
-          <ButtonContainer>
-            {!isHamburgerOpen ? (
-              <>
-                <Button>
-                  <Link
-                    href={pillButtonLinks[1].href}
-                    target={pillButtonLinks[1].target}
-                  >
-                    <PillButton
-                      text={pillButtonLinks[1].text}
-                      size={PillButton.Size.S}
-                      type={pillButtonLinks[1].type}
-                    />
-                  </Link>
-                </Button>
-                <Spacing $width={16} />
-              </>
-            ) : null}
-            <HamburgerBtn>
-              <IconButton
-                iconComponent={isHamburgerOpen ? crossIcon : hamburgerIcon}
-                onClick={handleHamburgerOnClick}
-              />
-            </HamburgerBtn>
-          </ButtonContainer>
-        </MobileOnly>
-      </HeaderSection>
+                </>
+              ) : null}
+              <HamburgerBtn>
+                <IconButton
+                  iconComponent={isHamburgerOpen ? crossIcon : hamburgerIcon}
+                  onClick={handleHamburgerOnClick}
+                />
+              </HamburgerBtn>
+            </ButtonContainer>
+          </MobileOnly>
+        </HeaderSection>
+      </Container>
       <HamburgerMenu isOpen={isHamburgerOpen} />
-    </Container>
+    </React.Fragment>
   )
 }
 

@@ -16,14 +16,15 @@ import {
   SECONDARY_LINKS,
   PILL_BUTTON_LINKS,
 } from '@/constants/navigation-link'
+import { HEADER_HEIGHT } from '@/constants/header'
 
 const Container = styled.div<{ $isOpen: boolean }>`
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: calc(100% - ${HEADER_HEIGHT}px);
   background-color: white;
-  position: absolute;
-  top: 64px;
+  position: fixed;
+  top: ${HEADER_HEIGHT}px;
   left: -100%;
   z-index: ${ZIndex.HamburgerMenu};
   padding: 16px 32px 0px 32px;
