@@ -12,13 +12,14 @@ generator client {
 }
 
 model SystemUser {
-  id        Int       @id @default(autoincrement())
-  name      String    @default("")
-  email     String    @unique @default("")
-  password  String
-  role      String
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id                         Int            @id @default(autoincrement())
+  name                       String         @default("")
+  email                      String         @unique @default("")
+  password                   String
+  role                       String
+  createdAt                  DateTime?      @default(now())
+  updatedAt                  DateTime?      @updatedAt
+  from_ImportRecord_importer ImportRecord[] @relation("ImportRecord_importer")
 }
 
 model Photo {
@@ -199,4 +200,17 @@ model CommitteeMember {
 
   @@index([legislativeMeetingSessionId])
   @@index([legislativeYuanMemberId])
+}
+
+model ImportRecord {
+  id         Int         @id @default(autoincrement())
+  recordName String      @default("")
+  listName   String
+  csvData    Json?
+  importer   SystemUser? @relation("ImportRecord_importer", fields: [importerId], references: [id])
+  importerId Int?        @map("importer")
+  createdAt  DateTime?   @default(now())
+  updatedAt  DateTime?   @updatedAt
+
+  @@index([importerId])
 }

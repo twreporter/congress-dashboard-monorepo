@@ -12,6 +12,8 @@
     "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown"
   },
   "dependencies": {
+    "@emotion/css": "^11.13.5",
+    "@emotion/styled": "^11.14.0",
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",

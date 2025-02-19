@@ -70,7 +70,7 @@ const listConfigurations = list({
     operation: {
       query: allowAllRoles(),
       create: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
-      update: allowAllRoles(),
+      update: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
       delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
     },
     item: {
