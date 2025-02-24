@@ -1,12 +1,17 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 // components
 import Tab from './tab'
+import FliterModal from './filter-modal'
 // @twreporter
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import {
+  colorGrayscale,
+  colorBrand,
+} from '@twreporter/core/lib/constants/color'
 import { PillButton } from '@twreporter/react-components/lib/button'
 import { Hamburger } from '@twreporter/react-components/lib/icon'
 import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
+import { P4 } from '@twreporter/react-components/lib/text/paragraph'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 // z-index
@@ -55,26 +60,55 @@ const Filter = styled.div`
   align-items: center;
 `
 
+const FilterCountIcon = styled.div`
+  background-color: ${colorBrand.heavy};
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const P4White = styled(P4)`
+  color: ${colorGrayscale.white};
+`
+
 export enum Option {
   Issue,
   Human,
 }
 
 type FunctionBarProps = {
-  filterString?: string
   currentTab?: Option
   setTab: (tab: Option) => void
 }
 const FunctionBar: React.FC<FunctionBarProps> = ({
-  filterString = '立法院｜第11屆｜全部會期',
   currentTab = Option.Issue,
   setTab,
 }: FunctionBarProps) => {
   const openFilter = () => {
-    window.alert(`current filter: ${filterString}`)
+    setIsFilterOpen((prev) => !prev)
   }
   const searchRef = useRef<HTMLDivElement>(null)
   const { setTabElement, isHeaderHidden, isHeaderAboveTab } = useScrollContext()
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [filterString, setFilterString] = useState('立法院｜第11屆｜全部會期')
+  const [filterCount, setFilterCount] = useState(0)
+
+  const handleSubmit = (v) => {
+    //TODO: add type
+    const meetingString = v.meeting ? `第${v.meeting}屆` : '第11屆'
+    const meetingSessionString = v.meetingSession.length
+      ? v.meetingSession[0] === 'all'
+        ? '全部會期'
+        : '部分會期'
+      : '全部會期'
+    const totalCount =
+      v.constituency.length + v.party.length + v.committee.length
+    setFilterString(`立法院｜${meetingString}｜${meetingSessionString}`)
+    setFilterCount(totalCount)
+  }
 
   useEffect(() => {
     if (searchRef.current) {
@@ -110,8 +144,20 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
           size={PillButton.Size.L}
           text={'篩選'}
           leftIconComponent={<Hamburger />} //todo: add filter icon & add release branch
+          rightIconComponent={
+            filterCount > 0 ? (
+              <FilterCountIcon>
+                <P4White text={filterCount} />
+              </FilterCountIcon>
+            ) : null
+          }
         />
       </Filter>
+      <FliterModal
+        isOpen={isFilterOpen}
+        setIsOpen={setIsFilterOpen}
+        onSubmit={handleSubmit}
+      />
     </Bar>
   )
 }
