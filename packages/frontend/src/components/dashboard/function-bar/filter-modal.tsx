@@ -32,6 +32,7 @@ const ModalContainer = styled.div<{ $isOpen: boolean }>`
 `
 
 const Filter = styled.div`
+  overflow: auto;
   background-color: ${colorGrayscale.white};
   width: 100%;
   ${mq.tabletAndAbove`
