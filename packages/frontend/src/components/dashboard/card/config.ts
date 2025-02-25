@@ -1,5 +1,5 @@
-import { Legislator, CardIssueProps } from './issue'
-import { CardHumanProps, Tag } from './human'
+import { Legislator, CardIssueProps } from '@/components/dashboard/card/issue'
+import { CardHumanProps, Tag } from '@/components/dashboard/card/human'
 import { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 
 export const DPP =

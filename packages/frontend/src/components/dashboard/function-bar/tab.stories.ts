@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import Tab from './tab'
+import Tab from '@/components/dashboard/function-bar/tab'
 
 const meta: Meta<typeof Tab> = {
   component: Tab,

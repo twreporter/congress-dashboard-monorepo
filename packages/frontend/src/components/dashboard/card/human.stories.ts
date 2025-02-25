@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
-import Human, { CardSize } from './human'
-import { mockHumans } from './config'
+import Human, { CardSize } from '@/components/dashboard/card/human'
+import { mockHumans } from '@/components/dashboard/card/config'
 const mockHuman = mockHumans[0]
 
 const meta: Meta<typeof Human> = {

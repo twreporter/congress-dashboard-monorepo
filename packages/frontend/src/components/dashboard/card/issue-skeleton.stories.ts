@@ -1,15 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { CardHumanSkeleton, CardSize } from '@/components/dashboard/card/human'
+import { CardIssueSkeleton, CardSize } from '@/components/dashboard/card/issue'
 
-const meta: Meta<typeof CardHumanSkeleton> = {
-  component: CardHumanSkeleton,
+const meta: Meta<typeof CardIssueSkeleton> = {
+  component: CardIssueSkeleton,
   argTypes: {
     size: {
       control: 'radio',
-      options: ['S', 'L'],
+      options: ['S', 'M', 'L'],
       mapping: {
         S: CardSize.S,
+        M: CardSize.M,
         L: CardSize.L,
       },
     },
@@ -17,7 +18,7 @@ const meta: Meta<typeof CardHumanSkeleton> = {
 }
 export default meta
 
-type Story = StoryObj<typeof CardHumanSkeleton>
+type Story = StoryObj<typeof CardIssueSkeleton>
 
 const defaultArgs = {
   size: CardSize.L,

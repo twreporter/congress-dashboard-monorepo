@@ -3,10 +3,12 @@
 import React from 'react'
 import styled from 'styled-components'
 // config
-import { title, description } from './config'
+import { title, description } from '@/components/open/config'
+// lib
+import { notoSerif } from '@/lib/font'
 // components
-import SeachBar from './search'
-import Selected from './selected'
+import SeachBar from '@/components/open/search'
+import Selected from '@/components/open/selected'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
@@ -64,11 +66,15 @@ const StyledSelected = styled(Selected)`
 
 const Open: React.FC = () => {
   const descriptJSX = description.map((text, index) => (
-    <H4 text={text} key={`open-desc-${index}`} />
+    <H4
+      className={notoSerif.className}
+      text={text}
+      key={`open-desc-${index}`}
+    />
   ))
   return (
     <Box>
-      <Title>{title}</Title>
+      <Title className={notoSerif.className}>{title}</Title>
       <Description>{descriptJSX}</Description>
       <SeachBar />
       <StyledSelected />

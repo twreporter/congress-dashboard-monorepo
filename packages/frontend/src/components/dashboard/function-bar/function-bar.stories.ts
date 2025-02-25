@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import FunctionBar, { Option } from './index'
+import FunctionBar, { Option } from '@/components/dashboard/function-bar'
 
 const meta: Meta<typeof FunctionBar> = {
   component: FunctionBar,

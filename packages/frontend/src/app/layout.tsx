@@ -1,37 +1,26 @@
-'use client'
-
-//import type { Metadata } from 'next'
 import React from 'react'
 import styled from 'styled-components'
+import type { Metadata } from 'next'
+// lib
 import StyledComponentsRegistry from '@/lib/style-registry'
-import { CoreContext } from '@/contexts'
+import { notoSans } from '@/lib/font'
+// constants
+import { SNACK_BAR_ID, SNACK_BAR_TEXT_ID } from '@/constants'
 // @twreporter
-import {
-  SnackBar,
-  useSnackBar,
-} from '@twreporter/react-components/lib/snack-bar'
+import SnackBar from '@twreporter/react-components/lib/snack-bar/components/snack-bar'
 import mq from '@twreporter/core/lib/utils/media-query'
-import { BRANCH } from '@twreporter/core/lib/constants/release-branch'
 
-/* todo
- *   add fonts
- *   add header, footer here
- *   add global styles
- */
-
-/*
 export const metadata: Metadata = {
   title: 'Twreporter Congress Dashboard',
   description: '報導者議會透視版',
 }
-  */
 
-const SnackBarContainer = styled.div<{ $show: boolean }>`
+const SnackBarContainer = styled.div`
   position: fixed;
   bottom: 8px;
   z-index: 1;
   transition: opacity 100ms ease-in-out;
-  opacity: ${(props) => (props.$show ? 1 : 0)};
+  opacity: 0;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -53,22 +42,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const { showSnackBar, snackBarText, toastr } = useSnackBar()
-  const contextValue = {
-    releaseBranch: BRANCH.dev,
-    toastr,
-  }
-
   return (
-    <html lang="zh-tw">
+    <html lang="zh-tw" className={notoSans.className}>
       <body>
         <StyledComponentsRegistry>
-          <CoreContext.Provider value={contextValue}>
-            <main>{children}</main>
-            <SnackBarContainer $show={showSnackBar}>
-              <SnackBar text={snackBarText} />
-            </SnackBarContainer>
-          </CoreContext.Provider>
+          <main>{children}</main>
+          <SnackBarContainer id={SNACK_BAR_ID}>
+            <SnackBar id={SNACK_BAR_TEXT_ID} />
+          </SnackBarContainer>
         </StyledComponentsRegistry>
       </body>
     </html>

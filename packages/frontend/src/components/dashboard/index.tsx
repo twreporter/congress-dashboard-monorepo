@@ -1,23 +1,23 @@
 'use client'
 
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 // config
-import { mockHumans, mockIssues } from './card/config'
-// context
-import { CoreContext } from '@/contexts'
+import { mockHumans, mockIssues } from '@/components/dashboard/card/config'
+// lib
+import toastr from '@/lib/toastr'
 // components
-import FunctionBar, { Option } from './function-bar'
+import FunctionBar, { Option } from '@/components/dashboard/function-bar'
 import {
   CardIssueRWD,
   CardIssueProps,
   CardIssueSkeletonRWD,
-} from './card/issue'
+} from '@/components/dashboard/card/issue'
 import {
   CardHumanRWD,
   CardHumanProps,
   CardHumanSkeletonRWD,
-} from './card/human'
+} from '@/components/dashboard/card/human'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -86,7 +86,6 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [mockIssue, setMockIssue] = useState<CardIssueProps[]>([])
   const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
-  const { toastr } = useContext(CoreContext)
 
   useEffect(() => {
     if (isLoading) {

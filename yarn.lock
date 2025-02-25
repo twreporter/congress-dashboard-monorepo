@@ -6161,6 +6161,7 @@ __metadata:
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
+    "@types/styled-components": "npm:^5.1.34"
     eslint: "npm:^9"
     eslint-config-next: "npm:15.1.5"
     eslint-plugin-storybook: "npm:^0.11.2"
@@ -6200,12 +6201,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@twreporter/react-components@npm:^9.4.3":
-  version: 9.4.3
-  resolution: "@twreporter/react-components@npm:9.4.3"
+"@twreporter/core@npm:^1.24.2":
+  version: 1.24.2
+  resolution: "@twreporter/core@npm:1.24.2"
   dependencies:
-    "@twreporter/core": "npm:^1.24.1"
-    "@twreporter/redux": "npm:^8.3.0"
+    lodash: "npm:^4.0.0"
+    prop-types: "npm:^15.0.0"
+    styled-components: "npm:^6.0.0"
+    stylis: "npm:^4.0.0"
+  checksum: 10c0/f300a45335eac5d1a365b00adf96cff5d3c8d97b7135d10fe020d346097422a1f65dd2054d789a38cdd36d9d4ff9c7b51becd024d1c9ee2c6a5db193a32c8f9f
+  languageName: node
+  linkType: hard
+
+"@twreporter/react-components@npm:^9.4.3":
+  version: 9.4.4
+  resolution: "@twreporter/react-components@npm:9.4.4"
+  dependencies:
+    "@twreporter/core": "npm:^1.24.2"
+    "@twreporter/redux": "npm:^8.3.1"
     fontfaceobserver-es: "npm:^3.3.3"
     hoist-non-react-statics: "npm:^2.3.1"
     lodash: "npm:^4.0.0"
@@ -6218,16 +6231,16 @@ __metadata:
     react-waypoint: "npm:^10.3.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-  checksum: 10c0/262091d1509800c0b0d17eac0315c8881f53234b6d3ecec8f1400b2247f45b056bc493aa428b4286241f86790836ffd2802ce65f6499038d3c7e322b2d805da9
+  checksum: 10c0/c3de062f66805a10c8cee09d83beda81fad756611cdb5bb38db21f29b5f27535733009b99d644904aedbf8d09bdf6add5965c1b0d94bc8afc33cbe741c3249f5
   languageName: node
   linkType: hard
 
-"@twreporter/redux@npm:^8.3.0":
-  version: 8.3.0
-  resolution: "@twreporter/redux@npm:8.3.0"
+"@twreporter/redux@npm:^8.3.1":
+  version: 8.3.1
+  resolution: "@twreporter/redux@npm:8.3.1"
   dependencies:
     "@reduxjs/toolkit": "npm:^2.2.5"
-    "@twreporter/core": "npm:^1.24.1"
+    "@twreporter/core": "npm:^1.24.2"
     axios: "npm:^0.19.0"
     es6-error: "npm:^4.0.2"
     humps: "npm:^0.6.0"
@@ -6239,7 +6252,7 @@ __metadata:
     react: "npm:^18.2.0"
     redux: "npm:^5.0.1"
     redux-thunk: "npm:^3.1.0"
-  checksum: 10c0/7d50948ef59c3b75515bef8e52013d931caf381a7f25b6446b610fc3009defc94d32c6c8cc301ef1a4d117b3e94130a050cd27190dcd3d2188fc56f95291e4cd
+  checksum: 10c0/4778d404d4fbc5efadc157239d5783732a9d9d3e32ca592db6727a777f3d5f0442a4621b3a9b06ca5bd8476c8917165fff0ec1bb5d665c86824dcbebe2d185c6
   languageName: node
   linkType: hard
 
@@ -6427,6 +6440,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/hoist-non-react-statics@npm:*":
+  version: 3.3.6
+  resolution: "@types/hoist-non-react-statics@npm:3.3.6"
+  dependencies:
+    "@types/react": "npm:*"
+    hoist-non-react-statics: "npm:^3.3.0"
+  checksum: 10c0/149a4c217d81f21f8a1e152160a59d5b99b6a9aa6d354385d5f5bc02760cbf1e170a8442ba92eb653befff44b0c5bc2234bb77ce33e0d11a65f779e8bab5c321
+  languageName: node
+  linkType: hard
+
 "@types/html-minifier-terser@npm:^6.0.0":
   version: 6.1.0
   resolution: "@types/html-minifier-terser@npm:6.1.0"
@@ -6603,6 +6626,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react@npm:*":
+  version: 19.0.10
+  resolution: "@types/react@npm:19.0.10"
+  dependencies:
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/41884cca21850c8b2d6578b172ca0ca4fff6021251a68532b19f2031ac23dc5a9222470208065f8d9985d367376047df2f49ece8d927f7d04cdc94922b1eb34b
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:^18.3.3":
   version: 18.3.18
   resolution: "@types/react@npm:18.3.18"
@@ -6654,6 +6686,17 @@ __metadata:
     "@types/node": "npm:*"
     "@types/send": "npm:*"
   checksum: 10c0/26ec864d3a626ea627f8b09c122b623499d2221bbf2f470127f4c9ebfe92bd8a6bb5157001372d4c4bd0dd37a1691620217d9dc4df5aa8f779f3fd996b1c60ae
+  languageName: node
+  linkType: hard
+
+"@types/styled-components@npm:^5.1.34":
+  version: 5.1.34
+  resolution: "@types/styled-components@npm:5.1.34"
+  dependencies:
+    "@types/hoist-non-react-statics": "npm:*"
+    "@types/react": "npm:*"
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/5bce93ea2c6161fc45daaf863eefdc20672e839ae486597c40b95e7978e249c160c1bc9706f56cb5152a7ef63cf485d15a9502889169ef945281f511e4b2d5a0
   languageName: node
   linkType: hard
 
@@ -12174,7 +12217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.1.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:^3.1.0, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:

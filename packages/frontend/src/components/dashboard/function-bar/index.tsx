@@ -1,13 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-// context
-import { CoreContext } from '@/contexts'
 // components
-import Tab from './tab'
+import Tab from '@/components/dashboard/function-bar/tab'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { PillButton } from '@twreporter/react-components/lib/button'
-import { Hamburger } from '@twreporter/react-components/lib/icon'
+import { Hamburger as FilterIcon } from '@twreporter/react-components/lib/icon'
 import {
   TabletAndAbove,
   MobileOnly,
@@ -82,7 +80,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   const openFilter = () => {
     window.alert(`current filter: ${filterString}`)
   }
-  const { releaseBranch } = useContext(CoreContext)
+  const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
 
   return (
     <Box>
@@ -108,7 +106,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
             type={PillButton.Type.SECONDARY}
             size={PillButton.Size.L}
             text={'篩選'}
-            leftIconComponent={<Hamburger releaseBranch={releaseBranch} />} //todo: add filter icon & add release branch
+            leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
           />
         </Filter>
       </Bar>

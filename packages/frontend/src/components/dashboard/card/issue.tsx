@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components'
 // hooks
 import useResizeObserver from '@/hooks/use-resize-observer'
 // components
-import { Triangle, Circle, Gap } from './skeleton'
-import PartyTag, { TagSize } from './party-tag'
+import { Triangle, Circle, Gap } from '@/components/dashboard/card/skeleton'
+import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 // @twreporter
 import {
   colorGrayscale,

@@ -1,9 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 // components
-import Tooltip from './tooltip'
-import { Triangle, Gap } from './skeleton'
-import PartyTag, { TagSize } from './party-tag'
+import Tooltip from '@/components/dashboard/card/tooltip'
+import { Triangle, Gap } from '@/components/dashboard/card/skeleton'
+import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 // @twreporter
 import {
   MEMBER_TYPE_LABEL,

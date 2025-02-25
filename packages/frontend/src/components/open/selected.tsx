@@ -3,7 +3,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 // config
-import { selected } from './config'
+import { selected } from '@/components/open/config'
 // @twreporter
 import {
   colorGrayscale,
