@@ -8,7 +8,13 @@ import releaseBranchConsts from '@twreporter/core/lib/constants/release-branch'
 import origins from '@twreporter/core/lib/constants/request-origins'
 import { LogoFooter } from '@twreporter/react-components/lib/logo'
 
-const Logo = ({ releaseBranch = releaseBranchConsts.release }) => {
+type LogoProps = {
+  releaseBranch: predefinedPropTypes.releaseBranch
+}
+
+const Logo: React.FC<LogoProps> = ({
+  releaseBranch = releaseBranchConsts.release,
+}) => {
   const mainOrigin = origins.forClientSideRendering[releaseBranch].main
   const [over, setOver] = useState(false)
   return (
@@ -24,10 +30,6 @@ const Logo = ({ releaseBranch = releaseBranchConsts.release }) => {
       />
     </Link>
   )
-}
-
-Logo.propTypes = {
-  releaseBranch: predefinedPropTypes.releaseBranch,
 }
 
 export default Logo

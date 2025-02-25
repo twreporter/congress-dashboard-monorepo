@@ -17,7 +17,11 @@ import {
   CITY_OPTIONS,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 // component
-import { SingleSelect, MultipleSelect } from '@/components/selector'
+import {
+  SelectorType,
+  SingleSelect,
+  MultipleSelect,
+} from '@/components/selector'
 
 const ModalContainer = styled.div<{ $isOpen: boolean }>`
   display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
@@ -144,10 +148,19 @@ const OptionIcon = () => {
   )
 }
 
+export type FilterModalValueType = {
+  department: string
+  meeting: string
+  meetingSession: string[]
+  constituency: string[]
+  party: string[]
+  committee: string[]
+}
+
 type FilterModelProps = {
   isOpen: boolean
   setIsOpen: (v: boolean) => void
-  onSubmit: (v: object) => void
+  onSubmit: (v: FilterModalValueType) => void
 }
 const FilterModal: React.FC<FilterModelProps> = ({
   isOpen,
@@ -162,18 +175,19 @@ const FilterModal: React.FC<FilterModelProps> = ({
     party: [],
     committee: [],
   }
-  const [filterValue, setFilterValue] = useState(defaultValue)
+  const [filterValue, setFilterValue] =
+    useState<FilterModalValueType>(defaultValue)
 
   const filterOptions = [
     {
-      type: 'single',
+      type: SelectorType.Single,
       disabled: true,
       label: '單位',
       value: 'department',
       options: [{ label: '立法院', value: 'legislativeYuan' }],
     },
     {
-      type: 'single',
+      type: SelectorType.Single,
       disabled: false,
       label: '屆期',
       value: 'meeting',
@@ -183,7 +197,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
       ], //TODO: get from api
     },
     {
-      type: 'multi',
+      type: SelectorType.Multiple,
       disabled: false,
       label: '會期',
       value: 'meetingSession',
@@ -194,7 +208,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
       ], //TODO: get from api
     },
     {
-      type: 'multi',
+      type: SelectorType.Multiple,
       disabled: false,
       label: '選區',
       value: 'constituency',
@@ -222,7 +236,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
       ],
     },
     {
-      type: 'multi',
+      type: SelectorType.Multiple,
       disabled: false,
       label: '黨籍',
       value: 'party',
@@ -232,7 +246,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
       ], //TODO: get from api
     },
     {
-      type: 'multi',
+      type: SelectorType.Multiple,
       disabled: false,
       label: '委員會',
       value: 'committee',
@@ -279,7 +293,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
         <SelectorsContainer>
           {filterOptions.map(
             ({ type, disabled, label, value, options }, idx) => {
-              if (type === 'single') {
+              if (type === SelectorType.Single) {
                 return (
                   <SelectContainer key={`single-select-${value}-${idx}`}>
                     <Label text={label} />
@@ -289,15 +303,16 @@ const FilterModal: React.FC<FilterModelProps> = ({
                         options={options}
                         value={filterValue[value]}
                         onChange={(optionValue) =>
-                          setFilterValue((v) => {
-                            return { ...v, [value]: optionValue }
-                          })
+                          setFilterValue((v) => ({
+                            ...v,
+                            [value]: optionValue,
+                          }))
                         }
                       />
                     </SelectorContainer>
                   </SelectContainer>
                 )
-              } else if (type === 'multi') {
+              } else if (type === SelectorType.Multiple) {
                 return (
                   <SelectContainer key={`multi-select-${value}-${idx}`}>
                     <Label text={label} />
@@ -306,10 +321,11 @@ const FilterModal: React.FC<FilterModelProps> = ({
                         disabled={disabled}
                         options={options}
                         value={filterValue[value]}
-                        onChange={(optionsValue) =>
-                          setFilterValue((v) => {
-                            return { ...v, [value]: optionsValue }
-                          })
+                        onChange={(optionValue) =>
+                          setFilterValue((v) => ({
+                            ...v,
+                            [value]: optionValue,
+                          }))
                         }
                       />
                     </SelectorContainer>

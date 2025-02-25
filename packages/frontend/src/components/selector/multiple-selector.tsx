@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+// @twreporter
+import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 import type { MultipleSelectProps, Option, ValueType } from './types'
-import { useOutsideClick } from './hooks'
 import { DropdownMenu } from './dropdown-menu'
 import { isOptionGroup } from './utils'
 import {
@@ -48,9 +49,11 @@ export const MultipleSelect = React.memo(function MultipleSelect({
 
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null)
-  const selectContainerRef = useRef<HTMLDivElement>(null)
   const selectBoxContentRef = useRef<HTMLDivElement>(null)
   const tagRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  const selectContainerRef = useOutsideClick(() => {
+    setOpen(false)
+  })
 
   // Get all available options (flattened if grouped)
   const getAllOptions = useMemo((): Option[] => {
@@ -129,11 +132,6 @@ export const MultipleSelect = React.memo(function MultipleSelect({
       searchInputRef.current.focus()
     }
   }, [open, searchable])
-
-  // Handle outside clicks
-  useOutsideClick(selectContainerRef, () => {
-    setOpen(false)
-  })
 
   // Calculate displayed tags and hidden count
   const { displayedTags, hiddenCount } = useMemo(() => {

@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
+// @twreporter
+import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 import type { SingleSelectProps, Option } from './types'
-import { useOutsideClick } from './hooks'
 import { DropdownMenu } from './dropdown-menu'
 import { isOptionGroup } from './utils'
 import {
@@ -34,7 +35,9 @@ export const SingleSelect = React.memo(function SingleSelect({
 
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const selectorContainerRef = useOutsideClick(() => {
+    setOpen(false)
+  })
 
   // Find and set the selected option when value changes
   useEffect(() => {
@@ -61,11 +64,6 @@ export const SingleSelect = React.memo(function SingleSelect({
       searchInputRef.current.focus()
     }
   }, [open, searchable])
-
-  // Handle outside clicks
-  useOutsideClick(containerRef, () => {
-    setOpen(false)
-  })
 
   // Handlers
   const handleToggle = useCallback(() => {
@@ -120,7 +118,7 @@ export const SingleSelect = React.memo(function SingleSelect({
   )
 
   return (
-    <SelectContainer ref={containerRef}>
+    <SelectContainer ref={selectorContainerRef}>
       <SelectBox
         onClick={handleToggle}
         onFocus={() => setFocused(true)}
@@ -162,7 +160,7 @@ export const SingleSelect = React.memo(function SingleSelect({
           filterOptions={filterOptions}
           handleSelect={handleSelect}
           isMultiple={false}
-          selectCotainerRef={containerRef}
+          selectCotainerRef={selectorContainerRef}
         />
       )}
     </SelectContainer>

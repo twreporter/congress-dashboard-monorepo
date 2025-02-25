@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 // components
 import Tab from './tab'
-import FliterModal from './filter-modal'
+import FliterModal, { type FilterModalValueType } from './filter-modal'
 // @twreporter
 import {
   colorGrayscale,
@@ -96,16 +96,19 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   const [filterString, setFilterString] = useState('立法院｜第11屆｜全部會期')
   const [filterCount, setFilterCount] = useState(0)
 
-  const handleSubmit = (v) => {
-    //TODO: add type
-    const meetingString = v.meeting ? `第${v.meeting}屆` : '第11屆'
-    const meetingSessionString = v.meetingSession.length
-      ? v.meetingSession[0] === 'all'
+  const handleSubmit = (filterModalValue: FilterModalValueType) => {
+    const meetingString = filterModalValue.meeting
+      ? `第${filterModalValue.meeting}屆`
+      : '第11屆'
+    const meetingSessionString = filterModalValue.meetingSession.length
+      ? filterModalValue.meetingSession[0] === 'all'
         ? '全部會期'
         : '部分會期'
       : '全部會期'
     const totalCount =
-      v.constituency.length + v.party.length + v.committee.length
+      filterModalValue.constituency.length +
+      filterModalValue.party.length +
+      filterModalValue.committee.length
     setFilterString(`立法院｜${meetingString}｜${meetingSessionString}`)
     setFilterCount(totalCount)
   }
@@ -114,7 +117,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     if (searchRef.current) {
       setTabElement(searchRef.current)
     }
-  }, [setTabElement])
+  }, [setTabElement, searchRef])
 
   return (
     <Bar
