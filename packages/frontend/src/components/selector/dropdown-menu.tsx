@@ -22,6 +22,12 @@ import {
   CheckMark,
 } from './styles'
 import CheckIcon from './check-icon'
+// lodash
+import { throttle } from 'lodash'
+
+const _ = {
+  throttle,
+}
 
 type DropdownMenuProps = {
   options: OptionGroup[] | Option[]
@@ -44,7 +50,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const [showAbove, setShowAbove] = useState(false)
 
   useEffect(() => {
-    const checkPosition = () => {
+    const checkPosition = _.throttle(() => {
       if (!selectCotainerRef.current || !dropdownRef.current) return
       const selectRect = selectCotainerRef.current.getBoundingClientRect()
       const dropdownHeight = dropdownRef.current.offsetHeight
@@ -59,13 +65,14 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
       setShowAbove(
         spaceBelow < dropdownHeight + padding && spaceAbove > spaceBelow
       )
-    }
+    }, 100)
 
     checkPosition()
     window.addEventListener('scroll', checkPosition)
     window.addEventListener('resize', checkPosition)
 
     return () => {
+      checkPosition.cancel()
       window.removeEventListener('scroll', checkPosition)
       window.removeEventListener('resize', checkPosition)
     }

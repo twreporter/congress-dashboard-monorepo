@@ -153,11 +153,13 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
           }
         />
       </Filter>
-      <FliterModal
-        isOpen={isFilterOpen}
-        setIsOpen={setIsFilterOpen}
-        onSubmit={handleSubmit}
-      />
+      {isFilterOpen ? (
+        <FliterModal
+          isOpen={isFilterOpen}
+          setIsOpen={setIsFilterOpen}
+          onSubmit={handleSubmit}
+        />
+      ) : null}
     </Bar>
   )
 }

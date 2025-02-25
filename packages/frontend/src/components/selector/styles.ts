@@ -26,7 +26,7 @@ export const SelectBox = styled.div<{ $disabled: boolean; $focused: boolean }>`
   border-radius: 4px;
   background-color: ${(props) =>
     props.$disabled ? colorGrayscale.gray100 : colorGrayscale.white};
-  padding: 12px 8px;
+  padding: 8px 12px;
   cursor: ${(props) => (props.$disabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s;
   height: 48px;

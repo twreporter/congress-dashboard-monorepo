@@ -39,7 +39,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
 
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const selectContainerRef = useRef<HTMLDivElement>(null)
 
   // Get all available options (flattened if grouped)
   const getAllOptions = useMemo((): Option[] => {
@@ -64,7 +64,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
   }, [open, searchable])
 
   // Handle outside clicks
-  useOutsideClick(containerRef, () => {
+  useOutsideClick(selectContainerRef, () => {
     setOpen(false)
   })
 
@@ -143,7 +143,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
   )
 
   return (
-    <SelectContainer ref={containerRef}>
+    <SelectContainer ref={selectContainerRef}>
       <SelectBox
         onClick={handleToggle}
         onFocus={() => setFocused(true)}
@@ -237,7 +237,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
           filterOptions={filterOptions}
           handleSelect={handleSelect}
           isMultiple={true}
-          selectCotainerRef={containerRef}
+          selectCotainerRef={selectContainerRef}
         />
       )}
     </SelectContainer>
