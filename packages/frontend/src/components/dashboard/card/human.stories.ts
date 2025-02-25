@@ -6,6 +6,7 @@ import { mockHumans } from '@/components/dashboard/card/config'
 const mockHuman = mockHumans[0]
 
 const meta: Meta<typeof Human> = {
+  title: 'Card/Human',
   component: Human,
   argTypes: {
     type: {

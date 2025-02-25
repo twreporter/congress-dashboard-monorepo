@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import Tab from '@/components/dashboard/function-bar/tab'
 
 const meta: Meta<typeof Tab> = {
+  title: 'Function Bar/Tab',
   component: Tab,
   parameters: {
     controls: {

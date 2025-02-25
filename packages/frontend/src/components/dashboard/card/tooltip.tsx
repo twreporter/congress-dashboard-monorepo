@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 import styled from 'styled-components'
 // @twreporter
@@ -7,6 +9,7 @@ import {
 } from '@twreporter/core/lib/constants/color'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import mq from '@twreporter/core/lib/utils/media-query'
+import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 
 // info icon
 const InfoIcon = () => (
@@ -98,9 +101,10 @@ const Tooltip: React.FC<TooltipProps> = ({ tooltip }: TooltipProps) => {
     e.stopPropagation()
     setShow(!show)
   }
+  const ref = useOutsideClick(() => setShow(false))
 
   return (
-    <Box onClick={toggleTooltip} $show={show}>
+    <Box onClick={toggleTooltip} $show={show} ref={ref}>
       <InfoIcon />
       <Detail $show={show}>
         <Content text={tooltip} />

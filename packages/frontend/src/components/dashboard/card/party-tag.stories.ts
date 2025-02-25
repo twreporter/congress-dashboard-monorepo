@@ -11,6 +11,7 @@ import {
 } from '@/components/dashboard/card/config'
 
 const meta: Meta<typeof PartyTag> = {
+  title: 'PartyTag',
   component: PartyTag,
   argTypes: {
     size: {

@@ -94,7 +94,7 @@ const Dashboard = () => {
         setMockHuman(mockHumans)
         setIsLoading(false)
         if (selectedType === Option.Human) {
-          toastr({ text: '隨機！' })
+          toastr({ text: '立委為隨機排列' })
         }
       }, 2000)
     }

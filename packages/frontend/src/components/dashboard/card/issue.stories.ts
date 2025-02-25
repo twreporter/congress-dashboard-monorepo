@@ -4,6 +4,7 @@ import Issue, { CardSize } from '@/components/dashboard/card/issue'
 import { mockLegislators } from '@/components/dashboard/card/config'
 
 const meta: Meta<typeof Issue> = {
+  title: 'Card/Issue',
   component: Issue,
   argTypes: {
     size: {

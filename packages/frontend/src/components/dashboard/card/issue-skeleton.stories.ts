@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { CardIssueSkeleton, CardSize } from '@/components/dashboard/card/issue'
 
 const meta: Meta<typeof CardIssueSkeleton> = {
+  title: 'Card/Issue/Skeleton',
   component: CardIssueSkeleton,
   argTypes: {
     size: {
