@@ -33,5 +33,5 @@ export type MultipleSelectProps = {
   searchable?: boolean
   searchPlaceholder?: string
   onChange: (value: ValueType[]) => void
-  maxDisplay?: number
+  maxDisplay?: number | 'responsive'
 }

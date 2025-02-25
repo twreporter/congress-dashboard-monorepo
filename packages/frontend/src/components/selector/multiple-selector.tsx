@@ -18,15 +18,21 @@ import {
   TagLabel,
   TagCloseIcon,
 } from './styles'
+// lodash
+import { throttle } from 'lodash'
+
+const _ = {
+  throttle,
+}
 
 export const MultipleSelect = React.memo(function MultipleSelect({
   placeholder = '請選擇',
   options,
   value = [] as ValueType[],
   disabled = false,
-  maxDisplay = 2,
+  maxDisplay = 'responsive',
   loading = false,
-  searchable = true,
+  searchable = false,
   searchPlaceholder = '搜尋...',
   onChange,
 }: MultipleSelectProps) {
@@ -36,10 +42,15 @@ export const MultipleSelect = React.memo(function MultipleSelect({
   const [focused, setFocused] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [isSearchFocused, setIsSearchFocused] = useState(false)
+  const [visibleTagCount, setVisibleTagCount] = useState(
+    typeof maxDisplay === 'number' ? maxDisplay : 1
+  )
 
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null)
   const selectContainerRef = useRef<HTMLDivElement>(null)
+  const selectBoxContentRef = useRef<HTMLDivElement>(null)
+  const tagRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
   // Get all available options (flattened if grouped)
   const getAllOptions = useMemo((): Option[] => {
@@ -56,6 +67,62 @@ export const MultipleSelect = React.memo(function MultipleSelect({
     setSelectedOptions(selected)
   }, [value, getAllOptions])
 
+  // Calculate visible tags based on container width when maxDisplay is 'responsive'
+  useEffect(() => {
+    if (
+      maxDisplay !== 'responsive' ||
+      !selectBoxContentRef.current ||
+      selectedOptions.length === 0
+    ) {
+      return
+    }
+
+    const currentSelectBoxContent = selectBoxContentRef.current
+
+    const calculateVisibleTags = _.throttle(() => {
+      if (!currentSelectBoxContent) return
+
+      const availableWidth = currentSelectBoxContent.clientWidth
+
+      // Calculate how many tags can fit
+      let totalWidth = 0
+      let count = 0
+
+      // Add width of each tag
+      for (let i = 0; i < selectedOptions.length; i++) {
+        const option = selectedOptions[i]
+        const tagElement = tagRefs.current.get(option.value.toString())
+        let tagWidth = 0
+
+        if (tagElement) {
+          tagWidth = tagElement.offsetWidth + 8 // 8px for margin
+        } else {
+          tagWidth = 108 // Default estimated width if tag not yet rendered
+        }
+
+        // "+N..." tag width approx 50px
+        if (totalWidth + tagWidth < availableWidth - 50) {
+          totalWidth += tagWidth
+          count++
+        } else {
+          break
+        }
+      }
+
+      setVisibleTagCount(Math.max(1, count))
+    }, 100)
+
+    const resizeObserver = new ResizeObserver(calculateVisibleTags)
+    resizeObserver.observe(currentSelectBoxContent)
+
+    calculateVisibleTags()
+
+    return () => {
+      resizeObserver.unobserve(currentSelectBoxContent)
+      resizeObserver.disconnect()
+    }
+  }, [selectedOptions, maxDisplay])
+
   // Focus search input when dropdown opens
   useEffect(() => {
     if (open && searchable && searchInputRef.current) {
@@ -70,10 +137,30 @@ export const MultipleSelect = React.memo(function MultipleSelect({
 
   // Calculate displayed tags and hidden count
   const { displayedTags, hiddenCount } = useMemo(() => {
-    const displayed = selectedOptions.slice(0, maxDisplay)
-    const hidden = Math.max(0, selectedOptions.length - maxDisplay)
+    // If maxDisplay is 'responsive', use calculated visibleTagCount
+    const displayLimit =
+      maxDisplay === 'responsive'
+        ? visibleTagCount
+        : typeof maxDisplay === 'number'
+        ? maxDisplay
+        : 2
+
+    const displayed = selectedOptions.slice(0, displayLimit)
+    const hidden = Math.max(0, selectedOptions.length - displayLimit)
     return { displayedTags: displayed, hiddenCount: hidden }
-  }, [selectedOptions, maxDisplay])
+  }, [selectedOptions, maxDisplay, visibleTagCount])
+
+  // Save tag refs for measurement
+  const setTagRef = useCallback(
+    (element: HTMLDivElement | null, value: string) => {
+      if (element) {
+        tagRefs.current.set(value, element)
+      } else {
+        tagRefs.current.delete(value)
+      }
+    },
+    []
+  )
 
   // Handlers
   const handleToggle = useCallback(() => {
@@ -155,13 +242,16 @@ export const MultipleSelect = React.memo(function MultipleSelect({
           <LoadingIndicator />
         ) : (
           <>
-            <SelectBoxContent $disabled={disabled}>
+            <SelectBoxContent ref={selectBoxContentRef} $disabled={disabled}>
               {searchable ? (
                 selectedOptions.length > 0 ? (
                   <>
                     <TagContainer>
                       {displayedTags.map((option) => (
-                        <Tag key={option.value.toString()}>
+                        <Tag
+                          key={option.value.toString()}
+                          ref={(el) => setTagRef(el, option.value.toString())}
+                        >
                           <TagLabel text={option.label} />
                           <TagCloseIcon
                             onClick={(e: React.MouseEvent) =>
@@ -206,7 +296,10 @@ export const MultipleSelect = React.memo(function MultipleSelect({
               ) : selectedOptions.length > 0 ? (
                 <TagContainer>
                   {displayedTags.map((option) => (
-                    <Tag key={option.value.toString()}>
+                    <Tag
+                      key={option.value.toString()}
+                      ref={(el) => setTagRef(el, option.value.toString())}
+                    >
                       <TagLabel text={option.label} />
                       <TagCloseIcon
                         onClick={(e: React.MouseEvent) =>

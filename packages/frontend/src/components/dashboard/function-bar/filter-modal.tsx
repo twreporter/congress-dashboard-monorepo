@@ -32,16 +32,16 @@ const ModalContainer = styled.div<{ $isOpen: boolean }>`
 `
 
 const Filter = styled.div`
-  overflow: auto;
   background-color: ${colorGrayscale.white};
   width: 100%;
   ${mq.tabletAndAbove`
     max-width: 480px;
     border-radius: 8px;
     box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
-  `}
+    `}
   ${mq.mobileOnly`
     height: 100%;
+    overflow: auto;
   `}
 `
 
@@ -286,7 +286,6 @@ const FilterModal: React.FC<FilterModelProps> = ({
                     <SelectorContainer>
                       <SingleSelect
                         disabled={disabled}
-                        searchable={false}
                         options={options}
                         value={filterValue[value]}
                         onChange={(optionValue) =>
@@ -305,7 +304,6 @@ const FilterModal: React.FC<FilterModelProps> = ({
                     <SelectorContainer>
                       <MultipleSelect
                         disabled={disabled}
-                        searchable={false}
                         options={options}
                         value={filterValue[value]}
                         onChange={(optionsValue) =>
