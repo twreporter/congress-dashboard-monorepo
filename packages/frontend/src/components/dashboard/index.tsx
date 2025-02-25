@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 // config
 import { mockHumans, mockIssues } from '@/components/dashboard/card/config'
-// lib
-import toastr from '@/lib/toastr'
+// utils
+import toastr from '@/utils/toastr'
 // components
 import FunctionBar, { Option } from '@/components/dashboard/function-bar'
 import {

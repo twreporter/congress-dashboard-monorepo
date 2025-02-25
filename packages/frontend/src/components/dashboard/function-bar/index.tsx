@@ -5,7 +5,7 @@ import Tab from '@/components/dashboard/function-bar/tab'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { PillButton } from '@twreporter/react-components/lib/button'
-import { Hamburger as FilterIcon } from '@twreporter/react-components/lib/icon'
+import { Filter as FilterIcon } from '@twreporter/react-components/lib/icon'
 import {
   TabletAndAbove,
   MobileOnly,

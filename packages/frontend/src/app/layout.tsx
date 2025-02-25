@@ -1,8 +1,8 @@
 import React from 'react'
 import type { Metadata } from 'next'
-// lib
-import StyledComponentsRegistry from '@/lib/style-registry'
-import { notoSans } from '@/lib/font'
+// utils
+import StyledComponentsRegistry from '@/utils/style-registry'
+import { notoSans } from '@/utils/font'
 // components
 import SnackBar from '@/components/snack-bar'
 

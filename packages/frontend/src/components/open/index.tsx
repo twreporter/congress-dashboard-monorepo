@@ -4,8 +4,8 @@ import React from 'react'
 import styled from 'styled-components'
 // config
 import { title, description } from '@/components/open/config'
-// lib
-import { notoSerif } from '@/lib/font'
+// utils
+import { notoSerif } from '@/utils/font'
 // components
 import SeachBar from '@/components/open/search'
 import Selected from '@/components/open/selected'
