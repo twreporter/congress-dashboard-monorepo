@@ -1,22 +1,43 @@
 import React from 'react'
 import styled from 'styled-components'
 // components
-import Tab from './tab'
+import Tab from '@/components/dashboard/function-bar/tab'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { PillButton } from '@twreporter/react-components/lib/button'
-import { Hamburger } from '@twreporter/react-components/lib/icon'
-import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
+import { Filter as FilterIcon } from '@twreporter/react-components/lib/icon'
+import {
+  TabletAndAbove,
+  MobileOnly,
+} from '@twreporter/react-components/lib/rwd'
+import mq from '@twreporter/core/lib/utils/media-query'
 
+const Box = styled.div`
+  width: 928px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  ${mq.tabletAndBelow`
+    width: 100%;
+  `}
+`
 const Bar = styled.div`
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${colorGrayscale.gray300};
 `
 const TabItem = styled(Tab)`
   margin-left: 40px;
+
+  ${mq.tabletOnly`
+    margin-left: 32px;
+  `}
+  ${mq.mobileOnly`
+    margin-left: 24px;
+  `}
+
   &:first-child {
     margin: 0;
   }
@@ -30,6 +51,10 @@ const FilterString = styled.div`
   font-weight: 400;
   line-height: 150%;
   margin-right: 20px;
+
+  ${mq.mobileOnly`
+    font-size: 14px;  
+  `}
 `
 const Filter = styled.div`
   cursor: pointer;
@@ -55,34 +80,40 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   const openFilter = () => {
     window.alert(`current filter: ${filterString}`)
   }
+  const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
 
   return (
-    <Bar>
-      <Tabs>
-        <TabItem
-          text={'看議題'}
-          selected={currentTab === Option.Issue}
-          onClick={() => setTab(Option.Issue)}
-        />
-        <TabItem
-          text={'看立委'}
-          selected={currentTab === Option.Human}
-          onClick={() => setTab(Option.Human)}
-        />
-      </Tabs>
-      <Filter onClick={openFilter}>
-        <TabletAndAbove>
-          <FilterString>{filterString}</FilterString>
-        </TabletAndAbove>
-        <PillButton
-          theme={PillButton.THEME.normal}
-          type={PillButton.Type.SECONDARY}
-          size={PillButton.Size.L}
-          text={'篩選'}
-          leftIconComponent={<Hamburger />} //todo: add filter icon & add release branch
-        />
-      </Filter>
-    </Bar>
+    <Box>
+      <Bar>
+        <Tabs>
+          <TabItem
+            text={'看議題'}
+            selected={currentTab === Option.Issue}
+            onClick={() => setTab(Option.Issue)}
+          />
+          <TabItem
+            text={'看立委'}
+            selected={currentTab === Option.Human}
+            onClick={() => setTab(Option.Human)}
+          />
+        </Tabs>
+        <Filter onClick={openFilter}>
+          <TabletAndAbove>
+            <FilterString>{filterString}</FilterString>
+          </TabletAndAbove>
+          <PillButton
+            theme={PillButton.THEME.normal}
+            type={PillButton.Type.SECONDARY}
+            size={PillButton.Size.L}
+            text={'篩選'}
+            leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
+          />
+        </Filter>
+      </Bar>
+      <MobileOnly>
+        <FilterString onClick={openFilter}>{filterString}</FilterString>
+      </MobileOnly>
+    </Box>
   )
 }
 export default FunctionBar

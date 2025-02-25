@@ -1,9 +1,17 @@
+'use client'
+
 import React, { useState } from 'react'
 import styled from 'styled-components'
 // @twreporter
-import { SnackBar } from '@twreporter/react-components/lib/snack-bar'
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import {
+  colorGrayscale,
+  colorOpacity,
+} from '@twreporter/core/lib/constants/color'
+import { P2 } from '@twreporter/react-components/lib/text/paragraph'
+import mq from '@twreporter/core/lib/utils/media-query'
+import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 
+// info icon
 const InfoIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -19,6 +27,49 @@ const InfoIcon = () => (
   </svg>
 )
 
+// content
+const ContentBox = styled.div`
+  background-color: ${colorGrayscale.gray800};
+  box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
+  padding: 8px 16px;
+  max-width: 256px;
+  border-radius: 4px;
+`
+const Text = styled(P2)`
+  color: ${colorGrayscale.white};
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: -12px;
+    width: 8px;
+    height: 4px;
+    background-color: ${colorGrayscale.gray800};
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+`
+
+type ContentProps = {
+  text: string
+}
+const Content: React.FC<ContentProps> = ({ text }: ContentProps) => {
+  return (
+    <ContentBox>
+      <Text text={text} />
+    </ContentBox>
+  )
+}
+
+// tooltip
+const Detail = styled.div<{ $show: boolean }>`
+  position: absolute;
+  top: 28px; // icon height(24) + 4
+  left: -4px;
+  width: max-content;
+  ${(props) => (props.$show ? '' : 'display: none;')}
+`
 const Box = styled.div<{ $show: boolean }>`
   display: flex;
   flex-direction: column;
@@ -30,16 +81,14 @@ const Box = styled.div<{ $show: boolean }>`
   color: ${(props) =>
     props.$show ? colorGrayscale.gray800 : colorGrayscale.gray600};
 
-  &:hover {
-    color: ${colorGrayscale.gray800};
-  }
-`
-const Detail = styled.div<{ $show: boolean }>`
-  position: absolute;
-  top: 28px; // icon height(24) + 4
-  left: -4px;
-  width: max-content;
-  ${(props) => (props.$show ? '' : 'display: none;')}
+  ${mq.desktopAndAbove`
+    &:hover {
+      color: ${colorGrayscale.gray800};
+      ${Detail} {
+        display: unset;
+      }
+    }
+  `}
 `
 
 type TooltipProps = {
@@ -52,12 +101,13 @@ const Tooltip: React.FC<TooltipProps> = ({ tooltip }: TooltipProps) => {
     e.stopPropagation()
     setShow(!show)
   }
+  const ref = useOutsideClick(() => setShow(false))
 
   return (
-    <Box onClick={toggleTooltip} $show={show}>
+    <Box onClick={toggleTooltip} $show={show} ref={ref}>
       <InfoIcon />
       <Detail $show={show}>
-        <SnackBar text={tooltip} theme={SnackBar.THEME.normal} />
+        <Content text={tooltip} />
       </Detail>
     </Box>
   )

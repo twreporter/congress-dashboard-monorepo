@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-frontend",
-  "version": "0.0.1-beta.5",
+  "version": "0.0.1-beta.6",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@twreporter/congress-dashboard-shared": "0.0.2-beta.0",
-    "@twreporter/core": "^1.24.1",
-    "@twreporter/react-components": "^9.4.3",
+    "@twreporter/core": "^1.24.3-rc.0",
+    "@twreporter/react-components": "^9.5.0-rc.0",
     "next": "15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -34,6 +34,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/styled-components": "^5.1.34",
     "eslint": "^9",
     "eslint-config-next": "15.1.5",
     "eslint-plugin-storybook": "^0.11.2",

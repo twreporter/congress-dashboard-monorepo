@@ -1,8 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 // components
-import Tooltip from './tooltip'
-import { Triangle, Gap } from './skeleton'
+import Tooltip from '@/components/dashboard/card/tooltip'
+import { Triangle, Gap } from '@/components/dashboard/card/skeleton'
+import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 // @twreporter
 import {
   MEMBER_TYPE_LABEL,
@@ -50,12 +51,18 @@ const Box = styled.div<{ $selected: boolean; $size: CardSize }>`
     }
   `}
 `
+const textOverflowEllipsisCss = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
 const Title = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
 `
 const Name = styled(H4)`
+  ${textOverflowEllipsisCss}
   color: ${colorGrayscale.gray800};
 `
 const Type = styled(P2)`
@@ -67,23 +74,36 @@ const DetailContainer = styled.div<{ $isShowTag: boolean; $withGap: boolean }>`
   justify-content: ${(props) =>
     props.$isShowTag ? 'flex-start' : 'space-between'};
   padding: 16px;
+  min-width: 0;
   ${(props) => (props.$withGap ? 'gap: 14px;' : '')}
 `
 const TagContainer = styled.div<{ $size: CardSize }>`
   display: flex;
   flex-direction: ${(props) => (props.$size === CardSize.S ? 'column' : 'row')};
   gap: ${(props) => (props.$size === CardSize.S ? 8 : 12)}px;
+  overflow-y: hidden;
+  ${(props) => (props.$size === CardSize.L ? 'flex-wrap: wrap;' : '')}
 `
-const TagItem = styled.div`
-  display: flex;
+const TagItem = styled.div<{ $size: CardSize }>`
   padding: 2px 8px;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
   border-radius: 40px;
   background: ${colorOpacity['black_0.05']};
   color: ${colorGrayscale.gray800};
   font-size: 14px;
   line-height: 150%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  ${(props) => (props.$size === CardSize.L ? 'width: fit-content;' : '')}
+`
+const TagName = styled.span`
+  ${textOverflowEllipsisCss}
+  flex-shrink: 1;
+`
+const TagCount = styled.span`
+  flex-shrink: 0;
 `
 const Note = styled(P3)`
   color: ${colorGrayscale.gray600};
@@ -97,11 +117,21 @@ const avatarCss = css<{ $size: CardSize }>`
 `
 const Avatar = styled.img<{ $size: CardSize }>`
   ${avatarCss}
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-right: 1px solid ${colorOpacity['black_0.05']};
 `
-const Party = styled.img`
+const Mask = styled.div<{ $size: CardSize }>`
+  opacity: 0.1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 100%);
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: ${(props) => (props.$size === CardSize.L ? 64 : 48)}px;
+`
+const Party = styled(PartyTag)`
   width: 32px;
   height: 32px;
-  border-radius: 50%;
   position: absolute;
   left: 8px;
   bottom: 8px;
@@ -141,7 +171,8 @@ const CardHuman: React.FC<CardHumanProps> = ({
     <Box $selected={selected} $size={size} onClick={onClick}>
       <AvatarContainer>
         <Avatar src={avatar} $size={size} />
-        <Party src={partyAvatar} />
+        <Mask $size={size} />
+        <Party avatar={partyAvatar} size={TagSize.L} />
       </AvatarContainer>
       <DetailContainer $isShowTag={isShowTag} $withGap={true}>
         <div>
@@ -155,8 +186,11 @@ const CardHuman: React.FC<CardHumanProps> = ({
           <TagContainer $size={size}>
             {tags.map(({ name, count }: Tag, index: number) => {
               return (
-                <TagItem key={`legislator-${name}-tag-${index}`}>
-                  {`${name}(${count})`}
+                <TagItem key={`legislator-${name}-tag-${index}`} $size={size}>
+                  <TagName>{name}</TagName>
+                  <TagCount
+                    key={`legislator-${name}-tag-count-${index}`}
+                  >{`(${count})`}</TagCount>
                 </TagItem>
               )
             })}
