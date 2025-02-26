@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.1-beta.9, 2025-02-26
+
+### Notable Changes
+
+- feat
+  - add selector and fiter button for storybook
+
+### Commits
+
+- [[`36b21d64e0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/36b21d64e0)] - **feat(frontend)**: add selector and fiter button for storybook (Lucien)
+
 ## 0.0.1-beta.8, 2025-02-26
 
 ### Notable Changes
