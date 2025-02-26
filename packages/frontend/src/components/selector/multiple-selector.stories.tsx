@@ -43,6 +43,7 @@ const meta: Meta<typeof MultipleSelect> = {
         'searchable',
         'searchPlaceholder',
         'placeholder',
+        'enableAllOptionLogic',
       ],
     },
   },
@@ -57,6 +58,7 @@ const meta: Meta<typeof MultipleSelect> = {
     searchable: false,
     placeholder: '請選擇',
     maxDisplay: 3,
+    enableAllOptionLogic: false,
   },
   render: MultipleSelectWithState,
 }

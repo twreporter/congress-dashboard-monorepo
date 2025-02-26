@@ -199,12 +199,14 @@ const FilterModal: React.FC<FilterModelProps> = ({
     {
       type: SelectorType.Multiple,
       disabled: false,
+      defaultValue: ['all'],
       label: '會期',
       value: 'meetingSession',
       options: [
-        { label: '全部會期', value: 'all' },
+        { label: '全部會期', value: 'all', isDeletable: false },
         { label: '第 1 會期(2020/9-2022/10)', value: '1' },
         { label: '第 2 會期(2022/10-2023/2)', value: '2' },
+        { label: '第 3 會期(2023/2-2023/6)', value: '3' },
       ], //TODO: get from api
     },
     {
@@ -292,7 +294,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
         </Header>
         <SelectorsContainer>
           {filterOptions.map(
-            ({ type, disabled, label, value, options }, idx) => {
+            ({ type, disabled, label, value, options, defaultValue }, idx) => {
               if (type === SelectorType.Single) {
                 return (
                   <SelectContainer key={`single-select-${value}-${idx}`}>
@@ -318,6 +320,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                     <Label text={label} />
                     <SelectorContainer>
                       <MultipleSelect
+                        defaultValue={defaultValue}
                         disabled={disabled}
                         options={options}
                         value={filterValue[value]}
