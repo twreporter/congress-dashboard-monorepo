@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.0.1-beta.7, 2025-02-26
+
+### Notable Changes
+
+- chore
+  - update @twreporter packages
+
+### Commits
+
+* \[[`e1d791f127`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1d791f127)] - **chore**: update @twreporter packages (Aylie Chou)
+
+## 0.0.1-beta.6, 2025-02-26
+
+### Notable Changes
+
+- fix
+  - defects in index page
+- chore
+  - add `.env.development` in codebase
+  - rename `lib` to `utils`
+  - update @twreporter packages
+
+### Commits
+
+* \[[`bb0aa42762`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bb0aa42762)] - **chore(frontend)**: update @twreporter packages (Aylie Chou)
+* \[[`f707962154`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f707962154)] - **chore(frontend)**: add `.env.development` in codebase (Aylie Chou)
+* \[[`c5a3e368f7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c5a3e368f7)] - **fix(frontend)**: rename `lib` to `utils` (Aylie Chou)
+* \[[`dbe3092ca2`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dbe3092ca2)] - **fix(frontend)**: arrage storybook (Aylie Chou)
+* \[[`3cdbdd0587`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3cdbdd0587)] - **fix(frontend)**: add fonts & fix style problems (Aylie Chou)
+* \[[`26bd76d460`](https://github.com/twreporter/congress-dashboard-monorepo/commit/26bd76d460)] - **fix(frontend)**: defects in index page (Aylie Chou)
+
+## 0.0.1-beta.5, 2025-02-13
+
+### Notable Changes
+
+- chore
+  - update monorepo related config
+
+### Commits
+
+* \[[`9969e7dfef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9969e7dfef)] - **chore**: update monorepo related config (Aylie Chou)
+
 ## 0.0.1-beta.4, 2025-02-11
 
 ### Notable Changes

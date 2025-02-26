@@ -1,21 +1,23 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 // config
-import { mockHumans, mockIssues } from './card/config'
+import { mockHumans, mockIssues } from '@/components/dashboard/card/config'
+// utils
+import toastr from '@/utils/toastr'
 // components
-import FunctionBar, { Option } from './function-bar'
+import FunctionBar, { Option } from '@/components/dashboard/function-bar'
 import {
   CardIssueRWD,
   CardIssueProps,
   CardIssueSkeletonRWD,
-} from './card/issue'
+} from '@/components/dashboard/card/issue'
 import {
   CardHumanRWD,
   CardHumanProps,
   CardHumanSkeletonRWD,
-} from './card/human'
+} from '@/components/dashboard/card/human'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -41,15 +43,22 @@ const Box = styled.div`
     gap: 20px;  
   `}
 `
+const cardCss = css`
+  width: 928px;
+
+  ${mq.tabletAndBelow`
+    width: 100%;
+  `}
+`
 const CardIssueBox = styled.div<{ $active: boolean }>`
-  width: 100%;
+  ${cardCss}
   display: flex;
   flex-direction: column;
   gap: 24px;
   ${(props) => (props.$active ? '' : 'display: none !important;')}
 `
 const CardHumanBox = styled.div<{ $active: boolean }>`
-  width: 100%;
+  ${cardCss}
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 24px;
@@ -84,6 +93,9 @@ const Dashboard = () => {
         setMockIssue(mockIssues)
         setMockHuman(mockHumans)
         setIsLoading(false)
+        if (selectedType === Option.Human) {
+          toastr({ text: '立委為隨機排列' })
+        }
       }, 2000)
     }
   }, [isLoading])
@@ -92,6 +104,7 @@ const Dashboard = () => {
     setMockIssue([])
     setMockHuman([])
   }, [selectedType])
+
   const setTab = (value: Option) => {
     setActiveCard(-1)
     setSelectedType(value)

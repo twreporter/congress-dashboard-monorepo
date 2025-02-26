@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
-import Human, { CardSize } from './human'
-import { mockHumans } from './config'
+import Human, { CardSize } from '@/components/dashboard/card/human'
+import { mockHumans } from '@/components/dashboard/card/config'
 const mockHuman = mockHumans[0]
 
 const meta: Meta<typeof Human> = {
+  title: 'Card/Human',
   component: Human,
   argTypes: {
     type: {
@@ -41,10 +42,13 @@ const defaultArgs = {
   name: '沈伯洋',
   type: MemberType.NationwideAndOverseas,
   size: CardSize.L,
-  tags: mockHuman.tags,
   avatar: mockHuman.avatar,
   partyAvatar: mockHuman.partyAvatar,
   selected: false,
 }
 
-export const Basic: Story = { args: defaultArgs }
+export const Basic: Story = { args: { tags: mockHuman.tags, ...defaultArgs } }
+
+export const WithNote: Story = {
+  args: { note: "To be or not to be, that's the question", ...defaultArgs },
+}

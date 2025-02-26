@@ -1,17 +1,21 @@
 import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 // components
-import Tab from './tab'
 import FliterModal, { type FilterModalValueType } from './filter-modal'
+import Tab from '@/components/dashboard/function-bar/tab'
 // @twreporter
 import {
   colorGrayscale,
   colorBrand,
 } from '@twreporter/core/lib/constants/color'
 import { PillButton } from '@twreporter/react-components/lib/button'
-import { Hamburger } from '@twreporter/react-components/lib/icon'
-import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
+import {
+  TabletAndAbove,
+  MobileOnly,
+} from '@twreporter/react-components/lib/rwd'
 import { P4 } from '@twreporter/react-components/lib/text/paragraph'
+import { Filter as FilterIcon } from '@twreporter/react-components/lib/icon'
+import mq from '@twreporter/core/lib/utils/media-query'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 // z-index
@@ -19,12 +23,21 @@ import { ZIndex } from '@/styles/z-index'
 // constants
 import { HEADER_HEIGHT } from '@/constants/header'
 
+const Box = styled.div`
+  width: 928px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  ${mq.tabletAndBelow`
+    width: 100%;
+  `}
+`
 const Bar = styled.div<{
   $isHeaderHidden: boolean
   $isHeaderAboveTab: boolean
 }>`
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${colorGrayscale.gray300};
@@ -40,6 +53,14 @@ const Bar = styled.div<{
 `
 const TabItem = styled(Tab)`
   margin-left: 40px;
+
+  ${mq.tabletOnly`
+    margin-left: 32px;
+  `}
+  ${mq.mobileOnly`
+    margin-left: 24px;
+  `}
+
   &:first-child {
     margin: 0;
   }
@@ -53,6 +74,10 @@ const FilterString = styled.div`
   font-weight: 400;
   line-height: 150%;
   margin-right: 20px;
+
+  ${mq.mobileOnly`
+    font-size: 14px;  
+  `}
 `
 const Filter = styled.div`
   cursor: pointer;
@@ -112,6 +137,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     setFilterString(`立法院｜${meetingString}｜${meetingSessionString}`)
     setFilterCount(totalCount)
   }
+  const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
 
   useEffect(() => {
     if (searchRef.current) {
@@ -120,50 +146,53 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   }, [setTabElement, searchRef])
 
   return (
-    <Bar
-      $isHeaderHidden={isHeaderHidden}
-      $isHeaderAboveTab={isHeaderAboveTab}
-      ref={searchRef}
-    >
-      <Tabs>
-        <TabItem
-          text={'看議題'}
-          selected={currentTab === Option.Issue}
-          onClick={() => setTab(Option.Issue)}
-        />
-        <TabItem
-          text={'看立委'}
-          selected={currentTab === Option.Human}
-          onClick={() => setTab(Option.Human)}
-        />
-      </Tabs>
-      <Filter onClick={openFilter}>
-        <TabletAndAbove>
-          <FilterString>{filterString}</FilterString>
-        </TabletAndAbove>
-        <PillButton
-          theme={PillButton.THEME.normal}
-          type={PillButton.Type.SECONDARY}
-          size={PillButton.Size.L}
-          text={'篩選'}
-          leftIconComponent={<Hamburger />} //todo: add filter icon & add release branch
-          rightIconComponent={
-            filterCount > 0 ? (
-              <FilterCountIcon>
-                <P4White text={filterCount} />
-              </FilterCountIcon>
-            ) : null
-          }
-        />
-      </Filter>
-      {isFilterOpen ? (
-        <FliterModal
-          isOpen={isFilterOpen}
-          setIsOpen={setIsFilterOpen}
-          onSubmit={handleSubmit}
-        />
-      ) : null}
-    </Bar>
+    <Box>
+      <Bar
+        $isHeaderHidden={isHeaderHidden}
+        $isHeaderAboveTab={isHeaderAboveTab}
+        ref={searchRef}
+      >
+        <Tabs>
+          <TabItem
+            text={'看議題'}
+            selected={currentTab === Option.Issue}
+            onClick={() => setTab(Option.Issue)}
+          />
+          <TabItem
+            text={'看立委'}
+            selected={currentTab === Option.Human}
+            onClick={() => setTab(Option.Human)}
+          />
+        </Tabs>
+        <Filter onClick={openFilter}>
+          <TabletAndAbove>
+            <FilterString>{filterString}</FilterString>
+          </TabletAndAbove>
+          <PillButton
+            theme={PillButton.THEME.normal}
+            type={PillButton.Type.SECONDARY}
+            size={PillButton.Size.L}
+            text={'篩選'}
+            leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
+            rightIconComponent={
+              filterCount > 0 ? (
+                <FilterCountIcon>
+                  <P4White text={filterCount} />
+                </FilterCountIcon>
+              ) : null
+            }
+          />
+        </Filter>
+      </Bar>
+      <MobileOnly>
+        <FilterString onClick={openFilter}>{filterString}</FilterString>
+      </MobileOnly>
+      <FliterModal
+        isOpen={isFilterOpen}
+        setIsOpen={setIsFilterOpen}
+        onSubmit={handleSubmit}
+      />
+    </Box>
   )
 }
 export default FunctionBar
