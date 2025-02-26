@@ -23,24 +23,14 @@ import { ZIndex } from '@/styles/z-index'
 // constants
 import { HEADER_HEIGHT } from '@/constants/header'
 
-const Box = styled.div`
+const Box = styled.div<{
+  $isHeaderHidden: boolean
+  $isHeaderAboveTab: boolean
+}>`
   width: 928px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-
-  ${mq.tabletAndBelow`
-    width: 100%;
-  `}
-`
-const Bar = styled.div<{
-  $isHeaderHidden: boolean
-  $isHeaderAboveTab: boolean
-}>`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid ${colorGrayscale.gray300};
   position: sticky;
   transition: all 300ms ease-in-out;
   top: ${(props) => (props.$isHeaderHidden ? '0px' : `${HEADER_HEIGHT}px`)};
@@ -50,6 +40,16 @@ const Bar = styled.div<{
     props.$isHeaderAboveTab
       ? `1px solid ${colorGrayscale.gray300}`
       : '1px solid transparent'};
+
+  ${mq.tabletAndBelow`
+    width: 100%;
+  `}
+`
+const Bar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid ${colorGrayscale.gray300};
 `
 const TabItem = styled(Tab)`
   margin-left: 40px;
@@ -146,12 +146,12 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   }, [setTabElement, searchRef])
 
   return (
-    <Box>
-      <Bar
-        $isHeaderHidden={isHeaderHidden}
-        $isHeaderAboveTab={isHeaderAboveTab}
-        ref={searchRef}
-      >
+    <Box
+      $isHeaderHidden={isHeaderHidden}
+      $isHeaderAboveTab={isHeaderAboveTab}
+      ref={searchRef}
+    >
+      <Bar>
         <Tabs>
           <TabItem
             text={'看議題'}
