@@ -6157,7 +6157,7 @@ __metadata:
     "@storybook/test": "npm:^8.5.1"
     "@twreporter/congress-dashboard-shared": "npm:0.0.2-beta.0"
     "@twreporter/core": "npm:^1.24.3-rc.0"
-    "@twreporter/react-components": "npm:^9.5.0-rc.0"
+    "@twreporter/react-components": "npm:^9.5.0-rc.2"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
@@ -6201,9 +6201,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@twreporter/react-components@npm:^9.5.0-rc.0":
-  version: 9.5.0-rc.0
-  resolution: "@twreporter/react-components@npm:9.5.0-rc.0"
+"@twreporter/react-components@npm:^9.5.0-rc.2":
+  version: 9.5.0-rc.2
+  resolution: "@twreporter/react-components@npm:9.5.0-rc.2"
   dependencies:
     "@twreporter/core": "npm:^1.24.3-rc.0"
     "@twreporter/redux": "npm:^8.3.2-rc.0"
@@ -6219,7 +6219,7 @@ __metadata:
     react-waypoint: "npm:^10.3.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-  checksum: 10c0/95c42203ec09e5beeed5f6e790e6695bbc7d622c9a62f49f0d9a4e798d4fd45ada204a00fe29f9ae17957f19c95f0a6944289e6d8dc01863244bfcded024a04b
+  checksum: 10c0/3dd40a7d6756af0ac8f16767686c0791480aded5d1230ae290e11d0d6672f3c6a09bdb2d5d722b50613cab53e9bcf95439c40b3d3ef506cc3a313cacc8f29f6e
   languageName: node
   linkType: hard
 

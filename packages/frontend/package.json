@@ -14,7 +14,7 @@
   "dependencies": {
     "@twreporter/congress-dashboard-shared": "0.0.2-beta.0",
     "@twreporter/core": "^1.24.3-rc.0",
-    "@twreporter/react-components": "^9.5.0-rc.0",
+    "@twreporter/react-components": "^9.5.0-rc.2",
     "next": "15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
