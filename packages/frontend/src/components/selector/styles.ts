@@ -85,7 +85,7 @@ export const OptionItem = styled.div<{
   $selected: boolean
   $isIndent?: boolean
 }>`
-  width: 100%;
+  width: inherit;
   height: 40px;
   padding: ${(props) => (props.$isIndent ? '8px 12px 8px 20px' : '8px 12px')};
   cursor: pointer;

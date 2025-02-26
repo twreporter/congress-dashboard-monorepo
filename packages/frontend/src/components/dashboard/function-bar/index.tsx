@@ -98,6 +98,23 @@ const FilterCountIcon = styled.div`
 const P4White = styled(P4)`
   color: ${colorGrayscale.white};
 `
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
+export const FilterButton = ({ filterCount }: { filterCount: number }) => (
+  <PillButton
+    theme={PillButton.THEME.normal}
+    type={PillButton.Type.SECONDARY}
+    size={PillButton.Size.L}
+    text={'篩選'}
+    leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
+    rightIconComponent={
+      filterCount > 0 ? (
+        <FilterCountIcon>
+          <P4White text={filterCount} />
+        </FilterCountIcon>
+      ) : null
+    }
+  />
+)
 
 export enum Option {
   Issue,
@@ -137,7 +154,6 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     setFilterString(`立法院｜${meetingString}｜${meetingSessionString}`)
     setFilterCount(totalCount)
   }
-  const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
 
   useEffect(() => {
     if (searchRef.current) {
@@ -168,20 +184,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
           <TabletAndAbove>
             <FilterString>{filterString}</FilterString>
           </TabletAndAbove>
-          <PillButton
-            theme={PillButton.THEME.normal}
-            type={PillButton.Type.SECONDARY}
-            size={PillButton.Size.L}
-            text={'篩選'}
-            leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
-            rightIconComponent={
-              filterCount > 0 ? (
-                <FilterCountIcon>
-                  <P4White text={filterCount} />
-                </FilterCountIcon>
-              ) : null
-            }
-          />
+          <FilterButton filterCount={filterCount} />
         </Filter>
       </Bar>
       <MobileOnly>
