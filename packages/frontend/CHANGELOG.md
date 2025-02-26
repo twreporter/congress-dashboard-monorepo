@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.1-beta.7, 2025-02-26
+
+### Notable Changes
+
+- chore
+  - update @twreporter packages
+
+### Commits
+
+* \[[`e1d791f127`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1d791f127)] - **chore**: update @twreporter packages (Aylie Chou)
+
 ## 0.0.1-beta.6, 2025-02-26
 
 ### Notable Changes
