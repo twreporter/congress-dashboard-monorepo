@@ -9,7 +9,7 @@ import origins from '@twreporter/core/lib/constants/request-origins'
 import { LogoFooter } from '@twreporter/react-components/lib/logo'
 
 type LogoProps = {
-  releaseBranch: predefinedPropTypes.releaseBranch
+  releaseBranch: typeof predefinedPropTypes.releaseBranch
 }
 
 const Logo: React.FC<LogoProps> = ({

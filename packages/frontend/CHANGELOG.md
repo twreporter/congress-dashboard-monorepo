@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.1-beta.10, 2025-02-26
+
+### Notable Changes
+
+- fix
+  - fix import type and footer prop type
+
+### Commits
+
+- [[`1f9d934e3b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1f9d934e3b)] - **fix(frontend)**: fix import type and footer prop type (Lucien)
+
 ## 0.0.1-beta.9, 2025-02-26
 
 ### Notable Changes

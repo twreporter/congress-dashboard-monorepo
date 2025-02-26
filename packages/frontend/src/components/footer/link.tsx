@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
 // type
-import type { NavigationLink } from '@/components/header'
+import type { NavigationLink } from '@/types/navigation-link'
 
 export enum TextSize {
   S,
