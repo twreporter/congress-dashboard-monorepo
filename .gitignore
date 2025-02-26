@@ -1,9 +1,13 @@
 # dependency
 node_modules
 .eslintcache
+install-state.gz
 
 # generated files
 packages/**/lib
 packages/**/dist
+
+# mac file
+.DS_Store
 
 .yarn

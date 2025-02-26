@@ -3,8 +3,14 @@ import type { Metadata } from 'next'
 // utils
 import StyledComponentsRegistry from '@/utils/style-registry'
 import { notoSans } from '@/utils/font'
-// components
+// style
+import GlobalStyles from '@/styles/global-styles'
+// component
+import Header from '@/components/header'
+import Footer from '@/components/footer'
 import SnackBar from '@/components/snack-bar'
+// context
+import { ScrollProvider } from '@/contexts/scroll-context'
 
 export const metadata: Metadata = {
   title: 'Twreporter Congress Dashboard',
@@ -20,7 +26,12 @@ export default function RootLayout({
     <html lang="zh-tw" className={notoSans.className}>
       <body>
         <StyledComponentsRegistry>
-          <main>{children}</main>
+          <ScrollProvider>
+            <GlobalStyles />
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </ScrollProvider>
           <SnackBar />
         </StyledComponentsRegistry>
       </body>

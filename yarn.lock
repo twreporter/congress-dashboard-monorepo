@@ -6158,6 +6158,7 @@ __metadata:
     "@twreporter/congress-dashboard-shared": "npm:0.0.2-beta.0"
     "@twreporter/core": "npm:^1.24.3-rc.0"
     "@twreporter/react-components": "npm:^9.5.0-rc.2"
+    "@types/lodash": "npm:^4"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
@@ -6165,6 +6166,7 @@ __metadata:
     eslint: "npm:^9"
     eslint-config-next: "npm:15.1.5"
     eslint-plugin-storybook: "npm:^0.11.2"
+    lodash: "npm:^4.17.21"
     next: "npm:15.1.5"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
@@ -6463,6 +6465,13 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 10c0/6bf5337bc447b706bb5b4431d37686aa2ea6d07cfd6f79cc31de80170d6ff9b1c7384a9c0ccbc45b3f512bae9e9f75c2e12109806a15331dc94e8a8db6dbb4ac
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:^4":
+  version: 4.17.15
+  resolution: "@types/lodash@npm:4.17.15"
+  checksum: 10c0/2eb2dc6d231f5fb4603d176c08c8d7af688f574d09af47466a179cd7812d9f64144ba74bb32ca014570ffdc544eedc51b7a5657212bad083b6eecbd72223f9bb
   languageName: node
   linkType: hard
 
