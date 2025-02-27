@@ -111,6 +111,7 @@ export const OptionItemLabel = styled(P1)`
 `
 
 export const OptionItemPrefixIcon = styled.div`
+  display: flex;
   height: 16px;
   width: 16px;
 `

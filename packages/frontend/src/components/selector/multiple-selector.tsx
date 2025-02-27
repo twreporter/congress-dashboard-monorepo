@@ -93,30 +93,23 @@ export const MultipleSelect = React.memo(function MultipleSelect({
     ) {
       return
     }
-
     const currentSelectBoxContent = selectBoxContentRef.current
-
     const calculateVisibleTags = _.throttle(() => {
       if (!currentSelectBoxContent) return
-
       const availableWidth = currentSelectBoxContent.clientWidth
-
       // Calculate how many tags can fit
       let totalWidth = 0
       let count = 0
-
       // Add width of each tag
       for (let i = 0; i < selectedOptions.length; i++) {
         const option = selectedOptions[i]
         const tagElement = tagRefs.current.get(option.value.toString())
         let tagWidth = 0
-
         if (tagElement) {
           tagWidth = tagElement.offsetWidth + 8 // 8px for margin
         } else {
           tagWidth = 108 // Default estimated width if tag not yet rendered
         }
-
         // "+N..." tag width approx 50px
         if (totalWidth + tagWidth < availableWidth - 50) {
           totalWidth += tagWidth
@@ -125,15 +118,11 @@ export const MultipleSelect = React.memo(function MultipleSelect({
           break
         }
       }
-
       setVisibleTagCount(Math.max(1, count))
     }, 100)
-
     const resizeObserver = new ResizeObserver(calculateVisibleTags)
     resizeObserver.observe(currentSelectBoxContent)
-
     calculateVisibleTags()
-
     return () => {
       resizeObserver.unobserve(currentSelectBoxContent)
       resizeObserver.disconnect()
