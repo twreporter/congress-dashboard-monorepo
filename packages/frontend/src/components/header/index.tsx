@@ -34,16 +34,21 @@ import { HEADER_HEIGHT } from '@/constants/header'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 
-const Container = styled.header.attrs<{ $isHidden: boolean; $tabTop: number }>(
-  (props) => ({
-    style: {
-      top: props.$isHidden
-        ? `calc(${props.$tabTop}px - ${HEADER_HEIGHT}px)`
-        : '0px',
-      transition: !props.$isHidden ? 'top 300ms ease-in-out' : 'none',
-    },
-  })
-)`
+const Container = styled.header.attrs<{
+  $isHidden: boolean
+  $tabTop: number
+  $isHeaderAboveTab: boolean
+}>((props) => ({
+  style: {
+    top: props.$isHidden
+      ? `calc(${props.$tabTop}px - ${HEADER_HEIGHT}px)`
+      : '0px',
+    transition: !props.$isHidden ? 'top 300ms ease-in-out' : 'none',
+    borderBottom: props.$isHeaderAboveTab
+      ? `1px solid ${colorGrayscale.gray300}`
+      : '1px solid transparent',
+  },
+}))`
   display: flex;
   width: -webkit-fill-available;
   height: ${HEADER_HEIGHT}px;
@@ -119,7 +124,7 @@ const menuLinks = COMMON_MENU_LINKS
 const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS
 
 const Header: React.FC = () => {
-  const { isHeaderHidden, tabTop } = useScrollContext()
+  const { isHeaderHidden, tabTop, isHeaderAboveTab } = useScrollContext()
   const windowWidth = useWindowWidth()
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
   const hamburgerIcon = <Hamburger releaseBranch={'master'} /> //TODO: releaseBranch
@@ -148,7 +153,11 @@ const Header: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Container $isHidden={isHeaderHidden} $tabTop={tabTop}>
+      <Container
+        $isHidden={isHeaderHidden}
+        $tabTop={tabTop}
+        $isHeaderAboveTab={isHeaderAboveTab}
+      >
         <HeaderSection>
           <LogoContainer>
             {/* TODO: releaseBranch */}
