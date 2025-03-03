@@ -147,6 +147,7 @@ const listConfigurations = list({
           try {
             const result = await context.prisma.$transaction(queries)
             const errors = result.filter(
+              // ref: https://github.com/keystonejs/keystone/pull/9476
               (item: any) => item instanceof GraphQLError
             )
             if (errors.length) {
