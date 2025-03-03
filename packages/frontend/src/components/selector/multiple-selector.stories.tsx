@@ -2,15 +2,13 @@ import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { useArgs } from '@storybook/preview-api'
 import { MultipleSelect } from '@/components/selector'
+import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 
 const OptionIcon = () => {
   return (
-    <img
-      style={{ width: '16px', height: '16px' }}
-      src={
-        'https://yt3.googleusercontent.com/ytc/AIdro_kG1AaurvqvdbbpAUW_PLMHeXf384dp8KX_stB4mHRVOQQ=s900-c-k-c0x00ffffff-no-rj'
-      }
-      alt=""
+    <PartyTag
+      size={TagSize.S}
+      avatar="https://yt3.googleusercontent.com/ytc/AIdro_kG1AaurvqvdbbpAUW_PLMHeXf384dp8KX_stB4mHRVOQQ=s900-c-k-c0x00ffffff-no-rj"
     />
   )
 }
@@ -113,6 +111,22 @@ export const WithIconsOptions: Story = {
       { label: 'Option 2', value: '2' },
       { label: 'Option 3', value: '3' },
     ],
+    disabled: false,
+    loading: false,
+  },
+}
+
+export const DefaultAllOptions: Story = {
+  args: {
+    value: ['all'],
+    defaultValue: ['all'],
+    options: [
+      { label: '我要全部!', value: 'all', isDeletable: false },
+      { label: 'Option 1', value: '1' },
+      { label: 'Option 2', value: '2' },
+      { label: 'Option 3', value: '3' },
+    ],
+    enableAllOptionLogic: true,
     disabled: false,
     loading: false,
   },
