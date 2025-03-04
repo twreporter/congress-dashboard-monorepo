@@ -3,7 +3,8 @@ export type ValueType = string
 export type Option = {
   label: string
   value: ValueType
-  prefixIcon?: React.JSX.Element
+  prefixIcon?: React.ReactNode
+  isDeletable?: boolean
 }
 
 export type OptionGroup = {
@@ -34,4 +35,5 @@ export type MultipleSelectProps = {
   searchPlaceholder?: string
   onChange: (value: ValueType[]) => void
   maxDisplay?: number | 'responsive'
+  enableAllOptionLogic?: boolean
 }

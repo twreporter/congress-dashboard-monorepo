@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.0.1-beta.12, 2025-03-04
+
+### Notable Changes
+
+- feat
+  - muti selector default all logic
+  - update multi selector storybook
+- fix
+  - dropdown prefix icon and filter modal footer
+
+### Commits
+
+- [[`90eca80c94`](https://github.com/twreporter/congress-dashboard-monorepo/commit/90eca80c94)] - Merge remote-tracking branch 'upstream/dev' into feature/frontend-selector-all (Lucien)
+- [[`6ea5ecec5d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6ea5ecec5d)] - **feat(frontend)**: update multi selector storybook (Lucien)
+- [[`3c77d39ceb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3c77d39ceb)] - **fix(frontend)**: dropdown prefix icon and filter modal footer (Lucien)
+- [[`08cee70122`](https://github.com/twreporter/congress-dashboard-monorepo/commit/08cee70122)] - **feat(frontend)**: muti selector default all logic (Lucien)
+
 ## 0.0.1-beta.11, 2025-03-04
 
 ### Notable Changes

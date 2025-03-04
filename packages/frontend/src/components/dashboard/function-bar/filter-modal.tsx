@@ -22,6 +22,7 @@ import {
   SingleSelect,
   MultipleSelect,
 } from '@/components/selector'
+import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 
 const ModalContainer = styled.div<{ $isOpen: boolean }>`
   display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
@@ -81,9 +82,14 @@ const Footer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 16px;
+  background-color: ${colorGrayscale.white};
   ${mq.mobileOnly`
     padding: 24px;
     gap: 10px;
+    border-top: 1px solid ${colorGrayscale.gray300};
+    position:fixed;
+    width: 100%;
+    bottom: 0;
   `}
 `
 
@@ -103,6 +109,7 @@ const SelectorsContainer = styled.div`
   flex-direction: column;
   ${mq.mobileOnly`
     gap: 20px;
+    margin-bottom: 91px;
   `}
 `
 
@@ -138,15 +145,103 @@ const SelectorContainer = styled.div`
 
 const OptionIcon = () => {
   return (
-    <img
-      style={{ width: '16px', height: '16px' }}
-      src={
-        'https://yt3.googleusercontent.com/ytc/AIdro_kG1AaurvqvdbbpAUW_PLMHeXf384dp8KX_stB4mHRVOQQ=s900-c-k-c0x00ffffff-no-rj'
-      }
-      alt=""
+    <PartyTag
+      size={TagSize.S}
+      avatar="https://yt3.googleusercontent.com/ytc/AIdro_kG1AaurvqvdbbpAUW_PLMHeXf384dp8KX_stB4mHRVOQQ=s900-c-k-c0x00ffffff-no-rj"
     />
   )
 }
+
+const filterOptions = [
+  {
+    type: SelectorType.Single,
+    disabled: true,
+    label: '單位',
+    value: 'department',
+    options: [{ label: '立法院', value: 'legislativeYuan' }],
+  },
+  {
+    type: SelectorType.Single,
+    disabled: false,
+    label: '屆期',
+    value: 'meeting',
+    options: [
+      { label: '第 10 屆', value: '10' },
+      { label: '第 11 屆', value: '11' },
+    ], //TODO: get from api
+  },
+  {
+    type: SelectorType.Multiple,
+    disabled: false,
+    defaultValue: ['all'],
+    label: '會期',
+    value: 'meetingSession',
+    options: [
+      { label: '全部會期', value: 'all', isDeletable: false },
+      { label: '第 1 會期(2020/9-2022/10)', value: '1' },
+      { label: '第 2 會期(2022/10-2023/2)', value: '2' },
+      { label: '第 3 會期(2023/2-2023/6)', value: '3' },
+    ], //TODO: get from api
+  },
+  {
+    type: SelectorType.Multiple,
+    disabled: false,
+    label: '選區',
+    value: 'constituency',
+    options: [
+      {
+        groupName: '不分區',
+        options: [{ label: '不分區', value: MemberType.NationwideAndOverseas }],
+      },
+      {
+        groupName: '原住民',
+        options: [
+          {
+            label: MEMBER_TYPE_LABEL[MemberType.LowlandAboriginal],
+            value: MemberType.LowlandAboriginal,
+          },
+          {
+            label: MEMBER_TYPE_LABEL[MemberType.HighlandAboriginal],
+            value: MemberType.HighlandAboriginal,
+          },
+        ],
+      },
+      { groupName: '區域', options: CITY_OPTIONS },
+    ],
+  },
+  {
+    type: SelectorType.Multiple,
+    disabled: false,
+    label: '黨籍',
+    value: 'party',
+    options: [
+      { label: '民進黨', value: 'DPP', prefixIcon: <OptionIcon /> },
+      { label: '國民黨', value: 'KMT' },
+    ], //TODO: get from api
+  },
+  {
+    type: SelectorType.Multiple,
+    disabled: false,
+    label: '委員會',
+    value: 'committee',
+    options: [
+      {
+        groupName: '常設',
+        options: [
+          { label: '內政委員會', value: 'committee-1' },
+          { label: '社會福利及衛生環境委員會', value: 'committee-3' },
+        ],
+      },
+      {
+        groupName: '特種',
+        options: [
+          { label: '經費稽核委員會', value: 'committee-2' },
+          { label: '紀律委員會', value: 'committee-4' },
+        ],
+      },
+    ], //TODO: get from api
+  },
+]
 
 export type FilterModalValueType = {
   department: string
@@ -178,97 +273,6 @@ const FilterModal: React.FC<FilterModelProps> = ({
   const [filterValue, setFilterValue] =
     useState<FilterModalValueType>(defaultValue)
 
-  const filterOptions = [
-    {
-      type: SelectorType.Single,
-      disabled: true,
-      label: '單位',
-      value: 'department',
-      options: [{ label: '立法院', value: 'legislativeYuan' }],
-    },
-    {
-      type: SelectorType.Single,
-      disabled: false,
-      label: '屆期',
-      value: 'meeting',
-      options: [
-        { label: '第 10 屆', value: '10' },
-        { label: '第 11 屆', value: '11' },
-      ], //TODO: get from api
-    },
-    {
-      type: SelectorType.Multiple,
-      disabled: false,
-      label: '會期',
-      value: 'meetingSession',
-      options: [
-        { label: '全部會期', value: 'all' },
-        { label: '第 1 會期(2020/9-2022/10)', value: '1' },
-        { label: '第 2 會期(2022/10-2023/2)', value: '2' },
-      ], //TODO: get from api
-    },
-    {
-      type: SelectorType.Multiple,
-      disabled: false,
-      label: '選區',
-      value: 'constituency',
-      options: [
-        {
-          groupName: '不分區',
-          options: [
-            { label: '不分區', value: MemberType.NationwideAndOverseas },
-          ],
-        },
-        {
-          groupName: '原住民',
-          options: [
-            {
-              label: MEMBER_TYPE_LABEL[MemberType.LowlandAboriginal],
-              value: MemberType.LowlandAboriginal,
-            },
-            {
-              label: MEMBER_TYPE_LABEL[MemberType.HighlandAboriginal],
-              value: MemberType.HighlandAboriginal,
-            },
-          ],
-        },
-        { groupName: '區域', options: CITY_OPTIONS },
-      ],
-    },
-    {
-      type: SelectorType.Multiple,
-      disabled: false,
-      label: '黨籍',
-      value: 'party',
-      options: [
-        { label: '民進黨', value: 'DPP', prefixIcon: <OptionIcon /> },
-        { label: '國民黨', value: 'KMT' },
-      ], //TODO: get from api
-    },
-    {
-      type: SelectorType.Multiple,
-      disabled: false,
-      label: '委員會',
-      value: 'committee',
-      options: [
-        {
-          groupName: '常設',
-          options: [
-            { label: '內政委員會', value: 'committee-1' },
-            { label: '社會福利及衛生環境委員會', value: 'committee-3' },
-          ],
-        },
-        {
-          groupName: '特種',
-          options: [
-            { label: '經費稽核委員會', value: 'committee-2' },
-            { label: '紀律委員會', value: 'committee-4' },
-          ],
-        },
-      ], //TODO: get from api
-    },
-  ]
-
   const handleSubmitClick = () => {
     onSubmit(filterValue)
     setIsOpen(false)
@@ -292,7 +296,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
         </Header>
         <SelectorsContainer>
           {filterOptions.map(
-            ({ type, disabled, label, value, options }, idx) => {
+            ({ type, disabled, label, value, options, defaultValue }, idx) => {
               if (type === SelectorType.Single) {
                 return (
                   <SelectContainer key={`single-select-${value}-${idx}`}>
@@ -318,6 +322,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                     <Label text={label} />
                     <SelectorContainer>
                       <MultipleSelect
+                        defaultValue={defaultValue}
                         disabled={disabled}
                         options={options}
                         value={filterValue[value]}
