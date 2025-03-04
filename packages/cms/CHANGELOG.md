@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.2-beta.1, 2025-03-04
+
+### Notable Changes
+
+- feat
+  - add comment for graphql error
+- fix
+  - add validation for upload data
+
+### Commits
+
+- [[`ec36e50e63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec36e50e63)] - **fix(cms)**: add validation for upload data (Lucien)
+- [[`c6a53870cc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c6a53870cc)] - **feat(cms)**: add comment for graphql error (Lucien)
+
 ## 0.0.2-beta.0, 2025-02-25
 
 ### Notable Changes

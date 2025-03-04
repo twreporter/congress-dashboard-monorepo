@@ -197,7 +197,7 @@ const Footer: React.FC = () => {
               <FooterLink
                 href={ExternalRoutes.Support}
                 text="贊助支持"
-                target="_self"
+                target="_blank"
               />
             </LinkGroup>
           </LinksContainer>

@@ -54,22 +54,37 @@ const Td = styled.td`
   color: #1f2937;
 `
 
-const Tr = styled.tr<{ $isHeader?: boolean }>`
-  ${(props) =>
-    props.$isHeader
-      ? `
-    padding: 12px;
-    border-bottom: 2px solid #e5e7eb;
-    text-align: left;
-    background-color: #f3f4f6;
-    font-weight: 500;
-    color: #374151;
-  `
-      : `
-    &:hover {
-    background-color: #f9fafb;
-  }
-  `}
+const Tr = styled.tr<{ $isHeader?: boolean; $status?: 'error' | 'success' }>`
+  ${(props) => {
+    if (props.$isHeader) {
+      return `
+        padding: 12px;
+        border-bottom: 2px solid #e5e7eb;
+        text-align: left;
+        background-color: #f3f4f6;
+        font-weight: 500;
+        color: #374151;
+      `
+    }
+
+    let bgColor = 'transparent'
+    let hoverColor = '#f9fafb'
+
+    if (props.$status === 'error') {
+      bgColor = '#e57373'
+      hoverColor = '#f44336'
+    } else if (props.$status === 'success') {
+      bgColor = '#81c784'
+      hoverColor = '#66bb6a'
+    }
+
+    return `
+      background-color: ${bgColor};
+      &:hover {
+        background-color: ${hoverColor};
+      }
+    `
+  }}
 `
 
 const FileName = styled.div`
@@ -178,13 +193,19 @@ export const Field = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {csvData.slice(1).map((row, i) => (
-                    <Tr key={i}>
-                      {row.map((cell, j) => (
-                        <Td key={j}>{cell}</Td>
-                      ))}
-                    </Tr>
-                  ))}
+                  {csvData.slice(1).map((row, i) => {
+                    // Check if any cell is empty or if length doesn't match header
+                    const hasEmptyCell = row.some((cell) => cell === '')
+                    const isValidRow =
+                      !hasEmptyCell && row.length === csvData[0].length
+                    return (
+                      <Tr key={i} $status={isValidRow ? 'success' : 'error'}>
+                        {row.map((cell, j) => (
+                          <Td key={j}>{cell}</Td>
+                        ))}
+                      </Tr>
+                    )
+                  })}
                 </tbody>
               </Table>
             </TableWrapper>
@@ -195,13 +216,28 @@ export const Field = ({
           {value && (
             <Table>
               <tbody>
-                {JSON.parse(value).map((row: string[], i: number) => (
-                  <Tr key={i} $isHeader={i === 0}>
-                    {row.map((cell, j) => (
-                      <Td key={j}>{cell}</Td>
-                    ))}
-                  </Tr>
-                ))}
+                {JSON.parse(value).map((row: string[], i: number) => {
+                  const headerRow = JSON.parse(value)[0]
+                  // For data rows, check for empty cells
+                  const hasEmptyCell =
+                    i !== 0 && row.some((cell) => cell === '')
+                  const isValidRow =
+                    i === 0 ||
+                    (!hasEmptyCell && row.length === headerRow.length)
+                  return (
+                    <Tr
+                      key={i}
+                      $isHeader={i === 0}
+                      $status={
+                        i === 0 ? undefined : isValidRow ? 'success' : 'error'
+                      }
+                    >
+                      {row.map((cell, j) => (
+                        <Td key={j}>{cell}</Td>
+                      ))}
+                    </Tr>
+                  )
+                })}
               </tbody>
             </Table>
           )}
