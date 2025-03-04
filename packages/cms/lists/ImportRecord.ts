@@ -107,6 +107,40 @@ const listConfigurations = list({
             `CSV 檔案標題格式不符\n上傳內容標題: ${csvHeader}\n規格標題應為: ${expectedHeader[listName]}\n請確認標題順序是否正確\n`
           )
         }
+
+        // Validate that no rows have empty cells
+        const headerLength = csvDataArray[0].length
+        const rowsWithEmptyCells = []
+
+        for (let i = 1; i < csvDataArray.length; i++) {
+          const row = csvDataArray[i]
+          // Skip empty rows (could be trailing newlines)
+          if (row.length === 0 || (row.length === 1 && row[0] === '')) {
+            continue
+          }
+
+          // Check if row length matches header length
+          if (row.length !== headerLength) {
+            rowsWithEmptyCells.push(`第 ${i + 1} 行: 欄位數量不符`)
+            continue
+          }
+
+          // Check for empty cells
+          for (let j = 0; j < row.length; j++) {
+            if (row[j] === '') {
+              rowsWithEmptyCells.push(
+                `第 ${i + 1} 行: 欄位 "${csvDataArray[0][j]}" 為空`
+              )
+              break
+            }
+          }
+        }
+
+        if (rowsWithEmptyCells.length > 0) {
+          return addValidationError(
+            `CSV 檔案含有空欄位或格式錯誤:\n${rowsWithEmptyCells.join('\n')}`
+          )
+        }
       },
     },
     beforeOperation: {
@@ -147,6 +181,7 @@ const listConfigurations = list({
           try {
             const result = await context.prisma.$transaction(queries)
             const errors = result.filter(
+              // ref: https://github.com/keystonejs/keystone/pull/9476
               (item: any) => item instanceof GraphQLError
             )
             if (errors.length) {
