@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.1-beta.11, 2025-03-04
+
+### Notable Changes
+
+- fix
+  - footer link and header style
+
+### Commits
+
+- [[`3164218e94`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3164218e94)] - **fix(frontend)**: footer link and header style (Lucien)
+
 ## 0.0.1-beta.10, 2025-02-26
 
 ### Notable Changes

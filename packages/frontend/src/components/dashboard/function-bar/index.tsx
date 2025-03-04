@@ -25,7 +25,6 @@ import { HEADER_HEIGHT } from '@/constants/header'
 
 const Box = styled.div<{
   $isHeaderHidden: boolean
-  $isHeaderAboveTab: boolean
 }>`
   width: 928px;
   display: flex;
@@ -36,11 +35,6 @@ const Box = styled.div<{
   top: ${(props) => (props.$isHeaderHidden ? '0px' : `${HEADER_HEIGHT}px`)};
   background-color: ${colorGrayscale.gray100};
   z-index: ${ZIndex.Bar};
-  border-top: ${(props) =>
-    props.$isHeaderAboveTab
-      ? `1px solid ${colorGrayscale.gray300}`
-      : '1px solid transparent'};
-
   ${mq.tabletAndBelow`
     width: 100%;
   `}
@@ -133,7 +127,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     setIsFilterOpen((prev) => !prev)
   }
   const searchRef = useRef<HTMLDivElement>(null)
-  const { setTabElement, isHeaderHidden, isHeaderAboveTab } = useScrollContext()
+  const { setTabElement, isHeaderHidden } = useScrollContext()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterString, setFilterString] = useState('立法院｜第11屆｜全部會期')
   const [filterCount, setFilterCount] = useState(0)
@@ -162,11 +156,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   }, [setTabElement, searchRef])
 
   return (
-    <Box
-      $isHeaderHidden={isHeaderHidden}
-      $isHeaderAboveTab={isHeaderAboveTab}
-      ref={searchRef}
-    >
+    <Box $isHeaderHidden={isHeaderHidden} ref={searchRef}>
       <Bar>
         <Tabs>
           <TabItem
