@@ -58,8 +58,14 @@ const Header = styled.div`
   gap: 10px;
   color: ${colorGrayscale.gray800};
   position: relative;
+  background-color: ${colorGrayscale.white};
   ${mq.mobileOnly`
     border-bottom: 1px solid ${colorGrayscale.gray300};
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 1;
   `}
 `
 
@@ -110,6 +116,7 @@ const SelectorsContainer = styled.div`
   ${mq.mobileOnly`
     gap: 20px;
     margin-bottom: 91px;
+    margin-top: 58.5px;
   `}
 `
 
