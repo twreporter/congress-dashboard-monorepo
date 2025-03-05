@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.2-beta.2, 2025-03-05
+
+### Notable Changes
+
+- feat
+  - required fields for upload csv
+
+### Commits
+
+- [[`e9a06a7d81`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e9a06a7d81)] - **feat(cms)**: required fields for upload csv (Lucien)
+
 ## 0.0.2-beta.1, 2025-03-04
 
 ### Notable Changes
