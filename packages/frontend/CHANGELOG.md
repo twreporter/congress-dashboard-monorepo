@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.0.1-beta.13, 2025-03-05
+
+### Notable Changes
+
+- fix
+  - change ref name for better reading
+  - header bottom line and filter modal header fixed
+
+### Commits
+
+- [[`91ed548951`](https://github.com/twreporter/congress-dashboard-monorepo/commit/91ed548951)] - **fix(frontend)**: change ref name for better reading (Lucien)
+- [[`1fdd18d35d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1fdd18d35d)] - **fix(frontend)**: header bottom line and filter modal header fixed (Lucien)
+
 ## 0.0.1-beta.12, 2025-03-04
 
 ### Notable Changes

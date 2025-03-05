@@ -37,16 +37,12 @@ import { useScrollContext } from '@/contexts/scroll-context'
 const Container = styled.header.attrs<{
   $isHidden: boolean
   $tabTop: number
-  $isHeaderAboveTab: boolean
 }>((props) => ({
   style: {
     top: props.$isHidden
       ? `calc(${props.$tabTop}px - ${HEADER_HEIGHT}px)`
       : '0px',
     transition: !props.$isHidden ? 'top 300ms ease-in-out' : 'none',
-    borderBottom: props.$isHeaderAboveTab
-      ? `1px solid ${colorGrayscale.gray300}`
-      : '1px solid transparent',
   },
 }))`
   display: flex;
@@ -63,24 +59,25 @@ const Container = styled.header.attrs<{
   ${mq.tabletOnly`
     padding: 0 32px;
   `}
-  ${mq.mobileOnly`
-    padding: 0 24px;
-  `}
 `
 
-const HeaderSection = styled.div`
+const HeaderSection = styled.div<{ $isHeaderAboveTab: boolean }>`
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
   padding: 16px;
+  border-bottom: ${(props) =>
+    props.$isHeaderAboveTab
+      ? `1px solid ${colorGrayscale.gray300}`
+      : '1px solid transparent'};
 
   ${mq.hdOnly`
     width: 1280px;
     margin: auto;
   `}
   ${mq.mobileOnly`
-    padding: 0px;
+    padding: 0 24px;
   `}
 `
 
@@ -153,12 +150,8 @@ const Header: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Container
-        $isHidden={isHeaderHidden}
-        $tabTop={tabTop}
-        $isHeaderAboveTab={isHeaderAboveTab}
-      >
-        <HeaderSection>
+      <Container $isHidden={isHeaderHidden} $tabTop={tabTop}>
+        <HeaderSection $isHeaderAboveTab={isHeaderAboveTab}>
           <LogoContainer>
             {/* TODO: releaseBranch */}
             <Link href={'https://www.twreporter.org/'} target={'_blank'}>

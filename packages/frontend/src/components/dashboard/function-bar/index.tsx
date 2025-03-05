@@ -126,7 +126,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   const openFilter = () => {
     setIsFilterOpen((prev) => !prev)
   }
-  const searchRef = useRef<HTMLDivElement>(null)
+  const tabRef = useRef<HTMLDivElement>(null)
   const { setTabElement, isHeaderHidden } = useScrollContext()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterString, setFilterString] = useState('立法院｜第11屆｜全部會期')
@@ -150,13 +150,13 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   }
 
   useEffect(() => {
-    if (searchRef.current) {
-      setTabElement(searchRef.current)
+    if (tabRef.current) {
+      setTabElement(tabRef.current)
     }
-  }, [setTabElement, searchRef])
+  }, [setTabElement, tabRef])
 
   return (
-    <Box $isHeaderHidden={isHeaderHidden} ref={searchRef}>
+    <Box $isHeaderHidden={isHeaderHidden} ref={tabRef}>
       <Bar>
         <Tabs>
           <TabItem
