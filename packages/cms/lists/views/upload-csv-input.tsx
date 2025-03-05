@@ -46,12 +46,18 @@ const Th = styled.th`
   background-color: #f3f4f6;
   font-weight: 500;
   color: #374151;
+  min-width: 100px;
 `
 
 const Td = styled.td`
   padding: 12px;
   border-bottom: 1px solid #e5e7eb;
   color: #1f2937;
+`
+
+const RequiredIndicator = styled.span`
+  color: #dc2626;
+  margin-left: 2px;
 `
 
 const Tr = styled.tr<{ $isHeader?: boolean; $status?: 'error' | 'success' }>`
@@ -103,6 +109,21 @@ export const Field = ({
   const [error, setError] = useState('')
   const [fileName, setFileName] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Extract required fields from field description if available
+  // TODO: use listName to change required fields
+  const getRequiredFields = () => {
+    if (!field.description) return []
+    const match = field.description.match(/必填欄位:\s*([\w\s,]+)/)
+    return match ? match[1].split(',').map((f) => f.trim()) : []
+  }
+
+  const requiredFields = getRequiredFields()
+
+  // Function to check if a field is required
+  const isFieldRequired = (fieldName: string) => {
+    return requiredFields.includes(fieldName)
+  }
 
   const handleButtonClick = () => {
     fileInputRef.current?.click()
@@ -188,16 +209,27 @@ export const Field = ({
                 <thead>
                   <tr>
                     {csvData[0].map((header, i) => (
-                      <Th key={i}>{header}</Th>
+                      <Th key={i}>
+                        {header}
+                        {isFieldRequired(header) && (
+                          <RequiredIndicator> *</RequiredIndicator>
+                        )}
+                      </Th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {csvData.slice(1).map((row, i) => {
-                    // Check if any cell is empty or if length doesn't match header
-                    const hasEmptyCell = row.some((cell) => cell === '')
-                    const isValidRow =
-                      !hasEmptyCell && row.length === csvData[0].length
+                    // Only check required fields for empty values
+                    const hasRequiredEmpty = csvData[0].some(
+                      (header, idx) =>
+                        isFieldRequired(header) && row[idx] === ''
+                    )
+
+                    // Check if row length matches header
+                    const isLengthValid = row.length === csvData[0].length
+                    const isValidRow = isLengthValid && !hasRequiredEmpty
+
                     return (
                       <Tr key={i} $status={isValidRow ? 'success' : 'error'}>
                         {row.map((cell, j) => (
@@ -218,20 +250,34 @@ export const Field = ({
               <tbody>
                 {JSON.parse(value).map((row: string[], i: number) => {
                   const headerRow = JSON.parse(value)[0]
-                  // For data rows, check for empty cells
-                  const hasEmptyCell =
-                    i !== 0 && row.some((cell) => cell === '')
-                  const isValidRow =
-                    i === 0 ||
-                    (!hasEmptyCell && row.length === headerRow.length)
+
+                  // For header row, add required field indicator
+                  if (i === 0) {
+                    return (
+                      <Tr key={i} $isHeader={true}>
+                        {row.map((cell, j) => (
+                          <Td key={j}>
+                            {cell}
+                            {isFieldRequired(cell) && (
+                              <RequiredIndicator> *</RequiredIndicator>
+                            )}
+                          </Td>
+                        ))}
+                      </Tr>
+                    )
+                  }
+
+                  // For data rows, only check required fields
+                  const hasRequiredEmpty = headerRow.some(
+                    (header: string, idx: number) =>
+                      isFieldRequired(header) && row[idx] === ''
+                  )
+
+                  const isLengthValid = row.length === headerRow.length
+                  const isValidRow = isLengthValid && !hasRequiredEmpty
+
                   return (
-                    <Tr
-                      key={i}
-                      $isHeader={i === 0}
-                      $status={
-                        i === 0 ? undefined : isValidRow ? 'success' : 'error'
-                      }
-                    >
+                    <Tr key={i} $status={isValidRow ? 'success' : 'error'}>
                       {row.map((cell, j) => (
                         <Td key={j}>{cell}</Td>
                       ))}

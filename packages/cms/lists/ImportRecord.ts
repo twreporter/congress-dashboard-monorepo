@@ -15,6 +15,10 @@ const expectedHeader: Record<string, string> = {
   [ListName.topic]: 'title,slug',
 }
 
+const requiredFields: Record<string, string[]> = {
+  [ListName.legislator]: ['name', 'slug'],
+}
+
 const listConfigurations = list({
   fields: {
     recordName: text({
@@ -45,7 +49,9 @@ const listConfigurations = list({
       ui: {
         description: `立法委員標題順序為 ${
           expectedHeader[ListName.legislator]
-        }\n議題標題順序為 ${expectedHeader[ListName.topic]}`,
+        } (必填欄位: name, slug)\n議題標題順序為 ${
+          expectedHeader[ListName.topic]
+        }`,
         views: './lists/views/upload-csv-input',
       },
     }),
@@ -108,7 +114,7 @@ const listConfigurations = list({
           )
         }
 
-        // Validate that no rows have empty cells
+        // Validate that required fields have values
         const headerLength = csvDataArray[0].length
         const rowsWithEmptyCells = []
 
@@ -125,13 +131,19 @@ const listConfigurations = list({
             continue
           }
 
-          // Check for empty cells
-          for (let j = 0; j < row.length; j++) {
-            if (row[j] === '') {
-              rowsWithEmptyCells.push(
-                `第 ${i + 1} 行: 欄位 "${csvDataArray[0][j]}" 為空`
-              )
-              break
+          // Check for empty cells in required fields
+          if (listName && requiredFields[listName]) {
+            for (let j = 0; j < row.length; j++) {
+              const fieldName = csvDataArray[0][j]
+              if (
+                requiredFields[listName].includes(fieldName) &&
+                row[j] === ''
+              ) {
+                rowsWithEmptyCells.push(
+                  `第 ${i + 1} 行: 必填欄位 "${fieldName}" 為空`
+                )
+                break
+              }
             }
           }
         }
