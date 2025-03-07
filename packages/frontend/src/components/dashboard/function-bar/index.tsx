@@ -23,19 +23,58 @@ import { ZIndex } from '@/styles/z-index'
 // constants
 import { HEADER_HEIGHT } from '@/constants/header'
 
-const Box = styled.div<{
+const HorizaontalLine = styled.div<{
+  $isHeaderAboveTab: boolean
+  $isHide?: boolean
   $isHeaderHidden: boolean
 }>`
-  width: 928px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  ${(props) => (props.$isHide ? 'display: none;' : '')}
+  width: 100%;
+  border-top: 1px solid ${colorGrayscale.gray300};
+
+  ${mq.hdOnly`
+    ${(props) =>
+      props.$isHeaderAboveTab || props.$isHeaderHidden
+        ? `
+      width: 1280px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    `
+        : ''}
+  `}
+  ${mq.mobileOnly`
+    ${(props) =>
+      props.$isHeaderAboveTab || props.$isHeaderHidden
+        ? `
+      width: 100vw;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    `
+        : ''}
+  `}
+`
+const StickyBar = styled.div<{
+  $isHeaderHidden: boolean
+}>`
   position: sticky;
   transition: all 300ms ease-in-out;
   top: ${(props) => (props.$isHeaderHidden ? '0px' : `${HEADER_HEIGHT}px`)};
   background-color: ${colorGrayscale.gray100};
   z-index: ${ZIndex.Bar};
-  ${mq.tabletAndBelow`
+  width: 928px;
+  ${mq.desktopAndBelow`
+    width: 100%;
+  `}
+`
+const Box = styled.div`
+  width: 928px;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  gap: 20px;
+  ${mq.desktopAndBelow`
     width: 100%;
   `}
 `
@@ -43,7 +82,6 @@ const Bar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid ${colorGrayscale.gray300};
 `
 const TabItem = styled(Tab)`
   margin-left: 40px;
@@ -78,9 +116,7 @@ const Filter = styled.div`
   display: flex;
   align-items: center;
 `
-
 const FilterCountIcon = styled.div`
-  background-color: ${colorBrand.heavy};
   height: 20px;
   width: 20px;
   border-radius: 50%;
@@ -88,13 +124,28 @@ const FilterCountIcon = styled.div`
   justify-content: center;
   align-items: center;
 `
+/* todo: support div icon color in @twreporter/react-components */
+const BasePillButton = styled(PillButton)`
+  ${FilterCountIcon} {
+    background-color: ${colorBrand.heavy};
+  }
 
+  &:hover {
+    ${FilterCountIcon} {
+      background-color: ${colorBrand.dark};
+    }
+  }
+`
 const P4White = styled(P4)`
   color: ${colorGrayscale.white};
 `
+const MobileOnlyBox = styled(MobileOnly)`
+  width: 100%;
+`
+
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
 export const FilterButton = ({ filterCount }: { filterCount: number }) => (
-  <PillButton
+  <BasePillButton
     theme={PillButton.THEME.normal}
     type={PillButton.Type.SECONDARY}
     size={PillButton.Size.L}
@@ -127,7 +178,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     setIsFilterOpen((prev) => !prev)
   }
   const tabRef = useRef<HTMLDivElement>(null)
-  const { setTabElement, isHeaderHidden } = useScrollContext()
+  const { setTabElement, isHeaderHidden, isHeaderAboveTab } = useScrollContext()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterString, setFilterString] = useState('立法院｜第11屆｜全部會期')
   const [filterCount, setFilterCount] = useState(0)
@@ -156,36 +207,49 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   }, [setTabElement, tabRef])
 
   return (
-    <Box $isHeaderHidden={isHeaderHidden} ref={tabRef}>
-      <Bar>
-        <Tabs>
-          <TabItem
-            text={'看議題'}
-            selected={currentTab === Option.Issue}
-            onClick={() => setTab(Option.Issue)}
+    <>
+      <StickyBar $isHeaderHidden={isHeaderHidden} ref={tabRef}>
+        <HorizaontalLine
+          $isHeaderAboveTab={isHeaderAboveTab}
+          $isHide={!isHeaderAboveTab}
+          $isHeaderHidden={isHeaderHidden}
+        />
+        <Box>
+          <Bar>
+            <Tabs>
+              <TabItem
+                text={'看議題'}
+                selected={currentTab === Option.Issue}
+                onClick={() => setTab(Option.Issue)}
+              />
+              <TabItem
+                text={'看立委'}
+                selected={currentTab === Option.Human}
+                onClick={() => setTab(Option.Human)}
+              />
+            </Tabs>
+            <Filter onClick={openFilter}>
+              <TabletAndAbove>
+                <FilterString>{filterString}</FilterString>
+              </TabletAndAbove>
+              <FilterButton filterCount={filterCount} />
+            </Filter>
+          </Bar>
+          <FliterModal
+            isOpen={isFilterOpen}
+            setIsOpen={setIsFilterOpen}
+            onSubmit={handleSubmit}
           />
-          <TabItem
-            text={'看立委'}
-            selected={currentTab === Option.Human}
-            onClick={() => setTab(Option.Human)}
-          />
-        </Tabs>
-        <Filter onClick={openFilter}>
-          <TabletAndAbove>
-            <FilterString>{filterString}</FilterString>
-          </TabletAndAbove>
-          <FilterButton filterCount={filterCount} />
-        </Filter>
-      </Bar>
-      <MobileOnly>
+        </Box>
+        <HorizaontalLine
+          $isHeaderAboveTab={isHeaderAboveTab}
+          $isHeaderHidden={isHeaderHidden}
+        />
+      </StickyBar>
+      <MobileOnlyBox>
         <FilterString onClick={openFilter}>{filterString}</FilterString>
-      </MobileOnly>
-      <FliterModal
-        isOpen={isFilterOpen}
-        setIsOpen={setIsFilterOpen}
-        onSubmit={handleSubmit}
-      />
-    </Box>
+      </MobileOnlyBox>
+    </>
   )
 }
 export default FunctionBar

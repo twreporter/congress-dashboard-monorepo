@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 // config
 import { title, description } from '@/components/open/config'
 // utils
@@ -13,6 +13,10 @@ import Selected from '@/components/open/selected'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { H4 } from '@twreporter/react-components/lib/text/headline'
+import {
+  MobileOnly,
+  TabletAndAbove,
+} from '@twreporter/react-components/lib/rwd'
 
 const Box = styled.div`
   width: -webkit-fill-available;
@@ -41,20 +45,28 @@ const Title = styled.div`
     font-size: 28px;  
   `}
 `
-const Description = styled.div`
+const descriptionCss = css`
   color: ${colorGrayscale.gray900};
   margin-top: 24px;
   margin-bottom: 48px;
   text-align: center;
+`
+const Description = styled(TabletAndAbove)`
+  ${descriptionCss}
 
   ${mq.tabletOnly`
     margin-top: 16px;
     margin-bottom: 40px;
   `}
-  ${mq.mobileOnly`
-    margin-top: 16px;
-    margin-bottom: 32px;
-  `}
+`
+const MobileDescription = styled(MobileOnly)`
+  ${descriptionCss}
+  margin-top: 16px;
+  margin-bottom: 32px;
+`
+const SerifH4 = styled(H4)`
+  // override H4 font-family
+  font-family: ${notoSerif.style.fontFamily}!important;
 `
 const StyledSelected = styled(Selected)`
   margin-top: 24px;
@@ -66,16 +78,15 @@ const StyledSelected = styled(Selected)`
 
 const Open: React.FC = () => {
   const descriptJSX = description.map((text, index) => (
-    <H4
-      className={notoSerif.className}
-      text={text}
-      key={`open-desc-${index}`}
-    />
+    <SerifH4 text={text} key={`open-desc-${index}`} />
   ))
   return (
     <Box>
       <Title className={notoSerif.className}>{title}</Title>
       <Description>{descriptJSX}</Description>
+      <MobileDescription>
+        <SerifH4 text={description} />
+      </MobileDescription>
       <SeachBar />
       <StyledSelected />
     </Box>

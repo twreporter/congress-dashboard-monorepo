@@ -61,16 +61,12 @@ const Container = styled.header.attrs<{
   `}
 `
 
-const HeaderSection = styled.div<{ $isHeaderAboveTab: boolean }>`
-  display: flex;
+const HeaderSection = styled.div`
   width: 100%;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  border-bottom: ${(props) =>
-    props.$isHeaderAboveTab
-      ? `1px solid ${colorGrayscale.gray300}`
-      : '1px solid transparent'};
 
   ${mq.hdOnly`
     width: 1280px;
@@ -121,7 +117,7 @@ const menuLinks = COMMON_MENU_LINKS
 const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS
 
 const Header: React.FC = () => {
-  const { isHeaderHidden, tabTop, isHeaderAboveTab } = useScrollContext()
+  const { isHeaderHidden, tabTop } = useScrollContext()
   const windowWidth = useWindowWidth()
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
   const hamburgerIcon = <Hamburger releaseBranch={'master'} /> //TODO: releaseBranch
@@ -151,7 +147,7 @@ const Header: React.FC = () => {
   return (
     <React.Fragment>
       <Container $isHidden={isHeaderHidden} $tabTop={tabTop}>
-        <HeaderSection $isHeaderAboveTab={isHeaderAboveTab}>
+        <HeaderSection>
           <LogoContainer>
             {/* TODO: releaseBranch */}
             <Link href={'https://www.twreporter.org/'} target={'_blank'}>

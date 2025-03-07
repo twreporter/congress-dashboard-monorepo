@@ -1,4 +1,6 @@
-import React from 'react'
+'use client'
+
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 // components
 import Tooltip from '@/components/dashboard/card/tooltip'
@@ -20,6 +22,11 @@ import {
   DesktopAndAbove,
   TabletAndBelow,
 } from '@twreporter/react-components/lib/rwd'
+// lodash
+import { throttle } from 'lodash'
+const _ = {
+  throttle,
+}
 
 export enum CardSize {
   S,
@@ -79,12 +86,13 @@ const DetailContainer = styled.div<{ $isShowTag: boolean; $withGap: boolean }>`
 `
 const TagContainer = styled.div<{ $size: CardSize }>`
   display: flex;
-  flex-direction: ${(props) => (props.$size === CardSize.S ? 'column' : 'row')};
+  flex-direction: row;
   gap: ${(props) => (props.$size === CardSize.S ? 8 : 12)}px;
   overflow-y: hidden;
-  ${(props) => (props.$size === CardSize.L ? 'flex-wrap: wrap;' : '')}
+  flex-wrap: wrap;
 `
-const TagItem = styled.div<{ $size: CardSize }>`
+const TagItem = styled.div`
+  width: fit-content;
   padding: 2px 8px;
   text-align: center;
   border-radius: 40px;
@@ -96,7 +104,6 @@ const TagItem = styled.div<{ $size: CardSize }>`
   align-items: center;
   justify-content: center;
   min-width: 0;
-  ${(props) => (props.$size === CardSize.L ? 'width: fit-content;' : '')}
 `
 const TagName = styled.span`
   ${textOverflowEllipsisCss}
@@ -113,7 +120,7 @@ const AvatarContainer = styled.div`
 `
 const avatarCss = css<{ $size: CardSize }>`
   width: ${(props) => (props.$size === CardSize.S ? 119 : 152)}px;
-  height: ${(props) => (props.$size === CardSize.S ? 154 : 196)}px;
+  height: 100%;
 `
 const Avatar = styled.img<{ $size: CardSize }>`
   ${avatarCss}
@@ -167,6 +174,65 @@ const CardHuman: React.FC<CardHumanProps> = ({
   onClick,
 }: CardHumanProps) => {
   const isShowTag = tags.length > 0
+
+  // calculate how many tags to show
+  const [visibleTagCount, setVisibleTagCount] = useState(tags.length)
+  const tagBoxRef = useRef<HTMLInputElement>(null)
+  const tagRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  useEffect(() => {
+    const tagBox = tagBoxRef.current
+    if (tagBox) {
+      const calculateVisibleTags = _.throttle(() => {
+        if (!tagBox) return
+        // tags can show at least two lines
+        const availableWidth = tagBox.clientWidth * 2
+        // Calculate how many tags can fit
+        let totalWidth = 0
+        let count = 0
+        // Add width of each tag
+        for (let i = 0; i < tags.length; i++) {
+          const tag = tags[i]
+          const tagElement = tagRefs.current.get(tag.name)
+          let tagWidth = 0
+          if (tagElement) {
+            tagWidth = tagElement.offsetWidth + 8 // 8px for margin
+          } else {
+            tagWidth = 108 // Default estimated width if tag not yet rendered
+          }
+          // "..." tag width approx 30px
+          if (totalWidth + tagWidth < availableWidth - 30) {
+            totalWidth += tagWidth
+            count++
+          } else {
+            break
+          }
+        }
+        setVisibleTagCount(Math.max(1, count))
+      }, 100)
+      const resizeObserver = new ResizeObserver(calculateVisibleTags)
+      resizeObserver.observe(tagBox)
+      calculateVisibleTags()
+      return () => {
+        resizeObserver.unobserve(tagBox)
+        resizeObserver.disconnect()
+      }
+    }
+  }, [tags])
+
+  // Save tag refs for measurement
+  const setTagRef = useCallback(
+    (element: HTMLDivElement | null, value: string) => {
+      if (element) {
+        tagRefs.current.set(value, element)
+      } else {
+        tagRefs.current.delete(value)
+      }
+    },
+    []
+  )
+  const visibleTags = tags.slice(0, visibleTagCount)
+  const hasMoreTag = tags.length > visibleTagCount
+
   return (
     <Box $selected={selected} $size={size} onClick={onClick}>
       <AvatarContainer>
@@ -183,10 +249,13 @@ const CardHuman: React.FC<CardHumanProps> = ({
           <Type text={MEMBER_TYPE_LABEL[type]} />
         </div>
         {isShowTag ? (
-          <TagContainer $size={size}>
-            {tags.map(({ name, count }: Tag, index: number) => {
+          <TagContainer $size={size} ref={tagBoxRef}>
+            {visibleTags.map(({ name, count }: Tag, index: number) => {
               return (
-                <TagItem key={`legislator-${name}-tag-${index}`} $size={size}>
+                <TagItem
+                  key={`legislator-${name}-tag-${index}`}
+                  ref={(el) => setTagRef(el, name)}
+                >
                   <TagName>{name}</TagName>
                   <TagCount
                     key={`legislator-${name}-tag-count-${index}`}
@@ -194,6 +263,11 @@ const CardHuman: React.FC<CardHumanProps> = ({
                 </TagItem>
               )
             })}
+            {hasMoreTag ? (
+              <TagItem>
+                <TagName>...</TagName>
+              </TagItem>
+            ) : null}
           </TagContainer>
         ) : (
           <Note text={note} />

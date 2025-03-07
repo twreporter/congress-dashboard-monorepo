@@ -58,11 +58,11 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
       )
     }
 
-    // When scrolling up
-    if (currentScrollY < lastScrollY.current) {
+    // Trigger animation when scrolling up > 5px
+    if (lastScrollY.current - currentScrollY > 5) {
       setIsHeaderHidden(false)
     }
-    // When scrolling down
+    // Trigger animation when scrolling down
     else if (
       currentScrollY > lastScrollY.current &&
       tabRect &&

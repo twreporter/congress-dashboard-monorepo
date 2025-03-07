@@ -33,6 +33,7 @@ export const Triangle = styled.div<{ $width?: string; $height?: string }>`
   height: ${(props) => props.$height || 'auto'};
   background: ${colorGrayscale.gray200};
   border-radius: 2px;
+  max-width: 100%;
   ${skeletonAnimationCss}
 `
 type CircleProps = {

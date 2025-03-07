@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.0.1-beta.14, 2025-03-07
+
+### Notable Changes
+
+- fix
+  - styles defects in dashboard page
+
+### Commits
+
+- [[`672c4d8860`](https://github.com/twreporter/congress-dashboard-monorepo/commit/672c4d8860)] - **fix**: typo in comment (Aylie Chou)
+- [[`a62b31af93`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a62b31af93)] - **fix**: hd function bar width (Aylie Chou)
+- [[`a50483fc27`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a50483fc27)] - **fix**: styles defects in dashboard page (Aylie Chou)
+
 ## 0.0.1-beta.13, 2025-03-05
 
 ### Notable Changes
