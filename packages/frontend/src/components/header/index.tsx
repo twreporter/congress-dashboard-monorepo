@@ -19,6 +19,9 @@ import {
 } from '@twreporter/react-components/lib/rwd'
 import { Hamburger, Cross } from '@twreporter/react-components/lib/icon'
 import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
+import { Search as SearchIcon } from '@twreporter/react-components/lib/icon'
+import { SearchBar } from '@twreporter/react-components/lib/input'
+import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
 // hooks
@@ -60,7 +63,6 @@ const Container = styled.header.attrs<{
     padding: 0 32px;
   `}
 `
-
 const HeaderSection = styled.div`
   width: 100%;
   display: flex;
@@ -76,7 +78,6 @@ const HeaderSection = styled.div`
     padding: 0 24px;
   `}
 `
-
 const LogoContainer = styled.div`
   width: 172px;
   height: 24px;
@@ -90,38 +91,59 @@ const LogoContainer = styled.div`
     align-items: center;
   }
 `
-
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
 `
-
-const Button = styled.div`
+const Button = styled.div<{
+  $isHide?: boolean
+}>`
   a {
     text-decoration: none;
   }
+  opacity: ${(props) => (props.$isHide ? 0 : 1)};
+  transition: opacity 300ms ease;
 `
-
 const HamburgerBtn = styled.div`
   width: 24px;
   height: 24px;
 `
-
 const Spacing = styled.div<{ $width?: number; $height?: number }>`
   width: ${(props) => (props.$width ? props.$width : 0)}px;
   height: ${(props) => (props.$height ? props.$height : 0)}px;
+`
+const SearchBox = styled.div`
+  margin: 0 16px 0 24px;
+  position: relative;
+`
+const BtnContainer = styled.div<{
+  $isOpen: boolean
+}>`
+  opacity: ${(props) => (props.$isOpen ? '0' : '1')};
+  transition: opacity 300ms ease;
+`
+const SearchContainer = styled.div<{
+  $isOpen: boolean
+}>`
+  opacity: ${(props) => (props.$isOpen ? '1' : '0')};
+  transition: opacity 300ms ease;
+  position: absolute;
+  right: 0;
+  top: -8px;
+  z-index: ${(props) => (props.$isOpen ? 999 : -1)};
 `
 
 // Constants
 const menuLinks = COMMON_MENU_LINKS
 const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 const Header: React.FC = () => {
   const { isHeaderHidden, tabTop } = useScrollContext()
   const windowWidth = useWindowWidth()
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
-  const hamburgerIcon = <Hamburger releaseBranch={'master'} /> //TODO: releaseBranch
-  const crossIcon = <Cross releaseBranch={'master'} /> //TODO: releaseBranch
+  const hamburgerIcon = <Hamburger releaseBranch={releaseBranch} />
+  const crossIcon = <Cross releaseBranch={releaseBranch} />
   const handleHamburgerOnClick = useCallback(() => {
     setIsHamburgerOpen((prev) => !prev)
   }, [])
@@ -144,21 +166,42 @@ const Header: React.FC = () => {
     }
   }, [isHamburgerOpen])
 
+  // search functions
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const closeSearchBox = () => {
+    setIsSearchOpen(false)
+  }
+  const handleClickSearch = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsSearchOpen(true)
+    if (!ref.current) {
+      return
+    }
+    const input = ref.current.getElementsByTagName('INPUT')[0]
+    if (input) {
+      input.focus()
+    }
+  }
+  const onSearch = (keywords: string) => {
+    setIsSearchOpen(false)
+    alert(`search: ${keywords}`)
+  }
+  const ref = useOutsideClick(closeSearchBox)
+
   return (
     <React.Fragment>
       <Container $isHidden={isHeaderHidden} $tabTop={tabTop}>
         <HeaderSection>
           <LogoContainer>
-            {/* TODO: releaseBranch */}
             <Link href={'https://www.twreporter.org/'} target={'_blank'}>
-              <LogoHeader />
+              <LogoHeader releaseBranch={releaseBranch} />
             </Link>
           </LogoContainer>
           <TabletAndAbove>
             <ButtonContainer>
               {menuLinks.map(({ href, text, target }, idx) => (
                 <React.Fragment key={`link-btn-${idx}`}>
-                  <Button>
+                  <Button $isHide={isSearchOpen}>
                     <Link href={href} target={target}>
                       <TextButton
                         text={text}
@@ -173,7 +216,7 @@ const Header: React.FC = () => {
 
               {pillButtonLinks.map(({ href, text, target, type }, idx) => (
                 <React.Fragment key={`pill-btn-${idx}`}>
-                  <Button>
+                  <Button $isHide={isSearchOpen}>
                     <Link href={href} target={target}>
                       <PillButton
                         text={text}
@@ -187,6 +230,25 @@ const Header: React.FC = () => {
                   ) : null}
                 </React.Fragment>
               ))}
+              <SearchBox ref={ref} key="search">
+                <BtnContainer
+                  onClick={handleClickSearch}
+                  $isOpen={isSearchOpen}
+                >
+                  <IconButton
+                    iconComponent={<SearchIcon releaseBranch={releaseBranch} />}
+                    theme={IconButton.THEME.normal}
+                  />
+                </BtnContainer>
+                <SearchContainer $isOpen={isSearchOpen}>
+                  <SearchBar
+                    placeholder="關鍵字搜尋"
+                    theme={SearchBar.THEME.normal}
+                    onClose={closeSearchBox}
+                    onSearch={onSearch}
+                  />
+                </SearchContainer>
+              </SearchBox>
             </ButtonContainer>
           </TabletAndAbove>
           <MobileOnly>
