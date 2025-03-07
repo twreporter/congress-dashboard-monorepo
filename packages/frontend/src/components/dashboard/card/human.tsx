@@ -199,7 +199,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
           } else {
             tagWidth = 108 // Default estimated width if tag not yet rendered
           }
-          // "+N..." tag width approx 30px
+          // "..." tag width approx 30px
           if (totalWidth + tagWidth < availableWidth - 30) {
             totalWidth += tagWidth
             count++
