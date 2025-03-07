@@ -63,7 +63,10 @@ const StickyBar = styled.div<{
   top: ${(props) => (props.$isHeaderHidden ? '0px' : `${HEADER_HEIGHT}px`)};
   background-color: ${colorGrayscale.gray100};
   z-index: ${ZIndex.Bar};
-  width: 100%;
+  width: 928px;
+  ${mq.desktopAndBelow`
+    width: 100%;
+  `}
 `
 const Box = styled.div`
   width: 928px;
