@@ -34,7 +34,7 @@ export enum CardSize {
 const legislatorWidth = 56 + 16 //px
 
 const boxCss = css<{ $size: CardSize }>`
-  width: calc(100% - 48px);
+  width: 100%;
   display: flex;
   flex-direction: ${(props) => (props.$size === CardSize.S ? 'column' : 'row')};
   justify-content: ${(props) =>
@@ -70,6 +70,7 @@ const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-right: 24px;
+  max-width: 100%;
 `
 const Title = styled(H4)`
   color: ${colorGrayscale.gray800};

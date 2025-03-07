@@ -23,6 +23,8 @@ import {
   MultipleSelect,
 } from '@/components/selector'
 import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+// z-index
+import { ZIndex } from '@/styles/z-index'
 
 const ModalContainer = styled.div<{ $isOpen: boolean }>`
   display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
@@ -34,6 +36,7 @@ const ModalContainer = styled.div<{ $isOpen: boolean }>`
   background-color: ${colorOpacity['black_0.2']};
   justify-content: center;
   align-items: center;
+  z-index: ${ZIndex.FilterModal};
 `
 
 const Filter = styled.div`

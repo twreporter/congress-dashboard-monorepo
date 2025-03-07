@@ -46,7 +46,7 @@ const Box = styled.div`
 const cardCss = css`
   width: 928px;
 
-  ${mq.tabletAndBelow`
+  ${mq.desktopAndBelow`
     width: 100%;
   `}
 `
