@@ -2,7 +2,7 @@ import { GraphQLError } from 'graphql'
 import { list } from '@keystone-6/core'
 import type { KeystoneContext } from '@keystone-6/core/types'
 import { text, relationship } from '@keystone-6/core/fields'
-import { allowAllRoles } from './utils/access-control-list'
+import { allowAllRoles, denyRoles } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import {
   validateCsvStructure,
@@ -524,7 +524,7 @@ const listConfigurations = list({
       initialSort: { field: 'createdAt', direction: 'DESC' },
       pageSize: 50,
     },
-    hideDelete: true,
+    hideDelete: denyRoles(['admin']), // Only for development purposes
     itemView: { defaultFieldMode: 'read' },
   },
 
