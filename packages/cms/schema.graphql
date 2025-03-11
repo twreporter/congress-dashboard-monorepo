@@ -287,8 +287,8 @@ type Speech {
   date: CalendarDay
   title: String
   slug: String
-  summary: String
-  content: String
+  summary: JSON
+  content: JSON
   attendee: String
   ivodLink: String
   ivodStartTime: String
@@ -317,8 +317,6 @@ input SpeechWhereInput {
   date: CalendarDayFilter
   title: StringFilter
   slug: StringFilter
-  summary: StringFilter
-  content: StringFilter
   attendee: StringFilter
   ivodLink: StringFilter
   ivodStartTime: StringFilter
@@ -350,8 +348,6 @@ input SpeechOrderByInput {
   date: OrderDirection
   title: OrderDirection
   slug: OrderDirection
-  summary: OrderDirection
-  content: OrderDirection
   attendee: OrderDirection
   ivodLink: OrderDirection
   ivodStartTime: OrderDirection
@@ -367,8 +363,8 @@ input SpeechUpdateInput {
   date: CalendarDay
   title: String
   slug: String
-  summary: String
-  content: String
+  summary: JSON
+  content: JSON
   attendee: String
   ivodLink: String
   ivodStartTime: String
@@ -415,8 +411,8 @@ input SpeechCreateInput {
   date: CalendarDay
   title: String
   slug: String
-  summary: String
-  content: String
+  summary: JSON
+  content: JSON
   attendee: String
   ivodLink: String
   ivodStartTime: String
@@ -1036,11 +1032,23 @@ input CommitteeMemberCreateInput {
 type ImportRecord {
   id: ID!
   recordName: String
-  listName: String
-  csvData: JSON
+  uploadData: UploaderOutput
   importer: SystemUser
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+type UploaderOutput {
+  listName: ListNameOutputEnum
+  csvData: JSON
+}
+
+enum ListNameOutputEnum {
+  Legislator
+  Topic
+  LegislativeYuanMember
+  Speech
+  CommitteeMember
 }
 
 input ImportRecordWhereUniqueInput {
@@ -1053,24 +1061,39 @@ input ImportRecordWhereInput {
   NOT: [ImportRecordWhereInput!]
   id: IDFilter
   recordName: StringFilter
-  listName: StringFilter
+  uploadData: UploaderFilter
   importer: SystemUserWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
 
+input UploaderFilter {
+  equals: UploaderInput
+}
+
+input UploaderInput {
+  listName: ListNameEnum
+  csvData: JSON
+}
+
+enum ListNameEnum {
+  Legislator
+  Topic
+  LegislativeYuanMember
+  Speech
+  CommitteeMember
+}
+
 input ImportRecordOrderByInput {
   id: OrderDirection
   recordName: OrderDirection
-  listName: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input ImportRecordUpdateInput {
   recordName: String
-  listName: String
-  csvData: JSON
+  uploadData: UploaderInput
   importer: SystemUserRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -1089,8 +1112,7 @@ input ImportRecordUpdateArgs {
 
 input ImportRecordCreateInput {
   recordName: String
-  listName: String
-  csvData: JSON
+  uploadData: UploaderInput
   importer: SystemUserRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
