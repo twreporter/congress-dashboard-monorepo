@@ -4,8 +4,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 // components
 import Tooltip from '@/components/dashboard/card/tooltip'
-import { Triangle, Gap } from '@/components/dashboard/card/skeleton'
+import { Triangle, Gap } from '@/components/skeleton'
 import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+// style
+import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
 // @twreporter
 import {
   MEMBER_TYPE_LABEL,
@@ -57,11 +59,6 @@ const Box = styled.div<{ $selected: boolean; $size: CardSize }>`
       box-shadow: 0px 0px 16px 0px ${colorOpacity['black_0.1']};
     }
   `}
-`
-const textOverflowEllipsisCss = css`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `
 const Title = styled.div`
   display: flex;
@@ -159,7 +156,7 @@ export type CardHumanProps = {
   partyAvatar?: string
   size?: CardSize
   selected?: boolean
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 const CardHuman: React.FC<CardHumanProps> = ({
   name = '',

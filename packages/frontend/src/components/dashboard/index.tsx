@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 // config
 import { mockHumans, mockIssues } from '@/components/dashboard/card/config'
+import {
+  mockSidebarIssueProps,
+  mockSidebarLegislatorProps,
+} from '@/components/sidebar/config'
 // utils
 import toastr from '@/utils/toastr'
 // components
@@ -18,10 +22,12 @@ import {
   CardHumanProps,
   CardHumanSkeletonRWD,
 } from '@/components/dashboard/card/human'
+import { SidebarIssue, SidebarLegislator } from '@/components/sidebar'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { PillButton } from '@twreporter/react-components/lib/button'
+import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 
 const Box = styled.div`
   background: ${colorGrayscale.gray100};
@@ -79,13 +85,32 @@ const LoadMore = styled(PillButton)`
     width: calc(100% - 32px) !important;
   `}
 `
+const sidebarCss = css<{ $show: boolean }>`
+  transform: translateX(
+    ${(props) => (props.$show ? 0 : 520)}px
+  ); //sidebar width 520px
+  transition: transform 1s ease-in-out;
+
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 3000;
+  overflow-y: scroll;
+`
+const StyledSidebarIssue = styled(SidebarIssue)<{ $show: boolean }>`
+  ${sidebarCss}
+`
+const StyledSidebarLegislator = styled(SidebarLegislator)<{ $show: boolean }>`
+  ${sidebarCss}
+`
 
 const Dashboard = () => {
   const [selectedType, setSelectedType] = useState(Option.Issue)
-  const [activeCard, setActiveCard] = useState(-1)
+  const [activeCardIndex, setActiveCardIndex] = useState(-1)
   const [isLoading, setIsLoading] = useState(true)
   const [mockIssue, setMockIssue] = useState<CardIssueProps[]>([])
   const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
+  const [showSidebar, setShowSidebar] = useState(false)
 
   useEffect(() => {
     if (isLoading) {
@@ -103,14 +128,36 @@ const Dashboard = () => {
     setIsLoading(true)
     setMockIssue([])
     setMockHuman([])
+    setShowSidebar(false)
   }, [selectedType])
+  useEffect(() => {
+    if (activeCardIndex > -1) {
+      setShowSidebar(true)
+    }
+  }, [activeCardIndex])
 
   const setTab = (value: Option) => {
-    setActiveCard(-1)
+    setActiveCardIndex(-1)
     setSelectedType(value)
   }
   const loadMore = () => {
     setIsLoading(true)
+  }
+  const closeSidebar = () => {
+    setShowSidebar(false)
+    setActiveCardIndex(-1)
+  }
+  const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
+    setActiveCardIndex(index)
+
+    const cardElement = e.currentTarget as HTMLElement
+    if (cardElement) {
+      cardElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'nearest',
+      })
+    }
   }
 
   return (
@@ -121,8 +168,10 @@ const Dashboard = () => {
           <CardIssueRWD
             key={`issue-card-${index}`}
             {...props}
-            selected={activeCard === index}
-            onClick={() => setActiveCard(index)}
+            selected={activeCardIndex === index}
+            onClick={(e: React.MouseEvent<HTMLElement>) =>
+              onClickCard(e, index)
+            }
           />
         ))}
         {isLoading ? (
@@ -133,14 +182,23 @@ const Dashboard = () => {
             <CardIssueSkeletonRWD />
           </>
         ) : null}
+        <TabletAndAbove>
+          <StyledSidebarIssue
+            $show={showSidebar}
+            {...mockSidebarIssueProps}
+            onClose={closeSidebar}
+          />
+        </TabletAndAbove>
       </CardIssueBox>
       <CardHumanBox $active={selectedType === Option.Human}>
         {mockHuman.map((props: CardHumanProps, index: number) => (
           <CardHumanRWD
             key={`human-card-${index}`}
             {...props}
-            selected={activeCard === index}
-            onClick={() => setActiveCard(index)}
+            selected={activeCardIndex === index}
+            onClick={(e: React.MouseEvent<HTMLElement>) =>
+              onClickCard(e, index)
+            }
           />
         ))}
         {isLoading ? (
@@ -151,6 +209,13 @@ const Dashboard = () => {
             <CardHumanSkeletonRWD />
           </>
         ) : null}
+        <TabletAndAbove>
+          <StyledSidebarLegislator
+            $show={showSidebar}
+            {...mockSidebarLegislatorProps}
+            onClose={closeSidebar}
+          />
+        </TabletAndAbove>
       </CardHumanBox>
       <LoadMore
         text={'載入更多'}
