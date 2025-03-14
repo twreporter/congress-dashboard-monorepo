@@ -38,7 +38,7 @@ const GrayPillButton = styled(PillButton)<{
     `}
 `
 
-type CustomPillButtonProps = {
+export type CustomPillButtonProps = {
   text?: string
   leftIconComponent?: React.ReactNode
   rightIconComponent?: React.ReactNode
