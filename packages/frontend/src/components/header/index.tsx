@@ -146,7 +146,11 @@ const Header: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Container $isHidden={isHeaderHidden} $tabTop={tabTop}>
+      <Container
+        $isHidden={isHeaderHidden}
+        $tabTop={tabTop}
+        className="hidden-print"
+      >
         <HeaderSection>
           <LogoContainer>
             {/* TODO: releaseBranch */}

@@ -167,7 +167,7 @@ const Footer: React.FC = () => {
     )
   }
   return (
-    <StyledFooter>
+    <StyledFooter className="hidden-print">
       <FooterSection>
         <UpperContainer>
           <InfoContainer>
