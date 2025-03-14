@@ -64,3 +64,7 @@ export const Circle = styled(CircleRaw)`
 export const Gap = styled.div<{ $gap: number }>`
   height: ${(props) => props.$gap}px;
 `
+
+export const GapHorizontal = styled.div<{ $gap: number }>`
+  width: ${(props) => props.$gap}px;
+`
