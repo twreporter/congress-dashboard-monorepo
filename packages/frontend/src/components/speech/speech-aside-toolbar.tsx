@@ -162,7 +162,6 @@ type AsideToolbarProps = {
   onFontSizeChange: () => void
   currentFontSize: FontSize
 }
-
 const AsideToolbar: React.FC<AsideToolbarProps> = ({
   onFontSizeChange,
   currentFontSize,

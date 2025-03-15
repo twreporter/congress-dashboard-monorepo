@@ -25,14 +25,14 @@ const GrayPillButton = styled(PillButton)<{
     border-color: ${colorGrayscale.gray600} !important;
     background-color: ${colorGrayscale.gray100} !important;
     svg {
-      background-color: transparent !important;
+      background-color: ${colorGrayscale.gray600} !important;
     }
     &:hover {
       color: ${colorGrayscale.gray800} !important;
       border-color: ${colorGrayscale.gray800} !important;
       background-color: ${colorGrayscale.gray100} !important;
-      svg path {
-        fill: ${colorGrayscale.gray800} !important;
+      svg {
+        background-color: ${colorGrayscale.gray800} !important;
       }
     } 
     `}

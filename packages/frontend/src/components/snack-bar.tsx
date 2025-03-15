@@ -9,6 +9,7 @@ import TwSnackBar from '@twreporter/react-components/lib/snack-bar/components/sn
 import mq from '@twreporter/core/lib/utils/media-query'
 
 const SnackBarContainer = styled.div`
+  pointer-events: none;
   position: fixed;
   bottom: 8px;
   z-index: 1;
