@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/navigation'
 // @twreporter
@@ -21,6 +21,13 @@ import {
   AsideBlock,
   ContentBlock,
   Feedback,
+  ControlTabContainer,
+  ControlTab,
+  DateAndTitle,
+  ControlTabDate,
+  ControlTabTitle,
+  ControlItems,
+  Spacing,
 } from '@/components/speech/styles'
 // components
 import SpeechDate from '@/components/speech/speech-date'
@@ -33,6 +40,13 @@ import SpeechContent from './speech-content'
 import SpeechMobileToolbar from './speech-mobile-toolbar'
 import IconButton from '@/components/button/icon-button'
 import CustomPillButton from '@/components/button/pill-button'
+// context
+import { useScrollContext } from '@/contexts/scroll-context'
+// lodash
+import throttle from 'lodash/throttle'
+const _ = {
+  throttle,
+}
 
 const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
   ${mq.desktopAndAbove`
@@ -122,14 +136,72 @@ export const FontSizeOffset = Object.freeze({
   [FontSize.LARGE]: 4,
 })
 
-export const Direction = {
-  PREV: 'prev',
-  NEXT: 'next',
+export enum Direction {
+  PREV = 'prev',
+  NEXT = 'next',
 }
 
 const SpeechPage = ({ slug }) => {
   const router = useRouter()
+  const leadingRef = useRef<HTMLDivElement>(null)
+  const { setTabElement, isHeaderHidden } = useScrollContext()
   const [fontSize, setFontSize] = useState(FontSize.SMALL)
+  const [isControllBarHidden, setIsControllBarHidden] = useState(true)
+  const [scrollStage, setScrollStage] = useState(1)
+  const lastY = useRef(0)
+  const currentY = useRef(0)
+
+  useEffect(() => {
+    if (leadingRef.current) {
+      setTabElement(leadingRef.current)
+    }
+  }, [setTabElement, leadingRef])
+
+  useEffect(() => {
+    if (!leadingRef.current) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsControllBarHidden(entry.isIntersecting)
+      },
+      {
+        threshold: 0.5,
+      }
+    )
+    observer.observe(leadingRef.current)
+    return () => {
+      observer.disconnect()
+    }
+  }, [leadingRef])
+
+  useEffect(() => {
+    const handleScroll = _.throttle(() => {
+      const scrollThreshold = 16
+      lastY.current = window.pageYOffset
+      const scrollDistance = Math.abs(currentY.current - lastY.current)
+
+      if (scrollDistance < scrollThreshold) {
+        return
+      }
+
+      const scrollDirection = lastY.current > currentY.current ? 'down' : 'up'
+      currentY.current = lastY.current
+
+      if (scrollDirection === 'up') {
+        setScrollStage((prevStage) => (prevStage - 1 < 1 ? 1 : prevStage - 1))
+      } else {
+        setScrollStage((prevStage) => (prevStage + 1 > 3 ? 3 : prevStage + 1))
+      }
+    }, 500)
+
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  const isFirstSpeech = testSpeechOrder.indexOf(slug) === 0
+  const isLastSpeech =
+    testSpeechOrder.indexOf(slug) === testSpeechOrder.length - 1
 
   const cycleFontSize = () => {
     setFontSize((currentSize) => {
@@ -145,7 +217,7 @@ const SpeechPage = ({ slug }) => {
     })
   }
 
-  const handleSwitchSpeech = (direction) => {
+  const handleSwitchSpeech = (direction: Direction) => {
     // TODO: need to changed
     const currentIndex = testSpeechOrder.indexOf(slug)
     if (direction === Direction.PREV && currentIndex > 0) {
@@ -160,20 +232,67 @@ const SpeechPage = ({ slug }) => {
 
   return (
     <SpeechContainer>
-      <LeadingContainer>
+      <ControlTabContainer
+        $isHeaderHidden={isHeaderHidden}
+        $isHidden={isControllBarHidden}
+      >
+        <ControlTab $isHeaderAbove={!isHeaderHidden && !isControllBarHidden}>
+          <DateAndTitle>
+            <ControlTabDate text={testSpeechData[slug].date} />
+            <ControlTabTitle text={testSpeechData[slug].title} />
+          </DateAndTitle>
+          <DesktopAndAbove>
+            <ControlItems>
+              <CustomPillButton
+                onClick={() =>
+                  window.open(testSpeechData[slug].iVODLink, '_blank')
+                }
+                leftIconComponent={<Video releaseBranch={releaseBranch} />}
+                text={'iVOD'}
+              />
+              <Spacing $width={24} />
+              <P1Gray600 text="質詢片段切換" />
+              <Spacing $width={12} />
+              <IconButton
+                disabled={isFirstSpeech}
+                direction={IconButton.Direction.LEFT}
+                onClick={() => handleSwitchSpeech(Direction.PREV)}
+              />
+              <Spacing $width={8} />
+              <IconButton
+                disabled={isLastSpeech}
+                direction={IconButton.Direction.RIGHT}
+                onClick={() => handleSwitchSpeech(Direction.NEXT)}
+              />
+            </ControlItems>
+          </DesktopAndAbove>
+        </ControlTab>
+      </ControlTabContainer>
+      <LeadingContainer ref={leadingRef}>
         <SpeechDate date={testSpeechData[slug].date} />
         <SpeechTitle title={testSpeechData[slug].title} />
         <DesktopAndAboveWithFlex>
           <IvodBlock>
             <CustomPillButton
+              onClick={() =>
+                window.open(testSpeechData[slug].iVODLink, '_blank')
+              }
               leftIconComponent={<Video releaseBranch={releaseBranch} />}
               text={'iVOD'}
             />
             <IvodSwitchBlock>
               <P1Gray600 text="質詢片段切換" />
               <IvodSwitchButtonContainer>
-                <IconButton direction={IconButton.Direction.LEFT} />
-                <IconButton direction={IconButton.Direction.RIGHT} />
+                <IconButton
+                  disabled={isFirstSpeech}
+                  direction={IconButton.Direction.LEFT}
+                  onClick={() => handleSwitchSpeech(Direction.PREV)}
+                />
+                <IconButton
+                  disabled={isLastSpeech}
+                  direction={IconButton.Direction.RIGHT}
+                  onClick={() => handleSwitchSpeech(Direction.NEXT)}
+                />
               </IvodSwitchButtonContainer>
             </IvodSwitchBlock>
           </IvodBlock>
@@ -233,11 +352,10 @@ const SpeechPage = ({ slug }) => {
         <SpeechMobileToolbar
           onFontSizeChange={cycleFontSize}
           iVODLink={testSpeechData[slug].iVODLink}
-          isLastSpeech={
-            testSpeechOrder.indexOf(slug) === testSpeechOrder.length - 1
-          }
-          isFirstSpeech={testSpeechOrder.indexOf(slug) === 0}
+          isLastSpeech={isLastSpeech}
+          isFirstSpeech={isFirstSpeech}
           onSwitchClick={handleSwitchSpeech}
+          scrollStage={scrollStage}
         />
       </TabletAndBelow>
     </SpeechContainer>

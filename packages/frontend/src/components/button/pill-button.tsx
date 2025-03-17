@@ -19,8 +19,10 @@ const GrayPillButton = styled(PillButton)<{
       background-color: ${colorGrayscale.gray400} !important;
     }
     cursor: not-allowed !important;
+    pointer-events: 'none';
     `
       : `
+    pointer-events: auto;
     color: ${colorGrayscale.gray600} !important;
     border-color: ${colorGrayscale.gray600} !important;
     background-color: ${colorGrayscale.gray100} !important;
@@ -44,6 +46,7 @@ export type CustomPillButtonProps = {
   rightIconComponent?: React.ReactNode
   disabled?: boolean
   isLoading?: boolean
+  onClick?: () => void
 }
 const CustomPillButton: React.FC<CustomPillButtonProps> = ({
   text = '',
@@ -51,9 +54,11 @@ const CustomPillButton: React.FC<CustomPillButtonProps> = ({
   rightIconComponent = null,
   disabled = false,
   isLoading = false,
+  onClick = () => {},
 }) => {
   return (
     <GrayPillButton
+      onClick={onClick}
       $disabled={disabled}
       $isLoading={isLoading}
       disabled={disabled}

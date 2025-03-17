@@ -10,6 +10,7 @@ const ButtonContainer = styled.div<{ $disabled?: boolean }>`
   padding: 8px;
   border-radius: 50%;
   background-color: ${colorGrayscale.white};
+  pointer-events: ${(props) => (props.$disabled ? 'none' : 'auto')};
   svg {
     background-color: ${(props) =>
       props.$disabled

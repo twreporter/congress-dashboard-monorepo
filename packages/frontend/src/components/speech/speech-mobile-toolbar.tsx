@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, createContext, useContext } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 // @twreporter
@@ -88,14 +88,17 @@ const SwitchOptionsContainer = styled.div<{ $isShow: boolean }>`
   transform: translateX(-50%);
 `
 
+const MobileToolbarContext = createContext({ hideText: false })
+
 const FeedbackButton = () => {
+  const { hideText } = useContext(MobileToolbarContext)
   return (
     <ButtonContainer>
       <Link href="/feedback">
         <IconWithTextButton
           text="問題回報"
           iconComponent={<Report releaseBranch={releaseBranch} />}
-          hideText={false}
+          hideText={hideText}
         />
       </Link>
     </ButtonContainer>
@@ -104,6 +107,7 @@ const FeedbackButton = () => {
 
 const ShareButton = () => {
   const [isShow, setIsShow] = useState(false)
+  const { hideText } = useContext(MobileToolbarContext)
   const onClick = () => {
     setIsShow(!isShow)
   }
@@ -153,7 +157,7 @@ const ShareButton = () => {
       <IconWithTextButton
         text="分享"
         iconComponent={<Share releaseBranch={releaseBranch} />}
-        hideText={false}
+        hideText={hideText}
       />
       <ShareOptionsContainer $isShow={isShow}>
         <TabBarButton
@@ -183,6 +187,7 @@ const SwitchButton = ({
   onSwitchClick,
 }) => {
   const [isShow, setIsShow] = useState(false)
+  const { hideText } = useContext(MobileToolbarContext)
   const onClick = () => {
     setIsShow(!isShow)
   }
@@ -201,6 +206,7 @@ const SwitchButton = ({
       <IconWithTextButton
         text="切換片段"
         iconComponent={<Switch releaseBranch={releaseBranch} />}
+        hideText={hideText}
       />
       <SwitchOptionsContainer $isShow={isShow}>
         <TabBarButton
@@ -229,24 +235,26 @@ const SwitchButton = ({
 }
 
 const FontSizeButton = ({ onClick }) => {
+  const { hideText } = useContext(MobileToolbarContext)
   return (
     <ButtonContainer onClick={onClick}>
       <IconWithTextButton
         text="文字大小"
         iconComponent={<Text releaseBranch={releaseBranch} />}
-        hideText={false}
+        hideText={hideText}
       />
     </ButtonContainer>
   )
 }
 
 const IVODButton = ({ link }) => {
+  const { hideText } = useContext(MobileToolbarContext)
   return (
     <ButtonContainer onClick={() => window.open(link, '_blank')}>
       <IconWithTextButton
         text="看IVOD"
         iconComponent={<Video releaseBranch={releaseBranch} />}
-        hideText={false}
+        hideText={hideText}
       />
     </ButtonContainer>
   )
@@ -256,7 +264,8 @@ type MobileToolbarProps = {
   iVODLink: string
   isLastSpeech: boolean
   isFirstSpeech: boolean
-  onSwitchClick: (direction: 'prev' | 'next') => void
+  onSwitchClick: (direction: Direction) => void
+  scrollStage: number
 }
 const MobileToolbar: React.FC<MobileToolbarProps> = ({
   onFontSizeChange,
@@ -264,21 +273,28 @@ const MobileToolbar: React.FC<MobileToolbarProps> = ({
   isLastSpeech,
   isFirstSpeech,
   onSwitchClick,
+  scrollStage,
 }) => {
+  const isHidden = scrollStage >= 3
+  const hideText = scrollStage >= 2
+  const contextValue = { hideText }
+
   return (
-    <MobileToolbarContainer $isHidden={false} $hideText={false}>
-      <ToolBar>
-        <FeedbackButton />
-        <ShareButton />
-        <SwitchButton
-          isLastSpeech={isLastSpeech}
-          isFirstSpeech={isFirstSpeech}
-          onSwitchClick={onSwitchClick}
-        />
-        <FontSizeButton onClick={onFontSizeChange} />
-        <IVODButton link={iVODLink} />
-      </ToolBar>
-    </MobileToolbarContainer>
+    <MobileToolbarContext.Provider value={contextValue}>
+      <MobileToolbarContainer $isHidden={isHidden} $hideText={hideText}>
+        <ToolBar>
+          <FeedbackButton />
+          <ShareButton />
+          <SwitchButton
+            isLastSpeech={isLastSpeech}
+            isFirstSpeech={isFirstSpeech}
+            onSwitchClick={onSwitchClick}
+          />
+          <FontSizeButton onClick={onFontSizeChange} />
+          <IVODButton link={iVODLink} />
+        </ToolBar>
+      </MobileToolbarContainer>
+    </MobileToolbarContext.Provider>
   )
 }
 

@@ -9,6 +9,8 @@ const ButtonContainer = styled.div<{
   $disabled?: boolean
   $isLoading?: boolean
 }>`
+  pointer-events: ${(props) =>
+    props.$disabled || props.$isLoading ? 'none' : 'auto'};
   width: 40px;
   height: 40px;
   display: flex;
@@ -83,6 +85,7 @@ type IconButtonProps = {
   direction?: Arrow.Direction
   disabled?: boolean
   isLoading?: boolean
+  onClick?: () => void
 }
 type IconButtonComponent = React.FC<IconButtonProps> & {
   Direction: typeof Arrow.Direction
@@ -91,9 +94,14 @@ const IconButton: IconButtonComponent = ({
   direction = Arrow.Direction.LEFT,
   disabled = false,
   isLoading = false,
+  onClick = () => {},
 }) => {
   return (
-    <ButtonContainer $disabled={disabled} $isLoading={isLoading}>
+    <ButtonContainer
+      $disabled={disabled}
+      $isLoading={isLoading}
+      onClick={onClick}
+    >
       {isLoading ? <LoadingIndicator /> : <Arrow direction={direction} />}
     </ButtonContainer>
   )
