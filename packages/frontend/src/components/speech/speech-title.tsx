@@ -13,7 +13,7 @@ const CustomH1 = styled(H1)`
 type SpeechTitleProps = {
   title: string
 }
-const SpeechTitle: React.FC<SpeechTitleProps> = ({ title = '' }) => {
+const SpeechTitle: React.FC<SpeechTitleProps> = ({ title }) => {
   return <CustomH1 text={title} />
 }
 export default SpeechTitle

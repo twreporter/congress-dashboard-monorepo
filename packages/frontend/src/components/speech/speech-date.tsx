@@ -18,7 +18,7 @@ const CustomP1 = styled(P1)`
 type SpeechDateProps = {
   date: string
 }
-const SpeechDate: React.FC<SpeechDateProps> = ({ date = '' }) => {
+const SpeechDate: React.FC<SpeechDateProps> = ({ date }) => {
   return <CustomP1 weight={P1.Weight.BOLD} text={date} />
 }
 export default SpeechDate
