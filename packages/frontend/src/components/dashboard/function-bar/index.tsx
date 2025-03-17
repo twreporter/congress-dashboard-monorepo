@@ -31,28 +31,21 @@ const HorizaontalLine = styled.div<{
   ${(props) => (props.$isHide ? 'display: none;' : '')}
   width: 100%;
   border-top: 1px solid ${colorGrayscale.gray300};
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 
   ${mq.hdOnly`
     ${(props) =>
-      props.$isHeaderAboveTab || props.$isHeaderHidden
-        ? `
-      width: 1280px;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-    `
-        : ''}
+      props.$isHeaderAboveTab || props.$isHeaderHidden ? 'width: 1280px;' : ''}
+  `}
+  ${mq.desktopOnly`
+    ${(props) =>
+      props.$isHeaderAboveTab || props.$isHeaderHidden ? '' : 'width: 928px;'}
   `}
   ${mq.mobileOnly`
     ${(props) =>
-      props.$isHeaderAboveTab || props.$isHeaderHidden
-        ? `
-      width: 100vw;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-    `
-        : ''}
+      props.$isHeaderAboveTab || props.$isHeaderHidden ? 'width: 100vw;' : ''}
   `}
 `
 const StickyBar = styled.div<{
@@ -64,9 +57,22 @@ const StickyBar = styled.div<{
   background-color: ${colorGrayscale.gray100};
   z-index: ${ZIndex.Bar};
   width: 928px;
+
   ${mq.desktopAndBelow`
     width: 100%;
   `}
+
+  &:before {
+    content: '';
+    width: 100vw;
+    height: 100%;
+    background-color: ${colorGrayscale.gray100};
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+  }
 `
 const Box = styled.div`
   width: 928px;
@@ -74,7 +80,7 @@ const Box = styled.div`
   flex-direction: column;
   justify-self: center;
   gap: 20px;
-  ${mq.desktopAndBelow`
+  ${mq.tabletAndBelow`
     width: 100%;
   `}
 `

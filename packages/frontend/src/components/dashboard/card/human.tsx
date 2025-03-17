@@ -81,10 +81,10 @@ const DetailContainer = styled.div<{ $isShowTag: boolean; $withGap: boolean }>`
   min-width: 0;
   ${(props) => (props.$withGap ? 'gap: 14px;' : '')}
 `
-const TagContainer = styled.div<{ $size: CardSize }>`
+const TagContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: ${(props) => (props.$size === CardSize.S ? 8 : 12)}px;
+  gap: 8px;
   overflow-y: hidden;
   flex-wrap: wrap;
 `
@@ -182,7 +182,8 @@ const CardHuman: React.FC<CardHumanProps> = ({
       const calculateVisibleTags = _.throttle(() => {
         if (!tagBox) return
         // tags can show at least two lines
-        const availableWidth = tagBox.clientWidth * 2
+        const availableLines = size === CardSize.L ? 3 : 2
+        const availableWidth = tagBox.clientWidth * availableLines
         // Calculate how many tags can fit
         let totalWidth = 0
         let count = 0
@@ -246,7 +247,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
           <Type text={MEMBER_TYPE_LABEL[type]} />
         </div>
         {isShowTag ? (
-          <TagContainer $size={size} ref={tagBoxRef}>
+          <TagContainer ref={tagBoxRef}>
             {visibleTags.map(({ name, count }: Tag, index: number) => {
               return (
                 <TagItem

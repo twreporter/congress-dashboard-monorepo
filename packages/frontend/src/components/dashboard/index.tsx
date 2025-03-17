@@ -53,7 +53,7 @@ const Box = styled.div`
 const cardCss = css`
   width: 928px;
 
-  ${mq.desktopAndBelow`
+  ${mq.tabletAndBelow`
     width: 100%;
   `}
 `
@@ -124,7 +124,7 @@ const CardSection = styled.div<{ $isScroll: boolean }>`
       : ''}
 
   max-width: 928px;
-  ${mq.desktopAndBelow`
+  ${mq.tabletAndBelow`
     max-width: 100%;  
   `}
 
@@ -133,6 +133,7 @@ const CardSection = styled.div<{ $isScroll: boolean }>`
   }
 `
 
+const anchorId = 'anchor-id'
 const Dashboard = () => {
   const [selectedType, setSelectedType] = useState(Option.Issue)
   const [activeCardIndex, setActiveCardIndex] = useState(-1)
@@ -168,6 +169,12 @@ const Dashboard = () => {
   const setTab = (value: Option) => {
     setActiveCardIndex(-1)
     setSelectedType(value)
+
+    // scroll to top when change tab
+    const anchorComponent = document.getElementById(anchorId)
+    if (anchorComponent) {
+      anchorComponent.scrollIntoView({ behavior: 'smooth' })
+    }
   }
   const loadMore = () => {
     setIsLoading(true)
@@ -181,7 +188,11 @@ const Dashboard = () => {
 
     const cardElement = e.currentTarget as HTMLElement
     if (cardElement) {
-      cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      cardElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'start',
+      })
       if (!showSidebar && selectedType === Option.Human) {
         window.setTimeout(() => {
           cardElement.scrollIntoView({
@@ -195,7 +206,7 @@ const Dashboard = () => {
   }
 
   return (
-    <Box>
+    <Box id={anchorId}>
       <FunctionBar currentTab={selectedType} setTab={setTab} />
       <CardSection $isScroll={showSidebar}>
         <CardBox>
