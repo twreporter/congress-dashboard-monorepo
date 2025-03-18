@@ -112,6 +112,8 @@ const Spacing = styled.div<{ $width?: number; $height?: number }>`
   height: ${(props) => (props.$height ? props.$height : 0)}px;
 `
 
+//
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 // Constants
 const menuLinks = COMMON_MENU_LINKS
 const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS
@@ -120,8 +122,8 @@ const Header: React.FC = () => {
   const { isHeaderHidden, tabTop } = useScrollContext()
   const windowWidth = useWindowWidth()
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
-  const hamburgerIcon = <Hamburger releaseBranch={'master'} /> //TODO: releaseBranch
-  const crossIcon = <Cross releaseBranch={'master'} /> //TODO: releaseBranch
+  const hamburgerIcon = <Hamburger releaseBranch={releaseBranch} />
+  const crossIcon = <Cross releaseBranch={releaseBranch} />
   const handleHamburgerOnClick = useCallback(() => {
     setIsHamburgerOpen((prev) => !prev)
   }, [])
@@ -153,9 +155,8 @@ const Header: React.FC = () => {
       >
         <HeaderSection>
           <LogoContainer>
-            {/* TODO: releaseBranch */}
             <Link href={'https://www.twreporter.org/'} target={'_blank'}>
-              <LogoHeader />
+              <LogoHeader releaseBranch={releaseBranch} />
             </Link>
           </LogoContainer>
           <TabletAndAbove>

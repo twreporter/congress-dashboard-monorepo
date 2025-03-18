@@ -4,7 +4,7 @@ import styled from 'styled-components'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 // constants
-import { FontSize, FontSizeOffset } from '.'
+import { FontSize, FontSizeOffset } from '@/components/speech'
 
 const Container = styled.section<{ $fontSizeOffset: number }>`
   display: flex;

@@ -9,6 +9,11 @@ const meta: Meta<typeof IconButton> = {
     disabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
   },
+  parameters: {
+    controls: {
+      exclude: ['onClick'],
+    },
+  },
 }
 export default meta
 

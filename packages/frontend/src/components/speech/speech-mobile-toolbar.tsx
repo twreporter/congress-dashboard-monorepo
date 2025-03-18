@@ -23,7 +23,7 @@ import TabBarButton from '../button/tab-bar-button'
 // toastr
 import toastr from '@/utils/toastr'
 // constants
-import { Direction } from '.'
+import { Direction } from '@/components/speech'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
@@ -90,7 +90,7 @@ const SwitchOptionsContainer = styled.div<{ $isShow: boolean }>`
 
 const MobileToolbarContext = createContext({ hideText: false })
 
-const FeedbackButton = () => {
+const FeedbackButton: React.FC = () => {
   const { hideText } = useContext(MobileToolbarContext)
   return (
     <ButtonContainer>
@@ -105,7 +105,7 @@ const FeedbackButton = () => {
   )
 }
 
-const ShareButton = () => {
+const ShareButton: React.FC = () => {
   const [isShow, setIsShow] = useState(false)
   const { hideText } = useContext(MobileToolbarContext)
   const onClick = () => {
@@ -181,7 +181,12 @@ const ShareButton = () => {
   )
 }
 
-const SwitchButton = ({
+type SwitchButtonProps = {
+  isLastSpeech?: boolean
+  isFirstSpeech?: boolean
+  onSwitchClick: (direction: Direction) => void
+}
+const SwitchButton: React.FC<SwitchButtonProps> = ({
   isLastSpeech = false,
   isFirstSpeech = false,
   onSwitchClick,
@@ -234,7 +239,10 @@ const SwitchButton = ({
   )
 }
 
-const FontSizeButton = ({ onClick }) => {
+type FontSizeButtonProps = {
+  onClick: () => void
+}
+const FontSizeButton: React.FC<FontSizeButtonProps> = ({ onClick }) => {
   const { hideText } = useContext(MobileToolbarContext)
   return (
     <ButtonContainer onClick={onClick}>
@@ -247,7 +255,10 @@ const FontSizeButton = ({ onClick }) => {
   )
 }
 
-const IVODButton = ({ link }) => {
+type IVODButtonProps = {
+  link: string
+}
+const IVODButton: React.FC<IVODButtonProps> = ({ link }) => {
   const { hideText } = useContext(MobileToolbarContext)
   return (
     <ButtonContainer onClick={() => window.open(link, '_blank')}>
@@ -259,6 +270,7 @@ const IVODButton = ({ link }) => {
     </ButtonContainer>
   )
 }
+
 type MobileToolbarProps = {
   onFontSizeChange: () => void
   iVODLink: string

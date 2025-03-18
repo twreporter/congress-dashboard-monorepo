@@ -35,9 +35,9 @@ import SpeechTitle from '@/components/speech/speech-title'
 import SpeechAsideInfo from '@/components/speech/speech-aside-info'
 import SpeechAsideToolBar from '@/components/speech/speech-aside-toolbar'
 import SpeechSummary from '@/components/speech/speech-summary'
-import SeparationCurve from './separation-curve'
-import SpeechContent from './speech-content'
-import SpeechMobileToolbar from './speech-mobile-toolbar'
+import SeparationCurve from '@/components/speech/separation-curve'
+import SpeechContent from '@/components/speech/speech-content'
+import SpeechMobileToolbar from '@/components/speech/speech-mobile-toolbar'
 import IconButton from '@/components/button/icon-button'
 import CustomPillButton from '@/components/button/pill-button'
 // context
@@ -141,7 +141,10 @@ export enum Direction {
   NEXT = 'next',
 }
 
-const SpeechPage = ({ slug }) => {
+type SpeechPageProps = {
+  slug: string
+}
+const SpeechPage: React.FC<SpeechPageProps> = ({ slug }) => {
   const router = useRouter()
   const leadingRef = useRef<HTMLDivElement>(null)
   const { setTabElement, isHeaderHidden } = useScrollContext()
