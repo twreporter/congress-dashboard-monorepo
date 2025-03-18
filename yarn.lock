@@ -6134,8 +6134,10 @@ __metadata:
     "@keystone-6/core": "npm:^6.0.0"
     "@keystone-6/fields-document": "npm:^9.0.0"
     "@twreporter/congress-dashboard-shared": "npm:0.0.2-beta.0"
+    "@types/papaparse": "npm:^5"
     changelog-maker: "npm:^4.1.1"
     lodash: "npm:^4.17.21"
+    papaparse: "npm:^5.5.2"
     react-transition-group: "npm:^4.4.2"
     typescript: "npm:^5.5.0"
   languageName: unknown
@@ -6156,8 +6158,8 @@ __metadata:
     "@storybook/react": "npm:^8.5.1"
     "@storybook/test": "npm:^8.5.1"
     "@twreporter/congress-dashboard-shared": "npm:0.0.2-beta.0"
-    "@twreporter/core": "npm:^1.24.3-rc.0"
-    "@twreporter/react-components": "npm:^9.6.0-rc.0"
+    "@twreporter/core": "npm:^1.24.4-rc.0"
+    "@twreporter/react-components": "npm:^9.6.0-rc.1"
     "@types/lodash": "npm:^4"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
@@ -6191,18 +6193,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@twreporter/core@npm:^1.24.3-rc.0":
-  version: 1.24.3-rc.0
-  resolution: "@twreporter/core@npm:1.24.3-rc.0"
+"@twreporter/core@npm:^1.24.4-rc.0":
+  version: 1.24.4-rc.0
+  resolution: "@twreporter/core@npm:1.24.4-rc.0"
   dependencies:
     lodash: "npm:^4.0.0"
     prop-types: "npm:^15.0.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-  checksum: 10c0/a43586464ffea81ad52439f1b700760ecee6e96d7f4217b46b4ec759f56df4b8d5d95a85ff553f1cebe29c7525e3079a4be3f11f531debc5ee8db93049b5bfa1
+  checksum: 10c0/e43d7d88af70a80cf68724339981819ff2a3e542863202e8d4256d5b4c0eb62d5d0cb06d4e085cdc787df32912f61415db792612439a77ddb19a9ab61325ee1c
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@twreporter/core@npm:^1.24.4-rc.0":
   version: 1.24.4-rc.0
   resolution: "@twreporter/core@npm:1.24.4-rc.0"
@@ -6219,6 +6222,12 @@ __metadata:
   version: 9.6.0-rc.0
   resolution: "@twreporter/react-components@npm:9.6.0-rc.0"
   dependencies:
+=======
+"@twreporter/react-components@npm:^9.6.0-rc.1":
+  version: 9.6.0-rc.1
+  resolution: "@twreporter/react-components@npm:9.6.0-rc.1"
+  dependencies:
+>>>>>>> upstream/dev
     "@twreporter/core": "npm:^1.24.4-rc.0"
     "@twreporter/redux": "npm:^8.3.3-rc.0"
     fontfaceobserver-es: "npm:^3.3.3"
@@ -6233,7 +6242,11 @@ __metadata:
     react-waypoint: "npm:^10.3.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
+<<<<<<< HEAD
   checksum: 10c0/019737df35183cb13b089b39573ff2ed12ba8ce9001cb886a078eb9fdb30f06403c6508c44c56343528028f34cdb3c30b377f7c38ab84cd6c684ea75eca0d92e
+=======
+  checksum: 10c0/1ba9b13b10d9fb549aa0a17ad7cc14ab7913aa6b136bc22bef43105ba9b8fbdda9049281cec0ffcfc023873ab72a99905bff79bc651b3af21ae0f3516176b337
+>>>>>>> upstream/dev
   languageName: node
   linkType: hard
 
@@ -6586,6 +6599,15 @@ __metadata:
   version: 0.11.4
   resolution: "@types/object-path@npm:0.11.4"
   checksum: 10c0/fb7f71b170013cf23d323782f12d25e8fa3e2d4048ee3d4d71ca7fe9c553ceeaaa720560bae9925a1c6b893f6d02bbaefad6d68be52c0bd6b136722a5baba77d
+  languageName: node
+  linkType: hard
+
+"@types/papaparse@npm:^5":
+  version: 5.3.15
+  resolution: "@types/papaparse@npm:5.3.15"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/9333e980b9ed4102f80b1791b6dfefb23fb4d27252b2b6ee6084b2cd847cbe802cfb838d46b4f6b4cb035f9225e0323034c956ee21bbcbcb4cbdb663302d5eeb
   languageName: node
   linkType: hard
 
@@ -16275,6 +16297,13 @@ __metadata:
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
   checksum: 10c0/86dd99d8b34c3930345b8bbeb5e1cd8a05f608eeb40967b293f72fe469d0e9c88b783a8777e4cc7dc7c91ce54c5e93d88ff4b4f060e6ff18408fd21030d9ffbe
+  languageName: node
+  linkType: hard
+
+"papaparse@npm:^5.5.2":
+  version: 5.5.2
+  resolution: "papaparse@npm:5.5.2"
+  checksum: 10c0/83b8c0cf570395581a42331cd9231194dbba43bc8c608026739f5180827506575993dc788def039a9666bc103e2a96075de8732ea8a63e507b74c02aa757bcd5
   languageName: node
   linkType: hard
 

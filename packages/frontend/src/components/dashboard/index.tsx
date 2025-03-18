@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 // config
 import { mockHumans, mockIssues } from '@/components/dashboard/card/config'
+import {
+  mockSidebarIssueProps,
+  mockSidebarLegislatorProps,
+} from '@/components/sidebar/config'
 // utils
 import toastr from '@/utils/toastr'
 // components
@@ -18,10 +22,13 @@ import {
   CardHumanProps,
   CardHumanSkeletonRWD,
 } from '@/components/dashboard/card/human'
+import { SidebarIssue, SidebarLegislator } from '@/components/sidebar'
+import { GapHorizontal } from '@/components/skeleton'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { PillButton } from '@twreporter/react-components/lib/button'
+import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 
 const Box = styled.div`
   background: ${colorGrayscale.gray100};
@@ -46,19 +53,23 @@ const Box = styled.div`
 const cardCss = css`
   width: 928px;
 
-  ${mq.desktopAndBelow`
+  ${mq.tabletAndBelow`
     width: 100%;
   `}
 `
-const CardIssueBox = styled.div<{ $active: boolean }>`
+const CardBox = styled.div`
   ${cardCss}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const CardIssueBox = styled.div<{ $active: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 24px;
   ${(props) => (props.$active ? '' : 'display: none !important;')}
 `
 const CardHumanBox = styled.div<{ $active: boolean }>`
-  ${cardCss}
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 24px;
@@ -79,13 +90,57 @@ const LoadMore = styled(PillButton)`
     width: calc(100% - 32px) !important;
   `}
 `
+const sidebarCss = css<{ $show: boolean }>`
+  transform: translateX(
+    ${(props) => (props.$show ? 0 : 520)}px
+  ); //sidebar width 520px
+  transition: transform 0.5s ease-in-out;
 
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 3000;
+  overflow-y: scroll;
+`
+const StyledSidebarIssue = styled(SidebarIssue)<{ $show: boolean }>`
+  ${sidebarCss}
+`
+const StyledSidebarLegislator = styled(SidebarLegislator)<{ $show: boolean }>`
+  ${sidebarCss}
+`
+const Gap = styled(GapHorizontal)<{ $show: boolean }>`
+  ${(props) => (props.$show ? '' : 'width: 0;')}
+  transition: width 0.5s ease-in-out;
+`
+const CardSection = styled.div<{ $isScroll: boolean }>`
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  ${(props) =>
+    props.$isScroll
+      ? `
+    overflow-x: scroll;
+  `
+      : ''}
+
+  max-width: 928px;
+  ${mq.tabletAndBelow`
+    max-width: 100%;  
+  `}
+
+  ${CardBox}, ${Gap} {
+    flex: none;
+  }
+`
+
+const anchorId = 'anchor-id'
 const Dashboard = () => {
   const [selectedType, setSelectedType] = useState(Option.Issue)
-  const [activeCard, setActiveCard] = useState(-1)
+  const [activeCardIndex, setActiveCardIndex] = useState(-1)
   const [isLoading, setIsLoading] = useState(true)
   const [mockIssue, setMockIssue] = useState<CardIssueProps[]>([])
   const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
+  const [showSidebar, setShowSidebar] = useState(false)
 
   useEffect(() => {
     if (isLoading) {
@@ -103,63 +158,123 @@ const Dashboard = () => {
     setIsLoading(true)
     setMockIssue([])
     setMockHuman([])
+    setShowSidebar(false)
   }, [selectedType])
+  useEffect(() => {
+    if (activeCardIndex > -1) {
+      setShowSidebar(true)
+    }
+  }, [activeCardIndex])
 
   const setTab = (value: Option) => {
-    setActiveCard(-1)
+    setActiveCardIndex(-1)
     setSelectedType(value)
+
+    // scroll to top when change tab
+    const anchorComponent = document.getElementById(anchorId)
+    if (anchorComponent) {
+      anchorComponent.scrollIntoView({ behavior: 'smooth' })
+    }
   }
   const loadMore = () => {
     setIsLoading(true)
   }
+  const closeSidebar = () => {
+    setShowSidebar(false)
+    setActiveCardIndex(-1)
+  }
+  const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
+    setActiveCardIndex(index)
+
+    const cardElement = e.currentTarget as HTMLElement
+    if (cardElement) {
+      cardElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'start',
+      })
+      if (!showSidebar && selectedType === Option.Human) {
+        window.setTimeout(() => {
+          cardElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'start',
+          })
+        }, 500)
+      }
+    }
+  }
 
   return (
-    <Box>
+    <Box id={anchorId}>
       <FunctionBar currentTab={selectedType} setTab={setTab} />
-      <CardIssueBox $active={selectedType === Option.Issue}>
-        {mockIssue.map((props: CardIssueProps, index) => (
-          <CardIssueRWD
-            key={`issue-card-${index}`}
-            {...props}
-            selected={activeCard === index}
-            onClick={() => setActiveCard(index)}
+      <CardSection $isScroll={showSidebar}>
+        <CardBox>
+          <CardIssueBox $active={selectedType === Option.Issue}>
+            {mockIssue.map((props: CardIssueProps, index) => (
+              <CardIssueRWD
+                key={`issue-card-${index}`}
+                {...props}
+                selected={activeCardIndex === index}
+                onClick={(e: React.MouseEvent<HTMLElement>) =>
+                  onClickCard(e, index)
+                }
+              />
+            ))}
+            {isLoading ? (
+              <>
+                <CardIssueSkeletonRWD />
+                <CardIssueSkeletonRWD />
+                <CardIssueSkeletonRWD />
+                <CardIssueSkeletonRWD />
+              </>
+            ) : null}
+            <TabletAndAbove>
+              <StyledSidebarIssue
+                $show={showSidebar}
+                {...mockSidebarIssueProps}
+                onClose={closeSidebar}
+              />
+            </TabletAndAbove>
+          </CardIssueBox>
+          <CardHumanBox $active={selectedType === Option.Human}>
+            {mockHuman.map((props: CardHumanProps, index: number) => (
+              <CardHumanRWD
+                key={`human-card-${index}`}
+                {...props}
+                selected={activeCardIndex === index}
+                onClick={(e: React.MouseEvent<HTMLElement>) =>
+                  onClickCard(e, index)
+                }
+              />
+            ))}
+            {isLoading ? (
+              <>
+                <CardHumanSkeletonRWD />
+                <CardHumanSkeletonRWD />
+                <CardHumanSkeletonRWD />
+                <CardHumanSkeletonRWD />
+              </>
+            ) : null}
+            <TabletAndAbove>
+              <StyledSidebarLegislator
+                $show={showSidebar}
+                {...mockSidebarLegislatorProps}
+                onClose={closeSidebar}
+              />
+            </TabletAndAbove>
+          </CardHumanBox>
+          <LoadMore
+            text={'載入更多'}
+            theme={PillButton.THEME.normal}
+            style={PillButton.Style.DARK}
+            type={PillButton.Type.PRIMARY}
+            size={PillButton.Size.L}
+            onClick={loadMore}
           />
-        ))}
-        {isLoading ? (
-          <>
-            <CardIssueSkeletonRWD />
-            <CardIssueSkeletonRWD />
-            <CardIssueSkeletonRWD />
-            <CardIssueSkeletonRWD />
-          </>
-        ) : null}
-      </CardIssueBox>
-      <CardHumanBox $active={selectedType === Option.Human}>
-        {mockHuman.map((props: CardHumanProps, index: number) => (
-          <CardHumanRWD
-            key={`human-card-${index}`}
-            {...props}
-            selected={activeCard === index}
-            onClick={() => setActiveCard(index)}
-          />
-        ))}
-        {isLoading ? (
-          <>
-            <CardHumanSkeletonRWD />
-            <CardHumanSkeletonRWD />
-            <CardHumanSkeletonRWD />
-            <CardHumanSkeletonRWD />
-          </>
-        ) : null}
-      </CardHumanBox>
-      <LoadMore
-        text={'載入更多'}
-        theme={PillButton.THEME.normal}
-        style={PillButton.Style.DARK}
-        type={PillButton.Type.PRIMARY}
-        size={PillButton.Size.L}
-        onClick={loadMore}
-      />
+        </CardBox>
+        <Gap $gap={520} $show={showSidebar} />
+      </CardSection>
     </Box>
   )
 }

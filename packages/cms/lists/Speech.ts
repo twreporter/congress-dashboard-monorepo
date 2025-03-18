@@ -1,5 +1,5 @@
 import { list } from '@keystone-6/core'
-import { text, relationship, calendarDay } from '@keystone-6/core/fields'
+import { text, relationship, calendarDay, json } from '@keystone-6/core/fields'
 import { allowAllRoles } from './utils/access-control-list'
 import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
 
@@ -39,11 +39,11 @@ const listConfigurations = list({
       isIndexed: true,
     }),
     slug: SLUG,
-    summary: text({
+    summary: json({
       label: '摘要',
     }),
     // TODO: change to editor
-    content: text({
+    content: json({
       label: '內文',
     }),
     attendee: text({

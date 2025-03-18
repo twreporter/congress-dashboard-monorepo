@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.0.2-beta.3, 2025-03-18
+
+### Notable Changes
+
+- feat
+  - add csv uploader custom field
+  - add papaparse to read csv file
+  - use custom field for import record and change speech content and summary type
+  - migration file
+  - allow admin to delete import record
+- fix
+  - fix comments
+
+### Commits
+
+- [[`d6bc98d572`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d6bc98d572)] - **fix(cms)**: fix comments (Lucien)
+- [[`0bb044ef58`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0bb044ef58)] - Merge remote-tracking branch 'upstream/dev' into feature/cms-upload-2 (Lucien)
+- [[`a4814d8e56`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4814d8e56)] - **feat(cms)**: allow admin to delete import record (Lucien)
+- [[`ddc0d509e1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ddc0d509e1)] - **feat(cms)**: migration file (Lucien)
+- [[`5008b0fd9d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5008b0fd9d)] - **feat(cms)**: use custom field for import record and change speech content and summary type (Lucien)
+- [[`e8eb2c9b16`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8eb2c9b16)] - **feat(cms)**: add papaparse to read csv file (Lucien)
+- [[`e1ca584a09`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1ca584a09)] - **feat(cms)**: add csv uploader custom field (Lucien)
+
 ## 0.0.2-beta.2, 2025-03-05
 
 ### Notable Changes
