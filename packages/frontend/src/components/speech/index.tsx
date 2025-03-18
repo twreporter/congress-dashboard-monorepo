@@ -236,6 +236,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ slug }) => {
   return (
     <SpeechContainer>
       <ControlTabContainer
+        className="hidden-print"
         $isHeaderHidden={isHeaderHidden}
         $isHidden={isControllBarHidden}
       >
@@ -351,7 +352,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ slug }) => {
           </Feedback>
         </DesktopAndAboveWithFlex>
       </BodyContainer>
-      <TabletAndBelow>
+      <TabletAndBelow className="hidden-print">
         <SpeechMobileToolbar
           onFontSizeChange={cycleFontSize}
           iVODLink={testSpeechData[slug].iVODLink}

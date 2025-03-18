@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.0.2-beta.5, 2025-03-19
+
+### Notable Changes
+
+- fix
+  - add header max top and hidden print for toolbar
+
+### Commits
+
+- [[`7fbcd57147`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7fbcd57147)] - Merge remote-tracking branch 'upstream/dev' into fix/frontend-speech-defetc-1 (Lucien)
+- [[`3979b03610`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3979b03610)] - **fix(frontend)**: add header max top and hidden print for toolbar (Lucien)
+
 ## 0.0.2-beta.4, 2025-03-19
 
 ### Notable Changes
@@ -9,7 +21,7 @@
 
 ### Commits
 
-- \[[`313563e4eb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/313563e4eb)] - **fix(frontend)**: remove inline comment in css (Aylie Chou)
+- [[`313563e4eb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/313563e4eb)] - **fix(frontend)**: remove inline comment in css (Aylie Chou)
 
 ## 0.0.2-beta.3, 2025-03-18
 
@@ -55,7 +67,7 @@
 
 ###
 
-- \[[`6d2d137b83`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6d2d137b83)] - **fix(frontend)**: build failed problem (Aylie Chou)
+- [[`6d2d137b83`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6d2d137b83)] - **fix(frontend)**: build failed problem (Aylie Chou)
 
 ## 0.0.2-beta.1, 2025-03-18
 
@@ -68,11 +80,11 @@
 
 ### Commits
 
-- \[[`c7a8f86d32`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c7a8f86d32)] - **fix(frontend)**: use correct icon in `titleSection` (Aylie Chou)
-- \[[`82e2ba5930`](https://github.com/twreporter/congress-dashboard-monorepo/commit/82e2ba5930)] - **chore(frontend)**: update @twreporter packages (Aylie Chou)
-- \[[`5c2d6a14cb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5c2d6a14cb)] - **fix(frontend)**: style defects in home page (Aylie Chou)
-- \[[`83b44ebddb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/83b44ebddb)] - **fix(frontend)**: add horizontal gap for interaction (Aylie Chou)
-- \[[`f04ed98ee6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f04ed98ee6)] - **feat**: add sidebar components & stories (Aylie Chou)
+- [[`c7a8f86d32`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c7a8f86d32)] - **fix(frontend)**: use correct icon in `titleSection` (Aylie Chou)
+- [[`82e2ba5930`](https://github.com/twreporter/congress-dashboard-monorepo/commit/82e2ba5930)] - **chore(frontend)**: update @twreporter packages (Aylie Chou)
+- [[`5c2d6a14cb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5c2d6a14cb)] - **fix(frontend)**: style defects in home page (Aylie Chou)
+- [[`83b44ebddb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/83b44ebddb)] - **fix(frontend)**: add horizontal gap for interaction (Aylie Chou)
+- [[`f04ed98ee6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f04ed98ee6)] - **feat**: add sidebar components & stories (Aylie Chou)
 
 ## 0.0.2-beta.0, 2025-03-18
 
@@ -83,7 +95,7 @@
 
 ### Commits
 
-- \[[`f5c959c355`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f5c959c355)] - **feat**: add search bar to header & hamburger menu (Aylie Chou)
+- [[`f5c959c355`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f5c959c355)] - **feat**: add search bar to header & hamburger menu (Aylie Chou)
 
 ## 0.0.1-beta.14, 2025-03-07
 
