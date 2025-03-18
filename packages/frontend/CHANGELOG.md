@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.2-beta.4, 2025-03-19
+
+### Notable Changes
+
+- fix
+  - remove inline comment in css
+
+### Commits
+
+- \[[`313563e4eb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/313563e4eb)] - **fix(frontend)**: remove inline comment in css (Aylie Chou)
+
 ## 0.0.2-beta.3, 2025-03-18
 
 ### Notable Changes

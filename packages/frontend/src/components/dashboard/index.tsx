@@ -91,9 +91,7 @@ const LoadMore = styled(PillButton)`
   `}
 `
 const sidebarCss = css<{ $show: boolean }>`
-  transform: translateX(
-    ${(props) => (props.$show ? 0 : 520)}px
-  ); //sidebar width 520px
+  transform: translateX(${(props) => (props.$show ? 0 : 520)}px);
   transition: transform 0.5s ease-in-out;
 
   position: fixed;
