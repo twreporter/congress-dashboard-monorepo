@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.2-beta.0, 2025-03-18
+
+### Notable Changes
+
+- feat
+  - add search bar to header & hamburger menu
+
+### Commits
+
+- \[[`f5c959c355`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f5c959c355)] - **feat**: add search bar to header & hamburger menu (Aylie Chou)
+
 ## 0.0.1-beta.14, 2025-03-07
 
 ### Notable Changes
