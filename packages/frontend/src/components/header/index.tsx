@@ -133,8 +133,6 @@ const SearchContainer = styled.div<{
   z-index: ${(props) => (props.$isOpen ? 999 : -1)};
 `
 
-//
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 // Constants
 const menuLinks = COMMON_MENU_LINKS
 const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS

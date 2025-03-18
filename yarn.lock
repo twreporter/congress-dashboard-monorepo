@@ -6205,29 +6205,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-"@twreporter/core@npm:^1.24.4-rc.0":
-  version: 1.24.4-rc.0
-  resolution: "@twreporter/core@npm:1.24.4-rc.0"
-  dependencies:
-    lodash: "npm:^4.0.0"
-    prop-types: "npm:^15.0.0"
-    styled-components: "npm:^6.0.0"
-    stylis: "npm:^4.0.0"
-  checksum: 10c0/e43d7d88af70a80cf68724339981819ff2a3e542863202e8d4256d5b4c0eb62d5d0cb06d4e085cdc787df32912f61415db792612439a77ddb19a9ab61325ee1c
-  languageName: node
-  linkType: hard
-
-"@twreporter/react-components@npm:^9.6.0-rc.0":
-  version: 9.6.0-rc.0
-  resolution: "@twreporter/react-components@npm:9.6.0-rc.0"
-  dependencies:
-=======
 "@twreporter/react-components@npm:^9.6.0-rc.1":
   version: 9.6.0-rc.1
   resolution: "@twreporter/react-components@npm:9.6.0-rc.1"
   dependencies:
->>>>>>> upstream/dev
     "@twreporter/core": "npm:^1.24.4-rc.0"
     "@twreporter/redux": "npm:^8.3.3-rc.0"
     fontfaceobserver-es: "npm:^3.3.3"
@@ -6242,11 +6223,7 @@ __metadata:
     react-waypoint: "npm:^10.3.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-<<<<<<< HEAD
-  checksum: 10c0/019737df35183cb13b089b39573ff2ed12ba8ce9001cb886a078eb9fdb30f06403c6508c44c56343528028f34cdb3c30b377f7c38ab84cd6c684ea75eca0d92e
-=======
   checksum: 10c0/1ba9b13b10d9fb549aa0a17ad7cc14ab7913aa6b136bc22bef43105ba9b8fbdda9049281cec0ffcfc023873ab72a99905bff79bc651b3af21ae0f3516176b337
->>>>>>> upstream/dev
   languageName: node
   linkType: hard
 
