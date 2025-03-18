@@ -43,7 +43,7 @@ const Container = styled.header.attrs<{
 }>((props) => ({
   style: {
     top: props.$isHidden
-      ? `calc(${props.$tabTop}px - ${HEADER_HEIGHT}px)`
+      ? `max(calc(${props.$tabTop}px - ${HEADER_HEIGHT}px), -${HEADER_HEIGHT}px)`
       : '0px',
   },
 }))`
