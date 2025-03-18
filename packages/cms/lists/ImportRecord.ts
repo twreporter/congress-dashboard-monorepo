@@ -5,15 +5,79 @@ import { text, relationship } from '@keystone-6/core/fields'
 import { allowAllRoles, denyRoles } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import {
-  validateCsvStructure,
-  formatValidationErrors,
-} from './utils/csv-validator'
-import {
   uploader,
   ListName,
   expectedHeaders,
   requiredFields,
 } from './fields/uploader'
+
+/**
+ * Validate CSV structure against expected headers and required fields
+ */
+const validateCsvStructure = (
+  csvData: string[][],
+  listName: string,
+  expectedHeaders: Record<string, string[]>,
+  requiredFields: Record<string, string[]>
+) => {
+  const errors = []
+  const csvHeader = csvData[0]
+
+  // Validate headers
+  const expectedHeadersArray = expectedHeaders[listName]
+  if (
+    csvHeader.length !== expectedHeadersArray.length ||
+    !csvHeader.every((header, index) => header === expectedHeadersArray[index])
+  ) {
+    errors.push(
+      `CSV 檔案標題格式不符\n上傳內容標題: ${csvHeader.join(
+        ','
+      )}\n規格標題應為: ${expectedHeadersArray.join(
+        ','
+      )}\n請確認標題順序是否正確`
+    )
+    return errors // Early return for header problems
+  }
+
+  // Validate required fields and row structure
+  const headerLength = csvHeader.length
+  for (let i = 1; i < csvData.length; i++) {
+    const row = csvData[i]
+
+    // Skip empty rows (could be trailing newlines)
+    if (row.length === 0 || (row.length === 1 && row[0] === '')) {
+      continue
+    }
+
+    // Check if row length matches header length
+    if (row.length !== headerLength) {
+      errors.push(`第 ${i + 1} 行: 欄位數量不符`)
+      continue
+    }
+
+    // Check for empty cells in required fields
+    if (requiredFields[listName]) {
+      for (let j = 0; j < row.length; j++) {
+        const fieldName = csvHeader[j]
+        if (requiredFields[listName].includes(fieldName) && row[j] === '') {
+          errors.push(`第 ${i + 1} 行: 必填欄位 "${fieldName}" 為空`)
+          break
+        }
+      }
+    }
+  }
+
+  return errors
+}
+
+/**
+ * Format validation errors into a readable message
+ */
+const formatValidationErrors = (errors: string[]) => {
+  if (errors.length === 0) return ''
+
+  return `CSV 檔案含有錯誤:\n${errors.join('\n')}`
+}
 
 const validateListSpecificData: Record<
   ListName,
@@ -31,14 +95,14 @@ const validateListSpecificData: Record<
     const validationErrors: string[] = []
     await Promise.all(
       csvData
-        .slice(1)
+        .slice(1) // exclude header row
         .map(
           async (
             [legislator_slug, party_slug, legislativeMeeting_term],
             index
           ) => {
             const rowNum = index + 1 // Add 1 for header row
-            const legislator = await context.prisma.legislator.findUnique({
+            const legislator = await context.prisma.legislator.findFirst({
               where: { slug: legislator_slug },
             })
             if (!legislator) {
@@ -46,7 +110,7 @@ const validateListSpecificData: Record<
                 `第 ${rowNum} 行: 立法委員 "${legislator_slug}" 不存在，請先匯入立法委員資料`
               )
             }
-            const party = await context.prisma.party.findUnique({
+            const party = await context.prisma.party.findFirst({
               where: { slug: party_slug },
             })
             if (!party) {
@@ -54,7 +118,7 @@ const validateListSpecificData: Record<
                 `第 ${rowNum} 行: 政黨 "${party_slug}" 不存在，請先匯入政黨資料`
               )
             }
-            const meeting = await context.prisma.legislativeMeeting.findUnique({
+            const meeting = await context.prisma.legislativeMeeting.findFirst({
               where: { term: Number(legislativeMeeting_term) },
             })
             if (!meeting) {
@@ -71,7 +135,7 @@ const validateListSpecificData: Record<
     const validationErrors: string[] = []
     await Promise.all(
       csvData
-        .slice(1)
+        .slice(1) // exclude header row
         .map(
           async (
             [
@@ -84,7 +148,7 @@ const validateListSpecificData: Record<
             index
           ) => {
             const rowNum = index + 1 // Add 1 for header row
-            const meeting = await context.prisma.legislativeMeeting.findUnique({
+            const meeting = await context.prisma.legislativeMeeting.findFirst({
               where: { term: Number(legislativeMeeting_term) },
               select: { id: true },
             })
@@ -95,7 +159,7 @@ const validateListSpecificData: Record<
               return // Skip further validation if meeting doesn't exist
             }
             const session =
-              await context.prisma.legislativeMeetingSession.findUnique({
+              await context.prisma.legislativeMeetingSession.findFirst({
                 where: {
                   term: Number(legislativeMeetingSession_term),
                   legislativeMeetingId: meeting.id,
@@ -106,7 +170,7 @@ const validateListSpecificData: Record<
                 `第 ${rowNum} 行: 會期 第${legislativeMeeting_term}屆 第 ${legislativeMeetingSession_term} 會期 不存在，請先匯入會期資料`
               )
             }
-            const legislator = await context.prisma.legislator.findUnique({
+            const legislator = await context.prisma.legislator.findFirst({
               where: { slug: legislator_slug },
               select: { id: true },
             })
@@ -117,7 +181,7 @@ const validateListSpecificData: Record<
               return
             }
             const legislativeYuanMember =
-              await context.prisma.legislativeYuanMember.findUnique({
+              await context.prisma.legislativeYuanMember.findFirst({
                 where: {
                   legislatorId: legislator.id,
                   legislativeMeetingId: meeting.id,
@@ -139,7 +203,7 @@ const validateListSpecificData: Record<
 
     await Promise.all(
       csvData
-        .slice(1)
+        .slice(1) // exclude header row
         .map(
           async (
             [
@@ -151,7 +215,7 @@ const validateListSpecificData: Record<
             index
           ) => {
             const rowNum = index + 1 // Add 1 for header row
-            const meeting = await context.prisma.legislativeMeeting.findUnique({
+            const meeting = await context.prisma.legislativeMeeting.findFirst({
               where: { term: Number(legislativeMeeting_term) },
               select: { id: true },
             })
@@ -162,7 +226,7 @@ const validateListSpecificData: Record<
               return // Skip further validation if meeting doesn't exist
             }
             const session =
-              await context.prisma.legislativeMeetingSession.findUnique({
+              await context.prisma.legislativeMeetingSession.findFirst({
                 where: {
                   term: Number(legislativeMeetingSession_term),
                   legislativeMeetingId: meeting.id,
@@ -173,7 +237,7 @@ const validateListSpecificData: Record<
                 `第 ${rowNum} 行: 會期 第${legislativeMeeting_term}屆 第 ${legislativeMeetingSession_term} 會期 不存在，請先匯入會期資料`
               )
             }
-            const legislator = await context.prisma.legislator.findUnique({
+            const legislator = await context.prisma.legislator.findFirst({
               where: { slug: legislator_slug },
               select: { id: true },
             })
@@ -185,7 +249,7 @@ const validateListSpecificData: Record<
               return
             }
             const legislativeYuanMember =
-              await context.prisma.legislativeYuanMember.findUnique({
+              await context.prisma.legislativeYuanMember.findFirst({
                 where: {
                   legislatorId: legislator.id,
                   legislativeMeetingId: meeting.id,
@@ -197,7 +261,7 @@ const validateListSpecificData: Record<
                 `第 ${rowNum} 行: 立法委員 "${legislator_slug}" 在第 ${legislativeMeeting_term} 屆不存在，請先匯入立委屆期資料`
               )
             }
-            const committeeData = await context.prisma.committee.findUnique({
+            const committeeData = await context.prisma.committee.findFirst({
               where: { slug: committee_slug },
               select: { id: true },
             })
@@ -262,7 +326,7 @@ const importHandlers: Record<
       tooltip,
       note,
     ] of csvData.slice(1)) {
-      const legislatorData = await context.prisma.legislator.findUnique({
+      const legislatorData = await context.prisma.legislator.findFirst({
         where: { slug: legislator_slug },
         select: { name: true },
       })
@@ -271,7 +335,6 @@ const importHandlers: Record<
         await context.prisma.legislativeYuanMember.findFirst({
           where: {
             legislator: { slug: legislator_slug },
-            party: { slug: party_slug },
             legislativeMeeting: { term: Number(legislativeMeeting_term) },
           },
           select: { id: true },
@@ -285,9 +348,6 @@ const importHandlers: Record<
         note,
         labelForCMS: `${legislatorData.name} | 第 ${legislativeMeeting_term} 屆`,
         party: { connect: { slug: party_slug } },
-        legislativeMeeting: {
-          connect: { term: Number(legislativeMeeting_term) },
-        },
       }
 
       if (existingMember) {
@@ -329,7 +389,7 @@ const importHandlers: Record<
       ivodStartTime,
       ivodEndTime,
     ] of csvData.slice(1)) {
-      const existingSpeech = await context.prisma.speech.findUnique({
+      const existingSpeech = await context.prisma.speech.findFirst({
         where: { slug },
         select: { id: true },
       })
@@ -395,17 +455,54 @@ const importHandlers: Record<
   [ListName.committeeMember]: async (csvData, context) => {
     const queries: Promise<any>[] = []
 
+    // Group the data by legislativeMeeting_term, legislativeMeetingSession_term, and legislator_slug
+    const groupedData: Record<
+      string,
+      {
+        legislativeMeeting_term: number
+        legislativeMeetingSession_term: number
+        legislator_slug: string
+        committee_slugs: string[]
+      }
+    > = {}
+
     for (const [
       legislativeMeeting_term,
       legislativeMeetingSession_term,
       legislator_slug,
       committee_slug,
     ] of csvData.slice(1)) {
+      const key = `${legislativeMeeting_term}_${legislativeMeetingSession_term}_${legislator_slug}`
+
+      if (!groupedData[key]) {
+        groupedData[key] = {
+          legislativeMeeting_term: Number(legislativeMeeting_term),
+          legislativeMeetingSession_term: Number(
+            legislativeMeetingSession_term
+          ),
+          legislator_slug,
+          committee_slugs: [],
+        }
+      }
+
+      if (!groupedData[key].committee_slugs.includes(committee_slug)) {
+        groupedData[key].committee_slugs.push(committee_slug)
+      }
+    }
+
+    for (const key in groupedData) {
+      const {
+        legislativeMeeting_term,
+        legislativeMeetingSession_term,
+        legislator_slug,
+        committee_slugs,
+      } = groupedData[key]
+
       const legislativeYuanMember =
         await context.prisma.legislativeYuanMember.findFirst({
           where: {
             legislator: { slug: legislator_slug },
-            legislativeMeeting: { term: Number(legislativeMeeting_term) },
+            legislativeMeeting: { term: legislativeMeeting_term },
           },
           select: { id: true },
         })
@@ -413,16 +510,21 @@ const importHandlers: Record<
       const legislativeMeetingSession =
         await context.prisma.legislativeMeetingSession.findFirst({
           where: {
-            legislativeMeeting: { term: Number(legislativeMeeting_term) },
-            term: Number(legislativeMeetingSession_term),
+            legislativeMeeting: { term: legislativeMeeting_term },
+            term: legislativeMeetingSession_term,
           },
           select: { id: true },
         })
 
-      const committeeData = await context.prisma.committee.findUnique({
-        where: { slug: committee_slug },
-        select: { id: true },
-      })
+      const committees: { id: string }[] =
+        await context.prisma.committee.findMany({
+          where: {
+            slug: {
+              in: committee_slugs,
+            },
+          },
+          select: { id: true, slug: true },
+        })
 
       const existingCommitteeMember =
         await context.prisma.committeeMember.findFirst({
@@ -438,7 +540,9 @@ const importHandlers: Record<
           context.prisma.committeeMember.update({
             where: { id: existingCommitteeMember.id },
             data: {
-              committee: { connect: { id: committeeData.id } },
+              committee: {
+                set: committees.map((committee) => ({ id: committee.id })),
+              },
             },
           })
         )
@@ -446,7 +550,9 @@ const importHandlers: Record<
         queries.push(
           context.prisma.committeeMember.create({
             data: {
-              committee: { connect: { id: committeeData.id } },
+              committee: {
+                connect: committees.map((committee) => ({ id: committee.id })),
+              },
               legislativeYuanMember: {
                 connect: { id: legislativeYuanMember.id },
               },
