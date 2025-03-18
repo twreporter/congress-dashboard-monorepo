@@ -69,6 +69,7 @@ const ImageWithSkeleton: React.FC<ImageProps> = ({ src }: ImageProps) => (
 )
 
 export type TabProps = {
+  slug?: string
   name: string
   count?: number
   imageLink?: string
