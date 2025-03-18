@@ -19,14 +19,13 @@ import {
 } from '@twreporter/react-components/lib/icon'
 import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 // components
-import TabBarButton from '../button/tab-bar-button'
+import TabBarButton from '@/components/button/tab-bar-button'
 // toastr
 import toastr from '@/utils/toastr'
 // constants
 import { Direction } from '@/components/speech'
 
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-
+// styles
 const MobileToolbarContainer = styled.div<{
   $isHidden: boolean
   $hideText: boolean
@@ -88,7 +87,11 @@ const SwitchOptionsContainer = styled.div<{ $isShow: boolean }>`
   transform: translateX(-50%);
 `
 
-const MobileToolbarContext = createContext({ hideText: false })
+// global variables
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+const MobileToolbarContext = createContext<{ hideText: boolean }>({
+  hideText: false,
+})
 
 const FeedbackButton: React.FC = () => {
   const { hideText } = useContext(MobileToolbarContext)
