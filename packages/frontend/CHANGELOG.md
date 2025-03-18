@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.2-beta.2, 2025-03-18
+
+### Notable Changes
+
+- fix
+  - build failed problem
+
+###
+
+- \[[`6d2d137b83`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6d2d137b83)] - **fix(frontend)**: build failed problem (Aylie Chou)
+
 ## 0.0.2-beta.1, 2025-03-18
 
 ### Notable Changes

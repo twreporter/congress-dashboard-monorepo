@@ -90,19 +90,19 @@ const mock2024Summary = {
   slug: 'test-slug-1',
 }
 
-export function mockGetSummary(slug: string) {
+export function mockGetSummary(slug?: string) {
   console.log(`get mock summary for ${slug}`)
   return _.fill(Array(4), mock2025Summary).concat(
     _.fill(Array(3), mock2024Summary)
   )
 }
 
-export function mockGetIssue(slug: string) {
+export function mockGetIssue(slug?: string) {
   console.log(`get mock issue for ${slug}`)
   return mockIssueList
 }
 
-export function mockGetLegislator(slug: string) {
+export function mockGetLegislator(slug?: string) {
   console.log(`get mock legislator for ${slug}`)
   return mockLegislators
 }

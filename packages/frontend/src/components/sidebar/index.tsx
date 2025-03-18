@@ -113,8 +113,10 @@ function groupSummary(summaryList: SummaryCardProps[]) {
   const summaryGroupByYear = _.groupBy(summaryList, (summary) =>
     summary.date.getFullYear()
   )
-  _.forEach(summaryGroupByYear, (summarys: SummaryCardProps[], year: number) =>
-    result.push({ year, cards: summarys })
+  _.forEach(
+    summaryGroupByYear,
+    (summarys: SummaryCardProps[], year: number | string) =>
+      result.push({ year: Number(year), cards: summarys })
   )
 
   return result
