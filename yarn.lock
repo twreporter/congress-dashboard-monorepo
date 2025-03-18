@@ -6174,6 +6174,7 @@ __metadata:
     react-dom: "npm:^19.0.0"
     storybook: "npm:^8.5.1"
     styled-components: "npm:^6.1.14"
+    swr: "npm:^2.3.3"
     typescript: "npm:^5"
   languageName: unknown
   linkType: soft
@@ -19965,6 +19966,18 @@ __metadata:
   version: 1.0.0
   resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
   checksum: 10c0/6c4032340701a9950865f7ae8ef38578d8d7053f5e10518076e6554a9381fa91bd9c6850193695c141f32b21f979c985db07265a758867bac95de05f7d8aeb39
+  languageName: node
+  linkType: hard
+
+"swr@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "swr@npm:2.3.3"
+  dependencies:
+    dequal: "npm:^2.0.3"
+    use-sync-external-store: "npm:^1.4.0"
+  peerDependencies:
+    react: ^16.11.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/882fc8291912860e0c50eae3470ebf0cd58b0144cb12adcc4b14c5cef913ea06479043830508d8b0b3d4061d99ad8dd52485c9c879fbd4e9b893484e6d8da9e3
   languageName: node
   linkType: hard
 
