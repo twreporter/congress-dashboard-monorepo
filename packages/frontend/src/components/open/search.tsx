@@ -12,7 +12,7 @@ import { Search } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
 
 const Bar = styled.div`
-  padding: 8px 20px;
+  padding: 0 20px;
   border: 1px solid ${colorGrayscale.gray400};
   border-radius: 40px;
   display: flex;
@@ -20,6 +20,7 @@ const Bar = styled.div`
   align-items: center;
   gap: 8px;
   background-color: ${colorOpacity['white_0.8']};
+  height: 48px;
 
   &:has(input:active),
   &:has(input:focus-visible) {
@@ -41,6 +42,7 @@ const Input = styled.input`
   height: 24px;
   padding: 0 2px;
   color: ${colorGrayscale.gray800};
+  font-size: 16px;
 
   &,
   &:active,

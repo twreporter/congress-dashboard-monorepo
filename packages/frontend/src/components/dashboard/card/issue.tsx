@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 // hooks
 import useResizeObserver from '@/hooks/use-resize-observer'
 // components
-import { Triangle, Circle, Gap } from '@/components/dashboard/card/skeleton'
+import { Triangle, Circle, Gap } from '@/components/skeleton'
 import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 // @twreporter
 import {
@@ -21,9 +21,10 @@ import {
 
 export type Legislator = {
   name: string
-  count?: number
+  count: number
   avatar: string
   partyAvatar: string
+  slug: string
 }
 export enum CardSize {
   S,
@@ -121,7 +122,7 @@ export type CardIssueProps = {
   legislators?: Legislator[]
   size?: CardSize
   selected?: boolean
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 const CardIssue: React.FC<CardIssueProps> = ({
   title = '',

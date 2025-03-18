@@ -4,8 +4,10 @@ import React, { useRef, useState, useEffect, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 // components
 import Tooltip from '@/components/dashboard/card/tooltip'
-import { Triangle, Gap } from '@/components/dashboard/card/skeleton'
+import { Triangle, Gap } from '@/components/skeleton'
 import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+// style
+import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
 // @twreporter
 import {
   MEMBER_TYPE_LABEL,
@@ -58,11 +60,6 @@ const Box = styled.div<{ $selected: boolean; $size: CardSize }>`
     }
   `}
 `
-const textOverflowEllipsisCss = css`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
 const Title = styled.div`
   display: flex;
   align-items: center;
@@ -84,10 +81,10 @@ const DetailContainer = styled.div<{ $isShowTag: boolean; $withGap: boolean }>`
   min-width: 0;
   ${(props) => (props.$withGap ? 'gap: 14px;' : '')}
 `
-const TagContainer = styled.div<{ $size: CardSize }>`
+const TagContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: ${(props) => (props.$size === CardSize.S ? 8 : 12)}px;
+  gap: 8px;
   overflow-y: hidden;
   flex-wrap: wrap;
 `
@@ -159,7 +156,7 @@ export type CardHumanProps = {
   partyAvatar?: string
   size?: CardSize
   selected?: boolean
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 const CardHuman: React.FC<CardHumanProps> = ({
   name = '',
@@ -185,7 +182,8 @@ const CardHuman: React.FC<CardHumanProps> = ({
       const calculateVisibleTags = _.throttle(() => {
         if (!tagBox) return
         // tags can show at least two lines
-        const availableWidth = tagBox.clientWidth * 2
+        const availableLines = size === CardSize.L ? 3 : 2
+        const availableWidth = tagBox.clientWidth * availableLines
         // Calculate how many tags can fit
         let totalWidth = 0
         let count = 0
@@ -249,7 +247,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
           <Type text={MEMBER_TYPE_LABEL[type]} />
         </div>
         {isShowTag ? (
-          <TagContainer $size={size} ref={tagBoxRef}>
+          <TagContainer ref={tagBoxRef}>
             {visibleTags.map(({ name, count }: Tag, index: number) => {
               return (
                 <TagItem

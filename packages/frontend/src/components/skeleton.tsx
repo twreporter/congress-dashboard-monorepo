@@ -39,14 +39,20 @@ export const Triangle = styled.div<{ $width?: string; $height?: string }>`
 type CircleProps = {
   width?: number
   height?: number
+  className?: string
 }
-const CircleRaw: React.FC = ({ width = 56, height = 56 }: CircleProps) => (
+const CircleRaw: React.FC = ({
+  width = 56,
+  height = 56,
+  className,
+}: CircleProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={width}
     height={height}
     viewBox="0 0 56 56"
     fill="none"
+    className={className}
   >
     <circle cx="28" cy="28" r="28" fill={colorGrayscale.gray200} />
   </svg>
@@ -57,4 +63,8 @@ export const Circle = styled(CircleRaw)`
 
 export const Gap = styled.div<{ $gap: number }>`
   height: ${(props) => props.$gap}px;
+`
+
+export const GapHorizontal = styled.div<{ $gap: number }>`
+  width: ${(props) => props.$gap}px;
 `
