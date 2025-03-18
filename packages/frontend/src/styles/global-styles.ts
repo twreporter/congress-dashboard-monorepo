@@ -10,6 +10,12 @@ const GlobalStyles = createGlobalStyle`
   main {
     margin-top: 64px; // header height
   }
+
+  @media print {
+    .hidden-print {
+      display: none !important;
+    }
+  }
 `
 
 export default GlobalStyles

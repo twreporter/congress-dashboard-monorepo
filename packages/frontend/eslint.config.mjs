@@ -12,13 +12,32 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  
+  // Global rules for all files
+  {
+    files: ['**/*.{js,jsx,ts,tsx,mjs,cjs}'],
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          "args": "all",
+          "argsIgnorePattern": "^_",
+          "caughtErrors": "all",
+          "caughtErrorsIgnorePattern": "^_",
+          "destructuredArrayIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "ignoreRestSiblings": true
+        }
+      ],
+    },
+  },
+  
+  // Storybook specific rules
   ...storybook.configs['flat/recommended'],
   {
     files: ['**/*.stories.@(ts|tsx|js|jsx|mjs|cjs)'],
     rules: {
-      // example of overriding a rule
       'storybook/hierarchy-separator': 'error',
-      // example of disabling a rule
       'storybook/default-exports': 'off',
     },
   },

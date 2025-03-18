@@ -45,7 +45,6 @@ const Container = styled.header.attrs<{
     top: props.$isHidden
       ? `calc(${props.$tabTop}px - ${HEADER_HEIGHT}px)`
       : '0px',
-    transition: !props.$isHidden ? 'top 300ms ease-in-out' : 'none',
   },
 }))`
   display: flex;
@@ -55,6 +54,7 @@ const Container = styled.header.attrs<{
   position: fixed;
   left: 0px;
   z-index: ${ZIndex.Header};
+  transition: all 300ms ease-in-out;
 
   ${mq.desktopOnly`
     padding: 0 48px;
@@ -190,7 +190,11 @@ const Header: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Container $isHidden={isHeaderHidden} $tabTop={tabTop}>
+      <Container
+        $isHidden={isHeaderHidden}
+        $tabTop={tabTop}
+        className="hidden-print"
+      >
         <HeaderSection>
           <LogoContainer>
             <Link href={'https://www.twreporter.org/'} target={'_blank'}>

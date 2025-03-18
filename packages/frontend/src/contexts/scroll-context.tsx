@@ -6,9 +6,10 @@ import {
   useRef,
   useState,
   ReactNode,
+  useCallback,
 } from 'react'
 // lodash
-import { throttle } from 'lodash'
+import { throttle, type DebouncedFuncLeading } from 'lodash'
 // constants
 import { HEADER_HEIGHT } from '@/constants/header'
 
@@ -37,8 +38,11 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
   const [tabTop, setTabTop] = useState(0)
 
   const lastScrollY = useRef(0)
+  // Store throttled function reference
+  const throttledScrollHandlerRef =
+    useRef<DebouncedFuncLeading<() => void>>(null)
 
-  const handleScroll = _.throttle(() => {
+  const handleScroll = useCallback(() => {
     const currentScrollY = window.scrollY
     const tabRect = tabElement?.getBoundingClientRect()
 
@@ -73,16 +77,20 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
     }
 
     lastScrollY.current = currentScrollY
-  }, 100)
+  }, [tabElement, setTabTop, setIsHeaderHidden, setIsHeaderAboveTab])
 
+  // Create the throttled function in useEffect to ensure proper cleanup
   useEffect(() => {
-    handleScroll()
-    window.addEventListener('scroll', handleScroll)
+    throttledScrollHandlerRef.current = _.throttle(handleScroll, 100)
+    window.addEventListener('scroll', throttledScrollHandlerRef.current)
+    throttledScrollHandlerRef.current()
     return () => {
-      handleScroll.cancel()
-      window.removeEventListener('scroll', handleScroll)
+      if (throttledScrollHandlerRef.current) {
+        throttledScrollHandlerRef.current.cancel()
+        window.removeEventListener('scroll', throttledScrollHandlerRef.current)
+      }
     }
-  }, [tabElement, handleScroll])
+  }, [handleScroll]) // Only depends on handleScroll which has its own dependencies
 
   return (
     <ScrollContext.Provider

@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.0.2-beta.3, 2025-03-18
+
+### Notable Changes
+
+- feat
+  - custom button for congress dashboard
+  - speech page components
+  - speech page desktop tool bar
+  - add storybook
+  - add mobile toolbar
+  - eslint config
+  - speech page scroll behavior
+  - scroll context useCallback
+- fix
+  - fix comments
+  - import path and type declare
+- chore
+  - update @twreporter packages
+  - sync dev
+
+###
+
+- [[`3f26ed73eb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3f26ed73eb)] - **chore(frontend)**: sync dev (Lucien)
+- [[`f3c1fffce4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f3c1fffce4)] - **fix(frontend)**: import path and type declare (Lucien)
+- [[`342727a1e0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/342727a1e0)] - **fix(frontend)**: fix comments (Lucien)
+- [[`f46bbb784d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f46bbb784d)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`1d6f0fe498`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1d6f0fe498)] - **feat(frontend)**: scroll context useCallback (Lucien)
+- [[`1560b5c368`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1560b5c368)] - **feat(frontend)**: speech page scroll behavior (Lucien)
+- [[`f48ae4667e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f48ae4667e)] - **feat(frontend)**: eslint config (Lucien)
+- [[`e0562549fa`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e0562549fa)] - **feat(frontend)**: add mobile toolbar (Lucien)
+- [[`bc39bc4944`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bc39bc4944)] - **feat(frontend)**: add storybook (Lucien)
+- [[`da871645b0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/da871645b0)] - **feat(frontend)**: speech page desktop tool bar (Lucien)
+- [[`c516f05c7e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c516f05c7e)] - **feat(frontend)**: speech page components (Lucien)
+- [[`6ebc74a982`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6ebc74a982)] - **feat(frontend)**: custom button for congress dashboard (Lucien)
+
 ## 0.0.2-beta.2, 2025-03-18
 
 ### Notable Changes
