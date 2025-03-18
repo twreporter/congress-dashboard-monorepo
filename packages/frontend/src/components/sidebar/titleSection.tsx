@@ -9,7 +9,7 @@ import { Gap } from '@/components/skeleton'
 import { H3 } from '@twreporter/react-components/lib/text/headline'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import { IconButton } from '@twreporter/react-components/lib/button'
-import { Share, Cross, Hamburger } from '@twreporter/react-components/lib/icon'
+import { Fullscreen, Back, More } from '@twreporter/react-components/lib/icon'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 
@@ -125,13 +125,13 @@ const TitleSection: React.FC<TitleSectionProps> = ({
         <Title text={`${title} 的相關發言摘要${count ? `(${count})` : ''}`} />
         <ButtonGroup>
           <Button
-            iconComponent={<Share releaseBranch={releaseBranch} />}
+            iconComponent={<Fullscreen releaseBranch={releaseBranch} />}
             theme={IconButton.THEME.normal}
             type={IconButton.Type.PRIMARY}
             onClick={gotoPage}
           />
           <Button
-            iconComponent={<Cross releaseBranch={releaseBranch} />}
+            iconComponent={<Back releaseBranch={releaseBranch} />}
             theme={IconButton.THEME.normal}
             type={IconButton.Type.PRIMARY}
             onClick={closePage}
@@ -154,7 +154,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
             ))}
           </FlexRow>
           <Button
-            iconComponent={<Hamburger releaseBranch={releaseBranch} />}
+            iconComponent={<More releaseBranch={releaseBranch} />}
             theme={IconButton.THEME.normal}
             type={IconButton.Type.PRIMARY}
             onClick={openFilter}
