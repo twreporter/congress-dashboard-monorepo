@@ -63,8 +63,8 @@ model Speech {
   date                        DateTime                   @mysql.Date
   title                       String                     @default("")
   slug                        String                     @unique @default("")
-  summary                     String                     @default("")
-  content                     String                     @default("")
+  summary                     Json?
+  content                     Json?
   attendee                    String                     @default("")
   ivodLink                    String                     @default("")
   ivodStartTime               String                     @default("")
@@ -203,14 +203,14 @@ model CommitteeMember {
 }
 
 model ImportRecord {
-  id         Int         @id @default(autoincrement())
-  recordName String      @default("")
-  listName   String
-  csvData    Json?
-  importer   SystemUser? @relation("ImportRecord_importer", fields: [importerId], references: [id])
-  importerId Int?        @map("importer")
-  createdAt  DateTime?   @default(now())
-  updatedAt  DateTime?   @updatedAt
+  id                  Int         @id @default(autoincrement())
+  recordName          String      @default("")
+  uploadData_listName String
+  uploadData_csvData  Json
+  importer            SystemUser? @relation("ImportRecord_importer", fields: [importerId], references: [id])
+  importerId          Int?        @map("importer")
+  createdAt           DateTime?   @default(now())
+  updatedAt           DateTime?   @updatedAt
 
   @@index([importerId])
 }
