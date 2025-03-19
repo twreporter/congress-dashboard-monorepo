@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.2-beta.7, 2025-03-19
+
+### Notable Changes
+
+- fix
+  - clouod build failed due to type error
+- chore
+  - move server only env to cloud run env
+
+### Commit
+
+- [[`3bdba60ae3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3bdba60ae3)] - **chore**: remove server only env (Aylie Chou)
+- [[`eefdf85699`](https://github.com/twreporter/congress-dashboard-monorepo/commit/eefdf85699)] - **fix**: error is of type unknow & update env file (Aylie Chou)
+
 ## 0.0.2-beta.6, 2025-03-19
 
 ### Notable Changes
