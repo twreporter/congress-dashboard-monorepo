@@ -7,8 +7,8 @@ export type partyData = {
   image?: { imageFile: { url: string } }
 }
 export type stateType<T> = {
-  party?: T
-  isLoading?: boolean
+  party: T[]
+  isLoading: boolean
   error?: Error
 }
 
@@ -42,7 +42,7 @@ const useParty = () => {
   const url = process.env.NEXT_PUBLIC_API_URL as string
   const { data, isLoading, error } = useSWR(url, fetchParty)
   return {
-    party: data?.data?.parties,
+    party: data?.data?.parties || [],
     isLoading,
     error,
   }
