@@ -16,6 +16,8 @@ import {
   MEMBER_TYPE_LABEL,
   CITY_OPTIONS,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+// fetcher
+import useParty, { partyData, stateType } from '@/fetchers/party'
 // component
 import {
   SelectorType,
@@ -25,6 +27,13 @@ import {
 import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+// lodash
+import { findIndex, clone, map } from 'lodash'
+const _ = {
+  findIndex,
+  clone,
+  map,
+}
 
 const ModalContainer = styled.div<{ $isOpen: boolean }>`
   display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
@@ -153,16 +162,14 @@ const SelectorContainer = styled.div`
   width: 100%;
 `
 
-const OptionIcon = () => {
-  return (
-    <PartyTag
-      size={TagSize.S}
-      avatar="https://yt3.googleusercontent.com/ytc/AIdro_kG1AaurvqvdbbpAUW_PLMHeXf384dp8KX_stB4mHRVOQQ=s900-c-k-c0x00ffffff-no-rj"
-    />
-  )
+type OptionIconProps = {
+  url: string
+}
+const OptionIcon: React.FC<OptionIconProps> = ({ url }) => {
+  return <PartyTag size={TagSize.S} avatar={url} />
 }
 
-const filterOptions = [
+const defaultOptions = [
   {
     type: SelectorType.Single,
     disabled: true,
@@ -224,10 +231,8 @@ const filterOptions = [
     disabled: false,
     label: '黨籍',
     value: 'party',
-    options: [
-      { label: '民進黨', value: 'DPP', prefixIcon: <OptionIcon /> },
-      { label: '國民黨', value: 'KMT' },
-    ], //TODO: get from api
+    isLoading: true,
+    options: [],
   },
   {
     type: SelectorType.Multiple,
@@ -252,6 +257,38 @@ const filterOptions = [
     ], //TODO: get from api
   },
 ]
+
+const generateOptions = (partyState: stateType<partyData>) => {
+  const partyFieldIndex = _.findIndex(
+    defaultOptions,
+    ({ value }) => value === 'party'
+  )
+  if (partyFieldIndex < 0) {
+    return defaultOptions
+  }
+
+  const filterOptions = _.clone(defaultOptions)
+  filterOptions[partyFieldIndex].isLoading = partyState.isLoading
+  filterOptions[partyFieldIndex].options = _.map(
+    partyState.party,
+    ({ slug, name, imageLink, image }: partyData) => {
+      const selfHostImage = image?.imageFile?.url
+      const imageUrl =
+        imageLink ||
+        (selfHostImage
+          ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${selfHostImage}`
+          : '')
+      const prefixIcon = <OptionIcon url={imageUrl} />
+      return {
+        label: name,
+        value: slug,
+        prefixIcon,
+      }
+    }
+  )
+
+  return filterOptions
+}
 
 export type FilterModalValueType = {
   department: string
@@ -295,6 +332,9 @@ const FilterModal: React.FC<FilterModelProps> = ({
     setIsOpen(false)
   }
 
+  const partyOptionStates = useParty()
+  const filterOptions = generateOptions(partyOptionStates)
+
   return (
     <ModalContainer $isOpen={isOpen}>
       <Filter>
@@ -306,7 +346,18 @@ const FilterModal: React.FC<FilterModelProps> = ({
         </Header>
         <SelectorsContainer>
           {filterOptions.map(
-            ({ type, disabled, label, value, options, defaultValue }, idx) => {
+            (
+              {
+                type,
+                disabled,
+                label,
+                value,
+                options,
+                defaultValue,
+                isLoading,
+              },
+              idx
+            ) => {
               if (type === SelectorType.Single) {
                 return (
                   <SelectContainer key={`single-select-${value}-${idx}`}>
@@ -322,6 +373,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                             [value]: optionValue,
                           }))
                         }
+                        loading={isLoading}
                       />
                     </SelectorContainer>
                   </SelectContainer>
@@ -342,6 +394,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                             [value]: optionValue,
                           }))
                         }
+                        loading={isLoading}
                       />
                     </SelectorContainer>
                   </SelectContainer>

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.0.2-beta.6, 2025-03-19
+
+### Notable Changes
+
+- feat
+  - add `/api/graphql` endpoint
+
+### Commits
+
+- [[`7038005be0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7038005be0)] - **fix(frontend)**: review comments (Aylie Chou)
+- [[`e96a8adfb1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e96a8adfb1)] - **feat**: add `/api/graphql` endpoint (Aylie Chou)
+
 ## 0.0.2-beta.5, 2025-03-19
 
 ### Notable Changes

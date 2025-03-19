@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-frontend",
-  "version": "0.0.2-beta.5",
+  "version": "0.0.2-beta.6",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -19,7 +19,8 @@
     "next": "15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "styled-components": "^6.1.14"
+    "styled-components": "^6.1.14",
+    "swr": "^2.3.3"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.4",

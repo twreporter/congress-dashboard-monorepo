@@ -64,6 +64,7 @@ const CardBox = styled.div`
   align-items: center;
 `
 const CardIssueBox = styled.div<{ $active: boolean }>`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 24px;
