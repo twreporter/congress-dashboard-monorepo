@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import useSWR from 'swr'
 // @twerporter
 import {
   colorOpacity,
@@ -17,6 +16,8 @@ import {
   MEMBER_TYPE_LABEL,
   CITY_OPTIONS,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+// fetcher
+import useParty, { partyData, stateType } from '@/fetchers/party'
 // component
 import {
   SelectorType,
@@ -230,7 +231,7 @@ const defaultOptions = [
     disabled: false,
     label: '黨籍',
     value: 'party',
-    isLoading: true, //todo: add loading component
+    isLoading: true,
     options: [],
   },
   {
@@ -256,17 +257,7 @@ const defaultOptions = [
     ], //TODO: get from api
   },
 ]
-type partyData = {
-  slug: string
-  name: string
-  imageLink?: string
-  image?: { imageFile: { url: string } }
-}
-type stateType<T> = {
-  party?: T
-  isLoading?: boolean
-  error?: Error
-}
+
 const generateOptions = (partyState: stateType<partyData>) => {
   const partyFieldIndex = _.findIndex(
     defaultOptions,
@@ -297,42 +288,6 @@ const generateOptions = (partyState: stateType<partyData>) => {
   )
 
   return filterOptions
-}
-
-const fetchParty = async (url: string) => {
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        query Query {
-          parties {
-            slug
-            name
-            imageLink
-            image {
-              imageFile {
-                url
-              }
-            }
-          }
-        }
-      `,
-    }),
-  })
-  const data = await res.json()
-  return data
-}
-const useParty = () => {
-  const url = process.env.NEXT_PUBLIC_API_URL as string
-  const { data, isLoading, error } = useSWR(url, fetchParty)
-  return {
-    party: data?.data?.parties,
-    isLoading,
-    error,
-  }
 }
 
 export type FilterModalValueType = {
@@ -403,14 +358,6 @@ const FilterModal: React.FC<FilterModelProps> = ({
               },
               idx
             ) => {
-              if (isLoading) {
-                return (
-                  <SelectContainer key={`loading-${idx}`}>
-                    <Label text={label} />
-                    <SelectorContainer>loading...</SelectorContainer>
-                  </SelectContainer>
-                )
-              }
               if (type === SelectorType.Single) {
                 return (
                   <SelectContainer key={`single-select-${value}-${idx}`}>
@@ -426,6 +373,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                             [value]: optionValue,
                           }))
                         }
+                        loading={isLoading}
                       />
                     </SelectorContainer>
                   </SelectContainer>
@@ -446,6 +394,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                             [value]: optionValue,
                           }))
                         }
+                        loading={isLoading}
                       />
                     </SelectorContainer>
                   </SelectContainer>
