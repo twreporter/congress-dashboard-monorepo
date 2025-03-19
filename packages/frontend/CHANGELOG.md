@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.2-beta.8, 2025-03-19
+
+### Notable Changes
+
+- fix
+  - `party` type incorrect
+
+### Commits
+
+- [[`81b0cc293b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/81b0cc293b)] - **fix**: `party` type incorrect (Aylie Chou)
+
 ## 0.0.2-beta.7, 2025-03-19
 
 ### Notable Changes
