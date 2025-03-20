@@ -4,9 +4,10 @@ import styled from 'styled-components'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
-import { fontFamily } from '@twreporter/core/lib/constants/font'
 // constants
 import { FontSize, FontSizeOffset } from '@/components/speech'
+// utils
+import { notoSerif } from '@/utils/font'
 
 const Container = styled.div`
   margin-top: 40px;
@@ -16,7 +17,7 @@ const Container = styled.div`
 `
 
 const Text = styled.div<{ $fontSizeOffset: number }>`
-  font-family: ${fontFamily.title};
+  font-family: ${notoSerif.style.fontFamily};
   color: ${colorGrayscale.gray600};
   font-size: ${(props) => props.$fontSizeOffset + 20}px;
   font-weight: 700;
@@ -33,7 +34,7 @@ const StyledOrderedList = styled.ol`
 `
 
 const StyledListItem = styled.li<{ $fontSizeOffset: number }>`
-  font-family: ${fontFamily.title};
+  font-family: ${notoSerif.style.fontFamily};
   color: ${colorGrayscale.gray600};
   font-size: ${(props) => props.$fontSizeOffset + 20}px;
   font-weight: 700;

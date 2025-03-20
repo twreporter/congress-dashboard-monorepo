@@ -8,11 +8,12 @@ import {
 import mq from '@twreporter/core/lib/utils/media-query'
 import { H1 } from '@twreporter/react-components/lib/text/headline'
 import { P1, P2 } from '@twreporter/react-components/lib/text/paragraph'
-import { fontFamily } from '@twreporter/core/lib/constants/font'
 // constants
 import { HEADER_HEIGHT } from '@/constants/header'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+// utils
+import { notoSerif } from '@/utils/font'
 
 export const SpeechContainer = styled.div`
   position: relative;
@@ -231,7 +232,7 @@ export const ControlTabDate = styled(P1)`
 `
 
 export const ControlTabTitle = styled(P1)`
-  font-family: ${fontFamily.title} !important;
+  font-family: ${notoSerif.style.fontFamily} !important;
   color: ${colorGrayscale.gray800};
   overflow: hidden;
   white-space: nowrap;
