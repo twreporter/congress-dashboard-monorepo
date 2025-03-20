@@ -4,10 +4,12 @@ import styled from 'styled-components'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { H1 } from '@twreporter/react-components/lib/text/headline'
+import { fontFamily } from '@twreporter/core/lib/constants/font'
 
 const CustomH1 = styled(H1)`
   color: ${colorGrayscale.gray800};
   letter-spacing: 0.4px;
+  font-family: ${fontFamily.title} !important;
 `
 
 type SpeechTitleProps = {

@@ -4,6 +4,9 @@ import styled from 'styled-components'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
+import { fontFamily } from '@twreporter/core/lib/constants/font'
+// constants
+import { FontSize, FontSizeOffset } from '@/components/speech'
 
 const Container = styled.div`
   margin-top: 40px;
@@ -12,9 +15,10 @@ const Container = styled.div`
   `}
 `
 
-const Text = styled.div`
+const Text = styled.div<{ $fontSizeOffset: number }>`
+  font-family: ${fontFamily.title};
   color: ${colorGrayscale.gray600};
-  font-size: 20px;
+  font-size: ${(props) => props.$fontSizeOffset + 20}px;
   font-weight: 700;
   line-height: 170%;
   letter-spacing: 0.7px;
@@ -28,15 +32,16 @@ const StyledOrderedList = styled.ol`
   `}
 `
 
-const StyledListItem = styled.li`
+const StyledListItem = styled.li<{ $fontSizeOffset: number }>`
+  font-family: ${fontFamily.title};
   color: ${colorGrayscale.gray600};
-  font-size: 20px;
+  font-size: ${(props) => props.$fontSizeOffset + 20}px;
   font-weight: 700;
   line-height: 170%;
   letter-spacing: 0.7px;
   &::marker {
     color: ${colorGrayscale.gray600};
-    font-size: 20px;
+    font-size: ${(props) => props.$fontSizeOffset + 20}px;
     font-weight: 700;
     line-height: 170%;
     letter-spacing: 0.7px;
@@ -45,16 +50,24 @@ const StyledListItem = styled.li`
 
 type SpeechSummaryProps = {
   summary: string | string[]
+  fontSizeOffset?: number
 }
-const SpeechSummary: React.FC<SpeechSummaryProps> = ({ summary }) => {
+const SpeechSummary: React.FC<SpeechSummaryProps> = ({
+  summary,
+  fontSizeOffset = FontSizeOffset[FontSize.SMALL],
+}) => {
   const summaryJSX = Array.isArray(summary) ? (
     <StyledOrderedList>
       {summary.map((summary, i) => {
-        return <StyledListItem key={`summary-${i}`}>{summary}</StyledListItem>
+        return (
+          <StyledListItem key={`summary-${i}`} $fontSizeOffset={fontSizeOffset}>
+            {summary}
+          </StyledListItem>
+        )
       })}
     </StyledOrderedList>
   ) : (
-    <Text>{summary}</Text>
+    <Text $fontSizeOffset={fontSizeOffset}>{summary}</Text>
   )
   return <Container>{summaryJSX}</Container>
 }

@@ -8,6 +8,7 @@ import {
 import mq from '@twreporter/core/lib/utils/media-query'
 import { H1 } from '@twreporter/react-components/lib/text/headline'
 import { P1, P2 } from '@twreporter/react-components/lib/text/paragraph'
+import { fontFamily } from '@twreporter/core/lib/constants/font'
 // constants
 import { HEADER_HEIGHT } from '@/constants/header'
 // z-index
@@ -203,6 +204,7 @@ export const DateAndTitle = styled.div`
 export const ControlItems = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `
 
 export const Spacing = styled.div<{ $width?: number; $height?: number }>`
@@ -229,6 +231,7 @@ export const ControlTabDate = styled(P1)`
 `
 
 export const ControlTabTitle = styled(P1)`
+  font-family: ${fontFamily.title} !important;
   color: ${colorGrayscale.gray800};
   overflow: hidden;
   white-space: nowrap;
