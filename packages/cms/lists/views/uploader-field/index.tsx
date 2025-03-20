@@ -260,9 +260,13 @@ export function Field({
                   <tr>
                     {csvData[0].map((header, i) => (
                       <Th key={i}>
-                        {header}
-                        {isFieldRequired(header) && (
-                          <RequiredIndicator> *</RequiredIndicator>
+                        {isFieldRequired(header) ? (
+                          <>
+                            {header}
+                            <RequiredIndicator>*</RequiredIndicator>
+                          </>
+                        ) : (
+                          <div>{header}</div>
                         )}
                       </Th>
                     ))}

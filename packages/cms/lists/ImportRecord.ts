@@ -87,9 +87,26 @@ const validateListSpecificData: Record<
     // No specific validation needed for legislators
     return []
   },
-  [ListName.topic]: async () => {
-    // No specific validation needed for topics
-    return []
+  [ListName.topic]: async (csvData, context) => {
+    const validationErrors: string[] = []
+    await Promise.all(
+      csvData
+        .slice(1) // exclude header row
+        .map(async ([_title, _slug, speech_slug], index) => {
+          const rowNum = index + 1 // Add 1 for header row
+          if (speech_slug) {
+            const existingSpeech = await context.prisma.speech.findFirst({
+              where: { slug: speech_slug },
+            })
+            if (!existingSpeech) {
+              validationErrors.push(
+                `第 ${rowNum} 行: 逐字稿 "${speech_slug}" 不存在，請先匯入逐字稿資料`
+              )
+            }
+          }
+        })
+    )
+    return validationErrors
   },
   [ListName.legislativeYuanMember]: async (csvData, context) => {
     const validationErrors: string[] = []
@@ -98,7 +115,12 @@ const validateListSpecificData: Record<
         .slice(1) // exclude header row
         .map(
           async (
-            [legislator_slug, party_slug, legislativeMeeting_term],
+            [
+              _legislator_name,
+              legislator_slug,
+              party_slug,
+              legislativeMeeting_term,
+            ],
             index
           ) => {
             const rowNum = index + 1 // Add 1 for header row
@@ -142,6 +164,7 @@ const validateListSpecificData: Record<
               _slug,
               legislativeMeeting_term,
               legislativeMeetingSession_term,
+              _legislator_name,
               legislator_slug,
               ..._rest
             ],
@@ -209,7 +232,9 @@ const validateListSpecificData: Record<
             [
               legislativeMeeting_term,
               legislativeMeetingSession_term,
+              _legislator_name,
               legislator_slug,
+              _committee_name,
               committee_slug,
             ],
             index
@@ -281,6 +306,7 @@ const importHandlers: Record<
   ListName,
   (csvData: string[][], context: KeystoneContext) => Promise<any[]>
 > = {
+  // TODO: topic & speech
   [ListName.legislator]: async (csvData, context) => {
     const queries: Promise<any>[] = []
 
@@ -317,6 +343,7 @@ const importHandlers: Record<
     const queries: Promise<any>[] = []
 
     for (const [
+      _legislator_name,
       legislator_slug,
       party_slug,
       legislativeMeeting_term,
@@ -379,6 +406,7 @@ const importHandlers: Record<
       slug,
       legislativeMeeting_term,
       legislativeMeetingSession_term,
+      _legislator_name,
       legislator_slug,
       date,
       title,
@@ -469,7 +497,9 @@ const importHandlers: Record<
     for (const [
       legislativeMeeting_term,
       legislativeMeetingSession_term,
+      _legislator_name,
       legislator_slug,
+      _committee_name,
       committee_slug,
     ] of csvData.slice(1)) {
       const key = `${legislativeMeeting_term}_${legislativeMeetingSession_term}_${legislator_slug}`
@@ -630,7 +660,7 @@ const listConfigurations = list({
       initialSort: { field: 'createdAt', direction: 'DESC' },
       pageSize: 50,
     },
-    hideDelete: denyRoles(['admin']), // Only for development purposes
+    hideDelete: denyRoles(['owner', 'admin']), // Only for development purposes
     itemView: { defaultFieldMode: 'read' },
   },
 
