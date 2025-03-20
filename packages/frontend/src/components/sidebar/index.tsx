@@ -24,7 +24,10 @@ import {
 } from '@/components/sidebar/followMore'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import {
+  colorGrayscale,
+  colorOpacity,
+} from '@twreporter/core/lib/constants/color'
 import { Loading } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
 // lodash
@@ -52,13 +55,13 @@ const LoadingBox = styled.div`
   top: 50%;
   right: 50%;
   transform: translate(50%, -50%);
-  animation: ${spin} 1s linear infinite;
   display: flex;
   align-items: center;
 
   svg {
     width: 48px;
     height: 48px;
+    animation: ${spin} 1s linear infinite;
   }
 `
 const Loader: React.FC = () => (
@@ -73,6 +76,7 @@ const Box = styled.div`
   height: 100vh;
   background-color: ${colorGrayscale.white};
   overflow-x: hidden;
+  box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
 
   ${mq.tabletOnly`
     width: 50vw;
@@ -218,6 +222,7 @@ const FollowMoreLegislator = styled.div`
 
 export type SidebarLegislatorProps = {
   title: TitleSectionProps['title']
+  subtitle?: TitleSectionProps['subtitle']
   issueList?: TitleSectionProps['tabs']
   slug: string
   onClose?: () => void
@@ -226,6 +231,7 @@ export type SidebarLegislatorProps = {
 export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   slug,
   title,
+  subtitle,
   issueList = [],
   onClose,
   className,
@@ -265,6 +271,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
     <Box className={className}>
       <TitleSection
         title={title}
+        subtitle={subtitle}
         tabs={issueList}
         link={`/issue/${slug}`}
         onSelectTab={setSelectedTab}

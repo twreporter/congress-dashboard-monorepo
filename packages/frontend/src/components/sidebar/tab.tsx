@@ -18,9 +18,8 @@ const Box = styled.div<{ $active: boolean }>`
   width: fit-content;
   display: flex;
   align-items: center;
-  border-bottom: 2px solid
-    ${(props) =>
-      props.$active ? colorGrayscale.gray800 : colorGrayscale.gray400};
+  ${(props) =>
+    props.$active ? `border-bottom: 2px solid ${colorGrayscale.gray800};` : ''}
   padding: 12px 0;
   gap: 10px;
   cursor: pointer;

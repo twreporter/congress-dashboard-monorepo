@@ -5,6 +5,8 @@ import styled from 'styled-components'
 // components
 import Tab, { TabProps } from '@/components/sidebar/tab'
 import { Gap } from '@/components/skeleton'
+// utils
+import { notoSerif } from '@/utils/font'
 // @twreporter
 import { H3 } from '@twreporter/react-components/lib/text/headline'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
@@ -20,13 +22,19 @@ const Section = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 16px 16px 0 24px;
+  padding: 16px 16px 0 0;
+  position: sticky;
+  top: 0;
+  background-color: ${colorGrayscale.white};
 `
 const FlexRow = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: flex-start;
+  flex-direction: row;
   justify-content: space-between;
+`
+const TitleGroup = styled(FlexRow)`
+  padding-left: 24px;
 `
 const ButtonGroup = styled.div`
   display: flex;
@@ -43,10 +51,12 @@ const Button = styled(IconButton)`
 `
 const Title = styled(H3)`
   color: ${colorGrayscale.gray900};
+  font-family: ${notoSerif.style.fontFamily} !important;
 `
 const Subtitle = styled(P2)`
   color: ${colorGrayscale.gray800};
   margin-top: 4px;
+  padding-left: 24px;
 
   ${mq.tabletOnly`
     margin-top: 0;  
@@ -55,17 +65,29 @@ const Subtitle = styled(P2)`
 const TabGroup = styled(FlexRow)`
   margin-top: 12px;
   align-items: center;
+  border-bottom: 1px solid ${colorGrayscale.gray300};
 
   ${FlexRow} {
     overflow-x: scroll;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     gap: 24px;
     margin-right: 4px;
     padding-right: 24px;
+    padding: 0 24px;
 
     ${mq.tabletOnly`
       margin-right: 0;
     `}
+  }
+
+  ${Button} {
+    &:before {
+      content: '';
+      height: 28px;
+      border-right: 1px solid ${colorGrayscale.gray300};
+      position: relative;
+      left: -10px;
+    }
   }
 `
 
@@ -121,7 +143,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
 
   return (
     <Section>
-      <FlexRow>
+      <TitleGroup>
         <Title text={`${title} 的相關發言摘要${count ? `(${count})` : ''}`} />
         <ButtonGroup>
           <Button
@@ -137,7 +159,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
             onClick={closePage}
           />
         </ButtonGroup>
-      </FlexRow>
+      </TitleGroup>
       {subtitle ? <Subtitle text={subtitle} /> : null}
       {tabs.length > 0 ? (
         <TabGroup>
