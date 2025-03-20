@@ -29,7 +29,6 @@ async function keystoneFetch<T>(
   })
 
   if (!res.ok) {
-    // todo: add error log
     throw new Error(`Keystone API Error: ${res.statusText}`)
   }
   const data = await res.json()

@@ -9,9 +9,14 @@ const session: Session = {
 const maxAge = 86400 // stateless session expire maxAge (sec)
 const second = 1000
 async function refreshToken(): Promise<void> {
+  const url = `${process.env.API_SERVER_URL}`
   const email = process.env.API_AUTH_EMAIL
   const password = process.env.API_AUTH_PASSWORD
-  const res = await fetch(`${process.env.API_SERVER_URL}`, {
+  if (!url || !email || !password) {
+    throw Error(`refresh token failed: invalid config`)
+  }
+
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -42,8 +47,7 @@ async function refreshToken(): Promise<void> {
   const { sessionToken, message } =
     data?.data?.authenticateSystemUserWithPassword
   if (!sessionToken || message) {
-    // todo: log error instead of throw err
-    throw `refresh token failed: ${message}`
+    throw Error(`refresh token failed: ${message}`)
   }
   session.token = sessionToken
   const now = new Date()
