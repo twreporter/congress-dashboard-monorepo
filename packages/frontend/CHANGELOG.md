@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.2-beta.9, 2025-03-20
+
+### Notable Changes
+
+- fix
+  - add `pino` logger & support stackdriver log
+  - remove unused files in `public` folder
+
+### Commits
+
+- [[`fc9977e1e1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fc9977e1e1)] - **fix**: `build-storybook` failed (Aylie Chou)
+- [[`f62b14be26`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f62b14be26)] - **fix**: remove unused files (Aylie Chou)
+- [[`1a3432c3f7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1a3432c3f7)] - **fix**: add `pino` logger & support stackdriver log (Aylie Chou)
+
 ## 0.0.2-beta.8, 2025-03-19
 
 ### Notable Changes
