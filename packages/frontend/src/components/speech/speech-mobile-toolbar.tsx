@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, createContext, useContext } from 'react'
+import React, { useState, createContext, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 // @twreporter
@@ -40,7 +40,7 @@ const MobileToolbarContainer = styled.div<{
   border-top: 1px solid ${colorGrayscale.gray300};
   height: ${(props) => (props.$hideText ? '40px' : '55px')};
   transform: ${(props) =>
-    props.$isHidden ? 'translateY(200%)' : 'tanslateY(0%)'};
+    props.$isHidden ? 'translateY(200%)' : 'translateY(0%)'};
   transition: height 200ms, transform 200ms ease-in-out;
 `
 
@@ -52,45 +52,41 @@ const ToolBar = styled.div`
   max-width: 560px;
   justify-content: space-evenly;
   align-items: center;
+  position: relative;
 `
+
+const OptionsContainer = styled.div<{ $isShow: boolean }>`
+  visibility: ${(props) => (props.$isShow ? 'visible' : 'hidden')};
+  transition: visibility 100ms;
+  position: absolute;
+  top: -55px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+`
+
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 50px;
-  position: relative;
   a {
     text-decoration: none;
   }
 `
 
-const ShareOptionsContainer = styled.div<{ $isShow: boolean }>`
-  visibility: ${(props) => (props.$isShow ? 'visible' : 'hidden')};
-  transition: visibility 100ms;
-  position: absolute;
-  top: -55px;
-  left: 5px;
-  display: flex;
-  gap: 8px;
-  z-index: 6;
-`
-
-const SwitchOptionsContainer = styled.div<{ $isShow: boolean }>`
-  visibility: ${(props) => (props.$isShow ? 'visible' : 'hidden')};
-  transition: visibility 100ms;
-  position: absolute;
-  top: -55px;
-  left: 50%;
-  display: flex;
-  gap: 8px;
-  z-index: 6;
-  transform: translateX(-50%);
-`
-
+type ButtonGroupType = 'share' | 'switch' | 'none'
 // global variables
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-const MobileToolbarContext = createContext<{ hideText: boolean }>({
+const MobileToolbarContext = createContext<{
+  hideText: boolean
+  setButtonGroup: React.Dispatch<React.SetStateAction<ButtonGroupType>>
+}>({
   hideText: false,
+  setButtonGroup: () => {},
 })
 
 const FeedbackButton: React.FC = () => {
@@ -109,13 +105,82 @@ const FeedbackButton: React.FC = () => {
 }
 
 const ShareButton: React.FC = () => {
-  const [isShow, setIsShow] = useState(false)
-  const { hideText } = useContext(MobileToolbarContext)
-  const onClick = () => {
-    setIsShow(!isShow)
+  const { hideText, setButtonGroup } = useContext(MobileToolbarContext)
+  const onClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setButtonGroup((prev) => (prev === 'share' ? 'none' : 'share'))
   }
-  const ref = useOutsideClick(() => setIsShow(false))
+  const ref = useOutsideClick(() => setButtonGroup('none'))
 
+  return (
+    <ButtonContainer onClick={onClick} ref={ref}>
+      <IconWithTextButton
+        text="分享"
+        iconComponent={<Share releaseBranch={releaseBranch} />}
+        hideText={hideText}
+      />
+    </ButtonContainer>
+  )
+}
+
+const SwitchButton: React.FC = () => {
+  const { hideText, setButtonGroup } = useContext(MobileToolbarContext)
+  const onClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setButtonGroup((prev) => (prev === 'switch' ? 'none' : 'switch'))
+  }
+  const ref = useOutsideClick(() => setButtonGroup('none'))
+
+  return (
+    <ButtonContainer onClick={onClick} ref={ref}>
+      <IconWithTextButton
+        text="切換片段"
+        iconComponent={<Switch releaseBranch={releaseBranch} />}
+        hideText={hideText}
+      />
+    </ButtonContainer>
+  )
+}
+
+type FontSizeButtonProps = {
+  onClick: () => void
+}
+
+const FontSizeButton: React.FC<FontSizeButtonProps> = ({ onClick }) => {
+  const { hideText } = useContext(MobileToolbarContext)
+  return (
+    <ButtonContainer onClick={onClick}>
+      <IconWithTextButton
+        text="文字大小"
+        iconComponent={<Text releaseBranch={releaseBranch} />}
+        hideText={hideText}
+      />
+    </ButtonContainer>
+  )
+}
+
+type IVODButtonProps = {
+  link: string
+}
+
+const IVODButton: React.FC<IVODButtonProps> = ({ link }) => {
+  const { hideText } = useContext(MobileToolbarContext)
+  return (
+    <ButtonContainer onClick={() => window.open(link, '_blank')}>
+      <IconWithTextButton
+        text="看IVOD"
+        iconComponent={<Video releaseBranch={releaseBranch} />}
+        hideText={hideText}
+      />
+    </ButtonContainer>
+  )
+}
+
+type ShareButtonGroupProps = {
+  isShow: boolean
+}
+
+const ShareButtonGroup: React.FC<ShareButtonGroupProps> = ({ isShow }) => {
   const handleCopyOnClick = async () => {
     try {
       const currentURL = window.location.href
@@ -134,7 +199,6 @@ const ShareButton: React.FC = () => {
       `&app_id=${appID}` +
       `&link=${encodeURIComponent(currentURL)}` +
       `&redirect_uri=${encodeURIComponent('https://www.facebook.com/')}`
-
     window.open(location, '_blank')
   }
   const handleLineClick = () => {
@@ -142,7 +206,6 @@ const ShareButton: React.FC = () => {
     const location = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(
       currentURL
     )}`
-
     window.open(location, '_blank')
   }
   const handleTwitterClick = () => {
@@ -152,125 +215,78 @@ const ShareButton: React.FC = () => {
       `url=${encodeURIComponent(currentURL)}&text=${encodeURIComponent(
         document.title + ' #報導者'
       )}`
-
     window.open(location, '_blank')
   }
   return (
-    <ButtonContainer onClick={onClick} ref={ref}>
-      <IconWithTextButton
-        text="分享"
-        iconComponent={<Share releaseBranch={releaseBranch} />}
-        hideText={hideText}
+    <OptionsContainer $isShow={isShow}>
+      <TabBarButton
+        icon={<Facebook releaseBranch={releaseBranch} />}
+        onClick={handleFBClick}
       />
-      <ShareOptionsContainer $isShow={isShow}>
-        <TabBarButton
-          icon={<Facebook releaseBranch={releaseBranch} />}
-          onClick={handleFBClick}
-        />
-        <TabBarButton
-          icon={<Line releaseBranch={releaseBranch} />}
-          onClick={handleLineClick}
-        />
-        <TabBarButton
-          icon={<Twitter releaseBranch={releaseBranch} />}
-          onClick={handleTwitterClick}
-        />
-        <TabBarButton
-          icon={<Copy releaseBranch={releaseBranch} />}
-          onClick={handleCopyOnClick}
-        />
-      </ShareOptionsContainer>
-    </ButtonContainer>
+      <TabBarButton
+        icon={<Line releaseBranch={releaseBranch} />}
+        onClick={handleLineClick}
+      />
+      <TabBarButton
+        icon={<Twitter releaseBranch={releaseBranch} />}
+        onClick={handleTwitterClick}
+      />
+      <TabBarButton
+        icon={<Copy releaseBranch={releaseBranch} />}
+        onClick={handleCopyOnClick}
+      />
+    </OptionsContainer>
   )
 }
 
-type SwitchButtonProps = {
-  isLastSpeech?: boolean
-  isFirstSpeech?: boolean
+type SwitchButtonGroupProps = {
+  isShow: boolean
   onSwitchClick: (direction: Direction) => void
+  isFirstSpeech: boolean
+  isLastSpeech: boolean
 }
-const SwitchButton: React.FC<SwitchButtonProps> = ({
-  isLastSpeech = false,
-  isFirstSpeech = false,
-  onSwitchClick,
-}) => {
-  const [isShow, setIsShow] = useState(false)
-  const { hideText } = useContext(MobileToolbarContext)
-  const onClick = () => {
-    setIsShow(!isShow)
-  }
-  const ref = useOutsideClick(() => setIsShow(false))
 
+const SwitchButtonGroup: React.FC<SwitchButtonGroupProps> = ({
+  isShow,
+  onSwitchClick,
+  isFirstSpeech,
+  isLastSpeech,
+}) => {
   const handlePrevClick = () => {
-    onSwitchClick(Direction.PREV)
+    if (!isFirstSpeech) {
+      onSwitchClick(Direction.PREV)
+    }
   }
 
   const handleNextClick = () => {
-    onSwitchClick(Direction.NEXT)
+    if (!isLastSpeech) {
+      onSwitchClick(Direction.NEXT)
+    }
   }
 
   return (
-    <ButtonContainer onClick={onClick} ref={ref}>
-      <IconWithTextButton
-        text="切換片段"
-        iconComponent={<Switch releaseBranch={releaseBranch} />}
-        hideText={hideText}
+    <OptionsContainer $isShow={isShow}>
+      <TabBarButton
+        icon={
+          <Arrow
+            releaseBranch={releaseBranch}
+            direction={Arrow.Direction.LEFT}
+          />
+        }
+        onClick={handlePrevClick}
+        disabled={isFirstSpeech}
       />
-      <SwitchOptionsContainer $isShow={isShow}>
-        <TabBarButton
-          disabled={isFirstSpeech}
-          icon={
-            <Arrow
-              releaseBranch={releaseBranch}
-              direction={Arrow.Direction.LEFT}
-            />
-          }
-          onClick={handlePrevClick}
-        />
-        <TabBarButton
-          disabled={isLastSpeech}
-          icon={
-            <Arrow
-              releaseBranch={releaseBranch}
-              direction={Arrow.Direction.RIGHT}
-            />
-          }
-          onClick={handleNextClick}
-        />
-      </SwitchOptionsContainer>
-    </ButtonContainer>
-  )
-}
-
-type FontSizeButtonProps = {
-  onClick: () => void
-}
-const FontSizeButton: React.FC<FontSizeButtonProps> = ({ onClick }) => {
-  const { hideText } = useContext(MobileToolbarContext)
-  return (
-    <ButtonContainer onClick={onClick}>
-      <IconWithTextButton
-        text="文字大小"
-        iconComponent={<Text releaseBranch={releaseBranch} />}
-        hideText={hideText}
+      <TabBarButton
+        icon={
+          <Arrow
+            releaseBranch={releaseBranch}
+            direction={Arrow.Direction.RIGHT}
+          />
+        }
+        onClick={handleNextClick}
+        disabled={isLastSpeech}
       />
-    </ButtonContainer>
-  )
-}
-
-type IVODButtonProps = {
-  link: string
-}
-const IVODButton: React.FC<IVODButtonProps> = ({ link }) => {
-  const { hideText } = useContext(MobileToolbarContext)
-  return (
-    <ButtonContainer onClick={() => window.open(link, '_blank')}>
-      <IconWithTextButton
-        text="看IVOD"
-        iconComponent={<Video releaseBranch={releaseBranch} />}
-        hideText={hideText}
-      />
-    </ButtonContainer>
+    </OptionsContainer>
   )
 }
 
@@ -290,9 +306,14 @@ const MobileToolbar: React.FC<MobileToolbarProps> = ({
   onSwitchClick,
   scrollStage,
 }) => {
+  const [buttonGroup, setButtonGroup] = useState<ButtonGroupType>('none')
   const isHidden = scrollStage >= 3
   const hideText = scrollStage >= 2
-  const contextValue = { hideText }
+  const contextValue = { hideText, setButtonGroup }
+
+  useEffect(() => {
+    setButtonGroup('none')
+  }, [scrollStage])
 
   return (
     <MobileToolbarContext.Provider value={contextValue}>
@@ -300,13 +321,16 @@ const MobileToolbar: React.FC<MobileToolbarProps> = ({
         <ToolBar>
           <FeedbackButton />
           <ShareButton />
-          <SwitchButton
-            isLastSpeech={isLastSpeech}
-            isFirstSpeech={isFirstSpeech}
-            onSwitchClick={onSwitchClick}
-          />
+          <SwitchButton />
           <FontSizeButton onClick={onFontSizeChange} />
           <IVODButton link={iVODLink} />
+          <ShareButtonGroup isShow={buttonGroup === 'share'} />
+          <SwitchButtonGroup
+            isShow={buttonGroup === 'switch'}
+            onSwitchClick={onSwitchClick}
+            isFirstSpeech={isFirstSpeech}
+            isLastSpeech={isLastSpeech}
+          />
         </ToolBar>
       </MobileToolbarContainer>
     </MobileToolbarContext.Provider>

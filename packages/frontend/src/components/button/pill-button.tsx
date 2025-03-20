@@ -9,6 +9,8 @@ const GrayPillButton = styled(PillButton)<{
   $disabled?: boolean
   $isLoading?: boolean
 }>`
+  height: 40px;
+  border-width: 1px !important;
   ${(props) =>
     props.$disabled || props.$isLoading
       ? `

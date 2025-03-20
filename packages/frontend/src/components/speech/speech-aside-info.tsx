@@ -21,6 +21,7 @@ export const AsideInfoContainer = styled.div`
   border-bottom: 1px solid ${colorGrayscale.gray300};
   padding: 24px 0;
   position: relative;
+  width: 100%;
   &::before {
     content: '';
     border-right: 0.5px solid ${colorGrayscale.gray300};

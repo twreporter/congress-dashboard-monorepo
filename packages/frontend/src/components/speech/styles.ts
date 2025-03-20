@@ -12,6 +12,8 @@ import { P1, P2 } from '@twreporter/react-components/lib/text/paragraph'
 import { HEADER_HEIGHT } from '@/constants/header'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+// utils
+import { notoSerif } from '@/utils/font'
 
 export const SpeechContainer = styled.div`
   position: relative;
@@ -203,6 +205,7 @@ export const DateAndTitle = styled.div`
 export const ControlItems = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `
 
 export const Spacing = styled.div<{ $width?: number; $height?: number }>`
@@ -229,6 +232,7 @@ export const ControlTabDate = styled(P1)`
 `
 
 export const ControlTabTitle = styled(P1)`
+  font-family: ${notoSerif.style.fontFamily} !important;
   color: ${colorGrayscale.gray800};
   overflow: hidden;
   white-space: nowrap;

@@ -9,6 +9,7 @@ import {
 } from '@twreporter/react-components/lib/rwd'
 import { Report, Video } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
+import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 // styles
 import {
   SpeechContainer,
@@ -242,8 +243,14 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ slug }) => {
       >
         <ControlTab $isHeaderAbove={!isHeaderHidden && !isControllBarHidden}>
           <DateAndTitle>
-            <ControlTabDate text={testSpeechData[slug].date} />
-            <ControlTabTitle text={testSpeechData[slug].title} />
+            <ControlTabDate
+              weight={P1.Weight.BOLD}
+              text={testSpeechData[slug].date}
+            />
+            <ControlTabTitle
+              weight={P1.Weight.BOLD}
+              text={testSpeechData[slug].title}
+            />
           </DateAndTitle>
           <DesktopAndAbove>
             <ControlItems>
@@ -255,7 +262,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ slug }) => {
                 text={'iVOD'}
               />
               <Spacing $width={24} />
-              <P1Gray600 text="質詢片段切換" />
+              <P1Gray600 weight={P1.Weight.BOLD} text="質詢片段切換" />
               <Spacing $width={12} />
               <IconButton
                 disabled={isFirstSpeech}
@@ -285,7 +292,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ slug }) => {
               text={'iVOD'}
             />
             <IvodSwitchBlock>
-              <P1Gray600 text="質詢片段切換" />
+              <P1Gray600 weight={P1.Weight.BOLD} text="質詢片段切換" />
               <IvodSwitchButtonContainer>
                 <IconButton
                   disabled={isFirstSpeech}
@@ -329,7 +336,10 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ slug }) => {
           />
         </TabletAndBelowWithFlex>
         <ContentBlock>
-          <SpeechSummary summary={testSpeechData[slug].summary} />
+          <SpeechSummary
+            summary={testSpeechData[slug].summary}
+            fontSizeOffset={FontSizeOffset[fontSize]}
+          />
           <SeparationCurve />
           <SpeechContent
             content={testSpeechData[slug].content}

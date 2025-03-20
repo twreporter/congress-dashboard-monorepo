@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.0.2-beta.10, 2025-03-21
+
+### Notable Changes
+
+- fix
+  - fix defects
+  - remove unused code
+  - utils font family
+
+### Commits
+
+- [[`0782c3608c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0782c3608c)] - Merge remote-tracking branch 'upstream/dev' into fix/frontend-speech-defetc-2 (Lucien)
+- [[`b49a571776`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b49a571776)] - **fix(frontend)**: utils font family (Lucien)
+- [[`c2aba513e3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c2aba513e3)] - **fix(frontend)**: remove unused code (Lucien)
+- [[`a819911f4d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a819911f4d)] - **fix(frontend)**: fix defects (Lucien)
+
 ## 0.0.2-beta.9, 2025-03-20
 
 ### Notable Changes
