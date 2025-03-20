@@ -57,7 +57,7 @@ const ToolBar = styled.div`
 
 const OptionsContainer = styled.div<{ $isShow: boolean }>`
   visibility: ${(props) => (props.$isShow ? 'visible' : 'hidden')};
-  transition: visibility 100ms, opacity 150ms ease;
+  transition: visibility 100ms;
   position: absolute;
   top: -55px;
   display: flex;
