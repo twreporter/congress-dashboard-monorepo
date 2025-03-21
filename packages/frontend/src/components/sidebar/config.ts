@@ -50,7 +50,7 @@ const mockLegislatorList = [
 
 export const mockSidebarIssueProps: SidebarIssueProps = {
   slug: 'test-1',
-  title: 'NCC執法效能與正當性 的相關發言摘要',
+  title: 'NCC執法效能與正當性',
   count: 36,
   legislatorList: mockLegislatorList,
 }
@@ -58,6 +58,7 @@ export const mockSidebarIssueProps: SidebarIssueProps = {
 export const mockSidebarLegislatorProps: SidebarLegislatorProps = {
   slug: 'test-1',
   title: '沈伯洋',
+  subtitle: '本屆加入：程序委員會(6會期)、外交及國防委員會(2會期)',
   issueList: mockIssueList,
 }
 
