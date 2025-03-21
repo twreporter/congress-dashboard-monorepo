@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import Papa from 'papaparse'
+import { useQuery, gql } from '@keystone-6/core/admin-ui/apollo'
 import type {
   FieldController,
   FieldControllerConfig,
@@ -28,7 +29,36 @@ import {
   Tr,
   RequiredIndicator,
   FileName,
+  WarningText,
+  LoadingWrapper,
+  Spinner,
+  LoadingOverlay,
+  LoadingHint,
 } from './style'
+
+const CHECK_LEGISLATOR_SLUGS = gql`
+  query CheckLegislatorSlugs($slugs: [String!]!) {
+    duplicates: legislators(where: { slug: { in: $slugs } }) {
+      slug
+    }
+  }
+`
+
+const CHECK_TOPIC_SLUGS = gql`
+  query CheckTopicSlugs($slugs: [String!]!) {
+    duplicates: topics(where: { slug: { in: $slugs } }) {
+      slug
+    }
+  }
+`
+
+const CHECK_SPEECH_SLUGS = gql`
+  query CheckSpeechSlugs($slugs: [String!]!) {
+    duplicates: speeches(where: { slug: { in: $slugs } }) {
+      slug
+    }
+  }
+`
 
 export const Cell: CellComponent = ({ item, field }) => {
   const { listOptions } = field
@@ -77,6 +107,7 @@ type UploaderFieldController = {
 } & FieldController<UploaderFieldValue | null, string>
 
 export function Field({
+  itemValue,
   field,
   value,
   onChange,
@@ -87,8 +118,72 @@ export function Field({
   )
   const [csvData, setCsvData] = useState<string[][]>([])
   const [error, setError] = useState('')
+  const [slugDuplicates, setSlugDuplicates] = useState<string[]>([])
   const [fileName, setFileName] = useState('')
+  const [isProcessing, setIsProcessing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Determine if this is a new record or updating an existing one
+  const isNewRecord = itemValue?.createdAt.value.kind === 'create'
+
+  // Extract slugs from CSV data when listName is one of the target lists
+  const extractSlugs = () => {
+    if (!csvData || csvData.length < 2 || !listName) return []
+
+    const headers = csvData[0]
+    const slugIndex = headers.findIndex(
+      (header) => header.toLowerCase() === 'slug'
+    )
+
+    if (slugIndex === -1) return []
+
+    return csvData
+      .slice(1)
+      .map((row) => row[slugIndex])
+      .filter((slug) => slug)
+  }
+
+  const isTargetList =
+    listName === 'Legislator' || listName === 'Topic' || listName === 'Speech'
+  const shouldCheckSlugs = isNewRecord && isTargetList
+  const slugsToCheck = useMemo(() => {
+    return shouldCheckSlugs ? extractSlugs() : []
+  }, [shouldCheckSlugs, csvData, listName])
+
+  // Select the appropriate query based on listName
+  const queryToUse =
+    listName === 'Legislator'
+      ? CHECK_LEGISLATOR_SLUGS
+      : listName === 'Topic'
+      ? CHECK_TOPIC_SLUGS
+      : CHECK_SPEECH_SLUGS
+
+  // Query to check for duplicate slugs only if this is a new record
+  const {
+    data,
+    loading,
+    error: queryError,
+    refetch,
+  } = useQuery(queryToUse, {
+    variables: {
+      slugs: slugsToCheck,
+    },
+    skip: !shouldCheckSlugs || slugsToCheck.length === 0,
+    fetchPolicy: 'network-only',
+  })
+
+  // Process the query results to find duplicates
+  useEffect(() => {
+    if (!data || !shouldCheckSlugs) return
+
+    let duplicates: string[] = []
+
+    if (data.duplicates) {
+      duplicates = data.duplicates.map((item: { slug: string }) => item.slug)
+    }
+
+    setSlugDuplicates(duplicates)
+  }, [data, shouldCheckSlugs])
 
   useEffect(() => {
     if (value?.csvData) {
@@ -102,6 +197,13 @@ export function Field({
       setListName(value.listName)
     }
   }, [value])
+
+  // Refetch duplicate check when CSV data changes (only for new records)
+  useEffect(() => {
+    if (shouldCheckSlugs && slugsToCheck.length > 0) {
+      refetch({ slugs: slugsToCheck })
+    }
+  }, [refetch, shouldCheckSlugs, slugsToCheck])
 
   const requiredFields =
     !listName || !field.requiredFields[listName]
@@ -129,6 +231,7 @@ export function Field({
     setListName(newListName)
     setCsvData([])
     setFileName('')
+    setSlugDuplicates([])
     if (onChange) {
       onChange({
         listName: newListName,
@@ -149,7 +252,10 @@ export function Field({
       setFileName('')
       return
     }
+
     setFileName(file.name)
+    setIsProcessing(true)
+
     const reader = new FileReader()
     reader.onload = (e) => {
       try {
@@ -160,6 +266,7 @@ export function Field({
         })
         setCsvData(result.data)
         setError('')
+        setIsProcessing(false)
         if (onChange) {
           onChange({
             listName,
@@ -170,12 +277,14 @@ export function Field({
         console.error('CSV parsing error:', err)
         setError('Failed to parse CSV file')
         setCsvData([])
+        setIsProcessing(false)
       }
     }
     reader.onerror = () => {
       setError('Failed to read file')
       setCsvData([])
       setFileName('')
+      setIsProcessing(false)
     }
     reader.readAsText(file)
   }
@@ -196,6 +305,21 @@ export function Field({
 
   const selectedOption =
     field.listOptions.find((option) => option.value === listName) || null
+
+  // Check if the row contains a duplicate slug
+  const isSlugDuplicated = (row: string[]) => {
+    if (!shouldCheckSlugs || !csvData || csvData.length < 1) return false
+
+    const headers = csvData[0]
+    const slugIndex = headers.findIndex(
+      (header) => header.toLowerCase() === 'slug'
+    )
+
+    if (slugIndex === -1) return false
+
+    const slug = row[slugIndex]
+    return slugDuplicates.includes(slug)
+  }
 
   return (
     <FieldContainer>
@@ -233,11 +357,30 @@ export function Field({
                 onClick={handleButtonClick}
                 tone="active"
                 weight="light"
-                isDisabled={!listName}
+                isDisabled={!listName || isProcessing || loading}
               >
                 Upload CSV File
               </Button>
               {fileName && <FileName>Selected file: {fileName}</FileName>}
+
+              {isProcessing && (
+                <LoadingWrapper>
+                  <Spinner />
+                  <LoadingHint style={{ marginLeft: '12px' }}>
+                    Processing CSV file...
+                  </LoadingHint>
+                </LoadingWrapper>
+              )}
+
+              {!isProcessing && loading && (
+                <LoadingWrapper>
+                  <Spinner />
+                  <LoadingHint style={{ marginLeft: '12px' }}>
+                    Checking for duplicate slugs...
+                  </LoadingHint>
+                </LoadingWrapper>
+              )}
+
               {error && <ErrorText>{error}</ErrorText>}
               {!isHeaderValid && csvData.length > 0 && (
                 <ErrorText>
@@ -251,10 +394,28 @@ export function Field({
                   請確認標題順序是否正確
                 </ErrorText>
               )}
+              {queryError && (
+                <ErrorText>
+                  Error checking for duplicate slugs: {queryError.message}
+                </ErrorText>
+              )}
+              {isNewRecord && slugDuplicates.length > 0 && (
+                <WarningText>
+                  注意：以下 slug
+                  已存在於資料庫中，將會更新現有資料而非新增記錄：
+                  <br />
+                  {slugDuplicates.join(', ')}
+                </WarningText>
+              )}
             </>
           ) : null}
           {csvData.length > 0 && (
             <TableWrapper>
+              {loading && (
+                <LoadingOverlay>
+                  <Spinner />
+                </LoadingOverlay>
+              )}
               <Table>
                 <thead>
                   <tr>
@@ -281,13 +442,40 @@ export function Field({
                     )
                     // Check if row length matches header
                     const isLengthValid = row.length === csvData[0].length
+                    // Check if slug is duplicated (only for new records)
+                    const hasSlugDuplicate = isSlugDuplicated(row)
+
                     const isValidRow =
                       isHeaderValid && isLengthValid && !hasRequiredEmpty
+
+                    // Determine row status
+                    let rowStatus: 'success' | 'warning' | 'error' = isValidRow
+                      ? 'success'
+                      : 'error'
+
+                    // If row is valid but has duplicate slug, mark as warning (only for new records)
+                    if (isValidRow && hasSlugDuplicate && isNewRecord) {
+                      rowStatus = 'warning'
+                    }
+
                     return (
-                      <Tr key={i} $status={isValidRow ? 'success' : 'error'}>
-                        {row.map((cell, j) => (
-                          <Td key={j}>{cell}</Td>
-                        ))}
+                      <Tr key={i} $status={rowStatus}>
+                        {row.map((cell, j) => {
+                          // Highlight duplicate slug cells (only for new records)
+                          const isSlugColumn =
+                            csvData[0][j].toLowerCase() === 'slug'
+                          const isDuplicateSlug =
+                            isSlugColumn &&
+                            isNewRecord &&
+                            slugDuplicates.includes(cell)
+
+                          return (
+                            <Td key={j}>
+                              {cell}
+                              {isDuplicateSlug && ' (將更新)'}
+                            </Td>
+                          )
+                        })}
                       </Tr>
                     )
                   })}
