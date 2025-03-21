@@ -306,7 +306,6 @@ const importHandlers: Record<
   ListName,
   (csvData: string[][], context: KeystoneContext) => Promise<any[]>
 > = {
-  // TODO: topic & speech
   [ListName.legislator]: async (csvData, context) => {
     const queries: Promise<any>[] = []
 
@@ -326,16 +325,75 @@ const importHandlers: Record<
   [ListName.topic]: async (csvData, context) => {
     const queries: Promise<any>[] = []
 
-    csvData.slice(1).forEach(([title, slug]) => {
-      queries.push(
-        context.prisma.Topic.upsert({
-          where: { slug },
-          update: { title },
-          create: { title, slug },
-        })
-      )
-    })
+    // Group the data by post slug
+    const groupedData: Record<
+      string,
+      {
+        title: string
+        slug: string
+        speech_slugs: string[]
+      }
+    > = {}
 
+    for (const [title, slug, speech_slug] of csvData.slice(1)) {
+      const key = `${slug}`
+
+      if (!groupedData[key]) {
+        groupedData[key] = {
+          title,
+          slug,
+          speech_slugs: [],
+        }
+      }
+
+      if (!groupedData[key].speech_slugs.includes(speech_slug)) {
+        groupedData[key].speech_slugs.push(speech_slug)
+      }
+    }
+
+    for (const key in groupedData) {
+      const { title, slug, speech_slugs } = groupedData[key]
+
+      const existingTopic = await context.prisma.topic.findFirst({
+        where: { slug },
+        select: { id: true },
+      })
+
+      const speeches: { id: string }[] = await context.prisma.speech.findMany({
+        where: {
+          slug: {
+            in: speech_slugs,
+          },
+        },
+        select: { id: true },
+      })
+
+      if (existingTopic) {
+        queries.push(
+          context.prisma.topic.update({
+            where: { id: existingTopic.id },
+            data: {
+              title,
+              speeches: {
+                set: speeches.map((speech) => ({ id: speech.id })),
+              },
+            },
+          })
+        )
+      } else {
+        queries.push(
+          context.prisma.topic.create({
+            data: {
+              slug,
+              title,
+              speeches: {
+                connect: speeches.map((speech) => ({ id: speech.id })),
+              },
+            },
+          })
+        )
+      }
+    }
     return queries
   },
 
@@ -553,7 +611,7 @@ const importHandlers: Record<
               in: committee_slugs,
             },
           },
-          select: { id: true, slug: true },
+          select: { id: true },
         })
 
       const existingCommitteeMember =
