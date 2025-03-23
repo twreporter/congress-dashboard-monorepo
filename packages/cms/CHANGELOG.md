@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.0.2-beta.4, 2025-03-23
+
+### Notable Changes
+
+- feat
+  - check slug duplicated for some list
+- fix
+  - more header & speech option
+  - upsert topic with speech
+
+### Commits
+
+- [[`e1b371a3b0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1b371a3b0)] - **feat(cms)**: check slug duplicated for some list (Lucien)
+- [[`c0f508ba2d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c0f508ba2d)] - **fix(cms)**: upsert topic with speech (Lucien)
+- [[`a8c7ab99ca`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a8c7ab99ca)] - **fix(cms)**: more header & speech option (Lucien)
+
 ## 0.0.2-beta.3, 2025-03-18
 
 ### Notable Changes
