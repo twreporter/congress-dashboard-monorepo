@@ -16,8 +16,9 @@ export enum ListName {
 
 export const expectedHeaders: Record<string, string[]> = {
   [ListName.legislator]: ['name', 'slug', 'imageLink'],
-  [ListName.topic]: ['title', 'slug'],
+  [ListName.topic]: ['title', 'slug', 'speech_slug'],
   [ListName.legislativeYuanMember]: [
+    'legislator_name',
     'legislator_slug',
     'party_slug',
     'legislativeMeeting_term',
@@ -31,6 +32,7 @@ export const expectedHeaders: Record<string, string[]> = {
     'slug',
     'legislativeMeeting_term',
     'legislativeMeetingSession_term',
+    'legislator_name',
     'legislator_slug',
     'date',
     'title',
@@ -44,7 +46,9 @@ export const expectedHeaders: Record<string, string[]> = {
   [ListName.committeeMember]: [
     'legislativeMeeting_term',
     'legislativeMeetingSession_term',
+    'legislator_name',
     'legislator_slug',
+    'committee_name',
     'committee_slug',
   ],
 }
