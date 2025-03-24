@@ -63,7 +63,7 @@ type ImageProps = {
 const ImageWithSkeleton: React.FC<ImageProps> = ({ src }: ImageProps) => (
   <ImageBox>
     <ImageSkeleton />
-    <Image src={src} />
+    <Image src={src} alt="tab image" />
   </ImageBox>
 )
 
@@ -74,6 +74,7 @@ export type TabProps = {
   imageLink?: string
   selected?: boolean
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
+  className?: string
 }
 const Tab: React.FC<TabProps> = ({
   name,
@@ -81,9 +82,10 @@ const Tab: React.FC<TabProps> = ({
   imageLink,
   selected = false,
   onClick,
+  className,
 }: TabProps) => {
   return (
-    <Box $active={selected} onClick={onClick}>
+    <Box $active={selected} onClick={onClick} className={className}>
       {imageLink ? <ImageWithSkeleton src={imageLink} /> : null}
       <Name text={`${name}${count ? `(${count})` : ''}`} $active={selected} />
     </Box>

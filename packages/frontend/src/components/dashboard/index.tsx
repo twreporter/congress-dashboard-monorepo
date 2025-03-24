@@ -1,6 +1,7 @@
+/* eslint-disable react/display-name */
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 // config
 import { mockHumans, mockIssues } from '@/components/dashboard/card/config'
@@ -22,7 +23,12 @@ import {
   CardHumanProps,
   CardHumanSkeletonRWD,
 } from '@/components/dashboard/card/human'
-import { SidebarIssue, SidebarLegislator } from '@/components/sidebar'
+import {
+  SidebarIssue,
+  SidebarIssueProps,
+  SidebarLegislator,
+  SidebarLegislatorProps,
+} from '@/components/sidebar'
 import { GapHorizontal } from '@/components/skeleton'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
@@ -33,21 +39,31 @@ import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 const Box = styled.div`
   background: ${colorGrayscale.gray100};
   display: flex;
-  padding: 40px 256px 0px 256px;
   flex-direction: column;
   align-items: center;
+  padding: 40px 0 0 0;
   gap: 32px;
 
   ${mq.desktopOnly`
-    padding: 40px 48px 0px 48px;
+    padding: 40px 0 0 0 ;
   `}
   ${mq.tabletOnly`
-    padding: 32px 32px 0px 32px;
+    padding: 32px 0 0 0;
     gap: 24px;
   `}
   ${mq.mobileOnly`
-    padding: 20px 24px 0px 24px;
+    padding: 20px 0 0 0;
     gap: 20px;  
+  `}
+`
+const StyledFunctionBar = styled(FunctionBar)`
+  padding: 0 256px 0px 256px;
+
+  ${mq.tabletOnly`
+    padding: 0 32px 0px 32px;
+  `}
+  ${mq.mobileOnly`
+    padding: 0 24px 0px 24px;
   `}
 `
 const cardCss = css`
@@ -71,6 +87,7 @@ const CardIssueBox = styled.div<{ $active: boolean }>`
   ${(props) => (props.$active ? '' : 'display: none !important;')}
 `
 const CardHumanBox = styled.div<{ $active: boolean }>`
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 24px;
@@ -93,7 +110,7 @@ const LoadMore = styled(PillButton)`
 `
 const sidebarCss = css<{ $show: boolean }>`
   transform: translateX(${(props) => (props.$show ? 0 : 520)}px);
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 
   position: fixed;
   right: 0;
@@ -101,17 +118,27 @@ const sidebarCss = css<{ $show: boolean }>`
   z-index: 3000;
   overflow-y: scroll;
 `
-const StyledSidebarIssue = styled(SidebarIssue)<{ $show: boolean }>`
+const StyledSidebarIssue = styled(
+  forwardRef<HTMLDivElement, SidebarIssueProps>((props, ref) => (
+    <SidebarIssue {...props} ref={ref} />
+  ))
+)<{ $show: boolean }>`
   ${sidebarCss}
 `
-const StyledSidebarLegislator = styled(SidebarLegislator)<{ $show: boolean }>`
+const StyledSidebarLegislator = styled(
+  forwardRef<HTMLDivElement, SidebarLegislatorProps>((props, ref) => (
+    <SidebarLegislator {...props} ref={ref} />
+  ))
+)<{ $show: boolean }>`
   ${sidebarCss}
 `
-const Gap = styled(GapHorizontal)<{ $show: boolean }>`
-  ${(props) => (props.$show ? '' : 'width: 0;')}
-  transition: width 0.5s ease-in-out;
+const Gap = styled(GapHorizontal)`
+  transition: width 0.3s ease-in-out;
 `
-const CardSection = styled.div<{ $isScroll: boolean }>`
+const CardSection = styled.div<{
+  $isScroll: boolean
+  $isSidebarOpened: boolean
+}>`
   width: 100%;
   display: flex;
   flex-wrap: nowrap;
@@ -119,12 +146,26 @@ const CardSection = styled.div<{ $isScroll: boolean }>`
     props.$isScroll
       ? `
     overflow-x: scroll;
+    scrollbar-width: none;
   `
       : ''}
+  ${(props) =>
+    props.$isSidebarOpened
+      ? `
+      width: 100vw;
+      padding-left: 24px;
+    `
+      : `
+      max-width: 928px;
+  `}
 
-  max-width: 928px;
   ${mq.tabletAndBelow`
-    max-width: 100%;  
+    max-width: 100%;
+    padding: 0 32px;
+  `}
+
+  ${mq.mobileOnly`
+    padding: 0 24px;
   `}
 
   ${CardBox}, ${Gap} {
@@ -140,6 +181,9 @@ const Dashboard = () => {
   const [mockIssue, setMockIssue] = useState<CardIssueProps[]>([])
   const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
   const [showSidebar, setShowSidebar] = useState(false)
+  const [sidebarGap, setSidebarGap] = useState(0)
+  const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
+  const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (isLoading) {
@@ -169,21 +213,39 @@ const Dashboard = () => {
     setActiveCardIndex(-1)
     setSelectedType(value)
 
-    // scroll to top when change tab
+    /* scroll to top when change tab
+   *   not yet decided
     const anchorComponent = document.getElementById(anchorId)
     if (anchorComponent) {
       anchorComponent.scrollIntoView({ behavior: 'smooth' })
     }
+  */
   }
   const loadMore = () => {
     setIsLoading(true)
   }
   const closeSidebar = () => {
     setShowSidebar(false)
+    setSidebarGap(0)
     setActiveCardIndex(-1)
   }
   const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
     setActiveCardIndex(index)
+
+    let newSidebarGap = 520 + 24
+    const sidebarComponent = sidebarRefs.current[selectedType]
+    const cardComponent = cardRef.current
+    if (sidebarComponent && cardComponent) {
+      const needGap = sidebarComponent.clientWidth + 24
+      const hasGap = cardComponent.offsetLeft
+      if (cardComponent.clientWidth === 928) {
+        // desktop and above
+        newSidebarGap = hasGap > needGap ? 0 : needGap
+      } else {
+        newSidebarGap = needGap - hasGap
+      }
+    }
+    setSidebarGap(newSidebarGap > 0 ? newSidebarGap : 0)
 
     const cardElement = e.currentTarget as HTMLElement
     if (cardElement) {
@@ -199,16 +261,16 @@ const Dashboard = () => {
             block: 'center',
             inline: 'start',
           })
-        }, 500)
+        }, 300)
       }
     }
   }
 
   return (
     <Box id={anchorId}>
-      <FunctionBar currentTab={selectedType} setTab={setTab} />
-      <CardSection $isScroll={showSidebar}>
-        <CardBox>
+      <StyledFunctionBar currentTab={selectedType} setTab={setTab} />
+      <CardSection $isScroll={showSidebar} $isSidebarOpened={showSidebar}>
+        <CardBox ref={cardRef}>
           <CardIssueBox $active={selectedType === Option.Issue}>
             {mockIssue.map((props: CardIssueProps, index) => (
               <CardIssueRWD
@@ -233,6 +295,9 @@ const Dashboard = () => {
                 $show={showSidebar}
                 {...mockSidebarIssueProps}
                 onClose={closeSidebar}
+                ref={(el: HTMLDivElement) => {
+                  sidebarRefs.current[Option.Issue] = el
+                }}
               />
             </TabletAndAbove>
           </CardIssueBox>
@@ -260,6 +325,9 @@ const Dashboard = () => {
                 $show={showSidebar}
                 {...mockSidebarLegislatorProps}
                 onClose={closeSidebar}
+                ref={(el: HTMLDivElement) => {
+                  sidebarRefs.current[Option.Human] = el
+                }}
               />
             </TabletAndAbove>
           </CardHumanBox>
@@ -272,7 +340,7 @@ const Dashboard = () => {
             onClick={loadMore}
           />
         </CardBox>
-        <Gap $gap={520} $show={showSidebar} />
+        <Gap $gap={sidebarGap} />
       </CardSection>
     </Box>
   )

@@ -175,10 +175,12 @@ export enum Option {
 type FunctionBarProps = {
   currentTab?: Option
   setTab: (tab: Option) => void
+  className?: string
 }
 const FunctionBar: React.FC<FunctionBarProps> = ({
   currentTab = Option.Issue,
   setTab,
+  className,
 }: FunctionBarProps) => {
   const openFilter = () => {
     setIsFilterOpen((prev) => !prev)
@@ -214,7 +216,11 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
 
   return (
     <>
-      <StickyBar $isHeaderHidden={isHeaderHidden} ref={tabRef}>
+      <StickyBar
+        $isHeaderHidden={isHeaderHidden}
+        ref={tabRef}
+        className={className}
+      >
         <HorizaontalLine
           $isHeaderAboveTab={isHeaderAboveTab}
           $isHide={!isHeaderAboveTab}
@@ -252,7 +258,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
           $isHeaderHidden={isHeaderHidden}
         />
       </StickyBar>
-      <MobileOnlyBox>
+      <MobileOnlyBox className={className}>
         <FilterString onClick={openFilter}>{filterString}</FilterString>
       </MobileOnlyBox>
     </>

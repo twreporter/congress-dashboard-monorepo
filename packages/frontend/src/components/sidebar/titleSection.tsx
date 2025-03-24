@@ -62,6 +62,7 @@ const Subtitle = styled(P2)`
     margin-top: 0;  
   `}
 `
+const TabItem = styled.div``
 const TabGroup = styled(FlexRow)`
   margin-top: 12px;
   align-items: center;
@@ -70,14 +71,15 @@ const TabGroup = styled(FlexRow)`
   ${FlexRow} {
     overflow-x: scroll;
     scrollbar-width: none;
-    gap: 24px;
-    margin-right: 4px;
     padding-right: 24px;
-    padding: 0 24px;
 
     ${mq.tabletOnly`
       margin-right: 0;
     `}
+  }
+
+  ${TabItem} {
+    padding-left: 24px;
   }
 
   ${Button} {
@@ -165,14 +167,14 @@ const TitleSection: React.FC<TitleSectionProps> = ({
         <TabGroup>
           <FlexRow>
             {tabs.map((tabProps: TabProps, index: number) => (
-              <Tab
-                {...tabProps}
+              <TabItem
                 key={`sidebar-tab-${index}`}
-                selected={index === selectedTab}
                 onClick={(e: React.MouseEvent<HTMLElement>) =>
                   selectTab(e, index)
                 }
-              />
+              >
+                <Tab {...tabProps} selected={index === selectedTab} />
+              </TabItem>
             ))}
           </FlexRow>
           <Button
