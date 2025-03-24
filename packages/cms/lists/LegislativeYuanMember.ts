@@ -152,7 +152,12 @@ const listConfigurations = list({
       update: ({ resolvedData, item, addValidationError }) => {
         const { legislator, legislativeMeeting, type, constituency } =
           resolvedData
-        const { legislatorId, legislativeMeetingId, type: typeFromItem } = item
+        const {
+          legislatorId,
+          legislativeMeetingId,
+          type: typeFromItem,
+          constituency: constituencyFromItem,
+        } = item
 
         const hasLegislator =
           !legislator?.disconnect && (legislator || legislatorId)
@@ -162,11 +167,11 @@ const listConfigurations = list({
 
         if (!hasLegislator) addValidationError('立法委員為必填')
         if (!hasLegislativeMeeting) addValidationError('所屬屆期為必填')
-        if (
-          (type === MemberType.Constituency ||
-            typeFromItem === MemberType.Constituency) &&
-          !constituency
-        )
+
+        const effectiveType = type !== undefined ? type : typeFromItem
+        const effectiveConstituency =
+          constituency !== undefined ? constituency : constituencyFromItem
+        if (effectiveType === MemberType.Constituency && !effectiveConstituency)
           addValidationError('類別為區域時選區為必填')
       },
     },
