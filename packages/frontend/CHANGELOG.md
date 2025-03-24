@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.2-beta.12, 2025-03-24
+
+### Notable Changes
+
+- fix
+  - copy public env when cloud build
+
+### Commits
+
+- [[`71901b318c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/71901b318c)] - **fix**: copy public env when cloud build (Aylie Chou)
+
 ## 0.0.2-beta.11, 2025-03-21
 
 ### Notable Changes
