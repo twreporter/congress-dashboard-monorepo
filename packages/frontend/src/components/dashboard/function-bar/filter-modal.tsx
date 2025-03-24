@@ -17,7 +17,7 @@ import {
   CITY_OPTIONS,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 // fetcher
-import useParty, { partyData, stateType } from '@/fetchers/party'
+import useParty, { type partyData, type stateType } from '@/fetchers/party'
 // component
 import {
   SelectorType,

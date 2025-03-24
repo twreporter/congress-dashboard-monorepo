@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 // components
-import Tab, { TabProps } from '@/components/sidebar/tab'
+import Tab, { type TabProps } from '@/components/sidebar/tab'
 import { Gap } from '@/components/skeleton'
 // utils
 import { notoSerif } from '@/utils/font'

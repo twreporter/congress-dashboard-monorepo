@@ -15,19 +15,19 @@ import toastr from '@/utils/toastr'
 import FunctionBar, { Option } from '@/components/dashboard/function-bar'
 import {
   CardIssueRWD,
-  CardIssueProps,
+  type CardIssueProps,
   CardIssueSkeletonRWD,
 } from '@/components/dashboard/card/issue'
 import {
   CardHumanRWD,
-  CardHumanProps,
+  type CardHumanProps,
   CardHumanSkeletonRWD,
 } from '@/components/dashboard/card/human'
 import {
   SidebarIssue,
-  SidebarIssueProps,
+  type SidebarIssueProps,
   SidebarLegislator,
-  SidebarLegislatorProps,
+  type SidebarLegislatorProps,
 } from '@/components/sidebar'
 import { GapHorizontal } from '@/components/skeleton'
 // @twreporter
