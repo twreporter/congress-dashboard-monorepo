@@ -448,6 +448,9 @@ const importHandlers: Record<
             data: {
               ...commonData,
               legislator: { connect: { slug: legislator_slug } },
+              legislativeMeeting: {
+                connect: { term: Number(legislativeMeeting_term) },
+              },
             },
           })
         )

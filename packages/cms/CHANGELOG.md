@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.2-beta.5, 2025-03-25
+
+### Notable Changes
+
+- fix
+  - connect legislativeMeeting & fix legislativeYuanMember update logic
+
+### Commits
+
+- [[`e04dc0a5c9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e04dc0a5c9)] - **fix(cms)**: connect legislativeMeeting & fix legislativeYuanMember update logic (Lucien)
+
 ## 0.0.2-beta.4, 2025-03-23
 
 ### Notable Changes
