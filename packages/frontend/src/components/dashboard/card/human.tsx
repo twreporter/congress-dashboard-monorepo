@@ -24,11 +24,15 @@ import {
   DesktopAndAbove,
   TabletAndBelow,
 } from '@twreporter/react-components/lib/rwd'
+import { More } from '@twreporter/react-components/lib/icon'
 // lodash
 import { throttle } from 'lodash'
 const _ = {
   throttle,
 }
+
+// global env
+const releaseBranch = process.env.RELEASE_BRANCH
 
 export enum CardSize {
   S,
@@ -90,6 +94,7 @@ const TagContainer = styled.div`
 `
 const TagItem = styled.div`
   width: fit-content;
+  height: 25px;
   padding: 2px 8px;
   text-align: center;
   border-radius: 40px;
@@ -197,8 +202,8 @@ const CardHuman: React.FC<CardHumanProps> = ({
           } else {
             tagWidth = 108 // Default estimated width if tag not yet rendered
           }
-          // "..." tag width approx 30px
-          if (totalWidth + tagWidth < availableWidth - 30) {
+          // "..." tag width approx 40px
+          if (totalWidth + tagWidth < availableWidth - 40) {
             totalWidth += tagWidth
             count++
           } else {
@@ -263,7 +268,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
             })}
             {hasMoreTag ? (
               <TagItem>
-                <TagName>...</TagName>
+                <More releaseBranch={releaseBranch} />
               </TagItem>
             ) : null}
           </TagContainer>

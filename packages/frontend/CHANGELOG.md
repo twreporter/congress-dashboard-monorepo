@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.2-beta.13, 2025-03-25
+
+- fix
+  - import type with type-only import
+  - fix sidebar animation defects
+
+### Commits
+
+- [[`20842818db`](https://github.com/twreporter/congress-dashboard-monorepo/commit/20842818db)] - **fix**: import type with type-only import (Aylie Chou)
+- [[`5586f5e09f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5586f5e09f)] - **fix**: defects (Aylie Chou)
+
 ## 0.0.2-beta.12, 2025-03-24
 
 ### Notable Changes

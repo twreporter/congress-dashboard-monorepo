@@ -1,7 +1,7 @@
 import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { Cross } from '@twreporter/react-components/lib/icon'
-import CustomPillButton, { CustomPillButtonProps } from './pill-button'
+import CustomPillButton, { type CustomPillButtonProps } from './pill-button'
 
 type CustomPillButtonStoryProps = CustomPillButtonProps & {
   showLeft?: boolean

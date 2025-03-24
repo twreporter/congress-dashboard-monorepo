@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, RefAttributes } from 'react'
 import styled, { keyframes } from 'styled-components'
 // mock config
 import {
@@ -126,7 +126,7 @@ function groupSummary(summaryList: SummaryCardProps[]) {
   return result
 }
 
-export type SidebarIssueProps = {
+export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
   count: TitleSectionProps['count']
   legislatorList?: TitleSectionProps['tabs']
@@ -141,6 +141,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   legislatorList = [],
   onClose,
   className,
+  ref,
 }: SidebarIssueProps) => {
   const [isLoading, setIsLoading] = useState(true)
   const [selectedTab, setSelectedTab] = useState(0)
@@ -174,7 +175,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   }, [selectedTab])
 
   return (
-    <Box className={className}>
+    <Box className={className} ref={ref}>
       <TitleSection
         title={title}
         count={count}
@@ -220,7 +221,7 @@ const FollowMoreLegislator = styled.div`
   overflow-x: scroll;
 `
 
-export type SidebarLegislatorProps = {
+export interface SidebarLegislatorProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
   subtitle?: TitleSectionProps['subtitle']
   issueList?: TitleSectionProps['tabs']
@@ -235,6 +236,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   issueList = [],
   onClose,
   className,
+  ref,
 }: SidebarLegislatorProps) => {
   const [isLoading, setIsLoading] = useState(true)
   const [selectedTab, setSelectedTab] = useState(0)
@@ -268,7 +270,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   }, [selectedTab])
 
   return (
-    <Box className={className}>
+    <Box className={className} ref={ref}>
       <TitleSection
         title={title}
         subtitle={subtitle}
