@@ -1,47 +1,37 @@
 # Changelog
 
-## 0.0.2-beta.5, 2025-03-25
+## 0.0.2, 2025-03-26
 
 ### Notable Changes
 
-- fix
+- feat
   - connect legislativeMeeting & fix legislativeYuanMember update logic
-
-### Commits
-
-- [[`e04dc0a5c9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e04dc0a5c9)] - **fix(cms)**: connect legislativeMeeting & fix legislativeYuanMember update logic (Lucien)
-
-## 0.0.2-beta.4, 2025-03-23
-
-### Notable Changes
-
-- feat
   - check slug duplicated for some list
-- fix
-  - more header & speech option
-  - upsert topic with speech
-
-### Commits
-
-- [[`e1b371a3b0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1b371a3b0)] - **feat(cms)**: check slug duplicated for some list (Lucien)
-- [[`c0f508ba2d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c0f508ba2d)] - **fix(cms)**: upsert topic with speech (Lucien)
-- [[`a8c7ab99ca`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a8c7ab99ca)] - **fix(cms)**: more header & speech option (Lucien)
-
-## 0.0.2-beta.3, 2025-03-18
-
-### Notable Changes
-
-- feat
   - add csv uploader custom field
   - add papaparse to read csv file
   - use custom field for import record and change speech content and summary type
   - migration file
   - allow admin to delete import record
+  - required fields for upload csv
+  - add comment for graphql error
+  - add emotion packages
+  - add import record list
+  - set body limit to 50mb
+  - session secret
 - fix
+  - more header & speech option
+  - upsert topic with speech
   - fix comments
+  - add validation for upload data
+- chore
+  - sync dev
 
 ### Commits
 
+- [[`e04dc0a5c9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e04dc0a5c9)] - **fix(cms)**: connect legislativeMeeting & fix legislativeYuanMember update logic (Lucien)
+- [[`e1b371a3b0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1b371a3b0)] - **feat(cms)**: check slug duplicated for some list (Lucien)
+- [[`c0f508ba2d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c0f508ba2d)] - **fix(cms)**: upsert topic with speech (Lucien)
+- [[`a8c7ab99ca`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a8c7ab99ca)] - **fix(cms)**: more header & speech option (Lucien)
 - [[`d6bc98d572`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d6bc98d572)] - **fix(cms)**: fix comments (Lucien)
 - [[`0bb044ef58`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0bb044ef58)] - Merge remote-tracking branch 'upstream/dev' into feature/cms-upload-2 (Lucien)
 - [[`a4814d8e56`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4814d8e56)] - **feat(cms)**: allow admin to delete import record (Lucien)
@@ -49,46 +39,9 @@
 - [[`5008b0fd9d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5008b0fd9d)] - **feat(cms)**: use custom field for import record and change speech content and summary type (Lucien)
 - [[`e8eb2c9b16`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8eb2c9b16)] - **feat(cms)**: add papaparse to read csv file (Lucien)
 - [[`e1ca584a09`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1ca584a09)] - **feat(cms)**: add csv uploader custom field (Lucien)
-
-## 0.0.2-beta.2, 2025-03-05
-
-### Notable Changes
-
-- feat
-  - required fields for upload csv
-
-### Commits
-
 - [[`e9a06a7d81`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e9a06a7d81)] - **feat(cms)**: required fields for upload csv (Lucien)
-
-## 0.0.2-beta.1, 2025-03-04
-
-### Notable Changes
-
-- feat
-  - add comment for graphql error
-- fix
-  - add validation for upload data
-
-### Commits
-
 - [[`ec36e50e63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec36e50e63)] - **fix(cms)**: add validation for upload data (Lucien)
 - [[`c6a53870cc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c6a53870cc)] - **feat(cms)**: add comment for graphql error (Lucien)
-
-## 0.0.2-beta.0, 2025-02-25
-
-### Notable Changes
-
-- feat
-  - add emotion packages
-  - add import record list
-  - set body limit to 50mb
-  - session secret
-- chore
-  - sync dev
-
-### Commits
-
 - [[`2767337dc8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2767337dc8)] - **feat(cms)**: session secret (Lucien)
 - [[`70642b9e87`](https://github.com/twreporter/congress-dashboard-monorepo/commit/70642b9e87)] - **feat(cms)**: sync dev (Lucien)
 - [[`2e9139491d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2e9139491d)] - Merge remote-tracking branch 'upstream/dev' into feature/cms-upload (Lucien)
