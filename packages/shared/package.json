@@ -1,0 +1,25 @@
+{
+  "name": "@twreporter/congress-dashboard-shared",
+  "version": "0.0.2-beta.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twreporter/congress-dashboard-monorepo.git",
+    "directory": "packages/shared"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build": "yarn clean && tsup src/*",
+    "postinstall": "yarn build"
+  },
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "license": "MIT",
+  "files": [
+    "lib"
+  ],
+  "types": "lib/index.d.ts",
+  "devDependencies": {
+    "tsup": "^8.3.6"
+  }
+}

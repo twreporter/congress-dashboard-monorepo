@@ -1,0 +1,33 @@
+{
+  "name": "@twreporter/congress-dashboard-cms",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "dev": "keystone dev",
+    "start": "keystone start",
+    "build": "keystone build --no-prisma",
+    "db-migrate": "keystone prisma migrate deploy",
+    "postinstall": "keystone postinstall --fix",
+    "generate-migrate": "keystone prisma migrate dev",
+    "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown"
+  },
+  "dependencies": {
+    "@emotion/css": "^11.13.5",
+    "@emotion/styled": "^11.14.0",
+    "@keystone-6/auth": "^8.0.0",
+    "@keystone-6/core": "^6.0.0",
+    "@keystone-6/fields-document": "^9.0.0",
+    "@twreporter/congress-dashboard-shared": "0.0.2-beta.0",
+    "lodash": "^4.17.21",
+    "papaparse": "^5.5.2",
+    "react-transition-group": "^4.4.2",
+    "typescript": "^5.5.0"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5",
+    "changelog-maker": "^4.1.1"
+  },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  }
+}
