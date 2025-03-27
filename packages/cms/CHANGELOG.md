@@ -1,30 +1,55 @@
 # Changelog
 
-## 0.0.2, 2025-03-26
+## 1.0.0-rc.0, 2025-03-27
 
 ### Notable Changes
 
 - feat
-  - connect legislativeMeeting & fix legislativeYuanMember update logic
-  - check slug duplicated for some list
+  - create lists
+    - committee list
+    - topic and speech list
+    - committeeMember list
+    - selected list
+    - party list
+    - legislative meeting list
+    - legislative meeting session list
+    - legislator list
+    - legislative yuan member list
   - add csv uploader custom field
-  - add papaparse to read csv file
-  - use custom field for import record and change speech content and summary type
-  - migration file
-  - allow admin to delete import record
-  - required fields for upload csv
-  - add comment for graphql error
-  - add emotion packages
-  - add import record list
+    - add `papaparse` to read csv file
+    - connect legislativeMeeting & fix legislativeYuanMember update logic
+    - check slug duplicated for some list
+    - add required fields configuration for upload csv
+    - add import record list
+    - allow admin to delete import record
+  - migration files
+    - create imageLink migration file
+    - create init migration file
+  - add `emotion` packages
   - set body limit to 50mb
   - session secret
+  - ignore eslintcache
+  - use typescript enum for export constants
+  - use common eslint & prettier & husky
 - fix
+  - change speech `content` and `summary` type from string to json
+  - add comment for graphql error handling
   - more header & speech option
   - upsert topic with speech
-  - fix comments
   - add validation for upload data
+  - list order and label name and dependency for cms
+  - add validation for selected
+  - prettier format
+  - remove duplicate tsconfig
+  - change legislative meeting term to unique
 - chore
+  - update monorepo related config
+  - use @twreporter packages
   - sync dev
+  - init cms
+    - access-control
+    - system user access
+  - READEME & add dockerfile for cms
 
 ### Commits
 
@@ -48,48 +73,6 @@
 - [[`abb735d429`](https://github.com/twreporter/congress-dashboard-monorepo/commit/abb735d429)] - **feat(cms)**: set body limit to 50mb (Lucien)
 - [[`43dc4d4b51`](https://github.com/twreporter/congress-dashboard-monorepo/commit/43dc4d4b51)] - **feat(cms)**: add import record list (Lucien)
 - [[`962e920cb7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/962e920cb7)] - **feat(cms)**: add emotion packages (Lucien)
-
-## 0.0.1, 2025-02-13
-
-### Notable Changes
-
-- feat
-  - add legislative-yuan-member options constant
-  - ignore eslintcache
-  - add imageLink for party and member
-  - add city constant
-  - create imageLink migration file
-  - create committee list
-  - create topic and speech list
-  - create committeeMember list
-  - use legislative yuan member for relation
-  - create selected list
-  - use typescript enum for export constants
-  - create party list
-  - create init migration file
-  - creat legislative meeting list
-  - creat legislative meeting session list
-  - create legislator list
-  - create legislative yuan member list
-  - use common eslint & prettier & husky
-- fix
-  - list order and label name and dependency for cms
-  - add validation for selected
-  - prettier format
-  - remove duplicate tsconfig
-  - change legislative meeting term to unique
-- chore
-  - update monorepo related config
-  - use twreporter repo
-  - sync dev
-  - init cms
-  - access-control
-  - system user access
-  - change to monorepo
-  - READEME & add dockerfile for cms
-
-### Commits
-
 - [[`9969e7dfef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9969e7dfef)] - **chore**: update monorepo related config (Aylie Chou)
 - [[`efe8fbca37`](https://github.com/twreporter/congress-dashboard-monorepo/commit/efe8fbca37)] - **fix(cms)**: list order and label name and dependency for cms (Lucien)
 - [[`7c68cbd28f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c68cbd28f)] - **chore**: use twreporter repo (Lucien)
