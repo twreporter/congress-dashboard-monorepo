@@ -1,6 +1,11 @@
 import { list } from '@keystone-6/core'
 import { text, relationship, select } from '@keystone-6/core/fields'
-import { allowAllRoles } from './utils/access-control-list'
+import {
+  allowAllRoles,
+  excludeReadOnlyRoles,
+  withReadOnlyRoleFieldMode,
+  hideReadOnlyRoles,
+} from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import {
   MemberType,
@@ -130,13 +135,18 @@ const listConfigurations = list({
       initialSort: { field: 'labelForCMS', direction: 'DESC' },
       pageSize: 50,
     },
+    itemView: {
+      defaultFieldMode: withReadOnlyRoleFieldMode,
+    },
+    hideCreate: hideReadOnlyRoles,
+    hideDelete: hideReadOnlyRoles,
   },
   access: {
     operation: {
       query: allowAllRoles(),
-      create: allowAllRoles(),
-      update: allowAllRoles(),
-      delete: allowAllRoles(),
+      create: excludeReadOnlyRoles(),
+      update: excludeReadOnlyRoles(),
+      delete: excludeReadOnlyRoles(),
     },
   },
   hooks: {
