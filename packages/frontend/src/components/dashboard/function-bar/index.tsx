@@ -3,18 +3,13 @@ import styled from 'styled-components'
 // components
 import FliterModal, { type FilterModalValueType } from './filter-modal'
 import Tab from '@/components/dashboard/function-bar/tab'
+import FilterButton from '@/components/button/filter-button'
 // @twreporter
-import {
-  colorGrayscale,
-  colorBrand,
-} from '@twreporter/core/lib/constants/color'
-import { PillButton } from '@twreporter/react-components/lib/button'
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import {
   TabletAndAbove,
   MobileOnly,
 } from '@twreporter/react-components/lib/rwd'
-import { P4 } from '@twreporter/react-components/lib/text/paragraph'
-import { Filter as FilterIcon } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
@@ -122,50 +117,9 @@ const Filter = styled.div`
   display: flex;
   align-items: center;
 `
-const FilterCountIcon = styled.div`
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-/* todo: support div icon color in @twreporter/react-components */
-const BasePillButton = styled(PillButton)`
-  ${FilterCountIcon} {
-    background-color: ${colorBrand.heavy};
-  }
-
-  &:hover {
-    ${FilterCountIcon} {
-      background-color: ${colorBrand.dark};
-    }
-  }
-`
-const P4White = styled(P4)`
-  color: ${colorGrayscale.white};
-`
 const MobileOnlyBox = styled(MobileOnly)`
   width: 100%;
 `
-
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
-export const FilterButton = ({ filterCount }: { filterCount: number }) => (
-  <BasePillButton
-    theme={PillButton.THEME.normal}
-    type={PillButton.Type.SECONDARY}
-    size={PillButton.Size.L}
-    text={'篩選'}
-    leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
-    rightIconComponent={
-      filterCount > 0 ? (
-        <FilterCountIcon>
-          <P4White text={filterCount} />
-        </FilterCountIcon>
-      ) : null
-    }
-  />
-)
 
 export enum Option {
   Issue,
