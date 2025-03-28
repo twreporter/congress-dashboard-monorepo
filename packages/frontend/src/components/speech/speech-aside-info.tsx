@@ -120,7 +120,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
       <IssueTagsBlock>
         {relatedTopics.map((topic, idx) => (
           <Link
-            href={`/topic/${topic.slug}`}
+            href={`/topics/${topic.slug}`}
             key={`issue-tag-${idx}-${topic.slug}`}
           >
             <IssueTag text={topic.title} />
