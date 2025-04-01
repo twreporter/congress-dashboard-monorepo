@@ -33,7 +33,11 @@ import {
 // component
 import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 // lodash
-import { map } from 'lodash'
+import map from 'lodash/map'
+
+const _ = {
+  map,
+}
 
 const HorizaontalLine = styled.div<{
   $isHeaderAboveTab: boolean
@@ -245,7 +249,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         label: '黨籍',
         value: 'party',
         isLoading: partyState.isLoading,
-        options: map(
+        options: _.map(
           partyState.party,
           ({ slug, name, imageLink, image }: partyData) => {
             const selfHostImage = image?.imageFile?.url

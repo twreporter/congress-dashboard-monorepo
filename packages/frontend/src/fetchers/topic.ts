@@ -90,6 +90,7 @@ export const fetchTopic = async ({
                 term
               }
             }
+            slug
             title
             speechesCount(where: $speechesWhere)
           }
@@ -116,7 +117,6 @@ export const fetchTopTopicsForLegislator = async ({
   legislativeMeeting: number
   legislativeMettingSession: number[]
 }): Promise<TopTopic[]> => {
-  // Changed return type to TopTopic[]
   const url = process.env.NEXT_PUBLIC_API_URL as string
 
   const speechesWhere = {

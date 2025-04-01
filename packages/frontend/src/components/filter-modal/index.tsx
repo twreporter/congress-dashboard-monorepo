@@ -13,7 +13,7 @@ import mq from '@twreporter/core/lib/utils/media-query'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 // component
 import {
-  type SelectorType,
+  SelectorType,
   SingleSelect,
   MultipleSelect,
 } from '@/components/selector'

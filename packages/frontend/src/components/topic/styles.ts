@@ -262,11 +262,12 @@ export const Feedback = styled.div`
 
 export const FunctionBar = styled.div`
   width: 100%;
+  height: 64px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 12px 16px;
   gap: 80px;
   ${mq.tabletOnly`
     gap: 48px;

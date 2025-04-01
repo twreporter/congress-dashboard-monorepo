@@ -20,6 +20,7 @@ const FilterCountIcon = styled.div`
 `
 /* todo: support div icon color in @twreporter/react-components */
 const BasePillButton = styled(PillButton)`
+  height: 40px;
   ${FilterCountIcon} {
     background-color: ${colorBrand.heavy};
   }
