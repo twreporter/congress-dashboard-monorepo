@@ -137,13 +137,13 @@ const More = styled.a`
 export type SummaryCardProps = {
   date: Date
   title: string
-  content: string
+  summary: string
   slug: string
 }
 export const SummaryCard: React.FC<SummaryCardProps> = ({
   date,
   title,
-  content,
+  summary,
   slug,
 }) => {
   return (
@@ -154,7 +154,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
       </FlexRow>
       <HorizontalLine />
       <Content>
-        {`${content}（`}
+        {`${summary}（`}
         <More href={`/a/${slug}`}>{'閱讀更多'}</More>
         {'）'}
       </Content>

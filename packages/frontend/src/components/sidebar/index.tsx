@@ -112,7 +112,7 @@ const FollowMoreTags = styled.div`
   flex-wrap: wrap;
 `
 
-function groupSummary(summaryList: SummaryCardProps[]) {
+export function groupSummary(summaryList: SummaryCardProps[]) {
   const result: CardsOfTheYearProps[] = []
   const summaryGroupByYear = _.groupBy(summaryList, (summary) =>
     summary.date.getFullYear()
