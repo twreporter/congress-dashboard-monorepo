@@ -148,8 +148,8 @@ type LegislatorData = {
 type TopicListProps = {
   legislatorsData: LegislatorData[]
   speechesByLegislator: Record<string, SpeechData[]>
-  currentMeetingTerm?: number
-  currentMeetingSession?: number[]
+  currentMeetingTerm: number
+  currentMeetingSession: number[]
 }
 
 const TopicList: React.FC<TopicListProps> = ({

@@ -1,16 +1,18 @@
 'use client'
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
 // twreporter
 import {
+  TabletAndAbove,
   TabletAndBelow,
   DesktopAndAbove,
 } from '@twreporter/react-components/lib/rwd'
 // components
 import FilterButton from '@/components/button/filter-button'
-// import IssueTag from '@/components/button/issue-tag'
 import TopicList from '@/components/topic/topic-list'
 import { Issue } from '@/components/sidebar/followMore'
+// context
+import { useScrollContext } from '@/contexts/scroll-context'
 // styles
 import {
   TopicWrapper,
@@ -32,6 +34,9 @@ import {
   OthersWatchingBlock,
   OthersWatchingTags,
   Feedback,
+  FunctionBarWrapper,
+  FunctionBar,
+  FunctionBarTitle,
 } from '@/components/topic/styles'
 //  fetcher
 import { type TopicData } from '@/fetchers/topic'
@@ -62,8 +67,8 @@ const othersWatchingTags = [
 
 type TopicPageProps = {
   topic: TopicData
-  currentMeetingTerm?: number
-  currentMeetingSession?: number[]
+  currentMeetingTerm: number
+  currentMeetingSession: number[]
 }
 
 const Topic: React.FC<TopicPageProps> = ({
@@ -71,6 +76,32 @@ const Topic: React.FC<TopicPageProps> = ({
   currentMeetingTerm,
   currentMeetingSession,
 }) => {
+  const { setTabElement, isHeaderHidden } = useScrollContext()
+  const leadingRef = useRef<HTMLDivElement>(null)
+  const [isControllBarHidden, setIsControllBarHidden] = useState(true)
+
+  useEffect(() => {
+    if (leadingRef.current) {
+      setTabElement(leadingRef.current)
+    }
+  }, [setTabElement, leadingRef])
+
+  useEffect(() => {
+    if (!leadingRef.current) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsControllBarHidden(entry.isIntersecting)
+      },
+      {
+        threshold: 0.5,
+      }
+    )
+    observer.observe(leadingRef.current)
+    return () => {
+      observer.disconnect()
+    }
+  }, [leadingRef])
+
   const { legislatorCount, legislatorsData, speechesByLegislator } =
     useMemo(() => {
       if (!topic?.speeches || !topic.speeches.length) {
@@ -104,8 +135,26 @@ const Topic: React.FC<TopicPageProps> = ({
 
   return (
     <TopicWrapper>
+      <FunctionBarWrapper
+        $isHeaderHidden={isHeaderHidden}
+        $isHidden={isControllBarHidden}
+      >
+        <FunctionBar>
+          <FunctionBarTitle text={`#${topic?.title} 的相關發言摘要`} />
+          <FilterBar>
+            <TabletAndAbove>
+              <P1Gray700
+                text={`第${currentMeetingTerm}屆｜${
+                  currentMeetingSession.length ? '全部' : '部分'
+                }會期`}
+              />
+            </TabletAndAbove>
+            <FilterButton filterCount={10} />
+          </FilterBar>
+        </FunctionBar>
+      </FunctionBarWrapper>
       <TopicContainer>
-        <LeadingContainer>
+        <LeadingContainer ref={leadingRef}>
           <TopicTitle text={`#${topic?.title} 的相關發言摘要`} />
           <FilterBar>
             <P1Gray700

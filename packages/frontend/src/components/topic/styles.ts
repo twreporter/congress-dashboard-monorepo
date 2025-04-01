@@ -3,10 +3,16 @@ import styled from 'styled-components'
 // @gtwreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
-import { H1, H4, H6 } from '@twreporter/react-components/lib/text/headline'
+import { H1, H4, H5, H6 } from '@twreporter/react-components/lib/text/headline'
 import { P1, P3 } from '@twreporter/react-components/lib/text/paragraph'
 // utils
 import { notoSerif } from '@/utils/font'
+// cheetsheet
+import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
+// constants
+import { HEADER_HEIGHT } from '@/constants/header'
+// z-index
+import { ZIndex } from '@/styles/z-index'
 
 export const TopicWrapper = styled.div`
   position: relative;
@@ -26,6 +32,41 @@ export const TopicWrapper = styled.div`
   `}
   ${mq.mobileOnly`
     padding: 32px 24px 80px;
+  `}
+`
+
+export const FunctionBarWrapper = styled.div<{
+  $isHeaderHidden?: boolean
+  $isHidden?: boolean
+}>`
+  z-index: ${ZIndex.ControlBar};
+  position: fixed;
+  top: ${(props) =>
+    props.$isHidden
+      ? '-64px'
+      : props.$isHeaderHidden
+      ? '0'
+      : `${HEADER_HEIGHT}px`};
+  transform: ${(props) =>
+    props.$isHidden ? 'translateY(-100%)' : 'translateY(0)'};
+  transition: all 300ms ease-in-out;
+  width: 100%;
+  display: flex;
+  background-color: ${colorGrayscale.gray100};
+  border-top: 1px solid ${colorGrayscale.gray300};
+  border-bottom: 1px solid ${colorGrayscale.gray300};
+  ${mq.hdOnly`
+    width: 1280px;
+    margin: auto;
+  `}
+  ${mq.desktopOnly`
+    padding: 0 48px;
+  `}
+  ${mq.tabletOnly`
+    padding: 0 32px;
+  `}
+  ${mq.mobileOnly`
+    padding: 0 24px;
   `}
 `
 
@@ -61,6 +102,7 @@ export const FilterBar = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   gap: 20px;
   flex: none;
   align-self: flex-end;
@@ -218,6 +260,28 @@ export const Feedback = styled.div`
   `}
 `
 
+export const FunctionBar = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  gap: 80px;
+  ${mq.tabletOnly`
+    gap: 48px;
+  `}
+  ${mq.mobileOnly`
+    gap: 20px;
+    padding: 12px 0;
+  `}
+  ${FilterBar} {
+    ${mq.mobileOnly`
+      width: auto;
+    `}
+  }
+`
+
 // text
 export const TopicTitle = styled(H1)`
   color: ${colorGrayscale.gray900};
@@ -251,4 +315,10 @@ export const H6Gray900 = styled(H6)`
 
 export const P3Gray600 = styled(P3)`
   color: ${colorGrayscale.gray600};
+`
+
+export const FunctionBarTitle = styled(H5)`
+  ${textOverflowEllipsisCss}
+  color: ${colorGrayscale.gray900};
+  font-family: ${notoSerif.style.fontFamily} !important;
 `
