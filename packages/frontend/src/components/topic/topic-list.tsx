@@ -1,46 +1,42 @@
 'use client'
-import React, {useMemo, useState, useEffect} from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 // twreporter
-import {H4, H5} from '@twreporter/react-components/lib/text/headline'
+import { H4, H5 } from '@twreporter/react-components/lib/text/headline'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { IconButton } from '@twreporter/react-components/lib/button'
 import { Arrow, More } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
-import {DesktopAndAbove} from '@twreporter/react-components/lib/rwd'
+import { DesktopAndAbove } from '@twreporter/react-components/lib/rwd'
 //  compoents
 import { groupSummary } from '@/components/sidebar'
 import CardsOfTheYear, {
   type SummaryCardProps,
   type CardsOfTheYearProps,
 } from '@/components/sidebar/card'
-import {
-  Issue,
-  type IssueProps,
-} from '@/components/sidebar/followMore'
+import { Issue, type IssueProps } from '@/components/sidebar/followMore'
 import Tab, { type TabProps } from '@/components/sidebar/tab'
 
-import {
-  mockGetSummary,
-  mockGetIssue,
-  mockSidebarIssueProps,
-} from '@/components/sidebar/config'
+import { mockGetIssue } from '@/components/sidebar/config'
+// fetcher
+import { type SpeechData } from '@/fetchers/topic'
+// utils
+import { notoSerif } from '@/utils/font'
 // lodash
-import {forEach, get, groupBy} from 'lodash'
+import get from 'lodash/get'
 const _ = {
   get,
-  groupBy,
-  forEach,
 }
 
 const Container = styled.div`
-  display:flex;
+  display: flex;
   flex-direction: column;
   width: 100%;
 `
 const Title = styled(H4)`
   color: ${colorGrayscale.gray900};
   padding: 24px 24px 12px 24px;
+  font-family: ${notoSerif.style.fontFamily} !important;
   ${mq.tabletOnly`
     padding: 32px 32px 12px 32px;
   `}
@@ -115,6 +111,11 @@ const ScrollableTab = styled.div`
         padding-left: 12px;
       }
     `}
+    ${mq.tabletOnly`
+      &:first-child {
+        padding-left: 32px;
+      }
+    `}
   }
 `
 
@@ -133,29 +134,57 @@ const ArrowIcon = styled.div`
   }
 `
 
-const TopicList: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true)
+type LegislatorData = {
+  name: string
+  slug: string
+  imageLink?: string
+  count: number
+}
+
+type TopicListProps = {
+  legislatorsData: LegislatorData[]
+  speechesByLegislator: Record<string, SpeechData[]>
+}
+
+const TopicList: React.FC<TopicListProps> = ({
+  legislatorsData,
+  speechesByLegislator,
+}) => {
   const [selectedTab, setSelectedTab] = useState(0)
   const releaseBranch = 'master'
-  const a = mockSidebarIssueProps
-  const legislatorList = a.legislatorList
-  const tabs = a.legislatorList
-  const selectedLegislator = useMemo(
-    () => _.get(legislatorList, selectedTab),
-    [legislatorList, selectedTab]
+
+  const tabs: TabProps[] = useMemo(
+    () => legislatorsData.map((legislator) => legislator),
+    [legislatorsData]
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => mockGetSummary(selectedLegislator.slug),
-    [selectedLegislator]
-  )
-  const issueList: IssueProps[] = useMemo(
-    () => mockGetIssue(selectedLegislator.slug),
-    [selectedLegislator]
-  )
+
+  const selectedLegislator = useMemo(() => {
+    if (legislatorsData.length === 0) return null
+    return legislatorsData[selectedTab] || legislatorsData[0]
+  }, [legislatorsData, selectedTab])
+
+  const summaryList: SummaryCardProps[] = useMemo(() => {
+    if (!selectedLegislator) return []
+    return speechesByLegislator[selectedLegislator.slug].map(
+      ({ title, date, summary, slug }) => ({
+        title,
+        date: new Date(date),
+        summary,
+        slug,
+      })
+    )
+  }, [selectedLegislator, speechesByLegislator])
+
+  const issueList: IssueProps[] = useMemo(() => {
+    if (!selectedLegislator) return []
+    return mockGetIssue(selectedLegislator.slug)
+  }, [selectedLegislator])
+
   const followMoreTitle: string = useMemo(
     () => `${_.get(selectedLegislator, ['name'], '')} 近期關注的五大議題：`,
     [selectedLegislator]
   )
+
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
     () => groupSummary(summaryList),
     [summaryList]
@@ -168,7 +197,11 @@ const TopicList: React.FC = () => {
 
     const tabElement = e.currentTarget as HTMLElement
     if (tabElement) {
-      tabElement.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'center' })
+      tabElement.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'start',
+        block: 'center',
+      })
     }
   }
 
@@ -178,22 +211,17 @@ const TopicList: React.FC = () => {
     alert(`open filter modal`)
   }
 
-  useEffect(() => {
-    setIsLoading(true)
-
-    if (window) {
-      window.setTimeout(() => setIsLoading(false), 2000)
-    }
-  }, [selectedTab])
-
   return (
     <Container>
-      <Title text="發言摘要"/>
+      <Title text="發言摘要" />
       <TabGroup>
         <DesktopAndAbove>
-          <ArrowIcon className='left-arrow' onClick={(e: React.MouseEvent<HTMLElement>) =>
-                selectTab(e, selectedTab -1 > 0 ? selectedTab -1 : 0)
-              }>
+          <ArrowIcon
+            className="left-arrow"
+            onClick={(e: React.MouseEvent<HTMLElement>) =>
+              selectTab(e, selectedTab - 1 > 0 ? selectedTab - 1 : 0)
+            }
+          >
             <Arrow direction={Arrow.Direction.LEFT} />
           </ArrowIcon>
         </DesktopAndAbove>
@@ -210,9 +238,17 @@ const TopicList: React.FC = () => {
           ))}
         </ScrollableTab>
         <DesktopAndAbove>
-          <ArrowIcon className='right-arrow' onClick={(e: React.MouseEvent<HTMLElement>) =>
-                selectTab(e, selectedTab +1 < tabs.length -1 ? selectedTab +1 : tabs.length -1)
-              }>
+          <ArrowIcon
+            className="right-arrow"
+            onClick={(e: React.MouseEvent<HTMLElement>) =>
+              selectTab(
+                e,
+                selectedTab + 1 < tabs.length - 1
+                  ? selectedTab + 1
+                  : tabs.length - 1
+              )
+            }
+          >
             <Arrow direction={Arrow.Direction.RIGHT} />
           </ArrowIcon>
         </DesktopAndAbove>
@@ -227,10 +263,7 @@ const TopicList: React.FC = () => {
         <SummarySection>
           {summaryGroupByYear.map(
             (props: CardsOfTheYearProps, index: number) => (
-              <CardsOfTheYear
-                {...props}
-                key={`summary-of-the-year-${index}`}
-              />
+              <CardsOfTheYear {...props} key={`summary-of-the-year-${index}`} />
             )
           )}
         </SummarySection>

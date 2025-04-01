@@ -1,50 +1,121 @@
 'use client'
-import React, {useState} from 'react'
+import React, { useState, useMemo } from 'react'
 import Link from 'next/link'
 // twreporter
-import {TabletAndBelow, DesktopAndAbove} from '@twreporter/react-components/lib/rwd'
+import {
+  TabletAndBelow,
+  DesktopAndAbove,
+} from '@twreporter/react-components/lib/rwd'
 // components
 import FilterButton from '@/components/button/filter-button'
 // import IssueTag from '@/components/button/issue-tag'
 import TopicList from '@/components/topic/topic-list'
 import { Issue } from '@/components/sidebar/followMore'
 // styles
-import { TopicWrapper,TopicContainer, LeadingContainer, TopicTitle, FilterBar, P1Gray700, Spacing, ContentBlock, DesktopAside, TopicListContainer, StatisticsBlock, StatisticsDiv,
-  P1Gray800, StatisticsNumber, RelatedArticleBlock, H4Title, OthersWatchingBlock, OthersWatchingTags, Feedback
- } from '@/components/topic/styles'
-
+import {
+  TopicWrapper,
+  TopicContainer,
+  LeadingContainer,
+  TopicTitle,
+  FilterBar,
+  P1Gray700,
+  Spacing,
+  ContentBlock,
+  DesktopAside,
+  TopicListContainer,
+  StatisticsBlock,
+  StatisticsDiv,
+  P1Gray800,
+  StatisticsNumber,
+  RelatedArticleBlock,
+  H4Title,
+  OthersWatchingBlock,
+  OthersWatchingTags,
+  Feedback,
+} from '@/components/topic/styles'
+//  fetcher
+import { type TopicData } from '@/fetchers/topic'
+// lodash
+import groupBy from 'lodash/groupBy'
+const _ = {
+  groupBy,
+}
 
 const othersWatchingTags = [
   {
     title: '環境1',
-    slug: 'slug-1'
+    slug: 'slug-1',
   },
   {
     title: '環境2',
-    slug: 'slug-2'
+    slug: 'slug-2',
   },
   {
     title: '環境3',
-    slug: 'slug-3'
+    slug: 'slug-3',
   },
   {
     title: '環境4',
-    slug: 'slug-4'
+    slug: 'slug-4',
   },
 ]
 
 type TopicPageProps = {
-  slug: string
+  topic: TopicData
+  currentMeetingTerm?: number
+  currentMeetingSession?: number[]
 }
-const Topic: React.FC<TopicPageProps> = ({slug}) => {
-  const [currentMeetingTerm, setCurrentMeetingTerm] = useState(11)
+
+const Topic: React.FC<TopicPageProps> = ({
+  topic,
+  currentMeetingTerm: initialMeetingTerm = 11,
+  currentMeetingSession: initialMeetingSession = [1, 2, 3, 4],
+}) => {
+  const [currentMeetingTerm] = useState(initialMeetingTerm)
+  const [currentMeetingSession] = useState(initialMeetingSession)
+
+  const { legislatorCount, legislatorsData, speechesByLegislator } =
+    useMemo(() => {
+      if (!topic?.speeches || !topic.speeches.length) {
+        return {
+          legislatorCount: 0,
+          legislatorsData: [],
+          speechesByLegislator: {},
+        }
+      }
+      const speechesByLegislator = _.groupBy(
+        topic.speeches,
+        (speech) => speech.legislativeYuanMember.legislator.slug
+      )
+      const legislatorCount = Object.keys(speechesByLegislator).length
+      const legislatorsData = Object.entries(speechesByLegislator).map(
+        ([slug, speeches]) => ({
+          name: speeches[0].legislativeYuanMember.legislator.name,
+          slug,
+          imageLink:
+            speeches[0].legislativeYuanMember.legislator.image?.imageFile
+              ?.url || speeches[0].legislativeYuanMember.legislator.imageLink,
+          count: speeches.length,
+        })
+      )
+      return { legislatorCount, legislatorsData, speechesByLegislator }
+    }, [topic?.speeches])
+
+  if (!topic) {
+    return <div>No topic data found</div>
+  }
+
   return (
     <TopicWrapper>
       <TopicContainer>
         <LeadingContainer>
-          <TopicTitle text={`#${slug} 的相關發言摘要`} />
+          <TopicTitle text={`#${topic?.title} 的相關發言摘要`} />
           <FilterBar>
-            <P1Gray700 text={`第${currentMeetingTerm}屆｜全部會期`} />
+            <P1Gray700
+              text={`第${currentMeetingTerm}屆｜${
+                currentMeetingSession.length ? '全部' : '部分'
+              }會期`}
+            />
             <FilterButton filterCount={10} />
           </FilterBar>
         </LeadingContainer>
@@ -52,18 +123,21 @@ const Topic: React.FC<TopicPageProps> = ({slug}) => {
         <ContentBlock>
           <DesktopAndAbove>
             <TopicListContainer>
-              <TopicList />
+              <TopicList
+                legislatorsData={legislatorsData}
+                speechesByLegislator={speechesByLegislator}
+              />
             </TopicListContainer>
           </DesktopAndAbove>
           <DesktopAside>
             <StatisticsBlock>
               <StatisticsDiv>
                 <P1Gray800 text="發言立委人數" />
-                <StatisticsNumber>99</StatisticsNumber>
+                <StatisticsNumber>{legislatorCount}</StatisticsNumber>
               </StatisticsDiv>
               <StatisticsDiv>
                 <P1Gray800 text="發言總數" />
-                <StatisticsNumber>99</StatisticsNumber>
+                <StatisticsNumber>{topic?.speechesCount}</StatisticsNumber>
               </StatisticsDiv>
             </StatisticsBlock>
             <RelatedArticleBlock>
@@ -83,8 +157,9 @@ const Topic: React.FC<TopicPageProps> = ({slug}) => {
               </OthersWatchingTags>
             </OthersWatchingBlock>
             <Feedback>
-              <span>發現什麼問題嗎？透過
-                <Link href={'/feedback'} target='_blank'>
+              <span>
+                發現什麼問題嗎？透過
+                <Link href={'/feedback'} target="_blank">
                   問題回報
                 </Link>
                 告訴我們，一起讓這裡變得更好！
@@ -95,16 +170,19 @@ const Topic: React.FC<TopicPageProps> = ({slug}) => {
             <StatisticsBlock>
               <StatisticsDiv>
                 <P1Gray800 text="發言立委人數" />
-                <StatisticsNumber>99</StatisticsNumber>
+                <StatisticsNumber>{legislatorCount}</StatisticsNumber>
               </StatisticsDiv>
               <StatisticsDiv>
                 <P1Gray800 text="發言總數" />
-                <StatisticsNumber>99</StatisticsNumber>
+                <StatisticsNumber>{topic?.speechesCount}</StatisticsNumber>
               </StatisticsDiv>
             </StatisticsBlock>
             <Spacing $height={32} />
             <TopicListContainer>
-              <TopicList />
+              <TopicList
+                legislatorsData={legislatorsData}
+                speechesByLegislator={speechesByLegislator}
+              />
             </TopicListContainer>
             <Spacing $height={8} />
             <RelatedArticleBlock>
@@ -126,8 +204,9 @@ const Topic: React.FC<TopicPageProps> = ({slug}) => {
             </OthersWatchingBlock>
             <Spacing $height={32} />
             <Feedback>
-              <span>發現什麼問題嗎？透過
-                <Link href={'/feedback'} target='_blank'>
+              <span>
+                發現什麼問題嗎？透過
+                <Link href={'/feedback'} target="_blank">
                   問題回報
                 </Link>
                 告訴我們，一起讓這裡變得更好！

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { H1, H4, H6 } from '@twreporter/react-components/lib/text/headline'
-import {P1, P3} from '@twreporter/react-components/lib/text/paragraph'
+import { P1, P3 } from '@twreporter/react-components/lib/text/paragraph'
 // utils
 import { notoSerif } from '@/utils/font'
 
@@ -45,9 +45,15 @@ export const LeadingContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  gap: 64px;
+  ${mq.tabletOnly`
+    gap: 32px;
+  `}
   ${mq.mobileOnly`
     flex-direction: column;
     gap: 20px;
+    align-items: flex-start;
   `}
 `
 
@@ -56,7 +62,10 @@ export const FilterBar = styled.div`
   flex-direction: row;
   justify-content: center;
   gap: 20px;
+  flex: none;
+  align-self: flex-end;
   ${mq.mobileOnly`
+    width: 100%;
     justify-content: space-between;
   `}
 `
