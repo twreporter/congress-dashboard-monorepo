@@ -15,16 +15,15 @@ export async function generateMetadata({
   searchParams: Promise<{ [key: string]: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const { meetingTerm, sessionTerm } = await searchParams
+  const { meetingTerm = 11, sessionTerm = '[1, 2, 3, 4]' } = await searchParams
   // TODO: validate meetingTerm and sessionTerm
   const legislativeMeeting = Number(meetingTerm)
   const legislativeMettingSession = JSON.parse(sessionTerm) as number[]
-  const result = await fetchTopic({
+  const topic = await fetchTopic({
     slug,
     legislativeMeeting,
     legislativeMettingSession,
   })
-  const topic = result?.data?.topic
   if (!topic) {
     notFound()
   }
@@ -43,16 +42,15 @@ export default async function Page({
   searchParams: Promise<{ [key: string]: string }>
 }) {
   const { slug } = await params
-  const { meetingTerm, sessionTerm } = await searchParams
+  const { meetingTerm = 11, sessionTerm = '[1, 2, 3, 4]' } = await searchParams
   // TODO: validate meetingTerm and sessionTerm
   const legislativeMeeting = Number(meetingTerm)
   const legislativeMettingSession = JSON.parse(sessionTerm) as number[]
-  const result = await fetchTopic({
+  const topic = await fetchTopic({
     slug,
     legislativeMeeting,
     legislativeMettingSession,
   })
-  const topic = result?.data?.topic
 
   return (
     <TopicPage

@@ -1,6 +1,8 @@
 'use client'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
+import useSWR from 'swr'
+import Link from 'next/link'
 // twreporter
 import { H4, H5 } from '@twreporter/react-components/lib/text/headline'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
@@ -17,9 +19,8 @@ import CardsOfTheYear, {
 import { Issue, type IssueProps } from '@/components/sidebar/followMore'
 import Tab, { type TabProps } from '@/components/sidebar/tab'
 
-import { mockGetIssue } from '@/components/sidebar/config'
 // fetcher
-import { type SpeechData } from '@/fetchers/topic'
+import { type SpeechData, fetchTopTopicsForLegislator } from '@/fetchers/topic'
 // utils
 import { notoSerif } from '@/utils/font'
 // lodash
@@ -70,6 +71,9 @@ const FollowMoreTags = styled.div`
   gap: 12px;
   display: flex;
   flex-wrap: wrap;
+  a {
+    text-decoration: none;
+  }
 `
 const TabGroup = styled.div`
   display: flex;
@@ -144,11 +148,15 @@ type LegislatorData = {
 type TopicListProps = {
   legislatorsData: LegislatorData[]
   speechesByLegislator: Record<string, SpeechData[]>
+  currentMeetingTerm?: number
+  currentMeetingSession?: number[]
 }
 
 const TopicList: React.FC<TopicListProps> = ({
   legislatorsData,
   speechesByLegislator,
+  currentMeetingTerm,
+  currentMeetingSession,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
   const releaseBranch = 'master'
@@ -175,10 +183,36 @@ const TopicList: React.FC<TopicListProps> = ({
     )
   }, [selectedLegislator, speechesByLegislator])
 
-  const issueList: IssueProps[] = useMemo(() => {
+  const { data: topTopics, error: topTopicsError } = useSWR(
+    selectedLegislator?.slug
+      ? [
+          'fetchTopTopicsForLegislator',
+          selectedLegislator.slug,
+          currentMeetingTerm,
+          currentMeetingSession,
+        ]
+      : null,
+    () =>
+      selectedLegislator?.slug
+        ? fetchTopTopicsForLegislator({
+            legislatorSlug: selectedLegislator.slug,
+            legislativeMeeting: currentMeetingTerm,
+            legislativeMettingSession: currentMeetingSession,
+          })
+        : null
+  )
+
+  const issueList: (IssueProps & { slug: string })[] = useMemo(() => {
     if (!selectedLegislator) return []
-    return mockGetIssue(selectedLegislator.slug)
-  }, [selectedLegislator])
+    if (topTopicsError) return []
+    if (!topTopics) return []
+
+    return topTopics.map((topic) => ({
+      name: topic.title,
+      slug: topic.slug,
+      count: topic.speechesCount,
+    }))
+  }, [selectedLegislator, topTopics, topTopicsError])
 
   const followMoreTitle: string = useMemo(
     () => `${_.get(selectedLegislator, ['name'], '')} 近期關注的五大議題：`,
@@ -271,8 +305,17 @@ const TopicList: React.FC<TopicListProps> = ({
           <FollowMoreTitle text={followMoreTitle} />
           {issueList.length > 0 ? (
             <FollowMoreTags>
-              {issueList.map((props: IssueProps, index: number) => (
-                <Issue {...props} key={`follow-more-issue-${index}`} />
+              {issueList.map((props, index: number) => (
+                <Link
+                  href={`/topics/${
+                    props.slug
+                  }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
+                    currentMeetingSession
+                  )}`}
+                  key={`follow-more-issue-${index}`}
+                >
+                  <Issue {...props} />
+                </Link>
               ))}
             </FollowMoreTags>
           ) : null}

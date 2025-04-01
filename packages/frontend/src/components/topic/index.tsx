@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import Link from 'next/link'
 // twreporter
 import {
@@ -68,12 +68,9 @@ type TopicPageProps = {
 
 const Topic: React.FC<TopicPageProps> = ({
   topic,
-  currentMeetingTerm: initialMeetingTerm = 11,
-  currentMeetingSession: initialMeetingSession = [1, 2, 3, 4],
+  currentMeetingTerm,
+  currentMeetingSession,
 }) => {
-  const [currentMeetingTerm] = useState(initialMeetingTerm)
-  const [currentMeetingSession] = useState(initialMeetingSession)
-
   const { legislatorCount, legislatorsData, speechesByLegislator } =
     useMemo(() => {
       if (!topic?.speeches || !topic.speeches.length) {
@@ -126,6 +123,8 @@ const Topic: React.FC<TopicPageProps> = ({
               <TopicList
                 legislatorsData={legislatorsData}
                 speechesByLegislator={speechesByLegislator}
+                currentMeetingTerm={currentMeetingTerm}
+                currentMeetingSession={currentMeetingSession}
               />
             </TopicListContainer>
           </DesktopAndAbove>
@@ -148,7 +147,11 @@ const Topic: React.FC<TopicPageProps> = ({
               <OthersWatchingTags>
                 {othersWatchingTags.map((topic, idx) => (
                   <Link
-                    href={`/topics/${topic.slug}`}
+                    href={`/topics/${
+                      topic.slug
+                    }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
+                      currentMeetingSession
+                    )}`}
                     key={`issue-tag-${idx}-${topic.slug}`}
                   >
                     <Issue name={topic.title} />
@@ -182,6 +185,8 @@ const Topic: React.FC<TopicPageProps> = ({
               <TopicList
                 legislatorsData={legislatorsData}
                 speechesByLegislator={speechesByLegislator}
+                currentMeetingTerm={currentMeetingTerm}
+                currentMeetingSession={currentMeetingSession}
               />
             </TopicListContainer>
             <Spacing $height={8} />
@@ -194,7 +199,11 @@ const Topic: React.FC<TopicPageProps> = ({
               <OthersWatchingTags>
                 {othersWatchingTags.map((topic, idx) => (
                   <Link
-                    href={`/topics/${topic.slug}`}
+                    href={`/topics/${
+                      topic.slug
+                    }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
+                      currentMeetingSession
+                    )}`}
                     key={`issue-tag-${idx}-${topic.slug}`}
                   >
                     <Issue name={topic.title} />
