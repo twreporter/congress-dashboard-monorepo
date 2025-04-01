@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 // @twerporter
 import {
@@ -11,29 +11,15 @@ import { Cross } from '@twreporter/react-components/lib/icon'
 import { PillButton } from '@twreporter/react-components/lib/button'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
-import {
-  MemberType,
-  MEMBER_TYPE_LABEL,
-  CITY_OPTIONS,
-} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
-// fetcher
-import useParty, { type partyData, type stateType } from '@/fetchers/party'
 // component
 import {
-  SelectorType,
+  type SelectorType,
   SingleSelect,
   MultipleSelect,
 } from '@/components/selector'
-import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+import type { OptionGroup, Option } from '@/components/selector/types'
 // z-index
 import { ZIndex } from '@/styles/z-index'
-// lodash
-import { findIndex, clone, map } from 'lodash'
-const _ = {
-  findIndex,
-  clone,
-  map,
-}
 
 const ModalContainer = styled.div<{ $isOpen: boolean }>`
   display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
@@ -162,163 +148,76 @@ const SelectorContainer = styled.div`
   width: 100%;
 `
 
-type OptionIconProps = {
-  url: string
-}
-const OptionIcon: React.FC<OptionIconProps> = ({ url }) => {
-  return <PartyTag size={TagSize.S} avatar={url} />
-}
-
-const defaultOptions = [
-  {
-    type: SelectorType.Single,
-    disabled: true,
-    label: '單位',
-    value: 'department',
-    options: [{ label: '立法院', value: 'legislativeYuan' }],
-  },
-  {
-    type: SelectorType.Single,
-    disabled: false,
-    label: '屆期',
-    value: 'meeting',
-    options: [
-      { label: '第 10 屆', value: '10' },
-      { label: '第 11 屆', value: '11' },
-    ], //TODO: get from api
-  },
-  {
-    type: SelectorType.Multiple,
-    disabled: false,
-    defaultValue: ['all'],
-    label: '會期',
-    value: 'meetingSession',
-    options: [
-      { label: '全部會期', value: 'all', isDeletable: false },
-      { label: '第 1 會期(2020/9-2022/10)', value: '1' },
-      { label: '第 2 會期(2022/10-2023/2)', value: '2' },
-      { label: '第 3 會期(2023/2-2023/6)', value: '3' },
-    ], //TODO: get from api
-  },
-  {
-    type: SelectorType.Multiple,
-    disabled: false,
-    label: '選區',
-    value: 'constituency',
-    options: [
-      {
-        groupName: '不分區',
-        options: [{ label: '不分區', value: MemberType.NationwideAndOverseas }],
-      },
-      {
-        groupName: '原住民',
-        options: [
-          {
-            label: MEMBER_TYPE_LABEL[MemberType.LowlandAboriginal],
-            value: MemberType.LowlandAboriginal,
-          },
-          {
-            label: MEMBER_TYPE_LABEL[MemberType.HighlandAboriginal],
-            value: MemberType.HighlandAboriginal,
-          },
-        ],
-      },
-      { groupName: '區域', options: CITY_OPTIONS },
-    ],
-  },
-  {
-    type: SelectorType.Multiple,
-    disabled: false,
-    label: '黨籍',
-    value: 'party',
-    isLoading: true,
-    options: [],
-  },
-  {
-    type: SelectorType.Multiple,
-    disabled: false,
-    label: '委員會',
-    value: 'committee',
-    options: [
-      {
-        groupName: '常設',
-        options: [
-          { label: '內政委員會', value: 'committee-1' },
-          { label: '社會福利及衛生環境委員會', value: 'committee-3' },
-        ],
-      },
-      {
-        groupName: '特種',
-        options: [
-          { label: '經費稽核委員會', value: 'committee-2' },
-          { label: '紀律委員會', value: 'committee-4' },
-        ],
-      },
-    ], //TODO: get from api
-  },
-]
-
-const generateOptions = (partyState: stateType<partyData>) => {
-  const partyFieldIndex = _.findIndex(
-    defaultOptions,
-    ({ value }) => value === 'party'
-  )
-  if (partyFieldIndex < 0) {
-    return defaultOptions
-  }
-
-  const filterOptions = _.clone(defaultOptions)
-  filterOptions[partyFieldIndex].isLoading = partyState.isLoading
-  filterOptions[partyFieldIndex].options = _.map(
-    partyState.party,
-    ({ slug, name, imageLink, image }: partyData) => {
-      const selfHostImage = image?.imageFile?.url
-      const imageUrl =
-        imageLink ||
-        (selfHostImage
-          ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${selfHostImage}`
-          : '')
-      const prefixIcon = <OptionIcon url={imageUrl} />
-      return {
-        label: name,
-        value: slug,
-        prefixIcon,
-      }
-    }
-  )
-
-  return filterOptions
+export type FilterOption = {
+  type: SelectorType
+  disabled?: boolean
+  label: string
+  value: string
+  options: Option[] | OptionGroup[]
+  defaultValue?: string[]
+  isLoading?: boolean
 }
 
 export type FilterModalValueType = {
-  department: string
-  meeting: string
-  meetingSession: string[]
-  constituency: string[]
-  party: string[]
-  committee: string[]
+  [key: string]: string | string[]
 }
 
 type FilterModelProps = {
   isOpen: boolean
   setIsOpen: (v: boolean) => void
   onSubmit: (v: FilterModalValueType) => void
+  options: FilterOption[]
+  initialValues?: FilterModalValueType
+  value?: FilterModalValueType
+  onChange?: (v: FilterModalValueType) => void
 }
+
 const FilterModal: React.FC<FilterModelProps> = ({
   isOpen,
   setIsOpen,
   onSubmit,
+  options,
+  initialValues = {},
+  value,
+  onChange,
 }) => {
-  const defaultValue = {
-    department: 'legislativeYuan',
-    meeting: '11',
-    meetingSession: ['all'],
-    constituency: [],
-    party: [],
-    committee: [],
+  // Create a default value object based on the provided options
+  const getDefaultValues = () => {
+    const defaults: FilterModalValueType = {}
+    options.forEach((option) => {
+      if (option.type === SelectorType.Single) {
+        defaults[option.value] = option.options[0]?.value || ''
+      } else if (option.type === SelectorType.Multiple) {
+        defaults[option.value] = option.defaultValue || []
+      }
+    })
+    return { ...defaults, ...initialValues }
   }
-  const [filterValue, setFilterValue] =
-    useState<FilterModalValueType>(defaultValue)
+
+  const [filterValue, setFilterValue] = useState<FilterModalValueType>(
+    value || getDefaultValues()
+  )
+
+  // Update internal state if value is provided and changes
+  useEffect(() => {
+    if (value) {
+      setFilterValue(value)
+    }
+  }, [value])
+
+  // Handle internal state changes
+  const handleValueChange = (key: string, newValue: string | string[]) => {
+    const updatedValue = {
+      ...filterValue,
+      [key]: newValue,
+    }
+    setFilterValue(updatedValue)
+
+    // If onChange is provided, call it
+    if (onChange) {
+      onChange(updatedValue)
+    }
+  }
 
   const handleSubmitClick = () => {
     onSubmit(filterValue)
@@ -326,14 +225,16 @@ const FilterModal: React.FC<FilterModelProps> = ({
   }
 
   const handleResetClick = () => {
-    setFilterValue(defaultValue)
+    const defaultValues = getDefaultValues()
+    setFilterValue(defaultValues)
+    if (onChange) {
+      onChange(defaultValues)
+    }
   }
+
   const handleCrossClick = () => {
     setIsOpen(false)
   }
-
-  const partyOptionStates = useParty()
-  const filterOptions = generateOptions(partyOptionStates)
 
   return (
     <ModalContainer $isOpen={isOpen}>
@@ -345,33 +246,30 @@ const FilterModal: React.FC<FilterModelProps> = ({
           </CrossIcon>
         </Header>
         <SelectorsContainer>
-          {filterOptions.map(
+          {options.map(
             (
               {
                 type,
                 disabled,
                 label,
-                value,
-                options,
-                defaultValue,
+                value: optionValue,
+                options: selectOptions,
                 isLoading,
+                defaultValue,
               },
               idx
             ) => {
               if (type === SelectorType.Single) {
                 return (
-                  <SelectContainer key={`single-select-${value}-${idx}`}>
+                  <SelectContainer key={`single-select-${optionValue}-${idx}`}>
                     <Label text={label} />
                     <SelectorContainer>
                       <SingleSelect
                         disabled={disabled}
-                        options={options}
-                        value={filterValue[value]}
-                        onChange={(optionValue) =>
-                          setFilterValue((v) => ({
-                            ...v,
-                            [value]: optionValue,
-                          }))
+                        options={selectOptions}
+                        value={filterValue[optionValue] as string}
+                        onChange={(selectedValue) =>
+                          handleValueChange(optionValue, selectedValue)
                         }
                         loading={isLoading}
                       />
@@ -380,19 +278,16 @@ const FilterModal: React.FC<FilterModelProps> = ({
                 )
               } else if (type === SelectorType.Multiple) {
                 return (
-                  <SelectContainer key={`multi-select-${value}-${idx}`}>
+                  <SelectContainer key={`multi-select-${optionValue}-${idx}`}>
                     <Label text={label} />
                     <SelectorContainer>
                       <MultipleSelect
-                        defaultValue={defaultValue}
                         disabled={disabled}
-                        options={options}
-                        value={filterValue[value]}
-                        onChange={(optionValue) =>
-                          setFilterValue((v) => ({
-                            ...v,
-                            [value]: optionValue,
-                          }))
+                        options={selectOptions}
+                        value={filterValue[optionValue] as string[]}
+                        defaultValue={defaultValue}
+                        onChange={(selectedValue) =>
+                          handleValueChange(optionValue, selectedValue)
                         }
                         loading={isLoading}
                       />
