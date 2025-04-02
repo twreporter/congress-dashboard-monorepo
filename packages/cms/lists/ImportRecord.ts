@@ -300,6 +300,38 @@ const validateListSpecificData: Record<
     )
     return validationErrors
   },
+  [ListName.relatedTopics]: async (csvData, context) => {
+    const validationErrors: string[] = []
+    await Promise.all(
+      csvData
+        .slice(1) // exclude header row
+        .map(
+          async (
+            [_title, slug, _related_topic_title, related_topic_slug],
+            index
+          ) => {
+            const rowNum = index + 1 // Add 1 for header row
+            const topic = await context.prisma.topic.findFirst({
+              where: { slug },
+            })
+            if (!topic) {
+              validationErrors.push(
+                `第 ${rowNum} 行: 議題 "${slug}" 不存在，請先匯入議題資料`
+              )
+            }
+            const relatedTopic = await context.prisma.topic.findFirst({
+              where: { slug: related_topic_slug },
+            })
+            if (!relatedTopic) {
+              validationErrors.push(
+                `第 ${rowNum} 行: 相關議題 "${related_topic_slug}" 不存在，請先匯入議題資料`
+              )
+            }
+          }
+        )
+    )
+    return validationErrors
+  },
 }
 
 const importHandlers: Record<
@@ -655,6 +687,34 @@ const importHandlers: Record<
         )
       }
     }
+    return queries
+  },
+  [ListName.relatedTopics]: async (csvData, context) => {
+    const queries: Promise<any>[] = []
+
+    for (const [
+      _title,
+      slug,
+      _related_topic_title,
+      related_topic_slug,
+    ] of csvData.slice(1)) {
+      const relatedTopic = await context.prisma.Topic.findFirst({
+        where: { slug: related_topic_slug },
+        select: { id: true },
+      })
+
+      queries.push(
+        context.prisma.Topic.update({
+          where: { slug },
+          data: {
+            relatedTopics: {
+              connect: { id: relatedTopic.id },
+            },
+          },
+        })
+      )
+    }
+
     return queries
   },
 }

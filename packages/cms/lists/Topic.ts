@@ -19,6 +19,25 @@ const listConfigurations = list({
         labelField: 'title',
       },
     }),
+    relatedTopics: relationship({
+      ref: 'Topic.beenRelatedTopics',
+      label: '相關議題',
+      many: true,
+      ui: {
+        labelField: 'title',
+      },
+    }),
+    beenRelatedTopics: relationship({
+      ref: 'Topic.relatedTopics',
+      label: '被相關議題',
+      many: true,
+      ui: {
+        labelField: 'title',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,
   },

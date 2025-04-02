@@ -85,6 +85,8 @@ model Topic {
   title               String     @default("")
   slug                String     @unique @default("")
   speeches            Speech[]   @relation("Speech_topics")
+  relatedTopics       Topic[]    @relation("Topic_beenRelatedTopics")
+  beenRelatedTopics   Topic[]    @relation("Topic_beenRelatedTopics")
   createdAt           DateTime?  @default(now())
   updatedAt           DateTime?  @updatedAt
   from_Selected_topic Selected[] @relation("Selected_topic")

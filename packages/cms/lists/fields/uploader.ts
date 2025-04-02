@@ -12,6 +12,7 @@ export enum ListName {
   legislativeYuanMember = 'LegislativeYuanMember',
   speech = 'Speech',
   committeeMember = 'CommitteeMember',
+  relatedTopics = 'RelatedTopics',
 }
 
 export const expectedHeaders: Record<string, string[]> = {
@@ -51,6 +52,12 @@ export const expectedHeaders: Record<string, string[]> = {
     'committee_name',
     'committee_slug',
   ],
+  [ListName.relatedTopics]: [
+    'title',
+    'slug',
+    'related_topic_title',
+    'related_topic_slug',
+  ],
 }
 
 export const requiredFields: Record<string, string[]> = {
@@ -76,6 +83,7 @@ export const requiredFields: Record<string, string[]> = {
     'legislator_slug',
     'committee_slug',
   ],
+  [ListName.relatedTopics]: ['slug', 'related_topic_slug'],
 }
 
 export type UploaderFieldConfig<ListTypeInfo extends BaseListTypeInfo> =
@@ -221,6 +229,7 @@ export function uploader<ListTypeInfo extends BaseListTypeInfo>(
           legislativeYuanMember: '立委屆資',
           speech: '逐字稿',
           committeeMember: '委員會屆資',
+          relatedTopics: '相關議題',
         }
 
         return {
