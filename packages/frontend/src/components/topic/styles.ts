@@ -78,7 +78,7 @@ export const TopicContainer = styled.div`
     width: 1120px;
   `}
   ${mq.desktopOnly`
-    max-width: 1016px; // 720 + 272 + 24
+    max-width: 1016px; // 720(list width) + 272(aside width) + 24(padding)
   `}
 `
 
@@ -168,98 +168,6 @@ export const DesktopAside = styled.div`
   `}
 `
 
-export const StatisticsBlock = styled.div`
-  display: flex;
-  padding: 32px 24px;
-  border-radius: 8px;
-  background-color: ${colorGrayscale.white};
-  justify-content: space-between;
-  gap: 20px;
-  ${mq.tabletAndBelow`
-    width: 100%;
-  `}
-`
-
-export const StatisticsDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-`
-
-export const RelatedArticleBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 24px;
-  gap: 20px;
-  border-radius: 8px;
-  background-color: ${colorGrayscale.white};
-  ${mq.tabletOnly`
-    margin-left: -32px;
-    margin-right: -32px;
-    padding-left: 32px;
-    padding-right: 32px;
-  `}
-  ${mq.mobileOnly`
-    margin-left: -24px;
-    margin-right: -24px;
-    padding-left: 24px;
-    padding-right: 24px;
-  `}
-`
-
-export const OthersWatchingBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 24px;
-  border-radius: 8px;
-  background-color: ${colorGrayscale.white};
-  ${mq.tabletOnly`
-    margin-left: -32px;
-    margin-right: -32px;
-    padding-left: 32px;
-    padding-right: 32px;
-  `}
-  ${mq.mobileOnly`
-    margin-left: -24px;
-    margin-right: -24px;
-    padding-left: 24px;
-    padding-right: 24px;
-  `}
-`
-
-export const OthersWatchingTags = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  flex-wrap: wrap;
-  a {
-    text-decoration: none;
-  }
-`
-
-export const Feedback = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 24px;
-  border-radius: 8px;
-  background-color: ${colorGrayscale.gray200};
-  span {
-    color: ${colorGrayscale.gray800};
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 150%;
-  }
-  a {
-    color: ${colorGrayscale.gray800};
-    text-decoration-color: ${colorGrayscale.gray800};
-  }
-  ${mq.tabletAndBelow`
-    width: 100%;
-  `}
-`
-
 export const FunctionBar = styled.div`
   width: 100%;
   height: 64px;
@@ -295,14 +203,6 @@ export const P1Gray700 = styled(P1)`
 
 export const P1Gray800 = styled(P1)`
   color: ${colorGrayscale.gray800};
-`
-
-export const StatisticsNumber = styled.div`
-  color: ${colorGrayscale.gray800};
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 125%;
 `
 
 export const H4Title = styled(H4)`

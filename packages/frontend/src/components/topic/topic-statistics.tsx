@@ -1,10 +1,37 @@
+'use client'
 import React from 'react'
-import {
-  StatisticsBlock,
-  StatisticsDiv,
-  P1Gray800,
-  StatisticsNumber,
-} from '@/components/topic/styles'
+import styled from 'styled-components'
+// @twreporter
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import mq from '@twreporter/core/lib/utils/media-query'
+// components
+import { P1Gray800 } from '@/components/topic/styles'
+
+const StatisticsBlock = styled.div`
+  display: flex;
+  padding: 32px 24px;
+  border-radius: 8px;
+  background-color: ${colorGrayscale.white};
+  justify-content: space-between;
+  gap: 20px;
+  ${mq.tabletAndBelow`
+    width: 100%;
+  `}
+`
+
+const StatisticsDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+`
+
+const StatisticsNumber = styled.div`
+  color: ${colorGrayscale.gray800};
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 125%;
+`
 
 type TopicStatisticsProps = {
   legislatorCount: number

@@ -1,6 +1,32 @@
+'use client'
 import React from 'react'
+import styled from 'styled-components'
 import Link from 'next/link'
-import { Feedback } from '@/components/topic/styles'
+// @twreporter
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import mq from '@twreporter/core/lib/utils/media-query'
+
+const Feedback = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 24px;
+  border-radius: 8px;
+  background-color: ${colorGrayscale.gray200};
+  span {
+    color: ${colorGrayscale.gray800};
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+  }
+  a {
+    color: ${colorGrayscale.gray800};
+    text-decoration-color: ${colorGrayscale.gray800};
+  }
+  ${mq.tabletAndBelow`
+    width: 100%;
+  `}
+`
 
 const TopicFeedback: React.FC = () => {
   return (
