@@ -532,6 +532,9 @@ type Legislator {
   slug: String
   image: Photo
   imageLink: String
+  externalLink: String
+  meetingTermCount: Int
+  meetingTermCountInfo: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -550,8 +553,22 @@ input LegislatorWhereInput {
   slug: StringFilter
   image: PhotoWhereInput
   imageLink: StringFilter
+  externalLink: StringFilter
+  meetingTermCount: IntNullableFilter
+  meetingTermCountInfo: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
+}
+
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
 }
 
 input LegislatorOrderByInput {
@@ -559,6 +576,9 @@ input LegislatorOrderByInput {
   name: OrderDirection
   slug: OrderDirection
   imageLink: OrderDirection
+  externalLink: OrderDirection
+  meetingTermCount: OrderDirection
+  meetingTermCountInfo: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -568,6 +588,9 @@ input LegislatorUpdateInput {
   slug: String
   image: PhotoRelateToOneForUpdateInput
   imageLink: String
+  externalLink: String
+  meetingTermCount: Int
+  meetingTermCountInfo: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -588,6 +611,9 @@ input LegislatorCreateInput {
   slug: String
   image: PhotoRelateToOneForCreateInput
   imageLink: String
+  externalLink: String
+  meetingTermCount: Int
+  meetingTermCountInfo: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -610,6 +636,7 @@ type LegislativeYuanMember {
   city: String
   tooltip: String
   note: String
+  proposalSuccessCount: Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -633,6 +660,7 @@ input LegislativeYuanMemberWhereInput {
   city: StringNullableFilter
   tooltip: StringFilter
   note: StringFilter
+  proposalSuccessCount: IntNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -665,6 +693,7 @@ input LegislativeYuanMemberOrderByInput {
   city: OrderDirection
   tooltip: OrderDirection
   note: OrderDirection
+  proposalSuccessCount: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -680,6 +709,7 @@ input LegislativeYuanMemberUpdateInput {
   city: String
   tooltip: String
   note: String
+  proposalSuccessCount: Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -713,6 +743,7 @@ input LegislativeYuanMemberCreateInput {
   city: String
   tooltip: String
   note: String
+  proposalSuccessCount: Int
   createdAt: DateTime
   updatedAt: DateTime
 }

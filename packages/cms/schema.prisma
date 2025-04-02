@@ -101,6 +101,9 @@ model Legislator {
   image                                 Photo?                  @relation("Legislator_image", fields: [imageId], references: [id])
   imageId                               Int?                    @map("image")
   imageLink                             String                  @default("")
+  externalLink                          String                  @default("")
+  meetingTermCount                      Int?
+  meetingTermCountInfo                  String                  @default("")
   createdAt                             DateTime?               @default(now())
   updatedAt                             DateTime?               @updatedAt
   from_Selected_legislator              Selected[]              @relation("Selected_legislator")
@@ -124,6 +127,7 @@ model LegislativeYuanMember {
   city                              String?
   tooltip                           String              @default("")
   note                              String              @default("")
+  proposalSuccessCount              Int?
   createdAt                         DateTime?           @default(now())
   updatedAt                         DateTime?           @updatedAt
   from_Speech_legislativeYuanMember Speech[]            @relation("Speech_legislativeYuanMember")

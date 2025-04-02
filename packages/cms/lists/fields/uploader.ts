@@ -16,7 +16,14 @@ export enum ListName {
 }
 
 export const expectedHeaders: Record<string, string[]> = {
-  [ListName.legislator]: ['name', 'slug', 'imageLink'],
+  [ListName.legislator]: [
+    'name',
+    'slug',
+    'imageLink',
+    'externalLink',
+    'meetingTermCount',
+    'meetingTermCountInfo',
+  ],
   [ListName.topic]: ['title', 'slug', 'speech_slug'],
   [ListName.legislativeYuanMember]: [
     'legislator_name',
@@ -28,6 +35,7 @@ export const expectedHeaders: Record<string, string[]> = {
     'city',
     'tooltip',
     'note',
+    'proposalSuccessCount',
   ],
   [ListName.speech]: [
     'slug',

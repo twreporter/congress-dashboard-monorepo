@@ -341,15 +341,39 @@ const importHandlers: Record<
   [ListName.legislator]: async (csvData, context) => {
     const queries: Promise<any>[] = []
 
-    csvData.slice(1).forEach(([name, slug, imageLink]) => {
-      queries.push(
-        context.prisma.Legislator.upsert({
-          where: { slug },
-          update: { name, imageLink },
-          create: { name, slug, imageLink },
-        })
+    csvData
+      .slice(1)
+      .forEach(
+        ([
+          name,
+          slug,
+          imageLink,
+          externalLink,
+          meetingTermCount,
+          meetingTermCountInfo,
+        ]) => {
+          queries.push(
+            context.prisma.Legislator.upsert({
+              where: { slug },
+              update: {
+                name,
+                imageLink,
+                externalLink,
+                meetingTermCount: Number(meetingTermCount),
+                meetingTermCountInfo,
+              },
+              create: {
+                name,
+                slug,
+                imageLink,
+                externalLink,
+                meetingTermCount: Number(meetingTermCount),
+                meetingTermCountInfo,
+              },
+            })
+          )
+        }
       )
-    })
 
     return queries
   },
@@ -442,6 +466,7 @@ const importHandlers: Record<
       city,
       tooltip,
       note,
+      proposalSuccessCount,
     ] of csvData.slice(1)) {
       const legislatorData = await context.prisma.legislator.findFirst({
         where: { slug: legislator_slug },
@@ -465,6 +490,7 @@ const importHandlers: Record<
         note,
         labelForCMS: `${legislatorData.name} | 第 ${legislativeMeeting_term} 屆`,
         party: { connect: { slug: party_slug } },
+        proposalSuccessCount: Number(proposalSuccessCount),
       }
 
       if (existingMember) {
