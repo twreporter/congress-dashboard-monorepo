@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo, useCallback, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import { IconButton } from '@twreporter/react-components/lib/button'
@@ -84,24 +84,43 @@ interface TabNavigationProps {
   onFilterClick: (e: React.MouseEvent<HTMLElement>) => void
 }
 
-const TabNavigation = React.memo<TabNavigationProps>(
+const TabNavigation = memo<TabNavigationProps>(
   ({ tabs, selectedTab, setSelectedTab, onFilterClick }) => {
-    const selectTab = React.useCallback(
+    const tabRefs = useRef<(HTMLDivElement | null)[]>([])
+
+    useEffect(() => {
+      tabRefs.current = tabRefs.current.slice(0, tabs.length)
+    }, [tabs])
+
+    const scrollTabIntoView = useCallback((index: number) => {
+      if (tabRefs.current[index]) {
+        tabRefs.current[index]?.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'start',
+          block: 'center',
+        })
+      }
+    }, [])
+
+    const selectTab = useCallback(
       (e: React.MouseEvent<HTMLElement>, index: number) => {
         e.preventDefault()
         e.stopPropagation()
         setSelectedTab(index)
 
-        const tabElement = e.currentTarget as HTMLElement
-        if (tabElement) {
-          tabElement.scrollIntoView({
+        // If clicking directly on a tab, use event target
+        if (e.currentTarget.classList.contains('tab-item')) {
+          e.currentTarget.scrollIntoView({
             behavior: 'smooth',
             inline: 'start',
             block: 'center',
           })
+        } else {
+          // If clicking on arrows, use the ref to scroll
+          scrollTabIntoView(index)
         }
       },
-      [setSelectedTab]
+      [setSelectedTab, scrollTabIntoView]
     )
 
     return (
@@ -119,7 +138,11 @@ const TabNavigation = React.memo<TabNavigationProps>(
         <ScrollableTab>
           {tabs.map((tabProps: TabProps, index: number) => (
             <TabItem
+              className="tab-item"
               key={`sidebar-tab-${index}`}
+              ref={(el) => {
+                tabRefs.current[index] = el
+              }}
               onClick={(e: React.MouseEvent<HTMLElement>) =>
                 selectTab(e, index)
               }
