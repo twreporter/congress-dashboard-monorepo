@@ -91,11 +91,6 @@ const Topic: React.FC<TopicPageProps> = ({
     }
   }, [leadingRef])
 
-  // Render a loading state if topic data is missing
-  if (!topic) {
-    return <div>Loading topic data...</div>
-  }
-
   const openFilter = () => {
     setIsFilterOpen((prev) => !prev)
   }

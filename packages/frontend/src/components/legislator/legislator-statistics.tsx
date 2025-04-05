@@ -24,7 +24,18 @@ const LegislatorStatisticsDiv = styled.div`
 const CurrentCommittee = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 50%;
+  gap: 4px;
+  ${mq.hdOnly`
+    width: 266px;
+  `}
+  ${mq.desktopAndBelow`
+    width: fit-content;
+  `}
+`
+
+const Committees = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const CommitteeText = styled.div`
@@ -59,14 +70,15 @@ const CountInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
-  flex: 50%;
 `
 
 const CountInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex: 50%;
+  ${mq.hdOnly`
+    width: 175px;
+  `}
 `
 
 const CountInfoTitle = styled.div`
@@ -104,11 +116,13 @@ const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
     <LegislatorStatisticsDiv>
       <CurrentCommittee>
         <P1Gray800 text="本屆加入" />
-        {committees.map((committee, index) => (
-          <CommitteeText key={index}>
-            {`${committee.name} (${committee.count}會期)`}
-          </CommitteeText>
-        ))}
+        <Committees>
+          {committees.map((committee, index) => (
+            <CommitteeText key={index}>
+              {`${committee.name} (${committee.count}會期)`}
+            </CommitteeText>
+          ))}
+        </Committees>
       </CurrentCommittee>
       <Separator />
       <CountInfoContainer>
