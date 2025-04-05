@@ -1,34 +1,25 @@
 'use client'
-import React, { useRef, useState, useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/navigation'
 // @twreporter
 import {
   DesktopAndAbove,
   TabletAndBelow,
-  TabletAndAbove,
 } from '@twreporter/react-components/lib/rwd'
 // components
-import FilterButton from '@/components/button/filter-button'
 import LegislatorInfo from '@/components/legislator/legislator-info'
 import LegislatorStatistics from '@/components/legislator/legislator-statistics'
 import LegislatorList from '@/components/legislator/legislator-list'
 import Feedback from '@/components/topic/topic-feedback'
 import FilterModal from '@/components/filter-modal'
+import ContentPageLayout from '@/components/layout/content-page-layout'
 // styles
 import {
   LegislatorWrapper,
-  LegislatorContainer,
-  LeadingContainer,
-  FilterBar,
-  LegislatorTitle,
-  P1Gray700,
   ContentBlock,
   DesktopAsideLeft,
   DesktopAsideRight,
   ListContainer,
-  FunctionBarWrapper,
-  FunctionBar,
-  FunctionBarTitle,
 } from '@/components/legislator/styles'
 // fetcher
 import {
@@ -37,10 +28,8 @@ import {
 } from '@/fetchers/server/legislator'
 // hooks
 import { useLegislatorData } from '@/components/legislator/hooks/use-legislator-data'
-// context
-import { useScrollContext } from '@/contexts/scroll-context'
 // custom hooks
-import { useLegislatorFilters } from '@/components/legislator/hooks/use-legislator-filters'
+import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
 // mock data
 import { LegislatorStatisticsMockData } from '@/components/legislator/mockData'
 
@@ -57,9 +46,6 @@ const Legislator: React.FC<LegislatorProps> = ({
   currentMeetingSession,
 }) => {
   const router = useRouter()
-  const { setTabElement, isHeaderHidden } = useScrollContext()
-  const leadingRef = useRef<HTMLDivElement>(null)
-  const [isControllBarHidden, setIsControllBarHidden] = useState(true)
 
   const {
     isFilterOpen,
@@ -69,34 +55,12 @@ const Legislator: React.FC<LegislatorProps> = ({
     handleFilterValueChange,
     legislativeMeetingSessionState,
     filterOptions,
-  } = useLegislatorFilters(currentMeetingTerm, currentMeetingSession)
+  } = useLegislativeMeetingFilters(currentMeetingTerm, currentMeetingSession)
 
   const { legislator, topics, speechesByTopic } = useLegislatorData(
     legislatorData,
     topicsData
   )
-
-  useEffect(() => {
-    if (leadingRef.current) {
-      setTabElement(leadingRef.current)
-    }
-  }, [setTabElement, leadingRef])
-
-  useEffect(() => {
-    if (!leadingRef.current) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsControllBarHidden(entry.isIntersecting)
-      },
-      {
-        threshold: 0.5,
-      }
-    )
-    observer.observe(leadingRef.current)
-    return () => {
-      observer.disconnect()
-    }
-  }, [leadingRef])
 
   const openFilter = () => {
     setIsFilterOpen((prev) => !prev)
@@ -135,66 +99,43 @@ const Legislator: React.FC<LegislatorProps> = ({
     }
   }
 
+  const pageTitle = `${legislator.name} 的相關發言摘要`
+
   return (
     <LegislatorWrapper>
-      <FunctionBarWrapper
-        $isHeaderHidden={isHeaderHidden}
-        $isHidden={isControllBarHidden}
+      <ContentPageLayout
+        title={pageTitle}
+        currentMeetingTerm={currentMeetingTerm}
+        filterValues={filterValues}
+        filterCount={filterCount}
+        onFilterClick={openFilter}
       >
-        <FunctionBar>
-          <FunctionBarTitle text={`${legislator.name} 的相關發言摘要`} />
-          <FilterBar onClick={openFilter}>
-            <TabletAndAbove>
-              <P1Gray700
-                text={`第${currentMeetingTerm}屆｜${
-                  filterValues.meetingSession.includes('all') ? '全部' : '部分'
-                }會期`}
-              />
-            </TabletAndAbove>
-            <FilterButton filterCount={filterCount} />
-          </FilterBar>
-        </FunctionBar>
-      </FunctionBarWrapper>
-      <LegislatorContainer>
-        <LeadingContainer ref={leadingRef}>
-          <LegislatorTitle text={`${legislator.name} 的相關發言摘要`} />
-          <FilterBar onClick={openFilter}>
-            <P1Gray700
-              text={`第${currentMeetingTerm}屆｜${
-                filterValues.meetingSession.includes('all') ? '全部' : '部分'
-              }會期`}
-            />
-            <FilterButton filterCount={filterCount} />
-          </FilterBar>
-        </LeadingContainer>
         <DesktopAndAbove>
-          <ContentBlock>
-            <DesktopAsideLeft>
-              <LegislatorInfo legislator={legislator} />
-              <Feedback />
-            </DesktopAsideLeft>
-            <DesktopAsideRight>
-              <LegislatorStatistics
-                committees={legislator.committees}
-                proposalSuccessCount={
-                  LegislatorStatisticsMockData.proposalSuccessCount
-                }
-                meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
-                meetingTermCountInfo={
-                  LegislatorStatisticsMockData.meetingTermCountInfo
-                }
+          <DesktopAsideLeft>
+            <LegislatorInfo legislator={legislator} />
+            <Feedback />
+          </DesktopAsideLeft>
+          <DesktopAsideRight>
+            <LegislatorStatistics
+              committees={legislator.committees}
+              proposalSuccessCount={
+                LegislatorStatisticsMockData.proposalSuccessCount
+              }
+              meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
+              meetingTermCountInfo={
+                LegislatorStatisticsMockData.meetingTermCountInfo
+              }
+            />
+            <ListContainer>
+              <LegislatorList
+                legislatorSlug={legislator.slug}
+                topics={topics}
+                speechesByTopic={speechesByTopic}
+                currentMeetingTerm={currentMeetingTerm}
+                currentMeetingSession={currentMeetingSession}
               />
-              <ListContainer>
-                <LegislatorList
-                  legislatorSlug={legislator.slug}
-                  topics={topics}
-                  speechesByTopic={speechesByTopic}
-                  currentMeetingTerm={currentMeetingTerm}
-                  currentMeetingSession={currentMeetingSession}
-                />
-              </ListContainer>
-            </DesktopAsideRight>
-          </ContentBlock>
+            </ListContainer>
+          </DesktopAsideRight>
         </DesktopAndAbove>
         <TabletAndBelow>
           <ContentBlock>
@@ -221,7 +162,8 @@ const Legislator: React.FC<LegislatorProps> = ({
             <Feedback />
           </ContentBlock>
         </TabletAndBelow>
-      </LegislatorContainer>
+      </ContentPageLayout>
+
       <FilterModal
         isOpen={isFilterOpen}
         setIsOpen={setIsFilterOpen}

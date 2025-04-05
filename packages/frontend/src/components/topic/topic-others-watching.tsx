@@ -6,16 +6,16 @@ import Link from 'next/link'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 // components
-import { Issue } from '@/components/sidebar/followMore'
 import { H4Title } from '@/components/topic/styles'
-// mockData
+import { Issue } from '@/components/sidebar/followMore'
+// mock data
 import { othersWatchingTags } from '@/components/topic/mockData'
 
 const OthersWatchingBlock = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
   padding: 24px;
+  gap: 20px;
   border-radius: 8px;
   background-color: ${colorGrayscale.white};
   ${mq.tabletOnly`
@@ -32,11 +32,10 @@ const OthersWatchingBlock = styled.div`
   `}
 `
 
-const OthersWatchingTags = styled.div`
+const TopicsContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 10px;
   flex-wrap: wrap;
+  gap: 8px;
   a {
     text-decoration: none;
   }
@@ -53,21 +52,21 @@ const TopicOthersWatching: React.FC<TopicOthersWatchingProps> = ({
 }) => {
   return (
     <OthersWatchingBlock>
-      <H4Title text="其他人也在看" />
-      <OthersWatchingTags>
-        {othersWatchingTags.map((topic, idx) => (
+      <H4Title text="其他人也在關注" />
+      <TopicsContainer>
+        {othersWatchingTags.map((tag, index) => (
           <Link
             href={`/topics/${
-              topic.slug
+              tag.slug
             }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
               currentMeetingSession
             )}`}
-            key={`issue-tag-${idx}-${topic.slug}`}
+            key={`others-watching-tag-${index}`}
           >
-            <Issue name={topic.title} />
+            <Issue name={tag.title} />
           </Link>
         ))}
-      </OthersWatchingTags>
+      </TopicsContainer>
     </OthersWatchingBlock>
   )
 }

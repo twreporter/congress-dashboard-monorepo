@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 // components
-import { H4Title } from '@/components/topic/styles'
+import { H4Title, P3Gray600 } from '@/components/topic/styles'
 
 const RelatedArticleBlock = styled.div`
   display: flex;
@@ -32,6 +32,7 @@ const TopicRelatedArticles: React.FC = () => {
   return (
     <RelatedArticleBlock>
       <H4Title text="相關文章" />
+      <P3Gray600 text="目前尚無相關文章" />
     </RelatedArticleBlock>
   )
 }

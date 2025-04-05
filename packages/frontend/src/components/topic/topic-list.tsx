@@ -8,11 +8,11 @@ import {
   Title,
   Body,
   SummarySection,
-} from '@/components/speech-summary-list/layout'
-import TabNavigation from '@/components/speech-summary-list/tab-navigation'
+} from '@/components/layout/speech-summary-list/layout'
+import TabNavigation from '@/components/layout/speech-summary-list/tab-navigation'
 import FollowMoreItems, {
   TopicContainer,
-} from '@/components/speech-summary-list/follow-more-items'
+} from '@/components/layout/speech-summary-list/follow-more-items'
 //  compoents
 import { groupSummary } from '@/components/sidebar'
 import CardsOfTheYear, {

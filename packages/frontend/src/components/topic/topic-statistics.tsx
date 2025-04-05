@@ -46,11 +46,15 @@ const TopicStatistics: React.FC<TopicStatisticsProps> = ({
     <StatisticsBlock>
       <StatisticsDiv>
         <P1Gray800 text="發言立委人數" />
-        <StatisticsNumber>{legislatorCount}</StatisticsNumber>
+        <StatisticsNumber>
+          {legislatorCount > 999 ? '999+' : legislatorCount}
+        </StatisticsNumber>
       </StatisticsDiv>
       <StatisticsDiv>
         <P1Gray800 text="發言總數" />
-        <StatisticsNumber>{speechesCount}</StatisticsNumber>
+        <StatisticsNumber>
+          {speechesCount > 999 ? '999+' : speechesCount}
+        </StatisticsNumber>
       </StatisticsDiv>
     </StatisticsBlock>
   )

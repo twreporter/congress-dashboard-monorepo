@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import {
   FollowMoreSection,
   FollowMoreTitle,
-} from '@/components/speech-summary-list/layout'
+} from '@/components/layout/speech-summary-list/layout'
 
 interface FollowMoreItemsProps {
   title: string

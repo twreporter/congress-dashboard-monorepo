@@ -5,64 +5,12 @@ import {
   fetchLegislator,
   fetchLegislatorTopics,
 } from '@/fetchers/server/legislator'
-import {
-  fetchLegislativeMeeting,
-  fetchLegislativeMeetingSession,
-} from '@/fetchers/server/legislative-meeting'
 // components
 import LegislatorPage from '@/components/legislator'
-// lodash
-import find from 'lodash/find'
-const _ = {
-  find,
-}
+// utils
+import { validateMeetingParams } from '@/utils/validate-meeting-params'
 
 export const dynamicParams = true
-
-const validateMeetingParams = async (
-  meetingTerm: string | undefined,
-  sessionTerm: string | undefined
-) => {
-  const legislativeMeetings = await fetchLegislativeMeeting()
-  let legislativeMeeting = legislativeMeetings[0].term
-  if (meetingTerm) {
-    const parsedMeeting = parseInt(meetingTerm, 10)
-    if (
-      !isNaN(parsedMeeting) &&
-      _.find(legislativeMeetings, ({ term }) => term === parsedMeeting)
-    ) {
-      legislativeMeeting = parsedMeeting
-    }
-  }
-
-  const legislativeMeetingSessions = await fetchLegislativeMeetingSession(
-    String(legislativeMeeting)
-  )
-  let legislativeMeetingSession = legislativeMeetingSessions.map(
-    (session) => session.term
-  )
-
-  if (sessionTerm) {
-    try {
-      const parsedSession = JSON.parse(sessionTerm)
-      if (Array.isArray(parsedSession) && parsedSession.length > 0) {
-        const validSessions = parsedSession.filter(
-          (item) =>
-            typeof item === 'number' &&
-            !isNaN(item) &&
-            _.find(legislativeMeetingSessions, ({ term }) => term === item)
-        )
-
-        if (validSessions.length > 0) {
-          legislativeMeetingSession = validSessions
-        }
-      }
-    } catch (error) {
-      console.error('Error parsing sessionTerm:', error)
-    }
-  }
-  return { legislativeMeeting, legislativeMeetingSession }
-}
 
 export async function generateMetadata({
   params,
@@ -76,7 +24,8 @@ export async function generateMetadata({
 
   const { legislativeMeeting } = await validateMeetingParams(
     meetingTerm,
-    sessionTerm
+    sessionTerm,
+    false // Use first meeting as fallback for legislators
   )
   const data = await fetchLegislator({ slug, legislativeMeeting })
   if (!data) {
@@ -100,7 +49,7 @@ export default async function Page({
 
   try {
     const { legislativeMeeting, legislativeMeetingSession } =
-      await validateMeetingParams(meetingTerm, sessionTerm)
+      await validateMeetingParams(meetingTerm, sessionTerm, false)
 
     const data = await fetchLegislator({ slug, legislativeMeeting })
     if (!data) {
