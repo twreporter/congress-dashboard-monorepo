@@ -46,7 +46,7 @@ export const fetchLegislativeMeetingSession = async (
     },
   }
 
-  const orderBy = [{ term: 'desc' }]
+  const orderBy = [{ term: 'asc' }]
 
   const res = await fetch(API_URL, {
     method: 'POST',

@@ -24,9 +24,7 @@ const validateMeetingParams = async (
   sessionTerm: string | undefined
 ) => {
   const legislativeMeetings = await fetchLegislativeMeeting()
-  console.log('legislativeMeetings: ', legislativeMeetings)
   let legislativeMeeting = legislativeMeetings[0].term
-  console.log('legislativeMeeting: ', legislativeMeeting)
   if (meetingTerm) {
     const parsedMeeting = parseInt(meetingTerm, 10)
     if (
