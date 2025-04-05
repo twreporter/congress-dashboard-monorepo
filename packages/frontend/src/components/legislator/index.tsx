@@ -15,8 +15,8 @@ import FilterModal from '@/components/filter-modal'
 import ContentPageLayout from '@/components/layout/content-page-layout'
 // styles
 import {
-  LegislatorWrapper,
   ContentBlock,
+  FLexDiv,
   DesktopAsideLeft,
   DesktopAsideRight,
   ListContainer,
@@ -102,7 +102,7 @@ const Legislator: React.FC<LegislatorProps> = ({
   const pageTitle = `${legislator.name} 的相關發言摘要`
 
   return (
-    <LegislatorWrapper>
+    <>
       <ContentPageLayout
         title={pageTitle}
         currentMeetingTerm={currentMeetingTerm}
@@ -111,31 +111,33 @@ const Legislator: React.FC<LegislatorProps> = ({
         onFilterClick={openFilter}
       >
         <DesktopAndAbove>
-          <DesktopAsideLeft>
-            <LegislatorInfo legislator={legislator} />
-            <Feedback />
-          </DesktopAsideLeft>
-          <DesktopAsideRight>
-            <LegislatorStatistics
-              committees={legislator.committees}
-              proposalSuccessCount={
-                LegislatorStatisticsMockData.proposalSuccessCount
-              }
-              meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
-              meetingTermCountInfo={
-                LegislatorStatisticsMockData.meetingTermCountInfo
-              }
-            />
-            <ListContainer>
-              <LegislatorList
-                legislatorSlug={legislator.slug}
-                topics={topics}
-                speechesByTopic={speechesByTopic}
-                currentMeetingTerm={currentMeetingTerm}
-                currentMeetingSession={currentMeetingSession}
+          <FLexDiv>
+            <DesktopAsideLeft>
+              <LegislatorInfo legislator={legislator} />
+              <Feedback />
+            </DesktopAsideLeft>
+            <DesktopAsideRight>
+              <LegislatorStatistics
+                committees={legislator.committees}
+                proposalSuccessCount={
+                  LegislatorStatisticsMockData.proposalSuccessCount
+                }
+                meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
+                meetingTermCountInfo={
+                  LegislatorStatisticsMockData.meetingTermCountInfo
+                }
               />
-            </ListContainer>
-          </DesktopAsideRight>
+              <ListContainer>
+                <LegislatorList
+                  legislatorSlug={legislator.slug}
+                  topics={topics}
+                  speechesByTopic={speechesByTopic}
+                  currentMeetingTerm={currentMeetingTerm}
+                  currentMeetingSession={currentMeetingSession}
+                />
+              </ListContainer>
+            </DesktopAsideRight>
+          </FLexDiv>
         </DesktopAndAbove>
         <TabletAndBelow>
           <ContentBlock>
@@ -172,7 +174,7 @@ const Legislator: React.FC<LegislatorProps> = ({
         value={filterValues}
         onChange={handleFilterValueChange}
       />
-    </LegislatorWrapper>
+    </>
   )
 }
 

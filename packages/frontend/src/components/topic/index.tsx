@@ -16,7 +16,6 @@ import TopicFeedback from '@/components/topic/topic-feedback'
 import ContentPageLayout from '@/components/layout/content-page-layout'
 // styles
 import {
-  TopicWrapper,
   Spacing,
   DesktopAside,
   TopicListContainer,
@@ -94,7 +93,7 @@ const Topic: React.FC<TopicPageProps> = ({
   const pageTitle = `#${topic?.title} 的相關發言摘要`
 
   return (
-    <TopicWrapper>
+    <>
       <ContentPageLayout
         title={pageTitle}
         currentMeetingTerm={currentMeetingTerm}
@@ -158,7 +157,7 @@ const Topic: React.FC<TopicPageProps> = ({
         value={filterValues}
         onChange={handleFilterValueChange}
       />
-    </TopicWrapper>
+    </>
   )
 }
 
