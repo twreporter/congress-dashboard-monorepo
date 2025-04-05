@@ -23,7 +23,7 @@ export const fetchLegislativeMeeting = async (): Promise<
     body: JSON.stringify({
       query: `
         query Query {
-          legislativeMeetings {
+          legislativeMeetings(orderBy: [{ term: desc }]) {
             id
             term
           }
@@ -46,6 +46,8 @@ export const fetchLegislativeMeetingSession = async (
     },
   }
 
+  const orderBy = [{ term: 'desc' }]
+
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: {
@@ -53,8 +55,8 @@ export const fetchLegislativeMeetingSession = async (
     },
     body: JSON.stringify({
       query: `
-        query LegislativeMeetingSessions($where: LegislativeMeetingSessionWhereInput!) {
-          legislativeMeetingSessions(where: $where) {
+        query LegislativeMeetingSessions($where: LegislativeMeetingSessionWhereInput!, $orderBy: [LegislativeMeetingSessionOrderByInput!]!) {
+          legislativeMeetingSessions(where: $where, orderBy: $orderBy) {
             id
             term
             startTime
@@ -64,6 +66,7 @@ export const fetchLegislativeMeetingSession = async (
       `,
       variables: {
         where,
+        orderBy,
       },
     }),
   })
