@@ -90,9 +90,15 @@ type LegislatorStatisticsProps = {
     name: string
     count: number
   }[]
+  proposalSuccessCount: number
+  meetingTermCount: number
+  meetingTermCountInfo: string
 }
 const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
   committees,
+  proposalSuccessCount,
+  meetingTermCount,
+  meetingTermCountInfo,
 }) => {
   return (
     <LegislatorStatisticsDiv>
@@ -111,14 +117,18 @@ const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
             <P1Gray800 text="提案通過數" />
             <Tooltip tooltip="僅統計所選屆期的主提案通過數" />
           </CountInfoTitle>
-          <CountInfoValue>30</CountInfoValue>
+          <CountInfoValue>
+            {proposalSuccessCount > 999 ? '999+' : proposalSuccessCount}
+          </CountInfoValue>
         </CountInfo>
         <CountInfo>
           <CountInfoTitle>
             <P1Gray800 text="立委任期屆數" />
-            <Tooltip tooltip="提案通過數：立法院審議通過的提案數量" />
+            <Tooltip tooltip={meetingTermCountInfo} />
           </CountInfoTitle>
-          <CountInfoValue>9</CountInfoValue>
+          <CountInfoValue>
+            {meetingTermCount > 999 ? '999+' : meetingTermCount}
+          </CountInfoValue>
         </CountInfo>
       </CountInfoContainer>
     </LegislatorStatisticsDiv>

@@ -41,6 +41,8 @@ import { useLegislatorData } from '@/components/legislator/hooks/use-legislator-
 import { useScrollContext } from '@/contexts/scroll-context'
 // custom hooks
 import { useLegislatorFilters } from '@/components/legislator/hooks/use-legislator-filters'
+// mock data
+import { LegislatorStatisticsMockData } from '@/components/legislator/mockData'
 
 type LegislatorProps = {
   legislatorData: LegislatorFromRes
@@ -172,7 +174,16 @@ const Legislator: React.FC<LegislatorProps> = ({
               <Feedback />
             </DesktopAsideLeft>
             <DesktopAsideRight>
-              <LegislatorStatistics committees={legislator.committees} />
+              <LegislatorStatistics
+                committees={legislator.committees}
+                proposalSuccessCount={
+                  LegislatorStatisticsMockData.proposalSuccessCount
+                }
+                meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
+                meetingTermCountInfo={
+                  LegislatorStatisticsMockData.meetingTermCountInfo
+                }
+              />
               <ListContainer>
                 <LegislatorList
                   legislatorSlug={legislator.slug}
@@ -188,7 +199,16 @@ const Legislator: React.FC<LegislatorProps> = ({
         <TabletAndBelow>
           <ContentBlock>
             <LegislatorInfo legislator={legislator} />
-            <LegislatorStatistics committees={legislator.committees} />
+            <LegislatorStatistics
+              committees={legislator.committees}
+              proposalSuccessCount={
+                LegislatorStatisticsMockData.proposalSuccessCount
+              }
+              meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
+              meetingTermCountInfo={
+                LegislatorStatisticsMockData.meetingTermCountInfo
+              }
+            />
             <ListContainer>
               <LegislatorList
                 legislatorSlug={legislator.slug}
