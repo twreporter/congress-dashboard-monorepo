@@ -33,11 +33,11 @@ export type TopTopic = {
 export const fetchTopic = async ({
   slug,
   legislativeMeeting,
-  legislativeMettingSession,
+  legislativeMeetingSession,
 }: {
   slug: string
   legislativeMeeting: number
-  legislativeMettingSession: number[]
+  legislativeMeetingSession: number[]
 }): Promise<TopicData> => {
   const url = process.env.NEXT_PUBLIC_API_URL as string
   const where = {
@@ -52,7 +52,7 @@ export const fetchTopic = async ({
       },
       legislativeMeetingSession: {
         term: {
-          in: legislativeMettingSession,
+          in: legislativeMeetingSession,
         },
       },
     },
@@ -111,11 +111,11 @@ export const fetchTopic = async ({
 export const fetchTopTopicsForLegislator = async ({
   legislatorSlug,
   legislativeMeeting,
-  legislativeMettingSession,
+  legislativeMeetingSession,
 }: {
   legislatorSlug: string
   legislativeMeeting: number
-  legislativeMettingSession: number[]
+  legislativeMeetingSession: number[]
 }): Promise<TopTopic[]> => {
   const url = process.env.NEXT_PUBLIC_API_URL as string
 
@@ -127,7 +127,7 @@ export const fetchTopTopicsForLegislator = async ({
     },
     legislativeMeetingSession: {
       term: {
-        in: legislativeMettingSession,
+        in: legislativeMeetingSession,
       },
     },
     legislativeYuanMember: {

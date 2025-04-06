@@ -140,10 +140,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
                   href={`/legislators/${props.slug}`}
                   key={`follow-more-legislator-${index}`}
                 >
-                  <Legislator
-                    {...props}
-                    key={`follow-more-legislator-${index}`}
-                  />
+                  <Legislator {...props} />
                 </Link>
               ))}
             </LegislatorContainer>

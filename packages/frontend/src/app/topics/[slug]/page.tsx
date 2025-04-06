@@ -25,7 +25,7 @@ export async function generateMetadata({
   const topic = await fetchTopic({
     slug,
     legislativeMeeting,
-    legislativeMettingSession: legislativeMeetingSession,
+    legislativeMeetingSession,
   })
 
   if (!topic) {
@@ -56,7 +56,7 @@ export default async function Page({
     const topic = await fetchTopic({
       slug,
       legislativeMeeting,
-      legislativeMettingSession: legislativeMeetingSession,
+      legislativeMeetingSession,
     })
 
     if (!topic) {

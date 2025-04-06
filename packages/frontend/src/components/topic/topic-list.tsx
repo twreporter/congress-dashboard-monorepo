@@ -84,7 +84,7 @@ const TopicList: React.FC<TopicListProps> = ({
         ? fetchTopTopicsForLegislator({
             legislatorSlug: selectedLegislator.slug,
             legislativeMeeting: currentMeetingTerm,
-            legislativeMettingSession: currentMeetingSession,
+            legislativeMeetingSession: currentMeetingSession,
           })
         : null
   )
