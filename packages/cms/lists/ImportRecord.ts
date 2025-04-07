@@ -2,7 +2,12 @@ import { GraphQLError } from 'graphql'
 import { list } from '@keystone-6/core'
 import type { KeystoneContext } from '@keystone-6/core/types'
 import { text, relationship } from '@keystone-6/core/fields'
-import { allowAllRoles, denyRoles } from './utils/access-control-list'
+import {
+  allowAllRoles,
+  excludeReadOnlyRoles,
+  RoleEnum,
+  hideReadOnlyRoles,
+} from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import {
   uploader,
@@ -721,16 +726,23 @@ const listConfigurations = list({
       initialSort: { field: 'createdAt', direction: 'DESC' },
       pageSize: 50,
     },
-    hideDelete: denyRoles(['owner', 'admin']), // Only for development purposes
+    hideDelete: ({ session }) => {
+      const role = session?.data?.role
+      if ([RoleEnum.Owner].includes(role)) {
+        return true
+      }
+      return false
+    },
     itemView: { defaultFieldMode: 'read' },
+    hideCreate: hideReadOnlyRoles,
   },
 
   access: {
     operation: {
       query: allowAllRoles(),
-      create: allowAllRoles(),
-      update: allowAllRoles(),
-      delete: allowAllRoles(),
+      create: excludeReadOnlyRoles(),
+      update: excludeReadOnlyRoles(),
+      delete: excludeReadOnlyRoles(),
     },
   },
 
