@@ -728,7 +728,7 @@ const listConfigurations = list({
     },
     hideDelete: ({ session }) => {
       const role = session?.data?.role
-      if ([RoleEnum.Owner].indexOf(role) > -1) {
+      if ([RoleEnum.Owner].includes(role)) {
         return true
       }
       return false

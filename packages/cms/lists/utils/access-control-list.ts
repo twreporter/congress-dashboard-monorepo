@@ -33,7 +33,7 @@ export const allowRoles =
     if (!Array.isArray(roles)) {
       return false
     }
-    return Boolean(roles.indexOf(session?.data?.role) > -1)
+    return Boolean(roles.includes(session?.data?.role))
   }
 
 export const allowAllRoles = () => {
@@ -54,7 +54,7 @@ export const denyRoles =
     if (!Array.isArray(roles)) {
       return true
     }
-    return roles.indexOf(session?.data?.role) === -1
+    return !roles.includes(session?.data?.role)
   }
 
 export const excludeReadOnlyRoles = () => {
@@ -67,7 +67,7 @@ export const withReadOnlyRoleFieldMode: MaybeItemFunction<
   BaseListTypeInfo
 > = ({ session }) => {
   const role = _.get(session, ['data', 'role'], '')
-  if (readonlyRoles.indexOf(role) > -1) {
+  if (readonlyRoles.includes(role)) {
     return 'read'
   } else {
     return 'edit'
@@ -79,7 +79,7 @@ export const hideReadOnlyRoles: MaybeSessionFunction<
   BaseListTypeInfo
 > = ({ session }) => {
   const role = _.get(session, ['data', 'role'], '')
-  if (readonlyRoles.indexOf(role) > -1) {
+  if (readonlyRoles.includes(role)) {
     return true
   }
   return false
