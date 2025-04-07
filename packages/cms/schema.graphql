@@ -450,8 +450,8 @@ type Topic {
   speechesCount(where: SpeechWhereInput! = {}): Int
   relatedTopics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
   relatedTopicsCount(where: TopicWhereInput! = {}): Int
-  beenRelatedTopics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
-  beenRelatedTopicsCount(where: TopicWhereInput! = {}): Int
+  referencedByTopics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
+  referencedByTopicsCount(where: TopicWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -470,7 +470,7 @@ input TopicWhereInput {
   slug: StringFilter
   speeches: SpeechManyRelationFilter
   relatedTopics: TopicManyRelationFilter
-  beenRelatedTopics: TopicManyRelationFilter
+  referencedByTopics: TopicManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -494,7 +494,7 @@ input TopicUpdateInput {
   slug: String
   speeches: SpeechRelateToManyForUpdateInput
   relatedTopics: TopicRelateToManyForUpdateInput
-  beenRelatedTopics: TopicRelateToManyForUpdateInput
+  referencedByTopics: TopicRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -516,7 +516,7 @@ input TopicCreateInput {
   slug: String
   speeches: SpeechRelateToManyForCreateInput
   relatedTopics: TopicRelateToManyForCreateInput
-  beenRelatedTopics: TopicRelateToManyForCreateInput
+  referencedByTopics: TopicRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }

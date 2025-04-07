@@ -729,16 +729,20 @@ const importHandlers: Record<
         select: { id: true },
       })
 
-      queries.push(
-        context.prisma.Topic.update({
-          where: { slug },
-          data: {
-            relatedTopics: {
-              connect: { id: relatedTopic.id },
+      if (relatedTopic) {
+        queries.push(
+          context.prisma.Topic.update({
+            where: { slug },
+            data: {
+              relatedTopics: {
+                connect: { id: relatedTopic.id },
+              },
             },
-          },
-        })
-      )
+          })
+        )
+      } else {
+        console.error(`Related topic not found for slug: ${related_topic_slug}`)
+      }
     }
 
     return queries

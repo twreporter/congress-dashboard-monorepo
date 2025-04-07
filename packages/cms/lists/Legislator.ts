@@ -1,7 +1,12 @@
 import { list } from '@keystone-6/core'
 import { text, relationship, integer } from '@keystone-6/core/fields'
 import { allowAllRoles } from './utils/access-control-list'
-import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
+import {
+  SLUG,
+  CREATED_AT,
+  UPDATED_AT,
+  URL_VALIDATION_REGEX,
+} from './utils/common-field'
 
 const listConfigurations = list({
   fields: {
@@ -46,6 +51,28 @@ const listConfigurations = list({
       create: allowAllRoles(),
       update: allowAllRoles(),
       delete: allowAllRoles(),
+    },
+  },
+  hooks: {
+    validate: {
+      create: ({ resolvedData, addValidationError }) => {
+        const { imageLink, externalLink } = resolvedData
+        if (imageLink && !URL_VALIDATION_REGEX.test(imageLink)) {
+          addValidationError('請輸入正確的圖片連結格式')
+        }
+        if (externalLink && !URL_VALIDATION_REGEX.test(externalLink)) {
+          addValidationError('請輸入正確的外部連結格式')
+        }
+      },
+      update: ({ resolvedData, addValidationError }) => {
+        const { imageLink, externalLink } = resolvedData
+        if (imageLink && !URL_VALIDATION_REGEX.test(imageLink)) {
+          addValidationError('請輸入正確的圖片連結格式')
+        }
+        if (externalLink && !URL_VALIDATION_REGEX.test(externalLink)) {
+          addValidationError('請輸入正確的外部連結格式')
+        }
+      },
     },
   },
 })
