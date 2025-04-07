@@ -1,3 +1,8 @@
+import { sortByCountDesc } from '@/fetchers/utils'
+
+/* fetchTopic
+ *   fetch topics with give slug in given terms & session
+ */
 export type SpeechData = {
   slug: string
   summary: string
@@ -22,12 +27,6 @@ export type TopicData = {
   title: string
   speechesCount?: number
   speeches?: SpeechData[]
-}
-
-export type TopTopic = {
-  slug: string
-  title: string
-  speechesCount: number
 }
 
 export const fetchTopic = async ({
@@ -101,11 +100,20 @@ export const fetchTopic = async ({
   })
 
   if (!res.ok) {
-    throw new Error('Failed to fetch topic data')
+    throw new Error(`Failed to fetch topic data, slug: ${slug}`)
   }
 
   const data = await res.json()
   return data?.data?.topic
+}
+
+/* fetchTopTopicsForLegislator
+ *   fetch top 5 topic which given legislator has more speeches in given terms & session
+ */
+export type TopTopic = {
+  slug: string
+  title: string
+  speechesCount: number
 }
 
 export const fetchTopTopicsForLegislator = async ({
@@ -118,7 +126,6 @@ export const fetchTopTopicsForLegislator = async ({
   legislativeMeetingSession: number[]
 }): Promise<TopTopic[]> => {
   const url = process.env.NEXT_PUBLIC_API_URL as string
-
   const speechesWhere = {
     legislativeMeeting: {
       term: {
@@ -138,7 +145,6 @@ export const fetchTopTopicsForLegislator = async ({
       },
     },
   }
-
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -161,7 +167,7 @@ export const fetchTopTopicsForLegislator = async ({
   })
 
   if (!res.ok) {
-    throw new Error('Failed to fetch top topics for legislator')
+    throw new Error(`Failed to fetch top topics for legislator slug: ${legislatorSlug}`)
   }
 
   const data = await res.json()
@@ -174,3 +180,63 @@ export const fetchTopTopicsForLegislator = async ({
 
   return sortedTopics
 }
+
+/* fetchTopicOfALegislator
+ *   fetch topics which given legislator has & sort by speeched count desc
+ */
+export type TopicForFilter = {
+  slug: string
+  name: string
+  count: number
+}
+
+const fetchTopicOfALegislator = async (legislatorSlug: string) => {
+  const url = process.env.NEXT_PUBLIC_API_URL as string
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
+        query GetTopicOfALegislator($speechesWhere: SpeechWhereInput!) {
+          topics {
+            slug
+            title
+            speechesCount(where: $speechesWhere)
+          }
+        }
+      `,
+      variables: {
+        speechesWhere: {
+          legislativeYuanMember: {
+            legislator: {
+              slug: {
+                equals: legislatorSlug,
+              },
+            },
+          },
+        },
+      },
+    }),
+  })
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch topics of a legislator: ${legislatorSlug}`)
+  }
+  const data = await res.json()
+
+  // map data & sort by speech counts
+  const topics = data?.data?.topics || []
+  const topicsWithCounts: TopicForFilter[] = topics.map((topicFromRes) => ({
+    count: topicFromRes.speechesCount,
+    name: topicFromRes.title,
+    ...topicFromRes,
+  }))
+  const topicOrderBySpeechCount = topicsWithCounts
+    .filter((topic) => topic.count > 0)
+    .sort(sortByCountDesc)
+  return topicOrderBySpeechCount
+}
+
+export default fetchTopicOfALegislator

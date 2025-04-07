@@ -25,8 +25,7 @@ export const Basic: Story = {
 export const WithImage: Story = {
   args: {
     name: '沈伯洋',
-    imageLink:
-      'https://dev-congress-dashboard-storage.twreporter.org/tmp/1.png', //todo: add storybook assets bucket or folder
+    avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1.png', //todo: add storybook assets bucket or folder
     selected: false,
   },
 }

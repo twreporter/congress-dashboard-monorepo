@@ -1,5 +1,10 @@
 'use client'
 
+import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
+
+/* fetchTopLegislatorsBySpeechCount
+ *   fetch top 5 legislators with most speeches of given topic in given term & session
+ */
 export type LegislatorWithSpeechCount = {
   slug: string
   name: string
@@ -20,7 +25,6 @@ export const fetchTopLegislatorsBySpeechCount = async ({
   legislatorSlug: string
 }): Promise<LegislatorWithSpeechCount[]> => {
   const url = process.env.NEXT_PUBLIC_API_URL as string
-
   const speechesWhere = {
     AND: [
       {
@@ -59,7 +63,6 @@ export const fetchTopLegislatorsBySpeechCount = async ({
       },
     ],
   }
-
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -78,17 +81,6 @@ export const fetchTopLegislatorsBySpeechCount = async ({
                 }
                 imageLink
               }
-              legislator {
-                slug
-                name
-                imageLink
-                image {
-                  imageFile {
-                    url
-                  }
-                }
-              }
-            }
           }
         }
       `,
@@ -115,9 +107,7 @@ export const fetchTopLegislatorsBySpeechCount = async ({
       if (!acc[slug]) {
         acc[slug] = {
           ...legislator,
-          avatar: legislator.image?.imageFile?.url
-            ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${legislator.image.imageFile.url}`
-            : legislator.imageLink,
+          avatar: getImageLink(legislator),
           partyAvatar: speech.legislativeYuanMember.party?.image?.imageFile?.url
             ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${speech.legislativeYuanMember.party.image.imageFile.url}`
             : speech.legislativeYuanMember.party.imageLink,
@@ -132,8 +122,89 @@ export const fetchTopLegislatorsBySpeechCount = async ({
 
   // Convert to array, sort by count, and take top 5
   const topLegislators = Object.values(legislatorCounts)
-    .sort((a, b) => b.count - a.count)
+    .sort(sortByCountDesc)
     .slice(0, 5)
 
   return topLegislators
 }
+
+/* fetchLegislatorsOfATopic
+ *   fetch legislators of given topic and sort by speeches count desc
+ */
+export type LegislatorForFilter = {
+  slug: string
+  name: string
+  imageLink?: string
+  image?: { imageFile: { url: string } }
+  count: number
+}
+export const fetchLegislatorsOfATopic = async (topicSlug: string) => {
+  const url = process.env.NEXT_PUBLIC_API_URL as string
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
+        query GetLegislatorsWithSpeechCount($where: SpeechWhereInput!) {
+          speeches(where: $where) {
+            legislativeYuanMember {
+              legislator {
+                slug
+                name
+                imageLink
+                image {
+                  imageFile {
+                    url
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+      variables: {
+        where: {
+          topics: {
+            some: {
+              slug: {
+                equals: topicSlug,
+              },
+            },
+          },
+        },
+      },
+    }),
+  })
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch legislators of a topic: ${topicSlug}`)
+  }
+  const data = await res.json()
+
+  // group by legislator & sort with speech counts
+  const speeches = data?.data?.speeches || []
+  const legislatorCounts: { [key: string]: LegislatorForFilter } =
+    speeches.reduce((acc, speech) => {
+      const legislator = speech.legislativeYuanMember?.legislator
+      if (!legislator) return acc
+
+      const slug = legislator.slug
+      if (!acc[slug]) {
+        acc[slug] = {
+          ...legislator,
+          avatar: getImageLink(legislator),
+          count: 0,
+        }
+      }
+      acc[slug].count++
+      return acc
+    }, {})
+  const legislatorOrderBySpeechCount =
+    Object.values(legislatorCounts).sort(sortByCountDesc)
+
+  return legislatorOrderBySpeechCount
+}
+
+export default fetchLegislatorsOfATopic

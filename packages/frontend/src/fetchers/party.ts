@@ -35,6 +35,10 @@ const fetchParty = async (url: string) => {
       `,
     }),
   })
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch party`)
+  }
   const data = await res.json()
   return data
 }

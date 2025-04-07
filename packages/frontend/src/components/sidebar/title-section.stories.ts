@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import TitleSection from '@/components/sidebar/titleSection'
+import TitleSection from '@/components/sidebar/title-section'
 import { humanProps, issueProps } from '@/components/sidebar/config'
 
 const meta: Meta<typeof TitleSection> = {
