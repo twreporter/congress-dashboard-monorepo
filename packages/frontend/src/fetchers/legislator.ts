@@ -1,6 +1,7 @@
 'use client'
 
 export type LegislatorWithSpeechCount = {
+  slug: string
   name: string
   avatar: string
   partyAvatar: string
@@ -105,26 +106,29 @@ export const fetchTopLegislatorsBySpeechCount = async ({
   const speeches = data?.data?.speeches || []
 
   // Count speeches by legislator
-  const legislatorCounts = speeches.reduce((acc, speech) => {
-    const legislator = speech.legislativeYuanMember?.legislator
-    if (!legislator) return acc
+  const legislatorCounts: LegislatorWithSpeechCount[] = speeches.reduce(
+    (acc, speech) => {
+      const legislator = speech.legislativeYuanMember?.legislator
+      if (!legislator) return acc
 
-    const slug = legislator.slug
-    if (!acc[slug]) {
-      acc[slug] = {
-        ...legislator,
-        avatar: legislator.image?.imageFile?.url
-          ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${legislator.image.imageFile.url}`
-          : legislator.imageLink,
-        partyAvatar: speech.legislativeYuanMember.party?.image?.imageFile?.url
-          ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${speech.legislativeYuanMember.party.image.imageFile.url}`
-          : speech.legislativeYuanMember.party.imageLink,
-        count: 0,
+      const slug = legislator.slug
+      if (!acc[slug]) {
+        acc[slug] = {
+          ...legislator,
+          avatar: legislator.image?.imageFile?.url
+            ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${legislator.image.imageFile.url}`
+            : legislator.imageLink,
+          partyAvatar: speech.legislativeYuanMember.party?.image?.imageFile?.url
+            ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${speech.legislativeYuanMember.party.image.imageFile.url}`
+            : speech.legislativeYuanMember.party.imageLink,
+          count: 0,
+        }
       }
-    }
-    acc[slug].count++
-    return acc
-  }, {})
+      acc[slug].count++
+      return acc
+    },
+    {}
+  )
 
   // Convert to array, sort by count, and take top 5
   const topLegislators = Object.values(legislatorCounts)

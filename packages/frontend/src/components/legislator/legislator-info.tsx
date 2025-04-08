@@ -18,7 +18,7 @@ import { H3Gray900, P1Gray800 } from '@/components/legislator/styles'
 // components
 import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 // fetcher
-import { type Legislator } from '@/fetchers/server/legislator'
+import { type Legislator } from '@/components/legislator/hooks/use-legislator-data'
 
 const LegislatorInfoDiv = styled.div`
   display: flex;

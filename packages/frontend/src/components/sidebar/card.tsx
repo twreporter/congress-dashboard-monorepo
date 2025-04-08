@@ -134,9 +134,8 @@ const Content = styled(P1)`
 const More = styled.span`
   color: ${colorSupportive.heavy};
   display: inline-block;
-  a {
-    /* text-decoration: none;; */
-  }
+  text-decoration: underline;
+  text-decoration-color: ${colorGrayscale.gray300};
 `
 
 export type SummaryCardProps = {

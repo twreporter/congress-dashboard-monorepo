@@ -79,14 +79,14 @@ export const issueProps: TitleSectionProps = {
 const mock2025Summary = {
   date: new Date('2025/12/07'),
   title: '行政院院長提出施政方針及施政報告並備質詢',
-  content:
+  summary:
     '沈伯洋的發言重點在於探討國科會對生命科學的重視與投入、生成式 AI 與人機介面的布局。他建議成立 AI 和 BCI 的法人，整合產學資源，推動臺灣科技發展。',
   slug: 'test-slug-1',
 }
 const mock2024Summary = {
   date: new Date('2024/03/05'),
   title: '行政院院長提出施政方針及施政報告並備質詢',
-  content:
+  summary:
     '沈伯洋的發言重點在於探討國科會對生命科學的重視與投入、生成式 AI 與人機介面的布局。他建議成立 AI 和 BCI 的法人，整合產學資源，推動臺灣科技發展。',
   slug: 'test-slug-1',
 }
