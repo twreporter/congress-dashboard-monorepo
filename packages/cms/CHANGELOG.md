@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.0.3-beta.1, 2025-04-08
+
+### Notable Changes
+
+- feat
+  - related topic upload
+  - new columns for legislator & legislativeYuanMember
+- fix
+  - rename related topic column and add validation for link
+- chore
+  - sync dev
+
+### Commits
+
+- [[`413bc7f3ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/413bc7f3ed)] - **chore(cms)**: sync dev (Lucien)
+- [[`854c87aa00`](https://github.com/twreporter/congress-dashboard-monorepo/commit/854c87aa00)] - **fix(cms)**: rename related topic column and add validation for link (Lucien)
+- [[`785de95947`](https://github.com/twreporter/congress-dashboard-monorepo/commit/785de95947)] - **feat(cms)**: new columns for legislator & legislativeYuanMember (Lucien)
+- [[`fde82401dd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fde82401dd)] - **feat(cms)**: related topic upload (Lucien)
+
+## 0.0.3-beta.0, 2025-04-07
+
+### Notable Changes
+
+- fix
+  - add `developer_headless_account` role
+  - use `includes` instead of `indexOf`
+
+### Commits
+
+- [[`3fab8379b1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3fab8379b1)] - **fix(cms)**: use `includes` instead of `indexOf` (Aylie Chou)
+- [[`651f5efb1f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/651f5efb1f)] - **feat(cms)**: add `developer_headless_account` role (Aylie Chou)
+
 ## 0.0.2, 2025-03-26
 
 ### Notable Changes
