@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.4, 2025-04-09
+
+### Notable Changes
+
+- fix
+  - add node options to yarn start
+
+### Commits
+
+- [[`34cfa2c26b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/34cfa2c26b)] - **fix(frontend)**: add node options to yarn start (Lucien)
+
 ## 0.0.3-beta.3, 2025-04-09
 
 ### Notable Changes
