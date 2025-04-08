@@ -1,5 +1,8 @@
 import { useMemo } from 'react'
+// fetcher
 import { type TopicData } from '@/fetchers/topic'
+// util
+import { getImageLink } from '@/fetchers/utils'
 // lodash
 import groupBy from 'lodash/groupBy'
 
@@ -25,9 +28,7 @@ export const useTopicData = (topic: TopicData | null) => {
       ([slug, speeches]) => ({
         name: speeches[0].legislativeYuanMember.legislator.name,
         slug,
-        imageLink:
-          speeches[0].legislativeYuanMember.legislator.image?.imageFile?.url ||
-          speeches[0].legislativeYuanMember.legislator.imageLink,
+        imageLink: getImageLink(speeches[0].legislativeYuanMember.legislator),
         count: speeches.length,
       })
     )

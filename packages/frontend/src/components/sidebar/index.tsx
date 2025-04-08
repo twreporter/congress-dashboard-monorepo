@@ -11,6 +11,8 @@ import {
 // fetcher
 import fetchLegislatorsOfATopic from '@/fetchers/legislator'
 import fetchTopicOfALegislator from '@/fetchers/topic'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 // components
 import TitleSection, {
   TitleSectionProps,
@@ -197,7 +199,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
           title={title}
           count={count}
           tabs={tabList}
-          link={`/legislator/${slug}`}
+          link={`${InternalRoutes.Legislator}/${slug}`}
           onSelectTab={setSelectedTab}
           onOpenFilterModal={() => setShowFilter(true)}
           onClose={onClose}
@@ -315,7 +317,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
           title={title}
           subtitle={subtitle}
           tabs={tabList}
-          link={`/issue/${slug}`}
+          link={`${InternalRoutes.Topic}/${slug}`}
           onSelectTab={setSelectedTab}
           onClose={onClose}
           onOpenFilterModal={() => setShowFilter(true)}

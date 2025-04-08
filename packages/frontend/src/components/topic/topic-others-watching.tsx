@@ -7,7 +7,7 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 // components
 import { H4Title } from '@/components/topic/styles'
-import { Issue } from '@/components/sidebar/followMore'
+import { Issue } from '@/components/sidebar/follow-more'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
 // mock data

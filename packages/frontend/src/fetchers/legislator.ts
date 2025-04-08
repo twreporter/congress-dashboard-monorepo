@@ -108,9 +108,7 @@ export const fetchTopLegislatorsBySpeechCount = async ({
         acc[slug] = {
           ...legislator,
           avatar: getImageLink(legislator),
-          partyAvatar: speech.legislativeYuanMember.party?.image?.imageFile?.url
-            ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${speech.legislativeYuanMember.party.image.imageFile.url}`
-            : speech.legislativeYuanMember.party.imageLink,
+          partyAvatar: getImageLink(speech.legislativeYuanMember.party),
           count: 0,
         }
       }
