@@ -58,7 +58,7 @@ const TopicOthersWatching: React.FC<TopicOthersWatchingProps> = ({
       <TopicsContainer>
         {othersWatchingTags.map((tag, index) => (
           <Link
-            href={`/${InternalRoutes.Topic}/${
+            href={`${InternalRoutes.Topic}/${
               tag.slug
             }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
               currentMeetingSession

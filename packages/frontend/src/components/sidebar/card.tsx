@@ -1,7 +1,7 @@
 'use client'
-
 import React from 'react'
 import styled from 'styled-components'
+import Link from 'next/link'
 // @twreporter
 import {
   colorSupportive,
@@ -131,9 +131,12 @@ const Content = styled(P1)`
   color: ${colorGrayscale.gray800};
   display: contents !important;
 `
-const More = styled.a`
+const More = styled.span`
   color: ${colorSupportive.heavy};
   display: inline-block;
+  a {
+    /* text-decoration: none;; */
+  }
 `
 
 export type SummaryCardProps = {
@@ -157,7 +160,9 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
       <HorizontalLine />
       <Content>
         {`${summary}（`}
-        <More href={`/${InternalRoutes.Speech}/${slug}`}>{'閱讀更多'}</More>
+        <Link href={`${InternalRoutes.Speech}/${slug}`}>
+          <More>{'閱讀更多'}</More>
+        </Link>
         {'）'}
       </Content>
     </CardBox>
