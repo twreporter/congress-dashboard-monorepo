@@ -147,7 +147,7 @@ const TopicList: React.FC<TopicListProps> = ({
             <TopicContainer>
               {issueList.map((props, index: number) => (
                 <Link
-                  href={`/${InternalRoutes.Topic}/${
+                  href={`${InternalRoutes.Topic}/${
                     props.slug
                   }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
                     currentMeetingSession

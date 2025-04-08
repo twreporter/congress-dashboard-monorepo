@@ -113,7 +113,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
             <P2Gray600 text="質詢立委" />
             <SlashIcon />
           </Questioning>
-          <Link href={`/${InternalRoutes.Legislator}/${legislator.slug}`}>
+          <Link href={`${InternalRoutes.Legislator}/${legislator.slug}`}>
             <P1SupportiveHeavy text={legislator.name} />
           </Link>
         </LegislatorBlock>
@@ -122,7 +122,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
       <IssueTagsBlock>
         {relatedTopics.map((topic, idx) => (
           <Link
-            href={`/${InternalRoutes.Topic}/${topic.slug}`}
+            href={`${InternalRoutes.Topic}/${topic.slug}`}
             key={`issue-tag-${idx}-${topic.slug}`}
           >
             <IssueTag text={topic.title} />

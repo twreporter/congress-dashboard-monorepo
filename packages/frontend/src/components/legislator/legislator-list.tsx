@@ -147,7 +147,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
             <LegislatorContainer>
               {legislatorList.map((props, index: number) => (
                 <Link
-                  href={`/${InternalRoutes.Legislator}/${props.slug}`}
+                  href={`${InternalRoutes.Legislator}/${props.slug}`}
                   key={`follow-more-legislator-${index}`}
                 >
                   <Legislator {...props} />

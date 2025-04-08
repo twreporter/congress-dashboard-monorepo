@@ -154,7 +154,7 @@ export type FilterOption = {
   label: string
   value: string
   options: Option[] | OptionGroup[]
-  defaultValue?: string[]
+  defaultValue?: string | string[]
   isLoading?: boolean
 }
 
@@ -186,7 +186,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
     const defaults: FilterModalValueType = {}
     options.forEach((option) => {
       if (option.type === SelectorType.Single) {
-        defaults[option.value] = option.options[0]?.value || ''
+        defaults[option.value] = option.defaultValue || ''
       } else if (option.type === SelectorType.Multiple) {
         defaults[option.value] = option.defaultValue || []
       }
@@ -285,7 +285,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                         disabled={disabled}
                         options={selectOptions}
                         value={filterValue[optionValue] as string[]}
-                        defaultValue={defaultValue}
+                        defaultValue={defaultValue as string[]}
                         onChange={(selectedValue) =>
                           handleValueChange(optionValue, selectedValue)
                         }
