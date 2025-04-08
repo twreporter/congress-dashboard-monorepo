@@ -21,7 +21,7 @@ import CardsOfTheYear, {
 import {
   Legislator,
   type LegislatorProps,
-} from '@/components/sidebar/followMore'
+} from '@/components/sidebar/follow-more'
 import { type TabProps } from '@/components/sidebar/tab'
 // utils
 import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'

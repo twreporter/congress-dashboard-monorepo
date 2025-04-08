@@ -1,4 +1,4 @@
-import { TitleSectionProps } from '@/components/sidebar/titleSection'
+import { TitleSectionProps } from '@/components/sidebar/title-section'
 import { SidebarIssueProps, SidebarLegislatorProps } from '@/components/sidebar'
 import { mockLegislators } from '@/components/dashboard/card/config'
 // lodash
@@ -8,69 +8,69 @@ const _ = {
 }
 
 const mockIssueList = [
-  { name: '人工智慧發展', count: 16 },
-  { name: '萊豬進口', count: 12 },
-  { name: '疫苗取得與使用', count: 9 },
-  { name: '社區防疫管理', count: 5 },
-  { name: '防疫量能檢討', count: 4 },
+  { name: '人工智慧發展', count: 16, slug: 'topic1' },
+  { name: '萊豬進口', count: 12, slug: 'topic2' },
+  { name: '疫苗取得與使用', count: 9, slug: 'topic3' },
+  { name: '社區防疫管理', count: 5, slug: 'topic4' },
+  { name: '防疫量能檢討', count: 4, slug: 'topic5' },
 ]
 
 const mockLegislatorList = [
   {
+    slug: 'chen-ming-wen',
     name: '沈伯洋',
     count: 16,
-    imageLink:
-      'https://dev-congress-dashboard-storage.twreporter.org/tmp/1.png',
+    avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1.png',
   },
   {
+    slug: 'huang-wei-che',
     name: '黃國昌',
     count: 9,
-    imageLink:
-      'https://dev-congress-dashboard-storage.twreporter.org/tmp/2.png',
+    avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/2.png',
   },
   {
+    slug: 'kao-chia-yu',
     name: '廖先翔',
     count: 5,
-    imageLink:
-      'https://dev-congress-dashboard-storage.twreporter.org/tmp/3.png',
+    avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/3.png',
   },
   {
+    slug: 'wang-yu-min',
     name: '吳思瑤',
     count: 4,
-    imageLink:
-      'https://dev-congress-dashboard-storage.twreporter.org/tmp/4.png',
+    avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/4.png',
   },
   {
+    slug: 'wu-chi-ming',
     name: '高金素梅',
     count: 2,
-    imageLink:
-      'https://dev-congress-dashboard-storage.twreporter.org/tmp/5.png',
+    avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/5.png',
   },
 ]
 
 export const mockSidebarIssueProps: SidebarIssueProps = {
-  slug: 'test-1',
+  slug: 'topic1',
   title: 'NCC執法效能與正當性',
   count: 36,
   legislatorList: mockLegislatorList,
 }
 
 export const mockSidebarLegislatorProps: SidebarLegislatorProps = {
-  slug: 'test-1',
+  slug: 'chen-ming-wen',
   title: '沈伯洋',
   subtitle: '本屆加入：程序委員會(6會期)、外交及國防委員會(2會期)',
   issueList: mockIssueList,
 }
 
 export const humanProps: TitleSectionProps = {
-  link: '/legislator/test-1',
+  link: '/legislators/chen-ming-wen',
   title: '沈伯洋',
   subtitle: '本屆加入：程序委員會(6會期)、外交及國防委員會(2會期)',
   tabs: mockLegislatorList,
 }
 
 export const issueProps: TitleSectionProps = {
-  link: '/issue/test-1',
+  link: '/topic/topic1',
   title: 'NCC執法效能與正當性',
   count: 36,
   tabs: mockIssueList,

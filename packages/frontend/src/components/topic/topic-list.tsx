@@ -18,7 +18,7 @@ import CardsOfTheYear, {
   type SummaryCardProps,
   type CardsOfTheYearProps,
 } from '@/components/sidebar/card'
-import { Issue, type IssueProps } from '@/components/sidebar/followMore'
+import { Issue, type IssueProps } from '@/components/sidebar/follow-more'
 import { type TabProps } from '@/components/sidebar/tab'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'

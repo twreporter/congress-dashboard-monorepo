@@ -1,8 +1,11 @@
 import { useMemo } from 'react'
+// fetcher
 import {
   type LegislatorFromRes,
   type TopicData,
 } from '@/fetchers/server/legislator'
+// utils
+import { getImageLink } from '@/fetchers/utils'
 // @twreporter
 import {
   MEMBER_TYPE_LABEL,
@@ -59,18 +62,14 @@ export const useLegislatorData = (
         legislator,
       } = legislatorData
       const legislatorName = legislator.name
-      const legislatorAvatar = legislator.image?.imageFile?.url
-        ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${legislator.image.imageFile.url}`
-        : legislator.imageLink
+      const legislatorAvatar = getImageLink(legislator)
       const LegislatorConstituency =
         type !== MemberType.Constituency
           ? MEMBER_TYPE_LABEL[type]
           : CONSTITUENCY_LABEL[constituency]
       const legislatorParty = {
         name: party.name,
-        image: party.image?.imageFile?.url
-          ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${party.image.imageFile.url}`
-          : party.imageLink,
+        image: getImageLink(party),
       }
       const meetingTerm = meeting.term
       // 獲取所有委員會

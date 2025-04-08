@@ -1,7 +1,7 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 // components
-import { Circle } from '@/components/skeleton'
+import { ImageWithSkeleton } from '@/components/skeleton'
 // twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 import {
@@ -35,43 +35,12 @@ const Box = styled.div<{ $active: boolean }>`
     }
   `}
 `
-const ImageBox = styled.div`
-  position: relative;
-  width: 36px;
-  height: 36px;
-`
-const imageCss = css`
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-`
-const Image = styled.img`
-  z-index: 2;
-  ${imageCss}
-`
-const ImageSkeleton = styled(Circle)`
-  z-index: 1;
-  ${imageCss}
-`
-
-type ImageProps = {
-  src: string
-}
-const ImageWithSkeleton: React.FC<ImageProps> = ({ src }: ImageProps) => (
-  <ImageBox>
-    <ImageSkeleton />
-    <Image src={src} alt="tab image" />
-  </ImageBox>
-)
 
 export type TabProps = {
   slug?: string
   name: string
   count?: number
-  imageLink?: string
+  avatar?: string
   selected?: boolean
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
   className?: string
@@ -79,14 +48,21 @@ export type TabProps = {
 const Tab: React.FC<TabProps> = ({
   name,
   count = 0,
-  imageLink,
+  avatar,
   selected = false,
   onClick,
   className,
 }: TabProps) => {
   return (
     <Box $active={selected} onClick={onClick} className={className}>
-      {imageLink ? <ImageWithSkeleton src={imageLink} /> : null}
+      {avatar ? (
+        <ImageWithSkeleton
+          src={avatar}
+          alt={`${name} avatar on tab`}
+          width={36}
+          height={36}
+        />
+      ) : null}
       <Name text={`${name}${count ? `(${count})` : ''}`} $active={selected} />
     </Box>
   )

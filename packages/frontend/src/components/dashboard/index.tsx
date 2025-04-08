@@ -252,9 +252,9 @@ const Dashboard = () => {
       cardElement.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
-        inline: 'start',
       })
-      if (!showSidebar && selectedType === Option.Human) {
+      const isRightItem = cardElement.offsetLeft > window.innerWidth / 2
+      if (selectedType === Option.Human && isRightItem) {
         window.setTimeout(() => {
           cardElement.scrollIntoView({
             behavior: 'smooth',
