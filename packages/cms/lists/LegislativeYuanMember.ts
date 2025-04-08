@@ -1,5 +1,5 @@
 import { list } from '@keystone-6/core'
-import { text, relationship, select } from '@keystone-6/core/fields'
+import { text, relationship, select, integer } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -123,6 +123,9 @@ const listConfigurations = list({
     }),
     note: text({
       label: '特殊說明',
+    }),
+    proposalSuccessCount: integer({
+      label: '提案通過數',
     }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,
