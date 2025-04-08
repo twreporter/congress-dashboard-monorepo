@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build-exp": "set NODE_ENV=production & next build --experimental-build-mode compile",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_OPTIONS='--network-family-autoselection-attempt-timeout=500' next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
