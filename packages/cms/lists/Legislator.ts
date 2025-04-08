@@ -1,12 +1,17 @@
 import { list } from '@keystone-6/core'
 import { text, relationship, integer } from '@keystone-6/core/fields'
-import { allowAllRoles } from './utils/access-control-list'
 import {
   SLUG,
   CREATED_AT,
   UPDATED_AT,
   URL_VALIDATION_REGEX,
 } from './utils/common-field'
+import {
+  allowAllRoles,
+  excludeReadOnlyRoles,
+  withReadOnlyRoleFieldMode,
+  hideReadOnlyRoles,
+} from './utils/access-control-list'
 
 const listConfigurations = list({
   fields: {
@@ -44,13 +49,18 @@ const listConfigurations = list({
       initialSort: { field: 'name', direction: 'DESC' },
       pageSize: 50,
     },
+    itemView: {
+      defaultFieldMode: withReadOnlyRoleFieldMode,
+    },
+    hideCreate: hideReadOnlyRoles,
+    hideDelete: hideReadOnlyRoles,
   },
   access: {
     operation: {
       query: allowAllRoles(),
-      create: allowAllRoles(),
-      update: allowAllRoles(),
-      delete: allowAllRoles(),
+      create: excludeReadOnlyRoles(),
+      update: excludeReadOnlyRoles(),
+      delete: excludeReadOnlyRoles(),
     },
   },
   hooks: {
