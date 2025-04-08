@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.3, 2025-04-09
+
+### Notable Changes
+
+- fix
+  - fix AggregateError `ETIMEDOUT` when fetching data
+
+### Commits
+
+- [[`ffd48a9fc1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ffd48a9fc1)] - **fix(frontend)**: AggregateError `ETIMEDOUT` (Aylie Chou)
+
 ## 0.0.3-beta.2, 2025-04-09
 
 ### Notable Changes
