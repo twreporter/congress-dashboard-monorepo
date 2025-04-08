@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.2-beta.15, 2025-04-08
+
+- fix
+  - type import and declare
+  - filter modal dafault value and remove href duplicated slash
+
+### Commits
+
+- [[`5b1e25f317`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5b1e25f317)] - **fix(frontend)**: type import and declare (Lucien)
+- [[`ded2440eae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ded2440eae)] - **fix(frontend)**: filter modal dafault value and remove href duplicated slash (Lucien)
+
 ## 0.0.2-beta.14, 2025-04-08
 
 - feat
