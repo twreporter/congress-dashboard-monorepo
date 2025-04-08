@@ -1,20 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 // components
-import FliterModal, { type FilterModalValueType } from './filter-modal'
+import FilterModal, {
+  type FilterModalValueType,
+  type FilterOption,
+} from '@/components/filter-modal'
 import Tab from '@/components/dashboard/function-bar/tab'
+import FilterButton from '@/components/button/filter-button'
 // @twreporter
-import {
-  colorGrayscale,
-  colorBrand,
-} from '@twreporter/core/lib/constants/color'
-import { PillButton } from '@twreporter/react-components/lib/button'
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import {
   TabletAndAbove,
   MobileOnly,
 } from '@twreporter/react-components/lib/rwd'
-import { P4 } from '@twreporter/react-components/lib/text/paragraph'
-import { Filter as FilterIcon } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
@@ -22,6 +20,24 @@ import { useScrollContext } from '@/contexts/scroll-context'
 import { ZIndex } from '@/styles/z-index'
 // constants
 import { HEADER_HEIGHT } from '@/constants/header'
+// fetcher
+import useParty, { type partyData } from '@/fetchers/party'
+// selector
+import { SelectorType } from '@/components/selector'
+// constants
+import {
+  MemberType,
+  MEMBER_TYPE_LABEL,
+  CITY_OPTIONS,
+} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+// component
+import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+// lodash
+import map from 'lodash/map'
+
+const _ = {
+  map,
+}
 
 const HorizaontalLine = styled.div<{
   $isHeaderAboveTab: boolean
@@ -122,50 +138,9 @@ const Filter = styled.div`
   display: flex;
   align-items: center;
 `
-const FilterCountIcon = styled.div`
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-/* todo: support div icon color in @twreporter/react-components */
-const BasePillButton = styled(PillButton)`
-  ${FilterCountIcon} {
-    background-color: ${colorBrand.heavy};
-  }
-
-  &:hover {
-    ${FilterCountIcon} {
-      background-color: ${colorBrand.dark};
-    }
-  }
-`
-const P4White = styled(P4)`
-  color: ${colorGrayscale.white};
-`
 const MobileOnlyBox = styled(MobileOnly)`
   width: 100%;
 `
-
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
-export const FilterButton = ({ filterCount }: { filterCount: number }) => (
-  <BasePillButton
-    theme={PillButton.THEME.normal}
-    type={PillButton.Type.SECONDARY}
-    size={PillButton.Size.L}
-    text={'篩選'}
-    leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
-    rightIconComponent={
-      filterCount > 0 ? (
-        <FilterCountIcon>
-          <P4White text={filterCount} />
-        </FilterCountIcon>
-      ) : null
-    }
-  />
-)
 
 export enum Option {
   Issue,
@@ -177,6 +152,11 @@ type FunctionBarProps = {
   setTab: (tab: Option) => void
   className?: string
 }
+
+const OptionIcon: React.FC<{ url: string }> = ({ url }) => {
+  return <PartyTag size={TagSize.S} avatar={url} />
+}
+
 const FunctionBar: React.FC<FunctionBarProps> = ({
   currentTab = Option.Issue,
   setTab,
@@ -190,20 +170,146 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterString, setFilterString] = useState('立法院｜第11屆｜全部會期')
   const [filterCount, setFilterCount] = useState(0)
+  const [filterValues, setFilterValues] = useState<FilterModalValueType>({
+    department: 'legislativeYuan',
+    meeting: '11',
+    meetingSession: ['all'],
+    constituency: [],
+    party: [],
+    committee: [],
+  })
+
+  // Get party data
+  const partyState = useParty()
+
+  // Generate filter options
+  const getFilterOptions = (): FilterOption[] => {
+    const options: FilterOption[] = [
+      {
+        type: SelectorType.Single,
+        disabled: true,
+        label: '單位',
+        value: 'department',
+        options: [{ label: '立法院', value: 'legislativeYuan' }],
+      },
+      {
+        type: SelectorType.Single,
+        disabled: false,
+        label: '屆期',
+        value: 'meeting',
+        options: [
+          { label: '第 10 屆', value: '10' },
+          { label: '第 11 屆', value: '11' },
+        ],
+      },
+      {
+        type: SelectorType.Multiple,
+        disabled: false,
+        defaultValue: ['all'],
+        label: '會期',
+        value: 'meetingSession',
+        options: [
+          { label: '全部會期', value: 'all', isDeletable: false },
+          { label: '第 1 會期(2020/9-2022/10)', value: '1' },
+          { label: '第 2 會期(2022/10-2023/2)', value: '2' },
+          { label: '第 3 會期(2023/2-2023/6)', value: '3' },
+        ],
+      },
+      {
+        type: SelectorType.Multiple,
+        disabled: false,
+        label: '選區',
+        value: 'constituency',
+        options: [
+          {
+            groupName: '不分區',
+            options: [
+              { label: '不分區', value: MemberType.NationwideAndOverseas },
+            ],
+          },
+          {
+            groupName: '原住民',
+            options: [
+              {
+                label: MEMBER_TYPE_LABEL[MemberType.LowlandAboriginal],
+                value: MemberType.LowlandAboriginal,
+              },
+              {
+                label: MEMBER_TYPE_LABEL[MemberType.HighlandAboriginal],
+                value: MemberType.HighlandAboriginal,
+              },
+            ],
+          },
+          { groupName: '區域', options: CITY_OPTIONS },
+        ],
+      },
+      {
+        type: SelectorType.Multiple,
+        disabled: false,
+        label: '黨籍',
+        value: 'party',
+        isLoading: partyState.isLoading,
+        options: _.map(
+          partyState.party,
+          ({ slug, name, imageLink, image }: partyData) => {
+            const selfHostImage = image?.imageFile?.url
+            const imageUrl =
+              imageLink ||
+              (selfHostImage
+                ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${selfHostImage}`
+                : '')
+            const prefixIcon = <OptionIcon url={imageUrl} />
+            return {
+              label: name,
+              value: slug,
+              prefixIcon,
+            }
+          }
+        ),
+      },
+      {
+        type: SelectorType.Multiple,
+        disabled: false,
+        label: '委員會',
+        value: 'committee',
+        options: [
+          {
+            groupName: '常設',
+            options: [
+              { label: '內政委員會', value: 'committee-1' },
+              { label: '社會福利及衛生環境委員會', value: 'committee-3' },
+            ],
+          },
+          {
+            groupName: '特種',
+            options: [
+              { label: '經費稽核委員會', value: 'committee-2' },
+              { label: '紀律委員會', value: 'committee-4' },
+            ],
+          },
+        ],
+      },
+    ]
+
+    return options
+  }
 
   const handleSubmit = (filterModalValue: FilterModalValueType) => {
+    setFilterValues(filterModalValue)
+
     const meetingString = filterModalValue.meeting
       ? `第${filterModalValue.meeting}屆`
       : '第11屆'
-    const meetingSessionString = filterModalValue.meetingSession.length
+    const meetingSessionString = filterModalValue.meetingSession?.length
       ? filterModalValue.meetingSession[0] === 'all'
         ? '全部會期'
         : '部分會期'
       : '全部會期'
     const totalCount =
-      filterModalValue.constituency.length +
-      filterModalValue.party.length +
-      filterModalValue.committee.length
+      (filterModalValue.constituency as string[])?.length +
+      (filterModalValue.party as string[])?.length +
+      (filterModalValue.committee as string[])?.length
+
     setFilterString(`立法院｜${meetingString}｜${meetingSessionString}`)
     setFilterCount(totalCount)
   }
@@ -247,10 +353,13 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
               <FilterButton filterCount={filterCount} />
             </Filter>
           </Bar>
-          <FliterModal
+          <FilterModal
             isOpen={isFilterOpen}
             setIsOpen={setIsFilterOpen}
             onSubmit={handleSubmit}
+            options={getFilterOptions()}
+            value={filterValues}
+            onChange={setFilterValues}
           />
         </Box>
         <HorizaontalLine

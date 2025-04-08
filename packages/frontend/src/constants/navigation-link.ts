@@ -5,6 +5,9 @@ export enum InternalRoutes {
   Home = '/',
   About = '/about',
   Feedback = '/feedback', // TODO: need to change
+  Legislator = '/legislators',
+  Topic = '/topics',
+  Speech = '/a',
 }
 
 export enum ExternalRoutes {
