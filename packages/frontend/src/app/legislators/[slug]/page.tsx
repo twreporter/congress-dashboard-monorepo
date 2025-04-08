@@ -44,10 +44,9 @@ export default async function Page({
   params: Promise<{ slug: string }>
   searchParams: Promise<{ [key: string]: string }>
 }) {
-  const { slug } = await params
-  const { meetingTerm, sessionTerm } = await searchParams
-
   try {
+    const { slug } = await params
+    const { meetingTerm, sessionTerm } = await searchParams
     const { legislativeMeeting, legislativeMeetingSession } =
       await validateMeetingParams(meetingTerm, sessionTerm, false)
 

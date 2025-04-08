@@ -1,5 +1,6 @@
 'use client'
 import React, { useMemo, useState, useCallback } from 'react'
+import styled from 'styled-components'
 import useSWR from 'swr'
 import Link from 'next/link'
 // Common components
@@ -10,9 +11,7 @@ import {
   SummarySection,
 } from '@/components/layout/speech-summary-list/layout'
 import TabNavigation from '@/components/layout/speech-summary-list/tab-navigation'
-import FollowMoreItems, {
-  LegislatorContainer,
-} from '@/components/layout/speech-summary-list/follow-more-items'
+import FollowMoreItems from '@/components/layout/speech-summary-list/follow-more-items'
 //  components
 import { groupSummary } from '@/components/sidebar'
 import CardsOfTheYear, {
@@ -26,11 +25,22 @@ import {
 import { type TabProps } from '@/components/sidebar/tab'
 // utils
 import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 // lodash
 import get from 'lodash/get'
 const _ = {
   get,
 }
+
+const LegislatorContainer = styled.div`
+  gap: 32px;
+  display: flex;
+  overflow-x: scroll;
+  a {
+    text-decoration: none;
+  }
+`
 
 type LegislatorListProps = {
   legislatorSlug: string
@@ -137,7 +147,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
             <LegislatorContainer>
               {legislatorList.map((props, index: number) => (
                 <Link
-                  href={`/legislators/${props.slug}`}
+                  href={`/${InternalRoutes.Legislator}/${props.slug}`}
                   key={`follow-more-legislator-${index}`}
                 >
                   <Legislator {...props} />

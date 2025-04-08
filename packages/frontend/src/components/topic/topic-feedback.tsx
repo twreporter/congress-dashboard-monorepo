@@ -5,6 +5,8 @@ import Link from 'next/link'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 
 const Feedback = styled.div`
   display: flex;
@@ -33,7 +35,7 @@ const TopicFeedback: React.FC = () => {
     <Feedback>
       <span>
         發現什麼問題嗎？透過
-        <Link href={'/feedback'} target="_blank">
+        <Link href={`/${InternalRoutes.Feedback}`} target="_blank">
           問題回報
         </Link>
         告訴我們，一起讓這裡變得更好！

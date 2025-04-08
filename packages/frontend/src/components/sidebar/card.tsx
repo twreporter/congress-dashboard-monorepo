@@ -8,6 +8,8 @@ import {
   colorGrayscale,
 } from '@twreporter/core/lib/constants/color'
 import { P1, P2, P4 } from '@twreporter/react-components/lib/text/paragraph'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 
 // date stamp component
 function getDateFormat(date: Date) {
@@ -155,7 +157,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
       <HorizontalLine />
       <Content>
         {`${summary}（`}
-        <More href={`/a/${slug}`}>{'閱讀更多'}</More>
+        <More href={`/${InternalRoutes.Speech}/${slug}`}>{'閱讀更多'}</More>
         {'）'}
       </Content>
     </CardBox>

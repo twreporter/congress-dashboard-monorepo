@@ -227,7 +227,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
   const handleResetClick = () => {
     const defaultValues = getDefaultValues()
     setFilterValue(defaultValues)
-    if (onChange) {
+    if (typeof onChange === 'function') {
       onChange(defaultValues)
     }
   }

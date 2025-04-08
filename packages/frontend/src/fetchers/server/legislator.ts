@@ -204,7 +204,7 @@ export const fetchLegislatorTopics = async ({
   })
 
   if (!res.ok) {
-    throw new Error('Failed to fetch topics for legislator')
+    throw new Error(`Failed to fetch topics for legislator for slug: ${slug}`)
   }
 
   const data = await res.json()

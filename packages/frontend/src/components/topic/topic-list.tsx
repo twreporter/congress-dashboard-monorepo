@@ -1,5 +1,6 @@
 'use client'
 import React, { useMemo, useState, useCallback } from 'react'
+import styled from 'styled-components'
 import useSWR from 'swr'
 import Link from 'next/link'
 // Common components
@@ -10,9 +11,7 @@ import {
   SummarySection,
 } from '@/components/layout/speech-summary-list/layout'
 import TabNavigation from '@/components/layout/speech-summary-list/tab-navigation'
-import FollowMoreItems, {
-  TopicContainer,
-} from '@/components/layout/speech-summary-list/follow-more-items'
+import FollowMoreItems from '@/components/layout/speech-summary-list/follow-more-items'
 //  compoents
 import { groupSummary } from '@/components/sidebar'
 import CardsOfTheYear, {
@@ -21,7 +20,8 @@ import CardsOfTheYear, {
 } from '@/components/sidebar/card'
 import { Issue, type IssueProps } from '@/components/sidebar/followMore'
 import { type TabProps } from '@/components/sidebar/tab'
-
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 // fetcher
 import { type SpeechData, fetchTopTopicsForLegislator } from '@/fetchers/topic'
 // lodash
@@ -29,6 +29,15 @@ import get from 'lodash/get'
 const _ = {
   get,
 }
+
+const TopicContainer = styled.div`
+  gap: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  a {
+    text-decoration: none;
+  }
+`
 
 type LegislatorData = {
   name: string
@@ -138,7 +147,7 @@ const TopicList: React.FC<TopicListProps> = ({
             <TopicContainer>
               {issueList.map((props, index: number) => (
                 <Link
-                  href={`/topics/${
+                  href={`/${InternalRoutes.Topic}/${
                     props.slug
                   }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
                     currentMeetingSession

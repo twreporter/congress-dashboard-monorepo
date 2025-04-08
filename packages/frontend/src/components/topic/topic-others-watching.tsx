@@ -8,6 +8,8 @@ import mq from '@twreporter/core/lib/utils/media-query'
 // components
 import { H4Title } from '@/components/topic/styles'
 import { Issue } from '@/components/sidebar/followMore'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 // mock data
 import { othersWatchingTags } from '@/components/topic/mockData'
 
@@ -56,7 +58,7 @@ const TopicOthersWatching: React.FC<TopicOthersWatchingProps> = ({
       <TopicsContainer>
         {othersWatchingTags.map((tag, index) => (
           <Link
-            href={`/topics/${
+            href={`/${InternalRoutes.Topic}/${
               tag.slug
             }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
               currentMeetingSession

@@ -9,6 +9,7 @@ import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 // components
 import FilterButton from '@/components/button/filter-button'
+import { Gap } from '@/components/skeleton'
 // utils
 import { notoSerif } from '@/utils/font'
 // context
@@ -153,10 +154,6 @@ const FunctionBarTitle = styled(H5)`
   font-family: ${notoSerif.style.fontFamily} !important;
 `
 
-const Spacing = styled.div<{ $height: number }>`
-  height: ${(props) => props.$height}px;
-`
-
 const ContentBlock = styled.div`
   display: flex;
   flex-direction: row;
@@ -242,7 +239,7 @@ const ContentPageLayout: React.FC<ContentPageLayoutProps> = ({
             <FilterButton filterCount={filterCount} />
           </FilterBar>
         </LeadingContainer>
-        <Spacing $height={32} />
+        <Gap $gap={32} />
         <ContentBlock>{children}</ContentBlock>
       </Container>
     </PageWrapper>
