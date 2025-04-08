@@ -1,5 +1,59 @@
 # Changelog
 
+## 0.0.2-beta.14, 2025-04-08
+
+- feat
+  - improve tooltip positioning and behavior
+  - refactor Legislator and Topic components and styles
+  - refactor content page layout and improve filter handling
+  - legislator page statistics style
+  - click arrow scroll into view
+  - use mock data
+  - move common components to components folder
+  - legislator page logic
+  - separate topic style
+  - improve param validation
+  - custom hook and component for topic page
+  - topic page filter
+  - move filter modal to component
+  - scroll animation
+  - get top topic from graphql
+  - get topic data from graphql
+  - export function and change variable name
+  - topic page basic layout
+  - move filter button to button folder
+- fix
+  - fix comments and add constants
+  - fix typo
+  - fix topics route
+
+### Commits
+
+- [[`f6fe20745b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f6fe20745b)] - Merge remote-tracking branch 'upstream/dev' into feature/topic-page (Lucien)
+- [[`e1b53b2d37`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1b53b2d37)] - **fix(frontend)**: fix comments and add constants (Lucien)
+- [[`9176e6156a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9176e6156a)] - **fix(frontend)**: fix typo (Lucien)
+- [[`af8ca5dd2b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af8ca5dd2b)] - **feat(frontend)**: improve tooltip positioning and behavior (Lucien)
+- [[`5b69410fde`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5b69410fde)] - **feat(frontend)**: remove unused custom hook (Lucien)
+- [[`18cde540e2`](https://github.com/twreporter/congress-dashboard-monorepo/commit/18cde540e2)] - **feat(frontend)**: refactor Legislator and Topic components and styles (Lucien)
+- [[`2d51088a09`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d51088a09)] - **feat(frontend)**: refactor content page layout and improve filter handling (Lucien)
+- [[`1a24de06a7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1a24de06a7)] - **feat(frontend)**: legislator page statistics style (Lucien)
+- [[`4ccba07fba`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4ccba07fba)] - **feat(frontend)**: click arrow scroll into view (Lucien)
+- [[`c3b2658a3a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c3b2658a3a)] - **feat(frontend)**: use mock data (Lucien)
+- [[`83414e594b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/83414e594b)] - **feat(frontend)**: move common components to components folder (Lucien)
+- [[`6fd8111397`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6fd8111397)] - **feat(frontend)**: legislator page logic (Lucien)
+- [[`76a9ed3cd4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/76a9ed3cd4)] - **feat(frontend)**: separate topic style (Lucien)
+- [[`5c824accef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5c824accef)] - **feat(frontend)**: improve param validation (Lucien)
+- [[`dccbecf053`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dccbecf053)] - **feat(frontend)**: custom hook and component for topic page (Lucien)
+- [[`dc038e166d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc038e166d)] - **feat(frontend)**: topic page filter (Lucien)
+- [[`62772a6232`](https://github.com/twreporter/congress-dashboard-monorepo/commit/62772a6232)] - **feat(frontend)**: move filter modal to component (Lucien)
+- [[`a8a14f9d95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a8a14f9d95)] - **feat(frontend)**: scroll animation (Lucien)
+- [[`7847c8d863`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7847c8d863)] - **feat(frontend)**: get top topic from graphql (Lucien)
+- [[`4c6656aa0a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4c6656aa0a)] - **feat(frontend)**: get topic data from graphql (Lucien)
+- [[`89e1146efb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/89e1146efb)] - **feat(frontend)**: export function and change variable name (Lucien)
+- [[`d71c715ce0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d71c715ce0)] - **feat(frontend)**: topic page basic layout (Lucien)
+- [[`2c25ac8681`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2c25ac8681)] - **fix(frontend)**: fix topics route (Lucien)
+- [[`1058b17d6e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1058b17d6e)] - **feat(frontend)**: move filter button to button folder (Lucien)
+
 ## 0.0.2-beta.13, 2025-03-25
 
 - fix
