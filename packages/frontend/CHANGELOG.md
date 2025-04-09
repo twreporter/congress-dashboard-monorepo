@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.9, 2025-04-10
+
+### Notable Changes
+
+- fix
+  - SSR req set connenction header `close`
+
+### Commits
+
+- [[`89a37ce926`](https://github.com/twreporter/congress-dashboard-monorepo/commit/89a37ce926)] - **fix(frontend)**: SSR req close connenction direclty (Aylie Chou)
+
 ## 0.0.3-beta.8, 2025-04-09
 
 ### Notable Changes
