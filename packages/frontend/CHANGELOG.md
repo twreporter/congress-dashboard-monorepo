@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.6, 2025-04-09
+
+### Notable Changes
+
+- feat
+  - add abort signal for server fetch
+
+### Commits
+
+- [[`bf10278e64`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bf10278e64)] - **feat(frontend)**: add abort signal for server fetch (Lucien)
+
 ## 0.0.3-beta.5, 2025-04-09
 
 ### Notable Changes
