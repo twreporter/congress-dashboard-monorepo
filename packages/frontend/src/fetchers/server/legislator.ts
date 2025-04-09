@@ -1,3 +1,9 @@
+// global var
+const API_URL = 'http://localhost:3000/api/graphql' // use localhost in ssr
+
+/* fetchLegislator
+ *   fetch legislative with given slug and in given term
+ */
 export type LegislatorFromRes = {
   slug: string
   party: {
@@ -42,8 +48,6 @@ export const fetchLegislator = async ({
   slug: string
   legislativeMeeting: number
 }): Promise<LegislatorFromRes> => {
-  const url = process.env.NEXT_PUBLIC_API_URL as string
-
   const where = {
     legislator: {
       slug: {
@@ -57,50 +61,52 @@ export const fetchLegislator = async ({
     },
   }
 
-  const res = await fetch(url, {
+  const res = await fetch(API_URL, {
     signal: AbortSignal.timeout(30000),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      query: `query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
-  legislativeYuanMembers(where: $where) {
-    party {
-      name
-      image {
-        imageFile {
-          url
+      query: `
+        query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
+          legislativeYuanMembers(where: $where) {
+            party {
+              name
+              image {
+                imageFile {
+                  url
+                }
+              }
+              imageLink
+            }
+            note
+            legislativeMeeting {
+              term
+            }
+            constituency
+            type
+            legislator {
+              name
+              slug
+              image {
+                imageFile {
+                  url
+                }
+              }
+              imageLink
+            }
+            sessionAndCommittee {
+              committee {
+                name
+              }
+              legislativeMeetingSession {
+                term
+              }
+            }
+          }
         }
-      }
-      imageLink
-    }
-    note
-    legislativeMeeting {
-      term
-    }
-    constituency
-    type
-    legislator {
-      name
-      slug
-      image {
-        imageFile {
-          url
-        }
-      }
-      imageLink
-    }
-    sessionAndCommittee {
-      committee {
-        name
-      }
-      legislativeMeetingSession {
-        term
-      }
-    }
-  }
-}`,
+      `,
       variables: { where },
     }),
   })
@@ -113,6 +119,9 @@ export const fetchLegislator = async ({
   return data?.data?.legislativeYuanMembers?.[0]
 }
 
+/* fetchLegislatorTopics
+ *   fetch topics which given legislator has speech in given term & session
+ */
 export type SpeechData = {
   slug: string
   title: string
@@ -136,8 +145,6 @@ export const fetchLegislatorTopics = async ({
   legislativeMeetingTerm: number
   legislativeMeetingSessionTerms: number[]
 }): Promise<TopicData[]> => {
-  const url = process.env.NEXT_PUBLIC_API_URL as string
-
   // Create where conditions for topics
   const where = {
     speeches: {
@@ -178,7 +185,7 @@ export const fetchLegislatorTopics = async ({
     },
   }
 
-  const res = await fetch(url, {
+  const res = await fetch(API_URL, {
     signal: AbortSignal.timeout(30000),
     method: 'POST',
     headers: {

@@ -1,3 +1,9 @@
+// global var
+const API_URL = 'http://localhost:3000/api/graphql' // use localhost in ssr
+
+/* fetchLegislativeMeeting
+ *   fetch legislative meeing order by term desc
+ */
 export type LegislativeMeeting = {
   id: number
   term: number
@@ -9,8 +15,6 @@ export type LegislativeMeetingSession = {
   startTime: string
   endTime: string
 }
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL as string
 
 export const fetchLegislativeMeeting = async (): Promise<
   LegislativeMeeting[]
@@ -35,6 +39,9 @@ export const fetchLegislativeMeeting = async (): Promise<
   return data?.data?.legislativeMeetings
 }
 
+/* fetchLegislativeMeetingSession
+ *   fetch legislative meeing sessions in given term & order by term asc
+ */
 export const fetchLegislativeMeetingSession = async (
   legislativeMeetingTerm: string
 ): Promise<LegislativeMeetingSession[]> => {
