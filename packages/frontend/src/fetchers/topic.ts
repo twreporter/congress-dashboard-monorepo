@@ -57,6 +57,7 @@ export const fetchTopic = async ({
     },
   }
   const res = await fetch(url, {
+    signal: AbortSignal.timeout(30000),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -167,7 +168,9 @@ export const fetchTopTopicsForLegislator = async ({
   })
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch top topics for legislator slug: ${legislatorSlug}`)
+    throw new Error(
+      `Failed to fetch top topics for legislator slug: ${legislatorSlug}`
+    )
   }
 
   const data = await res.json()
