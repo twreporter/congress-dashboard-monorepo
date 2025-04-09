@@ -1,5 +1,4 @@
-// global var
-const API_URL = 'http://localhost:3000/api/graphql' // use localhost in ssr
+import { keystoneFetch } from '@/app/api/graphql/keystone'
 
 /* fetchLegislator
  *   fetch legislative with given slug and in given term
@@ -47,7 +46,7 @@ export const fetchLegislator = async ({
 }: {
   slug: string
   legislativeMeeting: number
-}): Promise<LegislatorFromRes> => {
+}): Promise<LegislatorFromRes | undefined> => {
   const where = {
     legislator: {
       slug: {
@@ -60,63 +59,57 @@ export const fetchLegislator = async ({
       },
     },
   }
-
-  const res = await fetch(API_URL, {
-    signal: AbortSignal.timeout(30000),
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
-          legislativeYuanMembers(where: $where) {
-            party {
-              name
-              image {
-                imageFile {
-                  url
-                }
-              }
-              imageLink
-            }
-            note
-            legislativeMeeting {
-              term
-            }
-            constituency
-            type
-            legislator {
-              name
-              slug
-              image {
-                imageFile {
-                  url
-                }
-              }
-              imageLink
-            }
-            sessionAndCommittee {
-              committee {
-                name
-              }
-              legislativeMeetingSession {
-                term
-              }
+  const query = `
+    query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
+      legislativeYuanMembers(where: $where) {
+        party {
+          name
+          image {
+            imageFile {
+              url
             }
           }
+          imageLink
         }
-      `,
-      variables: { where },
-    }),
-  })
+        note
+        legislativeMeeting {
+          term
+        }
+        constituency
+        type
+        legislator {
+          name
+          slug
+          image {
+            imageFile {
+              url
+            }
+          }
+          imageLink
+        }
+        sessionAndCommittee {
+          committee {
+            name
+          }
+          legislativeMeetingSession {
+            term
+          }
+        }
+      }
+    }
+  `
+  const variables = { where }
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch legislator data for slug: ${slug}`)
+  try {
+    const data = await keystoneFetch<{
+      legislativeYuanMembers?: LegislatorFromRes[]
+    }>(JSON.stringify({ query, variables }))
+    return data?.data?.legislativeYuanMembers?.[0]
+  } catch (err) {
+    throw new Error(
+      `Failed to fetch legislators for slug: ${slug}, err: ${err}`
+    )
   }
-
-  const data = await res.json()
-  return data?.data?.legislativeYuanMembers?.[0]
 }
 
 /* fetchLegislatorTopics
@@ -184,38 +177,34 @@ export const fetchLegislatorTopics = async ({
       term: { in: legislativeMeetingSessionTerms },
     },
   }
-
-  const res = await fetch(API_URL, {
-    signal: AbortSignal.timeout(30000),
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `query TopicsByLegislator($where: TopicWhereInput!, $speechCondition: SpeechWhereInput!) {
-        topics(where: $where) {
-          title
+  const query = `
+    query TopicsByLegislator($where: TopicWhereInput!, $speechCondition: SpeechWhereInput!) {
+      topics(where: $where) {
+        title
+        slug
+        speechesCount(where: $speechCondition)
+        speeches(where: $speechCondition) {
           slug
-          speechesCount(where: $speechCondition)
-          speeches(where: $speechCondition) {
-            slug
-            date
-            title
-            summary
-          }
+          date
+          title
+          summary
         }
-      }`,
-      variables: {
-        where,
-        speechCondition,
-      },
-    }),
-  })
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch topics for legislator for slug: ${slug}`)
+      }
+    }
+  `
+  const variables = {
+    where,
+    speechCondition,
   }
 
-  const data = await res.json()
-  return data?.data?.topics
+  try {
+    const data = await keystoneFetch<{ topics: TopicData[] }>(
+      JSON.stringify({ query, variables })
+    )
+    return data?.data?.topics || []
+  } catch (err) {
+    throw new Error(
+      `Failed to fetch topics for legislator for slug: ${slug}, err: ${err}`
+    )
+  }
 }

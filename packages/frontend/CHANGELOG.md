@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.0.3-beta.8, 2025-04-09
+
+### Notable Changes
+
+- fix
+  - use `keystoneFetch` in SSR
+
+### Commits
+
+- [[`b60aed354e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b60aed354e)] - **fix(frontend)**: remove console.log (Aylie Chou)
+- [[`1b929e9158`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1b929e9158)] - **fix(frontend)**: use `keystoneFetch` in SSR (Aylie Chou)
+
 ## 0.0.3-beta.7, 2025-04-09
 
 ### Notable Changes

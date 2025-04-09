@@ -1,5 +1,4 @@
-// global var
-const API_URL = 'http://localhost:3000/api/graphql' // use localhost in ssr
+import { keystoneFetch } from '@/app/api/graphql/keystone'
 
 /* fetchLegislativeMeeting
  *   fetch legislative meeing order by term desc
@@ -19,12 +18,10 @@ export type LegislativeMeetingSession = {
 export const fetchLegislativeMeeting = async (): Promise<
   LegislativeMeeting[]
 > => {
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  const data = await keystoneFetch<{
+    legislativeMeetings: LegislativeMeeting[]
+  }>(
+    JSON.stringify({
       query: `
         query Query {
           legislativeMeetings(orderBy: [{ term: desc }]) {
@@ -33,10 +30,9 @@ export const fetchLegislativeMeeting = async (): Promise<
           }
         }
       `,
-    }),
-  })
-  const data = await res.json()
-  return data?.data?.legislativeMeetings
+    })
+  )
+  return data?.data?.legislativeMeetings || []
 }
 
 /* fetchLegislativeMeetingSession
@@ -52,31 +48,24 @@ export const fetchLegislativeMeetingSession = async (
       },
     },
   }
-
   const orderBy = [{ term: 'asc' }]
+  const query = `
+    query LegislativeMeetingSessions($where: LegislativeMeetingSessionWhereInput!, $orderBy: [LegislativeMeetingSessionOrderByInput!]!) {
+      legislativeMeetingSessions(where: $where, orderBy: $orderBy) {
+        id
+        term
+        startTime
+        endTime
+      }
+    }
+  `
+  const variables = {
+    where,
+    orderBy,
+  }
 
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        query LegislativeMeetingSessions($where: LegislativeMeetingSessionWhereInput!, $orderBy: [LegislativeMeetingSessionOrderByInput!]!) {
-          legislativeMeetingSessions(where: $where, orderBy: $orderBy) {
-            id
-            term
-            startTime
-            endTime
-          }
-        }
-      `,
-      variables: {
-        where,
-        orderBy,
-      },
-    }),
-  })
-  const data = await res.json()
-  return data?.data?.legislativeMeetingSessions
+  const data = await keystoneFetch<{
+    legislativeMeetingSessions: LegislativeMeetingSession[]
+  }>(JSON.stringify({ query, variables }))
+  return data?.data?.legislativeMeetingSessions || []
 }
