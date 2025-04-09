@@ -58,6 +58,7 @@ export const fetchLegislator = async ({
   }
 
   const res = await fetch(url, {
+    signal: AbortSignal.timeout(30000),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -105,7 +106,7 @@ export const fetchLegislator = async ({
   })
 
   if (!res.ok) {
-    throw new Error('Failed to fetch legislator data')
+    throw new Error(`Failed to fetch legislator data for slug: ${slug}`)
   }
 
   const data = await res.json()
@@ -178,6 +179,7 @@ export const fetchLegislatorTopics = async ({
   }
 
   const res = await fetch(url, {
+    signal: AbortSignal.timeout(30000),
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
