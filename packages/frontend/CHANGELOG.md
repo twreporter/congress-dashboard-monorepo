@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.7, 2025-04-09
+
+### Notable Changes
+
+- fix
+  - fetch data with `localhost` in SSR
+
+### Commits
+
+- [[`7766d09095`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7766d09095)] - **fix(frontend)**: fetch data with `localhost` in SSR (Aylie Chou)
+
 ## 0.0.3-beta.6, 2025-04-09
 
 ### Notable Changes
