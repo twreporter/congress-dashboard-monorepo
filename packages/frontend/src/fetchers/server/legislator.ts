@@ -104,7 +104,6 @@ export const fetchLegislator = async ({
     const data = await keystoneFetch<{
       legislativeYuanMembers?: LegislatorFromRes[]
     }>(JSON.stringify({ query, variables }))
-    console.log(`\n\ndata: ${JSON.stringify(data)}\n\n`)
     return data?.data?.legislativeYuanMembers?.[0]
   } catch (err) {
     throw new Error(
