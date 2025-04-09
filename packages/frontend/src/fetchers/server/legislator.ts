@@ -103,7 +103,7 @@ export const fetchLegislator = async ({
   try {
     const data = await keystoneFetch<{
       legislativeYuanMembers?: LegislatorFromRes[]
-    }>(JSON.stringify({ query, variables }))
+    }>(JSON.stringify({ query, variables }), false)
     return data?.data?.legislativeYuanMembers?.[0]
   } catch (err) {
     throw new Error(
@@ -199,7 +199,8 @@ export const fetchLegislatorTopics = async ({
 
   try {
     const data = await keystoneFetch<{ topics: TopicData[] }>(
-      JSON.stringify({ query, variables })
+      JSON.stringify({ query, variables }),
+      false
     )
     return data?.data?.topics || []
   } catch (err) {

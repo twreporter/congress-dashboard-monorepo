@@ -6,7 +6,8 @@ export interface GraphQLResponse<T> {
 }
 
 export async function keystoneFetch<T>(
-  bodyString: string
+  bodyString: string,
+  keepAlive = true
 ): Promise<GraphQLResponse<T>> {
   if (!bodyString) {
     throw new Error(`body string cannot be empty`)
@@ -18,6 +19,7 @@ export async function keystoneFetch<T>(
     headers: {
       'Content-Type': 'application/json',
       Cookie: cookie,
+      Connection: keepAlive ? 'keep-alive' : 'close',
     },
     body: bodyString,
   })
