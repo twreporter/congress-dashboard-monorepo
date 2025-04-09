@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.5, 2025-04-09
+
+### Notable Changes
+
+- fix
+  - extend timeout to 30000ms
+
+### Commits
+
+- [[`8d56eb0195`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8d56eb0195)] - **fix(frontend)**: extend timeout to 30000ms (Lucien)
+
 ## 0.0.3-beta.4, 2025-04-09
 
 ### Notable Changes

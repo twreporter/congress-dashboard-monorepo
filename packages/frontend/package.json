@@ -1,12 +1,12 @@
 {
   "name": "@twreporter/congress-dashboard-frontend",
-  "version": "0.0.3-beta.4",
+  "version": "0.0.3-beta.5",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build-exp": "set NODE_ENV=production & next build --experimental-build-mode compile",
     "build": "next build",
-    "start": "NODE_OPTIONS='--network-family-autoselection-attempt-timeout=500' next start",
+    "start": "NODE_OPTIONS='--network-family-autoselection-attempt-timeout=30000' next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
