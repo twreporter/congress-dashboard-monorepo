@@ -30,7 +30,8 @@ export const fetchLegislativeMeeting = async (): Promise<
           }
         }
       `,
-    })
+    }),
+    false
   )
   return data?.data?.legislativeMeetings || []
 }
@@ -66,6 +67,6 @@ export const fetchLegislativeMeetingSession = async (
 
   const data = await keystoneFetch<{
     legislativeMeetingSessions: LegislativeMeetingSession[]
-  }>(JSON.stringify({ query, variables }))
+  }>(JSON.stringify({ query, variables }), false)
   return data?.data?.legislativeMeetingSessions || []
 }

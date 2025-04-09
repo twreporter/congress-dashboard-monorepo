@@ -21,7 +21,8 @@ export async function POST<T>(req: NextRequest) {
 
   try {
     const response: GraphQLResponse<T> = await keystoneFetch<T>(
-      JSON.stringify(bodyForKeystone)
+      JSON.stringify(bodyForKeystone),
+      true
     )
     logger.debug({ requestId, response }, 'keystone api response')
     return NextResponse.json(response)
