@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.0.3-beta.10, 2025-04-10
+
+### Notable Changes
+
+- fix
+  - fix legislator qraphql column
+  - use fetch for client SWR
+  - use constants route
+
+### Commits
+
+- [[`82d5d714b9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/82d5d714b9)] - **fix(frontend)**: use constants route (Lucien)
+- [[`cb060bb1a7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cb060bb1a7)] - **fix(frontend)**: use fetch for client SWR (Lucien)
+- [[`ace7874861`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ace7874861)] - **fix(frontend)**: fix legislator qraphql column (Lucien)
+
 ## 0.0.3-beta.9, 2025-04-10
 
 ### Notable Changes

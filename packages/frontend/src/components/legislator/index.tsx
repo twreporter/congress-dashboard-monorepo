@@ -91,7 +91,7 @@ const Legislator: React.FC<LegislatorProps> = ({
         console.warn('No meeting sessions selected, using current session')
       }
 
-      const newUrl = `/${InternalRoutes.Legislator}/${
+      const newUrl = `${InternalRoutes.Legislator}/${
         legislator.slug
       }?meetingTerm=${filterValues.meeting}&sessionTerm=${JSON.stringify(
         sessionTermValue
