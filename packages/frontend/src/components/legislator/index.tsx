@@ -30,6 +30,8 @@ import {
 import { useLegislatorData } from '@/components/legislator/hooks/use-legislator-data'
 // custom hooks
 import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 // mock data
 import { LegislatorStatisticsMockData } from '@/components/legislator/mockData'
 
@@ -89,9 +91,11 @@ const Legislator: React.FC<LegislatorProps> = ({
         console.warn('No meeting sessions selected, using current session')
       }
 
-      const newUrl = `/legislators/${legislator.slug}?meetingTerm=${
-        filterValues.meeting
-      }&sessionTerm=${JSON.stringify(sessionTermValue)}`
+      const newUrl = `${InternalRoutes.Legislator}/${
+        legislator.slug
+      }?meetingTerm=${filterValues.meeting}&sessionTerm=${JSON.stringify(
+        sessionTermValue
+      )}`
       router.push(newUrl)
       setIsFilterOpen(false)
     } catch (error) {

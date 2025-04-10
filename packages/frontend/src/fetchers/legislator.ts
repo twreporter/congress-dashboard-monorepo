@@ -73,6 +73,16 @@ export const fetchTopLegislatorsBySpeechCount = async ({
         query GetTopLegislatorsBySpeechCount($where: SpeechWhereInput!) {
           speeches(where: $where) {
             legislativeYuanMember {
+              legislator {
+                slug
+                name
+                image {
+                  imageFile {
+                    url
+                  }
+                }
+                imageLink
+              }
               party {
                 image {
                   imageFile {
@@ -81,6 +91,7 @@ export const fetchTopLegislatorsBySpeechCount = async ({
                 }
                 imageLink
               }
+            }
           }
         }
       `,
