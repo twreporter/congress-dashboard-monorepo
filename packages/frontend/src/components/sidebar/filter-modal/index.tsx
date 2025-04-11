@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 // type
@@ -7,6 +7,7 @@ import { FilterOption } from '@/components/sidebar/type'
 // components
 import SelectTag from '@/components/sidebar/filter-modal/select-tag'
 import Search from '@/components/sidebar/filter-modal/search'
+import { Loader } from '@/components/sidebar/index'
 // style
 import {
   FlexColumn,
@@ -43,9 +44,24 @@ const TopBox = styled(FlexColumn)<{ $show: boolean }>`
   top: 0;
   background-color: ${colorGrayscale.white};
   z-index: 1;
-  ${(props) => (props.$show ? '' : 'display: none;')}
+  ${(props) => (props.$show ? '' : 'transform: translateY(-100%);')}
+  transition: transform 0.4s ease-in-out;
 `
 const TitleBox = styled(FlexRow)``
+const ContentBox = styled.div<{
+  $topBoxHeight: number
+  $isSearchMode: boolean
+}>`
+  transition: transform 0.4s ease-in-out;
+  ${(props) =>
+    props.$isSearchMode
+      ? `
+    transform: translateY(-${props.$topBoxHeight}px);
+  `
+      : `
+    transform: translateY(0);  
+  `}
+`
 const HorizontalLine = styled.div<{ $show: boolean }>`
   border-bottom: 1px solid ${colorGrayscale.gray300};
   ${(props) => (props.$show ? '' : `display: none;`)}
@@ -137,6 +153,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   onClose,
   onConfirmSelection,
 }) => {
+  const topBoxRef = useRef<HTMLDivElement>(null)
   const [options, setOptions] = useState(
     _.map(initialSelectedOption, (option) => ({ selected: true, ...option }))
   )
@@ -144,7 +161,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const [hasLoaded, setHasLoaded] = useState(false)
   const [keyword, setKeyword] = useState('')
   const [isSearchMode, setIsSearchMode] = useState(false)
-  const { data } = useSWR(slug, () => fetcher(slug)) //todo: add loading & error handling
+  const [isShowLoading, setIsShowLoading] = useState(true)
+  const { data } = useSWR(slug, () => fetcher(slug))
   const selectedOptionsForShow = useMemo(
     () => selectedOptions,
     [selectedOptions]
@@ -153,6 +171,16 @@ const FilterModal: React.FC<FilterModalProps> = ({
     () => (isSearchMode ? filterByKeyword(options, keyword) : options),
     [options, keyword, isSearchMode]
   )
+  const topBoxHeight = useMemo(
+    () => (topBoxRef.current ? topBoxRef.current.offsetHeight : 0),
+    [topBoxRef.current]
+  )
+
+  useEffect(() => {
+    if (hasLoaded) {
+      setIsShowLoading(false)
+    }
+  }, [hasLoaded])
 
   useEffect(() => {
     if (!data || hasLoaded) return
@@ -232,7 +260,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
 
   return (
     <>
-      <TopBox $show={!isSearchMode}>
+      <TopBox $show={!isSearchMode} ref={topBoxRef}>
         <TitleBox>
           <Title text={title} />
           <ButtonGroup>
@@ -246,62 +274,70 @@ const FilterModal: React.FC<FilterModalProps> = ({
         </TitleBox>
         {subtitle ? <Subtitle text={subtitle} /> : null}
       </TopBox>
-      <SearchBox $isSearchMode={isSearchMode}>
-        <Button
-          iconComponent={
-            <Arrow
-              direction={Arrow.Direction.LEFT}
-              releaseBranch={releaseBranch}
+      {isShowLoading ? (
+        <Loader />
+      ) : (
+        <ContentBox $topBoxHeight={topBoxHeight} $isSearchMode={isSearchMode}>
+          <SearchBox $isSearchMode={isSearchMode}>
+            <Button
+              iconComponent={
+                <Arrow
+                  direction={Arrow.Direction.LEFT}
+                  releaseBranch={releaseBranch}
+                />
+              }
+              theme={IconButton.THEME.normal}
+              type={IconButton.Type.PRIMARY}
+              onClick={() => {
+                setIsSearchMode(false)
+              }}
             />
-          }
-          theme={IconButton.THEME.normal}
-          type={IconButton.Type.PRIMARY}
-          onClick={() => {
-            setIsSearchMode(false)
-          }}
-        />
-        <Search
-          handleChange={setKeyword}
-          handleFocus={() => {
-            setIsSearchMode(true)
-          }}
-        />
-      </SearchBox>
-      <HorizontalLine $show={isSearchMode} />
-      <SelectBox>
-        <Seleted>
-          <Text text={`已選 (${selectedOptions.length}/${maxSelectedCount})`} />
-          <TagBox>
-            {_.map(selectedOptionsForShow, (selectedOption, index) => (
-              <SelectTag
-                key={`selected-tag-${index}`}
-                withDelete={true}
-                isLast={selectedOptions.length === 1}
-                {...selectedOption}
-                selected={true}
-                onClick={(e) => unSelect(e, index)}
+            <Search
+              handleChange={setKeyword}
+              handleFocus={() => {
+                setIsSearchMode(true)
+              }}
+            />
+          </SearchBox>
+          <HorizontalLine $show={isSearchMode} />
+          <SelectBox>
+            <Seleted>
+              <Text
+                text={`已選 (${selectedOptions.length}/${maxSelectedCount})`}
               />
-            ))}
-          </TagBox>
-        </Seleted>
-        <HorizontalLine $show={true} />
-        <UnSelected>
-          <Text text={`全部`} />
-          <TagBox>
-            {_.map(optionsForShow, (option, index) => (
-              <SelectTag
-                key={`all-options-${index}`}
-                withDelete={false}
-                {...option}
-                onClick={(e) => toggleSelect(e, index)}
-              />
-            ))}
-            {optionsForShow.length === 0 ? (
-              <EmptyText text={'找不到任何結果'} />
-            ) : null}
-          </TagBox>
-        </UnSelected>
-      </SelectBox>
+              <TagBox>
+                {_.map(selectedOptionsForShow, (selectedOption, index) => (
+                  <SelectTag
+                    key={`selected-tag-${index}`}
+                    withDelete={true}
+                    isLast={selectedOptions.length === 1}
+                    {...selectedOption}
+                    selected={true}
+                    onClick={(e) => unSelect(e, index)}
+                  />
+                ))}
+              </TagBox>
+            </Seleted>
+            <HorizontalLine $show={true} />
+            <UnSelected>
+              <Text text={`全部`} />
+              <TagBox>
+                {_.map(optionsForShow, (option, index) => (
+                  <SelectTag
+                    key={`all-options-${index}`}
+                    withDelete={false}
+                    {...option}
+                    onClick={(e) => toggleSelect(e, index)}
+                  />
+                ))}
+                {optionsForShow.length === 0 ? (
+                  <EmptyText text={'找不到任何結果'} />
+                ) : null}
+              </TagBox>
+            </UnSelected>
+          </SelectBox>
+        </ContentBox>
+      )}
       <ConfirmBox>
         <ConfirmButton
           text={'確定'}

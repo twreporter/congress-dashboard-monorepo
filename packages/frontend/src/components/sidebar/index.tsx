@@ -70,7 +70,7 @@ const LoadingBox = styled.div`
     animation: ${spin} 1s linear infinite;
   }
 `
-const Loader: React.FC = () => (
+export const Loader: React.FC = () => (
   <LoadingBox>
     <Loading releaseBranch={releaseBranch} />
   </LoadingBox>
