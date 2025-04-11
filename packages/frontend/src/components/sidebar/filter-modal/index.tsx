@@ -21,6 +21,7 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { Cross, Arrow } from '@twreporter/react-components/lib/icon'
 import { IconButton, PillButton } from '@twreporter/react-components/lib/button'
 import { P2, P1 } from '@twreporter/react-components/lib/text/paragraph'
+import { H5 } from '@twreporter/react-components/lib/text/headline'
 // lodash
 import { filter, map, findIndex, unionBy, without, find } from 'lodash'
 const _ = {
@@ -36,7 +37,49 @@ const _ = {
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 const maxSelectedCount = 10
 
-// todo: add animation
+// Error Component
+const ErrorBox = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+`
+const ErrorTitle = styled(H5)`
+  color: ${colorGrayscale.gray800};
+`
+const Desc = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+const TextButtonInP = styled.p`
+  text-decoration: underline ${colorGrayscale.gray700};
+  text-underline-offset: 1px;
+  text-underline-position: from-font;
+`
+const ErrorDesc = styled(P1)`
+  color: ${colorGrayscale.gray700};
+`
+const Error: React.FC = () => (
+  <ErrorBox>
+    <ErrorTitle text={'資料載入失敗'} />
+    <Desc>
+      <ErrorDesc text={'請嘗試重新整理頁面。若仍無法正常顯示，'} />
+      <ErrorDesc>
+        歡迎點此
+        <TextButtonInP>回報問題</TextButtonInP>以協助我們改善。
+      </ErrorDesc>
+    </Desc>
+  </ErrorBox>
+)
+
+// Filter Modal Component
 const TopBox = styled(FlexColumn)<{ $show: boolean }>`
   padding: 16px 16px 16px 24px;
   border-bottom: 1px solid ${colorGrayscale.gray300};
@@ -162,7 +205,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const [keyword, setKeyword] = useState('')
   const [isSearchMode, setIsSearchMode] = useState(false)
   const [isShowLoading, setIsShowLoading] = useState(true)
-  const { data } = useSWR(slug, () => fetcher(slug))
+  const [isShowError, setIsShowError] = useState(false)
+  const { data, error } = useSWR(slug, () => fetcher(slug))
   const selectedOptionsForShow = useMemo(
     () => selectedOptions,
     [selectedOptions]
@@ -181,6 +225,16 @@ const FilterModal: React.FC<FilterModalProps> = ({
       setIsShowLoading(false)
     }
   }, [hasLoaded])
+
+  useEffect(() => {
+    if (hasLoaded) {
+      setIsShowError(false)
+    } else if (error) {
+      console.error(`fetch options failed. err: ${error}`)
+      setIsShowError(true)
+      setIsShowLoading(false)
+    }
+  }, [hasLoaded, error])
 
   useEffect(() => {
     if (!data || hasLoaded) return
@@ -276,6 +330,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
       </TopBox>
       {isShowLoading ? (
         <Loader />
+      ) : isShowError ? (
+        <Error />
       ) : (
         <ContentBox $topBoxHeight={topBoxHeight} $isSearchMode={isSearchMode}>
           <SearchBox $isSearchMode={isSearchMode}>
