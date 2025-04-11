@@ -189,7 +189,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         type: SelectorType.Single,
         disabled: true,
         label: '單位',
-        value: 'department',
+        key: 'department',
         defaultValue: 'legislativeYuan',
         options: [{ label: '立法院', value: 'legislativeYuan' }],
       },
@@ -197,7 +197,8 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         type: SelectorType.Single,
         disabled: false,
         label: '屆期',
-        value: 'meeting',
+        key: 'meeting',
+        defaultValue: '11',
         options: [
           { label: '第 10 屆', value: '10' },
           { label: '第 11 屆', value: '11' },
@@ -208,7 +209,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         disabled: false,
         defaultValue: ['all'],
         label: '會期',
-        value: 'meetingSession',
+        key: 'meetingSession',
         options: [
           { label: '全部會期', value: 'all', isDeletable: false },
           { label: '第 1 會期(2020/9-2022/10)', value: '1' },
@@ -220,7 +221,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         type: SelectorType.Multiple,
         disabled: false,
         label: '選區',
-        value: 'constituency',
+        key: 'constituency',
         options: [
           {
             groupName: '不分區',
@@ -248,7 +249,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         type: SelectorType.Multiple,
         disabled: false,
         label: '黨籍',
-        value: 'party',
+        key: 'party',
         isLoading: partyState.isLoading,
         options: _.map(
           partyState.party,
@@ -272,7 +273,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         type: SelectorType.Multiple,
         disabled: false,
         label: '委員會',
-        value: 'committee',
+        key: 'committee',
         options: [
           {
             groupName: '常設',
@@ -297,7 +298,6 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
 
   const handleSubmit = (filterModalValue: FilterModalValueType) => {
     setFilterValues(filterModalValue)
-    console.log('filterModalValue: ', filterModalValue)
 
     const meetingString = filterModalValue.meeting
       ? `第${filterModalValue.meeting}屆`
