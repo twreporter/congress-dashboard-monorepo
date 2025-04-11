@@ -138,6 +138,7 @@ const Gap = styled(GapHorizontal)`
 const CardSection = styled.div<{
   $isScroll: boolean
   $isSidebarOpened: boolean
+  $windowWidth: number
 }>`
   width: 100%;
   display: flex;
@@ -150,14 +151,19 @@ const CardSection = styled.div<{
   `
       : ''}
   ${(props) =>
+    props.$windowWidth
+      ? `
+    max-width: 100%;
+    padding: 0 ${(props.$windowWidth - 928) / 2}px;
+  `
+      : 'max-width: 928px;'}
+  ${(props) =>
     props.$isSidebarOpened
       ? `
       width: 100vw;
-      padding-left: 24px;
+      padding-right: 24px;
     `
-      : `
-      max-width: 928px;
-  `}
+      : ''}
 
   ${mq.tabletAndBelow`
     max-width: 100%;
@@ -182,9 +188,15 @@ const Dashboard = () => {
   const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
   const [showSidebar, setShowSidebar] = useState(false)
   const [sidebarGap, setSidebarGap] = useState(0)
+  const [windowWidth, setWindowWidth] = useState(0)
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
   const cardRef = useRef<HTMLDivElement>(null)
 
+  useEffect(() => {
+    if (window) {
+      setWindowWidth(window.innerWidth)
+    }
+  }, [])
   useEffect(() => {
     if (isLoading) {
       window.setTimeout(() => {
@@ -269,7 +281,11 @@ const Dashboard = () => {
   return (
     <Box id={anchorId}>
       <StyledFunctionBar currentTab={selectedType} setTab={setTab} />
-      <CardSection $isScroll={showSidebar} $isSidebarOpened={showSidebar}>
+      <CardSection
+        $isScroll={showSidebar}
+        $isSidebarOpened={showSidebar}
+        $windowWidth={windowWidth}
+      >
         <CardBox ref={cardRef}>
           <CardIssueBox $active={selectedType === Option.Issue}>
             {mockIssue.map((props: CardIssueProps, index) => (
