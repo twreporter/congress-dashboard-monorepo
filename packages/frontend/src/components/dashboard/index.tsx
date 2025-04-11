@@ -96,6 +96,10 @@ const CardHumanBox = styled.div<{ $active: boolean }>`
   ${mq.mobileOnly`
     grid-template-columns: repeat(1, 1fr);
     grid-gap: 20px;
+
+    & > * {
+      width: calc(100vw - 48px);
+    }
   `}
 `
 const LoadMore = styled(PillButton)`
@@ -197,6 +201,7 @@ const Dashboard = () => {
       setWindowWidth(window.innerWidth)
     }
   }, [])
+
   useEffect(() => {
     if (isLoading) {
       window.setTimeout(() => {
@@ -209,6 +214,7 @@ const Dashboard = () => {
       }, 2000)
     }
   }, [isLoading])
+
   useEffect(() => {
     setIsLoading(true)
     setMockIssue([])
