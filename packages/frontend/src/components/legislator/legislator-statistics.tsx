@@ -29,7 +29,7 @@ const CurrentCommittee = styled.div`
     width: 266px;
   `}
   ${mq.desktopAndBelow`
-    width: fit-content;
+    flex: 50%;
   `}
 `
 
@@ -52,12 +52,12 @@ const Separator = styled.div`
   margin-left: 56px;
   margin-right: 56px;
   ${mq.desktopOnly`
-    margin-left: 23px;
-    margin-right: 23px;
+    margin-left: 0px;
+    margin-right: 24px;
   `}
   ${mq.tabletOnly`
-    margin-left: 48px;
-    margin-right: 48px;
+    margin-left: 24px;
+    margin-right: 24px;
   `}
   ${mq.mobileOnly`
     width: 100%;
@@ -70,6 +70,9 @@ const CountInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
+  ${mq.desktopAndBelow`
+    flex: 50%;
+  `}
 `
 
 const CountInfo = styled.div`
@@ -79,6 +82,9 @@ const CountInfo = styled.div`
   ${mq.hdOnly`
     width: 175px;
   `}
+  ${mq.desktopAndBelow`
+    flex: 50%;
+  `}
 `
 
 const CountInfoTitle = styled.div`
@@ -87,7 +93,7 @@ const CountInfoTitle = styled.div`
   gap: 4px;
 `
 
-const CountInfoValue = styled.div`
+const CountInfoValue = styled.div<{ $isOverMaxNumber?: boolean }>`
   height: 100%;
   display: flex;
   align-items: center;
@@ -96,6 +102,15 @@ const CountInfoValue = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: 125%;
+  ${mq.desktopOnly`
+    font-size: ${(props) => (props.$isOverMaxNumber ? 56 : 72)}px;
+  `}
+  ${mq.tabletOnly`
+    font-size: 64px;
+  `}
+  ${mq.mobileOnly`
+    font-size: 48px;
+  `}
 `
 type LegislatorStatisticsProps = {
   committees: {
@@ -112,6 +127,7 @@ const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
   meetingTermCount,
   meetingTermCountInfo,
 }) => {
+  const isOverMaxCount = proposalSuccessCount > 999 || meetingTermCount > 999
   return (
     <LegislatorStatisticsDiv>
       <CurrentCommittee>
@@ -131,7 +147,7 @@ const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
             <P1Gray800 text="提案通過數" />
             <Tooltip tooltip="僅統計所選屆期的主提案通過數" />
           </CountInfoTitle>
-          <CountInfoValue>
+          <CountInfoValue $isOverMaxNumber={isOverMaxCount}>
             {proposalSuccessCount > 999 ? '999+' : proposalSuccessCount}
           </CountInfoValue>
         </CountInfo>
@@ -140,7 +156,7 @@ const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
             <P1Gray800 text="立委任期屆數" />
             <Tooltip tooltip={meetingTermCountInfo} />
           </CountInfoTitle>
-          <CountInfoValue>
+          <CountInfoValue $isOverMaxNumber={isOverMaxCount}>
             {meetingTermCount > 999 ? '999+' : meetingTermCount}
           </CountInfoValue>
         </CountInfo>

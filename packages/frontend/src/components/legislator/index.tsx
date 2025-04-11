@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 // @twreporter
 import {
@@ -16,7 +16,7 @@ import ContentPageLayout from '@/components/layout/content-page-layout'
 // styles
 import {
   ContentBlock,
-  FLexDiv,
+  DesktopContainer,
   DesktopAsideLeft,
   DesktopAsideRight,
   ListContainer,
@@ -48,11 +48,11 @@ const Legislator: React.FC<LegislatorProps> = ({
   currentMeetingSession,
 }) => {
   const router = useRouter()
+  const [filterCount, setFilterCount] = useState<number>(0)
 
   const {
     isFilterOpen,
     setIsFilterOpen,
-    filterCount,
     filterValues,
     handleFilterValueChange,
     legislativeMeetingSessionState,
@@ -105,17 +105,39 @@ const Legislator: React.FC<LegislatorProps> = ({
 
   const pageTitle = `${legislator.name} 的相關發言摘要`
 
+  useEffect(() => {
+    if (legislativeMeetingSessionState.legislativeMeetingSessions?.length > 0) {
+      const allAvailableSessions =
+        legislativeMeetingSessionState.legislativeMeetingSessions.map(
+          ({ term }) => term
+        )
+      const hasAllSessions =
+        allAvailableSessions.length === currentMeetingSession.length &&
+        allAvailableSessions.every((session) =>
+          currentMeetingSession.includes(session)
+        )
+      if (hasAllSessions) {
+        setFilterCount(0)
+      } else {
+        setFilterCount(currentMeetingSession.length)
+      }
+    }
+  }, [
+    currentMeetingTerm,
+    currentMeetingSession,
+    legislativeMeetingSessionState,
+  ])
+
   return (
     <>
       <ContentPageLayout
         title={pageTitle}
         currentMeetingTerm={currentMeetingTerm}
-        filterValues={filterValues}
         filterCount={filterCount}
         onFilterClick={openFilter}
       >
         <DesktopAndAbove>
-          <FLexDiv>
+          <DesktopContainer>
             <DesktopAsideLeft>
               <LegislatorInfo legislator={legislator} />
               <Feedback />
@@ -141,7 +163,7 @@ const Legislator: React.FC<LegislatorProps> = ({
                 />
               </ListContainer>
             </DesktopAsideRight>
-          </FLexDiv>
+          </DesktopContainer>
         </DesktopAndAbove>
         <TabletAndBelow>
           <ContentBlock>

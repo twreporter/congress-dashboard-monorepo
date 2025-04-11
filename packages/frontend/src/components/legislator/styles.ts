@@ -37,7 +37,7 @@ export const ContentBlock = styled.div`
   `}
 `
 
-export const FLexDiv = styled.div`
+export const DesktopContainer = styled.div`
   display: flex;
   gap: 24px;
 `
@@ -62,6 +62,9 @@ export const DesktopAsideRight = styled.div`
   flex-direction: column;
   gap: 24px;
   width: 100%;
+  ${mq.desktopOnly`
+    max-width: 720px;
+  `}
   ${mq.tabletAndBelow`
     display: none;
   `}

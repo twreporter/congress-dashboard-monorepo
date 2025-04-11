@@ -75,6 +75,9 @@ const FilterBar = styled.div`
   gap: 20px;
   flex: none;
   align-self: flex-end;
+  ${mq.desktopAndAbove`
+    align-self: center;
+  `}
   ${mq.mobileOnly`
     width: 100%;
     justify-content: space-between;
@@ -168,7 +171,6 @@ type ContentPageLayoutProps = {
   title: string
   children: ReactNode
   currentMeetingTerm: number
-  filterValues: { meeting: string; meetingSession: string[] }
   filterCount: number
   onFilterClick: () => void
 }
@@ -177,7 +179,6 @@ const ContentPageLayout: React.FC<ContentPageLayoutProps> = ({
   title,
   children,
   currentMeetingTerm,
-  filterValues,
   filterCount,
   onFilterClick,
 }) => {
@@ -207,9 +208,8 @@ const ContentPageLayout: React.FC<ContentPageLayoutProps> = ({
     }
   }, [leadingRef])
 
-  const sessionDisplay = filterValues.meetingSession.includes('all')
-    ? '全部'
-    : '部分'
+  // Determine session display based on filterCount
+  const sessionDisplay = filterCount === 0 ? '全部' : '部分'
 
   return (
     <PageWrapper>

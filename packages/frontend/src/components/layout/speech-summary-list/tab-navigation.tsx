@@ -46,6 +46,9 @@ const ScrollableTab = styled.div`
   scrollbar-width: none;
   width: 300px;
   flex: 1;
+  ${mq.tabletAndBelow`
+    padding-right: 24px;
+  `}
   ${TabItem} {
     ${mq.desktopAndAbove`
       &:first-child {
@@ -60,12 +63,9 @@ const ScrollableTab = styled.div`
   }
 `
 
-const ArrowIcon = styled.div`
+const ArrowButton = styled(IconButton)`
   width: 24px;
   height: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
   &.left-arrow {
     margin-left: 16px;
   }
@@ -97,7 +97,7 @@ const TabNavigation = memo<TabNavigationProps>(
         tabRefs.current[index]?.scrollIntoView({
           behavior: 'smooth',
           inline: 'start',
-          block: 'center',
+          block: 'nearest',
         })
       }
     }, [])
@@ -113,7 +113,7 @@ const TabNavigation = memo<TabNavigationProps>(
           e.currentTarget.scrollIntoView({
             behavior: 'smooth',
             inline: 'start',
-            block: 'center',
+            block: 'nearest',
           })
         } else {
           // If clicking on arrows, use the ref to scroll
@@ -126,14 +126,19 @@ const TabNavigation = memo<TabNavigationProps>(
     return (
       <TabGroup>
         <DesktopAndAbove>
-          <ArrowIcon
+          <ArrowButton
             className="left-arrow"
+            iconComponent={
+              <Arrow
+                releaseBranch={releaseBranch}
+                direction={Arrow.Direction.LEFT}
+              />
+            }
             onClick={(e: React.MouseEvent<HTMLElement>) =>
               selectTab(e, selectedTab - 1 > 0 ? selectedTab - 1 : 0)
             }
-          >
-            <Arrow direction={Arrow.Direction.LEFT} />
-          </ArrowIcon>
+            disabled={selectedTab === 0}
+          />
         </DesktopAndAbove>
         <ScrollableTab>
           {tabs.map((tabProps: TabProps, index: number) => (
@@ -152,8 +157,14 @@ const TabNavigation = memo<TabNavigationProps>(
           ))}
         </ScrollableTab>
         <DesktopAndAbove>
-          <ArrowIcon
+          <ArrowButton
             className="right-arrow"
+            iconComponent={
+              <Arrow
+                releaseBranch={releaseBranch}
+                direction={Arrow.Direction.RIGHT}
+              />
+            }
             onClick={(e: React.MouseEvent<HTMLElement>) =>
               selectTab(
                 e,
@@ -162,9 +173,8 @@ const TabNavigation = memo<TabNavigationProps>(
                   : tabs.length - 1
               )
             }
-          >
-            <Arrow direction={Arrow.Direction.RIGHT} />
-          </ArrowIcon>
+            disabled={selectedTab === tabs.length - 1}
+          />
         </DesktopAndAbove>
         <Button
           iconComponent={<More releaseBranch={releaseBranch} />}

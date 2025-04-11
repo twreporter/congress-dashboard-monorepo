@@ -11,6 +11,9 @@ type FollowMoreItemsProps = {
 }
 const FollowMoreItems = React.memo<FollowMoreItemsProps>(
   ({ title, children }) => {
+    if (!children) {
+      return null
+    }
     return (
       <FollowMoreSection>
         <FollowMoreTitle text={title} />

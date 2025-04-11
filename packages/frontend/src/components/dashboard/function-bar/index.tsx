@@ -190,6 +190,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         disabled: true,
         label: '單位',
         value: 'department',
+        defaultValue: 'legislativeYuan',
         options: [{ label: '立法院', value: 'legislativeYuan' }],
       },
       {
@@ -296,6 +297,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
 
   const handleSubmit = (filterModalValue: FilterModalValueType) => {
     setFilterValues(filterModalValue)
+    console.log('filterModalValue: ', filterModalValue)
 
     const meetingString = filterModalValue.meeting
       ? `第${filterModalValue.meeting}屆`

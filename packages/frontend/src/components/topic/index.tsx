@@ -97,7 +97,6 @@ const Topic: React.FC<TopicPageProps> = ({
       <ContentPageLayout
         title={pageTitle}
         currentMeetingTerm={currentMeetingTerm}
-        filterValues={filterValues}
         filterCount={filterCount}
         onFilterClick={openFilter}
       >

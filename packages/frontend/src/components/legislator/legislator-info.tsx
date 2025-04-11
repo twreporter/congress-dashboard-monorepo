@@ -41,12 +41,29 @@ const LegislatorInfoDiv = styled.div`
 
 const LegislatorImageContainer = styled.div`
   position: relative;
+  height: fit-content;
+  width: 300px;
+  aspect-ratio: 3.5 / 4.5;
+  ${mq.desktopOnly`
+    width: 272px;
+  `}
+  ${mq.tabletOnly`
+    width: 164px;
+    aspect-ratio: 1/1;
+    height: 100%;
+  `}
+  ${mq.mobileOnly`
+    width: 144px;
+    aspect-ratio: 1/1;
+    height: 100%;
+  `}
 `
 
 const LegislatorImage = styled.img`
   width: 300px;
   aspect-ratio: 3.5 / 4.5;
   border-radius: 8px 8px 0 0;
+  border: 1px solid ${colorOpacity['black_0.05']};
   ${mq.desktopOnly`
     width: 272px;
   `}
@@ -54,14 +71,21 @@ const LegislatorImage = styled.img`
     width: 164px;
     aspect-ratio: 1/1;
     border-radius: 50%;
-    border: 1px solid ${colorOpacity['black_0.05']};
   `}
   ${mq.mobileOnly`
     width: 144px;
     aspect-ratio: 1/1;
     border-radius: 50%;
-    border: 1px solid ${colorOpacity['black_0.05']};
   `}
+`
+
+const Mask = styled.div`
+  opacity: 0.1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 100%);
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 80px;
 `
 
 const PartyTagContainer = styled.div`
@@ -77,6 +101,7 @@ const PartyTagContainer = styled.div`
 `
 
 const LegislatorDetail = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -125,6 +150,9 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({ legislator }) => {
     <LegislatorInfoDiv>
       <LegislatorImageContainer>
         <LegislatorImage src={legislator.avatar} />
+        <DesktopAndAbove>
+          <Mask />
+        </DesktopAndAbove>
         <PartyTagContainer>
           <DesktopAndAbove>
             <PartyTag size={TagSize.XXL} avatar={legislator.party.image} />
