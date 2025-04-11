@@ -21,9 +21,10 @@ const Box = styled.div<{
   $hoverBgColor: string
   $hasBorder: boolean
   $cursor: string
+  $withImg: boolean
 }>`
   display: inline-flex;
-  padding: 6px 12px 6px 8px;
+  padding: 6px 12px 6px ${(props) => (props.$withImg ? '8px' : '12px')};
   justify-content: center;
   align-items: center;
   gap: 8px;
@@ -94,6 +95,7 @@ const SelectTag: React.FC<SelectTagProps> = ({
       $hoverBgColor={hoverBgColor}
       $hasBorder={hasBorder}
       $cursor={cursor}
+      $withImg={!!avatar}
       onClick={onClick}
     >
       {avatar ? (

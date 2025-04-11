@@ -58,7 +58,7 @@ const SearchBox = styled(FlexRow)<{ $isSearchMode: boolean }>`
       ? `
     position: sticky;
     top: 0;
-    padding: 16px 24px;
+    padding: 16px 24px 16px 16px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -93,11 +93,12 @@ const Text = styled(P2)`
 `
 const ConfirmBox = styled.div`
   padding: 24px;
-  position: sticky;
+  position: absolute;
   bottom: 0;
   border-top: 1px solid ${colorGrayscale.gray300};
   background-color: ${colorGrayscale.white};
   z-index: 1;
+  width: 100%;
 `
 const ConfirmButton = styled(PillButton)`
   width: 100% !important;
@@ -225,12 +226,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
     }
   }
   const confirmSelect = () => {
-    const selected = _.map(selectedOptions, (item) => {
-      const selectedItem = { ...item }
-      selectedItem.selected = false
-      return selectedItem
-    })
-    onConfirmSelection(selected)
+    onConfirmSelection(selectedOptions)
     onClose()
   }
 

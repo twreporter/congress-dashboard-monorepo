@@ -95,6 +95,7 @@ const ContentBox = styled.div<{ $show: boolean }>`
 const FilterBox = styled.div<{ $show: boolean }>`
   ${(props) => (props.$show ? '' : 'display: none;')}
   height: 100%;
+  position: relative;
 `
 const Body = styled.div`
   display: flex;
