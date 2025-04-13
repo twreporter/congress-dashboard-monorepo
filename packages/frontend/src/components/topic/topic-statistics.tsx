@@ -27,10 +27,19 @@ const StatisticsDiv = styled.div`
 
 const StatisticsNumber = styled.div`
   color: ${colorGrayscale.gray800};
-  font-size: 40px;
+  font-size: 48px;
   font-style: normal;
   font-weight: 700;
   line-height: 125%;
+  ${mq.desktopOnly`
+    font-size: 40px;
+  `}
+  ${mq.tabletOnly`
+    font-size: 64px;
+  `}
+  ${mq.mobileOnly`
+    font-size: 48px;
+  `}
 `
 
 type TopicStatisticsProps = {

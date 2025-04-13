@@ -27,14 +27,24 @@ const RelatedArticleBlock = styled.div`
     padding-right: 24px;
   `}
 `
-
-const TopicRelatedArticles: React.FC = () => {
-  return (
+// TODO: add related articles
+type TopicRelatedArticlesProps = {
+  relatedArticles?: {
+    slug: string
+    title: string
+  }[]
+}
+const TopicRelatedArticles: React.FC<TopicRelatedArticlesProps> = ({
+  relatedArticles = [],
+}) => {
+  return relatedArticles.length > 0 ? (
     <RelatedArticleBlock>
       <H4Title text="相關文章" />
-      <P3Gray600 text="目前尚無相關文章" />
+      {relatedArticles.map((article) => (
+        <P3Gray600 key={article.slug} text={article.title} />
+      ))}
     </RelatedArticleBlock>
-  )
+  ) : null
 }
 
 export default TopicRelatedArticles

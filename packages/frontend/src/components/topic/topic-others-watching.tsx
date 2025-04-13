@@ -37,7 +37,7 @@ const OthersWatchingBlock = styled.div`
 const TopicsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   a {
     text-decoration: none;
   }

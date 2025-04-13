@@ -49,6 +49,10 @@ const Container = styled.div`
   ${mq.hdOnly`
     width: 1120px;
   `}
+  ${mq.desktopOnly`
+    max-width: 1016px;
+    margin: auto;
+  `}
 `
 
 const LeadingContainer = styled.div`

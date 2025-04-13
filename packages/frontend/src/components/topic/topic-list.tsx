@@ -42,7 +42,7 @@ const TopicContainer = styled.div`
 type LegislatorData = {
   name: string
   slug: string
-  imageLink?: string
+  avatar?: string
   count: number
 }
 
