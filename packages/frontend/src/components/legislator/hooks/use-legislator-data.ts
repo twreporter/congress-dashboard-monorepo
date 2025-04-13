@@ -39,11 +39,14 @@ export type Legislator = {
   }
   note: string
   meetingTerm: number
-  isActive: boolean
   committees: {
     name: string
     count: number
   }[]
+  proposalSuccessCount: number
+  externalLink: string
+  meetingTermCount: number
+  meetingTermCountInfo: string
 }
 
 export const useLegislatorData = (
@@ -60,6 +63,7 @@ export const useLegislatorData = (
         type,
         sessionAndCommittee,
         legislator,
+        proposalSuccessCount,
       } = legislatorData
       const legislatorName = legislator.name
       const legislatorAvatar = getImageLink(legislator)
@@ -82,17 +86,19 @@ export const useLegislatorData = (
         name,
         count,
       }))
-      const isActive = false //TODO: implement isActive logic
       return {
         name: legislatorName,
         slug: legislator.slug,
         constituency: LegislatorConstituency,
         avatar: legislatorAvatar,
         party: legislatorParty,
-        note,
+        note: note || '',
         meetingTerm,
-        isActive,
         committees,
+        proposalSuccessCount: proposalSuccessCount || 0,
+        externalLink: legislator.externalLink || '',
+        meetingTermCount: legislator.meetingTermCount || 1,
+        meetingTermCountInfo: legislator.meetingTermCountInfo || '',
       }
     }
 

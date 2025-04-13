@@ -32,8 +32,6 @@ import { useLegislatorData } from '@/components/legislator/hooks/use-legislator-
 import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
-// mock data
-import { LegislatorStatisticsMockData } from '@/components/legislator/mockData'
 
 type LegislatorProps = {
   legislatorData: LegislatorFromRes
@@ -49,12 +47,14 @@ const Legislator: React.FC<LegislatorProps> = ({
 }) => {
   const router = useRouter()
   const [filterCount, setFilterCount] = useState<number>(0)
+  const [isLegislatorActive, setIsLegislatorActive] = useState<boolean>(false)
 
   const {
     isFilterOpen,
     setIsFilterOpen,
     filterValues,
     handleFilterValueChange,
+    legislativeMeetingState,
     legislativeMeetingSessionState,
     filterOptions,
   } = useLegislativeMeetingFilters(currentMeetingTerm, currentMeetingSession)
@@ -128,6 +128,18 @@ const Legislator: React.FC<LegislatorProps> = ({
     legislativeMeetingSessionState,
   ])
 
+  useEffect(() => {
+    // if the legislator's meeting term matches the latest meeting term, set isLegislatorActive to true
+    if (
+      legislatorData.legislativeMeeting.term ===
+      legislativeMeetingState.legislativeMeeting[0].term
+    ) {
+      setIsLegislatorActive(true)
+    } else {
+      setIsLegislatorActive(false)
+    }
+  }, [legislativeMeetingState, legislatorData])
+
   return (
     <>
       <ContentPageLayout
@@ -139,19 +151,18 @@ const Legislator: React.FC<LegislatorProps> = ({
         <DesktopAndAbove>
           <DesktopContainer>
             <DesktopAsideLeft>
-              <LegislatorInfo legislator={legislator} />
+              <LegislatorInfo
+                legislator={legislator}
+                isLegislatorActive={isLegislatorActive}
+              />
               <Feedback />
             </DesktopAsideLeft>
             <DesktopAsideRight>
               <LegislatorStatistics
                 committees={legislator.committees}
-                proposalSuccessCount={
-                  LegislatorStatisticsMockData.proposalSuccessCount
-                }
-                meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
-                meetingTermCountInfo={
-                  LegislatorStatisticsMockData.meetingTermCountInfo
-                }
+                proposalSuccessCount={legislator.proposalSuccessCount}
+                meetingTermCount={legislator.meetingTermCount}
+                meetingTermCountInfo={legislator.meetingTermCountInfo}
               />
               <ListContainer>
                 <LegislatorList
@@ -167,16 +178,15 @@ const Legislator: React.FC<LegislatorProps> = ({
         </DesktopAndAbove>
         <TabletAndBelow>
           <ContentBlock>
-            <LegislatorInfo legislator={legislator} />
+            <LegislatorInfo
+              legislator={legislator}
+              isLegislatorActive={isLegislatorActive}
+            />
             <LegislatorStatistics
               committees={legislator.committees}
-              proposalSuccessCount={
-                LegislatorStatisticsMockData.proposalSuccessCount
-              }
-              meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
-              meetingTermCountInfo={
-                LegislatorStatisticsMockData.meetingTermCountInfo
-              }
+              proposalSuccessCount={legislator.proposalSuccessCount}
+              meetingTermCount={legislator.meetingTermCount}
+              meetingTermCountInfo={legislator.meetingTermCountInfo}
             />
             <ListContainer>
               <LegislatorList

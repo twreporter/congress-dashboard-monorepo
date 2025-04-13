@@ -172,6 +172,7 @@ export const useLegislativeMeetingFilters = (
     filterCount,
     filterValues,
     handleFilterValueChange,
+    legislativeMeetingState,
     legislativeMeetingSessionState,
     filterOptions,
   }

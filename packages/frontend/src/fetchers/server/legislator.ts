@@ -4,17 +4,17 @@ import { keystoneFetch } from '@/app/api/graphql/keystone'
  *   fetch legislative with given slug and in given term
  */
 export type LegislatorFromRes = {
-  slug: string
+  proposalSuccessCount?: number
   party: {
     name: string
-    image: {
+    image?: {
       imageFile: {
         url: string
       }
     }
-    imageLink: string
+    imageLink?: string
   }
-  note: string
+  note?: string
   legislativeMeeting: {
     term: number
   }
@@ -31,12 +31,15 @@ export type LegislatorFromRes = {
   legislator: {
     name: string
     slug: string
-    image: {
+    image?: {
       imageFile: {
         url: string
       }
     }
-    imageLink: string
+    imageLink?: string
+    externalLink?: string
+    meetingTermCount?: number
+    meetingTermCountInfo?: string
   }
 }
 
@@ -62,6 +65,7 @@ export const fetchLegislator = async ({
   const query = `
     query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
       legislativeYuanMembers(where: $where) {
+        proposalSuccessCount
         party {
           name
           image {
@@ -86,6 +90,9 @@ export const fetchLegislator = async ({
             }
           }
           imageLink
+          externalLink
+          meetingTermCount
+          meetingTermCountInfo
         }
         sessionAndCommittee {
           committee {

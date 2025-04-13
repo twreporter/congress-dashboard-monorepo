@@ -13,6 +13,8 @@ import {
   DesktopAndAbove,
   TabletAndBelow,
 } from '@twreporter/react-components/lib/rwd'
+import { IconButton } from '@twreporter/react-components/lib/button'
+import { OpenInNew } from '@twreporter/react-components/lib/icon'
 // styles
 import { H3Gray900, P1Gray800 } from '@/components/legislator/styles'
 // components
@@ -142,10 +144,24 @@ const Badge = styled.div`
 const BadgeText = styled(P2)`
   color: ${colorSupportive.heavy};
 `
+
+const ExternalLinkButton = styled(IconButton)`
+  width: 24px;
+  height: 24px;
+`
+
 type LegislatorInfoProps = {
   legislator: Legislator
+  isLegislatorActive?: boolean
 }
-const LegislatorInfo: React.FC<LegislatorInfoProps> = ({ legislator }) => {
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
+  legislator,
+  isLegislatorActive = false,
+}) => {
+  const handleExternalLinkClick = () => {
+    window.open(legislator.externalLink, '_blank')
+  }
   return (
     <LegislatorInfoDiv>
       <LegislatorImageContainer>
@@ -165,6 +181,16 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({ legislator }) => {
       <LegislatorDetail>
         <LegislatorInfoTitle>
           <H3Gray900 text={legislator.name} />
+          {legislator.externalLink ? (
+            <ExternalLinkButton
+              iconComponent={
+                <OpenInNew
+                  releaseBranch={releaseBranch}
+                  onClick={handleExternalLinkClick}
+                />
+              }
+            />
+          ) : null}
         </LegislatorInfoTitle>
         <LegislatorInfoContent>
           <InfoItem>
@@ -173,7 +199,7 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({ legislator }) => {
               weight={P1.Weight.BOLD}
               text={`第${legislator.meetingTerm}屆立法委員`}
             />
-            {legislator.isActive ? (
+            {isLegislatorActive ? (
               <Badge>
                 <BadgeText text={'現任'} />
               </Badge>

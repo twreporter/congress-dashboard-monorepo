@@ -154,7 +154,9 @@ const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
         <CountInfo>
           <CountInfoTitle>
             <P1Gray800 text="立委任期屆數" />
-            <Tooltip tooltip={meetingTermCountInfo} />
+            {meetingTermCountInfo ? (
+              <Tooltip tooltip={meetingTermCountInfo} />
+            ) : null}
           </CountInfoTitle>
           <CountInfoValue $isOverMaxNumber={isOverMaxCount}>
             {meetingTermCount > 999 ? '999+' : meetingTermCount}
