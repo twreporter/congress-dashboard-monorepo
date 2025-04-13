@@ -117,6 +117,7 @@ const Topic: React.FC<TopicPageProps> = ({
           />
           <TopicRelatedArticles />
           <TopicOthersWatching
+            othersWatchingTags={topic?.relatedTopics}
             currentMeetingTerm={currentMeetingTerm}
             currentMeetingSession={currentMeetingSession}
           />
@@ -140,6 +141,7 @@ const Topic: React.FC<TopicPageProps> = ({
           <TopicRelatedArticles />
           <Spacing $height={8} />
           <TopicOthersWatching
+            othersWatchingTags={topic?.relatedTopics}
             currentMeetingTerm={currentMeetingTerm}
             currentMeetingSession={currentMeetingSession}
           />

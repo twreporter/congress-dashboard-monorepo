@@ -27,6 +27,10 @@ export type TopicData = {
   title: string
   speechesCount?: number
   speeches?: SpeechData[]
+  relatedTopics?: {
+    slug: string
+    title: string
+  }[]
 }
 
 export const fetchTopic = async ({
@@ -93,6 +97,10 @@ export const fetchTopic = async ({
             slug
             title
             speechesCount(where: $speechesWhere)
+            relatedTopics {
+              slug
+              title
+            }
           }
         }
       `,
