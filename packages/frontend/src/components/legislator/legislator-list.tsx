@@ -37,6 +37,7 @@ const LegislatorContainer = styled.div`
   gap: 32px;
   display: flex;
   overflow-x: scroll;
+  scrollbar-width: none;
   a {
     text-decoration: none;
   }

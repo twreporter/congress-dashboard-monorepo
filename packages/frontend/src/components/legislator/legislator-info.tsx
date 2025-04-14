@@ -4,7 +4,6 @@ import styled from 'styled-components'
 // @twreporter
 import {
   colorGrayscale,
-  colorOpacity,
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -65,7 +64,7 @@ const LegislatorImage = styled.img`
   width: 300px;
   aspect-ratio: 3.5 / 4.5;
   border-radius: 8px 8px 0 0;
-  border: 1px solid ${colorOpacity['black_0.05']};
+  border: 1px solid rgba(0, 0, 0, 0.07);
   ${mq.desktopOnly`
     width: 272px;
   `}
