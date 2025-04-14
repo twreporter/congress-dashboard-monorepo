@@ -125,7 +125,8 @@ export const useLegislativeMeetingFilters = (
       type: SelectorType.Single,
       disabled: false,
       label: '屆期',
-      value: 'meeting',
+      key: 'meeting',
+      defaultValue: currentMeetingTerm.toString(),
       isLoading: legislativeMeetingState.isLoading,
       options: _.map(
         legislativeMeetingState.legislativeMeeting,
@@ -138,9 +139,9 @@ export const useLegislativeMeetingFilters = (
     {
       type: SelectorType.Multiple,
       disabled: false,
-      defaultValue: ['all'],
+      defaultValue: currentMeetingSession.map(String),
       label: '會期',
-      value: 'meetingSession',
+      key: 'meetingSession',
       isLoading: legislativeMeetingSessionState.isLoading,
       options: [
         { label: '全部會期', value: 'all', isDeletable: false },
@@ -171,6 +172,7 @@ export const useLegislativeMeetingFilters = (
     filterCount,
     filterValues,
     handleFilterValueChange,
+    legislativeMeetingState,
     legislativeMeetingSessionState,
     filterOptions,
   }

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 // @twreporter
 import {
@@ -16,7 +16,7 @@ import ContentPageLayout from '@/components/layout/content-page-layout'
 // styles
 import {
   ContentBlock,
-  FLexDiv,
+  DesktopContainer,
   DesktopAsideLeft,
   DesktopAsideRight,
   ListContainer,
@@ -32,8 +32,6 @@ import { useLegislatorData } from '@/components/legislator/hooks/use-legislator-
 import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
-// mock data
-import { LegislatorStatisticsMockData } from '@/components/legislator/mockData'
 
 type LegislatorProps = {
   legislatorData: LegislatorFromRes
@@ -48,13 +46,15 @@ const Legislator: React.FC<LegislatorProps> = ({
   currentMeetingSession,
 }) => {
   const router = useRouter()
+  const [filterCount, setFilterCount] = useState<number>(0)
+  const [isLegislatorActive, setIsLegislatorActive] = useState<boolean>(false)
 
   const {
     isFilterOpen,
     setIsFilterOpen,
-    filterCount,
     filterValues,
     handleFilterValueChange,
+    legislativeMeetingState,
     legislativeMeetingSessionState,
     filterOptions,
   } = useLegislativeMeetingFilters(currentMeetingTerm, currentMeetingSession)
@@ -105,31 +105,64 @@ const Legislator: React.FC<LegislatorProps> = ({
 
   const pageTitle = `${legislator.name} 的相關發言摘要`
 
+  useEffect(() => {
+    if (legislativeMeetingSessionState.legislativeMeetingSessions?.length > 0) {
+      const allAvailableSessions =
+        legislativeMeetingSessionState.legislativeMeetingSessions.map(
+          ({ term }) => term
+        )
+      const hasAllSessions =
+        allAvailableSessions.length === currentMeetingSession.length &&
+        allAvailableSessions.every((session) =>
+          currentMeetingSession.includes(session)
+        )
+      if (hasAllSessions) {
+        setFilterCount(0)
+      } else {
+        setFilterCount(currentMeetingSession.length)
+      }
+    }
+  }, [
+    currentMeetingTerm,
+    currentMeetingSession,
+    legislativeMeetingSessionState,
+  ])
+
+  useEffect(() => {
+    // if the legislator's meeting term matches the latest meeting term, set isLegislatorActive to true
+    if (
+      legislatorData.legislativeMeeting.term ===
+      legislativeMeetingState?.legislativeMeeting[0]?.term
+    ) {
+      setIsLegislatorActive(true)
+    } else {
+      setIsLegislatorActive(false)
+    }
+  }, [legislativeMeetingState, legislatorData])
+
   return (
     <>
       <ContentPageLayout
         title={pageTitle}
         currentMeetingTerm={currentMeetingTerm}
-        filterValues={filterValues}
         filterCount={filterCount}
         onFilterClick={openFilter}
       >
         <DesktopAndAbove>
-          <FLexDiv>
+          <DesktopContainer>
             <DesktopAsideLeft>
-              <LegislatorInfo legislator={legislator} />
+              <LegislatorInfo
+                legislator={legislator}
+                isLegislatorActive={isLegislatorActive}
+              />
               <Feedback />
             </DesktopAsideLeft>
             <DesktopAsideRight>
               <LegislatorStatistics
                 committees={legislator.committees}
-                proposalSuccessCount={
-                  LegislatorStatisticsMockData.proposalSuccessCount
-                }
-                meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
-                meetingTermCountInfo={
-                  LegislatorStatisticsMockData.meetingTermCountInfo
-                }
+                proposalSuccessCount={legislator.proposalSuccessCount}
+                meetingTermCount={legislator.meetingTermCount}
+                meetingTermCountInfo={legislator.meetingTermCountInfo}
               />
               <ListContainer>
                 <LegislatorList
@@ -141,20 +174,19 @@ const Legislator: React.FC<LegislatorProps> = ({
                 />
               </ListContainer>
             </DesktopAsideRight>
-          </FLexDiv>
+          </DesktopContainer>
         </DesktopAndAbove>
         <TabletAndBelow>
           <ContentBlock>
-            <LegislatorInfo legislator={legislator} />
+            <LegislatorInfo
+              legislator={legislator}
+              isLegislatorActive={isLegislatorActive}
+            />
             <LegislatorStatistics
               committees={legislator.committees}
-              proposalSuccessCount={
-                LegislatorStatisticsMockData.proposalSuccessCount
-              }
-              meetingTermCount={LegislatorStatisticsMockData.meetingTermCount}
-              meetingTermCountInfo={
-                LegislatorStatisticsMockData.meetingTermCountInfo
-              }
+              proposalSuccessCount={legislator.proposalSuccessCount}
+              meetingTermCount={legislator.meetingTermCount}
+              meetingTermCountInfo={legislator.meetingTermCountInfo}
             />
             <ListContainer>
               <LegislatorList

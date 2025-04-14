@@ -10,8 +10,6 @@ import { H4Title } from '@/components/topic/styles'
 import { Issue } from '@/components/sidebar/follow-more'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
-// mock data
-import { othersWatchingTags } from '@/components/topic/mockData'
 
 const OthersWatchingBlock = styled.div`
   display: flex;
@@ -37,22 +35,27 @@ const OthersWatchingBlock = styled.div`
 const TopicsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   a {
     text-decoration: none;
   }
 `
 
 type TopicOthersWatchingProps = {
+  othersWatchingTags?: {
+    title: string
+    slug: string
+  }[]
   currentMeetingTerm: number
   currentMeetingSession: number[]
 }
 
 const TopicOthersWatching: React.FC<TopicOthersWatchingProps> = ({
+  othersWatchingTags = [],
   currentMeetingTerm,
   currentMeetingSession,
 }) => {
-  return (
+  return othersWatchingTags.length > 0 ? (
     <OthersWatchingBlock>
       <H4Title text="其他人也在關注" />
       <TopicsContainer>
@@ -65,12 +68,12 @@ const TopicOthersWatching: React.FC<TopicOthersWatchingProps> = ({
             )}`}
             key={`others-watching-tag-${index}`}
           >
-            <Issue name={tag.title} />
+            <Issue name={`#${tag.title}`} />
           </Link>
         ))}
       </TopicsContainer>
     </OthersWatchingBlock>
-  )
+  ) : null
 }
 
 export default TopicOthersWatching

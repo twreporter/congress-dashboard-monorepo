@@ -13,6 +13,8 @@ import {
   DesktopAndAbove,
   TabletAndBelow,
 } from '@twreporter/react-components/lib/rwd'
+import { IconButton } from '@twreporter/react-components/lib/button'
+import { OpenInNew } from '@twreporter/react-components/lib/icon'
 // styles
 import { H3Gray900, P1Gray800 } from '@/components/legislator/styles'
 // components
@@ -41,12 +43,29 @@ const LegislatorInfoDiv = styled.div`
 
 const LegislatorImageContainer = styled.div`
   position: relative;
+  height: fit-content;
+  width: 300px;
+  aspect-ratio: 3.5 / 4.5;
+  ${mq.desktopOnly`
+    width: 272px;
+  `}
+  ${mq.tabletOnly`
+    width: 164px;
+    aspect-ratio: 1/1;
+    height: 100%;
+  `}
+  ${mq.mobileOnly`
+    width: 144px;
+    aspect-ratio: 1/1;
+    height: 100%;
+  `}
 `
 
 const LegislatorImage = styled.img`
   width: 300px;
   aspect-ratio: 3.5 / 4.5;
   border-radius: 8px 8px 0 0;
+  border: 1px solid ${colorOpacity['black_0.05']};
   ${mq.desktopOnly`
     width: 272px;
   `}
@@ -54,14 +73,21 @@ const LegislatorImage = styled.img`
     width: 164px;
     aspect-ratio: 1/1;
     border-radius: 50%;
-    border: 1px solid ${colorOpacity['black_0.05']};
   `}
   ${mq.mobileOnly`
     width: 144px;
     aspect-ratio: 1/1;
     border-radius: 50%;
-    border: 1px solid ${colorOpacity['black_0.05']};
   `}
+`
+
+const Mask = styled.div`
+  opacity: 0.1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 100%);
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 80px;
 `
 
 const PartyTagContainer = styled.div`
@@ -77,6 +103,7 @@ const PartyTagContainer = styled.div`
 `
 
 const LegislatorDetail = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -91,6 +118,7 @@ const LegislatorInfoTitle = styled.div`
   display: flex;
   flex-direction: row;
   gap: 12px;
+  align-items: center;
 `
 
 const LegislatorInfoContent = styled.div`
@@ -117,14 +145,31 @@ const Badge = styled.div`
 const BadgeText = styled(P2)`
   color: ${colorSupportive.heavy};
 `
+
+const ExternalLinkButton = styled(IconButton)`
+  width: 24px;
+  height: 24px;
+`
+
 type LegislatorInfoProps = {
   legislator: Legislator
+  isLegislatorActive?: boolean
 }
-const LegislatorInfo: React.FC<LegislatorInfoProps> = ({ legislator }) => {
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
+  legislator,
+  isLegislatorActive = false,
+}) => {
+  const handleExternalLinkClick = () => {
+    window.open(legislator.externalLink, '_blank')
+  }
   return (
     <LegislatorInfoDiv>
       <LegislatorImageContainer>
         <LegislatorImage src={legislator.avatar} />
+        <DesktopAndAbove>
+          <Mask />
+        </DesktopAndAbove>
         <PartyTagContainer>
           <DesktopAndAbove>
             <PartyTag size={TagSize.XXL} avatar={legislator.party.image} />
@@ -137,6 +182,16 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({ legislator }) => {
       <LegislatorDetail>
         <LegislatorInfoTitle>
           <H3Gray900 text={legislator.name} />
+          {legislator.externalLink ? (
+            <ExternalLinkButton
+              iconComponent={
+                <OpenInNew
+                  releaseBranch={releaseBranch}
+                  onClick={handleExternalLinkClick}
+                />
+              }
+            />
+          ) : null}
         </LegislatorInfoTitle>
         <LegislatorInfoContent>
           <InfoItem>
@@ -145,7 +200,7 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({ legislator }) => {
               weight={P1.Weight.BOLD}
               text={`第${legislator.meetingTerm}屆立法委員`}
             />
-            {legislator.isActive ? (
+            {isLegislatorActive ? (
               <Badge>
                 <BadgeText text={'現任'} />
               </Badge>

@@ -28,7 +28,7 @@ export const useTopicData = (topic: TopicData | null) => {
       ([slug, speeches]) => ({
         name: speeches[0].legislativeYuanMember.legislator.name,
         slug,
-        imageLink: getImageLink(speeches[0].legislativeYuanMember.legislator),
+        avatar: getImageLink(speeches[0].legislativeYuanMember.legislator),
         count: speeches.length,
       })
     )

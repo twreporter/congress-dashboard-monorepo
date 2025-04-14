@@ -57,6 +57,7 @@ const Header = styled.div`
   color: ${colorGrayscale.gray800};
   position: relative;
   background-color: ${colorGrayscale.white};
+  border-radius: 8px;
   ${mq.mobileOnly`
     border-bottom: 1px solid ${colorGrayscale.gray300};
     position: fixed;
@@ -87,6 +88,7 @@ const Footer = styled.div`
   align-items: center;
   gap: 16px;
   background-color: ${colorGrayscale.white};
+  border-radius: 8px;
   ${mq.mobileOnly`
     padding: 24px;
     gap: 10px;
@@ -152,7 +154,7 @@ export type FilterOption = {
   type: SelectorType
   disabled?: boolean
   label: string
-  value: string
+  key: string
   options: Option[] | OptionGroup[]
   defaultValue?: string | string[]
   isLoading?: boolean
@@ -186,9 +188,9 @@ const FilterModal: React.FC<FilterModelProps> = ({
     const defaults: FilterModalValueType = {}
     options.forEach((option) => {
       if (option.type === SelectorType.Single) {
-        defaults[option.value] = option.defaultValue || ''
+        defaults[option.key] = option.defaultValue || ''
       } else if (option.type === SelectorType.Multiple) {
-        defaults[option.value] = option.defaultValue || []
+        defaults[option.key] = option.defaultValue || []
       }
     })
     return { ...defaults, ...initialValues }
@@ -252,7 +254,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                 type,
                 disabled,
                 label,
-                value: optionValue,
+                key: optionKey,
                 options: selectOptions,
                 isLoading,
                 defaultValue,
@@ -261,15 +263,15 @@ const FilterModal: React.FC<FilterModelProps> = ({
             ) => {
               if (type === SelectorType.Single) {
                 return (
-                  <SelectContainer key={`single-select-${optionValue}-${idx}`}>
+                  <SelectContainer key={`single-select-${optionKey}-${idx}`}>
                     <Label text={label} />
                     <SelectorContainer>
                       <SingleSelect
                         disabled={disabled}
                         options={selectOptions}
-                        value={filterValue[optionValue] as string}
+                        value={filterValue[optionKey] as string}
                         onChange={(selectedValue) =>
-                          handleValueChange(optionValue, selectedValue)
+                          handleValueChange(optionKey, selectedValue)
                         }
                         loading={isLoading}
                       />
@@ -278,16 +280,16 @@ const FilterModal: React.FC<FilterModelProps> = ({
                 )
               } else if (type === SelectorType.Multiple) {
                 return (
-                  <SelectContainer key={`multi-select-${optionValue}-${idx}`}>
+                  <SelectContainer key={`multi-select-${optionKey}-${idx}`}>
                     <Label text={label} />
                     <SelectorContainer>
                       <MultipleSelect
                         disabled={disabled}
                         options={selectOptions}
-                        value={filterValue[optionValue] as string[]}
+                        value={filterValue[optionKey] as string[]}
                         defaultValue={defaultValue as string[]}
                         onChange={(selectedValue) =>
-                          handleValueChange(optionValue, selectedValue)
+                          handleValueChange(optionKey, selectedValue)
                         }
                         loading={isLoading}
                       />

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 // twreporter
 import {
@@ -21,7 +21,7 @@ import {
   TopicListContainer,
 } from '@/components/topic/styles'
 //  fetcher
-import { type TopicData } from '@/fetchers/topic'
+import { type TopicData } from '@/fetchers/server/topic'
 // custom hooks
 import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
 import { useTopicData } from '@/components/topic/hooks/use-topic-data'
@@ -38,12 +38,12 @@ const Topic: React.FC<TopicPageProps> = ({
   currentMeetingSession,
 }) => {
   const router = useRouter()
+  const [filterCount, setFilterCount] = useState<number>(0)
 
   // Custom hooks
   const {
     isFilterOpen,
     setIsFilterOpen,
-    filterCount,
     filterValues,
     handleFilterValueChange,
     legislativeMeetingSessionState,
@@ -92,12 +92,34 @@ const Topic: React.FC<TopicPageProps> = ({
 
   const pageTitle = `#${topic?.title} 的相關發言摘要`
 
+  useEffect(() => {
+    if (legislativeMeetingSessionState.legislativeMeetingSessions?.length > 0) {
+      const allAvailableSessions =
+        legislativeMeetingSessionState.legislativeMeetingSessions.map(
+          ({ term }) => term
+        )
+      const hasAllSessions =
+        allAvailableSessions.length === currentMeetingSession.length &&
+        allAvailableSessions.every((session) =>
+          currentMeetingSession.includes(session)
+        )
+      if (hasAllSessions) {
+        setFilterCount(0)
+      } else {
+        setFilterCount(currentMeetingSession.length)
+      }
+    }
+  }, [
+    currentMeetingTerm,
+    currentMeetingSession,
+    legislativeMeetingSessionState,
+  ])
+
   return (
     <>
       <ContentPageLayout
         title={pageTitle}
         currentMeetingTerm={currentMeetingTerm}
-        filterValues={filterValues}
         filterCount={filterCount}
         onFilterClick={openFilter}
       >
@@ -118,6 +140,7 @@ const Topic: React.FC<TopicPageProps> = ({
           />
           <TopicRelatedArticles />
           <TopicOthersWatching
+            othersWatchingTags={topic?.relatedTopics}
             currentMeetingTerm={currentMeetingTerm}
             currentMeetingSession={currentMeetingSession}
           />
@@ -141,6 +164,7 @@ const Topic: React.FC<TopicPageProps> = ({
           <TopicRelatedArticles />
           <Spacing $height={8} />
           <TopicOthersWatching
+            othersWatchingTags={topic?.relatedTopics}
             currentMeetingTerm={currentMeetingTerm}
             currentMeetingSession={currentMeetingSession}
           />
