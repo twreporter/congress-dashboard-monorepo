@@ -118,6 +118,7 @@ const LegislatorInfoTitle = styled.div`
   display: flex;
   flex-direction: row;
   gap: 12px;
+  align-items: center;
 `
 
 const LegislatorInfoContent = styled.div`
