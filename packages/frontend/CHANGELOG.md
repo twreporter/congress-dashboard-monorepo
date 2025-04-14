@@ -14,11 +14,14 @@
   - topic fetch for server
   - filter count for topic page
   - handle onClick on IconButton
+  - update changelog
 - chore
   - update @twreporter packages
 
 ### Commits
 
+- [[`bb00aeb706`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bb00aeb706)] - **fix(frontend)**: update changelog (Lucien)
+- [[`3f09ccc0c0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3f09ccc0c0)] - **fix(frontend)**: update changelog (Lucien)
 - [[`e527697212`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e527697212)] - **fix(frontend)**: handle onClick on IconButton (Lucien)
 - [[`dfb8d1c176`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dfb8d1c176)] - **fix(frontend)**: filter count for topic page (Lucien)
 - [[`d7a674a153`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d7a674a153)] - **fix(frontend)**: topic fetch for server (Lucien)
@@ -29,6 +32,8 @@
 - [[`7d9f6b8f69`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7d9f6b8f69)] - **fix(frontend)**: change filter option naming value to key (Lucien)
 - [[`ed353d93b8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ed353d93b8)] - **fix(frontend)**: fix defects for legislator page (Lucien)
 - [[`ec2597dba1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec2597dba1)] - **feat(frontend)**: change legislator route to lawmaker (Lucien)
+
+
 
 ## 0.0.3-beta.11, 2025-04-14
 

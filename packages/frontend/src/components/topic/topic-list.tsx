@@ -23,7 +23,8 @@ import { type TabProps } from '@/components/sidebar/tab'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
 // fetcher
-import { type SpeechData, fetchTopTopicsForLegislator } from '@/fetchers/topic'
+import { fetchTopTopicsForLegislator } from '@/fetchers/topic'
+import { type SpeechData } from '@/fetchers/server/topic'
 // lodash
 import get from 'lodash/get'
 const _ = {
