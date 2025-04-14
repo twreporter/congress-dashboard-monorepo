@@ -57,6 +57,7 @@ const Header = styled.div`
   color: ${colorGrayscale.gray800};
   position: relative;
   background-color: ${colorGrayscale.white};
+  border-radius: 8px;
   ${mq.mobileOnly`
     border-bottom: 1px solid ${colorGrayscale.gray300};
     position: fixed;
@@ -87,6 +88,7 @@ const Footer = styled.div`
   align-items: center;
   gap: 16px;
   background-color: ${colorGrayscale.white};
+  border-radius: 8px;
   ${mq.mobileOnly`
     padding: 24px;
     gap: 10px;
