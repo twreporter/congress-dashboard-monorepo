@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.0.3-beta.12, 2025-04-14
+
+### Notable Changes
+  - change legislator route to lawmaker
+    - fix defects for legislator page
+    - change filter option naming value to key
+    - topic page defect
+    - use data from api for legislator page
+    - use data from api for topic page
+    - topic fetch for server
+    - filter count for topic page
+    - handle onClick on IconButton
+  - chore
+    - update @twreporter packages
+
+### Commits
+
+- [[`e527697212`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e527697212)] - **fix(frontend)**: handle onClick on IconButton (Lucien)
+- [[`dfb8d1c176`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dfb8d1c176)] - **fix(frontend)**: filter count for topic page (Lucien)
+- [[`d7a674a153`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d7a674a153)] - **fix(frontend)**: topic fetch for server (Lucien)
+- [[`e95ef23242`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e95ef23242)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`45bc91c4bb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/45bc91c4bb)] - **feat(frontend)**: use data from api for topic page (Lucien)
+- [[`7ea2ebcc38`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7ea2ebcc38)] - **feat(frontend)**: use data from api for legislator page (Lucien)
+- [[`1152f5b461`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1152f5b461)] - **fix(frontend)**: topic page defect (Lucien)
+- [[`7d9f6b8f69`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7d9f6b8f69)] - **fix(frontend)**: change filter option naming value to key (Lucien)
+- [[`ed353d93b8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ed353d93b8)] - **fix(frontend)**: fix defects for legislator page (Lucien)
+- [[`ec2597dba1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec2597dba1)] - **feat(frontend)**: change legislator route to lawmaker (Lucien)
+
 ## 0.0.3-beta.11, 2025-04-14
 
 ### Notable Changes
