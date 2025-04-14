@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.13, 2025-04-14
+
+### Notable Changes
+
+- fix
+  - fix type import
+
+### Commits
+
+- [[`be816e72cb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/be816e72cb)] - **fix(frontend)**: fix type import (Lucien)
+
 ## 0.0.3-beta.12, 2025-04-14
 
 ### Notable Changes
@@ -32,8 +43,6 @@
 - [[`7d9f6b8f69`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7d9f6b8f69)] - **fix(frontend)**: change filter option naming value to key (Lucien)
 - [[`ed353d93b8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ed353d93b8)] - **fix(frontend)**: fix defects for legislator page (Lucien)
 - [[`ec2597dba1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec2597dba1)] - **feat(frontend)**: change legislator route to lawmaker (Lucien)
-
-
 
 ## 0.0.3-beta.11, 2025-04-14
 
