@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 // fetcher
-import { type TopicData } from '@/fetchers/topic'
+import { type TopicData } from '@/fetchers/server/topic'
 // util
 import { getImageLink } from '@/fetchers/utils'
 // lodash

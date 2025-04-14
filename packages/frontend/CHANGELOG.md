@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.13, 2025-04-14
+
+### Notable Changes
+
+- fix
+  - fix type import
+
+### Commits
+
+- [[`be816e72cb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/be816e72cb)] - **fix(frontend)**: fix type import (Lucien)
+
 ## 0.0.3-beta.12, 2025-04-14
 
 ### Notable Changes
@@ -14,11 +25,14 @@
   - topic fetch for server
   - filter count for topic page
   - handle onClick on IconButton
+  - update changelog
 - chore
   - update @twreporter packages
 
 ### Commits
 
+- [[`bb00aeb706`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bb00aeb706)] - **fix(frontend)**: update changelog (Lucien)
+- [[`3f09ccc0c0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3f09ccc0c0)] - **fix(frontend)**: update changelog (Lucien)
 - [[`e527697212`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e527697212)] - **fix(frontend)**: handle onClick on IconButton (Lucien)
 - [[`dfb8d1c176`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dfb8d1c176)] - **fix(frontend)**: filter count for topic page (Lucien)
 - [[`d7a674a153`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d7a674a153)] - **fix(frontend)**: topic fetch for server (Lucien)
