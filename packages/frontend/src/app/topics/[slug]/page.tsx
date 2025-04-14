@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 // components
 import TopicPage from '@/components/topic'
 // fetcher
-import { fetchTopic } from '@/fetchers/topic'
+import { fetchTopic } from '@/fetchers/server/topic'
 // utils
 import { validateMeetingParams } from '@/utils/validate-meeting-params'
 
