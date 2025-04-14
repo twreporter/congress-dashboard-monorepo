@@ -70,7 +70,7 @@ const LoadingBox = styled.div`
     animation: ${spin} 1s linear infinite;
   }
 `
-const Loader: React.FC = () => (
+export const Loader: React.FC = () => (
   <LoadingBox>
     <Loading releaseBranch={releaseBranch} />
   </LoadingBox>
@@ -95,6 +95,7 @@ const ContentBox = styled.div<{ $show: boolean }>`
 const FilterBox = styled.div<{ $show: boolean }>`
   ${(props) => (props.$show ? '' : 'display: none;')}
   height: 100%;
+  position: relative;
 `
 const Body = styled.div`
   display: flex;

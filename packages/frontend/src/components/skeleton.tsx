@@ -83,6 +83,7 @@ export const ImageWithSkeleton: React.FC<ImageProps> = (props) => {
       placeholder="blur"
       blurDataURL={`data:image/png;base64, ${gray200Base64}`}
       style={imageStyle}
+      unoptimized={false}
     />
   )
 }
