@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.0.3-beta.11, 2025-04-14
+
+### Notable Changes
+
+- fix
+  - style defects in sidebar & filter modal
+
+### Commits
+
+- [[`bd9122363a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bd9122363a)] - **fix(frontend)**: card width defect in width < 375px (Aylie Chou)
+- [[`5cbcc3cea1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5cbcc3cea1)] - **fix(frontend)**: add error UI in filter modal (Aylie Chou)
+- [[`3f475756bd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3f475756bd)] - **fix(frontend)**: fix card animation in dashboard (Aylie Chou)
+- [[`16163b80a3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/16163b80a3)] - **fix(frontend)**: add animation & loading in filter (Aylie Chou)
+- [[`c0cbf7c64c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c0cbf7c64c)] - **fix(frontend)**: defects in sidebar filter modal (Aylie Chou)
+
 ## 0.0.3-beta.10, 2025-04-10
 
 ### Notable Changes
