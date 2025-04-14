@@ -4,7 +4,7 @@
 
 ### Notable Changes
 
--fix
+- fix
   - change legislator route to lawmaker
   - fix defects for legislator page
   - change filter option naming value to key
