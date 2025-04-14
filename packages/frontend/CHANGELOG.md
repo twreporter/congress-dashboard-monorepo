@@ -3,17 +3,19 @@
 ## 0.0.3-beta.12, 2025-04-14
 
 ### Notable Changes
+
+-fix
   - change legislator route to lawmaker
-    - fix defects for legislator page
-    - change filter option naming value to key
-    - topic page defect
-    - use data from api for legislator page
-    - use data from api for topic page
-    - topic fetch for server
-    - filter count for topic page
-    - handle onClick on IconButton
-  - chore
-    - update @twreporter packages
+  - fix defects for legislator page
+  - change filter option naming value to key
+  - topic page defect
+  - use data from api for legislator page
+  - use data from api for topic page
+  - topic fetch for server
+  - filter count for topic page
+  - handle onClick on IconButton
+- chore
+  - update @twreporter packages
 
 ### Commits
 
