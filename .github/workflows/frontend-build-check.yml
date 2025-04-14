@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Has to be run before actions/setup-node.
+      # See: https://github.com/actions/setup-node/issues/480
+      - name: Enable corepack for yarn
+        run: corepack enable
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
