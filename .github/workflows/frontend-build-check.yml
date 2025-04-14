@@ -1,0 +1,30 @@
+name: Frontend Build Check
+
+on:
+  pull_request:
+    paths: # 只在 frontend 或相關根目錄檔案變動時觸發
+      - 'packages/frontend/**'
+      - 'yarn.lock'
+      - 'package.json'
+      - '.yarnrc.yml'
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --immutable # 使用 --immutable 或 --frozen-lockfile 確保 lock 檔一致
+
+      - name: Build frontend package
+        run: yarn workspace @twreporter/congress-dashboard-shared build && yarn workspace @twreporter/congress-dashboard-frontend build # 先 build shared 再 build frontend
+        working-directory: ./ # 在根目錄執行 workspace 指令
