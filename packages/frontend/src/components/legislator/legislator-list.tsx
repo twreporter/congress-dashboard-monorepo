@@ -148,7 +148,11 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
             <LegislatorContainer>
               {legislatorList.map((props, index: number) => (
                 <Link
-                  href={`${InternalRoutes.Legislator}/${props.slug}`}
+                  href={`${InternalRoutes.Legislator}/${
+                    props.slug
+                  }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
+                    currentMeetingSession
+                  )}`}
                   key={`follow-more-legislator-${index}`}
                 >
                   <Legislator {...props} />
