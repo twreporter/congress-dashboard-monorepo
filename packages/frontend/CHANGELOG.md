@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.14, 2025-04-14
+
+### Notable Changes
+
+- fix
+  - apply rwd style for sidebar gap
+
+### Commits
+
+- [[`229723bf76`](https://github.com/twreporter/congress-dashboard-monorepo/commit/229723bf76)] - **fix(frontend)**: sidebar gap rwd (Aylie Chou)
+
 ## 0.0.3-beta.13, 2025-04-14
 
 ### Notable Changes
