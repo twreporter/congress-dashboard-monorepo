@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@google-cloud/logging": "^11.2.0",
-    "@twreporter/congress-dashboard-shared": "0.0.2-beta.0",
+    "@twreporter/congress-dashboard-shared": "0.0.3",
     "@twreporter/core": "^1.24.4",
     "@twreporter/react-components": "^9.7.0-rc.0",
     "lodash": "^4.17.21",
