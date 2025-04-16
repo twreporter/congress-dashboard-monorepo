@@ -39,7 +39,7 @@
   - filter count for topic page
   - handle onClick on IconButton
   - style defects in sidebar & filter modal
-  - fix legislator qraphql column
+  - fix legislator graphql column
   - use fetch for client SWR
   - use constants route
   - SSR req set connection header `close`
