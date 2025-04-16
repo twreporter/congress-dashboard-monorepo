@@ -1,6 +1,17 @@
 # Changelog
 
-## 0.0.3, 2024-05-23
+## 0.0.4-beta.0, 2025-04-16
+
+### Notable Changes
+
+- chore
+  - fix `yarn.lock` to use npm version @twreporter/shared
+
+### Commits
+
+- [[`8ab178ccf7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8ab178ccf7)] - **chore**: fix `yarn.lock` (Aylie Chou)
+
+## 0.0.3, 2025-04-16
 
 ### Notable Changes
 
