@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { SelectorType } from '@/components/selector'
-import { formatDateToYearMonth } from '@/utils/date-formatters'
+import { formatDate } from '@/utils/date-formatters'
 import {
   useLegislativeMeeting,
   useLegislativeMeetingSession,
@@ -156,9 +156,10 @@ export const useLegislativeMeetingFilters = (
             startTime: string
             endTime: string
           }) => ({
-            label: `第 ${term} 會期(${formatDateToYearMonth(
-              startTime
-            )}-${formatDateToYearMonth(endTime)})`,
+            label: `第 ${term} 會期(${formatDate(
+              startTime,
+              'YYYY/M'
+            )}-${formatDate(endTime, 'YYYY/M')})`,
             value: term.toString(),
           })
         ),

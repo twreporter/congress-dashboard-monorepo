@@ -21,7 +21,7 @@ export type SpeechFromRes = {
   ivodStartTime?: string
 }
 
-/* fetchSpeech
+/** fetchSpeech
  *  fetch speech with given slug
  */
 export const fetchSpeech = async ({
@@ -72,9 +72,9 @@ export const fetchSpeech = async ({
   }
 }
 
-/*
+/**
  * fetchSpeechGroup
- *  fetch speech group with given title and date
+ *  fetch speech group by given title and date
  */
 export const fetchSpeechGroup = async ({
   title,

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/navigation'
 // @twreporter
@@ -47,13 +47,9 @@ import { useScrollContext } from '@/contexts/scroll-context'
 import { type SpeechFromRes } from '@/fetchers/server/speech'
 // hooks
 import { useSpeechData } from '@/components/speech/hooks/use-speech-data'
+import { useScrollStage } from '@/components/speech/hooks/use-scroll-stage'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
-// lodash
-import throttle from 'lodash/throttle'
-const _ = {
-  throttle,
-}
 
 const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
   ${mq.desktopAndAbove`
@@ -66,8 +62,6 @@ const TabletAndBelowWithFlex = styled(TabletAndBelow)`
     display: flex !important;
   `}
 `
-
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 export enum FontSize {
   SMALL = 'small',
@@ -86,6 +80,10 @@ export enum Direction {
   NEXT = 'next',
 }
 
+// constants
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+const INTERSECTION_THRESHOLD = 0.5
+
 type SpeechPageProps = {
   speech: SpeechFromRes
   speechGroup: string[]
@@ -96,9 +94,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
   const { setTabElement, isHeaderHidden } = useScrollContext()
   const [fontSize, setFontSize] = useState(FontSize.SMALL)
   const [isControllBarHidden, setIsControllBarHidden] = useState(true)
-  const [scrollStage, setScrollStage] = useState(1)
-  const lastY = useRef(0)
-  const currentY = useRef(0)
+  const scrollStage = useScrollStage()
 
   useEffect(() => {
     if (leadingRef.current) {
@@ -113,7 +109,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
         setIsControllBarHidden(entry.isIntersecting)
       },
       {
-        threshold: 0.5,
+        threshold: INTERSECTION_THRESHOLD,
       }
     )
     observer.observe(leadingRef.current)
@@ -121,32 +117,6 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
       observer.disconnect()
     }
   }, [leadingRef])
-
-  useEffect(() => {
-    const handleScroll = _.throttle(() => {
-      const scrollThreshold = 16
-      lastY.current = window.pageYOffset
-      const scrollDistance = Math.abs(currentY.current - lastY.current)
-
-      if (scrollDistance < scrollThreshold) {
-        return
-      }
-
-      const scrollDirection = lastY.current > currentY.current ? 'down' : 'up'
-      currentY.current = lastY.current
-
-      if (scrollDirection === 'up') {
-        setScrollStage((prevStage) => (prevStage - 1 < 1 ? 1 : prevStage - 1))
-      } else {
-        setScrollStage((prevStage) => (prevStage + 1 > 3 ? 3 : prevStage + 1))
-      }
-    }, 500)
-
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
 
   const {
     slug,
@@ -163,31 +133,34 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
   const isFirstSpeech = speechGroup.indexOf(slug) === 0
   const isLastSpeech = speechGroup.indexOf(slug) === speechGroup.length - 1
 
-  const cycleFontSize = () => {
-    setFontSize((currentSize) => {
-      switch (currentSize) {
-        case FontSize.SMALL:
-          return FontSize.MEDIUM
-        case FontSize.MEDIUM:
-          return FontSize.LARGE
-        case FontSize.LARGE:
-        default:
-          return FontSize.SMALL
-      }
-    })
-  }
+  const cycleFontSize = useCallback(() => {
+    setFontSize((current) =>
+      current === FontSize.SMALL
+        ? FontSize.MEDIUM
+        : current === FontSize.MEDIUM
+        ? FontSize.LARGE
+        : FontSize.SMALL
+    )
+  }, [])
 
-  const handleSwitchSpeech = (direction: Direction) => {
-    const currentIndex = speechGroup.indexOf(slug)
-    if (direction === Direction.PREV && currentIndex > 0) {
-      router.push(`${InternalRoutes.Speech}/${speechGroup[currentIndex - 1]}`)
-    } else if (
-      direction === Direction.NEXT &&
-      currentIndex < speechGroup.length - 1
-    ) {
-      router.push(`${InternalRoutes.Speech}/${speechGroup[currentIndex + 1]}`)
-    }
-  }
+  const handleSwitchSpeech = useCallback(
+    (direction: Direction) => {
+      const idx = speechGroup.indexOf(slug)
+      if (direction === Direction.PREV && idx > 0) {
+        router.push(`${InternalRoutes.Speech}/${speechGroup[idx - 1]}`)
+      }
+      if (direction === Direction.NEXT && idx < speechGroup.length - 1) {
+        router.push(`${InternalRoutes.Speech}/${speechGroup[idx + 1]}`)
+      }
+    },
+    [router, speechGroup, slug]
+  )
+
+  // memoize props passed repeatedly
+  const asideInfoProps = useMemo(
+    () => ({ legislator, attendee, relatedTopics }),
+    [legislator, attendee, relatedTopics]
+  )
 
   return (
     <SpeechContainer>
@@ -257,28 +230,16 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
       <BodyContainer>
         <DesktopAndAboveWithFlex>
           <AsideBlock>
-            <SpeechAsideInfo
-              legislator={legislator}
-              attendee={attendee}
-              relatedTopics={relatedTopics}
-            />
+            <SpeechAsideInfo {...asideInfoProps} />
             <SpeechAsideToolBar
               onFontSizeChange={cycleFontSize}
               currentFontSize={fontSize}
             />
-            <SpeechAsideInfo
-              legislator={legislator}
-              attendee={attendee}
-              relatedTopics={relatedTopics}
-            />
+            <SpeechAsideInfo {...asideInfoProps} />
           </AsideBlock>
         </DesktopAndAboveWithFlex>
         <TabletAndBelowWithFlex>
-          <SpeechAsideInfo
-            legislator={legislator}
-            attendee={attendee}
-            relatedTopics={relatedTopics}
-          />
+          <SpeechAsideInfo {...asideInfoProps} />
         </TabletAndBelowWithFlex>
         <ContentBlock>
           <SpeechSummary
@@ -292,11 +253,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
           />
         </ContentBlock>
         <TabletAndBelowWithFlex>
-          <SpeechAsideInfo
-            legislator={legislator}
-            attendee={attendee}
-            relatedTopics={relatedTopics}
-          />
+          <SpeechAsideInfo {...asideInfoProps} />
         </TabletAndBelowWithFlex>
         <DesktopAndAboveWithFlex>
           <Feedback>
@@ -321,4 +278,4 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
   )
 }
 
-export default SpeechPage
+export default React.memo(SpeechPage)

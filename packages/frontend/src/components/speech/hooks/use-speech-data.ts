@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 // fetcher
 import { type SpeechFromRes } from '@/fetchers/server/speech'
+// utils
+import { formatDate } from '@/utils/date-formatters'
 
 export type SpeechData = {
   slug: string
@@ -11,7 +13,7 @@ export type SpeechData = {
     slug: string
   }
   attendee: string
-  topics: {
+  relatedTopics: {
     title: string
     slug: string
   }[]
@@ -28,7 +30,7 @@ const summaryParser = (summary: string): string | string[] => {
   return summary
 }
 
-export const useSpeechData = (speechData: SpeechFromRes) => {
+export const useSpeechData = (speechData: SpeechFromRes): SpeechData => {
   return useMemo(() => {
     const {
       slug,
@@ -44,7 +46,7 @@ export const useSpeechData = (speechData: SpeechFromRes) => {
 
     return {
       slug,
-      date,
+      date: formatDate(date, 'YYYY/M/D'),
       title,
       legislator,
       attendee,
