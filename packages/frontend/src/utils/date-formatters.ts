@@ -36,17 +36,24 @@ export const formatDate = (
   const hours = dateObj.getHours()
   const minutes = dateObj.getMinutes()
   const seconds = dateObj.getSeconds()
-  return format
-    .replace(/YYYY/g, `${year}`)
-    .replace(/YY/g, `${year}`.slice(-2))
-    .replace(/MM/g, pad(month))
-    .replace(/M/g, `${month}`)
-    .replace(/DD/g, pad(day))
-    .replace(/D/g, `${day}`)
-    .replace(/HH/g, pad(hours))
-    .replace(/H/g, `${hours}`)
-    .replace(/mm/g, pad(minutes))
-    .replace(/m/g, `${minutes}`)
-    .replace(/ss/g, pad(seconds))
-    .replace(/s/g, `${seconds}`)
+
+  const tokenMap = {
+    YYYY: `${year}`,
+    YY: `${year}`.slice(-2),
+    MM: pad(month),
+    M: `${month}`,
+    DD: pad(day),
+    D: `${day}`,
+    HH: pad(hours),
+    H: `${hours}`,
+    mm: pad(minutes),
+    m: `${minutes}`,
+    ss: pad(seconds),
+    s: `${seconds}`,
+  }
+
+  return format.replace(
+    /YYYY|YY|MM|M|DD|D|HH|H|mm|m|ss|s/g,
+    (match) => tokenMap[match]
+  )
 }

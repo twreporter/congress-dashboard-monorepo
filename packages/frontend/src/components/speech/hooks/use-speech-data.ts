@@ -22,10 +22,13 @@ export type SpeechData = {
   iVODLink: string
 }
 // summary will be like this:
-// "[this is a long sentence], [this is a long sentence], [this is a long sentence]" or "this is a long sentence"
+// "<ul><li>this is a long sentence</li><li>this is a long sentence</li></ul>" or "this is a long sentence"
 const summaryParser = (summary: string): string | string[] => {
-  if (summary.startsWith('[') && summary.endsWith(']')) {
-    return summary.split('],').map((str) => str.replace(/[\[\]]/g, '').trim())
+  if (/<ul>[\s\S]*<\/ul>/i.test(summary)) {
+    const items = Array.from(summary.matchAll(/<li>([\s\S]*?)<\/li>/gi), (m) =>
+      m[1].trim()
+    )
+    return items
   }
   return summary
 }
