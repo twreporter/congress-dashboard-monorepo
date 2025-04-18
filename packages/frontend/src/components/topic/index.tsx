@@ -126,6 +126,8 @@ const Topic: React.FC<TopicPageProps> = ({
         <DesktopAndAbove>
           <TopicListContainer>
             <TopicList
+              topicTitle={topic.title}
+              topicSlug={topic.slug}
               legislatorsData={legislatorsData}
               speechesByLegislator={speechesByLegislator}
               currentMeetingTerm={currentMeetingTerm}
@@ -154,6 +156,8 @@ const Topic: React.FC<TopicPageProps> = ({
           <Spacing $height={32} />
           <TopicListContainer>
             <TopicList
+              topicTitle={topic.title}
+              topicSlug={topic.slug}
               legislatorsData={legislatorsData}
               speechesByLegislator={speechesByLegislator}
               currentMeetingTerm={currentMeetingTerm}

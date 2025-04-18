@@ -167,6 +167,7 @@ const Legislator: React.FC<LegislatorProps> = ({
               <ListContainer>
                 <LegislatorList
                   legislatorSlug={legislator.slug}
+                  legislatorName={legislator.name}
                   topics={topics}
                   speechesByTopic={speechesByTopic}
                   currentMeetingTerm={currentMeetingTerm}
@@ -191,6 +192,7 @@ const Legislator: React.FC<LegislatorProps> = ({
             <ListContainer>
               <LegislatorList
                 legislatorSlug={legislator.slug}
+                legislatorName={legislator.name}
                 topics={topics}
                 speechesByTopic={speechesByTopic}
                 currentMeetingTerm={currentMeetingTerm}
