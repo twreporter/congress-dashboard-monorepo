@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-shared",
-  "version": "0.0.3",
+  "version": "0.0.4-beta.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/twreporter/congress-dashboard-monorepo.git",
@@ -19,7 +19,7 @@
     "lib"
   ],
   "types": "lib/index.d.ts",
-  "devDependencies": {
+  "dependencies": {
     "tsup": "^8.3.6"
   }
 }
