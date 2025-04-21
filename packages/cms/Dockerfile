@@ -7,14 +7,18 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends build-essent
 ENV APP_DIR /app
 WORKDIR $APP_DIR
 
-# Copy dependency manifests
-# Copy workspace root manifests first if they exist and are needed
-# COPY ../../package.json ../../yarn.lock ./
-COPY package.json yarn.lock ./
+# Enable Corepack and install Yarn v4
+RUN corepack enable && corepack prepare yarn@stable --activate
+
+# Copy dependency manifests from monorepo root and cms package
+COPY packages/cms/package.json yarn.lock ./
+# If you have a .yarnrc.yml, copy it too for better caching, otherwise COPY . . below will handle it.
+# COPY .yarnrc.yml ./
 
 # Install ALL dependencies (including devDependencies like tsup, typescript, prisma)
 # Using --frozen-lockfile is recommended in CI/CD
-RUN yarn install --frozen-lockfile
+# Yarn v4 automatically uses the lockfile, --frozen-lockfile ensures it's not modified.
+RUN yarn install --immutable --immutable-cache || yarn install --immutable --immutable-cache
 
 # Copy the rest of the application code
 COPY . .
@@ -24,7 +28,7 @@ COPY . .
 RUN yarn build
 
 # Optional: Prune devDependencies after build to potentially reduce node_modules size before copying
-# RUN yarn install --production --frozen-lockfile
+# Yarn v4 handles this differently, consider multi-stage builds or workspace focuses if needed.
 
 # --- Production Stage ---
 FROM node:18.18.2-slim
