@@ -1,42 +1,9 @@
-# --- Build Stage ---
-FROM node:18.18.2-slim AS builder
-
-# Install OS dependencies needed for build (if any, like build-essential for native modules)
-RUN apt-get update -y && apt-get install -y --no-install-recommends build-essential python3 && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-ENV APP_DIR /app
-WORKDIR $APP_DIR
-
-# Enable Corepack and install Yarn v4
-RUN corepack enable && corepack prepare yarn@stable --activate
-
-# Copy dependency manifests from monorepo root and cms package
-COPY packages/cms/package.json yarn.lock ./
-# If you have a .yarnrc.yml, copy it too for better caching, otherwise COPY . . below will handle it.
-# COPY .yarnrc.yml ./
-
-# Install ALL dependencies (including devDependencies like tsup, typescript, prisma)
-# Using --frozen-lockfile is recommended in CI/CD
-# Yarn v4 automatically uses the lockfile, --frozen-lockfile ensures it's not modified.
-RUN yarn install --immutable --immutable-cache || yarn install --immutable --immutable-cache
-
-# Copy the rest of the application code
-COPY . .
-
-# Build the KeystoneJS application
-# This typically generates the .keystone directory and Prisma client
-RUN yarn build
-
-# Optional: Prune devDependencies after build to potentially reduce node_modules size before copying
-# Yarn v4 handles this differently, consider multi-stage builds or workspace focuses if needed.
-
-# --- Production Stage ---
 FROM node:18.18.2-slim
 
-## Install runtime system dependencies, `gcsfuse` in particular.
+## Install system dependencies, `gcsfuse` in particular.
 RUN set -e; \
-    apt-get update -y && apt-get install -y --no-install-recommends \
-    # build-essential is likely not needed in runtime stage unless native modules are recompiled
+    apt-get update -y && apt-get install -y \
+    build-essential \
     curl \
     wget \
     gnupg2 \
@@ -52,7 +19,7 @@ RUN set -e; \
     # apt-get install -y gcsfuse \
     # TODO: remove wget workaround for gcsfuse due to missing registry & restore with apt-get
     wget https://github.com/GoogleCloudPlatform/gcsfuse/releases/download/v1.2.0/gcsfuse_1.2.0_amd64.deb -O gcsfuse.deb && apt-get install -y ./gcsfuse.deb && rm -f ./gcsfuse.deb \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && apt-get clean
 
 ENV APP_DIR /app
 ## Set fallback mount directory
@@ -64,19 +31,14 @@ RUN mkdir -p $APP_DIR
 
 WORKDIR $APP_DIR
 
-# Copy necessary files from the builder stage
-COPY --from=builder $APP_DIR/package.json $APP_DIR/yarn.lock ./
-COPY --from=builder $APP_DIR/node_modules ./node_modules
-COPY --from=builder $APP_DIR/.keystone ./.keystone
-COPY --from=builder $APP_DIR/schema.prisma ./schema.prisma
-COPY --from=builder $APP_DIR/run.sh ./run.sh
+COPY . $APP_DIR
 
-# If you pruned devDependencies in the builder stage, you might not need this.
-# If you didn't prune, running this ensures only prod deps are present,
-# but copying pre-built node_modules is usually faster and safer with Prisma.
-# RUN yarn install --production --frozen-lockfile
+## Install application dependencies
+RUN yarn install
 
-# Clean cache (optional, might save a little space)
+## Build application bundles
+RUN yarn build
+
 RUN yarn cache clean
 
 ## Ensure the script is executable

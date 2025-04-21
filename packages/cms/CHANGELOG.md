@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.4, 2025-04-21
+
+### Notable Changes
+
+- fix
+  - install all dependencies for docker image
+
+### Commits
+
+- [[`593e5bb0a3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/593e5bb0a3)] - **fix(cms)**: install all dependencies for docker image (Lucien)
+
 ## 0.0.3-beta.3, 2025-04-21
 
 ### Notable Changes
