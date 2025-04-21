@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.3, 2025-04-21
+
+### Notable Changes
+
+- fix
+  - update Dockerfile to use corepack
+
+### Commits
+
+- [[`70d9a0b738`](https://github.com/twreporter/congress-dashboard-monorepo/commit/70d9a0b738)] - **fix(cms)**: update Dockerfile to use corepack (Lucien)
+
 ## 0.0.3-beta.2, 2025-04-21
 
 ### Notable Changes
