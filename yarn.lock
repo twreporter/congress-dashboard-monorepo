@@ -6243,7 +6243,7 @@ __metadata:
     "@keystone-6/auth": "npm:^8.0.0"
     "@keystone-6/core": "npm:^6.0.0"
     "@keystone-6/fields-document": "npm:^9.0.0"
-    "@twreporter/congress-dashboard-shared": "npm:0.0.3"
+    "@twreporter/congress-dashboard-shared": "npm:0.0.4-beta.0"
     "@types/papaparse": "npm:^5"
     changelog-maker: "npm:^4.1.1"
     lodash: "npm:^4.17.21"
@@ -6291,7 +6291,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@twreporter/congress-dashboard-shared@npm:0.0.3, @twreporter/congress-dashboard-shared@workspace:packages/shared":
+"@twreporter/congress-dashboard-shared@npm:0.0.3":
+  version: 0.0.3
+  resolution: "@twreporter/congress-dashboard-shared@npm:0.0.3"
+  checksum: 10c0/5e4e365d247f39142e33ff0028b341634111fe4255a476a45e5c94fdfc8d0a6f48c7c20125dd0a2cbea02769e9607b0b2defe2a2baad18bc3f04f17d8bdfc065
+  languageName: node
+  linkType: hard
+
+"@twreporter/congress-dashboard-shared@npm:0.0.4-beta.0, @twreporter/congress-dashboard-shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@twreporter/congress-dashboard-shared@workspace:packages/shared"
   dependencies:
