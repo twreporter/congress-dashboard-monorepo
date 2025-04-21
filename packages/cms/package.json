@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-cms",
-  "version": "0.0.3-beta.5",
+  "version": "0.0.3-beta.6",
   "private": true,
   "scripts": {
     "dev": "keystone dev",
@@ -17,7 +17,7 @@
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
-    "@twreporter/congress-dashboard-shared": "0.0.3",
+    "@twreporter/congress-dashboard-shared": "0.0.4-beta.0",
     "lodash": "^4.17.21",
     "papaparse": "^5.5.2",
     "react-transition-group": "^4.4.2",

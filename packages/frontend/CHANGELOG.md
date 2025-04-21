@@ -1,6 +1,17 @@
 # Changelog
 
-## 0.0.3, 2024-05-23
+## 0.0.4-beta.0, 2025-04-21
+
+### Notable Changes
+
+- chore
+  - update @twreporter packages
+
+### Commits
+
+- [[`0339513a82`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0339513a82)] - **chore(frontend)**: update @twreporter packages (Lucien)
+
+## 0.0.3, 2025-04-16
 
 ### Notable Changes
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.3-beta.6, 2025-04-21
+
+### Notable Changes
+
+- fix
+  - reset Dockerfile
+- chore
+  - update @twreporter/congress-dashboard-shared version
+
+### Commits
+
+- [[`4f00f74ee2`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4f00f74ee2)] - **chore(cms)**: update @twreporter/congress-dashboard-shared version (Lucien)
+- [[`51ae426634`](https://github.com/twreporter/congress-dashboard-monorepo/commit/51ae426634)] - **fix(cms)**: reset Dockerfile (Lucien)
+
 ## 0.0.3-beta.5, 2025-04-21
 
 ### Notable Changes
