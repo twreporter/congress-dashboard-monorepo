@@ -8,8 +8,7 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "build": "yarn clean && tsup src/*",
-    "postinstall": "yarn build"
+    "build": "yarn clean && tsup src/*"
   },
   "type": "commonjs",
   "main": "lib/index.js",
