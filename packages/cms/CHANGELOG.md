@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.2, 2025-04-21
+
+### Notable Changes
+
+- fix
+  - update Dockerfile with multi stage
+
+### Commits
+
+- [[`e9c2bbef3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e9c2bbef3c)] - **fix(cms)**: update Dockerfile with multi stage (Lucien)
+
 ## 0.0.3-beta.1, 2025-04-08
 
 ### Notable Changes
