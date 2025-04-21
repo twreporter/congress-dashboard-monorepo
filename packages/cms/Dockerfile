@@ -34,7 +34,9 @@ WORKDIR $APP_DIR
 COPY . $APP_DIR
 
 ## Install application dependencies
-RUN yarn install
+## Force NODE_ENV to development to ensure devDependencies (like tsup for shared package build) are installed
+## Use --frozen-lockfile for reproducible builds based on yarn.lock
+RUN NODE_ENV=development yarn install --frozen-lockfile
 
 ## Build application bundles
 RUN yarn build

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.0.3-beta.5, 2025-04-21
+
+### Notable Changes
+
+- fix
+  - install all dependencies for docker image
+
+### Commits
+
+- [[`40389475bc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/40389475bc)] - **fix(cms)**: set env to development for yarn install at Dockerfile (Lucien)
+
 ## 0.0.3-beta.4, 2025-04-21
 
 ### Notable Changes
