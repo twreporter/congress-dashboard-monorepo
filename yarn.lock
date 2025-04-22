@@ -6268,7 +6268,7 @@ __metadata:
     "@storybook/nextjs": "npm:^8.5.1"
     "@storybook/react": "npm:^8.5.1"
     "@storybook/test": "npm:^8.5.1"
-    "@twreporter/congress-dashboard-shared": "npm:0.0.4-beta.1"
+    "@twreporter/congress-dashboard-shared": "npm:0.0.4"
     "@twreporter/core": "npm:^1.24.4"
     "@twreporter/react-components": "npm:^9.7.0-rc.0"
     "@types/lodash": "npm:^4"
@@ -6291,13 +6291,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@twreporter/congress-dashboard-shared@npm:0.0.4-beta.1, @twreporter/congress-dashboard-shared@workspace:packages/shared":
+"@twreporter/congress-dashboard-shared@npm:0.0.4, @twreporter/congress-dashboard-shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@twreporter/congress-dashboard-shared@workspace:packages/shared"
   dependencies:
     tsup: "npm:^8.3.6"
   languageName: unknown
   linkType: soft
+
+"@twreporter/congress-dashboard-shared@npm:0.0.4-beta.1":
+  version: 0.0.4-beta.1
+  resolution: "@twreporter/congress-dashboard-shared@npm:0.0.4-beta.1"
+  checksum: 10c0/f55cf4b66a07c6de10d647c334788bb52b8090df3ef575801758f2e6e223b76432fd367a2d73379c6d163f6ed1d6218971752692de80a620793717b2393153e0
+  languageName: node
+  linkType: hard
 
 "@twreporter/core@npm:^1.24.4":
   version: 1.24.4
