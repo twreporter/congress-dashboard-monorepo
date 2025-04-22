@@ -85,8 +85,7 @@
   - init cms
     - access-control
     - system user access
-  - READEME & add dockerfile for cms
-
+  - README & add dockerfile for cms
 ### Commits
 
 - [[`e04dc0a5c9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e04dc0a5c9)] - **fix(cms)**: connect legislativeMeeting & fix legislativeYuanMember update logic (Lucien)
