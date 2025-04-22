@@ -10,7 +10,6 @@
 - fix
   - reset Dockerfile
   - install all dependencies for docker image
-  - install all dependencies for docker image
   - update Dockerfile to use corepack
   - update Dockerfile with multi stage
   - rename related topic column and add validation for link
