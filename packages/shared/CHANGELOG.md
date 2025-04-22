@@ -1,27 +1,18 @@
 # Changelog
 
-## 0.0.4-beta.1, 2025-04-21 (Current)
+## 0.0.4, 2025-04-22 (Current)
 
 ### Notable Changes
 
 - fix
   - remove postinstall
   - move tsup back to devDependencies
+  - move tsup to dependencies
 
 ### Commits
 
 - [[`c56b257b5c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c56b257b5c)] - **fix(shared)**: move tsup back to devDependencies (Lucien)
 - [[`62457b7e2c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/62457b7e2c)] - **fix(shared)**: remove postinstall (Lucien)
-
-## 0.0.4-beta.0, 2025-04-21
-
-### Notable Changes
-
-- fix
-  - move tsup to dependencies
-
-### Commits
-
 - [[`9e7891e228`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9e7891e228)] - **chore(shared)**: move tsup to dependencies (Lucien)
 
 ## 0.0.3, 2025-04-15
