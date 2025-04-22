@@ -69,8 +69,11 @@ const StyledFunctionBar = styled(FunctionBar)`
 const cardCss = css`
   width: 928px;
 
-  ${mq.tabletAndBelow`
-    width: 100%;
+  ${mq.tabletOnly`
+    width: calc( 100vw - 64px );
+  `}
+  ${mq.mobileOnly`
+    width: calc( 100vw - 48px);
   `}
 `
 const CardBox = styled.div`
@@ -96,6 +99,10 @@ const CardHumanBox = styled.div<{ $active: boolean }>`
   ${mq.mobileOnly`
     grid-template-columns: repeat(1, 1fr);
     grid-gap: 20px;
+
+    & > * {
+      width: calc(100vw - 48px);
+    }
   `}
 `
 const LoadMore = styled(PillButton)`
@@ -138,6 +145,7 @@ const Gap = styled(GapHorizontal)`
 const CardSection = styled.div<{
   $isScroll: boolean
   $isSidebarOpened: boolean
+  $windowWidth: number
 }>`
   width: 100%;
   display: flex;
@@ -149,15 +157,27 @@ const CardSection = styled.div<{
     scrollbar-width: none;
   `
       : ''}
+
+  ${mq.desktopAndAbove`
+    ${(props) =>
+      props.$windowWidth
+        ? `
+        max-width: 100%;
+        padding: 0 ${
+          props.$isSidebarOpened ? 0 : (props.$windowWidth - 928) / 2
+        }px 0 ${(props.$windowWidth - 928) / 2}px;
+      `
+        : `
+        max-width: 928px;
+      `}
+  `}
+
   ${(props) =>
     props.$isSidebarOpened
       ? `
       width: 100vw;
-      padding-left: 24px;
     `
-      : `
-      max-width: 928px;
-  `}
+      : ''}
 
   ${mq.tabletAndBelow`
     max-width: 100%;
@@ -182,8 +202,15 @@ const Dashboard = () => {
   const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
   const [showSidebar, setShowSidebar] = useState(false)
   const [sidebarGap, setSidebarGap] = useState(0)
+  const [windowWidth, setWindowWidth] = useState(0)
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
   const cardRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (window) {
+      setWindowWidth(window.innerWidth)
+    }
+  }, [])
 
   useEffect(() => {
     if (isLoading) {
@@ -197,6 +224,7 @@ const Dashboard = () => {
       }, 2000)
     }
   }, [isLoading])
+
   useEffect(() => {
     setIsLoading(true)
     setMockIssue([])
@@ -236,12 +264,14 @@ const Dashboard = () => {
     const sidebarComponent = sidebarRefs.current[selectedType]
     const cardComponent = cardRef.current
     if (sidebarComponent && cardComponent) {
-      const needGap = sidebarComponent.clientWidth + 24
+      let needGap = sidebarComponent.offsetWidth
       const hasGap = cardComponent.offsetLeft
-      if (cardComponent.clientWidth === 928) {
+      if (cardComponent.offsetWidth === 928) {
         // desktop and above
+        needGap += 32
         newSidebarGap = hasGap > needGap ? 0 : needGap
       } else {
+        needGap += 24
         newSidebarGap = needGap - hasGap
       }
     }
@@ -252,9 +282,9 @@ const Dashboard = () => {
       cardElement.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
-        inline: 'start',
       })
-      if (!showSidebar && selectedType === Option.Human) {
+      const isRightItem = cardElement.offsetLeft > window.innerWidth / 2
+      if (selectedType === Option.Human && isRightItem) {
         window.setTimeout(() => {
           cardElement.scrollIntoView({
             behavior: 'smooth',
@@ -269,7 +299,11 @@ const Dashboard = () => {
   return (
     <Box id={anchorId}>
       <StyledFunctionBar currentTab={selectedType} setTab={setTab} />
-      <CardSection $isScroll={showSidebar} $isSidebarOpened={showSidebar}>
+      <CardSection
+        $isScroll={showSidebar}
+        $isSidebarOpened={showSidebar}
+        $windowWidth={windowWidth}
+      >
         <CardBox ref={cardRef}>
           <CardIssueBox $active={selectedType === Option.Issue}>
             {mockIssue.map((props: CardIssueProps, index) => (

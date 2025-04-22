@@ -1,5 +1,42 @@
 # Changelog
 
+## 1.0.0-rc.1, 2025-04-22
+
+### Notable Changes
+
+- feat
+  - related topic upload
+  - new columns for legislator & legislativeYuanMember
+- fix
+  - reset Dockerfile
+  - install all dependencies for docker image
+  - install all dependencies for docker image
+  - update Dockerfile to use corepack
+  - update Dockerfile with multi stage
+  - rename related topic column and add validation for link
+  - add `developer_headless_account` role
+  - use `includes` instead of `indexOf`
+- chore
+  - update @twreporter packages
+  - update @twreporter/congress-dashboard-shared version
+  - sync dev
+
+### Commits
+
+- [[`c2c99d12b7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c2c99d12b7)] - **chore(cms)**: update @twreporter packages (Lucien)
+- [[`4f00f74ee2`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4f00f74ee2)] - **chore(cms)**: update @twreporter/congress-dashboard-shared version (Lucien)
+- [[`51ae426634`](https://github.com/twreporter/congress-dashboard-monorepo/commit/51ae426634)] - **fix(cms)**: reset Dockerfile (Lucien)
+- [[`40389475bc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/40389475bc)] - **fix(cms)**: set env to development for yarn install at Dockerfile (Lucien)
+- [[`593e5bb0a3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/593e5bb0a3)] - **fix(cms)**: install all dependencies for docker image (Lucien)
+- [[`70d9a0b738`](https://github.com/twreporter/congress-dashboard-monorepo/commit/70d9a0b738)] - **fix(cms)**: update Dockerfile to use corepack (Lucien)
+- [[`e9c2bbef3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e9c2bbef3c)] - **fix(cms)**: update Dockerfile with multi stage (Lucien)
+- [[`413bc7f3ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/413bc7f3ed)] - **chore(cms)**: sync dev (Lucien)
+- [[`854c87aa00`](https://github.com/twreporter/congress-dashboard-monorepo/commit/854c87aa00)] - **fix(cms)**: rename related topic column and add validation for link (Lucien)
+- [[`785de95947`](https://github.com/twreporter/congress-dashboard-monorepo/commit/785de95947)] - **feat(cms)**: new columns for legislator & legislativeYuanMember (Lucien)
+- [[`fde82401dd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fde82401dd)] - **feat(cms)**: related topic upload (Lucien)
+- [[`3fab8379b1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3fab8379b1)] - **fix(cms)**: use `includes` instead of `indexOf` (Aylie Chou)
+- [[`651f5efb1f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/651f5efb1f)] - **feat(cms)**: add `developer_headless_account` role (Aylie Chou)
+
 ## 1.0.0-rc.0, 2025-03-27
 
 ### Notable Changes
@@ -105,4 +142,3 @@
 - [[`8585ec4ee6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8585ec4ee6)] - **chore**: system user access (Lucien)
 - [[`ec12bde1d9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec12bde1d9)] - **chore**: access-control (Lucien)
 - [[`e8e09268f8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8e09268f8)] - **chore**: init cms (Lucien)
-

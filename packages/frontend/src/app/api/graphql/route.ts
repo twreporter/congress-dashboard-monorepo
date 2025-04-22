@@ -3,15 +3,26 @@ import { v4 as uuidV4 } from 'uuid'
 import keystoneFetch, { GraphQLResponse } from '@/app/api/graphql/keystone'
 import logger from '@/utils/logger'
 
+type Body = {
+  query: string
+  variables?: Record<string, string>
+}
+
 export async function POST<T>(req: NextRequest) {
   const body = await req.json()
+  const { query, variables } = body
   const requestId = uuidV4()
   logger.info({ requestId, request: body }, 'incoming API request')
 
+  const bodyForKeystone: Body = { query }
+  if (variables) {
+    bodyForKeystone.variables = variables
+  }
+
   try {
     const response: GraphQLResponse<T> = await keystoneFetch<T>(
-      body.query,
-      body.variables
+      JSON.stringify(bodyForKeystone),
+      true
     )
     logger.debug({ requestId, response }, 'keystone api response')
     return NextResponse.json(response)

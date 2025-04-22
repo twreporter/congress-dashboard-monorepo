@@ -45,6 +45,7 @@ export type LegislatorProps = {
   avatar: string
   partyAvatar: string
   count: number
+  slug?: string
 }
 export const Legislator: React.FC<LegislatorProps> = ({
   name,
@@ -89,10 +90,10 @@ const TagItem = styled.div`
 
 export type IssueProps = {
   name: string
-  count: number
+  count?: number
 }
 export const Issue: React.FC<IssueProps> = ({ name, count }: IssueProps) => (
   <TagItem>
-    <TagName>{`${name}(${count})`}</TagName>
+    <TagName>{count ? `${name}(${count})` : name}</TagName>
   </TagItem>
 )

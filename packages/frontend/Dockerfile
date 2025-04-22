@@ -14,4 +14,6 @@ RUN yarn build
 
 ENV NODE_ENV=production
 
+ENV NODE_OPTIONS="--network-family-autoselection-attempt-timeout=30000"
+
 CMD ["yarn", "start"]

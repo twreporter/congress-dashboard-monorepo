@@ -1,21 +1,21 @@
 {
   "name": "@twreporter/congress-dashboard-frontend",
-  "version": "0.0.2-beta.13",
+  "version": "1.0.0-rc.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build-exp": "set NODE_ENV=production & next build --experimental-build-mode compile",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_OPTIONS='--network-family-autoselection-attempt-timeout=30000' next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
     "@google-cloud/logging": "^11.2.0",
-    "@twreporter/congress-dashboard-shared": "0.0.2-beta.0",
-    "@twreporter/core": "^1.24.4-rc.0",
-    "@twreporter/react-components": "^9.6.0-rc.1",
+    "@twreporter/congress-dashboard-shared": "0.0.4",
+    "@twreporter/core": "^1.24.4",
+    "@twreporter/react-components": "^9.7.0-rc.0",
     "lodash": "^4.17.21",
     "next": "15.1.5",
     "pino": "^9.6.0",

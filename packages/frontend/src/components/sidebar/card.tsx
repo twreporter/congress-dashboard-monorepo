@@ -1,13 +1,15 @@
 'use client'
-
 import React from 'react'
 import styled from 'styled-components'
+import Link from 'next/link'
 // @twreporter
 import {
   colorSupportive,
   colorGrayscale,
 } from '@twreporter/core/lib/constants/color'
 import { P1, P2, P4 } from '@twreporter/react-components/lib/text/paragraph'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 
 // date stamp component
 function getDateFormat(date: Date) {
@@ -129,21 +131,23 @@ const Content = styled(P1)`
   color: ${colorGrayscale.gray800};
   display: contents !important;
 `
-const More = styled.a`
+const More = styled.span`
   color: ${colorSupportive.heavy};
   display: inline-block;
+  text-decoration: underline;
+  text-decoration-color: ${colorGrayscale.gray300};
 `
 
 export type SummaryCardProps = {
   date: Date
   title: string
-  content: string
+  summary: string
   slug: string
 }
 export const SummaryCard: React.FC<SummaryCardProps> = ({
   date,
   title,
-  content,
+  summary,
   slug,
 }) => {
   return (
@@ -154,8 +158,10 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
       </FlexRow>
       <HorizontalLine />
       <Content>
-        {`${content}（`}
-        <More href={`/a/${slug}`}>{'閱讀更多'}</More>
+        {`${summary}（`}
+        <Link href={`${InternalRoutes.Speech}/${slug}`}>
+          <More>{'閱讀更多'}</More>
+        </Link>
         {'）'}
       </Content>
     </CardBox>

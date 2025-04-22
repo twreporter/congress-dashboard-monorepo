@@ -1,6 +1,11 @@
 import { list } from '@keystone-6/core'
 import { relationship, text } from '@keystone-6/core/fields'
-import { allowAllRoles } from './utils/access-control-list'
+import {
+  allowAllRoles,
+  excludeReadOnlyRoles,
+  withReadOnlyRoleFieldMode,
+  hideReadOnlyRoles,
+} from './utils/access-control-list'
 import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
 
 const listConfigurations = list({
@@ -19,6 +24,25 @@ const listConfigurations = list({
         labelField: 'title',
       },
     }),
+    relatedTopics: relationship({
+      ref: 'Topic.referencedByTopics',
+      label: '相關議題',
+      many: true,
+      ui: {
+        labelField: 'title',
+      },
+    }),
+    referencedByTopics: relationship({
+      ref: 'Topic.relatedTopics',
+      label: '被關聯的議題',
+      many: true,
+      ui: {
+        labelField: 'title',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'read' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,
   },
@@ -30,13 +54,18 @@ const listConfigurations = list({
       initialSort: { field: 'createdAt', direction: 'DESC' },
       pageSize: 50,
     },
+    itemView: {
+      defaultFieldMode: withReadOnlyRoleFieldMode,
+    },
+    hideCreate: hideReadOnlyRoles,
+    hideDelete: hideReadOnlyRoles,
   },
   access: {
     operation: {
       query: allowAllRoles(),
-      create: allowAllRoles(),
-      update: allowAllRoles(),
-      delete: allowAllRoles(),
+      create: excludeReadOnlyRoles(),
+      update: excludeReadOnlyRoles(),
+      delete: excludeReadOnlyRoles(),
     },
   },
 })
