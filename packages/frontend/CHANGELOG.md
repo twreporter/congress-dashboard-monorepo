@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.1, 2025-04-22
+
+### Notable Changes
+
+- chore
+  - add staging env file
+
+### Commits
+
+- [[`bd10d1866a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bd10d1866a)] - **chore(frontend)**: add staging env file (Lucien)
+
 ## 1.0.0-rc.0, 2025-04-22
 
 ### Notable Changes
