@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import {
@@ -10,6 +10,11 @@ import {
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import mq from '@twreporter/core/lib/utils/media-query'
 import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
+// lodash
+import throttle from 'lodash/throttle'
+const _ = {
+  throttle,
+}
 
 // info icon
 const InfoIcon = () => (
@@ -63,13 +68,53 @@ const Content: React.FC<ContentProps> = ({ text }: ContentProps) => {
 }
 
 // tooltip
-const Detail = styled.div<{ $show: boolean }>`
+const Detail = styled.div<{
+  $show: boolean
+  $position: { top: boolean; left: boolean }
+}>`
   position: absolute;
-  top: 28px; // icon height(24) + 4
-  left: -4px;
+  ${(props) =>
+    props.$position.top ? 'bottom: 28px;' : 'top: 28px;'} // icon height(24) + 4
+  ${(props) => (props.$position.left ? 'right: -4px;' : 'left: -4px;')}
   width: max-content;
   ${(props) => (props.$show ? '' : 'display: none;')}
+
+  /* Flip the arrow position based on where the tooltip is displayed */
+  ${(props) =>
+    props.$position.top &&
+    !props.$position.left &&
+    `
+    ${Text}:before {
+      top: auto;
+      bottom: -12px;
+      transform: rotate(180deg);
+    }
+  `}
+  
+  ${(props) =>
+    !props.$position.top &&
+    props.$position.left &&
+    `
+    ${Text}:before {
+      left: auto;
+      right: -4px;
+    }
+  `}
+  
+  ${(props) =>
+    props.$position.top &&
+    props.$position.left &&
+    `
+    ${Text}:before {
+      top: auto;
+      bottom: -12px;
+      left: auto;
+      right: -4px;
+      transform: rotate(180deg);
+    }
+  `}
 `
+
 const Box = styled.div<{ $show: boolean }>`
   display: flex;
   flex-direction: column;
@@ -96,17 +141,89 @@ type TooltipProps = {
 }
 const Tooltip: React.FC<TooltipProps> = ({ tooltip }: TooltipProps) => {
   const [show, setShow] = useState(false)
+  const [position, setPosition] = useState({ top: false, left: false })
+  const boxRef = React.useRef<HTMLDivElement>(null)
+  const detailRef = React.useRef<HTMLDivElement>(null)
+
+  const checkPosition = _.throttle(() => {
+    if (!boxRef.current || !detailRef.current) return
+
+    const boxRect = boxRef.current.getBoundingClientRect()
+    const detailRect = detailRef.current.getBoundingClientRect()
+    const windowWidth = window.innerWidth
+    const windowHeight = window.innerHeight
+
+    // Check if tooltip would overflow to the right
+    const overflowRight = boxRect.left + detailRect.width > windowWidth
+
+    // Check if tooltip would overflow to the bottom
+    const overflowBottom = boxRect.bottom + detailRect.height > windowHeight
+
+    setPosition({
+      left: overflowRight,
+      top: overflowBottom,
+    })
+  }, 500)
+
   const toggleTooltip = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     e.stopPropagation()
     setShow(!show)
+
+    // Check position on next render when showing tooltip
+    if (!show) {
+      setTimeout(checkPosition, 0)
+    }
   }
-  const ref = useOutsideClick(() => setShow(false))
+
+  useEffect(() => {
+    if (show) {
+      checkPosition()
+
+      // Recalculate on window resize
+      window.addEventListener('resize', checkPosition)
+      return () => window.removeEventListener('resize', checkPosition)
+    }
+  }, [show])
+
+  // Create a custom handler for outside clicks
+  const handleOutsideClick = useCallback((event: MouseEvent) => {
+    // Consider clicking on the detail part as "inside"
+    if (detailRef.current && detailRef.current.contains(event.target as Node)) {
+      return
+    }
+    setShow(false)
+  }, [])
+
+  // Use the useOutsideClick hook with our custom handler
+  const outsideClickRef = useOutsideClick(handleOutsideClick)
+
+  // Set up the combined ref handling
+  const setRefs = useCallback(
+    (element: HTMLDivElement | null) => {
+      boxRef.current = element
+
+      // The useOutsideClick hook returns a ref object; we need to assign it to our element
+      if (
+        outsideClickRef &&
+        typeof outsideClickRef === 'object' &&
+        'current' in outsideClickRef
+      ) {
+        outsideClickRef.current = element
+      }
+    },
+    [outsideClickRef]
+  )
 
   return (
-    <Box onClick={toggleTooltip} $show={show} ref={ref}>
+    <Box onClick={toggleTooltip} $show={show} ref={setRefs}>
       <InfoIcon />
-      <Detail $show={show}>
+      <Detail
+        $show={show}
+        $position={position}
+        ref={detailRef}
+        onClick={(e) => e.stopPropagation()} // Prevent tooltip from closing when clicking detail
+      >
         <Content text={tooltip} />
       </Detail>
     </Box>

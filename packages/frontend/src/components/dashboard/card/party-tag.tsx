@@ -6,6 +6,8 @@ import { colorOpacity } from '@twreporter/core/lib/constants/color'
 export enum TagSize {
   S,
   L,
+  XL,
+  XXL,
 }
 
 const Avatar = styled.img`
@@ -19,8 +21,34 @@ const Tag = styled.div<{ $size: TagSize }>`
 
   &,
   ${Avatar} {
-    width: ${(props) => (props.$size === TagSize.L ? 32 : 16)}px;
-    height: ${(props) => (props.$size === TagSize.L ? 32 : 16)}px;
+    width: ${(props) => {
+      switch (props.$size) {
+        case TagSize.S:
+          return 16
+        case TagSize.L:
+          return 32
+        case TagSize.XL:
+          return 40
+        case TagSize.XXL:
+          return 48
+        default:
+          return 16
+      }
+    }}px;
+    height: ${(props) => {
+      switch (props.$size) {
+        case TagSize.S:
+          return 16
+        case TagSize.L:
+          return 32
+        case TagSize.XL:
+          return 40
+        case TagSize.XXL:
+          return 48
+        default:
+          return 16
+      }
+    }}px;
   }
 
   // outline
@@ -34,7 +62,21 @@ type OutlineProps = {
   size?: TagSize
 }
 const Outline: React.FC<OutlineProps> = ({ size = TagSize.L }) => {
-  const width = size === TagSize.L ? 32 : 16
+  const width = (() => {
+    switch (size) {
+      case TagSize.S:
+        return 16
+      case TagSize.L:
+        return 32
+      case TagSize.XL:
+        return 40
+      case TagSize.XXL:
+        return 48
+      default:
+        return 32
+    }
+  })()
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

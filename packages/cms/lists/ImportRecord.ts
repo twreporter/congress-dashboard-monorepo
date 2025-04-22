@@ -2,7 +2,12 @@ import { GraphQLError } from 'graphql'
 import { list } from '@keystone-6/core'
 import type { KeystoneContext } from '@keystone-6/core/types'
 import { text, relationship } from '@keystone-6/core/fields'
-import { allowAllRoles, denyRoles } from './utils/access-control-list'
+import {
+  allowAllRoles,
+  excludeReadOnlyRoles,
+  RoleEnum,
+  hideReadOnlyRoles,
+} from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import {
   uploader,
@@ -300,6 +305,38 @@ const validateListSpecificData: Record<
     )
     return validationErrors
   },
+  [ListName.relatedTopics]: async (csvData, context) => {
+    const validationErrors: string[] = []
+    await Promise.all(
+      csvData
+        .slice(1) // exclude header row
+        .map(
+          async (
+            [_title, slug, _related_topic_title, related_topic_slug],
+            index
+          ) => {
+            const rowNum = index + 1 // Add 1 for header row
+            const topic = await context.prisma.topic.findFirst({
+              where: { slug },
+            })
+            if (!topic) {
+              validationErrors.push(
+                `第 ${rowNum} 行: 議題 "${slug}" 不存在，請先匯入議題資料`
+              )
+            }
+            const relatedTopic = await context.prisma.topic.findFirst({
+              where: { slug: related_topic_slug },
+            })
+            if (!relatedTopic) {
+              validationErrors.push(
+                `第 ${rowNum} 行: 相關議題 "${related_topic_slug}" 不存在，請先匯入議題資料`
+              )
+            }
+          }
+        )
+    )
+    return validationErrors
+  },
 }
 
 const importHandlers: Record<
@@ -309,15 +346,39 @@ const importHandlers: Record<
   [ListName.legislator]: async (csvData, context) => {
     const queries: Promise<any>[] = []
 
-    csvData.slice(1).forEach(([name, slug, imageLink]) => {
-      queries.push(
-        context.prisma.Legislator.upsert({
-          where: { slug },
-          update: { name, imageLink },
-          create: { name, slug, imageLink },
-        })
+    csvData
+      .slice(1)
+      .forEach(
+        ([
+          name,
+          slug,
+          imageLink,
+          externalLink,
+          meetingTermCount,
+          meetingTermCountInfo,
+        ]) => {
+          queries.push(
+            context.prisma.Legislator.upsert({
+              where: { slug },
+              update: {
+                name,
+                imageLink,
+                externalLink,
+                meetingTermCount: Number(meetingTermCount),
+                meetingTermCountInfo,
+              },
+              create: {
+                name,
+                slug,
+                imageLink,
+                externalLink,
+                meetingTermCount: Number(meetingTermCount),
+                meetingTermCountInfo,
+              },
+            })
+          )
+        }
       )
-    })
 
     return queries
   },
@@ -410,6 +471,7 @@ const importHandlers: Record<
       city,
       tooltip,
       note,
+      proposalSuccessCount,
     ] of csvData.slice(1)) {
       const legislatorData = await context.prisma.legislator.findFirst({
         where: { slug: legislator_slug },
@@ -433,6 +495,7 @@ const importHandlers: Record<
         note,
         labelForCMS: `${legislatorData.name} | 第 ${legislativeMeeting_term} 屆`,
         party: { connect: { slug: party_slug } },
+        proposalSuccessCount: Number(proposalSuccessCount),
       }
 
       if (existingMember) {
@@ -657,6 +720,38 @@ const importHandlers: Record<
     }
     return queries
   },
+  [ListName.relatedTopics]: async (csvData, context) => {
+    const queries: Promise<any>[] = []
+
+    for (const [
+      _title,
+      slug,
+      _related_topic_title,
+      related_topic_slug,
+    ] of csvData.slice(1)) {
+      const relatedTopic = await context.prisma.Topic.findFirst({
+        where: { slug: related_topic_slug },
+        select: { id: true },
+      })
+
+      if (relatedTopic) {
+        queries.push(
+          context.prisma.Topic.update({
+            where: { slug },
+            data: {
+              relatedTopics: {
+                connect: { id: relatedTopic.id },
+              },
+            },
+          })
+        )
+      } else {
+        console.error(`Related topic not found for slug: ${related_topic_slug}`)
+      }
+    }
+
+    return queries
+  },
 }
 
 async function executeImportQueries(
@@ -721,16 +816,23 @@ const listConfigurations = list({
       initialSort: { field: 'createdAt', direction: 'DESC' },
       pageSize: 50,
     },
-    hideDelete: denyRoles(['owner', 'admin']), // Only for development purposes
+    hideDelete: ({ session }) => {
+      const role = session?.data?.role
+      if ([RoleEnum.Owner].includes(role)) {
+        return true
+      }
+      return false
+    },
     itemView: { defaultFieldMode: 'read' },
+    hideCreate: hideReadOnlyRoles,
   },
 
   access: {
     operation: {
       query: allowAllRoles(),
-      create: allowAllRoles(),
-      update: allowAllRoles(),
-      delete: allowAllRoles(),
+      create: excludeReadOnlyRoles(),
+      update: excludeReadOnlyRoles(),
+      delete: excludeReadOnlyRoles(),
     },
   },
 

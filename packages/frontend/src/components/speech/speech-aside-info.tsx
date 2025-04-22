@@ -12,6 +12,8 @@ import mq from '@twreporter/core/lib/utils/media-query'
 import { P1SupportiveHeavy, P2Gray600 } from '@/components/speech/styles'
 // components
 import IssueTag from '@/components/button/issue-tag'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 
 export const AsideInfoContainer = styled.div`
   display: flex;
@@ -111,7 +113,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
             <P2Gray600 text="質詢立委" />
             <SlashIcon />
           </Questioning>
-          <Link href={`/legislator/${legislator.slug}`}>
+          <Link href={`${InternalRoutes.Legislator}/${legislator.slug}`}>
             <P1SupportiveHeavy text={legislator.name} />
           </Link>
         </LegislatorBlock>
@@ -120,7 +122,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
       <IssueTagsBlock>
         {relatedTopics.map((topic, idx) => (
           <Link
-            href={`/topic/${topic.slug}`}
+            href={`${InternalRoutes.Topic}/${topic.slug}`}
             key={`issue-tag-${idx}-${topic.slug}`}
           >
             <IssueTag text={topic.title} />

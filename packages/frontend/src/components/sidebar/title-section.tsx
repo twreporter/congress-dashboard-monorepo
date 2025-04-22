@@ -5,10 +5,15 @@ import styled from 'styled-components'
 // components
 import Tab, { type TabProps } from '@/components/sidebar/tab'
 import { Gap } from '@/components/skeleton'
-// utils
-import { notoSerif } from '@/utils/font'
+// style
+import {
+  FlexRow,
+  TitleGroup,
+  ButtonGroup,
+  Title,
+  Button,
+} from '@/components/sidebar/style'
 // @twreporter
-import { H3 } from '@twreporter/react-components/lib/text/headline'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import { IconButton } from '@twreporter/react-components/lib/button'
 import { Fullscreen, Back, More } from '@twreporter/react-components/lib/icon'
@@ -26,32 +31,6 @@ const Section = styled.div`
   position: sticky;
   top: 0;
   background-color: ${colorGrayscale.white};
-`
-const FlexRow = styled.div`
-  display: flex;
-  align-items: flex-start;
-  flex-direction: row;
-  justify-content: space-between;
-`
-const TitleGroup = styled(FlexRow)`
-  padding-left: 24px;
-`
-const ButtonGroup = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 16px;
-  gap: 8px;
-`
-const Button = styled(IconButton)`
-  width: 44px;
-  height: 44px;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-`
-const Title = styled(H3)`
-  color: ${colorGrayscale.gray900};
-  font-family: ${notoSerif.style.fontFamily} !important;
 `
 const Subtitle = styled(P2)`
   color: ${colorGrayscale.gray800};
@@ -101,6 +80,7 @@ export type TitleSectionProps = {
   tabs?: TabProps[]
   onSelectTab?: (index: number) => void
   onClose?: () => void
+  onOpenFilterModal?: () => void
 }
 const TitleSection: React.FC<TitleSectionProps> = ({
   link,
@@ -110,6 +90,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   tabs = [],
   onSelectTab,
   onClose,
+  onOpenFilterModal,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
   const selectTab = (e: React.MouseEvent<HTMLElement>, index: number) => {
@@ -140,7 +121,9 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   const openFilter = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    alert(`open filter modal`)
+    if (typeof onOpenFilterModal === 'function') {
+      onOpenFilterModal()
+    }
   }
 
   return (

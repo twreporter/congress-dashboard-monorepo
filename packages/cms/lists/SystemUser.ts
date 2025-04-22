@@ -39,6 +39,10 @@ const listConfigurations = list({
           label: RoleEnum.Editor,
           value: RoleEnum.Editor,
         },
+        {
+          label: RoleEnum.Headless,
+          value: RoleEnum.Headless,
+        },
       ],
       validation: { isRequired: true },
     }),
@@ -47,7 +51,7 @@ const listConfigurations = list({
   },
   ui: {
     isHidden: ({ session }) => {
-      if ([RoleEnum.Owner, RoleEnum.Admin].indexOf(session?.data.role) > -1) {
+      if ([RoleEnum.Owner, RoleEnum.Admin].includes(session?.data.role)) {
         return false
       } else {
         return true
@@ -58,7 +62,7 @@ const listConfigurations = list({
     },
     itemView: {
       defaultFieldMode: ({ session }) => {
-        if ([RoleEnum.Owner, RoleEnum.Admin].indexOf(session?.data.role) > -1) {
+        if ([RoleEnum.Owner, RoleEnum.Admin].includes(session?.data.role)) {
           return 'edit'
         } else {
           return 'read'
@@ -79,8 +83,13 @@ const listConfigurations = list({
         const userEmail = session?.data?.email
 
         // only owner and admin roles can update the items without further checking
-        if ([RoleEnum.Owner, RoleEnum.Admin].indexOf(userRole) > -1) {
+        if ([RoleEnum.Owner, RoleEnum.Admin].includes(userRole)) {
           return true
+        }
+
+        // headless account cannot update anything
+        if ([RoleEnum.Headless].includes(userRole)) {
+          return false
         }
 
         if (
