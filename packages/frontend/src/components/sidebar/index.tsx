@@ -8,10 +8,15 @@ import {
   mockGetIssue,
   mockGetLegislator,
 } from '@/components/sidebar/config'
+// fetcher
+import fetchLegislatorsOfATopic from '@/fetchers/legislator'
+import fetchTopicOfALegislator from '@/fetchers/topic'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 // components
 import TitleSection, {
   TitleSectionProps,
-} from '@/components/sidebar/titleSection'
+} from '@/components/sidebar/title-section'
 import CardsOfTheYear, {
   SummaryCardProps,
   CardsOfTheYearProps,
@@ -21,7 +26,8 @@ import {
   IssueProps,
   Legislator,
   LegislatorProps,
-} from '@/components/sidebar/followMore'
+} from '@/components/sidebar/follow-more'
+import FilterModal from '@/components/sidebar/filter-modal'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 import {
@@ -64,7 +70,7 @@ const LoadingBox = styled.div`
     animation: ${spin} 1s linear infinite;
   }
 `
-const Loader: React.FC = () => (
+export const Loader: React.FC = () => (
   <LoadingBox>
     <Loading releaseBranch={releaseBranch} />
   </LoadingBox>
@@ -82,6 +88,14 @@ const Box = styled.div`
     width: 50vw;
     max-width: 520px;  
   `}
+`
+const ContentBox = styled.div<{ $show: boolean }>`
+  ${(props) => (props.$show ? '' : 'display: none;')}
+`
+const FilterBox = styled.div<{ $show: boolean }>`
+  ${(props) => (props.$show ? '' : 'display: none;')}
+  height: 100%;
+  position: relative;
 `
 const Body = styled.div`
   display: flex;
@@ -112,7 +126,7 @@ const FollowMoreTags = styled.div`
   flex-wrap: wrap;
 `
 
-function groupSummary(summaryList: SummaryCardProps[]) {
+export function groupSummary(summaryList: SummaryCardProps[]) {
   const result: CardsOfTheYearProps[] = []
   const summaryGroupByYear = _.groupBy(summaryList, (summary) =>
     summary.date.getFullYear()
@@ -143,11 +157,13 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   className,
   ref,
 }: SidebarIssueProps) => {
+  const [tabList, setTabList] = useState(legislatorList)
   const [isLoading, setIsLoading] = useState(true)
   const [selectedTab, setSelectedTab] = useState(0)
+  const [showFilter, setShowFilter] = useState(false)
   const selectedLegislator = useMemo(
-    () => _.get(legislatorList, selectedTab),
-    [legislatorList, selectedTab]
+    () => _.get(tabList, selectedTab),
+    [tabList, selectedTab]
   )
   const summaryList: SummaryCardProps[] = useMemo(
     () => mockGetSummary(selectedLegislator.slug),
@@ -173,43 +189,63 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
       window.setTimeout(() => setIsLoading(false), 2000)
     }
   }, [selectedTab])
+  useEffect(() => {
+    setSelectedTab(0)
+  }, [tabList])
 
   return (
     <Box className={className} ref={ref}>
-      <TitleSection
-        title={title}
-        count={count}
-        tabs={legislatorList}
-        link={`/legislator/${slug}`}
-        onSelectTab={setSelectedTab}
-        onClose={onClose}
-      />
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <Body>
-          <SummarySection>
-            {summaryGroupByYear.map(
-              (props: CardsOfTheYearProps, index: number) => (
-                <CardsOfTheYear
-                  {...props}
-                  key={`summary-of-the-year-${index}`}
-                />
-              )
-            )}
-          </SummarySection>
-          <FollowMoreSection>
-            <FollowMoreTitle text={followMoreTitle} />
-            {issueList.length > 0 ? (
-              <FollowMoreTags>
-                {issueList.map((props: IssueProps, index: number) => (
-                  <Issue {...props} key={`follow-more-issue-${index}`} />
-                ))}
-              </FollowMoreTags>
-            ) : null}
-          </FollowMoreSection>
-        </Body>
-      )}
+      <ContentBox $show={!showFilter}>
+        <TitleSection
+          title={title}
+          count={count}
+          tabs={tabList}
+          link={`${InternalRoutes.Legislator}/${slug}`}
+          onSelectTab={setSelectedTab}
+          onOpenFilterModal={() => setShowFilter(true)}
+          onClose={onClose}
+        />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <Body>
+            <SummarySection>
+              {summaryGroupByYear.map(
+                (props: CardsOfTheYearProps, index: number) => (
+                  <CardsOfTheYear
+                    {...props}
+                    key={`summary-of-the-year-${index}`}
+                  />
+                )
+              )}
+            </SummarySection>
+            <FollowMoreSection>
+              <FollowMoreTitle text={followMoreTitle} />
+              {issueList.length > 0 ? (
+                <FollowMoreTags>
+                  {issueList.map((props: IssueProps, index: number) => (
+                    <Issue {...props} key={`follow-more-issue-${index}`} />
+                  ))}
+                </FollowMoreTags>
+              ) : null}
+            </FollowMoreSection>
+          </Body>
+        )}
+      </ContentBox>
+      {showFilter ? (
+        <FilterBox $show={showFilter}>
+          <FilterModal
+            title={`${title} 的相關發言篩選`}
+            slug={slug}
+            initialSelectedOption={tabList}
+            fetcher={fetchLegislatorsOfATopic}
+            onClose={() => {
+              setShowFilter(false)
+            }}
+            onConfirmSelection={setTabList}
+          />
+        </FilterBox>
+      ) : null}
     </Box>
   )
 }
@@ -239,10 +275,12 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   ref,
 }: SidebarLegislatorProps) => {
   const [isLoading, setIsLoading] = useState(true)
+  const [tabList, setTabList] = useState(issueList)
   const [selectedTab, setSelectedTab] = useState(0)
+  const [showFilter, setShowFilter] = useState(false)
   const selectedIssue = useMemo(
-    () => _.get(issueList, selectedTab),
-    [issueList, selectedTab]
+    () => _.get(tabList, selectedTab),
+    [tabList, selectedTab]
   )
   const summaryList: SummaryCardProps[] = useMemo(
     () => mockGetSummary(selectedIssue.slug),
@@ -269,45 +307,69 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
     }
   }, [selectedTab])
 
+  useEffect(() => {
+    setSelectedTab(0)
+  }, [tabList])
+
   return (
     <Box className={className} ref={ref}>
-      <TitleSection
-        title={title}
-        subtitle={subtitle}
-        tabs={issueList}
-        link={`/issue/${slug}`}
-        onSelectTab={setSelectedTab}
-        onClose={onClose}
-      />
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <Body>
-          <SummarySection>
-            {summaryGroupByYear.map(
-              (props: CardsOfTheYearProps, index: number) => (
-                <CardsOfTheYear
-                  {...props}
-                  key={`summary-of-the-year-${index}`}
-                />
-              )
-            )}
-          </SummarySection>
-          <FollowMoreSection>
-            <FollowMoreTitle text={followMoreTitle} />
-            {legislatorList.length > 0 ? (
-              <FollowMoreLegislator>
-                {legislatorList.map((props: LegislatorProps, index: number) => (
-                  <Legislator
+      <ContentBox $show={!showFilter}>
+        <TitleSection
+          title={title}
+          subtitle={subtitle}
+          tabs={tabList}
+          link={`${InternalRoutes.Topic}/${slug}`}
+          onSelectTab={setSelectedTab}
+          onClose={onClose}
+          onOpenFilterModal={() => setShowFilter(true)}
+        />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <Body>
+            <SummarySection>
+              {summaryGroupByYear.map(
+                (props: CardsOfTheYearProps, index: number) => (
+                  <CardsOfTheYear
                     {...props}
-                    key={`follow-more-legislator-${index}`}
+                    key={`summary-of-the-year-${index}`}
                   />
-                ))}
-              </FollowMoreLegislator>
-            ) : null}
-          </FollowMoreSection>
-        </Body>
-      )}
+                )
+              )}
+            </SummarySection>
+            <FollowMoreSection>
+              <FollowMoreTitle text={followMoreTitle} />
+              {legislatorList.length > 0 ? (
+                <FollowMoreLegislator>
+                  {legislatorList.map(
+                    (props: LegislatorProps, index: number) => (
+                      <Legislator
+                        {...props}
+                        key={`follow-more-legislator-${index}`}
+                      />
+                    )
+                  )}
+                </FollowMoreLegislator>
+              ) : null}
+            </FollowMoreSection>
+          </Body>
+        )}
+      </ContentBox>
+      {showFilter ? (
+        <FilterBox $show={showFilter}>
+          <FilterModal
+            title={`${title} 的相關發言篩選`}
+            subtitle={subtitle}
+            slug={slug}
+            initialSelectedOption={tabList}
+            fetcher={fetchTopicOfALegislator}
+            onClose={() => {
+              setShowFilter(false)
+            }}
+            onConfirmSelection={setTabList}
+          />
+        </FilterBox>
+      ) : null}
     </Box>
   )
 }

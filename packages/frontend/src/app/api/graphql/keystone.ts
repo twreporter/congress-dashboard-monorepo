@@ -4,28 +4,24 @@ export interface GraphQLResponse<T> {
   data?: T
   errors?: { message: string }[]
 }
-type Body = {
-  query: string
-  variables?: Record<string, string>
-}
 
-async function keystoneFetch<T>(
-  query: string,
-  variables?: Record<string, string>
+export async function keystoneFetch<T>(
+  bodyString: string,
+  keepAlive = true
 ): Promise<GraphQLResponse<T>> {
-  const cookie = await getCookie()
-
-  const rawBody: Body = { query }
-  if (variables) {
-    rawBody.variables = variables
+  if (!bodyString) {
+    throw new Error(`body string cannot be empty`)
   }
+
+  const cookie = await getCookie()
   const res = await fetch(process.env.API_SERVER_URL as string, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Cookie: cookie,
+      Connection: keepAlive ? 'keep-alive' : 'close',
     },
-    body: JSON.stringify(rawBody),
+    body: bodyString,
   })
 
   if (!res.ok) {
