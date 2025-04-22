@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-shared",
-  "version": "0.0.4-beta.1",
+  "version": "0.0.4",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/twreporter/congress-dashboard-monorepo.git",
