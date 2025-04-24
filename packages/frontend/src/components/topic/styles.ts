@@ -5,6 +5,7 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { H4, H6 } from '@twreporter/react-components/lib/text/headline'
 import { P1, P3 } from '@twreporter/react-components/lib/text/paragraph'
+import { DesktopAndAbove } from '@twreporter/react-components/lib/rwd'
 // utils
 import { notoSerif } from '@/utils/font'
 
@@ -52,8 +53,9 @@ export const TopicListContainer = styled.div`
   background-color: ${colorGrayscale.white};
   ${mq.hdOnly`
     width: 796px;
-  `}
+    `}
   ${mq.desktopOnly`
+    width: 100%;
     max-width: 720px;
   `}
   ${mq.tabletAndBelow`
@@ -66,6 +68,13 @@ export const TopicListContainer = styled.div`
   ${mq.mobileOnly`
     margin-left: -24px;
     margin-right: -24px;
+  `}
+`
+
+export const DesktopList = styled(DesktopAndAbove)`
+  ${mq.desktopAndAbove`
+    display: flex !important;
+    flex: 1;
   `}
 `
 

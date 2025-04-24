@@ -1,11 +1,8 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 // twreporter
-import {
-  TabletAndBelow,
-  DesktopAndAbove,
-} from '@twreporter/react-components/lib/rwd'
+import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 // components
 import TopicList from '@/components/topic/topic-list'
 import FilterModal from '@/components/filter-modal'
@@ -17,6 +14,7 @@ import ContentPageLayout from '@/components/layout/content-page-layout'
 // styles
 import {
   Spacing,
+  DesktopList,
   DesktopAside,
   TopicListContainer,
 } from '@/components/topic/styles'
@@ -72,9 +70,11 @@ const Topic: React.FC<TopicPageProps> = ({
           legislativeMeetingSessionState.legislativeMeetingSessions.map(
             ({ term }) => term
           )
+        setFilterCount(0)
       } else if (filterValues.meetingSession.length > 0) {
         // Use selected sessions
         sessionTermValue = filterValues.meetingSession.map(Number)
+        setFilterCount(filterValues.meetingSession.length)
       } else {
         // Fallback to current session if nothing is selected
         console.warn('No meeting sessions selected, using current session')
@@ -92,29 +92,6 @@ const Topic: React.FC<TopicPageProps> = ({
 
   const pageTitle = `#${topic?.title} 的相關發言摘要`
 
-  useEffect(() => {
-    if (legislativeMeetingSessionState.legislativeMeetingSessions?.length > 0) {
-      const allAvailableSessions =
-        legislativeMeetingSessionState.legislativeMeetingSessions.map(
-          ({ term }) => term
-        )
-      const hasAllSessions =
-        allAvailableSessions.length === currentMeetingSession.length &&
-        allAvailableSessions.every((session) =>
-          currentMeetingSession.includes(session)
-        )
-      if (hasAllSessions) {
-        setFilterCount(0)
-      } else {
-        setFilterCount(currentMeetingSession.length)
-      }
-    }
-  }, [
-    currentMeetingTerm,
-    currentMeetingSession,
-    legislativeMeetingSessionState,
-  ])
-
   return (
     <>
       <ContentPageLayout
@@ -123,7 +100,7 @@ const Topic: React.FC<TopicPageProps> = ({
         filterCount={filterCount}
         onFilterClick={openFilter}
       >
-        <DesktopAndAbove>
+        <DesktopList>
           <TopicListContainer>
             <TopicList
               legislatorsData={legislatorsData}
@@ -132,7 +109,7 @@ const Topic: React.FC<TopicPageProps> = ({
               currentMeetingSession={currentMeetingSession}
             />
           </TopicListContainer>
-        </DesktopAndAbove>
+        </DesktopList>
         <DesktopAside>
           <TopicStatistics
             legislatorCount={legislatorCount}
