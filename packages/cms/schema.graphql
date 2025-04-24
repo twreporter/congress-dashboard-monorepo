@@ -1318,6 +1318,9 @@ type Query {
   importRecordsCount(where: ImportRecordWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
+
+  """ Get topics order by speech count desc """
+  topicsOrderBySpeechCount(meetingId: Int!, sessionIds: [Int] = [], partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [TopicWithSpeechCount]
 }
 
 union AuthenticatedItem = SystemUser
@@ -1455,4 +1458,29 @@ type KeystoneAdminUISort {
 enum KeystoneAdminUISortDirection {
   ASC
   DESC
+}
+
+type ImageFileWithUrlOnly {
+  url: String!
+}
+
+type CustomImage {
+  imageFile: ImageFileWithUrlOnly!
+}
+
+type LegislatorForTopic {
+  name: String!
+  party: Int
+  count: Int
+  slug: String!
+  imageLink: String
+  image: CustomImage
+}
+
+type TopicWithSpeechCount {
+  title: String!
+  slug: String!
+  speechCount: Int!
+  legislatorCount: Int!
+  legislators: [LegislatorForTopic]
 }
