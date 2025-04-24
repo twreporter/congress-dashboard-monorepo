@@ -9,6 +9,8 @@ import {
   Title,
   Body,
   SummarySection,
+  EmptyState,
+  EmptyStateText,
 } from '@/components/layout/speech-summary-list/layout'
 import TabNavigation from '@/components/layout/speech-summary-list/tab-navigation'
 import FollowMoreItems from '@/components/layout/speech-summary-list/follow-more-items'
@@ -125,6 +127,19 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   const handleTabChange = useCallback((index: number) => {
     setSelectedTab(index)
   }, [])
+
+  if (topics.length === 0) {
+    return (
+      <Container>
+        <Title $isEmpty={true} text="發言摘要" />
+        <Body>
+          <EmptyState>
+            <EmptyStateText text="所選會期無發言資訊" />
+          </EmptyState>
+        </Body>
+      </Container>
+    )
+  }
 
   return (
     <Container>

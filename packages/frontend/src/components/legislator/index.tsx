@@ -2,10 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 // @twreporter
-import {
-  DesktopAndAbove,
-  TabletAndBelow,
-} from '@twreporter/react-components/lib/rwd'
+import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 // components
 import LegislatorInfo from '@/components/legislator/legislator-info'
 import LegislatorStatistics from '@/components/legislator/legislator-statistics'
@@ -148,34 +145,32 @@ const Legislator: React.FC<LegislatorProps> = ({
         filterCount={filterCount}
         onFilterClick={openFilter}
       >
-        <DesktopAndAbove>
-          <DesktopContainer>
-            <DesktopAsideLeft>
-              <LegislatorInfo
-                legislator={legislator}
-                isLegislatorActive={isLegislatorActive}
+        <DesktopContainer>
+          <DesktopAsideLeft>
+            <LegislatorInfo
+              legislator={legislator}
+              isLegislatorActive={isLegislatorActive}
+            />
+            <Feedback />
+          </DesktopAsideLeft>
+          <DesktopAsideRight>
+            <LegislatorStatistics
+              committees={legislator.committees}
+              proposalSuccessCount={legislator.proposalSuccessCount}
+              meetingTermCount={legislator.meetingTermCount}
+              meetingTermCountInfo={legislator.meetingTermCountInfo}
+            />
+            <ListContainer>
+              <LegislatorList
+                legislatorSlug={legislator.slug}
+                topics={topics}
+                speechesByTopic={speechesByTopic}
+                currentMeetingTerm={currentMeetingTerm}
+                currentMeetingSession={currentMeetingSession}
               />
-              <Feedback />
-            </DesktopAsideLeft>
-            <DesktopAsideRight>
-              <LegislatorStatistics
-                committees={legislator.committees}
-                proposalSuccessCount={legislator.proposalSuccessCount}
-                meetingTermCount={legislator.meetingTermCount}
-                meetingTermCountInfo={legislator.meetingTermCountInfo}
-              />
-              <ListContainer>
-                <LegislatorList
-                  legislatorSlug={legislator.slug}
-                  topics={topics}
-                  speechesByTopic={speechesByTopic}
-                  currentMeetingTerm={currentMeetingTerm}
-                  currentMeetingSession={currentMeetingSession}
-                />
-              </ListContainer>
-            </DesktopAsideRight>
-          </DesktopContainer>
-        </DesktopAndAbove>
+            </ListContainer>
+          </DesktopAsideRight>
+        </DesktopContainer>
         <TabletAndBelow>
           <ContentBlock>
             <LegislatorInfo

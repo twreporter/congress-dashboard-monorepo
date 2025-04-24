@@ -40,6 +40,10 @@ export const ContentBlock = styled.div`
 export const DesktopContainer = styled.div`
   display: flex;
   gap: 24px;
+  width: 100%;
+  ${mq.tabletAndBelow`
+    display: none;
+  `}
 `
 
 export const DesktopAsideLeft = styled.div`

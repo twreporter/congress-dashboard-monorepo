@@ -127,7 +127,7 @@ export const useLegislativeMeetingFilters = (
       label: '屆期',
       key: 'meeting',
       defaultValue:
-        legislativeMeetingState.legislativeMeeting[0].term.toString(),
+        legislativeMeetingState.legislativeMeeting[0]?.term.toString(),
       isLoading: legislativeMeetingState.isLoading,
       options: _.map(
         legislativeMeetingState.legislativeMeeting,
