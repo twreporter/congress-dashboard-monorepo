@@ -1,6 +1,6 @@
 export type TabProps = {
   slug?: string
-  name: string
+  name?: string
   count?: number
   avatar?: string
   selected?: boolean

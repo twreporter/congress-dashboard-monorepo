@@ -4,18 +4,23 @@
 import React, { useState, useEffect, useRef, forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 // config
-import { mockHumans, mockIssues } from '@/components/dashboard/card/config'
-import {
-  mockSidebarIssueProps,
-  mockSidebarLegislatorProps,
-} from '@/components/sidebar/config'
+import { mockHumans } from '@/components/dashboard/card/config'
+import { mockSidebarLegislatorProps } from '@/components/sidebar/config'
+// type
+import { type TopNTopicData } from '@/fetchers/server/topic'
+import { type partyData } from '@/fetchers/party'
+import { type LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
+import { type SidebarIssueProps } from '@/components/sidebar'
 // utils
 import toastr from '@/utils/toastr'
+import { getImageLink } from '@/fetchers/utils'
+// fetcher
+import { fetchTopNTopics } from '@/fetchers/topic'
 // components
 import FunctionBar, { Option } from '@/components/dashboard/function-bar'
 import {
   CardIssueRWD,
-  type CardIssueProps,
+  type Legislator,
   CardIssueSkeletonRWD,
 } from '@/components/dashboard/card/issue'
 import {
@@ -25,7 +30,6 @@ import {
 } from '@/components/dashboard/card/human'
 import {
   SidebarIssue,
-  type SidebarIssueProps,
   SidebarLegislator,
   type SidebarLegislatorProps,
 } from '@/components/sidebar'
@@ -37,6 +41,11 @@ import { PillButton } from '@twreporter/react-components/lib/button'
 import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+// lodash
+import { find } from 'lodash'
+const _ = {
+  find,
+}
 
 const Box = styled.div`
   background: ${colorGrayscale.gray100};
@@ -196,13 +205,30 @@ const CardSection = styled.div<{
 `
 
 const anchorId = 'anchor-id'
-const Dashboard = () => {
+type DashboardProps = {
+  initialTopics?: TopNTopicData & {
+    legislators?: Legislator[]
+  }
+  parties?: partyData[]
+  meetings?: LegislativeMeeting[]
+}
+const Dashboard: React.FC<DashboardProps> = ({
+  initialTopics = [],
+  parties = [],
+  meetings = [],
+}) => {
   const [selectedType, setSelectedType] = useState(Option.Issue)
   const [activeCardIndex, setActiveCardIndex] = useState(-1)
-  const [isLoading, setIsLoading] = useState(true)
-  const [mockIssue, setMockIssue] = useState<CardIssueProps[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [topics, setTopics] = useState(initialTopics)
   const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
   const [showSidebar, setShowSidebar] = useState(false)
+  const [sidebarTopic, setSidebarTopic] = useState<SidebarIssueProps>({
+    title: '',
+    count: 0,
+    slug: '',
+    legislatorList: [],
+  })
   const [sidebarGap, setSidebarGap] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
@@ -217,7 +243,6 @@ const Dashboard = () => {
   useEffect(() => {
     if (isLoading) {
       window.setTimeout(() => {
-        setMockIssue(mockIssues)
         setMockHuman(mockHumans)
         setIsLoading(false)
         if (selectedType === Option.Human) {
@@ -228,9 +253,6 @@ const Dashboard = () => {
   }, [isLoading])
 
   useEffect(() => {
-    setIsLoading(true)
-    setMockIssue([])
-    setMockHuman([])
     setShowSidebar(false)
   }, [selectedType])
   useEffect(() => {
@@ -261,6 +283,13 @@ const Dashboard = () => {
   }
   const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
     setActiveCardIndex(index)
+    const activeTopic = topics[index]
+    setSidebarTopic({
+      slug: activeTopic.slug,
+      title: activeTopic.title,
+      legislatorList: activeTopic.legislators,
+      count: activeTopic.speechCount,
+    })
 
     let newSidebarGap = 520 + 24
     const sidebarComponent = sidebarRefs.current[selectedType]
@@ -297,10 +326,57 @@ const Dashboard = () => {
       }
     }
   }
+  const onChangeFilter = async (filterModalValue) => {
+    setTopics([])
+    setIsLoading(true)
+    const meeting =
+      _.find(
+        meetings,
+        ({ term }) => term === Number(filterModalValue.meeting)
+      ) || meetings[0]
+    const meetingId = meeting.id
+    const partyIds = filterModalValue.party.map((idString: string) =>
+      Number(idString)
+    )
+    const sessionIds =
+      filterModalValue.meetingSession[0] === 'all'
+        ? []
+        : filterModalValue.meetingSession.map((idString: string) =>
+            Number(idString)
+          )
+    const topics = await fetchTopNTopics({
+      take: 10,
+      skip: 0,
+      legislativeMeetingId: meetingId,
+      legislativeMeetingSessionIds: sessionIds,
+      partyIds,
+    })
+    topics.forEach((topic) => {
+      topic.legislators = topic.legislators.map((legislator) => {
+        const partyData = legislator.party
+          ? _.find(parties, ({ id }) => id === legislator.party)
+          : undefined
+        return {
+          avatar: getImageLink(legislator),
+          partyAvatar: partyData ? getImageLink(partyData) : '',
+          party: partyData,
+          ...legislator,
+        }
+      })
+    })
+    setTopics(topics)
+    setIsLoading(false)
+  }
 
   return (
     <Box id={anchorId}>
-      <StyledFunctionBar currentTab={selectedType} setTab={setTab} />
+      <StyledFunctionBar
+        currentTab={selectedType}
+        setTab={setTab}
+        parties={parties}
+        meetings={meetings}
+        onChangeFilter={onChangeFilter}
+      />
       <CardSection
         $isScroll={showSidebar}
         $isSidebarOpened={showSidebar}
@@ -308,16 +384,20 @@ const Dashboard = () => {
       >
         <CardBox ref={cardRef}>
           <CardIssueBox $active={selectedType === Option.Issue}>
-            {mockIssue.map((props: CardIssueProps, index) => (
-              <CardIssueRWD
-                key={`issue-card-${index}`}
-                {...props}
-                selected={activeCardIndex === index}
-                onClick={(e: React.MouseEvent<HTMLElement>) =>
-                  onClickCard(e, index)
-                }
-              />
-            ))}
+            {topics.map(
+              ({ title, speechCount, legislatorCount, legislators }, index) => (
+                <CardIssueRWD
+                  key={`issue-card-${index}`}
+                  title={title}
+                  subTitle={`共 ${speechCount} 筆相關發言（${legislatorCount}人）`}
+                  legislators={legislators}
+                  selected={activeCardIndex === index}
+                  onClick={(e: React.MouseEvent<HTMLElement>) =>
+                    onClickCard(e, index)
+                  }
+                />
+              )
+            )}
             {isLoading ? (
               <>
                 <CardIssueSkeletonRWD />
@@ -329,7 +409,7 @@ const Dashboard = () => {
             <TabletAndAbove>
               <StyledSidebarIssue
                 $show={showSidebar}
-                {...mockSidebarIssueProps}
+                {...sidebarTopic}
                 onClose={closeSidebar}
                 ref={(el: HTMLDivElement) => {
                   sidebarRefs.current[Option.Issue] = el

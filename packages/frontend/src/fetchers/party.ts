@@ -1,6 +1,7 @@
 import useSWR from 'swr'
 
 export type partyData = {
+  id: number
   slug: string
   name: string
   imageLink?: string

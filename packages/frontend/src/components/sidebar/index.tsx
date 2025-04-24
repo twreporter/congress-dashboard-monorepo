@@ -134,11 +134,11 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
     [tabList, selectedTab]
   )
   const summaryList: SummaryCardProps[] = useMemo(
-    () => mockGetSummary(selectedLegislator.slug),
+    () => (selectedLegislator ? mockGetSummary(selectedLegislator.slug) : []),
     [selectedLegislator]
   )
   const issueList: IssueProps[] = useMemo(
-    () => mockGetIssue(selectedLegislator.slug),
+    () => (selectedLegislator ? mockGetIssue(selectedLegislator.slug) : []),
     [selectedLegislator]
   )
   const followMoreTitle: string = useMemo(
@@ -160,6 +160,11 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   useEffect(() => {
     setSelectedTab(0)
   }, [tabList])
+  useEffect(() => {
+    if (legislatorList) {
+      setTabList(legislatorList)
+    }
+  }, [legislatorList])
 
   return (
     <Box className={className} ref={ref}>

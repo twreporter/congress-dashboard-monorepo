@@ -1,4 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react'
+'use client'
+
+import React, { useRef, useEffect, useState, useMemo } from 'react'
 import styled from 'styled-components'
 // components
 import FilterModal, {
@@ -20,8 +22,16 @@ import { useScrollContext } from '@/contexts/scroll-context'
 import { ZIndex } from '@/styles/z-index'
 // constants
 import { HEADER_HEIGHT } from '@/constants/header'
+// utils
+import { getImageLink } from '@/fetchers/utils'
+import { formatDateToYearMonth } from '@/utils/date-formatters'
 // fetcher
-import useParty, { type partyData } from '@/fetchers/party'
+import { useLegislativeMeetingSession } from '@/fetchers/legislative-meeting'
+import useCommittee from '@/fetchers/committee'
+// type
+import { type partyData } from '@/fetchers/party'
+import { type LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
+import type { OptionGroup } from '@/components/selector/types'
 // selector
 import { SelectorType } from '@/components/selector'
 // constants
@@ -33,10 +43,10 @@ import {
 // component
 import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 // lodash
-import map from 'lodash/map'
-
+import { isEqual, map } from 'lodash'
 const _ = {
   map,
+  isEqual,
 }
 
 const HorizaontalLine = styled.div<{
@@ -151,7 +161,12 @@ type FunctionBarProps = {
   currentTab?: Option
   setTab: (tab: Option) => void
   className?: string
+  parties: partyData[]
+  meetings: LegislativeMeeting[]
+  onChangeFilter?: (filterModalValue: FilterModalValueType) => void
 }
+
+type CommitteeOptionGroup = Record<string, OptionGroup>
 
 const OptionIcon: React.FC<{ url: string }> = ({ url }) => {
   return <PartyTag size={TagSize.S} avatar={url} />
@@ -160,27 +175,35 @@ const OptionIcon: React.FC<{ url: string }> = ({ url }) => {
 const FunctionBar: React.FC<FunctionBarProps> = ({
   currentTab = Option.Issue,
   setTab,
+  parties,
+  meetings,
   className,
+  onChangeFilter,
 }: FunctionBarProps) => {
+  const latestMettingTerm = useMemo(() => `${meetings[0]?.term}`, [meetings])
   const openFilter = () => {
     setIsFilterOpen((prev) => !prev)
   }
   const tabRef = useRef<HTMLDivElement>(null)
   const { setTabElement, isHeaderHidden, isHeaderAboveTab } = useScrollContext()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [filterString, setFilterString] = useState('立法院｜第11屆｜全部會期')
+  const [filterString, setFilterString] = useState(
+    `立法院｜第${latestMettingTerm}屆｜全部會期`
+  )
   const [filterCount, setFilterCount] = useState(0)
   const [filterValues, setFilterValues] = useState<FilterModalValueType>({
     department: 'legislativeYuan',
-    meeting: '11',
+    meeting: latestMettingTerm,
     meetingSession: ['all'],
     constituency: [],
     party: [],
     committee: [],
   })
 
-  // Get party data
-  const partyState = useParty()
+  const sessionState = useLegislativeMeetingSession(
+    filterValues.meeting as string
+  )
+  const committeeState = useCommittee()
 
   // Generate filter options
   const getFilterOptions = (): FilterOption[] => {
@@ -198,11 +221,11 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         disabled: false,
         label: '屆期',
         key: 'meeting',
-        defaultValue: '11',
-        options: [
-          { label: '第 10 屆', value: '10' },
-          { label: '第 11 屆', value: '11' },
-        ],
+        defaultValue: `${latestMettingTerm}`,
+        options: meetings.map(({ term }) => ({
+          label: `第 ${term} 屆`,
+          value: `${term}`,
+        })),
       },
       {
         type: SelectorType.Multiple,
@@ -210,12 +233,20 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         defaultValue: ['all'],
         label: '會期',
         key: 'meetingSession',
+        isLoading: sessionState.isLoading,
         options: [
           { label: '全部會期', value: 'all', isDeletable: false },
-          { label: '第 1 會期(2020/9-2022/10)', value: '1' },
-          { label: '第 2 會期(2022/10-2023/2)', value: '2' },
-          { label: '第 3 會期(2023/2-2023/6)', value: '3' },
-        ],
+        ].concat(
+          sessionState.legislativeMeetingSessions.map(
+            ({ id, term, startTime, endTime }) => ({
+              label: `第 ${term} 會期(${formatDateToYearMonth(
+                startTime
+              )}-${formatDateToYearMonth(endTime)})`,
+              value: `${id}`,
+              isDeletable: true,
+            })
+          )
+        ),
       },
       {
         type: SelectorType.Multiple,
@@ -250,46 +281,40 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         disabled: false,
         label: '黨籍',
         key: 'party',
-        isLoading: partyState.isLoading,
-        options: _.map(
-          partyState.party,
-          ({ slug, name, imageLink, image }: partyData) => {
-            const selfHostImage = image?.imageFile?.url
-            const imageUrl =
-              imageLink ||
-              (selfHostImage
-                ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${selfHostImage}`
-                : '')
-            const prefixIcon = <OptionIcon url={imageUrl} />
-            return {
-              label: name,
-              value: slug,
-              prefixIcon,
-            }
-          }
-        ),
+        isLoading: false,
+        options: _.map(parties, (party) => ({
+          label: party.name,
+          value: `${party.id}`,
+          prefixIcon: <OptionIcon url={getImageLink(party)} />,
+        })),
       },
       {
         type: SelectorType.Multiple,
         disabled: false,
         label: '委員會',
         key: 'committee',
-        options: [
-          {
-            groupName: '常設',
-            options: [
-              { label: '內政委員會', value: 'committee-1' },
-              { label: '社會福利及衛生環境委員會', value: 'committee-3' },
-            ],
-          },
-          {
-            groupName: '特種',
-            options: [
-              { label: '經費稽核委員會', value: 'committee-2' },
-              { label: '紀律委員會', value: 'committee-4' },
-            ],
-          },
-        ],
+        isLoading: committeeState.isLoading,
+        options: Object.values(
+          committeeState.committees.reduce(
+            (acc: CommitteeOptionGroup, committee): CommitteeOptionGroup => {
+              if (!acc[committee.type]) {
+                acc = {
+                  ...acc,
+                  [committee.type]: {
+                    groupName: committee.type === 'ad-hoc' ? '特種' : '常設',
+                    options: [],
+                  },
+                }
+              }
+              acc[committee.type].options.push({
+                label: committee.name,
+                value: committee.slug,
+              })
+              return acc
+            },
+            {} as CommitteeOptionGroup
+          )
+        ) as OptionGroup[],
       },
     ]
 
@@ -297,11 +322,17 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   }
 
   const handleSubmit = (filterModalValue: FilterModalValueType) => {
+    console.log('filterValues', filterValues)
+    console.log('filterModalValue', filterModalValue)
+    if (_.isEqual(filterModalValue, filterValues)) {
+      console.log('the same')
+      return
+    }
     setFilterValues(filterModalValue)
 
     const meetingString = filterModalValue.meeting
       ? `第${filterModalValue.meeting}屆`
-      : '第11屆'
+      : `第${latestMettingTerm}屆`
     const meetingSessionString = filterModalValue.meetingSession?.length
       ? filterModalValue.meetingSession[0] === 'all'
         ? '全部會期'
@@ -314,6 +345,10 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
 
     setFilterString(`立法院｜${meetingString}｜${meetingSessionString}`)
     setFilterCount(totalCount)
+
+    if (typeof onChangeFilter === 'function') {
+      onChangeFilter(filterModalValue)
+    }
   }
 
   useEffect(() => {
@@ -361,7 +396,6 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
             onSubmit={handleSubmit}
             options={getFilterOptions()}
             value={filterValues}
-            onChange={setFilterValues}
           />
         </Box>
         <HorizaontalLine

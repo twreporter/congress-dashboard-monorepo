@@ -20,10 +20,10 @@ import {
 } from '@twreporter/react-components/lib/rwd'
 
 export type Legislator = {
-  name: string
+  name?: string
   count: number
-  avatar: string
-  partyAvatar: string
+  avatar?: string
+  partyAvatar?: string
   slug: string
 }
 export enum CardSize {
@@ -154,8 +154,10 @@ const CardIssue: React.FC<CardIssueProps> = ({
             return (
               <LegislatorItem key={`legislator-${index}`}>
                 <AvatarContainer>
-                  <Avatar src={avatar} />
-                  <Party avatar={partyAvatar} size={TagSize.S} />
+                  {avatar ? <Avatar src={avatar} /> : <Circle />}
+                  {partyAvatar ? (
+                    <Party avatar={partyAvatar} size={TagSize.S} />
+                  ) : null}
                 </AvatarContainer>
                 <Text text={name} />
                 <Text text={`(${count})`} />

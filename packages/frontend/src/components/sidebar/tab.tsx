@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 // components
-import { ImageWithSkeleton } from '@/components/skeleton'
+import { ImageWithSkeleton, CircleRaw } from '@/components/skeleton'
 // twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 import {
@@ -38,7 +38,7 @@ const Box = styled.div<{ $active: boolean }>`
 
 export type TabProps = {
   slug?: string
-  name: string
+  name?: string
   count?: number
   avatar?: string
   selected?: boolean
@@ -46,7 +46,7 @@ export type TabProps = {
   className?: string
 }
 const Tab: React.FC<TabProps> = ({
-  name,
+  name = '',
   count = 0,
   avatar,
   selected = false,
@@ -62,7 +62,9 @@ const Tab: React.FC<TabProps> = ({
           width={36}
           height={36}
         />
-      ) : null}
+      ) : (
+        <CircleRaw width={36} height={36} />
+      )}
       <Name text={`${name}${count ? `(${count})` : ''}`} $active={selected} />
     </Box>
   )
