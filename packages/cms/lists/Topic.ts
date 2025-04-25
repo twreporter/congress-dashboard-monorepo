@@ -1,5 +1,5 @@
 import { list } from '@keystone-6/core'
-import { relationship, text } from '@keystone-6/core/fields'
+import { relationship, text, json } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -41,6 +41,13 @@ const listConfigurations = list({
         createView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'read' },
         listView: { fieldMode: 'hidden' },
+      },
+    }),
+    relatedTwreporterArticles: json({
+      label: '相關文章',
+      defaultValue: [],
+      ui: {
+        views: './lists/views/related-article',
       },
     }),
     createdAt: CREATED_AT,

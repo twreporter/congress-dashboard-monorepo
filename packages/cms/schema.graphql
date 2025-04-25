@@ -452,6 +452,7 @@ type Topic {
   relatedTopicsCount(where: TopicWhereInput! = {}): Int
   referencedByTopics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
   referencedByTopicsCount(where: TopicWhereInput! = {}): Int
+  relatedTwreporterArticles: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -495,6 +496,7 @@ input TopicUpdateInput {
   speeches: SpeechRelateToManyForUpdateInput
   relatedTopics: TopicRelateToManyForUpdateInput
   referencedByTopics: TopicRelateToManyForUpdateInput
+  relatedTwreporterArticles: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -517,6 +519,7 @@ input TopicCreateInput {
   speeches: SpeechRelateToManyForCreateInput
   relatedTopics: TopicRelateToManyForCreateInput
   referencedByTopics: TopicRelateToManyForCreateInput
+  relatedTwreporterArticles: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
