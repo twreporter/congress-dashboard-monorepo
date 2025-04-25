@@ -108,6 +108,10 @@ export const H6Gray900 = styled(H6)`
   color: ${colorGrayscale.gray900};
 `
 
+export const H6Gray800 = styled(H6)`
+  color: ${colorGrayscale.gray800};
+`
+
 export const P3Gray600 = styled(P3)`
   color: ${colorGrayscale.gray600};
 `

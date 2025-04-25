@@ -57,3 +57,14 @@ export const formatDate = (
     (match) => tokenMap[match]
   )
 }
+
+/**
+ * Formats a date string to YYYY/MM/DD format
+ */
+export const formatDateToYYYYMMDD = (dateString: string): string => {
+  const date = new Date(dateString)
+  const year = date.getFullYear()
+  const month = `${date.getMonth() + 1}`
+  const day = `${date.getDate()}`
+  return `${year}/${month.padStart(2, '0')}/${day.padStart(2, '0')}`
+}

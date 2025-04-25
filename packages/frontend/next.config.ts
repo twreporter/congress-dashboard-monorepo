@@ -8,7 +8,9 @@ const nextConfig: NextConfig = {
     domains: [
       'dev-congress-dashboard-storage.twreporter.org',
       'staging-congress-dashboard-storage.twreporter.org',
-      'picsum.photos',
+      'dev.twreporter.org',
+      'staging.twreporter.org',
+      'twreporter.org',
     ],
   },
 }

@@ -28,6 +28,7 @@ export type TopicData = {
     slug: string
     title: string
   }[]
+  relatedTwreporterArticles?: string[]
 }
 /** fetchTopic
  *   fetch topics with give slug in given terms & session
@@ -92,6 +93,7 @@ export const fetchTopic = async ({
           slug
           title
         }
+        relatedTwreporterArticles
       }
     }
   `

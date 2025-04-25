@@ -128,7 +128,9 @@ const Topic: React.FC<TopicPageProps> = ({
             legislatorCount={legislatorCount}
             speechesCount={topic?.speechesCount}
           />
-          <TopicRelatedArticles />
+          <TopicRelatedArticles
+            relatedArticles={topic?.relatedTwreporterArticles}
+          />
           <TopicOthersWatching
             othersWatchingTags={topic?.relatedTopics}
             currentMeetingTerm={currentMeetingTerm}
@@ -154,7 +156,9 @@ const Topic: React.FC<TopicPageProps> = ({
             />
           </TopicListContainer>
           <Spacing $height={8} />
-          <TopicRelatedArticles />
+          <TopicRelatedArticles
+            relatedArticles={topic?.relatedTwreporterArticles}
+          />
           <Spacing $height={8} />
           <TopicOthersWatching
             othersWatchingTags={topic?.relatedTopics}
