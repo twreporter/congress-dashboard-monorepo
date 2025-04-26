@@ -5,15 +5,17 @@ import styled from 'styled-components'
 // fetcher
 import useTwreporterArticle from '@/fetchers/twreporter-article'
 // component
-import { Triangle } from '@/components/skeleton'
+import { Triangle, Gap, ImageWithSkeleton } from '@/components/skeleton'
+import { H4Title, P3Gray600, H6Gray800 } from '@/components/topic/styles'
 // util
 import { formatDateToYYYYMMDD } from '@/utils/date-formatters'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import {
+  DesktopAndAbove,
+  MobileOnly,
+} from '@twreporter/react-components/lib/rwd'
 import mq from '@twreporter/core/lib/utils/media-query'
-// components
-import { H4Title, P3Gray600, H6Gray800 } from '@/components/topic/styles'
-import { ImageWithSkeleton } from '@/components/skeleton'
 
 // horizontal line component
 const HorazontalLine = styled.div`
@@ -42,6 +44,12 @@ const CategoryAndDate = styled.div`
   display: flex;
   gap: 8px;
 `
+const TabletOnly = styled.div`
+  display: none;
+  ${mq.tabletOnly`
+    display: block;  
+  `}
+`
 const imageStyle = {
   flex: 'none',
 }
@@ -54,7 +62,29 @@ const TwreporterArticle: React.FC<TwreporterArticleProps> = ({ slug }) => {
   if (isLoading || error) {
     return (
       <ArticleBox>
-        <Triangle $width={'250px'} $height={'120px'} />
+        <FlexColumn>
+          <CategoryAndDate>
+            <Triangle $width={'36px'} $height={'18px'} />
+            <Triangle $width={'60px'} $height={'18px'} />
+          </CategoryAndDate>
+          <Gap $gap={8} />
+          <Triangle $width={'100%'} $height={'20px'} />
+          <Gap $gap={4} />
+          <DesktopAndAbove>
+            <Triangle $width={'100%'} $height={'20px'} />
+            <Gap $gap={4} />
+            <Triangle $width={'80px'} $height={'20px'} />
+          </DesktopAndAbove>
+          <TabletOnly>
+            <Triangle $width={'240px'} $height={'20px'} />
+          </TabletOnly>
+          <MobileOnly>
+            <Triangle $width={'100%'} $height={'20px'} />
+            <Gap $gap={4} />
+            <Triangle $width={'80px'} $height={'20px'} />
+          </MobileOnly>
+        </FlexColumn>
+        <Triangle $width={'72px'} $height={'72px'} />
       </ArticleBox>
     )
   }
