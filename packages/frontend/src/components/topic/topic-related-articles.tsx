@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 // fetcher
 import useTwreporterArticle from '@/fetchers/twreporter-article'
@@ -18,7 +18,7 @@ import {
 import mq from '@twreporter/core/lib/utils/media-query'
 
 // horizontal line component
-const HorazontalLine = styled.div`
+const HorizontalLine = styled.div`
   margin-bottom: 20px;
   border-bottom: 1px solid ${colorGrayscale.gray300};
 `
@@ -56,10 +56,26 @@ const imageStyle = {
 
 type TwreporterArticleProps = {
   slug: string
+  onError?: () => void
 }
-const TwreporterArticle: React.FC<TwreporterArticleProps> = ({ slug }) => {
+const TwreporterArticle: React.FC<TwreporterArticleProps> = ({
+  slug,
+  onError,
+}) => {
   const { data, isLoading, error } = useTwreporterArticle(slug)
-  if (isLoading || error) {
+  const hasCalledOnError = useRef(false)
+
+  useEffect(() => {
+    if (!isLoading && error && !hasCalledOnError.current) {
+      hasCalledOnError.current = true
+      onError?.()
+    }
+  }, [isLoading, error, onError])
+
+  if (error) {
+    return null
+  }
+  if (isLoading) {
     return (
       <ArticleBox>
         <FlexColumn>
@@ -144,14 +160,15 @@ const RelatedArticleBlock = styled.div`
     padding-right: 24px;
   `}
 `
-// TODO: add related articles
+
 type TopicRelatedArticlesProps = {
   relatedArticles?: string[]
 }
 const TopicRelatedArticles: React.FC<TopicRelatedArticlesProps> = ({
   relatedArticles = [],
 }) => {
-  if (relatedArticles.length === 0) {
+  const [errorCount, setErrorCount] = useState(0)
+  if (errorCount === relatedArticles.length) {
     return null
   }
 
@@ -160,8 +177,11 @@ const TopicRelatedArticles: React.FC<TopicRelatedArticlesProps> = ({
       <H4Title text="相關文章" />
       {relatedArticles.map((slug, index) => (
         <div key={`twreporter-a-${slug}`}>
-          {index !== 0 ? <HorazontalLine /> : null}
-          <TwreporterArticle slug={slug} />
+          {index !== 0 ? <HorizontalLine /> : null}
+          <TwreporterArticle
+            slug={slug}
+            onError={() => setErrorCount((errorCount) => errorCount + 1)}
+          />
         </div>
       ))}
     </RelatedArticleBlock>
