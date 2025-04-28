@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.0, 2025-04-28
+
+### Notable Changes
+
+- feat
+  - implement filter modals and sidebar z-index management
+
+### Commits
+
+- [[`bffb6d2e94`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bffb6d2e94)] - **feat(frontend)**: implement filter modals and sidebar z-index management (Lucien)
+
 ## 1.0.0-rc.1, 2025-04-22
 
 ### Notable Changes
