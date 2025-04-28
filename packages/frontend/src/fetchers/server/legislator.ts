@@ -1,8 +1,5 @@
 import { keystoneFetch } from '@/app/api/graphql/keystone'
 
-/* fetchLegislator
- *   fetch legislative with given slug and in given term
- */
 export type LegislatorFromRes = {
   proposalSuccessCount?: number
   party: {
@@ -43,6 +40,83 @@ export type LegislatorFromRes = {
   }
 }
 
+/** checkLegislatorExist
+ *  check if legislator exist with given slug
+ */
+export const checkLegislatorExist = async ({
+  slug,
+}: {
+  slug: string
+}): Promise<boolean> => {
+  const where = {
+    slug,
+  }
+  const query = `
+    query Legislator($where: LegislatorWhereUniqueInput!) {
+      legislator(where: $where) {
+        slug
+      }
+    }
+  `
+  const variables = { where }
+  try {
+    const data = await keystoneFetch<{
+      legislator: { slug: string }
+    }>(JSON.stringify({ query, variables }), false)
+    return Boolean(data?.data?.legislator?.slug)
+  } catch (err) {
+    throw new Error(
+      `Failed to check if legislator exists for slug: ${slug}, err: ${err}`
+    )
+  }
+}
+
+/** getLegislatorMeetingTerms
+ *  get legislator's all meeting terms return in descending order by term
+ */
+export const getLegislatorMeetingTerms = async ({
+  slug,
+}: {
+  slug: string
+}): Promise<string[]> => {
+  const where = {
+    legislator: {
+      slug: {
+        equals: slug,
+      },
+    },
+  }
+  const query = `
+    query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
+      legislativeYuanMembers(where: $where) {
+        legislativeMeeting {
+          term
+        }
+      }
+    }
+  `
+  const variables = { where }
+
+  try {
+    const data = await keystoneFetch<{
+      legislativeYuanMembers: { legislativeMeeting: { term: number } }[]
+    }>(JSON.stringify({ query, variables }), false)
+    return (
+      data?.data?.legislativeYuanMembers
+        .map((m) => m.legislativeMeeting.term)
+        .sort((a, b) => b - a)
+        .map(String) || []
+    )
+  } catch (err) {
+    throw new Error(
+      `Failed to fetch legislators for slug: ${slug}, err: ${err}`
+    )
+  }
+}
+
+/** fetchLegislator
+ *   fetch legislative with given slug and in given term
+ */
 export const fetchLegislator = async ({
   slug,
   legislativeMeeting,
@@ -119,9 +193,6 @@ export const fetchLegislator = async ({
   }
 }
 
-/* fetchLegislatorTopics
- *   fetch topics which given legislator has speech in given term & session
- */
 export type SpeechData = {
   slug: string
   title: string
@@ -136,6 +207,9 @@ export type TopicData = {
   speeches: SpeechData[]
 }
 
+/** fetchLegislatorTopics
+ *   fetch topics which given legislator has speech in given term & session
+ */
 export const fetchLegislatorTopics = async ({
   slug,
   legislativeMeetingTerm,
