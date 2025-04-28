@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.0.3-beta.1, 2025-04-08
+## 1.0.0-rc.1, 2025-04-22
 
 ### Notable Changes
 
@@ -8,56 +8,84 @@
   - related topic upload
   - new columns for legislator & legislativeYuanMember
 - fix
+  - reset Dockerfile
+  - install all dependencies for docker image
+  - update Dockerfile to use corepack
+  - update Dockerfile with multi stage
   - rename related topic column and add validation for link
+  - add `developer_headless_account` role
+  - use `includes` instead of `indexOf`
 - chore
+  - update @twreporter packages
+  - update @twreporter/congress-dashboard-shared version
   - sync dev
 
 ### Commits
 
+- [[`c2c99d12b7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c2c99d12b7)] - **chore(cms)**: update @twreporter packages (Lucien)
+- [[`4f00f74ee2`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4f00f74ee2)] - **chore(cms)**: update @twreporter/congress-dashboard-shared version (Lucien)
+- [[`51ae426634`](https://github.com/twreporter/congress-dashboard-monorepo/commit/51ae426634)] - **fix(cms)**: reset Dockerfile (Lucien)
+- [[`40389475bc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/40389475bc)] - **fix(cms)**: set env to development for yarn install at Dockerfile (Lucien)
+- [[`593e5bb0a3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/593e5bb0a3)] - **fix(cms)**: install all dependencies for docker image (Lucien)
+- [[`70d9a0b738`](https://github.com/twreporter/congress-dashboard-monorepo/commit/70d9a0b738)] - **fix(cms)**: update Dockerfile to use corepack (Lucien)
+- [[`e9c2bbef3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e9c2bbef3c)] - **fix(cms)**: update Dockerfile with multi stage (Lucien)
 - [[`413bc7f3ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/413bc7f3ed)] - **chore(cms)**: sync dev (Lucien)
 - [[`854c87aa00`](https://github.com/twreporter/congress-dashboard-monorepo/commit/854c87aa00)] - **fix(cms)**: rename related topic column and add validation for link (Lucien)
 - [[`785de95947`](https://github.com/twreporter/congress-dashboard-monorepo/commit/785de95947)] - **feat(cms)**: new columns for legislator & legislativeYuanMember (Lucien)
 - [[`fde82401dd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fde82401dd)] - **feat(cms)**: related topic upload (Lucien)
-
-## 0.0.3-beta.0, 2025-04-07
-
-### Notable Changes
-
-- fix
-  - add `developer_headless_account` role
-  - use `includes` instead of `indexOf`
-
-### Commits
-
 - [[`3fab8379b1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3fab8379b1)] - **fix(cms)**: use `includes` instead of `indexOf` (Aylie Chou)
 - [[`651f5efb1f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/651f5efb1f)] - **feat(cms)**: add `developer_headless_account` role (Aylie Chou)
 
-## 0.0.2, 2025-03-26
+## 1.0.0-rc.0, 2025-03-27
 
 ### Notable Changes
 
 - feat
-  - connect legislativeMeeting & fix legislativeYuanMember update logic
-  - check slug duplicated for some list
+  - create lists
+    - committee list
+    - topic and speech list
+    - committeeMember list
+    - selected list
+    - party list
+    - legislative meeting list
+    - legislative meeting session list
+    - legislator list
+    - legislative yuan member list
   - add csv uploader custom field
-  - add papaparse to read csv file
-  - use custom field for import record and change speech content and summary type
-  - migration file
-  - allow admin to delete import record
-  - required fields for upload csv
-  - add comment for graphql error
-  - add emotion packages
-  - add import record list
+    - add `papaparse` to read csv file
+    - connect legislativeMeeting & fix legislativeYuanMember update logic
+    - check slug duplicated for some list
+    - add required fields configuration for upload csv
+    - add import record list
+    - allow admin to delete import record
+  - migration files
+    - create imageLink migration file
+    - create init migration file
+  - add `emotion` packages
   - set body limit to 50mb
   - session secret
+  - ignore eslintcache
+  - use typescript enum for export constants
+  - use common eslint & prettier & husky
 - fix
+  - change speech `content` and `summary` type from string to json
+  - add comment for graphql error handling
   - more header & speech option
   - upsert topic with speech
-  - fix comments
   - add validation for upload data
+  - list order and label name and dependency for cms
+  - add validation for selected
+  - prettier format
+  - remove duplicate tsconfig
+  - change legislative meeting term to unique
 - chore
+  - update monorepo related config
+  - use @twreporter packages
   - sync dev
-
+  - init cms
+    - access-control
+    - system user access
+  - README & add dockerfile for cms
 ### Commits
 
 - [[`e04dc0a5c9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e04dc0a5c9)] - **fix(cms)**: connect legislativeMeeting & fix legislativeYuanMember update logic (Lucien)
@@ -80,48 +108,6 @@
 - [[`abb735d429`](https://github.com/twreporter/congress-dashboard-monorepo/commit/abb735d429)] - **feat(cms)**: set body limit to 50mb (Lucien)
 - [[`43dc4d4b51`](https://github.com/twreporter/congress-dashboard-monorepo/commit/43dc4d4b51)] - **feat(cms)**: add import record list (Lucien)
 - [[`962e920cb7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/962e920cb7)] - **feat(cms)**: add emotion packages (Lucien)
-
-## 0.0.1, 2025-02-13
-
-### Notable Changes
-
-- feat
-  - add legislative-yuan-member options constant
-  - ignore eslintcache
-  - add imageLink for party and member
-  - add city constant
-  - create imageLink migration file
-  - create committee list
-  - create topic and speech list
-  - create committeeMember list
-  - use legislative yuan member for relation
-  - create selected list
-  - use typescript enum for export constants
-  - create party list
-  - create init migration file
-  - creat legislative meeting list
-  - creat legislative meeting session list
-  - create legislator list
-  - create legislative yuan member list
-  - use common eslint & prettier & husky
-- fix
-  - list order and label name and dependency for cms
-  - add validation for selected
-  - prettier format
-  - remove duplicate tsconfig
-  - change legislative meeting term to unique
-- chore
-  - update monorepo related config
-  - use twreporter repo
-  - sync dev
-  - init cms
-  - access-control
-  - system user access
-  - change to monorepo
-  - READEME & add dockerfile for cms
-
-### Commits
-
 - [[`9969e7dfef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9969e7dfef)] - **chore**: update monorepo related config (Aylie Chou)
 - [[`efe8fbca37`](https://github.com/twreporter/congress-dashboard-monorepo/commit/efe8fbca37)] - **fix(cms)**: list order and label name and dependency for cms (Lucien)
 - [[`7c68cbd28f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c68cbd28f)] - **chore**: use twreporter repo (Lucien)
@@ -154,4 +140,3 @@
 - [[`8585ec4ee6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8585ec4ee6)] - **chore**: system user access (Lucien)
 - [[`ec12bde1d9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec12bde1d9)] - **chore**: access-control (Lucien)
 - [[`e8e09268f8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8e09268f8)] - **chore**: init cms (Lucien)
-
