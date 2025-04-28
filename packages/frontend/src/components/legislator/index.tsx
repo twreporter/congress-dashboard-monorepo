@@ -46,6 +46,11 @@ const Legislator: React.FC<LegislatorProps> = ({
   const [filterCount, setFilterCount] = useState<number>(0)
   const [isLegislatorActive, setIsLegislatorActive] = useState<boolean>(false)
 
+  const { legislator, topics, speechesByTopic } = useLegislatorData(
+    legislatorData,
+    topicsData
+  )
+
   const {
     isFilterOpen,
     setIsFilterOpen,
@@ -54,11 +59,10 @@ const Legislator: React.FC<LegislatorProps> = ({
     legislativeMeetingState,
     legislativeMeetingSessionState,
     filterOptions,
-  } = useLegislativeMeetingFilters(currentMeetingTerm, currentMeetingSession)
-
-  const { legislator, topics, speechesByTopic } = useLegislatorData(
-    legislatorData,
-    topicsData
+  } = useLegislativeMeetingFilters(
+    legislator.slug,
+    currentMeetingTerm,
+    currentMeetingSession
   )
 
   const openFilter = () => {
@@ -119,11 +123,7 @@ const Legislator: React.FC<LegislatorProps> = ({
         setFilterCount(currentMeetingSession.length)
       }
     }
-  }, [
-    currentMeetingTerm,
-    currentMeetingSession,
-    legislativeMeetingSessionState,
-  ])
+  }, [currentMeetingTerm, currentMeetingSession])
 
   useEffect(() => {
     // if the legislator's meeting term matches the latest meeting term, set isLegislatorActive to true
