@@ -71,11 +71,18 @@ export const Field = ({
   }
   const addSlug = async () => {
     try {
-      await getTwreporterArticle(inputSlug)
+      const article = await getTwreporterArticle(inputSlug)
+      alert(`
+        新增報導者相關文章:
+          ${article.title}
+      `)
       setSlugs([inputSlug].concat(slugs))
       setInputSlug('')
     } catch (err) {
-      alert(`failed to find slug: ${inputSlug}, err: ${err}`)
+      alert(`
+        無法加入此文章，重新輸入文章 slug 再試一次。
+        error code: ${err}
+      `)
     }
   }
   const removeSlug = (slug: string) => {
