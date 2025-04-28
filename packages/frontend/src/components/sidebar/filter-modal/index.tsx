@@ -101,7 +101,9 @@ const TopBox = styled(FlexColumn)<{ $show: boolean }>`
   ${(props) => (props.$show ? '' : 'transform: translateY(-100%);')}
   transition: transform 0.4s ease-in-out;
 `
-const TitleBox = styled(FlexRow)``
+const TitleBox = styled(FlexRow)`
+  align-items: center;
+`
 const ContentBox = styled.div<{
   $topBoxHeight: number
   $isSearchMode: boolean
@@ -208,7 +210,7 @@ type FilterModalProps = {
   title: string
   subtitle?: string
   initialSelectedOption?: FilterOption[]
-  fetcher: (slug: string) => Promise<FilterOption[]>
+  fetcher?: (slug: string) => Promise<FilterOption[]>
   onClose: () => void
   onConfirmSelection: (selectedOptions: FilterOption[]) => void
 }
@@ -231,12 +233,15 @@ const FilterModal: React.FC<FilterModalProps> = ({
     _.map(initialSelectedOption, (option) => ({ selected: true, ...option }))
   )
   const [selectedOptions, setSelectedOptions] = useState(initialSelectedOption)
-  const [hasLoaded, setHasLoaded] = useState(false)
+  const [hasLoaded, setHasLoaded] = useState(!fetcher) // Set to true if no fetcher
   const [keyword, setKeyword] = useState('')
   const [isSearchMode, setIsSearchMode] = useState(false)
-  const [isShowLoading, setIsShowLoading] = useState(true)
+  const [isShowLoading, setIsShowLoading] = useState(!!fetcher) // Only show loading if fetcher exists
   const [isShowError, setIsShowError] = useState(false)
-  const { data, error } = useSWR(slug, () => fetcher(slug))
+  const { data, error } = useSWR(
+    fetcher ? slug : null,
+    () => fetcher && fetcher(slug)
+  )
   const selectedOptionsForShow = useMemo(
     () => selectedOptions,
     [selectedOptions]
@@ -251,6 +256,18 @@ const FilterModal: React.FC<FilterModalProps> = ({
   )
 
   const { toastr, showSnackBar, snackBarText } = useSnackBar()
+  // If no fetcher is provided, use initialSelectedOption as options
+  useEffect(() => {
+    if (!fetcher && !hasLoaded) {
+      setOptions(
+        _.map(initialSelectedOption, (option) => ({
+          selected: true,
+          ...option,
+        }))
+      )
+      setHasLoaded(true)
+    }
+  }, [])
 
   useEffect(() => {
     if (hasLoaded) {
@@ -277,7 +294,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
     )
     setOptions(newOptions)
     setHasLoaded(true)
-  }, [data, hasLoaded])
+  }, [data, hasLoaded, options])
 
   useEffect(() => {
     if (!isSearchMode) {

@@ -3,6 +3,12 @@ import React, { useMemo, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 import Link from 'next/link'
+// @twreporter
+import {
+  colorGrayscale,
+  colorOpacity,
+} from '@twreporter/core/lib/constants/color'
+import mq from '@twreporter/core/lib/utils/media-query'
 // Common components
 import {
   Container,
@@ -20,11 +26,14 @@ import CardsOfTheYear, {
 } from '@/components/sidebar/card'
 import { Issue, type IssueProps } from '@/components/sidebar/follow-more'
 import { type TabProps } from '@/components/sidebar/tab'
+import FilterModal from '@/components/sidebar/filter-modal'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
 // fetcher
 import { fetchTopTopicsForLegislator } from '@/fetchers/topic'
 import { type SpeechData } from '@/fetchers/server/topic'
+// z-index
+import { ZIndex } from '@/styles/z-index'
 // lodash
 import get from 'lodash/get'
 const _ = {
@@ -40,6 +49,35 @@ const TopicContainer = styled.div`
   }
 `
 
+const FilterMask = styled.div<{ $show: boolean }>`
+  visibility: ${(props) => (props.$show ? 'visible' : 'hidden')};
+  transition: visibility 0.3s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: ${colorOpacity['black_0.2']};
+  z-index: ${ZIndex.SideBar};
+`
+
+const FilterBox = styled.div<{ $show: boolean }>`
+  transform: translateX(${(props) => (props.$show ? 0 : '100%')});
+  transition: transform 0.3s ease-in-out;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 520px;
+  height: 100vh;
+  background-color: ${colorGrayscale.white};
+  overflow-x: hidden;
+  box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
+  z-index: ${ZIndex.SideBar};
+  ${mq.mobileOnly`
+    width: 100vw;
+  `}
+`
+
 type LegislatorData = {
   name: string
   slug: string
@@ -48,6 +86,8 @@ type LegislatorData = {
 }
 
 type TopicListProps = {
+  topicTitle: string
+  topicSlug: string
   legislatorsData: LegislatorData[]
   speechesByLegislator: Record<string, SpeechData[]>
   currentMeetingTerm: number
@@ -55,16 +95,19 @@ type TopicListProps = {
 }
 
 const TopicList: React.FC<TopicListProps> = ({
+  topicTitle,
+  topicSlug,
   legislatorsData,
   speechesByLegislator,
   currentMeetingTerm,
   currentMeetingSession,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
-  const tabs: TabProps[] = useMemo(
-    () => legislatorsData.map((legislator) => legislator),
-    [legislatorsData]
+  const [showFilter, setShowFilter] = useState(false)
+  const [tabList, setTabList] = useState(
+    legislatorsData.map((legislator) => legislator) as TabProps[]
   )
+
   const selectedLegislator = useMemo(() => {
     if (legislatorsData.length === 0) return null
     return legislatorsData[selectedTab] || legislatorsData[0]
@@ -120,7 +163,7 @@ const TopicList: React.FC<TopicListProps> = ({
   const openFilter = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    alert(`open filter modal`)
+    setShowFilter(true)
   }, [])
   const handleTabChange = useCallback((index: number) => {
     setSelectedTab(index)
@@ -130,7 +173,7 @@ const TopicList: React.FC<TopicListProps> = ({
     <Container>
       <Title text="發言摘要" />
       <TabNavigation
-        tabs={tabs}
+        tabs={tabList}
         selectedTab={selectedTab}
         setSelectedTab={handleTabChange}
         onFilterClick={openFilter}
@@ -162,6 +205,19 @@ const TopicList: React.FC<TopicListProps> = ({
           ) : null}
         </FollowMoreItems>
       </Body>
+      <FilterMask $show={showFilter}>
+        <FilterBox $show={showFilter}>
+          <FilterModal
+            title={`${topicTitle} 的相關發言篩選`}
+            slug={topicSlug}
+            initialSelectedOption={tabList}
+            onClose={() => {
+              setShowFilter(false)
+            }}
+            onConfirmSelection={setTabList}
+          />
+        </FilterBox>
+      </FilterMask>
     </Container>
   )
 }
