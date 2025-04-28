@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { SelectorType } from '@/components/selector'
 import { formatDateToYearMonth } from '@/utils/date-formatters'
 import {
+  useLegislativeMeeting,
   useLegislativeMeetingByLegislator,
   useLegislativeMeetingSession,
 } from '@/fetchers/legislative-meeting'
@@ -14,11 +15,15 @@ const _ = {
   map,
 }
 
-export const useLegislativeMeetingFilters = (
-  legislatorSlug: string,
-  currentMeetingTerm: number,
+export const useLegislativeMeetingFilters = ({
+  legislatorSlug,
+  currentMeetingTerm,
+  currentMeetingSession,
+}: {
+  legislatorSlug?: string
+  currentMeetingTerm: number
   currentMeetingSession: number[]
-) => {
+}) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterCount, setFilterCount] = useState(0)
   const [filterValues, setFilterValues] = useState({
@@ -26,8 +31,14 @@ export const useLegislativeMeetingFilters = (
     meetingSession: currentMeetingSession.map(String),
   })
 
-  const legislativeMeetingState =
-    useLegislativeMeetingByLegislator(legislatorSlug)
+  const allMeetingState = useLegislativeMeeting()
+  const byLegislatorMeetingState = useLegislativeMeetingByLegislator(
+    legislatorSlug || ''
+  )
+  const legislativeMeetingState = legislatorSlug
+    ? byLegislatorMeetingState
+    : allMeetingState
+
   const legislativeMeetingSessionState = useLegislativeMeetingSession(
     filterValues.meeting as string
   )

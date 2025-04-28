@@ -59,11 +59,11 @@ const Legislator: React.FC<LegislatorProps> = ({
     legislativeMeetingState,
     legislativeMeetingSessionState,
     filterOptions,
-  } = useLegislativeMeetingFilters(
-    legislator.slug,
+  } = useLegislativeMeetingFilters({
+    legislatorSlug: legislator.slug,
     currentMeetingTerm,
-    currentMeetingSession
-  )
+    currentMeetingSession,
+  })
 
   const openFilter = () => {
     setIsFilterOpen((prev) => !prev)

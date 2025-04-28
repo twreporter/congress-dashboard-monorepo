@@ -46,7 +46,10 @@ const Topic: React.FC<TopicPageProps> = ({
     handleFilterValueChange,
     legislativeMeetingSessionState,
     filterOptions,
-  } = useLegislativeMeetingFilters(currentMeetingTerm, currentMeetingSession)
+  } = useLegislativeMeetingFilters({
+    currentMeetingTerm,
+    currentMeetingSession,
+  })
 
   const { legislatorCount, legislatorsData, speechesByLegislator } =
     useTopicData(topic)
