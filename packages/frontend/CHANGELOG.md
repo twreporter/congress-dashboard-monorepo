@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0-beta.1, 2025-04-28
+
+### Notable Changes
+
+- feat
+  - add snackbar for sidebar filter
+- chore
+  - sync dev
+
+### Commits
+
+- [[`dc6d7b2a73`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc6d7b2a73)] - **feat(frontend)**: add snackbar for sidebar filter (Lucien)
+- [[`b7d94ac4ae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7d94ac4ae)] - **chore(frontend)**: sync dev (Lucien)
+
 ## 1.0.0-beta.0, 2025-04-28
 
 ### Notable Changes
