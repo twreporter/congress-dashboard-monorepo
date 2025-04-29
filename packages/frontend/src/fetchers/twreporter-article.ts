@@ -23,21 +23,21 @@ const getArticleUrl = (slug: string, style: string) => {
   return `${process.env.NEXT_PUBLIC_TWREPORTER_URL}/${entry}/${slug}`
 }
 
-export type ArticleData =
-  | {
-      category?: string
-      publishedDate?: string
-      title: string
-      image?: {
-        description?: string
-        url?: string
-      }
-      style: string
-      url: string
-    }
-  | undefined
+export type ArticleData = {
+  category?: string
+  publishedDate?: string
+  title: string
+  image?: {
+    description?: string
+    url?: string
+  }
+  style: string
+  url: string
+}
 
-const fetchTwreporterArticle = async (slug: string): Promise<ArticleData> => {
+const fetchTwreporterArticle = async (
+  slug: string
+): Promise<ArticleData | undefined> => {
   const url = process.env.NEXT_PUBLIC_TWREPORTER_API_URL as string
   const endpoint = `/v2/posts/${slug}?full=false`
   const res = await fetch(`${url}${endpoint}`, {

@@ -72,9 +72,6 @@ const TwreporterArticle: React.FC<TwreporterArticleProps> = ({
     }
   }, [isLoading, error, onError])
 
-  if (error) {
-    return null
-  }
   if (isLoading) {
     return (
       <ArticleBox>
@@ -103,6 +100,9 @@ const TwreporterArticle: React.FC<TwreporterArticleProps> = ({
         <Triangle $width={'72px'} $height={'72px'} />
       </ArticleBox>
     )
+  }
+  if (error || !data) {
+    return null
   }
 
   const openTwreporterArticle = () => {
