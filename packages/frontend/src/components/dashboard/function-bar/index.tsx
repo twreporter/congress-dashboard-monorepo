@@ -1,23 +1,18 @@
 'use client'
 
-import React, { useRef, useEffect, useState, useMemo } from 'react'
+import React, { useRef, useEffect, useState, useMemo, useContext } from 'react'
 import styled from 'styled-components'
 // components
-import FilterModal, {
-  type FilterModalValueType,
-  type FilterOption,
-} from '@/components/filter-modal'
+import FilterModal from '@/components/filter-modal'
 import Tab from '@/components/dashboard/function-bar/tab'
 import FilterButton from '@/components/button/filter-button'
-// @twreporter
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import {
-  TabletAndAbove,
-  MobileOnly,
-} from '@twreporter/react-components/lib/rwd'
-import mq from '@twreporter/core/lib/utils/media-query'
+import PartyTag from '@/components/dashboard/card/party-tag'
+// enum
+import { Option, TagSize } from '@/components/dashboard/enum'
+import { SelectorType } from '@/components/selector'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
+import { DashboardContext } from '@/components/dashboard/context'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
@@ -29,19 +24,25 @@ import { formatDateToYearMonth } from '@/utils/date-formatters'
 import { useLegislativeMeetingSession } from '@/fetchers/legislative-meeting'
 import useCommittee from '@/fetchers/committee'
 // type
-import { type partyData } from '@/fetchers/party'
-import { type LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
+import type { partyData } from '@/fetchers/party'
+import type { LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
 import type { OptionGroup } from '@/components/selector/types'
-// selector
-import { SelectorType } from '@/components/selector'
-// constants
+import type {
+  FilterOption,
+  FilterModalValueType,
+} from '@/components/dashboard/type'
+// @twreporter
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import {
+  TabletAndAbove,
+  MobileOnly,
+} from '@twreporter/react-components/lib/rwd'
+import mq from '@twreporter/core/lib/utils/media-query'
 import {
   MemberType,
   MEMBER_TYPE_LABEL,
   CITY_OPTIONS,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
-// component
-import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
 // lodash
 import { isEqual, map } from 'lodash'
 const _ = {
@@ -152,13 +153,7 @@ const MobileOnlyBox = styled(MobileOnly)`
   width: 100%;
 `
 
-export enum Option {
-  Issue,
-  Human,
-}
-
 type FunctionBarProps = {
-  currentTab?: Option
   setTab: (tab: Option) => void
   className?: string
   parties: partyData[]
@@ -173,13 +168,14 @@ const OptionIcon: React.FC<{ url: string }> = ({ url }) => {
 }
 
 const FunctionBar: React.FC<FunctionBarProps> = ({
-  currentTab = Option.Issue,
   setTab,
   parties,
   meetings,
   className,
   onChangeFilter,
 }: FunctionBarProps) => {
+  const { tabType, filterValues, setFilterValues } =
+    useContext(DashboardContext)
   const latestMettingTerm = useMemo(() => `${meetings[0]?.term}`, [meetings])
   const openFilter = () => {
     setIsFilterOpen((prev) => !prev)
@@ -191,14 +187,6 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     `立法院｜第${latestMettingTerm}屆｜全部會期`
   )
   const [filterCount, setFilterCount] = useState(0)
-  const [filterValues, setFilterValues] = useState<FilterModalValueType>({
-    department: 'legislativeYuan',
-    meeting: latestMettingTerm,
-    meetingSession: ['all'],
-    constituency: [],
-    party: [],
-    committee: [],
-  })
 
   const sessionState = useLegislativeMeetingSession(
     filterValues.meeting as string
@@ -250,6 +238,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
       },
       {
         type: SelectorType.Multiple,
+        hide: tabType === Option.Issue,
         disabled: false,
         label: '選區',
         key: 'constituency',
@@ -278,6 +267,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
       },
       {
         type: SelectorType.Multiple,
+        hide: tabType === Option.Issue,
         disabled: false,
         label: '黨籍',
         key: 'party',
@@ -290,6 +280,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
       },
       {
         type: SelectorType.Multiple,
+        hide: tabType === Option.Issue,
         disabled: false,
         label: '委員會',
         key: 'committee',
@@ -322,10 +313,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   }
 
   const handleSubmit = (filterModalValue: FilterModalValueType) => {
-    console.log('filterValues', filterValues)
-    console.log('filterModalValue', filterModalValue)
     if (_.isEqual(filterModalValue, filterValues)) {
-      console.log('the same')
       return
     }
     setFilterValues(filterModalValue)
@@ -374,12 +362,12 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
             <Tabs>
               <TabItem
                 text={'看議題'}
-                selected={currentTab === Option.Issue}
+                selected={tabType === Option.Issue}
                 onClick={() => setTab(Option.Issue)}
               />
               <TabItem
                 text={'看立委'}
-                selected={currentTab === Option.Human}
+                selected={tabType === Option.Human}
                 onClick={() => setTab(Option.Human)}
               />
             </Tabs>

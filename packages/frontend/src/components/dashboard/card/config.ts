@@ -1,6 +1,7 @@
-import { Legislator, CardIssueProps } from '@/components/dashboard/card/issue'
+import { CardIssueProps } from '@/components/dashboard/card/issue'
 import { CardHumanProps, Tag } from '@/components/dashboard/card/human'
 import { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import type { Legislator } from '@/components/dashboard/type'
 
 export const DPP =
   'https://dev-congress-dashboard-storage.twreporter.org/tmp/dpp.png'

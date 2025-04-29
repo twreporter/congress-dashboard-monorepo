@@ -1,26 +1,30 @@
 /* eslint-disable react/display-name */
 'use client'
 
-import React, { useState, useEffect, useRef, forwardRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 // config
-import { mockHumans } from '@/components/dashboard/card/config'
 import { mockSidebarLegislatorProps } from '@/components/sidebar/config'
 // type
-import { type TopNTopicData } from '@/fetchers/server/topic'
-import { type partyData } from '@/fetchers/party'
-import { type LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
-import { type SidebarIssueProps } from '@/components/sidebar'
+import type { TopNTopicData } from '@/fetchers/server/topic'
+import type { partyData } from '@/fetchers/party'
+import type { LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
+import type { SidebarIssueProps } from '@/components/sidebar'
+import type { Legislator } from '@/components/dashboard/type'
 // utils
 import toastr from '@/utils/toastr'
-import { getImageLink } from '@/fetchers/utils'
-// fetcher
-import { fetchTopNTopics } from '@/fetchers/topic'
+// enum
+import { Option } from '@/components/dashboard/enum'
+// context
+import { DashboardContext } from '@/components/dashboard/context'
+// hook
+import useFilter from '@/components/dashboard/hook/use-filter'
+import useTopic from '@/components/dashboard/hook/use-topic'
+import useLegislator from '@/components/dashboard/hook/use-legislator'
 // components
-import FunctionBar, { Option } from '@/components/dashboard/function-bar'
+import FunctionBar from '@/components/dashboard/function-bar'
 import {
   CardIssueRWD,
-  type Legislator,
   CardIssueSkeletonRWD,
 } from '@/components/dashboard/card/issue'
 import {
@@ -43,6 +47,7 @@ import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 import { ZIndex } from '@/styles/z-index'
 // lodash
 import { find } from 'lodash'
+import { FilterModalValueType } from './type'
 const _ = {
   find,
 }
@@ -217,11 +222,12 @@ const Dashboard: React.FC<DashboardProps> = ({
   parties = [],
   meetings = [],
 }) => {
+  const latestMettingId = useMemo(() => meetings[0]?.id, [meetings])
   const [selectedType, setSelectedType] = useState(Option.Issue)
   const [activeCardIndex, setActiveCardIndex] = useState(-1)
   const [isLoading, setIsLoading] = useState(false)
   const [topics, setTopics] = useState(initialTopics)
-  const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
+  const [legislators, setLegislators] = useState<CardHumanProps[]>([])
   const [showSidebar, setShowSidebar] = useState(false)
   const [sidebarTopic, setSidebarTopic] = useState<SidebarIssueProps>({
     title: '',
@@ -234,16 +240,28 @@ const Dashboard: React.FC<DashboardProps> = ({
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
   const cardRef = useRef<HTMLDivElement>(null)
 
+  const { filterValues, setFilterValues, formatter } = useFilter(meetings)
+  const fetchTopics = useTopic(parties)
+  const { fetchLegislatorAndTopTopics, loadMoreLegislatorAndTopTopics } =
+    useLegislator()
+
   useEffect(() => {
     if (window) {
       setWindowWidth(window.innerWidth)
     }
+
+    const initializeLegislator = async () => {
+      const legislators = await fetchLegislatorAndTopTopics({
+        legislativeMeetingId: Number(latestMettingId),
+      })
+      setLegislators(legislators)
+    }
+    initializeLegislator()
   }, [])
 
   useEffect(() => {
     if (isLoading) {
       window.setTimeout(() => {
-        setMockHuman(mockHumans)
         setIsLoading(false)
         if (selectedType === Option.Human) {
           toastr({ text: '立委為隨機排列' })
@@ -255,6 +273,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   useEffect(() => {
     setShowSidebar(false)
   }, [selectedType])
+
   useEffect(() => {
     if (activeCardIndex > -1) {
       setShowSidebar(true)
@@ -264,17 +283,35 @@ const Dashboard: React.FC<DashboardProps> = ({
   const setTab = (value: Option) => {
     setActiveCardIndex(-1)
     setSelectedType(value)
-
-    /* scroll to top when change tab
-   *   not yet decided
-    const anchorComponent = document.getElementById(anchorId)
-    if (anchorComponent) {
-      anchorComponent.scrollIntoView({ behavior: 'smooth' })
-    }
-  */
   }
-  const loadMore = () => {
+  const loadMore = async () => {
     setIsLoading(true)
+    const loadMoreFunc =
+      selectedType === Option.Issue ? loadMoreTopics : loadMoreHuman
+    await loadMoreFunc()
+    setIsLoading(false)
+  }
+  const loadMoreTopics = async () => {
+    const skip = topics.length
+    const { meetingId, sessionIds } = formatter(filterValues)
+    const moreTopics = await fetchTopics({
+      skip,
+      take: 10,
+      legislativeMeetingId: meetingId,
+      legislativeMeetingSessionIds: sessionIds,
+    })
+    setTopics((topics) => topics.concat(moreTopics))
+  }
+  const loadMoreHuman = async () => {
+    const skip = legislators.length
+    const { meetingId, sessionIds } = formatter(filterValues)
+    const moreLegislators = await loadMoreLegislatorAndTopTopics({
+      skip,
+      take: 10,
+      legislativeMeetingId: meetingId,
+      legislativeMeetingSessionIds: sessionIds,
+    })
+    setLegislators((legislators) => legislators.concat(moreLegislators))
   }
   const closeSidebar = () => {
     setShowSidebar(false)
@@ -326,139 +363,143 @@ const Dashboard: React.FC<DashboardProps> = ({
       }
     }
   }
-  const onChangeFilter = async (filterModalValue) => {
-    setTopics([])
+  const onChangeFilter = async (filterModalValue: FilterModalValueType) => {
     setIsLoading(true)
-    const meeting =
-      _.find(
-        meetings,
-        ({ term }) => term === Number(filterModalValue.meeting)
-      ) || meetings[0]
-    const meetingId = meeting.id
-    const partyIds = filterModalValue.party.map((idString: string) =>
-      Number(idString)
-    )
-    const sessionIds =
-      filterModalValue.meetingSession[0] === 'all'
-        ? []
-        : filterModalValue.meetingSession.map((idString: string) =>
-            Number(idString)
-          )
-    const topics = await fetchTopNTopics({
+    await Promise.all([
+      onChangeTopicFilter(filterModalValue),
+      onChangeHumanFilter(filterModalValue),
+    ])
+    setIsLoading(false)
+  }
+  const onChangeTopicFilter = async (
+    filterModalValue: FilterModalValueType
+  ) => {
+    setTopics([])
+    const { meetingId, sessionIds } = formatter(filterModalValue)
+    const topics = await fetchTopics({
       take: 10,
       skip: 0,
       legislativeMeetingId: meetingId,
       legislativeMeetingSessionIds: sessionIds,
-      partyIds,
-    })
-    topics.forEach((topic) => {
-      topic.legislators = topic.legislators.map((legislator) => {
-        const partyData = legislator.party
-          ? _.find(parties, ({ id }) => id === legislator.party)
-          : undefined
-        return {
-          avatar: getImageLink(legislator),
-          partyAvatar: partyData ? getImageLink(partyData) : '',
-          party: partyData,
-          ...legislator,
-        }
-      })
     })
     setTopics(topics)
-    setIsLoading(false)
+  }
+  const onChangeHumanFilter = async (
+    filterModalValue: FilterModalValueType
+  ) => {
+    setLegislators([])
+    const { meetingId, sessionIds, partyIds, constituency } =
+      formatter(filterModalValue)
+    const legislators = await fetchLegislatorAndTopTopics({
+      legislativeMeetingId: meetingId,
+      legislativeMeetingSessionIds: sessionIds,
+      partyIds,
+      constituencies: constituency,
+    })
+    setLegislators(legislators)
+  }
+
+  const contextValue = {
+    tabType: selectedType,
+    filterValues,
+    setFilterValues,
   }
 
   return (
-    <Box id={anchorId}>
-      <StyledFunctionBar
-        currentTab={selectedType}
-        setTab={setTab}
-        parties={parties}
-        meetings={meetings}
-        onChangeFilter={onChangeFilter}
-      />
-      <CardSection
-        $isScroll={showSidebar}
-        $isSidebarOpened={showSidebar}
-        $windowWidth={windowWidth}
-      >
-        <CardBox ref={cardRef}>
-          <CardIssueBox $active={selectedType === Option.Issue}>
-            {topics.map(
-              ({ title, speechCount, legislatorCount, legislators }, index) => (
-                <CardIssueRWD
-                  key={`issue-card-${index}`}
-                  title={title}
-                  subTitle={`共 ${speechCount} 筆相關發言（${legislatorCount}人）`}
-                  legislators={legislators}
+    <DashboardContext.Provider value={contextValue}>
+      <Box id={anchorId}>
+        <StyledFunctionBar
+          setTab={setTab}
+          parties={parties}
+          meetings={meetings}
+          onChangeFilter={onChangeFilter}
+        />
+        <CardSection
+          $isScroll={showSidebar}
+          $isSidebarOpened={showSidebar}
+          $windowWidth={windowWidth}
+        >
+          <CardBox ref={cardRef}>
+            <CardIssueBox $active={selectedType === Option.Issue}>
+              {topics.map(
+                (
+                  { title, speechCount, legislatorCount, legislators },
+                  index
+                ) => (
+                  <CardIssueRWD
+                    key={`issue-card-${index}`}
+                    title={title}
+                    subTitle={`共 ${speechCount} 筆相關發言（${legislatorCount}人）`}
+                    legislators={legislators}
+                    selected={activeCardIndex === index}
+                    onClick={(e: React.MouseEvent<HTMLElement>) =>
+                      onClickCard(e, index)
+                    }
+                  />
+                )
+              )}
+              {isLoading ? (
+                <>
+                  <CardIssueSkeletonRWD />
+                  <CardIssueSkeletonRWD />
+                  <CardIssueSkeletonRWD />
+                  <CardIssueSkeletonRWD />
+                </>
+              ) : null}
+              <TabletAndAbove>
+                <StyledSidebarIssue
+                  $show={showSidebar}
+                  {...sidebarTopic}
+                  onClose={closeSidebar}
+                  ref={(el: HTMLDivElement) => {
+                    sidebarRefs.current[Option.Issue] = el
+                  }}
+                />
+              </TabletAndAbove>
+            </CardIssueBox>
+            <CardHumanBox $active={selectedType === Option.Human}>
+              {legislators.map((props: CardHumanProps, index: number) => (
+                <CardHumanRWD
+                  key={`human-card-${index}`}
+                  {...props}
                   selected={activeCardIndex === index}
                   onClick={(e: React.MouseEvent<HTMLElement>) =>
                     onClickCard(e, index)
                   }
                 />
-              )
-            )}
-            {isLoading ? (
-              <>
-                <CardIssueSkeletonRWD />
-                <CardIssueSkeletonRWD />
-                <CardIssueSkeletonRWD />
-                <CardIssueSkeletonRWD />
-              </>
-            ) : null}
-            <TabletAndAbove>
-              <StyledSidebarIssue
-                $show={showSidebar}
-                {...sidebarTopic}
-                onClose={closeSidebar}
-                ref={(el: HTMLDivElement) => {
-                  sidebarRefs.current[Option.Issue] = el
-                }}
-              />
-            </TabletAndAbove>
-          </CardIssueBox>
-          <CardHumanBox $active={selectedType === Option.Human}>
-            {mockHuman.map((props: CardHumanProps, index: number) => (
-              <CardHumanRWD
-                key={`human-card-${index}`}
-                {...props}
-                selected={activeCardIndex === index}
-                onClick={(e: React.MouseEvent<HTMLElement>) =>
-                  onClickCard(e, index)
-                }
-              />
-            ))}
-            {isLoading ? (
-              <>
-                <CardHumanSkeletonRWD />
-                <CardHumanSkeletonRWD />
-                <CardHumanSkeletonRWD />
-                <CardHumanSkeletonRWD />
-              </>
-            ) : null}
-            <TabletAndAbove>
-              <StyledSidebarLegislator
-                $show={showSidebar}
-                {...mockSidebarLegislatorProps}
-                onClose={closeSidebar}
-                ref={(el: HTMLDivElement) => {
-                  sidebarRefs.current[Option.Human] = el
-                }}
-              />
-            </TabletAndAbove>
-          </CardHumanBox>
-          <LoadMore
-            text={'載入更多'}
-            theme={PillButton.THEME.normal}
-            style={PillButton.Style.DARK}
-            type={PillButton.Type.PRIMARY}
-            size={PillButton.Size.L}
-            onClick={loadMore}
-          />
-        </CardBox>
-        <Gap $gap={sidebarGap} />
-      </CardSection>
-    </Box>
+              ))}
+              {isLoading ? (
+                <>
+                  <CardHumanSkeletonRWD />
+                  <CardHumanSkeletonRWD />
+                  <CardHumanSkeletonRWD />
+                  <CardHumanSkeletonRWD />
+                </>
+              ) : null}
+              <TabletAndAbove>
+                <StyledSidebarLegislator
+                  $show={showSidebar}
+                  {...mockSidebarLegislatorProps}
+                  onClose={closeSidebar}
+                  ref={(el: HTMLDivElement) => {
+                    sidebarRefs.current[Option.Human] = el
+                  }}
+                />
+              </TabletAndAbove>
+            </CardHumanBox>
+            <LoadMore
+              text={'載入更多'}
+              theme={PillButton.THEME.normal}
+              style={PillButton.Style.DARK}
+              type={PillButton.Type.PRIMARY}
+              size={PillButton.Size.L}
+              onClick={loadMore}
+            />
+          </CardBox>
+          <Gap $gap={sidebarGap} />
+        </CardSection>
+      </Box>
+    </DashboardContext.Provider>
   )
 }
 export default Dashboard
