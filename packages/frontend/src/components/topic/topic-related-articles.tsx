@@ -8,7 +8,7 @@ import useTwreporterArticle from '@/fetchers/twreporter-article'
 import { Triangle, Gap, ImageWithSkeleton } from '@/components/skeleton'
 import { H4Title, P3Gray600, H6Gray800 } from '@/components/topic/styles'
 // util
-import { formatDateToYYYYMMDD } from '@/utils/date-formatters'
+import { formatDate } from '@/utils/date-formatters'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import {
@@ -117,7 +117,9 @@ const TwreporterArticle: React.FC<TwreporterArticleProps> = ({
         <CategoryAndDate>
           <P3Gray600 text={data?.category} />
           {data?.publishedDate ? (
-            <P3Gray600 text={`${formatDateToYYYYMMDD(data.publishedDate)}`} />
+            <P3Gray600
+              text={`${formatDate(data.publishedDate, 'YYYY/MM/DD')}`}
+            />
           ) : null}
         </CategoryAndDate>
         <H6Gray800 text={data?.title} />
