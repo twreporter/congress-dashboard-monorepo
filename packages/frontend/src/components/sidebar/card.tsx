@@ -150,6 +150,9 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
   summary,
   slug,
 }) => {
+  // summary will be like this:
+  // "<ul><li>this is a long sentence</li><li>this is a long sentence</li></ul>" or "this is a long sentence"
+  const parsedSummary = summary.replace(/<[^>]*>/g, '')
   return (
     <CardBox>
       <FlexRow>
@@ -158,7 +161,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
       </FlexRow>
       <HorizontalLine />
       <Content>
-        {`${summary}（`}
+        {`${parsedSummary}（`}
         <Link href={`${InternalRoutes.Speech}/${slug}`}>
           <More>{'閱讀更多'}</More>
         </Link>
