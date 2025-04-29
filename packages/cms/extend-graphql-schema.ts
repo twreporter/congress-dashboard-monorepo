@@ -1,10 +1,13 @@
 import { Context } from '.keystone/types'
 import type { GraphQLSchema } from 'graphql'
 import { mergeSchemas } from '@graphql-tools/schema'
+// custom sql
 import {
   getTopicsSql,
   getTop5LegislatorSql,
 } from './custom-sql/topicsOrderBySpeechCount'
+import { getLegislatorsSql } from './custom-sql/topNTopicsOfLegislators'
+// lodash
 import { groupBy } from 'lodash'
 const _ = {
   groupBy,
@@ -35,10 +38,20 @@ type LegislatorForTopicRaw = LegislatorForTopic & {
   imageExtension?: string
 }
 
+type TopicForLegislator = {
+  title: string
+  slug: string
+  count: number
+}
+type LegislatorWithTopTopics = TopicForLegislator & {
+  legislatorId: number
+}
+
 const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
     schemas: [baseSchema],
     typeDefs: `
+      """ custom type for topicsOrderBySpeechCount """
       type ImageFileWithUrlOnly {
         url: String!
       }
@@ -53,17 +66,30 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
         imageLink: String
         image: CustomImage
       }
-      type TopicWithSpeechCount {
+      type TopicWithSpeechCountAndLegislators {
         title: String!
         slug: String!
         speechCount: Int!
         legislatorCount: Int!
         legislators: [LegislatorForTopic]
       }
+      
+      """ custom type for topNTopicsOfLegislators """
+      type TopicWithSpeechCount {
+        title: String!
+        slug: String!
+        count: Int!
+      }
+      type LegislatorWIthTopTopics {
+        id: Int!
+        topics: [TopicWithSpeechCount]
+      }
 
       type Query {
         """ Get topics order by speech count desc """
-        topicsOrderBySpeechCount(meetingId: Int!, sessionIds: [Int] = [], partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [TopicWithSpeechCount]
+        topicsOrderBySpeechCount(meetingId: Int!, sessionIds: [Int] = [], partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [TopicWithSpeechCountAndLegislators]
+        """ Get top N topic of a legislator order by speech cound desc """
+        topNTopicsOfLegislators(legislatorIds: [Int!]!, meetingId: Int!, sessionIds: [Int] = [], take: Int = 10): [LegislatorWIthTopTopics]
       }
     `,
     resolvers: {
@@ -121,6 +147,40 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
               legislators: top5legislatorsGrouped[id],
             })
           )
+        },
+        topNTopicsOfLegislators: async (
+          _root,
+          { legislatorIds, meetingId, sessionIds, take },
+          context: Context
+        ) => {
+          const topics = await context.prisma.$queryRaw<
+            LegislatorWithTopTopics[]
+          >(getLegislatorsSql({ legislatorIds, meetingId, sessionIds, take }))
+          console.log(
+            getLegislatorsSql({ legislatorIds, meetingId, sessionIds, take })
+          )
+          console.log(topics)
+          type GroupedTopics = {
+            [legislatorId: number]: Array<TopicForLegislator>
+          }
+          const topicsGrouped = topics.reduce(
+            (acc: GroupedTopics, { legislatorId, count, ...rest }) => {
+              if (!acc[legislatorId]) {
+                acc[legislatorId] = []
+              }
+              acc[legislatorId].push({
+                ...rest,
+                count: Number(count),
+              })
+              return acc
+            },
+            {} as GroupedTopics
+          )
+
+          return legislatorIds.map((id: number) => ({
+            id,
+            topics: topicsGrouped[id],
+          }))
         },
       },
     },
