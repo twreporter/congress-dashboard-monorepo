@@ -1,6 +1,9 @@
 import { useState, useMemo } from 'react'
 // type
-import type { FilterModalValueType } from '@/components/dashboard/type'
+import type {
+  FilterModalValueType,
+  FilterFormatter,
+} from '@/components/dashboard/type'
 // lodash
 import { find } from 'lodash'
 const _ = {
@@ -18,7 +21,7 @@ const useFilter = (meetings) => {
     committee: [],
   })
 
-  const formatter = (filterValues: FilterModalValueType) => {
+  const formatter: FilterFormatter = (filterValues: FilterModalValueType) => {
     const meeting =
       _.find(meetings, ({ term }) => term === Number(filterValues.meeting)) ||
       meetings[0]
@@ -38,7 +41,12 @@ const useFilter = (meetings) => {
     return { meetingId, sessionIds, partyIds, constituency }
   }
 
-  return { filterValues, setFilterValues, formatter }
+  const formattedFilterValues = useMemo(
+    () => formatter(filterValues),
+    [filterValues]
+  )
+
+  return { filterValues, setFilterValues, formatter, formattedFilterValues }
 }
 
 export default useFilter

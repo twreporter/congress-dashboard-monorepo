@@ -27,9 +27,21 @@ export type Legislator = {
   tooltip?: string
   note?: string
   count?: number
+  tags?: Tag[]
 }
 
 export type Tag = {
   name: string
   count: number
 }
+
+export type FormattedFilterValue = {
+  meetingId: number
+  sessionIds: number[]
+  partyIds: number[]
+  constituency: string[]
+}
+
+export type FilterFormatter = (
+  filterValues: FilterModalValueType
+) => FormattedFilterValue

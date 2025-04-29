@@ -3,8 +3,6 @@
 
 import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
 import styled, { css } from 'styled-components'
-// config
-import { mockSidebarLegislatorProps } from '@/components/sidebar/config'
 // type
 import type { TopNTopicData } from '@/fetchers/server/topic'
 import type { partyData } from '@/fetchers/party'
@@ -29,7 +27,6 @@ import {
 } from '@/components/dashboard/card/issue'
 import {
   CardHumanRWD,
-  type CardHumanProps,
   CardHumanSkeletonRWD,
 } from '@/components/dashboard/card/human'
 import {
@@ -227,7 +224,8 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [activeCardIndex, setActiveCardIndex] = useState(-1)
   const [isLoading, setIsLoading] = useState(false)
   const [topics, setTopics] = useState(initialTopics)
-  const [legislators, setLegislators] = useState<CardHumanProps[]>([])
+  const [legislators, setLegislators] = useState<Legislator[]>([])
+  const [shouldToastrOnHuman, setShouldToastrOnHuman] = useState(true)
   const [showSidebar, setShowSidebar] = useState(false)
   const [sidebarTopic, setSidebarTopic] = useState<SidebarIssueProps>({
     title: '',
@@ -235,12 +233,17 @@ const Dashboard: React.FC<DashboardProps> = ({
     slug: '',
     legislatorList: [],
   })
+  const [sidebarHuman, setSidebarHuman] = useState<SidebarLegislatorProps>({
+    title: '',
+    slug: '',
+  })
   const [sidebarGap, setSidebarGap] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
   const cardRef = useRef<HTMLDivElement>(null)
 
-  const { filterValues, setFilterValues, formatter } = useFilter(meetings)
+  const { filterValues, setFilterValues, formatter, formattedFilterValues } =
+    useFilter(meetings)
   const fetchTopics = useTopic(parties)
   const { fetchLegislatorAndTopTopics, loadMoreLegislatorAndTopTopics } =
     useLegislator()
@@ -260,15 +263,11 @@ const Dashboard: React.FC<DashboardProps> = ({
   }, [])
 
   useEffect(() => {
-    if (isLoading) {
-      window.setTimeout(() => {
-        setIsLoading(false)
-        if (selectedType === Option.Human) {
-          toastr({ text: '立委為隨機排列' })
-        }
-      }, 2000)
+    if (shouldToastrOnHuman && selectedType === Option.Human) {
+      toastr({ text: '立委為隨機排列' })
+      setShouldToastrOnHuman(false)
     }
-  }, [isLoading])
+  }, [selectedType, shouldToastrOnHuman])
 
   useEffect(() => {
     setShowSidebar(false)
@@ -318,8 +317,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     setSidebarGap(0)
     setActiveCardIndex(-1)
   }
-  const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
-    setActiveCardIndex(index)
+  const updateSidebarTopic = (index: number) => {
     const activeTopic = topics[index]
     setSidebarTopic({
       slug: activeTopic.slug,
@@ -327,7 +325,24 @@ const Dashboard: React.FC<DashboardProps> = ({
       legislatorList: activeTopic.legislators,
       count: activeTopic.speechCount,
     })
+  }
+  const updateSidebarHuman = (index: number) => {
+    const activeLegislator = legislators[index]
+    setSidebarHuman({
+      slug: activeLegislator.slug,
+      title: `${activeLegislator.name}`,
+      issueList: activeLegislator.tags,
+    })
+  }
+  const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
+    setActiveCardIndex(index)
 
+    // set sidebar data
+    const updater =
+      selectedType === Option.Issue ? updateSidebarTopic : updateSidebarHuman
+    updater(index)
+
+    // set animations for sidebar
     let newSidebarGap = 520 + 24
     const sidebarComponent = sidebarRefs.current[selectedType]
     const cardComponent = cardRef.current
@@ -397,12 +412,14 @@ const Dashboard: React.FC<DashboardProps> = ({
       constituencies: constituency,
     })
     setLegislators(legislators)
+    setShouldToastrOnHuman(true)
   }
 
   const contextValue = {
     tabType: selectedType,
     filterValues,
     setFilterValues,
+    formattedFilterValues,
   }
 
   return (
@@ -448,7 +465,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               ) : null}
               <TabletAndAbove>
                 <StyledSidebarIssue
-                  $show={showSidebar}
+                  $show={showSidebar && selectedType === Option.Issue}
                   {...sidebarTopic}
                   onClose={closeSidebar}
                   ref={(el: HTMLDivElement) => {
@@ -458,7 +475,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               </TabletAndAbove>
             </CardIssueBox>
             <CardHumanBox $active={selectedType === Option.Human}>
-              {legislators.map((props: CardHumanProps, index: number) => (
+              {legislators.map((props: Legislator, index: number) => (
                 <CardHumanRWD
                   key={`human-card-${index}`}
                   {...props}
@@ -478,8 +495,8 @@ const Dashboard: React.FC<DashboardProps> = ({
               ) : null}
               <TabletAndAbove>
                 <StyledSidebarLegislator
-                  $show={showSidebar}
-                  {...mockSidebarLegislatorProps}
+                  $show={showSidebar && selectedType === Option.Human}
+                  {...sidebarHuman}
                   onClose={closeSidebar}
                   ref={(el: HTMLDivElement) => {
                     sidebarRefs.current[Option.Human] = el

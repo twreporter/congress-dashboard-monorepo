@@ -242,9 +242,10 @@ export const fetchLegislators = async ({
  */
 type TopNTopicFromRes = {
   id: number
-  topic?: {
+  topics?: {
     id: number
     slug: string
+    name: string
     count: number
   }[]
 }
@@ -271,7 +272,7 @@ export const fetchTopNTopicsOfLegislators = async ({
         topics {
           count
           slug
-          title
+          name
         }
       }
     }

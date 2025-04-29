@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 // @twreporter
@@ -12,7 +12,8 @@ import { P1, P2, P4 } from '@twreporter/react-components/lib/text/paragraph'
 import { InternalRoutes } from '@/constants/navigation-link'
 
 // date stamp component
-function getDateFormat(date: Date) {
+const getDateFormat = (dateString: string) => {
+  const date = new Date(dateString)
   let month = ''
   const day = date.getDate()
 
@@ -89,9 +90,9 @@ const Day = styled(P2)`
 `
 
 type DateStampProps = {
-  date: Date
+  date: string
 }
-const DateStamp: React.FC<DateStampProps> = ({ date }) => {
+const DateStamp: React.FC<DateStampProps> = memo(({ date }) => {
   const { month, day } = getDateFormat(date)
   return (
     <DateBox>
@@ -99,7 +100,8 @@ const DateStamp: React.FC<DateStampProps> = ({ date }) => {
       <Day text={day} weight={P2.Weight.BOLD} />
     </DateBox>
   )
-}
+})
+DateStamp.displayName = 'date-stamp'
 
 // summary card component
 const CardBox = styled.div`
@@ -139,7 +141,7 @@ const More = styled.span`
 `
 
 export type SummaryCardProps = {
-  date: Date
+  date: string
   title: string
   summary: string
   slug: string

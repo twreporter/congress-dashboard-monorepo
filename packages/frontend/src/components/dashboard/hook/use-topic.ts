@@ -27,17 +27,18 @@ const useTopic = (parties: partyData[]) => {
         legislativeMeetingSessionIds,
       })
       topics.forEach((topic) => {
-        topic.legislators = topic.legislators.map((legislator) => {
-          const partyData = legislator.party
-            ? _.find(parties, ({ id }) => id === legislator.party)
-            : undefined
-          return {
-            avatar: getImageLink(legislator),
-            partyAvatar: partyData ? getImageLink(partyData) : '',
-            party: partyData,
-            ...legislator,
-          }
-        })
+        topic.legislators =
+          topic.legislators?.map((legislator) => {
+            const partyData = legislator.party
+              ? _.find(parties, ({ id }) => id === legislator.party)
+              : undefined
+            return {
+              avatar: getImageLink(legislator),
+              partyAvatar: partyData ? getImageLink(partyData) : '',
+              party: partyData,
+              ...legislator,
+            }
+          }) || []
       })
 
       return topics

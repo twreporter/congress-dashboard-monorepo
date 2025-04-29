@@ -68,20 +68,22 @@ const useLegislator = () => {
     legislativeMeetingSessionIds,
     take = 10,
     skip = 0,
-  }: LoadMoreLegislatorAndTopTopics) => {
+  }: LoadMoreLegislatorAndTopTopics): Promise<Legislator[]> => {
     const pool = customLegislatorPool || legislatorPool
     const legislators = pool.slice(skip, skip + take)
-    console.log(legislators)
     const top5Topics = await fetchTopNTopicsOfLegislators({
       legislatorIds: legislators.map(({ id }) => id!),
       legislativeMeetingId,
       legislativeMeetingSessionIds,
       take: 5,
     })
-    return legislators.map((legislator) => ({
-      ...legislator,
-      topics: _.find(top5Topics, ({ id }) => id === legislator.id)?.topic || [],
-    }))
+    return legislators.map((legislator) => {
+      const top5Topic = _.find(top5Topics, ({ id }) => id === legislator.id)
+      return {
+        ...legislator,
+        tags: top5Topic?.topics || [],
+      }
+    })
   }
 
   return { fetchLegislatorAndTopTopics, loadMoreLegislatorAndTopTopics }

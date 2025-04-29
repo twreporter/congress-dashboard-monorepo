@@ -45,7 +45,7 @@ export type LegislatorProps = {
   name?: string
   avatar?: string
   partyAvatar?: string
-  count: number
+  count?: number
   slug?: string
 }
 export const Legislator: React.FC<LegislatorProps> = ({
