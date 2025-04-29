@@ -1,6 +1,42 @@
 # Changelog
 
-## 0.0.3, 2024-05-23
+## 1.0.0-beta.1, 2025-04-28
+
+### Notable Changes
+
+- feat
+  - add snackbar for sidebar filter
+- chore
+  - sync dev
+
+### Commits
+
+- [[`dc6d7b2a73`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc6d7b2a73)] - **feat(frontend)**: add snackbar for sidebar filter (Lucien)
+- [[`b7d94ac4ae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7d94ac4ae)] - **chore(frontend)**: sync dev (Lucien)
+
+## 1.0.0-beta.0, 2025-04-28
+
+### Notable Changes
+
+- feat
+  - implement filter modals and sidebar z-index management
+
+### Commits
+
+- [[`bffb6d2e94`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bffb6d2e94)] - **feat(frontend)**: implement filter modals and sidebar z-index management (Lucien)
+
+## 1.0.0-rc.1, 2025-04-22
+
+### Notable Changes
+
+- chore
+  - add staging env file
+
+### Commits
+
+- [[`bd10d1866a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bd10d1866a)] - **chore(frontend)**: add staging env file (Lucien)
+
+## 1.0.0-rc.0, 2025-04-22
 
 ### Notable Changes
 
@@ -26,6 +62,29 @@
   - export function and change variable name
   - topic page basic layout
   - move filter button to button folder
+  - add `/api/graphql` endpoint
+  - add sidebar components & stories
+  - add search bar to header & hamburger menu
+  - add speech page
+    - custom button for congress dashboard
+    - add rwd toolbar
+    - add storybook stories
+    - add scrolling animation
+    - scroll context useCallback
+  - add `pino` logger & support stackdriver log
+  - add header max top and hidden print for toolbar
+  - add storybook configs
+  - add selector components for single & multi selection
+    - add storybook stories
+  - add header & footer component
+    - add scrolling animation
+  - add filter modal component
+    - add storybook stories
+  - add `use-window-width` hook
+    - support SSR
+  - add navigation link constants
+  - add responsive tag display
+  - add index page
 - fix
   - apply rwd style for sidebar gap
   - fix type import
@@ -53,11 +112,27 @@
   - fix comments and add constants
   - fix typo
   - fix topics route
+  - import type with type-only import
+  - copy public env when cloud build
+  - remove unused code
+  - utils font family
+  - using @ for import routes
 - chore
   - update @twreporter packages
+  - remove unused files in `public` folder
+  - move server only env to cloud run env
+  - update @twreporter packages
+  - add configs for monorepo cross import
+  - update @twreporter packages
+  - add `.env.development` in codebase
+  - rename `lib` to `utils`
+  - build `shared` lib with `tsup`
+  - update dependency version
 
 ### Commits
 
+- [[`1fb227e184`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1fb227e184)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`0339513a82`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0339513a82)] - **chore(frontend)**: update @twreporter packages (Lucien)
 - [[`229723bf76`](https://github.com/twreporter/congress-dashboard-monorepo/commit/229723bf76)] - **fix(frontend)**: sidebar gap rwd (Aylie Chou)
 - [[`be816e72cb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/be816e72cb)] - **fix(frontend)**: fix type import (Lucien)
 - [[`bb00aeb706`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bb00aeb706)] - **fix(frontend)**: update changelog (Lucien)
@@ -117,35 +192,6 @@
 - [[`d71c715ce0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d71c715ce0)] - **feat(frontend)**: topic page basic layout (Lucien)
 - [[`2c25ac8681`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2c25ac8681)] - **fix(frontend)**: fix topics route (Lucien)
 - [[`1058b17d6e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1058b17d6e)] - **feat(frontend)**: move filter button to button folder (Lucien)
-
-## 0.0.2, 2025-03-25
-
-### Notable Changes
-
-- feat
-  - add `/api/graphql` endpoint
-  - add sidebar components & stories
-  - add search bar to header & hamburger menu
-  - add speech page
-    - custom button for congress dashboard
-    - add rwd toolbar
-    - add storybook stories
-    - add scrolling animation
-    - scroll context useCallback
-  - add `pino` logger & support stackdriver log
-  - add header max top and hidden print for toolbar
-- fix
-  - import type with type-only import
-  - copy public env when cloud build
-  - remove unused code
-  - utils font family
-- chore
-  - remove unused files in `public` folder
-  - move server only env to cloud run env
-  - update @twreporter packages
-
-### Commits
-
 - [[`20842818db`](https://github.com/twreporter/congress-dashboard-monorepo/commit/20842818db)] - **fix**: import type with type-only import (Aylie Chou)
 - [[`5586f5e09f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5586f5e09f)] - **fix**: defects (Aylie Chou)
 - [[`71901b318c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/71901b318c)] - **fix**: copy public env when cloud build (Aylie Chou)
@@ -184,36 +230,6 @@
 - [[`83b44ebddb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/83b44ebddb)] - **fix(frontend)**: add horizontal gap for interaction (Aylie Chou)
 - [[`f04ed98ee6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f04ed98ee6)] - **feat**: add sidebar components & stories (Aylie Chou)
 - [[`f5c959c355`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f5c959c355)] - **feat**: add search bar to header & hamburger menu (Aylie Chou)
-
-## 0.0.1, 2025-03-07
-
-### Notable Changes
-
-- feat
-  - add storybook configs
-  - add selector components for single & multi selection
-    - add storybook stories
-  - add header & footer component
-    - add scrolling animation
-  - add filter modal component
-    - add storybook stories
-  - add `use-window-width` hook
-    - support SSR
-  - add navigation link constants
-  - add responsive tag display
-  - add index page
-- fix
-  - using @ for import routes
-- chore
-  - add configs for monorepo cross import
-  - update @twreporter packages
-  - add `.env.development` in codebase
-  - rename `lib` to `utils`
-  - build `shared` lib with `tsup`
-  - update dependency version
-
-### Commits
-
 - [[`493a5a5948`](https://github.com/twreporter/congress-dashboard-monorepo/commit/493a5a5948)] - **fix(frontend)**: remove comments (Aylie Chou)
 - [[`2f87305c32`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2f87305c32)] - **fix(frontend)**: add `tooltip`, `note`, `skeleton` (Aylie Chou)
 - [[`1e0f2b5863`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1e0f2b5863)] - **fix**: remove `console.log` (Aylie Chou)

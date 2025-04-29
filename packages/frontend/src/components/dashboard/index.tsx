@@ -35,6 +35,8 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { PillButton } from '@twreporter/react-components/lib/button'
 import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
+// z-index
+import { ZIndex } from '@/styles/z-index'
 
 const Box = styled.div`
   background: ${colorGrayscale.gray100};
@@ -122,7 +124,7 @@ const sidebarCss = css<{ $show: boolean }>`
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 3000;
+  z-index: ${ZIndex.SideBar};
   overflow-y: scroll;
 `
 const StyledSidebarIssue = styled(

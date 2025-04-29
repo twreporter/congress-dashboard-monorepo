@@ -22,6 +22,10 @@ import { Cross, Arrow } from '@twreporter/react-components/lib/icon'
 import { IconButton, PillButton } from '@twreporter/react-components/lib/button'
 import { P2, P1 } from '@twreporter/react-components/lib/text/paragraph'
 import { H5 } from '@twreporter/react-components/lib/text/headline'
+import {
+  SnackBar,
+  useSnackBar,
+} from '@twreporter/react-components/lib/snack-bar'
 // lodash
 import { filter, map, findIndex, unionBy, without, find } from 'lodash'
 const _ = {
@@ -35,7 +39,14 @@ const _ = {
 
 // global var
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-const maxSelectedCount = 10
+const maxSelectedCount = {
+  count: 10,
+  snackBarText: '至多可有十個篩選項目',
+}
+const minSelectedCount = {
+  count: 1,
+  snackBarText: '至少需保留一個篩選項目',
+}
 
 // Error Component
 const ErrorBox = styled.div`
@@ -90,7 +101,9 @@ const TopBox = styled(FlexColumn)<{ $show: boolean }>`
   ${(props) => (props.$show ? '' : 'transform: translateY(-100%);')}
   transition: transform 0.4s ease-in-out;
 `
-const TitleBox = styled(FlexRow)``
+const TitleBox = styled(FlexRow)`
+  align-items: center;
+`
 const ContentBox = styled.div<{
   $topBoxHeight: number
   $isSearchMode: boolean
@@ -151,11 +164,8 @@ const Text = styled(P2)`
   color: ${colorGrayscale.gray800};
 `
 const ConfirmBox = styled.div`
-  padding: 24px;
   position: absolute;
   bottom: 0;
-  border-top: 1px solid ${colorGrayscale.gray300};
-  background-color: ${colorGrayscale.white};
   z-index: 1;
   width: 100%;
 `
@@ -173,12 +183,34 @@ const EmptyText = styled(P1)`
   padding: 80px 0;
 `
 
+const ConfirmBoxRelative = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-top: 1px solid ${colorGrayscale.gray300};
+  background-color: ${colorGrayscale.white};
+`
+
+const ConfirmButtonContainer = styled.div`
+  width: 100%;
+  padding: 24px;
+`
+
+const SnackBarContainer = styled.div<{ $showSnackBar?: boolean }>`
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  transition: opacity 100ms ease-in-out;
+  opacity: ${(props) => (props.$showSnackBar ? 1 : 0)};
+`
+
 type FilterModalProps = {
   slug: string
   title: string
   subtitle?: string
   initialSelectedOption?: FilterOption[]
-  fetcher: (slug: string) => Promise<FilterOption[]>
+  fetcher?: (slug: string) => Promise<FilterOption[]>
   onClose: () => void
   onConfirmSelection: (selectedOptions: FilterOption[]) => void
 }
@@ -201,12 +233,15 @@ const FilterModal: React.FC<FilterModalProps> = ({
     _.map(initialSelectedOption, (option) => ({ selected: true, ...option }))
   )
   const [selectedOptions, setSelectedOptions] = useState(initialSelectedOption)
-  const [hasLoaded, setHasLoaded] = useState(false)
+  const [hasLoaded, setHasLoaded] = useState(!fetcher) // Set to true if no fetcher
   const [keyword, setKeyword] = useState('')
   const [isSearchMode, setIsSearchMode] = useState(false)
-  const [isShowLoading, setIsShowLoading] = useState(true)
+  const [isShowLoading, setIsShowLoading] = useState(!!fetcher) // Only show loading if fetcher exists
   const [isShowError, setIsShowError] = useState(false)
-  const { data, error } = useSWR(slug, () => fetcher(slug))
+  const { data, error } = useSWR(
+    fetcher ? slug : null,
+    () => fetcher && fetcher(slug)
+  )
   const selectedOptionsForShow = useMemo(
     () => selectedOptions,
     [selectedOptions]
@@ -219,6 +254,20 @@ const FilterModal: React.FC<FilterModalProps> = ({
     () => (topBoxRef.current ? topBoxRef.current.offsetHeight : 0),
     [topBoxRef.current]
   )
+
+  const { toastr, showSnackBar, snackBarText } = useSnackBar()
+  // If no fetcher is provided, use initialSelectedOption as options
+  useEffect(() => {
+    if (!fetcher && !hasLoaded) {
+      setOptions(
+        _.map(initialSelectedOption, (option) => ({
+          selected: true,
+          ...option,
+        }))
+      )
+      setHasLoaded(true)
+    }
+  }, [])
 
   useEffect(() => {
     if (hasLoaded) {
@@ -245,7 +294,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
     )
     setOptions(newOptions)
     setHasLoaded(true)
-  }, [data, hasLoaded])
+  }, [data, hasLoaded, options])
 
   useEffect(() => {
     if (!isSearchMode) {
@@ -258,8 +307,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
     e.preventDefault()
     const targetOption = optionsForShow[index]
     const newSelected = !targetOption.selected
-    if (!newSelected && selectedOptions.length === 1) return
-    if (newSelected && selectedOptions.length === maxSelectedCount) return
+    if (!newSelected && selectedOptions.length === minSelectedCount.count) {
+      toastr({ text: minSelectedCount.snackBarText })
+      return
+    }
+    if (newSelected && selectedOptions.length === maxSelectedCount.count) {
+      toastr({ text: maxSelectedCount.snackBarText })
+      return
+    }
 
     const updatedOptions = [...options]
     const indexInOptions = _.findIndex(
@@ -288,7 +343,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const unSelect = (e: React.MouseEvent<HTMLElement>, index: number) => {
     e.stopPropagation()
     e.preventDefault()
-    if (selectedOptions.length === 1) return
+    if (selectedOptions.length === minSelectedCount.count) {
+      toastr({ text: minSelectedCount.snackBarText })
+      return
+    }
 
     const targetOptionInSelected = selectedOptionsForShow[index]
     const newSelectedOptions = _.without(
@@ -359,7 +417,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
           <SelectBox>
             <Seleted>
               <Text
-                text={`已選 (${selectedOptions.length}/${maxSelectedCount})`}
+                text={`已選 (${selectedOptions.length}/${maxSelectedCount.count})`}
               />
               <TagBox>
                 {_.map(selectedOptionsForShow, (selectedOption, index) => (
@@ -395,13 +453,20 @@ const FilterModal: React.FC<FilterModalProps> = ({
         </ContentBox>
       )}
       <ConfirmBox>
-        <ConfirmButton
-          text={'確定'}
-          size={PillButton.Size.L}
-          theme={PillButton.THEME.normal}
-          type={PillButton.Type.PRIMARY}
-          onClick={confirmSelect}
-        />
+        <ConfirmBoxRelative>
+          <SnackBarContainer $showSnackBar={showSnackBar}>
+            <SnackBar text={snackBarText} />
+          </SnackBarContainer>
+          <ConfirmButtonContainer>
+            <ConfirmButton
+              text={'確定'}
+              size={PillButton.Size.L}
+              theme={PillButton.THEME.normal}
+              type={PillButton.Type.PRIMARY}
+              onClick={confirmSelect}
+            />
+          </ConfirmButtonContainer>
+        </ConfirmBoxRelative>
       </ConfirmBox>
     </>
   )

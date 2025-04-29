@@ -10,7 +10,9 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown"
+    "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown",
+    "build:shared": "yarn workspace @twreporter/congress-dashboard-shared build",
+    "postinstall": "yarn build:shared"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.0",
