@@ -7,7 +7,8 @@ import { title, description } from '@/components/open/config'
 // utils
 import { notoSerif } from '@/utils/font'
 // components
-import SeachBar from '@/components/open/search'
+// import SeachBar from '@/components/open/search'
+import { AlgoliaInstantSearch } from '@/components/search/instant-search'
 import Selected from '@/components/open/selected'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -87,7 +88,7 @@ const Open: React.FC = () => {
       <MobileDescription>
         <SerifH4 text={description} />
       </MobileDescription>
-      <SeachBar />
+      <AlgoliaInstantSearch />
       <StyledSelected />
     </Box>
   )
