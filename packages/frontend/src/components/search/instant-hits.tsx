@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { useInView } from 'react-intersection-observer'
-import type { LegislatorRawHit, TopicRawHit } from './instant-hit'
-import { Search as IconSearch } from './icons'
-import { InstantLegislatorHit, InstantTopicHit } from './instant-hit'
+import type {
+  LegislatorRawHit,
+  TopicRawHit,
+} from '@/components/search/instant-hit'
+import { Search as IconSearch } from '@/components/search/icons'
+import {
+  InstantLegislatorHit,
+  InstantTopicHit,
+} from '@/components/search/instant-hit'
 import {
   Configure,
   Index,
@@ -11,15 +17,26 @@ import {
   useInfiniteHits,
   useInstantSearch,
 } from 'react-instantsearch'
+import {
+  colorGrayscale,
+  colorOpacity,
+} from '@twreporter/core/lib/constants/color'
+
+const InstantSearchStatus = {
+  Idle: 'idle',
+  Loading: 'loading',
+  Stalled: 'stalled',
+  Error: 'error',
+} as const
 
 const Container = styled.div`
   width: 100%;
   max-height: 320px;
   overflow: scroll;
-  background-color: #fff;
+  background-color: ${colorGrayscale.white};
   border-radius: 8px;
   padding: 8px 0;
-  box-shadow: 0px 0px 24px 0px #0000001a;
+  box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
 
   a {
     text-decoration: none;
@@ -34,29 +51,29 @@ const FirstRow = styled.div`
   padding: 16px 16px 12px 16px;
 
   &:hover {
-    background-color: #f1f1f1;
+    background-color: ${colorGrayscale.gray100};
   }
 `
 
-const SearchIcon = styled.div`
+const SearchIconContainer = styled.div`
   width: 48px;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #e2e2e2;
+  border: 1px solid ${colorGrayscale.gray200};
   border-radius: 50%;
 `
 
 const SearchText = styled.div`
-  color: #404040;
+  color: ${colorGrayscale.gray800};
   font-size: 16px;
   font-weight: 700;
   line-height: 1.5;
 `
 
 const Rows = styled.div`
-  border-top: 1px solid #cdcdcd;
+  border-top: 1px solid ${colorGrayscale.gray300};
 `
 
 // TODO: replace loading indicator after design ready
@@ -108,12 +125,12 @@ export const InstantHits = ({ className }: { className?: string }) => {
 
   return (
     <Container ref={containerRef} className={className}>
-      {/* TODO: add href after search page is ready */}
+      {/* TODO: change to `next/link` when search page is ready */}
       <a href="" target="_self">
         <FirstRow>
-          <SearchIcon>
+          <SearchIconContainer>
             <IconSearch />
-          </SearchIcon>
+          </SearchIconContainer>
           <SearchText>{query}</SearchText>
         </FirstRow>
       </a>
@@ -174,11 +191,13 @@ const LoadMore = ({
     root: containerRef.current ?? null,
   })
   const [noMoreHits, setNoMoreHits] = useState(false)
-  const isLoading = status === 'loading' || status === 'stalled'
+  const isLoading =
+    status === InstantSearchStatus.Loading ||
+    status === InstantSearchStatus.Stalled
 
   // Per [react-instantsearch docs](https://www.algolia.com/doc/api-reference/widgets/use-instantsearch/react/#widget-param-status):
   // show loading indicator only when status === 'stalled'
-  const showLoadingIcon = status === 'stalled'
+  const showLoadingIcon = status === InstantSearchStatus.Stalled
 
   // Reset when query changes
   useEffect(() => {
@@ -246,7 +265,7 @@ const LoadMore = ({
     }
 
     load()
-  }, [inView, isLoading, renderState, stage, setStage])
+  }, [query, inView, isLoading, renderState, stage, setStage])
 
   return (
     <div>
