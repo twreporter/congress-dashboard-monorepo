@@ -43,7 +43,7 @@ import IconButton from '@/components/button/icon-button'
 import CustomPillButton from '@/components/button/pill-button'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
-// fetcher
+// type
 import { type SpeechFromRes } from '@/fetchers/server/speech'
 // hooks
 import { useSpeechData } from '@/components/speech/hooks/use-speech-data'
@@ -82,7 +82,7 @@ export enum Direction {
 
 // constants
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-const INTERSECTION_THRESHOLD = 0.5
+const intersectionThreshold = 0.5
 
 type SpeechPageProps = {
   speech: SpeechFromRes
@@ -109,7 +109,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
         setIsControllBarHidden(entry.isIntersecting)
       },
       {
-        threshold: INTERSECTION_THRESHOLD,
+        threshold: intersectionThreshold,
       }
     )
     observer.observe(leadingRef.current)

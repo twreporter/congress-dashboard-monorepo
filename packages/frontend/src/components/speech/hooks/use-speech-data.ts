@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-// fetcher
+// type
 import { type SpeechFromRes } from '@/fetchers/server/speech'
 // utils
 import { formatDate } from '@/utils/date-formatters'
