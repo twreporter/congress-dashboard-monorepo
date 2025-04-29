@@ -41,6 +41,7 @@ type LegislatorForTopicRaw = LegislatorForTopic & {
 type TopicForLegislator = {
   title: string
   slug: string
+  name: string
   count: number
 }
 type LegislatorWithTopTopics = TopicForLegislator & {
@@ -78,6 +79,7 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
       type TopicWithSpeechCount {
         title: String!
         slug: String!
+        name: String!
         count: Int!
       }
       type LegislatorWIthTopTopics {
@@ -156,20 +158,18 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
           const topics = await context.prisma.$queryRaw<
             LegislatorWithTopTopics[]
           >(getLegislatorsSql({ legislatorIds, meetingId, sessionIds, take }))
-          console.log(
-            getLegislatorsSql({ legislatorIds, meetingId, sessionIds, take })
-          )
-          console.log(topics)
           type GroupedTopics = {
             [legislatorId: number]: Array<TopicForLegislator>
           }
           const topicsGrouped = topics.reduce(
-            (acc: GroupedTopics, { legislatorId, count, ...rest }) => {
+            (acc: GroupedTopics, { legislatorId, count, title, ...rest }) => {
               if (!acc[legislatorId]) {
                 acc[legislatorId] = []
               }
               acc[legislatorId].push({
                 ...rest,
+                title,
+                name: title,
                 count: Number(count),
               })
               return acc

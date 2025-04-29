@@ -1493,6 +1493,7 @@ type TopicWithSpeechCountAndLegislators {
 type TopicWithSpeechCount {
   title: String!
   slug: String!
+  name: String!
   count: Int!
 }
 
