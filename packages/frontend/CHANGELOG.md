@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.0.0-beta.2, 2025-04-30
+
+### Notable Changes
+
+- feat
+  - use data from api for speech page
+  - parse HTML summaries and consolidate date formatter logic
+- fix
+  - implement universal date formatter with enhanced flexibility
+  - fix comments
+
+### Commits
+
+- [[`02507e93ca`](https://github.com/twreporter/congress-dashboard-monorepo/commit/02507e93ca)] - **fix(frontend)**: fix comments (Lucien)
+- [[`3a07eafe0f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3a07eafe0f)] - **feat(frontend)**: parse HTML summaries and consolidate date formatter logic (Lucien)
+- [[`bc1a862e6a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bc1a862e6a)] - **fix(frontend)**: implement universal date formatter with enhanced flexibility (Lucien)
+- [[`4bc42ce9b6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4bc42ce9b6)] - **feat(frontend)**: use data from api for speech page (Lucien)
+
 ## 1.0.0-beta.1, 2025-04-28
 
 ### Notable Changes
