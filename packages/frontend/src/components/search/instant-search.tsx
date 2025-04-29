@@ -1,9 +1,10 @@
 import React from 'react'
-import { liteClient as algoliasearch } from 'algoliasearch/lite'
+import styled from 'styled-components'
+import { InstantHits as _InstantHits, defaultIndexName } from './instant-hits'
 import { InstantSearch } from 'react-instantsearch'
 import { SearchBox } from './search-box'
-import { InstantHits as _InstantHits, defaultIndexName } from './instant-hits'
-import styled from 'styled-components'
+import { ZIndex } from '@/styles/z-index'
+import { liteClient as algoliasearch } from 'algoliasearch/lite'
 
 // TODO: move to constants file and read them from environment variables
 const algoliaConfig = {
@@ -22,14 +23,17 @@ const Container = styled.div`
     box-sizing: border-box;
   }
 
-  max-width: 560px;
   position: relative;
+
+  /* desktop styles */
+  width: 560px;
 
   /* TODO: add mobile styles */
 `
 
 const InstantHits = styled(_InstantHits)`
   position: absolute;
+  z-index: ${ZIndex.SearchBar};
 `
 
 export const AlgoliaInstantSearch = () => {
