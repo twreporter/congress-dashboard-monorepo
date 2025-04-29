@@ -2,13 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
 import { Highlight } from 'react-instantsearch'
-import { Issue as IconIssue } from './icons'
-
-enum HitTypes {
-  Legislator = 'legislator',
-  Speech = 'speech',
-  Topic = 'topic',
-}
+import { Issue as IconIssue } from '@/components/search/icons'
+import {
+  colorGrayscale,
+  colorSupportive,
+} from '@twreporter/core/lib/constants/color'
 
 export type LegislatorRawHit = Hit<{
   objectID: string
@@ -20,7 +18,6 @@ export type LegislatorRawHit = Hit<{
   term: number
   session: number
   latestSpeechAt?: string
-  type: HitTypes.Legislator
   href: string
 }>
 
@@ -58,7 +55,7 @@ const InstantHitContainer = styled.div`
   cursor: pointer;
 
   &:hover {
-    background-color: #f1f1f1;
+    background-color: ${colorGrayscale.gray100};
   }
 
   > h3 {
@@ -75,7 +72,7 @@ const InstantHitContainer = styled.div`
     font-weight: 400;
     line-height: 150%;
 
-    color: #808080;
+    color: ${colorGrayscale.gray600};
 
     /* reset default margin */
     margin: 0;
@@ -91,12 +88,12 @@ const InstantHitContainer = styled.div`
     font-size: 16px;
     font-weight: 700;
     line-height: 150%;
-    color: #262626;
+    color: ${colorGrayscale.gray900};
   }
 
   /* overwrite InstantSearch Highlight styles */
   .ais-Highlight-highlighted {
-    color: #9f7544;
+    color: ${colorSupportive.heavy};
   }
 `
 
@@ -104,7 +101,7 @@ const Avatar = styled.div`
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid #e2e2e2;
+  border: 1px solid ${colorGrayscale.gray200};
 
   display: flex;
   justify-content: center;

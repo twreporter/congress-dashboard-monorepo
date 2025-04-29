@@ -1,8 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { InstantHits as _InstantHits, defaultIndexName } from './instant-hits'
+import {
+  InstantHits as _InstantHits,
+  defaultIndexName,
+} from '@/components/search/instant-hits'
 import { InstantSearch } from 'react-instantsearch'
-import { SearchBox } from './search-box'
+import { SearchBox } from '@/components/search/search-box'
 import { ZIndex } from '@/styles/z-index'
 import { liteClient as algoliasearch } from 'algoliasearch/lite'
 

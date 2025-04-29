@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react'
 import { useSearchBox } from 'react-instantsearch'
 import styled from 'styled-components'
-import { Search as IconSearch, X as IconX } from './icons'
+import { Search as IconSearch, X as IconX } from '@/components/search/icons'
 import debounce from 'lodash/debounce'
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 
 const _ = {
   debounce,
@@ -10,7 +11,7 @@ const _ = {
 
 const Container = styled.div`
   width: 100%;
-  background-color: #fff;
+  background-color: ${colorGrayscale.white};
 
   margin-bottom: 8px;
   padding: 12px 20px;
@@ -20,7 +21,7 @@ const Container = styled.div`
   justify-content: flex-start;
   gap: 8px;
 
-  border: 1px solid #808080;
+  border: 1px solid ${colorGrayscale.gray600};
   border-radius: 40px;
 `
 
@@ -31,16 +32,14 @@ const Input = styled.input`
   border: 0;
   outline: none;
 
-  color: #404040;
+  color: ${colorGrayscale.gray800};
 `
 
 const ClearButton = styled.button`
   background: none;
   border: none;
   padding: 0;
-  color: #888;
   cursor: pointer;
-
   line-height: 0;
 `
 
@@ -69,7 +68,7 @@ export const SearchBox = () => {
         onChange={handleOnChange}
         placeholder="搜尋立委、議題和逐字稿..."
       />
-      {query && (
+      {inputValue && (
         <ClearButton onClick={clearQuery}>
           <IconX />
         </ClearButton>
