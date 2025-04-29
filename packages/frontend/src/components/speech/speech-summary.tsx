@@ -25,7 +25,7 @@ const Text = styled.div<{ $fontSizeOffset: number }>`
   letter-spacing: 0.7px;
 `
 
-const StyledOrderedList = styled.ol`
+const StyledUnorderedList = styled.ul`
   list-style-position: outside;
   margin-left: 24px;
   ${mq.desktopOnly`
@@ -58,7 +58,7 @@ const SpeechSummary: React.FC<SpeechSummaryProps> = ({
   fontSizeOffset = FontSizeOffset[FontSize.SMALL],
 }) => {
   const summaryJSX = Array.isArray(summary) ? (
-    <StyledOrderedList>
+    <StyledUnorderedList>
       {summary.map((summary, i) => {
         return (
           <StyledListItem key={`summary-${i}`} $fontSizeOffset={fontSizeOffset}>
@@ -66,7 +66,7 @@ const SpeechSummary: React.FC<SpeechSummaryProps> = ({
           </StyledListItem>
         )
       })}
-    </StyledOrderedList>
+    </StyledUnorderedList>
   ) : (
     <Text $fontSizeOffset={fontSizeOffset}>{summary}</Text>
   )
