@@ -25,6 +25,7 @@ import {
   type LegislatorProps,
 } from '@/components/sidebar/follow-more'
 import { type TabProps } from '@/components/sidebar/tab'
+import { Loader } from '@/components/loader'
 // utils
 import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
 // constants
@@ -46,6 +47,7 @@ const LegislatorContainer = styled.div`
 `
 
 type LegislatorListProps = {
+  isLoading?: boolean
   legislatorSlug: string
   topics: { name: string; slug: string; count: number }[]
   speechesByTopic: Record<
@@ -57,6 +59,7 @@ type LegislatorListProps = {
 }
 
 const LegislatorList: React.FC<LegislatorListProps> = ({
+  isLoading = true,
   legislatorSlug,
   topics,
   speechesByTopic,
@@ -127,6 +130,17 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   const handleTabChange = useCallback((index: number) => {
     setSelectedTab(index)
   }, [])
+
+  if (isLoading) {
+    return (
+      <Container>
+        <Title $isEmpty={true} text="發言摘要" />
+        <Body>
+          <Loader />
+        </Body>
+      </Container>
+    )
+  }
 
   if (topics.length === 0) {
     return (

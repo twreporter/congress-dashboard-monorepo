@@ -1,6 +1,6 @@
 'use client'
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 // twreporter
 import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 // components
@@ -36,7 +36,13 @@ const Topic: React.FC<TopicPageProps> = ({
   currentMeetingSession,
 }) => {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [filterCount, setFilterCount] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [searchParams])
 
   // Custom hooks
   const {
@@ -87,6 +93,7 @@ const Topic: React.FC<TopicPageProps> = ({
         filterValues.meeting
       }&sessionTerm=${JSON.stringify(sessionTermValue)}`
       router.push(newUrl)
+      setIsLoading(true)
       setIsFilterOpen(false)
     } catch (error) {
       console.error('Error processing filter values:', error)
@@ -106,6 +113,7 @@ const Topic: React.FC<TopicPageProps> = ({
         <DesktopList>
           <TopicListContainer>
             <TopicList
+              isLoading={isLoading}
               legislatorsData={legislatorsData}
               speechesByLegislator={speechesByLegislator}
               currentMeetingTerm={currentMeetingTerm}
@@ -134,6 +142,7 @@ const Topic: React.FC<TopicPageProps> = ({
           <Spacing $height={32} />
           <TopicListContainer>
             <TopicList
+              isLoading={isLoading}
               legislatorsData={legislatorsData}
               speechesByLegislator={speechesByLegislator}
               currentMeetingTerm={currentMeetingTerm}

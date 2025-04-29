@@ -28,6 +28,8 @@ export const Title = styled(H4)<{ $isEmpty: boolean }>`
 `
 
 export const Body = styled.div`
+  height: 100%;
+  position: relative;
   display: flex;
   padding: 24px 24px 40px 24px;
   flex-direction: column;

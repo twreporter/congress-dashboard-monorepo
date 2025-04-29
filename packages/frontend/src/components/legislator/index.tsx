@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 // @twreporter
 import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 // components
@@ -43,8 +43,14 @@ const Legislator: React.FC<LegislatorProps> = ({
   currentMeetingSession,
 }) => {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [filterCount, setFilterCount] = useState<number>(0)
   const [isLegislatorActive, setIsLegislatorActive] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [searchParams])
 
   const { legislator, topics, speechesByTopic } = useLegislatorData(
     legislatorData,
@@ -98,6 +104,7 @@ const Legislator: React.FC<LegislatorProps> = ({
         sessionTermValue
       )}`
       router.push(newUrl)
+      setIsLoading(true)
       setIsFilterOpen(false)
     } catch (error) {
       console.error('Error processing filter values:', error)
@@ -162,6 +169,7 @@ const Legislator: React.FC<LegislatorProps> = ({
             />
             <ListContainer>
               <LegislatorList
+                isLoading={isLoading}
                 legislatorSlug={legislator.slug}
                 topics={topics}
                 speechesByTopic={speechesByTopic}
@@ -185,6 +193,7 @@ const Legislator: React.FC<LegislatorProps> = ({
             />
             <ListContainer>
               <LegislatorList
+                isLoading={isLoading}
                 legislatorSlug={legislator.slug}
                 topics={topics}
                 speechesByTopic={speechesByTopic}

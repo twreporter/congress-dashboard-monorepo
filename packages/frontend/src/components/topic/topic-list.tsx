@@ -22,6 +22,7 @@ import CardsOfTheYear, {
 } from '@/components/sidebar/card'
 import { Issue, type IssueProps } from '@/components/sidebar/follow-more'
 import { type TabProps } from '@/components/sidebar/tab'
+import { Loader } from '@/components/loader'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
 // fetcher
@@ -50,6 +51,7 @@ type LegislatorData = {
 }
 
 type TopicListProps = {
+  isLoading?: boolean
   legislatorsData: LegislatorData[]
   speechesByLegislator: Record<string, SpeechData[]>
   currentMeetingTerm: number
@@ -57,6 +59,7 @@ type TopicListProps = {
 }
 
 const TopicList: React.FC<TopicListProps> = ({
+  isLoading = true,
   legislatorsData,
   speechesByLegislator,
   currentMeetingTerm,
@@ -127,6 +130,17 @@ const TopicList: React.FC<TopicListProps> = ({
   const handleTabChange = useCallback((index: number) => {
     setSelectedTab(index)
   }, [])
+
+  if (isLoading) {
+    return (
+      <Container>
+        <Title $isEmpty={true} text="發言摘要" />
+        <Body>
+          <Loader />
+        </Body>
+      </Container>
+    )
+  }
 
   if (legislatorsData.length === 0) {
     return (
