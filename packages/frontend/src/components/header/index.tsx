@@ -20,7 +20,10 @@ import {
 import { Hamburger, Cross } from '@twreporter/react-components/lib/icon'
 import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import { Search as SearchIcon } from '@twreporter/react-components/lib/icon'
-import { SearchBar } from '@twreporter/react-components/lib/input'
+import {
+  AlgoliaInstantSearch,
+  layoutVariants,
+} from '@/components/search/instant-search'
 import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
@@ -125,12 +128,17 @@ const BtnContainer = styled.div<{
 const SearchContainer = styled.div<{
   $isOpen: boolean
 }>`
+  width: 360px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
   opacity: ${(props) => (props.$isOpen ? '1' : '0')};
   transition: opacity 300ms ease;
   position: absolute;
   right: 0;
   top: -8px;
-  z-index: ${(props) => (props.$isOpen ? 999 : -1)};
 `
 
 // Constants
@@ -181,10 +189,6 @@ const Header: React.FC = () => {
     if (input) {
       input.focus()
     }
-  }
-  const onSearch = (keywords: string) => {
-    setIsSearchOpen(false)
-    alert(`search: ${keywords}`)
   }
   const ref = useOutsideClick(closeSearchBox)
 
@@ -245,12 +249,15 @@ const Header: React.FC = () => {
                   />
                 </BtnContainer>
                 <SearchContainer $isOpen={isSearchOpen}>
-                  <SearchBar
-                    placeholder="關鍵字搜尋"
-                    theme={SearchBar.THEME.normal}
-                    onClose={closeSearchBox}
-                    onSearch={onSearch}
-                  />
+                  {isSearchOpen && (
+                    <>
+                      <AlgoliaInstantSearch variant={layoutVariants.Header} />
+                      <IconButton
+                        iconComponent={crossIcon}
+                        onClick={closeSearchBox}
+                      />
+                    </>
+                  )}
                 </SearchContainer>
               </SearchBox>
             </ButtonContainer>
