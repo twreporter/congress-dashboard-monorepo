@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.2, 2025-05-01
+
+### Notable Changes
+
+- fix
+  - add `NEXT_PUBLIC` for public env & add .env.dev.public file
+
+### Commits
+
+- [[`505d7e8f9b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/505d7e8f9b)] - **fix(cms)**: add `NEXT_PUBLIC` for public env (Aylie Chou)
+
 ## 1.0.0-beta.1, 2025-04-30
 
 ### Notable Changes
