@@ -219,7 +219,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   parties = [],
   meetings = [],
 }) => {
-  const latestMettingId = useMemo(() => meetings[0]?.id, [meetings])
+  const latestMeetingId = useMemo(() => meetings[0]?.id, [meetings])
   const [selectedType, setSelectedType] = useState(Option.Issue)
   const [activeCardIndex, setActiveCardIndex] = useState(-1)
   const [isLoading, setIsLoading] = useState(false)
@@ -255,7 +255,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
     const initializeLegislator = async () => {
       const legislators = await fetchLegislatorAndTopTopics({
-        legislativeMeetingId: Number(latestMettingId),
+        legislativeMeetingId: Number(latestMeetingId),
       })
       setLegislators(legislators)
     }

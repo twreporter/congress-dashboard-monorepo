@@ -11,10 +11,10 @@ const _ = {
 }
 
 const useFilter = (meetings) => {
-  const latestMettingTerm = useMemo(() => `${meetings[0]?.term}`, [meetings])
+  const latestMeetingTerm = useMemo(() => `${meetings[0]?.term}`, [meetings])
   const [filterValues, setFilterValues] = useState<FilterModalValueType>({
     department: 'legislativeYuan',
-    meeting: latestMettingTerm,
+    meeting: latestMeetingTerm,
     meetingSession: ['all'],
     constituency: [],
     party: [],
