@@ -50,14 +50,16 @@ const InstantHits = styled(_InstantHits)`
 export const AlgoliaInstantSearch = ({
   className,
   variant = layoutVariants.Default,
+  autoFocus = false,
 }: {
   className?: string
   variant?: LayoutVariant
+  autoFocus?: boolean
 }) => {
   return (
     <Container className={className} $variant={variant}>
       <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
-        <SearchBox variant={variant} />
+        <SearchBox variant={variant} autoFocus={autoFocus} />
         <InstantHits />
       </InstantSearch>
     </Container>

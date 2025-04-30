@@ -24,7 +24,6 @@ import {
   AlgoliaInstantSearch,
   layoutVariants,
 } from '@/components/search/instant-search'
-import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
 // hooks
@@ -130,7 +129,6 @@ const SearchContainer = styled.div<{
   $isOpen: boolean
 }>`
   width: 360px;
-
   display: flex;
   align-items: center;
   gap: 8px;
@@ -183,17 +181,7 @@ const Header: React.FC = () => {
   const handleClickSearch = (e: React.MouseEvent) => {
     e.preventDefault()
     setIsSearchOpen(true)
-    if (!ref.current) {
-      return
-    }
-    const input = ref.current.getElementsByTagName(
-      'INPUT'
-    )[0] as HTMLInputElement
-    if (input) {
-      input.focus()
-    }
   }
-  const ref = useOutsideClick(closeSearchBox)
 
   return (
     <React.Fragment>
@@ -241,7 +229,7 @@ const Header: React.FC = () => {
                   ) : null}
                 </React.Fragment>
               ))}
-              <SearchBox ref={ref} key="search">
+              <SearchBox key="search">
                 <BtnContainer
                   onClick={handleClickSearch}
                   $isOpen={isSearchOpen}
@@ -254,7 +242,10 @@ const Header: React.FC = () => {
                 <SearchContainer $isOpen={isSearchOpen}>
                   {isSearchOpen && (
                     <>
-                      <AlgoliaInstantSearch variant={layoutVariants.Header} />
+                      <AlgoliaInstantSearch
+                        variant={layoutVariants.Header}
+                        autoFocus={isSearchOpen}
+                      />
                       <IconButton
                         iconComponent={crossIcon}
                         onClick={closeSearchBox}
