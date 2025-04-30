@@ -10,12 +10,17 @@ const getCDNUrl = (url: string | URL = '') => {
     return ''
   }
 
-  const urlObj = new URL(url)
-  const imageId = _.last(urlObj.pathname.split('/'))
+  try {
+    const urlObj = new URL(url)
+    const imageId = _.last(urlObj.pathname.split('/'))
 
-  return imageId
-    ? `${process.env.NEXT_PUBLIC_TWREPORTER_URL}/images/${imageId}`
-    : ''
+    return imageId
+      ? `${process.env.NEXT_PUBLIC_TWREPORTER_URL}/images/${imageId}`
+      : ''
+  } catch (err) {
+    console.error('Invalid URL provided to getCDNUrl:', url, err)
+    return ''
+  }
 }
 
 const getArticleUrl = (slug: string, style: string) => {
