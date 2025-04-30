@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0-beta.4, 2025-04-30
+
+### Notable Changes
+
+- feat
+  - add related twreporter articles
+
+### Commits
+
+- [[`587a768d59`](https://github.com/twreporter/congress-dashboard-monorepo/commit/587a768d59)] - **fix(frontend)**: add try catch to `getCDNUrl` (Aylie Chou)
+- [[`cfac3f2562`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cfac3f2562)] - **fix(frontend)**: use general `formatDate` method (Aylie Chou)
+- [[`bbdcacfdbe`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bbdcacfdbe)] - **fix(frontend)**: resolve review comment (Aylie Chou)
+- [[`1bc3eb857d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1bc3eb857d)] - **fix(frontend)**: typo & hide block if fetch error (Aylie Chou)
+- [[`3c25f1867c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3c25f1867c)] - **fix(frontend)**: add skeleton loading for articles (Aylie Chou)
+- [[`c7c54a16f4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c7c54a16f4)] - **feat(frontend)**: add related twreporter articles (Aylie Chou)
+
 ## 1.0.0-beta.3, 2025-04-30
 
 ### Notable Changes
