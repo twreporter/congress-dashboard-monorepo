@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import debounce from 'lodash/debounce'
 import styled from 'styled-components'
 import { Search as IconSearch, X as IconX } from '@/components/search/icons'
@@ -63,9 +63,11 @@ const ClearButton = styled.button`
 export const SearchBox = ({
   className,
   variant,
+  autoFocus,
 }: {
   className?: string
   variant: LayoutVariant
+  autoFocus: boolean
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { query, refine: _refine } = useSearchBox()
@@ -82,6 +84,12 @@ export const SearchBox = ({
     setInputValue('')
     refine('')
   }
+
+  useEffect(() => {
+    if (autoFocus) {
+      inputRef.current?.focus()
+    }
+  }, [autoFocus])
 
   return (
     <Container className={className} $variant={variant}>
