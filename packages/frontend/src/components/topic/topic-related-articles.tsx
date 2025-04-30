@@ -170,6 +170,10 @@ const TopicRelatedArticles: React.FC<TopicRelatedArticlesProps> = ({
   relatedArticles = [],
 }) => {
   const [errorCount, setErrorCount] = useState(0)
+
+  if (!relatedArticles || relatedArticles.length === 0) {
+    return null
+  }
   if (errorCount === relatedArticles.length) {
     return null
   }

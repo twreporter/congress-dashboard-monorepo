@@ -19,7 +19,7 @@ import { ZIndex } from '@/styles/z-index'
 import { HEADER_HEIGHT } from '@/constants/header'
 // utils
 import { getImageLink } from '@/fetchers/utils'
-import { formatDateToYearMonth } from '@/utils/date-formatters'
+import { formatDate } from '@/utils/date-formatters'
 // fetcher
 import { useLegislativeMeetingSession } from '@/fetchers/legislative-meeting'
 import useCommittee from '@/fetchers/committee'
@@ -227,9 +227,10 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         ].concat(
           sessionState.legislativeMeetingSessions.map(
             ({ id, term, startTime, endTime }) => ({
-              label: `第 ${term} 會期(${formatDateToYearMonth(
-                startTime
-              )}-${formatDateToYearMonth(endTime)})`,
+              label: `第 ${term} 會期(${formatDate(
+                startTime,
+                'YYYY/MM'
+              )}-${formatDate(endTime, 'YYYY/MM')})`,
               value: `${id}`,
               isDeletable: true,
             })
