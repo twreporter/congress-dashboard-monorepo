@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import Issue, { CardSize } from '@/components/dashboard/card/issue'
-import { mockLegislators } from '@/components/dashboard/card/config'
+import { mockLegislators } from '@/components/sidebar/config'
 
 const meta: Meta<typeof Issue> = {
   title: 'Card/Issue',

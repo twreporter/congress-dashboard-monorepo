@@ -12,8 +12,7 @@ import { P1, P2, P4 } from '@twreporter/react-components/lib/text/paragraph'
 import { InternalRoutes } from '@/constants/navigation-link'
 
 // date stamp component
-const getDateFormat = (dateString: string) => {
-  const date = new Date(dateString)
+const getDateFormat = (date: Date) => {
   let month = ''
   const day = date.getDate()
 
@@ -90,7 +89,7 @@ const Day = styled(P2)`
 `
 
 type DateStampProps = {
-  date: string
+  date: Date
 }
 const DateStamp: React.FC<DateStampProps> = memo(({ date }) => {
   const { month, day } = getDateFormat(date)
@@ -141,7 +140,7 @@ const More = styled.span`
 `
 
 export type SummaryCardProps = {
-  date: string
+  date: string | Date
   title: string
   summary: string
   slug: string
@@ -154,11 +153,12 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
 }) => {
   // summary will be like this:
   // "<ul><li>this is a long sentence</li><li>this is a long sentence</li></ul>" or "this is a long sentence"
+  const dateObj = typeof date === 'string' ? new Date(date) : date
   const parsedSummary = summary.replace(/<[^>]*>/g, '')
   return (
     <CardBox>
       <FlexRow>
-        <DateStamp date={date} />
+        <DateStamp date={dateObj} />
         <Title text={title} weight={P1.Weight.BOLD} />
       </FlexRow>
       <HorizontalLine />

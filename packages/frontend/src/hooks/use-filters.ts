@@ -1,15 +1,20 @@
 import { useState, useEffect } from 'react'
+// enum
 import { SelectorType } from '@/components/selector'
+// util
 import { formatDate } from '@/utils/date-formatters'
+// fetcher
 import {
   useLegislativeMeeting,
   useLegislativeMeetingByLegislator,
   useLegislativeMeetingSession,
 } from '@/fetchers/legislative-meeting'
-import {
+// type
+import type {
   FilterOption,
-  type FilterModalValueType,
-} from '@/components/filter-modal'
+  FilterModalValueType,
+} from '@/components/dashboard/type'
+// lodash
 import map from 'lodash/map'
 const _ = {
   map,

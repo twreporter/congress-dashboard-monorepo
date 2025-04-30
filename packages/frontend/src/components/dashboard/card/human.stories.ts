@@ -1,9 +1,26 @@
 import type { Meta, StoryObj } from '@storybook/react'
-
+// @twreporter
 import { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+// components
 import Human, { CardSize } from '@/components/dashboard/card/human'
-import { mockHumans } from '@/components/dashboard/card/config'
-const mockHuman = mockHumans[0]
+// type
+import { Tag } from '@/components/dashboard/type'
+
+const defaultTag: Tag[] = [
+  { name: '人工智慧發展', count: 16 },
+  { name: '國家科技發展', count: 12 },
+  { name: '大學治理與人才培育', count: 9 },
+  { name: '文化預算', count: 5 },
+  { name: '藝文產業', count: 4 },
+]
+const mockHuman = {
+  name: '沈伯洋',
+  type: MemberType.NationwideAndOverseas,
+  tags: defaultTag,
+  avatar: 'https://dev-congress-dashboard-storage.twreporter.org/tmp/1-L.png',
+  partyAvatar:
+    'https://dev-congress-dashboard-storage.twreporter.org/tmp/dpp.png',
+}
 
 const meta: Meta<typeof Human> = {
   title: 'Card/Human',
