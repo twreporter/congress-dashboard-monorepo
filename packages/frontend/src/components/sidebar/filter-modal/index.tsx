@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 // type
-import { FilterOption } from '@/components/sidebar/type'
+import type { FilterOption } from '@/components/sidebar/type'
 // components
 import SelectTag from '@/components/sidebar/filter-modal/select-tag'
 import Search from '@/components/sidebar/filter-modal/search'
@@ -214,9 +214,14 @@ type FilterModalProps = {
   onClose: () => void
   onConfirmSelection: (selectedOptions: FilterOption[]) => void
 }
-const filterByKeyword = (options: FilterOption[], keyword: string) => {
+const filterByKeyword = (
+  options: FilterOption[],
+  keyword: string
+): FilterOption[] => {
   return keyword
-    ? _.filter(options, (option) => option.name.includes(keyword))
+    ? _.filter(options, (option) =>
+        Boolean(option.name && option.name.includes(keyword))
+      )
     : options
 }
 const FilterModal: React.FC<FilterModalProps> = ({
@@ -229,7 +234,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   onConfirmSelection,
 }) => {
   const topBoxRef = useRef<HTMLDivElement>(null)
-  const [options, setOptions] = useState(
+  const [options, setOptions] = useState<FilterOption[]>(
     _.map(initialSelectedOption, (option) => ({ selected: true, ...option }))
   )
   const [selectedOptions, setSelectedOptions] = useState(initialSelectedOption)
@@ -246,7 +251,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
     () => selectedOptions,
     [selectedOptions]
   )
-  const optionsForShow = useMemo(
+  const optionsForShow = useMemo<FilterOption[]>(
     () => (isSearchMode ? filterByKeyword(options, keyword) : options),
     [options, keyword, isSearchMode]
   )

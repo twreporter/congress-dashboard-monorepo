@@ -9,6 +9,13 @@ import { notoSerif } from '@/utils/font'
 // components
 import SeachBar from '@/components/open/search'
 import Selected from '@/components/open/selected'
+// type
+import {
+  type EditorSelect,
+  EditorSelectType,
+} from '@/fetchers/server/editor-pickor'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
@@ -76,10 +83,24 @@ const StyledSelected = styled(Selected)`
   `}
 `
 
-const Open: React.FC = () => {
+type OpenProps = {
+  selecteds: EditorSelect[]
+}
+const Open: React.FC<OpenProps> = ({ selecteds }) => {
   const descriptJSX = description.map((text, index) => (
     <SerifH4 text={text} key={`open-desc-${index}`} />
   ))
+  const selectedsWithPath = selecteds.map(({ label, order, type, slug }) => {
+    const pathFrom =
+      type === EditorSelectType.Legislator
+        ? InternalRoutes.Legislator
+        : InternalRoutes.Topic
+    return {
+      label,
+      order,
+      path: `${pathFrom}/${slug}`,
+    }
+  })
   return (
     <Box>
       <Title className={notoSerif.className}>{title}</Title>
@@ -88,7 +109,7 @@ const Open: React.FC = () => {
         <SerifH4 text={description} />
       </MobileDescription>
       <SeachBar />
-      <StyledSelected />
+      <StyledSelected selecteds={selectedsWithPath} />
     </Box>
   )
 }

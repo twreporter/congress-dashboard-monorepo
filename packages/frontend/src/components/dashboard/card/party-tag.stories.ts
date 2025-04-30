@@ -1,14 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
-import {
-  TPP,
-  KMT,
-  DPP,
-  TSP,
-  NPP,
-  NONE,
-} from '@/components/dashboard/card/config'
+import PartyTag from '@/components/dashboard/card/party-tag'
+import { TagSize } from '@/components/dashboard/enum'
+import { TPP, KMT, DPP, TSP, NPP, NONE } from '@/components/sidebar/config'
 
 const meta: Meta<typeof PartyTag> = {
   title: 'PartyTag',

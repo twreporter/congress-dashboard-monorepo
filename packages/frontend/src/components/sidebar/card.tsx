@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 // @twreporter
@@ -12,7 +12,7 @@ import { P1, P2, P4 } from '@twreporter/react-components/lib/text/paragraph'
 import { InternalRoutes } from '@/constants/navigation-link'
 
 // date stamp component
-function getDateFormat(date: Date) {
+const getDateFormat = (date: Date) => {
   let month = ''
   const day = date.getDate()
 
@@ -91,7 +91,7 @@ const Day = styled(P2)`
 type DateStampProps = {
   date: Date
 }
-const DateStamp: React.FC<DateStampProps> = ({ date }) => {
+const DateStamp: React.FC<DateStampProps> = memo(({ date }) => {
   const { month, day } = getDateFormat(date)
   return (
     <DateBox>
@@ -99,7 +99,8 @@ const DateStamp: React.FC<DateStampProps> = ({ date }) => {
       <Day text={day} weight={P2.Weight.BOLD} />
     </DateBox>
   )
-}
+})
+DateStamp.displayName = 'date-stamp'
 
 // summary card component
 const CardBox = styled.div`
@@ -139,7 +140,7 @@ const More = styled.span`
 `
 
 export type SummaryCardProps = {
-  date: Date
+  date: string | Date
   title: string
   summary: string
   slug: string
@@ -152,11 +153,12 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
 }) => {
   // summary will be like this:
   // "<ul><li>this is a long sentence</li><li>this is a long sentence</li></ul>" or "this is a long sentence"
+  const dateObj = typeof date === 'string' ? new Date(date) : date
   const parsedSummary = summary.replace(/<[^>]*>/g, '')
   return (
     <CardBox>
       <FlexRow>
-        <DateStamp date={date} />
+        <DateStamp date={dateObj} />
         <Title text={title} weight={P1.Weight.BOLD} />
       </FlexRow>
       <HorizontalLine />

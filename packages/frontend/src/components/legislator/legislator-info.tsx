@@ -17,7 +17,9 @@ import { OpenInNew } from '@twreporter/react-components/lib/icon'
 // styles
 import { H3Gray900, P1Gray800 } from '@/components/legislator/styles'
 // components
-import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+import PartyTag from '@/components/dashboard/card/party-tag'
+// enums
+import { TagSize } from '@/components/dashboard/enum'
 // fetcher
 import { type Legislator } from '@/components/legislator/hooks/use-legislator-data'
 

@@ -137,6 +137,169 @@ export const fetchTopLegislatorsBySpeechCount = async ({
   return topLegislators
 }
 
+/* fetchLegislators
+ *   fetch legislator data of given meeting term & party & constituency
+ */
+type keystoneImage = {
+  imageFile: {
+    url: string
+  }
+}
+type LegislatorFromRes = {
+  id: number
+  legislator: {
+    slug: string
+    name: string
+    imageLink?: string
+    image?: keystoneImage
+  }
+  party: {
+    image?: keystoneImage
+  }
+  constituency?: string
+  tootip?: string
+  note?: string
+}[]
+type FetchLegislatorsParams = {
+  legislativeMeetingId: number
+  partyIds?: number[]
+  constituencies?: string[]
+}
+export const fetchLegislators = async ({
+  legislativeMeetingId,
+  partyIds,
+  constituencies,
+}: FetchLegislatorsParams): Promise<LegislatorFromRes> => {
+  const query = `
+    query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
+      legislativeYuanMembers(where: $where) {
+        id,
+        legislator {
+          slug
+          imageLink
+          image {
+            imageFile {
+              url
+            }
+          }
+          name
+        }
+        constituency
+        party {
+          image {
+            imageFile {
+              url
+            }
+          }
+          imageLink
+        }
+        tooltip
+        note
+      }
+    }
+  `
+  const where = {
+    legislativeMeeting: {
+      id: {
+        equals: legislativeMeetingId,
+      },
+    },
+  }
+  if (partyIds && partyIds.length > 0) {
+    where['party'] = {
+      id: {
+        in: partyIds,
+      },
+    }
+  }
+  if (constituencies && constituencies.length > 0) {
+    where['constituency'] = {
+      in: constituencies,
+    }
+  }
+
+  const url = process.env.NEXT_PUBLIC_API_URL as string
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ query, variables: { where } }),
+  })
+  if (!res.ok) {
+    throw new Error(
+      `Failed to fetch legislators. meetingId: ${legislativeMeetingId}, partyIds: ${partyIds}, constituencies: ${constituencies}`
+    )
+  }
+  const data = await res.json()
+  const legislators: LegislatorFromRes =
+    data?.data?.legislativeYuanMembers || []
+  return legislators
+}
+
+/* fetchTopNTopicsOfLegislators
+ *   fetch top N topics of given legislator ids in given meeting term & session
+ */
+type TopNTopicFromRes = {
+  id: number
+  topics?: {
+    id: number
+    slug: string
+    name: string
+    count: number
+  }[]
+}
+type FetchTopNTopicsOfLegislatorsParams = {
+  legislatorIds?: number[]
+  legislativeMeetingId: number
+  legislativeMeetingSessionIds?: number[]
+  take?: number
+}
+export const fetchTopNTopicsOfLegislators = async ({
+  legislatorIds,
+  legislativeMeetingId,
+  legislativeMeetingSessionIds = [],
+  take = 5,
+}: FetchTopNTopicsOfLegislatorsParams): Promise<TopNTopicFromRes[]> => {
+  if (!legislatorIds || legislatorIds.length === 0) {
+    return []
+  }
+
+  const query = `
+    query TopNTopicsOfLegislators($legislatorIds: [Int!]!, $meetingId: Int!, $take: Int, $sessionIds: [Int]) {
+      topNTopicsOfLegislators(legislatorIds: $legislatorIds, meetingId: $meetingId, take: $take, sessionIds: $sessionIds) {
+        id
+        topics {
+          count
+          slug
+          name
+        }
+      }
+    }
+  `
+  const variables = {
+    legislatorIds,
+    meetingId: legislativeMeetingId,
+    sessionIds: legislativeMeetingSessionIds,
+    take,
+  }
+  const url = process.env.NEXT_PUBLIC_API_URL as string
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ query, variables }),
+  })
+  if (!res.ok) {
+    throw new Error(
+      `Failed to fetch top ${take} topics of legislator id: ${legislatorIds}. meetingId: ${legislativeMeetingId}, sessionIds: ${legislativeMeetingSessionIds}`
+    )
+  }
+  const data = await res.json()
+  return data?.data?.topNTopicsOfLegislators || []
+}
+
 /* fetchLegislatorsOfATopic
  *   fetch legislators of given topic and sort by speeches count desc
  */

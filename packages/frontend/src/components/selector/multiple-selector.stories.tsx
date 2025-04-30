@@ -2,7 +2,8 @@ import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { useArgs } from '@storybook/preview-api'
 import { MultipleSelect } from '@/components/selector'
-import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+import PartyTag from '@/components/dashboard/card/party-tag'
+import { TagSize } from '@/components/dashboard/enum'
 
 const OptionIcon = () => {
   return (

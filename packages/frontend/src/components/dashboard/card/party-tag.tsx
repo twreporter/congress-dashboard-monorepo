@@ -1,14 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+// enum
+import { TagSize } from '@/components/dashboard/enum'
 // @twreporter
 import { colorOpacity } from '@twreporter/core/lib/constants/color'
-
-export enum TagSize {
-  S,
-  L,
-  XL,
-  XXL,
-}
 
 const Avatar = styled.img`
   margin: auto;
