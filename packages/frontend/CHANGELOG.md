@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.0-beta.5, 2025-04-30
+
+### Notable Changes
+
+- feat
+  - add fetchers for home page
+
+### Commits
+
+- [[`0109245990`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0109245990)] - **fix(frontend)**: address merge conflicts (Aylie Chou)
+- [[`0e71d04802`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0e71d04802)] - **fix(frontend)**: typo (Aylie Chou)
+- [[`0daf8aa387`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0daf8aa387)] - **feat(frontend)**: add fetcher for speeches (Aylie Chou)
+- [[`b84d9ab33a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b84d9ab33a)] - **feat(frontend)**: add fetcher for legislator at home (Aylie Chou)
+- [[`7876a5a37f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7876a5a37f)] - **feat(frontend)**: add fetchers for topics & filter (Aylie Chou)
+
 ## 1.0.0-beta.4, 2025-04-30
 
 ### Notable Changes
