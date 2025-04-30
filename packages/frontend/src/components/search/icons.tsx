@@ -1,43 +1,43 @@
 import React from 'react'
+import styled from 'styled-components'
+import { Search as _Search } from '@twreporter/react-components/lib/icon'
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 
-export const Search = () => {
+export const Search = styled(_Search)`
+  /* overwrite default icon style */
+  && {
+    background-color: ${colorGrayscale.gray600};
+  }
+`
+
+const _X = ({ className }: { className?: string }) => {
   return (
     <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M15 10C15 12.7614 12.7614 15 10 15C7.23858 15 5 12.7614 5 10C5 7.23858 7.23858 5 10 5C12.7614 5 15 7.23858 15 10ZM14.2001 15.6004C13.0302 16.4792 11.5759 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 11.5759 16.4792 13.0302 15.6004 14.2001C15.6376 14.2281 15.6733 14.259 15.7071 14.2929L20.7071 19.2929C21.0976 19.6834 21.0976 20.3166 20.7071 20.7071C20.3166 21.0976 19.6834 21.0976 19.2929 20.7071L14.2929 15.7071C14.259 15.6733 14.2281 15.6376 14.2001 15.6004Z"
-        fill="#808080"
-      />
-    </svg>
-  )
-}
-
-export const X = () => {
-  return (
-    <svg
+      className={className}
       width="20"
       height="20"
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="20" height="20" rx="10" fill="#BBBBBB" />
+      <rect width="20" height="20" rx="10" fill={colorGrayscale.gray400} />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
         d="M6.88871 6.18258C6.69345 5.98732 6.37686 5.98732 6.1816 6.18258C5.98634 6.37784 5.98634 6.69442 6.1816 6.88969L9.29198 10.0001L6.18161 13.1104C5.98635 13.3057 5.98635 13.6223 6.18161 13.8175C6.37688 14.0128 6.69346 14.0128 6.88872 13.8175L9.99908 10.7072L13.1094 13.8175C13.3047 14.0128 13.6213 14.0128 13.8166 13.8175C14.0118 13.6223 14.0118 13.3057 13.8166 13.1104L10.7062 10.0001L13.8166 6.88969C14.0118 6.69442 14.0118 6.37784 13.8166 6.18258C13.6213 5.98732 13.3047 5.98732 13.1095 6.18258L9.99908 9.29295L6.88871 6.18258Z"
-        fill="white"
+        fill={colorGrayscale.white}
       />
     </svg>
   )
 }
+
+export const X = styled(_X)`
+  &:hover {
+    rect {
+      fill: ${colorGrayscale.gray600};
+    }
+  }
+`
 
 export const Issue = () => {
   return (
