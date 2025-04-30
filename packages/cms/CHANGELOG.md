@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0-beta.0, 2025-04-30
+
+### Notable Changes
+
+- feat
+  - add field & migration for related reporter articles
+
+### Commits
+
+- [[`8c2931e5d6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8c2931e5d6)] - **fix(cms)**: add migration file (Aylie Chou)
+- [[`c48310bfa3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c48310bfa3)] - **fix(cms)**: add alert when add twreporter article (Aylie Chou)
+- [[`b3997e72c4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b3997e72c4)] - **feat(cms)**: add field for related reporter articles (Aylie Chou)
+
 ## 1.0.0-rc.1, 2025-04-22
 
 ### Notable Changes
