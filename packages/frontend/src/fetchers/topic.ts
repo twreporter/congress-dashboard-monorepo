@@ -1,4 +1,9 @@
 import { sortByCountDesc } from '@/fetchers/utils'
+// type
+import type {
+  FetchTopNTopicsParams,
+  TopNTopicData,
+} from '@/fetchers/server/topic'
 
 /* fetchTopTopicsForLegislator
  *   fetch top 5 topic which given legislator has more speeches in given terms & session
@@ -74,6 +79,65 @@ export const fetchTopTopicsForLegislator = async ({
     .slice(0, 5)
 
   return sortedTopics
+}
+
+/* fetchTopNTopics
+ * fetch top N topics with give take & skip in given meeting & session
+ *   top logic is order by speech count desc
+ */
+export const fetchTopNTopics = async ({
+  take = 10,
+  skip = 0,
+  legislativeMeetingId,
+  legislativeMeetingSessionIds = [],
+  partyIds = [],
+}: FetchTopNTopicsParams): Promise<TopNTopicData> => {
+  const query = `
+    query TopicsOrderBySpeechCount($meetingId: Int!, $take: Int, $sessionIds: [Int], $partyIds: [Int], $skip: Int) {
+      topicsOrderBySpeechCount(meetingId: $meetingId, take: $take, sessionIds: $sessionIds, skip: $skip, partyIds: $partyIds) {
+        legislatorCount
+        slug
+        speechCount
+        title
+        legislators {
+          count
+          name
+          imageLink
+          slug
+          image {
+            imageFile {
+              url
+            }
+          }
+        }
+      }
+    }
+  `
+  const variables = {
+    take,
+    skip,
+    meetingId: Number(legislativeMeetingId),
+    sessionIds: legislativeMeetingSessionIds,
+    partyIds,
+  }
+
+  const url = process.env.NEXT_PUBLIC_API_URL as string
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ query, variables }),
+  })
+
+  if (!res.ok) {
+    throw new Error(
+      `Failed to fetch topics of meetingId: ${legislativeMeetingId}, sessionIds: ${legislativeMeetingSessionIds}, partyIds: ${partyIds}`
+    )
+  }
+  const data = await res.json()
+  const topics = data?.data?.topicsOrderBySpeechCount || []
+  return topics
 }
 
 /* fetchTopicOfALegislator

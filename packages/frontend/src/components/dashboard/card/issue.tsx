@@ -2,9 +2,13 @@ import React, { useRef } from 'react'
 import styled, { css } from 'styled-components'
 // hooks
 import useResizeObserver from '@/hooks/use-resize-observer'
+// enums
+import { TagSize } from '@/components/dashboard/enum'
+// types
+import type { Legislator } from '@/components/dashboard/type'
 // components
 import { Triangle, Circle, Gap } from '@/components/skeleton'
-import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+import PartyTag from '@/components/dashboard/card/party-tag'
 // @twreporter
 import {
   colorGrayscale,
@@ -19,13 +23,6 @@ import {
   MobileOnly,
 } from '@twreporter/react-components/lib/rwd'
 
-export type Legislator = {
-  name: string
-  count: number
-  avatar: string
-  partyAvatar: string
-  slug: string
-}
 export enum CardSize {
   S,
   M,
@@ -154,8 +151,10 @@ const CardIssue: React.FC<CardIssueProps> = ({
             return (
               <LegislatorItem key={`legislator-${index}`}>
                 <AvatarContainer>
-                  <Avatar src={avatar} />
-                  <Party avatar={partyAvatar} size={TagSize.S} />
+                  {avatar ? <Avatar src={avatar} /> : <Circle />}
+                  {partyAvatar ? (
+                    <Party avatar={partyAvatar} size={TagSize.S} />
+                  ) : null}
                 </AvatarContainer>
                 <Text text={name} />
                 <Text text={`(${count})`} />

@@ -1,31 +1,36 @@
 /* eslint-disable react/display-name */
 'use client'
 
-import React, { useState, useEffect, useRef, forwardRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
 import styled, { css } from 'styled-components'
-// config
-import { mockHumans, mockIssues } from '@/components/dashboard/card/config'
-import {
-  mockSidebarIssueProps,
-  mockSidebarLegislatorProps,
-} from '@/components/sidebar/config'
+// type
+import type { TopNTopicData } from '@/fetchers/server/topic'
+import type { partyData } from '@/fetchers/party'
+import type { LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
+import type { SidebarIssueProps } from '@/components/sidebar'
+import type { Legislator } from '@/components/dashboard/type'
 // utils
 import toastr from '@/utils/toastr'
+// enum
+import { Option } from '@/components/dashboard/enum'
+// context
+import { DashboardContext } from '@/components/dashboard/context'
+// hook
+import useFilter from '@/components/dashboard/hook/use-filter'
+import useTopic from '@/components/dashboard/hook/use-topic'
+import useLegislator from '@/components/dashboard/hook/use-legislator'
 // components
-import FunctionBar, { Option } from '@/components/dashboard/function-bar'
+import FunctionBar from '@/components/dashboard/function-bar'
 import {
   CardIssueRWD,
-  type CardIssueProps,
   CardIssueSkeletonRWD,
 } from '@/components/dashboard/card/issue'
 import {
   CardHumanRWD,
-  type CardHumanProps,
   CardHumanSkeletonRWD,
 } from '@/components/dashboard/card/human'
 import {
   SidebarIssue,
-  type SidebarIssueProps,
   SidebarLegislator,
   type SidebarLegislatorProps,
 } from '@/components/sidebar'
@@ -37,6 +42,12 @@ import { PillButton } from '@twreporter/react-components/lib/button'
 import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+// lodash
+import { find } from 'lodash'
+import { FilterModalValueType } from './type'
+const _ = {
+  find,
+}
 
 const Box = styled.div`
   background: ${colorGrayscale.gray100};
@@ -196,43 +207,72 @@ const CardSection = styled.div<{
 `
 
 const anchorId = 'anchor-id'
-const Dashboard = () => {
+type DashboardProps = {
+  initialTopics?: TopNTopicData & {
+    legislators?: Legislator[]
+  }
+  parties?: partyData[]
+  meetings?: LegislativeMeeting[]
+}
+const Dashboard: React.FC<DashboardProps> = ({
+  initialTopics = [],
+  parties = [],
+  meetings = [],
+}) => {
+  const latestMeetingId = useMemo(() => meetings[0]?.id, [meetings])
   const [selectedType, setSelectedType] = useState(Option.Issue)
   const [activeCardIndex, setActiveCardIndex] = useState(-1)
-  const [isLoading, setIsLoading] = useState(true)
-  const [mockIssue, setMockIssue] = useState<CardIssueProps[]>([])
-  const [mockHuman, setMockHuman] = useState<CardHumanProps[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [topics, setTopics] = useState(initialTopics)
+  const [legislators, setLegislators] = useState<Legislator[]>([])
+  const [shouldToastrOnHuman, setShouldToastrOnHuman] = useState(true)
   const [showSidebar, setShowSidebar] = useState(false)
+  const [sidebarTopic, setSidebarTopic] = useState<SidebarIssueProps>({
+    title: '',
+    count: 0,
+    slug: '',
+    legislatorList: [],
+  })
+  const [sidebarHuman, setSidebarHuman] = useState<SidebarLegislatorProps>({
+    title: '',
+    slug: '',
+  })
   const [sidebarGap, setSidebarGap] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
   const cardRef = useRef<HTMLDivElement>(null)
 
+  const { filterValues, setFilterValues, formatter, formattedFilterValues } =
+    useFilter(meetings)
+  const fetchTopics = useTopic(parties)
+  const { fetchLegislatorAndTopTopics, loadMoreLegislatorAndTopTopics } =
+    useLegislator()
+
   useEffect(() => {
     if (window) {
       setWindowWidth(window.innerWidth)
     }
+
+    const initializeLegislator = async () => {
+      const legislators = await fetchLegislatorAndTopTopics({
+        legislativeMeetingId: Number(latestMeetingId),
+      })
+      setLegislators(legislators)
+    }
+    initializeLegislator()
   }, [])
 
   useEffect(() => {
-    if (isLoading) {
-      window.setTimeout(() => {
-        setMockIssue(mockIssues)
-        setMockHuman(mockHumans)
-        setIsLoading(false)
-        if (selectedType === Option.Human) {
-          toastr({ text: '立委為隨機排列' })
-        }
-      }, 2000)
+    if (shouldToastrOnHuman && selectedType === Option.Human) {
+      toastr({ text: '立委為隨機排列' })
+      setShouldToastrOnHuman(false)
     }
-  }, [isLoading])
+  }, [selectedType, shouldToastrOnHuman])
 
   useEffect(() => {
-    setIsLoading(true)
-    setMockIssue([])
-    setMockHuman([])
     setShowSidebar(false)
   }, [selectedType])
+
   useEffect(() => {
     if (activeCardIndex > -1) {
       setShowSidebar(true)
@@ -242,26 +282,67 @@ const Dashboard = () => {
   const setTab = (value: Option) => {
     setActiveCardIndex(-1)
     setSelectedType(value)
-
-    /* scroll to top when change tab
-   *   not yet decided
-    const anchorComponent = document.getElementById(anchorId)
-    if (anchorComponent) {
-      anchorComponent.scrollIntoView({ behavior: 'smooth' })
-    }
-  */
   }
-  const loadMore = () => {
+  const loadMore = async () => {
     setIsLoading(true)
+    const loadMoreFunc =
+      selectedType === Option.Issue ? loadMoreTopics : loadMoreHuman
+    await loadMoreFunc()
+    setIsLoading(false)
+  }
+  const loadMoreTopics = async () => {
+    const skip = topics.length
+    const { meetingId, sessionIds } = formatter(filterValues)
+    const moreTopics = await fetchTopics({
+      skip,
+      take: 10,
+      legislativeMeetingId: meetingId,
+      legislativeMeetingSessionIds: sessionIds,
+    })
+    setTopics((topics) => topics.concat(moreTopics))
+  }
+  const loadMoreHuman = async () => {
+    const skip = legislators.length
+    const { meetingId, sessionIds } = formatter(filterValues)
+    const moreLegislators = await loadMoreLegislatorAndTopTopics({
+      skip,
+      take: 10,
+      legislativeMeetingId: meetingId,
+      legislativeMeetingSessionIds: sessionIds,
+    })
+    setLegislators((legislators) => legislators.concat(moreLegislators))
   }
   const closeSidebar = () => {
     setShowSidebar(false)
     setSidebarGap(0)
     setActiveCardIndex(-1)
   }
+  const updateSidebarTopic = (index: number) => {
+    const activeTopic = topics[index]
+    setSidebarTopic({
+      slug: activeTopic.slug,
+      title: activeTopic.title,
+      legislatorList: activeTopic.legislators,
+      count: activeTopic.speechCount,
+    })
+  }
+  const updateSidebarHuman = (index: number) => {
+    const activeLegislator = legislators[index]
+    setSidebarHuman({
+      slug: activeLegislator.slug,
+      title: `${activeLegislator.name}`,
+      issueList: activeLegislator.tags,
+    })
+  }
   const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
     setActiveCardIndex(index)
 
+    // set sidebar data
+    const updater =
+      selectedType === Option.Issue ? updateSidebarTopic : updateSidebarHuman
+    updater(index)
+
+    // set animations for sidebar
     let newSidebarGap = 520 + 24
     const sidebarComponent = sidebarRefs.current[selectedType]
     const cardComponent = cardRef.current
@@ -297,88 +378,145 @@ const Dashboard = () => {
       }
     }
   }
+  const onChangeFilter = async (filterModalValue: FilterModalValueType) => {
+    setIsLoading(true)
+    await Promise.all([
+      onChangeTopicFilter(filterModalValue),
+      onChangeHumanFilter(filterModalValue),
+    ])
+    setIsLoading(false)
+  }
+  const onChangeTopicFilter = async (
+    filterModalValue: FilterModalValueType
+  ) => {
+    setTopics([])
+    const { meetingId, sessionIds } = formatter(filterModalValue)
+    const topics = await fetchTopics({
+      take: 10,
+      skip: 0,
+      legislativeMeetingId: meetingId,
+      legislativeMeetingSessionIds: sessionIds,
+    })
+    setTopics(topics)
+  }
+  const onChangeHumanFilter = async (
+    filterModalValue: FilterModalValueType
+  ) => {
+    setLegislators([])
+    const { meetingId, sessionIds, partyIds, constituency } =
+      formatter(filterModalValue)
+    const legislators = await fetchLegislatorAndTopTopics({
+      legislativeMeetingId: meetingId,
+      legislativeMeetingSessionIds: sessionIds,
+      partyIds,
+      constituencies: constituency,
+    })
+    setLegislators(legislators)
+    setShouldToastrOnHuman(true)
+  }
+
+  const contextValue = {
+    tabType: selectedType,
+    filterValues,
+    setFilterValues,
+    formattedFilterValues,
+  }
 
   return (
-    <Box id={anchorId}>
-      <StyledFunctionBar currentTab={selectedType} setTab={setTab} />
-      <CardSection
-        $isScroll={showSidebar}
-        $isSidebarOpened={showSidebar}
-        $windowWidth={windowWidth}
-      >
-        <CardBox ref={cardRef}>
-          <CardIssueBox $active={selectedType === Option.Issue}>
-            {mockIssue.map((props: CardIssueProps, index) => (
-              <CardIssueRWD
-                key={`issue-card-${index}`}
-                {...props}
-                selected={activeCardIndex === index}
-                onClick={(e: React.MouseEvent<HTMLElement>) =>
-                  onClickCard(e, index)
-                }
-              />
-            ))}
-            {isLoading ? (
-              <>
-                <CardIssueSkeletonRWD />
-                <CardIssueSkeletonRWD />
-                <CardIssueSkeletonRWD />
-                <CardIssueSkeletonRWD />
-              </>
-            ) : null}
-            <TabletAndAbove>
-              <StyledSidebarIssue
-                $show={showSidebar}
-                {...mockSidebarIssueProps}
-                onClose={closeSidebar}
-                ref={(el: HTMLDivElement) => {
-                  sidebarRefs.current[Option.Issue] = el
-                }}
-              />
-            </TabletAndAbove>
-          </CardIssueBox>
-          <CardHumanBox $active={selectedType === Option.Human}>
-            {mockHuman.map((props: CardHumanProps, index: number) => (
-              <CardHumanRWD
-                key={`human-card-${index}`}
-                {...props}
-                selected={activeCardIndex === index}
-                onClick={(e: React.MouseEvent<HTMLElement>) =>
-                  onClickCard(e, index)
-                }
-              />
-            ))}
-            {isLoading ? (
-              <>
-                <CardHumanSkeletonRWD />
-                <CardHumanSkeletonRWD />
-                <CardHumanSkeletonRWD />
-                <CardHumanSkeletonRWD />
-              </>
-            ) : null}
-            <TabletAndAbove>
-              <StyledSidebarLegislator
-                $show={showSidebar}
-                {...mockSidebarLegislatorProps}
-                onClose={closeSidebar}
-                ref={(el: HTMLDivElement) => {
-                  sidebarRefs.current[Option.Human] = el
-                }}
-              />
-            </TabletAndAbove>
-          </CardHumanBox>
-          <LoadMore
-            text={'載入更多'}
-            theme={PillButton.THEME.normal}
-            style={PillButton.Style.DARK}
-            type={PillButton.Type.PRIMARY}
-            size={PillButton.Size.L}
-            onClick={loadMore}
-          />
-        </CardBox>
-        <Gap $gap={sidebarGap} />
-      </CardSection>
-    </Box>
+    <DashboardContext.Provider value={contextValue}>
+      <Box id={anchorId}>
+        <StyledFunctionBar
+          setTab={setTab}
+          parties={parties}
+          meetings={meetings}
+          onChangeFilter={onChangeFilter}
+        />
+        <CardSection
+          $isScroll={showSidebar}
+          $isSidebarOpened={showSidebar}
+          $windowWidth={windowWidth}
+        >
+          <CardBox ref={cardRef}>
+            <CardIssueBox $active={selectedType === Option.Issue}>
+              {topics.map(
+                (
+                  { title, speechCount, legislatorCount, legislators },
+                  index
+                ) => (
+                  <CardIssueRWD
+                    key={`issue-card-${index}`}
+                    title={title}
+                    subTitle={`共 ${speechCount} 筆相關發言（${legislatorCount}人）`}
+                    legislators={legislators}
+                    selected={activeCardIndex === index}
+                    onClick={(e: React.MouseEvent<HTMLElement>) =>
+                      onClickCard(e, index)
+                    }
+                  />
+                )
+              )}
+              {isLoading ? (
+                <>
+                  <CardIssueSkeletonRWD />
+                  <CardIssueSkeletonRWD />
+                  <CardIssueSkeletonRWD />
+                  <CardIssueSkeletonRWD />
+                </>
+              ) : null}
+              <TabletAndAbove>
+                <StyledSidebarIssue
+                  $show={showSidebar && selectedType === Option.Issue}
+                  {...sidebarTopic}
+                  onClose={closeSidebar}
+                  ref={(el: HTMLDivElement) => {
+                    sidebarRefs.current[Option.Issue] = el
+                  }}
+                />
+              </TabletAndAbove>
+            </CardIssueBox>
+            <CardHumanBox $active={selectedType === Option.Human}>
+              {legislators.map((props: Legislator, index: number) => (
+                <CardHumanRWD
+                  key={`human-card-${index}`}
+                  {...props}
+                  selected={activeCardIndex === index}
+                  onClick={(e: React.MouseEvent<HTMLElement>) =>
+                    onClickCard(e, index)
+                  }
+                />
+              ))}
+              {isLoading ? (
+                <>
+                  <CardHumanSkeletonRWD />
+                  <CardHumanSkeletonRWD />
+                  <CardHumanSkeletonRWD />
+                  <CardHumanSkeletonRWD />
+                </>
+              ) : null}
+              <TabletAndAbove>
+                <StyledSidebarLegislator
+                  $show={showSidebar && selectedType === Option.Human}
+                  {...sidebarHuman}
+                  onClose={closeSidebar}
+                  ref={(el: HTMLDivElement) => {
+                    sidebarRefs.current[Option.Human] = el
+                  }}
+                />
+              </TabletAndAbove>
+            </CardHumanBox>
+            <LoadMore
+              text={'載入更多'}
+              theme={PillButton.THEME.normal}
+              style={PillButton.Style.DARK}
+              type={PillButton.Type.PRIMARY}
+              size={PillButton.Size.L}
+              onClick={loadMore}
+            />
+          </CardBox>
+          <Gap $gap={sidebarGap} />
+        </CardSection>
+      </Box>
+    </DashboardContext.Provider>
   )
 }
 export default Dashboard

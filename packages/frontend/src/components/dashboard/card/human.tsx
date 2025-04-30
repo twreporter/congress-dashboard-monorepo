@@ -2,10 +2,14 @@
 
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import styled, { css } from 'styled-components'
+// enum
+import { TagSize } from '@/components/dashboard/enum'
+// type
+import type { Tag } from '@/components/dashboard/type'
 // components
 import Tooltip from '@/components/dashboard/card/tooltip'
 import { Triangle, Gap } from '@/components/skeleton'
-import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+import PartyTag from '@/components/dashboard/card/party-tag'
 // style
 import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
 // @twreporter
@@ -145,11 +149,6 @@ const Party = styled(PartyTag)`
   left: 8px;
   bottom: 8px;
 `
-
-export type Tag = {
-  name: string
-  count: number
-}
 
 export type CardHumanProps = {
   name?: string

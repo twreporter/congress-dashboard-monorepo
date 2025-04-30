@@ -1318,6 +1318,12 @@ type Query {
   importRecordsCount(where: ImportRecordWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
+
+  """ Get topics order by speech count desc """
+  topicsOrderBySpeechCount(meetingId: Int!, sessionIds: [Int] = [], partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [TopicWithSpeechCountAndLegislators]
+
+  """ Get top N topic of a legislator order by speech cound desc """
+  topNTopicsOfLegislators(legislatorIds: [Int!]!, meetingId: Int!, sessionIds: [Int] = [], take: Int = 10): [LegislatorWIthTopTopics]
 }
 
 union AuthenticatedItem = SystemUser
@@ -1455,4 +1461,43 @@ type KeystoneAdminUISort {
 enum KeystoneAdminUISortDirection {
   ASC
   DESC
+}
+
+""" custom type for topicsOrderBySpeechCount """
+type ImageFileWithUrlOnly {
+  url: String!
+}
+
+type CustomImage {
+  imageFile: ImageFileWithUrlOnly!
+}
+
+type LegislatorForTopic {
+  name: String!
+  party: Int
+  count: Int
+  slug: String!
+  imageLink: String
+  image: CustomImage
+}
+
+type TopicWithSpeechCountAndLegislators {
+  title: String!
+  slug: String!
+  speechCount: Int!
+  legislatorCount: Int!
+  legislators: [LegislatorForTopic]
+}
+
+""" custom type for topNTopicsOfLegislators """
+type TopicWithSpeechCount {
+  title: String!
+  slug: String!
+  name: String!
+  count: Int!
+}
+
+type LegislatorWIthTopTopics {
+  id: Int!
+  topics: [TopicWithSpeechCount]
 }

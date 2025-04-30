@@ -3,6 +3,7 @@ import express from 'express'
 import envVars from './environment-variables'
 import { listDefinition as lists } from './lists'
 import { withAuth, session } from './auth'
+import extendGraphqlSchema from './extend-graphql-schema'
 
 export default withAuth(
   config({
@@ -35,6 +36,9 @@ export default withAuth(
         app.use(express.json({ limit: '50mb' }))
         app.use(express.urlencoded({ limit: '50mb', extended: true }))
       },
+    },
+    graphql: {
+      extendGraphqlSchema,
     },
   })
 )

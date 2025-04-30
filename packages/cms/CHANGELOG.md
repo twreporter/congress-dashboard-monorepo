@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0-beta.1, 2025-04-30
+
+### Notable Changes
+
+- feat
+  - add custom sql endpoints for home page fetchers
+
+### Commits
+
+- [[`0a034fbd79`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0a034fbd79)] - **fix(cms)**: typo (Aylie Chou)
+- [[`f8f83f529f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f8f83f529f)] - **fix(cms)**: update type `TopicForLegislator` (Aylie Chou)
+- [[`4e7c6aafeb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4e7c6aafeb)] - **feat(cms)**: add `topNTopicsOfLegislators` endpoint (Aylie Chou)
+- [[`661116df76`](https://github.com/twreporter/congress-dashboard-monorepo/commit/661116df76)] - **feat(cms)**: add custom graphql endpoints (Aylie Chou)
+
 ## 1.0.0-beta.0, 2025-04-30
 
 ### Notable Changes

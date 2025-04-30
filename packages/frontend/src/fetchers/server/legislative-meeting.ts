@@ -8,13 +8,6 @@ export type LegislativeMeeting = {
   term: number
 }
 
-export type LegislativeMeetingSession = {
-  id: number
-  term: number
-  startTime: string
-  endTime: string
-}
-
 export const fetchLegislativeMeeting = async (): Promise<
   LegislativeMeeting[]
 > => {
@@ -39,6 +32,13 @@ export const fetchLegislativeMeeting = async (): Promise<
 /* fetchLegislativeMeetingSession
  *   fetch legislative meeing sessions in given term & order by term asc
  */
+export type LegislativeMeetingSession = {
+  id: number
+  term: number
+  startTime: string
+  endTime: string
+}
+
 export const fetchLegislativeMeetingSession = async (
   legislativeMeetingTerm: string
 ): Promise<LegislativeMeetingSession[]> => {
