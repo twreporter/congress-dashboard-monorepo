@@ -126,7 +126,7 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
               if (imageId && imageExtension) {
                 image = {
                   imageFile: {
-                    url: `/images/${imageId}.${imageExtension}`, // todo: use config in keyston.config
+                    url: `/images/${imageId}.${imageExtension}`, // todo: use config in keystone.config
                   },
                 }
               }
