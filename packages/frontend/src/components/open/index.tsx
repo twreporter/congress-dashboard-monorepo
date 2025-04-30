@@ -83,6 +83,20 @@ const StyledSelected = styled(Selected)`
   `}
 `
 
+const InstantSearchContainer = styled.div`
+  ${mq.desktopAndAbove`
+    width: 560px;
+  `}
+
+  ${mq.tabletOnly`
+    width: 480px;
+  `}
+
+  ${mq.mobileOnly`
+    width: 327px;
+  `}
+`
+
 type OpenProps = {
   selecteds: EditorSelect[]
 }
@@ -108,7 +122,9 @@ const Open: React.FC<OpenProps> = ({ selecteds }) => {
       <MobileDescription>
         <SerifH4 text={description} />
       </MobileDescription>
-      <AlgoliaInstantSearch />
+      <InstantSearchContainer>
+        <AlgoliaInstantSearch />
+      </InstantSearchContainer>
       <StyledSelected selecteds={selectedsWithPath} />
     </Box>
   )
