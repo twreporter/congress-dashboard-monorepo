@@ -76,6 +76,20 @@ const StyledSelected = styled(Selected)`
   `}
 `
 
+const InstantSearchContainer = styled.div`
+  ${mq.desktopAndAbove`
+    width: 560px;
+  `}
+
+  ${mq.tabletOnly`
+    width: 480px;
+  `}
+
+  ${mq.mobileOnly`
+    width: 327px;
+  `}
+`
+
 const Open: React.FC = () => {
   const descriptJSX = description.map((text, index) => (
     <SerifH4 text={text} key={`open-desc-${index}`} />
@@ -87,7 +101,9 @@ const Open: React.FC = () => {
       <MobileDescription>
         <SerifH4 text={description} />
       </MobileDescription>
-      <AlgoliaInstantSearch />
+      <InstantSearchContainer>
+        <AlgoliaInstantSearch />
+      </InstantSearchContainer>
       <StyledSelected />
     </Box>
   )

@@ -28,8 +28,7 @@ const Container = styled.div`
 
   position: relative;
 
-  /* desktop styles */
-  width: 560px;
+  width: 100%;
 
   /* TODO: add mobile styles */
 `
@@ -39,9 +38,9 @@ const InstantHits = styled(_InstantHits)`
   z-index: ${ZIndex.SearchBar};
 `
 
-export const AlgoliaInstantSearch = () => {
+export const AlgoliaInstantSearch = ({ className }: { className?: string }) => {
   return (
-    <Container>
+    <Container className={className}>
       <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
         <SearchBox />
         <InstantHits />
