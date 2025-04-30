@@ -7,7 +7,7 @@ import { FilterOption } from '@/components/sidebar/type'
 // components
 import SelectTag from '@/components/sidebar/filter-modal/select-tag'
 import Search from '@/components/sidebar/filter-modal/search'
-import { Loader } from '@/components/sidebar/index'
+import { Loader } from '@/components/loader'
 // style
 import {
   FlexColumn,

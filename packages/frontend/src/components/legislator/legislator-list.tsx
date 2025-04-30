@@ -15,6 +15,8 @@ import {
   Title,
   Body,
   SummarySection,
+  EmptyState,
+  EmptyStateText,
 } from '@/components/layout/speech-summary-list/layout'
 import TabNavigation from '@/components/layout/speech-summary-list/tab-navigation'
 import FollowMoreItems from '@/components/layout/speech-summary-list/follow-more-items'
@@ -29,6 +31,7 @@ import {
   type LegislatorProps,
 } from '@/components/sidebar/follow-more'
 import { type TabProps } from '@/components/sidebar/tab'
+import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
 // utils
 import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
@@ -48,6 +51,7 @@ const LegislatorContainer = styled.div`
   gap: 32px;
   display: flex;
   overflow-x: scroll;
+  scrollbar-width: none;
   a {
     text-decoration: none;
   }
@@ -83,6 +87,7 @@ const FilterBox = styled.div<{ $show: boolean }>`
 `
 
 type LegislatorListProps = {
+  isLoading?: boolean
   legislatorSlug: string
   legislatorName: string
   topics: { name: string; slug: string; count: number }[]
@@ -95,6 +100,7 @@ type LegislatorListProps = {
 }
 
 const LegislatorList: React.FC<LegislatorListProps> = ({
+  isLoading = true,
   legislatorSlug,
   legislatorName,
   topics,
@@ -170,6 +176,30 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
     setSelectedTab(index)
   }, [])
 
+  if (isLoading) {
+    return (
+      <Container>
+        <Title $isEmpty={true} text="發言摘要" />
+        <Body>
+          <Loader />
+        </Body>
+      </Container>
+    )
+  }
+
+  if (topics.length === 0) {
+    return (
+      <Container>
+        <Title $isEmpty={true} text="發言摘要" />
+        <Body>
+          <EmptyState>
+            <EmptyStateText text="所選會期無發言資訊" />
+          </EmptyState>
+        </Body>
+      </Container>
+    )
+  }
+
   return (
     <Container>
       <Title text="發言摘要" />
@@ -192,7 +222,11 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
             <LegislatorContainer>
               {legislatorList.map((props, index: number) => (
                 <Link
-                  href={`${InternalRoutes.Legislator}/${props.slug}`}
+                  href={`${InternalRoutes.Legislator}/${
+                    props.slug
+                  }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
+                    currentMeetingSession
+                  )}`}
                   key={`follow-more-legislator-${index}`}
                 >
                   <Legislator {...props} />

@@ -1,8 +1,5 @@
 import { keystoneFetch } from '@/app/api/graphql/keystone'
 
-/* fetchTopic
- *   fetch topics with give slug in given terms & session
- */
 export type SpeechData = {
   slug: string
   summary: string
@@ -32,7 +29,9 @@ export type TopicData = {
     title: string
   }[]
 }
-
+/** fetchTopic
+ *   fetch topics with give slug in given terms & session
+ */
 export const fetchTopic = async ({
   slug,
   legislativeMeeting,

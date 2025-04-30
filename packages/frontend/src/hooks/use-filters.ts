@@ -3,6 +3,7 @@ import { SelectorType } from '@/components/selector'
 import { formatDate } from '@/utils/date-formatters'
 import {
   useLegislativeMeeting,
+  useLegislativeMeetingByLegislator,
   useLegislativeMeetingSession,
 } from '@/fetchers/legislative-meeting'
 import {
@@ -14,10 +15,15 @@ const _ = {
   map,
 }
 
-export const useLegislativeMeetingFilters = (
-  currentMeetingTerm: number,
+export const useLegislativeMeetingFilters = ({
+  legislatorSlug,
+  currentMeetingTerm,
+  currentMeetingSession,
+}: {
+  legislatorSlug?: string
+  currentMeetingTerm: number
   currentMeetingSession: number[]
-) => {
+}) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterCount, setFilterCount] = useState(0)
   const [filterValues, setFilterValues] = useState({
@@ -25,7 +31,14 @@ export const useLegislativeMeetingFilters = (
     meetingSession: currentMeetingSession.map(String),
   })
 
-  const legislativeMeetingState = useLegislativeMeeting()
+  const allMeetingState = useLegislativeMeeting()
+  const byLegislatorMeetingState = useLegislativeMeetingByLegislator(
+    legislatorSlug || ''
+  )
+  const legislativeMeetingState = legislatorSlug
+    ? byLegislatorMeetingState
+    : allMeetingState
+
   const legislativeMeetingSessionState = useLegislativeMeetingSession(
     filterValues.meeting as string
   )
@@ -126,7 +139,8 @@ export const useLegislativeMeetingFilters = (
       disabled: false,
       label: '屆期',
       key: 'meeting',
-      defaultValue: currentMeetingTerm.toString(),
+      defaultValue:
+        legislativeMeetingState.legislativeMeeting[0]?.term.toString(),
       isLoading: legislativeMeetingState.isLoading,
       options: _.map(
         legislativeMeetingState.legislativeMeeting,
@@ -139,7 +153,7 @@ export const useLegislativeMeetingFilters = (
     {
       type: SelectorType.Multiple,
       disabled: false,
-      defaultValue: currentMeetingSession.map(String),
+      defaultValue: ['all'],
       label: '會期',
       key: 'meetingSession',
       isLoading: legislativeMeetingSessionState.isLoading,

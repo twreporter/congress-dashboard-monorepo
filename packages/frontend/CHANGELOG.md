@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.0.0-beta.3, 2025-04-30
+
+### Notable Changes
+
+- fix
+  - legislator image & scrollbar width
+  - pass querystring for legislator route
+  - add empty state to topic speech summary list and fix filter count
+  - add empty state for legislator page
+  - check if legislator slug exist
+  - fix use-filters
+  - add loader component and add loading for topic & legislator page
+  - use common loader component
+  - parse summary for speech card
+- chore
+  - sync dev
+
+### Commits
+
+* \[[`b27a6879ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b27a6879ed)] - **chore(frontend)**: sync dev (Lucien)
+* \[[`9a895b8204`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9a895b8204)] - **fix(frontend)**: parse summary for speech card (Lucien)
+* \[[`c98b5b81ba`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c98b5b81ba)] - **fix(frontend)**: use common loader component (Lucien)
+* \[[`6d7fa67fa0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6d7fa67fa0)] - **fix(frontend)**: add loader component and add loading for topic & legislator page (Lucien)
+* \[[`61211b17d5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/61211b17d5)] - **fix(frontend)**: fix use-filters (Lucien)
+* \[[`894416739b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/894416739b)] - **fix(frontend)**: use legislative meeting term filter by legislator (Lucien)
+* \[[`87e7e04588`](https://github.com/twreporter/congress-dashboard-monorepo/commit/87e7e04588)] - **fix(frontend)**: check if legislator slug exist (Lucien)
+* \[[`a4978d8c16`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4978d8c16)] - **fix(frontend)**: add empty state for legislator page (Lucien)
+* \[[`74fa26cb54`](https://github.com/twreporter/congress-dashboard-monorepo/commit/74fa26cb54)] - **fix(frontend)**: add empty state to topic speech summary list and fix filter count (Lucien)
+* \[[`de6f7d38ef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/de6f7d38ef)] - **fix(frontend)**: pass querystring for legislator route (Lucien)
+* \[[`6e4a33d507`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6e4a33d507)] - **fix(frontend)**: legislator image & scrollbar width (Lucien)
+
+
 ## 1.0.0-beta.2, 2025-04-30
 
 ### Notable Changes

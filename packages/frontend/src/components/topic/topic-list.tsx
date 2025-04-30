@@ -15,6 +15,8 @@ import {
   Title,
   Body,
   SummarySection,
+  EmptyState,
+  EmptyStateText,
 } from '@/components/layout/speech-summary-list/layout'
 import TabNavigation from '@/components/layout/speech-summary-list/tab-navigation'
 import FollowMoreItems from '@/components/layout/speech-summary-list/follow-more-items'
@@ -26,6 +28,7 @@ import CardsOfTheYear, {
 } from '@/components/sidebar/card'
 import { Issue, type IssueProps } from '@/components/sidebar/follow-more'
 import { type TabProps } from '@/components/sidebar/tab'
+import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
@@ -86,6 +89,7 @@ type LegislatorData = {
 }
 
 type TopicListProps = {
+  isLoading?: boolean
   topicTitle: string
   topicSlug: string
   legislatorsData: LegislatorData[]
@@ -95,6 +99,7 @@ type TopicListProps = {
 }
 
 const TopicList: React.FC<TopicListProps> = ({
+  isLoading = true,
   topicTitle,
   topicSlug,
   legislatorsData,
@@ -168,6 +173,30 @@ const TopicList: React.FC<TopicListProps> = ({
   const handleTabChange = useCallback((index: number) => {
     setSelectedTab(index)
   }, [])
+
+  if (isLoading) {
+    return (
+      <Container>
+        <Title $isEmpty={true} text="發言摘要" />
+        <Body>
+          <Loader />
+        </Body>
+      </Container>
+    )
+  }
+
+  if (legislatorsData.length === 0) {
+    return (
+      <Container>
+        <Title $isEmpty={true} text="發言摘要" />
+        <Body>
+          <EmptyState>
+            <EmptyStateText text="所選會期無發言資訊" />
+          </EmptyState>
+        </Body>
+      </Container>
+    )
+  }
 
   return (
     <Container>

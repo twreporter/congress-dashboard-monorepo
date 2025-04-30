@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useMemo, useState, RefAttributes } from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 // mock config
 import {
   mockGetSummary,
@@ -28,13 +28,13 @@ import {
   LegislatorProps,
 } from '@/components/sidebar/follow-more'
 import FilterModal from '@/components/sidebar/filter-modal'
+import { Loader } from '@/components/loader'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 import {
   colorGrayscale,
   colorOpacity,
 } from '@twreporter/core/lib/constants/color'
-import { Loading } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
 // lodash
 import { get, groupBy, forEach } from 'lodash'
@@ -43,38 +43,6 @@ const _ = {
   groupBy,
   forEach,
 }
-
-// global var
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-
-// loader component
-const spin = keyframes`
-  0% {
-      transform: rotate(0deg);
-  }
-  100% {
-      transform: rotate(360deg);
-  }
-`
-const LoadingBox = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 50%;
-  transform: translate(50%, -50%);
-  display: flex;
-  align-items: center;
-
-  svg {
-    width: 48px;
-    height: 48px;
-    animation: ${spin} 1s linear infinite;
-  }
-`
-export const Loader: React.FC = () => (
-  <LoadingBox>
-    <Loading releaseBranch={releaseBranch} />
-  </LoadingBox>
-)
 
 // sidebar issue component
 const Box = styled.div`
