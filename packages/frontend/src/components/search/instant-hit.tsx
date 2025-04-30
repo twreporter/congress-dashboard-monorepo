@@ -43,60 +43,6 @@ export type TopicRawHit = Hit<{
   href: string
 }>
 
-const InstantHitContainer = styled.div`
-  width: 100%;
-  margin: 4px 0;
-  padding: 8px 16px;
-
-  display: flex;
-  gap: 12px;
-  align-items: center;
-
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${colorGrayscale.gray100};
-  }
-
-  > h3 {
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 150%;
-
-    /* reset default margin */
-    margin: 0 0 2px 0;
-  }
-
-  p {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 150%;
-
-    color: ${colorGrayscale.gray600};
-
-    /* reset default margin */
-    margin: 0;
-
-    /* handle text overflow */
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  /* overwrite InstantSearch Highlight styles */
-  .ais-Highlight {
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 150%;
-    color: ${colorGrayscale.gray900};
-  }
-
-  /* overwrite InstantSearch Highlight styles */
-  .ais-Highlight-highlighted {
-    color: ${colorSupportive.heavy};
-  }
-`
-
 const Avatar = styled.div`
   width: 48px;
   height: 48px;
@@ -115,6 +61,60 @@ const Avatar = styled.div`
   }
 `
 
+const Text = styled.div`
+  p {
+    color: ${colorGrayscale.gray600};
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 150%;
+
+    /* reset default margin */
+    margin: 0;
+
+    /* handle text overflow */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+`
+
+const InstantHitContainer = styled.div`
+  width: 100%;
+  margin: 4px 0;
+  padding: 8px 16px;
+
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${colorGrayscale.gray100};
+  }
+
+  /* overwrite InstantSearch Highlight styles */
+  .ais-Highlight {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 150%;
+    color: ${colorGrayscale.gray800};
+  }
+
+  /* overwrite InstantSearch Highlight styles */
+  .ais-Highlight-highlighted {
+    color: ${colorSupportive.heavy};
+  }
+
+  ${Avatar} {
+    flex-shrink: 0;
+  }
+
+  ${Text} {
+    overflow: hidden;
+  }
+`
+
 export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
   return (
     <InstantHitContainer>
@@ -122,10 +122,10 @@ export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
         {/* TODO: replace img by using `<Image />` from `next/image` */}
         <img src={hit.imgSrc} />
       </Avatar>
-      <div>
+      <Text>
         <Highlight highlightedTagName="span" attribute="name" hit={hit} />
         <p>{hit.shortDesc}</p>
-      </div>
+      </Text>
     </InstantHitContainer>
   )
 }
@@ -136,11 +136,11 @@ export function InstantTopicHit({ hit }: { hit: TopicRawHit }) {
       <Avatar>
         <IconIssue />
       </Avatar>
-      <div>
-        <h3>{hit.name}</h3>
+      <Text>
+        <Highlight highlightedTagName="span" attribute="name" hit={hit} />
         {/* TODO: use Snippet to truncate text and highlight keyword */}
         <p>{hit.shortDesc}</p>
-      </div>
+      </Text>
     </InstantHitContainer>
   )
 }
