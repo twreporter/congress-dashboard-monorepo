@@ -9,6 +9,7 @@
 
 ### Commits
 
+-[[`5e1005ada5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e1005ada5)] - **fix(frontend)**: adress yarn build failed problem (Aylie Chou)
 - [[`0109245990`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0109245990)] - **fix(frontend)**: address merge conflicts (Aylie Chou)
 - [[`0e71d04802`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0e71d04802)] - **fix(frontend)**: typo (Aylie Chou)
 - [[`0daf8aa387`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0daf8aa387)] - **feat(frontend)**: add fetcher for speeches (Aylie Chou)
