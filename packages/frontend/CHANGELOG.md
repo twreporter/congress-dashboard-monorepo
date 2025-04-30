@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0-beta.6, 2025-05-01
+
+### Notable Changes
+
+- feat
+  - filter graphql null to undefined
+- fix
+  - fix comments
+
+### Commits
+
+- [[`c623b13259`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c623b13259)] - **feat(frontend)**: filter graphql null to undefined (Lucien)
+- [[`7512273198`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7512273198)] - **fix(frontend)**: fix comments (Lucien)
+
 ## 1.0.0-beta.5, 2025-04-30
 
 ### Notable Changes
@@ -9,7 +23,7 @@
 
 ### Commits
 
--[[`5e1005ada5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e1005ada5)] - **fix(frontend)**: adress yarn build failed problem (Aylie Chou)
+- [[`5e1005ada5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e1005ada5)] - **fix(frontend)**: adress yarn build failed problem (Aylie Chou)
 - [[`0109245990`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0109245990)] - **fix(frontend)**: address merge conflicts (Aylie Chou)
 - [[`0e71d04802`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0e71d04802)] - **fix(frontend)**: typo (Aylie Chou)
 - [[`0daf8aa387`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0daf8aa387)] - **feat(frontend)**: add fetcher for speeches (Aylie Chou)
