@@ -36,6 +36,7 @@ const Container = styled.div`
   background-color: ${colorGrayscale.white};
   border-radius: 8px;
   padding: 8px 0;
+  margin-top: 8px;
   box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
 
   a {
