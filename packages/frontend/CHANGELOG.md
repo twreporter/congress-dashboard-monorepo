@@ -1,188 +1,66 @@
 # Changelog
 
-## 0.0.3-beta.13, 2025-04-14
-
-### Notable Changes
-
-- fix
-  - fix type import
-
-### Commits
-
-- [[`be816e72cb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/be816e72cb)] - **fix(frontend)**: fix type import (Lucien)
-
-## 0.0.3-beta.12, 2025-04-14
-
-### Notable Changes
-
-- fix
-  - change legislator route to lawmaker
-  - fix defects for legislator page
-  - change filter option naming value to key
-  - topic page defect
-  - use data from api for legislator page
-  - use data from api for topic page
-  - topic fetch for server
-  - filter count for topic page
-  - handle onClick on IconButton
-  - update changelog
-- chore
-  - update @twreporter packages
-
-### Commits
-
-- [[`bb00aeb706`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bb00aeb706)] - **fix(frontend)**: update changelog (Lucien)
-- [[`3f09ccc0c0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3f09ccc0c0)] - **fix(frontend)**: update changelog (Lucien)
-- [[`e527697212`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e527697212)] - **fix(frontend)**: handle onClick on IconButton (Lucien)
-- [[`dfb8d1c176`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dfb8d1c176)] - **fix(frontend)**: filter count for topic page (Lucien)
-- [[`d7a674a153`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d7a674a153)] - **fix(frontend)**: topic fetch for server (Lucien)
-- [[`e95ef23242`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e95ef23242)] - **chore(frontend)**: update @twreporter packages (Lucien)
-- [[`45bc91c4bb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/45bc91c4bb)] - **feat(frontend)**: use data from api for topic page (Lucien)
-- [[`7ea2ebcc38`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7ea2ebcc38)] - **feat(frontend)**: use data from api for legislator page (Lucien)
-- [[`1152f5b461`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1152f5b461)] - **fix(frontend)**: topic page defect (Lucien)
-- [[`7d9f6b8f69`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7d9f6b8f69)] - **fix(frontend)**: change filter option naming value to key (Lucien)
-- [[`ed353d93b8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ed353d93b8)] - **fix(frontend)**: fix defects for legislator page (Lucien)
-- [[`ec2597dba1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec2597dba1)] - **feat(frontend)**: change legislator route to lawmaker (Lucien)
-
-## 0.0.3-beta.11, 2025-04-14
-
-### Notable Changes
-
-- fix
-  - style defects in sidebar & filter modal
-
-### Commits
-
-- [[`bd9122363a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bd9122363a)] - **fix(frontend)**: card width defect in width < 375px (Aylie Chou)
-- [[`5cbcc3cea1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5cbcc3cea1)] - **fix(frontend)**: add error UI in filter modal (Aylie Chou)
-- [[`3f475756bd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3f475756bd)] - **fix(frontend)**: fix card animation in dashboard (Aylie Chou)
-- [[`16163b80a3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/16163b80a3)] - **fix(frontend)**: add animation & loading in filter (Aylie Chou)
-- [[`c0cbf7c64c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c0cbf7c64c)] - **fix(frontend)**: defects in sidebar filter modal (Aylie Chou)
-
-## 0.0.3-beta.10, 2025-04-10
-
-### Notable Changes
-
-- fix
-  - fix legislator qraphql column
-  - use fetch for client SWR
-  - use constants route
-
-### Commits
-
-- [[`82d5d714b9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/82d5d714b9)] - **fix(frontend)**: use constants route (Lucien)
-- [[`cb060bb1a7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cb060bb1a7)] - **fix(frontend)**: use fetch for client SWR (Lucien)
-- [[`ace7874861`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ace7874861)] - **fix(frontend)**: fix legislator qraphql column (Lucien)
-
-## 0.0.3-beta.9, 2025-04-10
-
-### Notable Changes
-
-- fix
-  - SSR req set connenction header `close`
-
-### Commits
-
-- [[`89a37ce926`](https://github.com/twreporter/congress-dashboard-monorepo/commit/89a37ce926)] - **fix(frontend)**: SSR req close connenction direclty (Aylie Chou)
-
-## 0.0.3-beta.8, 2025-04-09
-
-### Notable Changes
-
-- fix
-  - use `keystoneFetch` in SSR
-
-### Commits
-
-- [[`b60aed354e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b60aed354e)] - **fix(frontend)**: remove console.log (Aylie Chou)
-- [[`1b929e9158`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1b929e9158)] - **fix(frontend)**: use `keystoneFetch` in SSR (Aylie Chou)
-
-## 0.0.3-beta.7, 2025-04-09
-
-### Notable Changes
-
-- fix
-  - fetch data with `localhost` in SSR
-
-### Commits
-
-- [[`7766d09095`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7766d09095)] - **fix(frontend)**: fetch data with `localhost` in SSR (Aylie Chou)
-
-## 0.0.3-beta.6, 2025-04-09
+## 1.0.0-beta.2, 2025-04-30
 
 ### Notable Changes
 
 - feat
-  - add abort signal for server fetch
+  - use data from api for speech page
+  - parse HTML summaries and consolidate date formatter logic
+- fix
+  - implement universal date formatter with enhanced flexibility
+  - fix comments
 
 ### Commits
 
-- [[`bf10278e64`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bf10278e64)] - **feat(frontend)**: add abort signal for server fetch (Lucien)
+- [[`02507e93ca`](https://github.com/twreporter/congress-dashboard-monorepo/commit/02507e93ca)] - **fix(frontend)**: fix comments (Lucien)
+- [[`3a07eafe0f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3a07eafe0f)] - **feat(frontend)**: parse HTML summaries and consolidate date formatter logic (Lucien)
+- [[`bc1a862e6a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bc1a862e6a)] - **fix(frontend)**: implement universal date formatter with enhanced flexibility (Lucien)
+- [[`4bc42ce9b6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4bc42ce9b6)] - **feat(frontend)**: use data from api for speech page (Lucien)
 
-## 0.0.3-beta.5, 2025-04-09
+## 1.0.0-beta.1, 2025-04-28
 
 ### Notable Changes
 
-- fix
-  - extend timeout to 30000ms
+- feat
+  - add snackbar for sidebar filter
+- chore
+  - sync dev
 
 ### Commits
 
-- [[`8d56eb0195`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8d56eb0195)] - **fix(frontend)**: extend timeout to 30000ms (Lucien)
+- [[`dc6d7b2a73`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc6d7b2a73)] - **feat(frontend)**: add snackbar for sidebar filter (Lucien)
+- [[`b7d94ac4ae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7d94ac4ae)] - **chore(frontend)**: sync dev (Lucien)
 
-## 0.0.3-beta.4, 2025-04-09
+## 1.0.0-beta.0, 2025-04-28
 
 ### Notable Changes
 
-- fix
-  - add node options to yarn start
+- feat
+  - implement filter modals and sidebar z-index management
 
 ### Commits
 
-- [[`34cfa2c26b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/34cfa2c26b)] - **fix(frontend)**: add node options to yarn start (Lucien)
+- [[`bffb6d2e94`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bffb6d2e94)] - **feat(frontend)**: implement filter modals and sidebar z-index management (Lucien)
 
-## 0.0.3-beta.3, 2025-04-09
+## 1.0.0-rc.1, 2025-04-22
 
 ### Notable Changes
 
-- fix
-  - fix AggregateError `ETIMEDOUT` when fetching data
+- chore
+  - add staging env file
 
 ### Commits
 
-- [[`ffd48a9fc1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ffd48a9fc1)] - **fix(frontend)**: AggregateError `ETIMEDOUT` (Aylie Chou)
+- [[`bd10d1866a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bd10d1866a)] - **chore(frontend)**: add staging env file (Lucien)
 
-## 0.0.3-beta.2, 2025-04-09
+## 1.0.0-rc.0, 2025-04-22
 
 ### Notable Changes
 
 - feat
   - add filter modal for sidebar
-
-### Commits
-
-- [[`ac8f5d7ee9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ac8f5d7ee9)] - **fix(frontend)**: use correct import path (Aylie Chou)
-- [[`cb8f96c4ea`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cb8f96c4ea)] - **fix(frontend)**: resolving conflicts (Aylie Chou)
-- [[`0a799c60ca`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0a799c60ca)] - **feat(frontend)**: add filter modal for sidebar (Aylie Chou)
-
-## 0.0.3-beta.1, 2025-04-08
-
-### Notable Changes
-
-- fix
-  - type import and declare
-  - filter modal dafault value and remove href duplicated slash
-
-### Commits
-
-- [[`5b1e25f317`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5b1e25f317)] - **fix(frontend)**: type import and declare (Lucien)
-- [[`ded2440eae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ded2440eae)] - **fix(frontend)**: filter modal dafault value and remove href duplicated slash (Lucien)
-
-## 0.0.3-beta.0, 2025-04-08
-
-### Notable Changes
-
-- feat
+  - add abort signal for server fetch
   - improve tooltip positioning and behavior
   - refactor Legislator and Topic components and styles
   - refactor content page layout and improve filter handling
@@ -202,13 +80,112 @@
   - export function and change variable name
   - topic page basic layout
   - move filter button to button folder
+  - add `/api/graphql` endpoint
+  - add sidebar components & stories
+  - add search bar to header & hamburger menu
+  - add speech page
+    - custom button for congress dashboard
+    - add rwd toolbar
+    - add storybook stories
+    - add scrolling animation
+    - scroll context useCallback
+  - add `pino` logger & support stackdriver log
+  - add header max top and hidden print for toolbar
+  - add storybook configs
+  - add selector components for single & multi selection
+    - add storybook stories
+  - add header & footer component
+    - add scrolling animation
+  - add filter modal component
+    - add storybook stories
+  - add `use-window-width` hook
+    - support SSR
+  - add navigation link constants
+  - add responsive tag display
+  - add index page
 - fix
+  - apply rwd style for sidebar gap
+  - fix type import
+  - change legislator route to lawmaker
+  - fix defects for legislator page
+  - change filter option naming value to key
+  - topic page defect
+  - use data from api for legislator page
+  - use data from api for topic page
+  - topic fetch for server
+  - filter count for topic page
+  - handle onClick on IconButton
+  - style defects in sidebar & filter modal
+  - fix legislator graphql column
+  - use fetch for client SWR
+  - use constants route
+  - SSR req set connection header `close`
+  - use `keystoneFetch` in SSR
+  - fetch data with `localhost` in SSR
+  - extend timeout to 30000ms
+  - add node options to yarn start
+  - fix AggregateError `ETIMEDOUT` when fetching data
+  - type import and declare
+  - filter modal default value and remove href duplicated slash
   - fix comments and add constants
   - fix typo
   - fix topics route
+  - import type with type-only import
+  - copy public env when cloud build
+  - remove unused code
+  - utils font family
+  - using @ for import routes
+- chore
+  - update @twreporter packages
+  - remove unused files in `public` folder
+  - move server only env to cloud run env
+  - update @twreporter packages
+  - add configs for monorepo cross import
+  - update @twreporter packages
+  - add `.env.development` in codebase
+  - rename `lib` to `utils`
+  - build `shared` lib with `tsup`
+  - update dependency version
 
 ### Commits
 
+- [[`1fb227e184`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1fb227e184)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`0339513a82`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0339513a82)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`229723bf76`](https://github.com/twreporter/congress-dashboard-monorepo/commit/229723bf76)] - **fix(frontend)**: sidebar gap rwd (Aylie Chou)
+- [[`be816e72cb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/be816e72cb)] - **fix(frontend)**: fix type import (Lucien)
+- [[`bb00aeb706`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bb00aeb706)] - **fix(frontend)**: update changelog (Lucien)
+- [[`3f09ccc0c0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3f09ccc0c0)] - **fix(frontend)**: update changelog (Lucien)
+- [[`e527697212`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e527697212)] - **fix(frontend)**: handle onClick on IconButton (Lucien)
+- [[`dfb8d1c176`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dfb8d1c176)] - **fix(frontend)**: filter count for topic page (Lucien)
+- [[`d7a674a153`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d7a674a153)] - **fix(frontend)**: topic fetch for server (Lucien)
+- [[`e95ef23242`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e95ef23242)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`45bc91c4bb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/45bc91c4bb)] - **feat(frontend)**: use data from api for topic page (Lucien)
+- [[`7ea2ebcc38`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7ea2ebcc38)] - **feat(frontend)**: use data from api for legislator page (Lucien)
+- [[`1152f5b461`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1152f5b461)] - **fix(frontend)**: topic page defect (Lucien)
+- [[`7d9f6b8f69`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7d9f6b8f69)] - **fix(frontend)**: change filter option naming value to key (Lucien)
+- [[`ed353d93b8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ed353d93b8)] - **fix(frontend)**: fix defects for legislator page (Lucien)
+- [[`ec2597dba1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec2597dba1)] - **feat(frontend)**: change legislator route to lawmaker (Lucien)
+- [[`bd9122363a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bd9122363a)] - **fix(frontend)**: card width defect in width < 375px (Aylie Chou)
+- [[`5cbcc3cea1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5cbcc3cea1)] - **fix(frontend)**: add error UI in filter modal (Aylie Chou)
+- [[`3f475756bd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3f475756bd)] - **fix(frontend)**: fix card animation in dashboard (Aylie Chou)
+- [[`16163b80a3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/16163b80a3)] - **fix(frontend)**: add animation & loading in filter (Aylie Chou)
+- [[`c0cbf7c64c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c0cbf7c64c)] - **fix(frontend)**: defects in sidebar filter modal (Aylie Chou)
+- [[`82d5d714b9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/82d5d714b9)] - **fix(frontend)**: use constants route (Lucien)
+- [[`cb060bb1a7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cb060bb1a7)] - **fix(frontend)**: use fetch for client SWR (Lucien)
+- [[`ace7874861`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ace7874861)] - **fix(frontend)**: fix legislator qraphql column (Lucien)
+- [[`89a37ce926`](https://github.com/twreporter/congress-dashboard-monorepo/commit/89a37ce926)] - **fix(frontend)**: SSR req close connenction direclty (Aylie Chou)
+- [[`b60aed354e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b60aed354e)] - **fix(frontend)**: remove console.log (Aylie Chou)
+- [[`1b929e9158`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1b929e9158)] - **fix(frontend)**: use `keystoneFetch` in SSR (Aylie Chou)
+- [[`7766d09095`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7766d09095)] - **fix(frontend)**: fetch data with `localhost` in SSR (Aylie Chou)
+- [[`bf10278e64`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bf10278e64)] - **feat(frontend)**: add abort signal for server fetch (Lucien)
+- [[`8d56eb0195`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8d56eb0195)] - **fix(frontend)**: extend timeout to 30000ms (Lucien)
+- [[`34cfa2c26b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/34cfa2c26b)] - **fix(frontend)**: add node options to yarn start (Lucien)
+- [[`ffd48a9fc1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ffd48a9fc1)] - **fix(frontend)**: AggregateError `ETIMEDOUT` (Aylie Chou)
+- [[`ac8f5d7ee9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ac8f5d7ee9)] - **fix(frontend)**: use correct import path (Aylie Chou)
+- [[`cb8f96c4ea`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cb8f96c4ea)] - **fix(frontend)**: resolving conflicts (Aylie Chou)
+- [[`0a799c60ca`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0a799c60ca)] - **feat(frontend)**: add filter modal for sidebar (Aylie Chou)
+- [[`5b1e25f317`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5b1e25f317)] - **fix(frontend)**: type import and declare (Lucien)
+- [[`ded2440eae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ded2440eae)] - **fix(frontend)**: filter modal dafault value and remove href duplicated slash (Lucien)
 - [[`f6fe20745b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f6fe20745b)] - Merge remote-tracking branch 'upstream/dev' into feature/topic-page (Lucien)
 - [[`e1b53b2d37`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1b53b2d37)] - **fix(frontend)**: fix comments and add constants (Lucien)
 - [[`9176e6156a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9176e6156a)] - **fix(frontend)**: fix typo (Lucien)
@@ -233,35 +210,6 @@
 - [[`d71c715ce0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d71c715ce0)] - **feat(frontend)**: topic page basic layout (Lucien)
 - [[`2c25ac8681`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2c25ac8681)] - **fix(frontend)**: fix topics route (Lucien)
 - [[`1058b17d6e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1058b17d6e)] - **feat(frontend)**: move filter button to button folder (Lucien)
-
-## 0.0.2, 2025-03-25
-
-### Notable Changes
-
-- feat
-  - add `/api/graphql` endpoint
-  - add sidebar components & stories
-  - add search bar to header & hamburger menu
-  - add speech page
-    - custom button for congress dashboard
-    - add rwd toolbar
-    - add storybook stories
-    - add scrolling animation
-    - scroll context useCallback
-  - add `pino` logger & support stackdriver log
-  - add header max top and hidden print for toolbar
-- fix
-  - import type with type-only import
-  - copy public env when cloud build
-  - remove unused code
-  - utils font family
-- chore
-  - remove unused files in `public` folder
-  - move server only env to cloud run env
-  - update @twreporter packages
-
-### Commits
-
 - [[`20842818db`](https://github.com/twreporter/congress-dashboard-monorepo/commit/20842818db)] - **fix**: import type with type-only import (Aylie Chou)
 - [[`5586f5e09f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5586f5e09f)] - **fix**: defects (Aylie Chou)
 - [[`71901b318c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/71901b318c)] - **fix**: copy public env when cloud build (Aylie Chou)
@@ -300,36 +248,6 @@
 - [[`83b44ebddb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/83b44ebddb)] - **fix(frontend)**: add horizontal gap for interaction (Aylie Chou)
 - [[`f04ed98ee6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f04ed98ee6)] - **feat**: add sidebar components & stories (Aylie Chou)
 - [[`f5c959c355`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f5c959c355)] - **feat**: add search bar to header & hamburger menu (Aylie Chou)
-
-## 0.0.1, 2025-03-07
-
-### Notable Changes
-
-- feat
-  - add storybook configs
-  - add selector components for single & multi selection
-    - add storybook stories
-  - add header & footer component
-    - add scrolling animation
-  - add filter modal component
-    - add storybook stories
-  - add `use-window-width` hook
-    - support SSR
-  - add navigation link constants
-  - add responsive tag display
-  - add index page
-- fix
-  - using @ for import routes
-- chore
-  - add configs for monorepo cross import
-  - update @twreporter packages
-  - add `.env.development` in codebase
-  - rename `lib` to `utils`
-  - build `shared` lib with `tsup`
-  - update dependency version
-
-### Commits
-
 - [[`493a5a5948`](https://github.com/twreporter/congress-dashboard-monorepo/commit/493a5a5948)] - **fix(frontend)**: remove comments (Aylie Chou)
 - [[`2f87305c32`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2f87305c32)] - **fix(frontend)**: add `tooltip`, `note`, `skeleton` (Aylie Chou)
 - [[`1e0f2b5863`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1e0f2b5863)] - **fix**: remove `console.log` (Aylie Chou)

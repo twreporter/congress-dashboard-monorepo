@@ -35,6 +35,8 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { PillButton } from '@twreporter/react-components/lib/button'
 import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
+// z-index
+import { ZIndex } from '@/styles/z-index'
 
 const Box = styled.div`
   background: ${colorGrayscale.gray100};
@@ -69,8 +71,11 @@ const StyledFunctionBar = styled(FunctionBar)`
 const cardCss = css`
   width: 928px;
 
-  ${mq.tabletAndBelow`
-    width: 100%;
+  ${mq.tabletOnly`
+    width: calc( 100vw - 64px );
+  `}
+  ${mq.mobileOnly`
+    width: calc( 100vw - 48px);
   `}
 `
 const CardBox = styled.div`
@@ -119,7 +124,7 @@ const sidebarCss = css<{ $show: boolean }>`
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 3000;
+  z-index: ${ZIndex.SideBar};
   overflow-y: scroll;
 `
 const StyledSidebarIssue = styled(
@@ -154,18 +159,25 @@ const CardSection = styled.div<{
     scrollbar-width: none;
   `
       : ''}
-  ${(props) =>
-    props.$windowWidth
-      ? `
-    max-width: 100%;
-    padding: 0 ${(props.$windowWidth - 928) / 2}px;
-  `
-      : 'max-width: 928px;'}
+
+  ${mq.desktopAndAbove`
+    ${(props) =>
+      props.$windowWidth
+        ? `
+        max-width: 100%;
+        padding: 0 ${
+          props.$isSidebarOpened ? 0 : (props.$windowWidth - 928) / 2
+        }px 0 ${(props.$windowWidth - 928) / 2}px;
+      `
+        : `
+        max-width: 928px;
+      `}
+  `}
+
   ${(props) =>
     props.$isSidebarOpened
       ? `
       width: 100vw;
-      padding-right: 24px;
     `
       : ''}
 
@@ -254,12 +266,14 @@ const Dashboard = () => {
     const sidebarComponent = sidebarRefs.current[selectedType]
     const cardComponent = cardRef.current
     if (sidebarComponent && cardComponent) {
-      const needGap = sidebarComponent.clientWidth + 24
+      let needGap = sidebarComponent.offsetWidth
       const hasGap = cardComponent.offsetLeft
-      if (cardComponent.clientWidth === 928) {
+      if (cardComponent.offsetWidth === 928) {
         // desktop and above
+        needGap += 32
         newSidebarGap = hasGap > needGap ? 0 : needGap
       } else {
+        needGap += 24
         newSidebarGap = needGap - hasGap
       }
     }
