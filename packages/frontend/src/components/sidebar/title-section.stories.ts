@@ -10,6 +10,7 @@ const humanProps: TitleSectionProps = {
   title: '沈伯洋',
   subtitle: '本屆加入：程序委員會(6會期)、外交及國防委員會(2會期)',
   tabs: mockLegislators,
+  showTabAvatar: true,
 }
 
 const issueProps: TitleSectionProps = {
@@ -17,6 +18,7 @@ const issueProps: TitleSectionProps = {
   title: 'NCC執法效能與正當性',
   count: 36,
   tabs: mockIssueList,
+  showTabAvatar: false,
 }
 
 const meta: Meta<typeof TitleSection> = {

@@ -190,6 +190,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
           title={title}
           count={count}
           tabs={tabList}
+          showTabAvatar={true}
           link={`${InternalRoutes.Legislator}/${slug}`}
           onSelectTab={setSelectedTab}
           onOpenFilterModal={() => setShowFilter(true)}
@@ -325,6 +326,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
           title={title}
           subtitle={subtitle}
           tabs={tabList}
+          showTabAvatar={false}
           link={`${InternalRoutes.Topic}/${slug}`}
           onSelectTab={setSelectedTab}
           onClose={onClose}
