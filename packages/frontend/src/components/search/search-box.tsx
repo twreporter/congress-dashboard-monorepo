@@ -9,19 +9,19 @@ const _ = {
   debounce,
 }
 
-export const layoutVariants = {
+export const LayoutVariants = {
   Default: 'default', // search bar in the body of the page
   Header: 'header', // search bar in the header
 } as const
 
-export type LayoutVariant = (typeof layoutVariants)[keyof typeof layoutVariants]
+export type LayoutVariant = (typeof LayoutVariants)[keyof typeof LayoutVariants]
 
 const Container = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
   background-color: ${colorGrayscale.white};
 
   ${({ $variant }) => {
-    if ($variant === layoutVariants.Header) {
+    if ($variant === LayoutVariants.Header) {
       return `
         padding: 8px 20px;
         height: 40px;
