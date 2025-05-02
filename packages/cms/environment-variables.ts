@@ -22,7 +22,8 @@ const environmentVariables = {
     storagePath: IMAGES_STORAGE_PATH || 'public/images',
   },
   releaseBranch: RELEASE_BRANCH || 'master',
-  twreporterApiUrl: NEXT_PUBLIC_TWREPORTER_API_URL || 'http://localhost:8080',
+  twreporterApiUrl:
+    NEXT_PUBLIC_TWREPORTER_API_URL || 'https://staging-go-api.twreporter.org',
 }
 
 export default environmentVariables

@@ -5,6 +5,7 @@ import { fetchTopNTopics } from '@/fetchers/server/topic'
 import { fetchParty } from '@/fetchers/server/party'
 // utils
 import { getImageLink } from '@/fetchers/utils'
+import logger from '@/utils/logger'
 // components
 import Open from '@/components/open'
 import Dashboard from '@/components/dashboard'
@@ -54,7 +55,7 @@ export default async function Home() {
       </div>
     )
   } catch (err) {
-    console.error(`Failed to fetch home page data. err: ${err}`)
+    logger.error({ err }, 'Failed to fetch home page data')
     return <div>Failed to load home page data. Please try again later.</div>
   }
 }
