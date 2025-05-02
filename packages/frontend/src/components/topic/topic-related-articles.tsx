@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import useTwreporterArticle from '@/fetchers/twreporter-article'
 // component
 import { Triangle, Gap, ImageWithSkeleton } from '@/components/skeleton'
-import { H4Title, P3Gray600, H6Gray800 } from '@/components/topic/styles'
+import { H4Title, P3Gray600, H6Gray800Title } from '@/components/topic/styles'
 // util
 import { formatDate } from '@/utils/date-formatters'
 // @twreporter
@@ -52,6 +52,7 @@ const TabletOnly = styled.div`
 `
 const imageStyle = {
   flex: 'none',
+  ObjectFit: 'cover',
 }
 
 type TwreporterArticleProps = {
@@ -122,7 +123,7 @@ const TwreporterArticle: React.FC<TwreporterArticleProps> = ({
             />
           ) : null}
         </CategoryAndDate>
-        <H6Gray800 text={data?.title} />
+        <H6Gray800Title text={data?.title} />
       </FlexColumn>
       {data?.image?.url ? (
         <ImageWithSkeleton
