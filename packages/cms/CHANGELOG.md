@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.3, 2025-05-02
+
+### Notable Changes
+
+- fix
+  - update default value of twreporter url
+
+### Commits
+
+- [[`a6c380ab29`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a6c380ab29)] - **fix(cms)**: update default value of twreporter url (Aylie Chou)
+
 ## 1.0.0-beta.2, 2025-05-01
 
 ### Notable Changes
