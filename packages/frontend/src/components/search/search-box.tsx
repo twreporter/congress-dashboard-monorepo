@@ -1,20 +1,37 @@
-import React, { useState, useMemo } from 'react'
-import { useSearchBox } from 'react-instantsearch'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
+import debounce from 'lodash/debounce'
 import styled from 'styled-components'
 import { Search as IconSearch, X as IconX } from '@/components/search/icons'
-import debounce from 'lodash/debounce'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import { useSearchBox } from 'react-instantsearch'
 
 const _ = {
   debounce,
 }
 
-const Container = styled.div`
+export const LayoutVariants = {
+  Default: 'default', // search bar in the body of the page
+  Header: 'header', // search bar in the header
+} as const
+
+export type LayoutVariant = (typeof LayoutVariants)[keyof typeof LayoutVariants]
+
+const Container = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
   background-color: ${colorGrayscale.white};
 
-  margin-bottom: 8px;
-  padding: 12px 20px;
+  ${({ $variant }) => {
+    if ($variant === LayoutVariants.Header) {
+      return `
+        padding: 8px 20px;
+        height: 40px;
+      `
+    }
+    return `
+      padding: 12px 20px;
+      height: 48px;
+    `
+  }}
 
   display: flex;
   align-items: center;
@@ -43,7 +60,16 @@ const ClearButton = styled.button`
   line-height: 0;
 `
 
-export const SearchBox = () => {
+export const SearchBox = ({
+  className,
+  variant,
+  autoFocus,
+}: {
+  className?: string
+  variant: LayoutVariant
+  autoFocus: boolean
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null)
   const { query, refine: _refine } = useSearchBox()
   const [inputValue, setInputValue] = useState(query)
   const refine = useMemo(() => _.debounce(_refine, 500), [_refine])
@@ -59,14 +85,25 @@ export const SearchBox = () => {
     refine('')
   }
 
+  useEffect(() => {
+    if (autoFocus) {
+      inputRef.current?.focus()
+    }
+  }, [autoFocus])
+
+  useEffect(() => {
+    setInputValue(query)
+  }, [query])
+
   return (
-    <Container>
+    <Container className={className} $variant={variant}>
       <IconSearch />
       <Input
+        ref={inputRef}
         type="text"
         value={inputValue}
         onChange={handleOnChange}
-        placeholder="搜尋立委、議題和逐字稿..."
+        placeholder="搜尋立委和議題"
       />
       {inputValue && (
         <ClearButton onClick={clearQuery}>
