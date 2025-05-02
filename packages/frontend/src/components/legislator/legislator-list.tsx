@@ -183,7 +183,9 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
       <Container>
         <Title $isEmpty={true} text="發言摘要" />
         <Body>
-          <Loader />
+          <EmptyState>
+            <Loader useAbsolute={false} />
+          </EmptyState>
         </Body>
       </Container>
     )
