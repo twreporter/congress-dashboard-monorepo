@@ -111,7 +111,7 @@ export const useLegislativeMeetingByLegislator = (slug: string) => {
     fetchLegislativeMeetingByLegislator(slug)
   )
   return {
-    legislativeMeeting: data || [],
+    legislativeMeetings: data || [],
     isLoading,
     error,
   }

@@ -145,10 +145,10 @@ export const useLegislativeMeetingFilters = ({
       label: '屆期',
       key: 'meeting',
       defaultValue:
-        legislativeMeetingState.legislativeMeeting[0]?.term.toString(),
+        legislativeMeetingState.legislativeMeetings[0]?.term.toString(),
       isLoading: legislativeMeetingState.isLoading,
       options: _.map(
-        legislativeMeetingState.legislativeMeeting,
+        legislativeMeetingState.legislativeMeetings,
         ({ term }: { term: number }) => ({
           label: `第 ${term} 屆`,
           value: term.toString(),

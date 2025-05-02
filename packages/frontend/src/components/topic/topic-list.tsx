@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 import Link from 'next/link'
@@ -112,6 +112,10 @@ const TopicList: React.FC<TopicListProps> = ({
   const [tabList, setTabList] = useState(
     legislatorsData.map((legislator) => legislator) as TabProps[]
   )
+
+  useEffect(() => {
+    setTabList(legislatorsData.map((legislator) => legislator))
+  }, [legislatorsData])
 
   const selectedLegislator = useMemo(() => {
     if (legislatorsData.length === 0) return null

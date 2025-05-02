@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 import Link from 'next/link'
@@ -37,8 +37,6 @@ import FilterModal from '@/components/sidebar/filter-modal'
 import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
-// fetcher
-import fetchTopicOfALegislator from '@/fetchers/topic'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // lodash
@@ -113,6 +111,10 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   const [tabList, setTabList] = useState(
     topics.map((topic) => topic) as TabProps[]
   )
+
+  useEffect(() => {
+    setTabList(topics.map((topic) => topic))
+  }, [topics])
 
   const selectedTopic = useMemo(() => {
     if (topics.length === 0) return null
@@ -242,7 +244,6 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
             title={`${legislatorName} 的相關發言篩選`}
             slug={legislatorSlug}
             initialSelectedOption={tabList}
-            fetcher={fetchTopicOfALegislator}
             onClose={() => {
               setShowFilter(false)
             }}
