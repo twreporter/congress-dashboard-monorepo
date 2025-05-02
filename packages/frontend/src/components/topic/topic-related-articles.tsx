@@ -9,6 +9,7 @@ import { Triangle, Gap, ImageWithSkeleton } from '@/components/skeleton'
 import { H4Title, P3Gray600, H6Gray800 } from '@/components/topic/styles'
 // util
 import { formatDate } from '@/utils/date-formatters'
+import { notoSerif } from '@/utils/font'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import {
@@ -52,7 +53,11 @@ const TabletOnly = styled.div`
 `
 const imageStyle = {
   flex: 'none',
+  objectFit: 'cover',
 }
+const Title = styled(H6Gray800)`
+  font-family: ${notoSerif.style.fontFamily} !important;
+`
 
 type TwreporterArticleProps = {
   slug: string
@@ -122,7 +127,7 @@ const TwreporterArticle: React.FC<TwreporterArticleProps> = ({
             />
           ) : null}
         </CategoryAndDate>
-        <H6Gray800 text={data?.title} />
+        <Title text={data?.title} />
       </FlexColumn>
       {data?.image?.url ? (
         <ImageWithSkeleton
