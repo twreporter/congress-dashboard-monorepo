@@ -41,6 +41,7 @@ export type TabProps = {
   name?: string
   count?: number
   avatar?: string
+  showAvatar?: boolean
   selected?: boolean
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
   className?: string
@@ -49,22 +50,25 @@ const Tab: React.FC<TabProps> = ({
   name = '',
   count = 0,
   avatar,
+  showAvatar = false,
   selected = false,
   onClick,
   className,
 }: TabProps) => {
   return (
     <Box $active={selected} onClick={onClick} className={className}>
-      {avatar ? (
-        <ImageWithSkeleton
-          src={avatar}
-          alt={`${name} avatar on tab`}
-          width={36}
-          height={36}
-        />
-      ) : (
-        <CircleRaw width={36} height={36} />
-      )}
+      {showAvatar ? (
+        avatar ? (
+          <ImageWithSkeleton
+            src={avatar}
+            alt={`${name} avatar on tab`}
+            width={36}
+            height={36}
+          />
+        ) : (
+          <CircleRaw width={36} height={36} />
+        )
+      ) : null}
       <Name text={`${name}${count ? `(${count})` : ''}`} $active={selected} />
     </Box>
   )

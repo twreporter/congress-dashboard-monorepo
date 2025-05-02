@@ -110,11 +110,16 @@ const TopicList: React.FC<TopicListProps> = ({
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
   const [tabList, setTabList] = useState(
-    legislatorsData.map((legislator) => legislator) as TabProps[]
+    legislatorsData.map((legislator) => ({
+      ...legislator,
+      showAvatar: true,
+    })) as TabProps[]
   )
 
   useEffect(() => {
-    setTabList(legislatorsData.map((legislator) => legislator))
+    setTabList(
+      legislatorsData.map((legislator) => ({ ...legislator, showAvatar: true }))
+    )
   }, [legislatorsData])
 
   const selectedLegislator = useMemo(() => {

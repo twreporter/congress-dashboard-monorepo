@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.9, 2025-05-02
+
+### Notable Changes
+
+- fix
+  - add `showAvatar` props to Tab & `showTabAvatar` to TitleSection
+
+### Commits
+
+- [[`431fe879c1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/431fe879c1)] - **fix(frontend)**: add `showAvatar` props to Tab (Aylie Chou)
+
 ## 1.0.0-beta.8, 2025-05-02
 
 ### Notable Changes
