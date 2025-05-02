@@ -51,9 +51,10 @@ export const TopicListContainer = styled.div`
   display: flex;
   border-radius: 8px;
   background-color: ${colorGrayscale.white};
+  height: fit-content;
   ${mq.hdOnly`
     width: 796px;
-    `}
+  `}
   ${mq.desktopOnly`
     width: 100%;
     max-width: 720px;

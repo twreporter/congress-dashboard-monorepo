@@ -217,7 +217,7 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
           </InfoItem>
           <InfoItem>
             <P1Gray800 text="備註" />
-            <P1Gray800 weight={P1.Weight.BOLD} text={legislator.note} />
+            <P1Gray800 weight={P1.Weight.BOLD} text={legislator.tooltip} />
           </InfoItem>
         </LegislatorInfoContent>
       </LegislatorDetail>

@@ -123,7 +123,7 @@ export const useLegislativeMeeting = () => {
     fetchLegislativeMeeting
   )
   return {
-    legislativeMeeting: data || [],
+    legislativeMeetings: data || [],
     isLoading,
     error,
   }

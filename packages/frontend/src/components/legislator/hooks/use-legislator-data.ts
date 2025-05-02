@@ -37,16 +37,16 @@ export type Legislator = {
     name: string
     image: string
   }
-  note: string
+  tooltip?: string
   meetingTerm: number
   committees: {
     name: string
     count: number
   }[]
-  proposalSuccessCount: number
-  externalLink: string
+  proposalSuccessCount?: number
+  externalLink?: string
   meetingTermCount: number
-  meetingTermCountInfo: string
+  meetingTermCountInfo?: string
 }
 
 export const useLegislatorData = (
@@ -57,7 +57,7 @@ export const useLegislatorData = (
     const legislator = () => {
       const {
         party,
-        note,
+        tooltip,
         legislativeMeeting: meeting,
         constituency,
         type,
@@ -92,7 +92,7 @@ export const useLegislatorData = (
         constituency: LegislatorConstituency,
         avatar: legislatorAvatar,
         party: legislatorParty,
-        note: note || '',
+        tooltip,
         meetingTerm,
         committees,
         proposalSuccessCount: proposalSuccessCount || 0,
