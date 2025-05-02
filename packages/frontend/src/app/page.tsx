@@ -9,6 +9,9 @@ import logger from '@/utils/logger'
 // components
 import Open from '@/components/open'
 import Dashboard from '@/components/dashboard'
+import Error from '@/components/error'
+// type
+import type { ErrorType } from '@/components/error/type'
 // lodash
 import { find } from 'lodash'
 const _ = {
@@ -56,6 +59,13 @@ export default async function Home() {
     )
   } catch (err) {
     logger.error({ err }, 'Failed to fetch home page data')
-    return <div>Failed to load home page data. Please try again later.</div>
+
+    const errValue = err as ErrorType
+    return (
+      <Error
+        title={'Failed to load home page data. Please try again later.'}
+        error={errValue}
+      />
+    )
   }
 }
