@@ -11,6 +11,7 @@ export type LegislatorFromRes = {
     }
     imageLink?: string
   }
+  note?: string
   tooltip?: string
   legislativeMeeting: {
     term: number
@@ -149,6 +150,7 @@ export const fetchLegislator = async ({
           }
           imageLink
         }
+        note
         tooltip
         legislativeMeeting {
           term
