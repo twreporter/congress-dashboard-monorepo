@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.7, 2025-05-02
+
+### Notable Changes
+
+- fix
+  - use logger instead of console.error to catch home page SSR error
+
+### Commits
+
+- [[`b7bfbb61f9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7bfbb61f9)] - **fix(frontend)**: use logger instead of console.error (Aylie Chou)
+
 ## 1.0.0-beta.6, 2025-05-01
 
 ### Notable Changes
