@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import {
   InstantHits as _InstantHits,
   defaultIndexName,
 } from '@/components/search/instant-hits'
-import { InstantSearch } from 'react-instantsearch'
+import { InstantSearch, useSearchBox } from 'react-instantsearch'
 import { SearchBox, layoutVariants } from '@/components/search/search-box'
 import type { LayoutVariant } from '@/components/search/search-box'
 import { ZIndex } from '@/styles/z-index'
@@ -47,6 +47,32 @@ const InstantHits = styled(_InstantHits)`
   position: absolute;
 `
 
+const ClickOutsideWidget = ({ containerRef }) => {
+  const { query, refine } = useSearchBox()
+
+  useEffect(() => {
+    if (query === '') {
+      return
+    }
+
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        refine('')
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [containerRef, query])
+
+  return null
+}
+
 export const AlgoliaInstantSearch = ({
   className,
   variant = layoutVariants.Default,
@@ -56,11 +82,13 @@ export const AlgoliaInstantSearch = ({
   variant?: LayoutVariant
   autoFocus?: boolean
 }) => {
+  const containerRef = useRef(null)
   return (
-    <Container className={className} $variant={variant}>
+    <Container ref={containerRef} className={className} $variant={variant}>
       <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
         <SearchBox variant={variant} autoFocus={autoFocus} />
         <InstantHits />
+        <ClickOutsideWidget containerRef={containerRef} />
       </InstantSearch>
     </Container>
   )

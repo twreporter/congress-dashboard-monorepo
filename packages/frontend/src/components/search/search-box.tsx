@@ -91,6 +91,10 @@ export const SearchBox = ({
     }
   }, [autoFocus])
 
+  useEffect(() => {
+    setInputValue(query)
+  }, [query])
+
   return (
     <Container className={className} $variant={variant}>
       <IconSearch />
