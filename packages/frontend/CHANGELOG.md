@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.11, 2025-05-02
+
+### Notable Changes
+
+- fix
+  - add more log for home page SSR
+
+### Commits
+
+- [[`6b5fb2bb39`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b5fb2bb39)] - **fix(frontend)**: add more log for home page SSR (Aylie Chou)
+
 ## 1.0.0-beta.10, 2025-05-02
 
 ### Notable Changes

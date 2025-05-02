@@ -20,11 +20,14 @@ const _ = {
 
 export default async function Home() {
   try {
+    logger.debug('start to fetch editor selecteds & meetings...')
     const [selecteds, meetings] = await Promise.all([
       fetchEditorSelecteds(),
       fetchLegislativeMeeting(),
     ])
+    logger.debug({ selecteds, meetings }, 'fetch selecteds & meetings done.')
     const latestMeetingId = meetings[0]?.id
+    logger.debug('start to fetch top topics & party...')
     const [topics = [], parties] = await Promise.all([
       fetchTopNTopics({
         take: 10,
@@ -33,6 +36,7 @@ export default async function Home() {
       }),
       fetchParty(),
     ])
+    logger.debug({ topics, parties }, 'fetch top topics & party done.')
     topics.forEach((topic) => {
       topic.legislators = topic.legislators.map((legislator) => {
         const partyData = legislator.party

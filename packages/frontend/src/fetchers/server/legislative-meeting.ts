@@ -11,22 +11,26 @@ export type LegislativeMeeting = {
 export const fetchLegislativeMeeting = async (): Promise<
   LegislativeMeeting[]
 > => {
-  const data = await keystoneFetch<{
-    legislativeMeetings: LegislativeMeeting[]
-  }>(
-    JSON.stringify({
-      query: `
-        query Query {
-          legislativeMeetings(orderBy: [{ term: desc }]) {
-            id
-            term
+  try {
+    const data = await keystoneFetch<{
+      legislativeMeetings: LegislativeMeeting[]
+    }>(
+      JSON.stringify({
+        query: `
+          query LegislativeMeetings {
+            legislativeMeetings(orderBy: [{ term: desc }]) {
+              id
+              term
+            }
           }
-        }
-      `,
-    }),
-    false
-  )
-  return data?.data?.legislativeMeetings || []
+        `,
+      }),
+      false
+    )
+    return data?.data?.legislativeMeetings || []
+  } catch (err) {
+    throw new Error(`Failed to fetch legislative meetings. err: ${err}`)
+  }
 }
 
 /* fetchLegislativeMeetingSession
@@ -65,8 +69,12 @@ export const fetchLegislativeMeetingSession = async (
     orderBy,
   }
 
-  const data = await keystoneFetch<{
-    legislativeMeetingSessions: LegislativeMeetingSession[]
-  }>(JSON.stringify({ query, variables }), false)
-  return data?.data?.legislativeMeetingSessions || []
+  try {
+    const data = await keystoneFetch<{
+      legislativeMeetingSessions: LegislativeMeetingSession[]
+    }>(JSON.stringify({ query, variables }), false)
+    return data?.data?.legislativeMeetingSessions || []
+  } catch (err) {
+    throw new Error(`Failed to fetch meeting sessions. err: ${err}`)
+  }
 }
