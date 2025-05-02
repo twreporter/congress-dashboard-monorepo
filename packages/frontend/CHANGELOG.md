@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.10, 2025-05-02
+
+### Notable Changes
+
+- fix
+  - add Error component for SSR error
+
+### Commits
+
+- [[`64cc12a0bd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/64cc12a0bd)] - **fix(frontend)**: add Error for SSR error (Aylie Chou)
+
 ## 1.0.0-beta.9, 2025-05-02
 
 ### Notable Changes
