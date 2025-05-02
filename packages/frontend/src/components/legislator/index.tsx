@@ -18,11 +18,13 @@ import {
   DesktopAsideRight,
   ListContainer,
 } from '@/components/legislator/styles'
-// fetcher
+// type
 import {
   type LegislatorFromRes,
   type TopicData,
 } from '@/fetchers/server/legislator'
+// fetcher
+import { useLegislativeMeeting } from '@/fetchers/legislative-meeting'
 // hooks
 import { useLegislatorData } from '@/components/legislator/hooks/use-legislator-data'
 // custom hooks
@@ -62,7 +64,6 @@ const Legislator: React.FC<LegislatorProps> = ({
     setIsFilterOpen,
     filterValues,
     handleFilterValueChange,
-    legislativeMeetingState,
     legislativeMeetingSessionState,
     filterOptions,
   } = useLegislativeMeetingFilters({
@@ -132,17 +133,17 @@ const Legislator: React.FC<LegislatorProps> = ({
     }
   }, [currentMeetingTerm, currentMeetingSession])
 
+  const { legislativeMeetings } = useLegislativeMeeting()
   useEffect(() => {
     // if the legislator's meeting term matches the latest meeting term, set isLegislatorActive to true
     if (
-      legislatorData.legislativeMeeting.term ===
-      legislativeMeetingState?.legislativeMeeting[0]?.term
+      legislatorData.legislativeMeeting.term === legislativeMeetings[0]?.term
     ) {
       setIsLegislatorActive(true)
     } else {
       setIsLegislatorActive(false)
     }
-  }, [legislativeMeetingState, legislatorData])
+  }, [legislativeMeetings, legislatorData])
 
   return (
     <>

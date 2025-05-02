@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0-beta.8, 2025-05-02
+
+### Notable Changes
+
+- fix
+  - fix loading & filter for topic & legislator page
+
+### Commits
+
+- [[`8096d146ae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8096d146ae)] - Merge remote-tracking branch 'upstream/dev' into fix/legislator-page-1 (Lucien)
+- [[`fdead25a95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fdead25a95)] - **fix(frontend)**: add note to legislator data (Lucien)
+- [[`d1db23403d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d1db23403d)] - **fix(frontend)**: enhance LegislatorInfo component layout and update title styles (Lucien)
+- [[`f06a3eaee5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f06a3eaee5)] - **fix(frontend)**: update Loader component to accept useAbsolute prop and wrap in EmptyState (Lucien)
+- [[`0feb390cf2`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0feb390cf2)] - **fix(frontend)**: rename legislativeMeeting to legislativeMeetings and update related hooks (Lucien)
+- [[`cbcb445228`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cbcb445228)] - **fix(frontend)**: rename note to toolitp, use legislativeMeetings hook (Lucien)
+
 ## 1.0.0-beta.7, 2025-05-02
 
 ### Notable Changes

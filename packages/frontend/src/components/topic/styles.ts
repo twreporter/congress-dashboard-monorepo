@@ -51,9 +51,10 @@ export const TopicListContainer = styled.div`
   display: flex;
   border-radius: 8px;
   background-color: ${colorGrayscale.white};
+  height: fit-content;
   ${mq.hdOnly`
     width: 796px;
-    `}
+  `}
   ${mq.desktopOnly`
     width: 100%;
     max-width: 720px;
@@ -110,6 +111,10 @@ export const H6Gray900 = styled(H6)`
 
 export const H6Gray800 = styled(H6)`
   color: ${colorGrayscale.gray800};
+`
+
+export const H6Gray800Title = styled(H6Gray800)`
+  font-family: ${notoSerif.style.fontFamily} !important;
 `
 
 export const P3Gray600 = styled(P3)`

@@ -132,6 +132,12 @@ const InfoItem = styled.div`
   display: flex;
   flex-direction: row;
   gap: 12px;
+  align-items: baseline;
+`
+
+const InfoTitle = styled.div`
+  display: flex;
+  flex: 0 0 32px;
 `
 
 const Badge = styled.div`
@@ -196,7 +202,9 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
         </LegislatorInfoTitle>
         <LegislatorInfoContent>
           <InfoItem>
-            <P1Gray800 text="屆別" />
+            <InfoTitle>
+              <P1Gray800 text="屆別" />
+            </InfoTitle>
             <P1Gray800
               weight={P1.Weight.BOLD}
               text={`第${legislator.meetingTerm}屆立法委員`}
@@ -208,16 +216,22 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
             ) : null}
           </InfoItem>
           <InfoItem>
-            <P1Gray800 text="黨籍" />
+            <InfoTitle>
+              <P1Gray800 text="黨籍" />
+            </InfoTitle>
             <P1Gray800 weight={P1.Weight.BOLD} text={legislator.party.name} />
           </InfoItem>
           <InfoItem>
-            <P1Gray800 text="選區" />
+            <InfoTitle>
+              <P1Gray800 text="選區" />
+            </InfoTitle>
             <P1Gray800 weight={P1.Weight.BOLD} text={legislator.constituency} />
           </InfoItem>
           <InfoItem>
-            <P1Gray800 text="備註" />
-            <P1Gray800 weight={P1.Weight.BOLD} text={legislator.note} />
+            <InfoTitle>
+              <P1Gray800 text="備註" />
+            </InfoTitle>
+            <P1Gray800 weight={P1.Weight.BOLD} text={legislator.tooltip} />
           </InfoItem>
         </LegislatorInfoContent>
       </LegislatorDetail>
