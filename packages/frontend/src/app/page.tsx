@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 // fetcher
 import fetchEditorSelecteds from '@/fetchers/server/editor-pickor'
 import { fetchLegislativeMeeting } from '@/fetchers/server/legislative-meeting'
