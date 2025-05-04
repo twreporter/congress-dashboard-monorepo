@@ -9,6 +9,7 @@
 
 ### Commits
 
+- [[`6c6fcf1733`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6c6fcf1733)] - **fix(frontend)**: prevent static-generation on Home (Aylie Chou)
 - [[`5f1c966d01`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f1c966d01)] - **fix(frontend)**: use app router way error handling (Aylie Chou)
 
 ## 1.0.0-beta.11, 2025-05-02
