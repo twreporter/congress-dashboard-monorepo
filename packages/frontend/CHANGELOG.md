@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-beta.12, 2025-05-04
+
+### Notable Changes
+
+- fix
+  - use app router way error handling
+
+### Commits
+
+- [[`5f1c966d01`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f1c966d01)] - **fix(frontend)**: use app router way error handling (Aylie Chou)
+
 ## 1.0.0-beta.11, 2025-05-02
 
 ### Notable Changes
