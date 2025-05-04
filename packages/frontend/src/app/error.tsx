@@ -1,8 +1,6 @@
 'use client'
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-// type
-import type { ErrorType } from '@/components/error/type'
 // @twreporter
 import { H3 } from '@twreporter/react-components/lib/text/headline'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
@@ -14,30 +12,27 @@ const Box = styled.div`
   padding: 24px;
 `
 
-const getErrorMsg = (err: ErrorType): string => {
-  if (typeof err === 'string') {
-    return err
-  }
-  return JSON.stringify(err)
-}
+type ErrorType = Error | { digest?: string }
 
 type ErrorProps = {
-  title: string
   error: ErrorType
+  reset: () => void
 }
-const Error: React.FC<ErrorProps> = ({ title, error }) => {
-  const errorMsg = getErrorMsg(error)
-
+const ErrorBoundary: React.FC<ErrorProps> = ({ error, reset }) => {
   useEffect(() => {
-    console.log(error)
-  }, [])
+    console.error(error)
+  }, [error])
+
+  const errorMsg =
+    error instanceof Error ? error.message : error.digest || 'Unknown reason'
 
   return (
     <Box>
-      <H3 text={title} />
+      <H3 text={'Failed to fetch home page data'} />
       <P1 text={errorMsg} />
+      <button onClick={() => reset()}>Try again</button>
     </Box>
   )
 }
 
-export default Error
+export default ErrorBoundary
