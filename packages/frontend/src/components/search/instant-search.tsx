@@ -48,7 +48,7 @@ const InstantHits = styled(_InstantHits)`
 `
 
 const ClickOutsideWidget = ({ containerRef }) => {
-  const { query, refine } = useSearchBox()
+  const { query, clear } = useSearchBox()
 
   useEffect(() => {
     if (query === '') {
@@ -60,7 +60,7 @@ const ClickOutsideWidget = ({ containerRef }) => {
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        refine('')
+        clear()
       }
     }
 
