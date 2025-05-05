@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.0-beta.4, 2025-05-05
+
+### Notable Changes
+
+- fix
+  - update alert wording when failed to add twreporter article
+
+### Commits
+
+- [[`f7556f50a4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f7556f50a4)] - **fix(cms)**: update alert wording when failed (Aylie Chou)
+
+
 ## 1.0.0-beta.3, 2025-05-02
 
 ### Notable Changes
