@@ -1,16 +1,22 @@
 'use client'
 
-import React, { useEffect, useMemo, useState, RefAttributes } from 'react'
-import styled, { keyframes } from 'styled-components'
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useContext,
+  useRef,
+  RefAttributes,
+} from 'react'
+import styled from 'styled-components'
 // mock config
-import {
-  mockGetSummary,
-  mockGetIssue,
-  mockGetLegislator,
-} from '@/components/sidebar/config'
+import { mockGetIssue, mockGetLegislator } from '@/components/sidebar/config'
+// context
+import { DashboardContext } from '@/components/dashboard/context'
 // fetcher
 import fetchLegislatorsOfATopic from '@/fetchers/legislator'
 import fetchTopicOfALegislator from '@/fetchers/topic'
+import useSpeech from '@/fetchers/speech'
 // constants
 import { InternalRoutes } from '@/constants/navigation-link'
 // components
@@ -28,13 +34,13 @@ import {
   LegislatorProps,
 } from '@/components/sidebar/follow-more'
 import FilterModal from '@/components/sidebar/filter-modal'
+import { Loader } from '@/components/loader'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 import {
   colorGrayscale,
   colorOpacity,
 } from '@twreporter/core/lib/constants/color'
-import { Loading } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
 // lodash
 import { get, groupBy, forEach } from 'lodash'
@@ -43,38 +49,6 @@ const _ = {
   groupBy,
   forEach,
 }
-
-// global var
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-
-// loader component
-const spin = keyframes`
-  0% {
-      transform: rotate(0deg);
-  }
-  100% {
-      transform: rotate(360deg);
-  }
-`
-const LoadingBox = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 50%;
-  transform: translate(50%, -50%);
-  display: flex;
-  align-items: center;
-
-  svg {
-    width: 48px;
-    height: 48px;
-    animation: ${spin} 1s linear infinite;
-  }
-`
-export const Loader: React.FC = () => (
-  <LoadingBox>
-    <Loading releaseBranch={releaseBranch} />
-  </LoadingBox>
-)
 
 // sidebar issue component
 const Box = styled.div`
@@ -129,7 +103,7 @@ const FollowMoreTags = styled.div`
 export function groupSummary(summaryList: SummaryCardProps[]) {
   const result: CardsOfTheYearProps[] = []
   const summaryGroupByYear = _.groupBy(summaryList, (summary) =>
-    summary.date.getFullYear()
+    new Date(summary.date).getFullYear()
   )
   _.forEach(
     summaryGroupByYear,
@@ -165,17 +139,28 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
     () => _.get(tabList, selectedTab),
     [tabList, selectedTab]
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => mockGetSummary(selectedLegislator.slug),
-    [selectedLegislator]
-  )
   const issueList: IssueProps[] = useMemo(
-    () => mockGetIssue(selectedLegislator.slug),
+    () => (selectedLegislator ? mockGetIssue(selectedLegislator.slug) : []),
     [selectedLegislator]
   )
   const followMoreTitle: string = useMemo(
     () => `${_.get(selectedLegislator, ['name'], '')} 近期關注的五大議題：`,
     [selectedLegislator]
+  )
+  const { formattedFilterValues } = useContext(DashboardContext)
+  const speechState = useSpeech(
+    formattedFilterValues && selectedLegislator
+      ? {
+          legislatorSlug: selectedLegislator.slug as string,
+          topicSlug: slug,
+          legislativeMeetingId: formattedFilterValues?.meetingId,
+          legislativeMeetingSessionIds: formattedFilterValues?.sessionIds,
+        }
+      : undefined
+  )
+  const summaryList: SummaryCardProps[] = useMemo(
+    () => speechState.speeches || [],
+    [speechState.speeches]
   )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
     () => groupSummary(summaryList),
@@ -183,15 +168,20 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   )
 
   useEffect(() => {
-    setIsLoading(true)
-
-    if (window) {
-      window.setTimeout(() => setIsLoading(false), 2000)
+    if (speechState.speeches != undefined) {
+      setIsLoading(speechState.isLoading)
     }
-  }, [selectedTab])
+  }, [speechState.speeches, speechState.isLoading])
+
   useEffect(() => {
     setSelectedTab(0)
   }, [tabList])
+
+  useEffect(() => {
+    if (legislatorList) {
+      setTabList(legislatorList)
+    }
+  }, [legislatorList])
 
   return (
     <Box className={className} ref={ref}>
@@ -200,6 +190,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
           title={title}
           count={count}
           tabs={tabList}
+          showTabAvatar={true}
           link={`${InternalRoutes.Legislator}/${slug}`}
           onSelectTab={setSelectedTab}
           onOpenFilterModal={() => setShowFilter(true)}
@@ -278,21 +269,33 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   const [tabList, setTabList] = useState(issueList)
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
+  const hasInitialized = useRef(false)
   const selectedIssue = useMemo(
     () => _.get(tabList, selectedTab),
     [tabList, selectedTab]
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => mockGetSummary(selectedIssue.slug),
-    [selectedIssue]
-  )
   const legislatorList: LegislatorProps[] = useMemo(
-    () => mockGetLegislator(selectedIssue.slug),
+    () => mockGetLegislator(selectedIssue?.slug),
     [selectedIssue]
   )
   const followMoreTitle: string = useMemo(
     () => `關注 ${_.get(selectedIssue, ['name'], '')} 主題的其他人：`,
     [selectedIssue]
+  )
+  const { formattedFilterValues } = useContext(DashboardContext)
+  const speechState = useSpeech(
+    formattedFilterValues && selectedIssue
+      ? {
+          legislatorSlug: slug,
+          topicSlug: selectedIssue.slug as string,
+          legislativeMeetingId: formattedFilterValues.meetingId,
+          legislativeMeetingSessionIds: formattedFilterValues.sessionIds,
+        }
+      : undefined
+  )
+  const summaryList: SummaryCardProps[] = useMemo(
+    () => speechState.speeches || [],
+    [speechState.speeches]
   )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
     () => groupSummary(summaryList),
@@ -300,12 +303,17 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   )
 
   useEffect(() => {
-    setIsLoading(true)
-
-    if (window) {
-      window.setTimeout(() => setIsLoading(false), 2000)
+    if (!hasInitialized.current && issueList.length > 0) {
+      setTabList(issueList)
+      hasInitialized.current = true
     }
-  }, [selectedTab])
+  }, [issueList])
+
+  useEffect(() => {
+    if (speechState.speeches != undefined) {
+      setIsLoading(speechState.isLoading)
+    }
+  }, [speechState.speeches, speechState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
@@ -318,6 +326,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
           title={title}
           subtitle={subtitle}
           tabs={tabList}
+          showTabAvatar={false}
           link={`${InternalRoutes.Topic}/${slug}`}
           onSelectTab={setSelectedTab}
           onClose={onClose}

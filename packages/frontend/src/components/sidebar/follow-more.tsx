@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 // component
 import PartyTag from '@/components/dashboard/card/party-tag'
+import { CircleRaw } from '@/components/skeleton'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
@@ -41,22 +42,22 @@ const Text = styled(P3)`
 `
 
 export type LegislatorProps = {
-  name: string
-  avatar: string
-  partyAvatar: string
-  count: number
+  name?: string
+  avatar?: string
+  partyAvatar?: string
+  count?: number
   slug?: string
 }
 export const Legislator: React.FC<LegislatorProps> = ({
-  name,
+  name = '',
   avatar,
   partyAvatar,
   count,
 }: LegislatorProps) => (
   <LegislatorItem>
     <AvatarContainer>
-      <Avatar src={avatar} />
-      <Party avatar={partyAvatar} />
+      {avatar ? <Avatar src={avatar} /> : <CircleRaw width={56} height={56} />}
+      {partyAvatar ? <Party avatar={partyAvatar} /> : null}
     </AvatarContainer>
     <Text text={name} />
     <Text text={`(${count})`} />
@@ -89,10 +90,13 @@ const TagItem = styled.div`
 `
 
 export type IssueProps = {
-  name: string
+  name?: string
   count?: number
 }
-export const Issue: React.FC<IssueProps> = ({ name, count }: IssueProps) => (
+export const Issue: React.FC<IssueProps> = ({
+  name = '',
+  count,
+}: IssueProps) => (
   <TagItem>
     <TagName>{count ? `${name}(${count})` : name}</TagName>
   </TagItem>

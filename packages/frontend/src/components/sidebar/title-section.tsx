@@ -78,6 +78,7 @@ export type TitleSectionProps = {
   count?: number
   subtitle?: string
   tabs?: TabProps[]
+  showTabAvatar?: boolean
   onSelectTab?: (index: number) => void
   onClose?: () => void
   onOpenFilterModal?: () => void
@@ -88,6 +89,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   count = 0,
   subtitle = '',
   tabs = [],
+  showTabAvatar = false,
   onSelectTab,
   onClose,
   onOpenFilterModal,
@@ -156,7 +158,11 @@ const TitleSection: React.FC<TitleSectionProps> = ({
                   selectTab(e, index)
                 }
               >
-                <Tab {...tabProps} selected={index === selectedTab} />
+                <Tab
+                  {...tabProps}
+                  showAvatar={showTabAvatar}
+                  selected={index === selectedTab}
+                />
               </TabItem>
             ))}
           </FlexRow>

@@ -7,6 +7,45 @@ import type {
 } from '@/fetchers/server/legislative-meeting'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL as string
+const fetchLegislativeMeetingByLegislator = async (
+  slug: string
+): Promise<LegislativeMeeting> => {
+  const where = {
+    legislator: {
+      slug: {
+        equals: slug,
+      },
+    },
+  }
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
+        query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
+          legislativeYuanMembers(where: $where) {
+            legislativeMeeting {
+              id
+              term
+            }
+          }
+        }
+      `,
+      variables: {
+        where,
+      },
+    }),
+  })
+  const data = await res.json()
+  return data?.data?.legislativeYuanMembers
+    .map((m) => ({
+      term: m.legislativeMeeting.term,
+      id: m.legislativeMeeting.id,
+    }))
+    .sort((a, b) => b.term - a.term)
+}
 const fetchLegislativeMeeting = async (): Promise<LegislativeMeeting[]> => {
   const res = await fetch(API_URL, {
     method: 'POST',
@@ -67,13 +106,24 @@ const fetchLegislativeMeetingSession = async (
   return data?.data?.legislativeMeetingSessions
 }
 
+export const useLegislativeMeetingByLegislator = (slug: string) => {
+  const { data, isLoading, error } = useSWR(['legislativeMeetings', slug], () =>
+    fetchLegislativeMeetingByLegislator(slug)
+  )
+  return {
+    legislativeMeetings: data || [],
+    isLoading,
+    error,
+  }
+}
+
 export const useLegislativeMeeting = () => {
   const { data, isLoading, error } = useSWR(
     'legislativeMeetings',
     fetchLegislativeMeeting
   )
   return {
-    legislativeMeeting: data || [],
+    legislativeMeetings: data || [],
     isLoading,
     error,
   }

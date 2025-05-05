@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-cms",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "private": true,
   "scripts": {
     "dev": "keystone dev",
@@ -9,11 +9,13 @@
     "db-migrate": "keystone prisma migrate deploy",
     "postinstall": "keystone postinstall --fix",
     "generate-migrate": "keystone prisma migrate dev",
-    "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown"
+    "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown",
+    "prisma-generate": "keystone prisma generate --sql"
   },
   "dependencies": {
     "@emotion/css": "^11.13.5",
     "@emotion/styled": "^11.14.0",
+    "@graphql-tools/schema": "^10.0.23",
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",

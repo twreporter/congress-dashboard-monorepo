@@ -120,11 +120,8 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
         <P2Gray600 text={attendee} />
       </LegislatorAndAttendeeBlock>
       <IssueTagsBlock>
-        {relatedTopics.map((topic, idx) => (
-          <Link
-            href={`${InternalRoutes.Topic}/${topic.slug}`}
-            key={`issue-tag-${idx}-${topic.slug}`}
-          >
+        {relatedTopics.map((topic) => (
+          <Link href={`${InternalRoutes.Topic}/${topic.slug}`} key={topic.slug}>
             <IssueTag text={topic.title} />
           </Link>
         ))}
@@ -132,4 +129,5 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
     </AsideInfoContainer>
   )
 }
-export default AsideInfo
+
+export default React.memo(AsideInfo)

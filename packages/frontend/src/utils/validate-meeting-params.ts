@@ -17,8 +17,8 @@ export async function validateMeetingParams(
 
   // Set default meeting term (either first or last, depending on parameter)
   let legislativeMeeting = useLatestAsFallback
-    ? legislativeMeetings[legislativeMeetings.length - 1].term
-    : legislativeMeetings[0].term
+    ? legislativeMeetings[0].term
+    : legislativeMeetings[legislativeMeetings.length - 1].term
 
   if (meetingTerm) {
     const parsedMeeting = parseInt(meetingTerm, 10)

@@ -1,4 +1,5 @@
 'use client'
+
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 // @twerporter
@@ -17,9 +18,13 @@ import {
   SingleSelect,
   MultipleSelect,
 } from '@/components/selector'
-import type { OptionGroup, Option } from '@/components/selector/types'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+// type
+import type {
+  FilterOption,
+  FilterModalValueType,
+} from '@/components/dashboard/type'
 
 const ModalContainer = styled.div<{ $isOpen: boolean }>`
   display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
@@ -150,20 +155,6 @@ const SelectorContainer = styled.div`
   width: 100%;
 `
 
-export type FilterOption = {
-  type: SelectorType
-  disabled?: boolean
-  label: string
-  key: string
-  options: Option[] | OptionGroup[]
-  defaultValue?: string | string[]
-  isLoading?: boolean
-}
-
-export type FilterModalValueType = {
-  [key: string]: string | string[]
-}
-
 type FilterModelProps = {
   isOpen: boolean
   setIsOpen: (v: boolean) => void
@@ -252,6 +243,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
             (
               {
                 type,
+                hide,
                 disabled,
                 label,
                 key: optionKey,
@@ -261,6 +253,9 @@ const FilterModal: React.FC<FilterModelProps> = ({
               },
               idx
             ) => {
+              if (hide) {
+                return null
+              }
               if (type === SelectorType.Single) {
                 return (
                   <SelectContainer key={`single-select-${optionKey}-${idx}`}>

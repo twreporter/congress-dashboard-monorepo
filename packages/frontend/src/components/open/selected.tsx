@@ -2,8 +2,6 @@
 
 import React from 'react'
 import styled, { css } from 'styled-components'
-// config
-import { selected } from '@/components/open/config'
 // @twreporter
 import {
   colorGrayscale,
@@ -38,21 +36,29 @@ const Item = styled(TextButton)`
 `
 
 type SelectedProps = {
+  selecteds?: {
+    label: string
+    path: string
+    order: number
+  }[]
   className?: string
 }
 
-const Selected: React.FC<SelectedProps> = ({ className }: SelectedProps) => {
+const Selected: React.FC<SelectedProps> = ({
+  selecteds = [],
+  className,
+}: SelectedProps) => {
   const openLink = (link: string) => {
     window.open(link, '_self')
   }
 
-  if (!selected || selected.length === 0) {
+  if (!selecteds || selecteds.length === 0) {
     return null
   }
   return (
     <Container className={className}>
       <Text key="selected-intro">編輯精選：</Text>
-      {selected.map(({ label, path }, index) => (
+      {selecteds.map(({ label, path }, index) => (
         <SelectedTag key={`selected-${index}`}>
           {index === 0 ? null : <Text>、</Text>}
           <Item

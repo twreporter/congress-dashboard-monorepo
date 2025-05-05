@@ -4,7 +4,6 @@ import styled from 'styled-components'
 // @twreporter
 import {
   colorGrayscale,
-  colorOpacity,
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -18,7 +17,9 @@ import { OpenInNew } from '@twreporter/react-components/lib/icon'
 // styles
 import { H3Gray900, P1Gray800 } from '@/components/legislator/styles'
 // components
-import PartyTag, { TagSize } from '@/components/dashboard/card/party-tag'
+import PartyTag from '@/components/dashboard/card/party-tag'
+// enums
+import { TagSize } from '@/components/dashboard/enum'
 // fetcher
 import { type Legislator } from '@/components/legislator/hooks/use-legislator-data'
 
@@ -65,7 +66,7 @@ const LegislatorImage = styled.img`
   width: 300px;
   aspect-ratio: 3.5 / 4.5;
   border-radius: 8px 8px 0 0;
-  border: 1px solid ${colorOpacity['black_0.05']};
+  border: 1px solid rgba(0, 0, 0, 0.07);
   ${mq.desktopOnly`
     width: 272px;
   `}
@@ -131,6 +132,12 @@ const InfoItem = styled.div`
   display: flex;
   flex-direction: row;
   gap: 12px;
+  align-items: baseline;
+`
+
+const InfoTitle = styled.div`
+  display: flex;
+  flex: 0 0 32px;
 `
 
 const Badge = styled.div`
@@ -195,7 +202,9 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
         </LegislatorInfoTitle>
         <LegislatorInfoContent>
           <InfoItem>
-            <P1Gray800 text="屆別" />
+            <InfoTitle>
+              <P1Gray800 text="屆別" />
+            </InfoTitle>
             <P1Gray800
               weight={P1.Weight.BOLD}
               text={`第${legislator.meetingTerm}屆立法委員`}
@@ -207,16 +216,22 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
             ) : null}
           </InfoItem>
           <InfoItem>
-            <P1Gray800 text="黨籍" />
+            <InfoTitle>
+              <P1Gray800 text="黨籍" />
+            </InfoTitle>
             <P1Gray800 weight={P1.Weight.BOLD} text={legislator.party.name} />
           </InfoItem>
           <InfoItem>
-            <P1Gray800 text="選區" />
+            <InfoTitle>
+              <P1Gray800 text="選區" />
+            </InfoTitle>
             <P1Gray800 weight={P1.Weight.BOLD} text={legislator.constituency} />
           </InfoItem>
           <InfoItem>
-            <P1Gray800 text="備註" />
-            <P1Gray800 weight={P1.Weight.BOLD} text={legislator.note} />
+            <InfoTitle>
+              <P1Gray800 text="備註" />
+            </InfoTitle>
+            <P1Gray800 weight={P1.Weight.BOLD} text={legislator.tooltip} />
           </InfoItem>
         </LegislatorInfoContent>
       </LegislatorDetail>
