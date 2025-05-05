@@ -5,6 +5,7 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { H4, H6 } from '@twreporter/react-components/lib/text/headline'
 import { P1, P3 } from '@twreporter/react-components/lib/text/paragraph'
+import { DesktopAndAbove } from '@twreporter/react-components/lib/rwd'
 // utils
 import { notoSerif } from '@/utils/font'
 
@@ -50,10 +51,12 @@ export const TopicListContainer = styled.div`
   display: flex;
   border-radius: 8px;
   background-color: ${colorGrayscale.white};
+  height: fit-content;
   ${mq.hdOnly`
     width: 796px;
   `}
   ${mq.desktopOnly`
+    width: 100%;
     max-width: 720px;
   `}
   ${mq.tabletAndBelow`
@@ -66,6 +69,13 @@ export const TopicListContainer = styled.div`
   ${mq.mobileOnly`
     margin-left: -24px;
     margin-right: -24px;
+  `}
+`
+
+export const DesktopList = styled(DesktopAndAbove)`
+  ${mq.desktopAndAbove`
+    display: flex !important;
+    flex: 1;
   `}
 `
 
@@ -97,6 +107,14 @@ export const H4Title = styled(H4)`
 
 export const H6Gray900 = styled(H6)`
   color: ${colorGrayscale.gray900};
+`
+
+export const H6Gray800 = styled(H6)`
+  color: ${colorGrayscale.gray800};
+`
+
+export const H6Gray800Title = styled(H6Gray800)`
+  font-family: ${notoSerif.style.fontFamily} !important;
 `
 
 export const P3Gray600 = styled(P3)`

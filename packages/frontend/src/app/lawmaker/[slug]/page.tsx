@@ -1,9 +1,11 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-// fetcher
+// fetchers
 import {
+  checkLegislatorExist,
   fetchLegislator,
   fetchLegislatorTopics,
+  getLegislatorMeetingTerms,
 } from '@/fetchers/server/legislator'
 // components
 import LegislatorPage from '@/components/legislator'
@@ -17,23 +19,29 @@ export async function generateMetadata({
   searchParams,
 }: {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ [key: string]: string }>
+  searchParams: Promise<{ meetingTerm?: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const { meetingTerm, sessionTerm } = await searchParams
+  const { meetingTerm } = await searchParams
 
-  const { legislativeMeeting } = await validateMeetingParams(
-    meetingTerm,
-    sessionTerm,
-    false // Use first meeting as fallback for legislators
-  )
-  const data = await fetchLegislator({ slug, legislativeMeeting })
-  if (!data) {
+  const isLegislatorExist = await checkLegislatorExist({ slug })
+  if (!isLegislatorExist) {
     notFound()
   }
+  const meetingTerms = await getLegislatorMeetingTerms({ slug })
+  const chosenMeetingTerm =
+    meetingTerm && meetingTerms.includes(meetingTerm)
+      ? meetingTerm
+      : meetingTerms[0]
+
+  const data = await fetchLegislator({
+    slug,
+    legislativeMeeting: Number(chosenMeetingTerm),
+  })
+
   return {
-    title: `委員 - ${data.legislator.name}`,
-    description: '委員頁',
+    title: `委員 – ${data?.legislator.name}`,
+    description: `委員 ${data?.legislator.name} 的發言紀錄`,
   }
 }
 
@@ -42,28 +50,35 @@ export default async function Page({
   searchParams,
 }: {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ [key: string]: string }>
+  searchParams: Promise<{ meetingTerm?: string; sessionTerm?: string }>
 }) {
   try {
     const { slug } = await params
     const { meetingTerm, sessionTerm } = await searchParams
+    const meetingTerms = await getLegislatorMeetingTerms({ slug })
+
+    const chosenMeetingTerm =
+      meetingTerm && meetingTerms.includes(meetingTerm)
+        ? meetingTerm
+        : meetingTerms[0]
+
     const { legislativeMeeting, legislativeMeetingSession } =
-      await validateMeetingParams(meetingTerm, sessionTerm, false)
+      await validateMeetingParams(chosenMeetingTerm, sessionTerm)
 
-    const data = await fetchLegislator({ slug, legislativeMeeting })
-    if (!data) {
-      notFound()
-    }
+    const [legislatorData, topicsData] = await Promise.all([
+      fetchLegislator({ slug, legislativeMeeting }),
+      fetchLegislatorTopics({
+        slug,
+        legislativeMeetingTerm: legislativeMeeting,
+        legislativeMeetingSessionTerms: legislativeMeetingSession,
+      }),
+    ])
 
-    const topicsData = await fetchLegislatorTopics({
-      slug,
-      legislativeMeetingTerm: legislativeMeeting,
-      legislativeMeetingSessionTerms: legislativeMeetingSession,
-    })
+    if (!legislatorData) notFound()
 
     return (
       <LegislatorPage
-        legislatorData={data}
+        legislatorData={legislatorData}
         topicsData={topicsData}
         currentMeetingTerm={legislativeMeeting}
         currentMeetingSession={legislativeMeetingSession}

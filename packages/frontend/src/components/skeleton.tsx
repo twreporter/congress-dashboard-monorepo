@@ -42,11 +42,11 @@ type CircleProps = {
   height?: number
   className?: string
 }
-const CircleRaw: React.FC = ({
+export const CircleRaw: React.FC<CircleProps> = ({
   width = 56,
   height = 56,
   className,
-}: CircleProps) => (
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={width}
@@ -76,13 +76,16 @@ const imageStyle = {
 }
 const gray200Base64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN89B8AAskB44g04okAAAAASUVORK5CYII='
-export const ImageWithSkeleton: React.FC<ImageProps> = (props) => {
+export const ImageWithSkeleton: React.FC<ImageProps> = ({
+  style = imageStyle,
+  ...props
+}) => {
   return (
     <Image
       {...props}
       placeholder="blur"
       blurDataURL={`data:image/png;base64, ${gray200Base64}`}
-      style={imageStyle}
+      style={style}
       unoptimized={false}
     />
   )

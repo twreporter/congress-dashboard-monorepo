@@ -1,11 +1,8 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 // twreporter
-import {
-  TabletAndBelow,
-  DesktopAndAbove,
-} from '@twreporter/react-components/lib/rwd'
+import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 // components
 import TopicList from '@/components/topic/topic-list'
 import FilterModal from '@/components/filter-modal'
@@ -17,6 +14,7 @@ import ContentPageLayout from '@/components/layout/content-page-layout'
 // styles
 import {
   Spacing,
+  DesktopList,
   DesktopAside,
   TopicListContainer,
 } from '@/components/topic/styles'
@@ -38,7 +36,13 @@ const Topic: React.FC<TopicPageProps> = ({
   currentMeetingSession,
 }) => {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [filterCount, setFilterCount] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [searchParams])
 
   // Custom hooks
   const {
@@ -48,7 +52,10 @@ const Topic: React.FC<TopicPageProps> = ({
     handleFilterValueChange,
     legislativeMeetingSessionState,
     filterOptions,
-  } = useLegislativeMeetingFilters(currentMeetingTerm, currentMeetingSession)
+  } = useLegislativeMeetingFilters({
+    currentMeetingTerm,
+    currentMeetingSession,
+  })
 
   const { legislatorCount, legislatorsData, speechesByLegislator } =
     useTopicData(topic)
@@ -72,9 +79,11 @@ const Topic: React.FC<TopicPageProps> = ({
           legislativeMeetingSessionState.legislativeMeetingSessions.map(
             ({ term }) => term
           )
+        setFilterCount(0)
       } else if (filterValues.meetingSession.length > 0) {
         // Use selected sessions
         sessionTermValue = filterValues.meetingSession.map(Number)
+        setFilterCount(filterValues.meetingSession.length)
       } else {
         // Fallback to current session if nothing is selected
         console.warn('No meeting sessions selected, using current session')
@@ -84,6 +93,7 @@ const Topic: React.FC<TopicPageProps> = ({
         filterValues.meeting
       }&sessionTerm=${JSON.stringify(sessionTermValue)}`
       router.push(newUrl)
+      setIsLoading(true)
       setIsFilterOpen(false)
     } catch (error) {
       console.error('Error processing filter values:', error)
@@ -91,29 +101,6 @@ const Topic: React.FC<TopicPageProps> = ({
   }
 
   const pageTitle = `#${topic?.title} 的相關發言摘要`
-
-  useEffect(() => {
-    if (legislativeMeetingSessionState.legislativeMeetingSessions?.length > 0) {
-      const allAvailableSessions =
-        legislativeMeetingSessionState.legislativeMeetingSessions.map(
-          ({ term }) => term
-        )
-      const hasAllSessions =
-        allAvailableSessions.length === currentMeetingSession.length &&
-        allAvailableSessions.every((session) =>
-          currentMeetingSession.includes(session)
-        )
-      if (hasAllSessions) {
-        setFilterCount(0)
-      } else {
-        setFilterCount(currentMeetingSession.length)
-      }
-    }
-  }, [
-    currentMeetingTerm,
-    currentMeetingSession,
-    legislativeMeetingSessionState,
-  ])
 
   return (
     <>
@@ -123,22 +110,27 @@ const Topic: React.FC<TopicPageProps> = ({
         filterCount={filterCount}
         onFilterClick={openFilter}
       >
-        <DesktopAndAbove>
+        <DesktopList>
           <TopicListContainer>
             <TopicList
+              isLoading={isLoading}
+              topicTitle={topic.title}
+              topicSlug={topic.slug}
               legislatorsData={legislatorsData}
               speechesByLegislator={speechesByLegislator}
               currentMeetingTerm={currentMeetingTerm}
               currentMeetingSession={currentMeetingSession}
             />
           </TopicListContainer>
-        </DesktopAndAbove>
+        </DesktopList>
         <DesktopAside>
           <TopicStatistics
             legislatorCount={legislatorCount}
             speechesCount={topic?.speechesCount}
           />
-          <TopicRelatedArticles />
+          <TopicRelatedArticles
+            relatedArticles={topic?.relatedTwreporterArticles}
+          />
           <TopicOthersWatching
             othersWatchingTags={topic?.relatedTopics}
             currentMeetingTerm={currentMeetingTerm}
@@ -154,6 +146,9 @@ const Topic: React.FC<TopicPageProps> = ({
           <Spacing $height={32} />
           <TopicListContainer>
             <TopicList
+              isLoading={isLoading}
+              topicTitle={topic.title}
+              topicSlug={topic.slug}
               legislatorsData={legislatorsData}
               speechesByLegislator={speechesByLegislator}
               currentMeetingTerm={currentMeetingTerm}
@@ -161,7 +156,9 @@ const Topic: React.FC<TopicPageProps> = ({
             />
           </TopicListContainer>
           <Spacing $height={8} />
-          <TopicRelatedArticles />
+          <TopicRelatedArticles
+            relatedArticles={topic?.relatedTwreporterArticles}
+          />
           <Spacing $height={8} />
           <TopicOthersWatching
             othersWatchingTags={topic?.relatedTopics}

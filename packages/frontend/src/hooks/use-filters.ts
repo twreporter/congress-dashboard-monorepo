@@ -1,23 +1,34 @@
 import { useState, useEffect } from 'react'
+// enum
 import { SelectorType } from '@/components/selector'
-import { formatDateToYearMonth } from '@/utils/date-formatters'
+// util
+import { formatDate } from '@/utils/date-formatters'
+// fetcher
 import {
   useLegislativeMeeting,
+  useLegislativeMeetingByLegislator,
   useLegislativeMeetingSession,
 } from '@/fetchers/legislative-meeting'
-import {
+// type
+import type {
   FilterOption,
-  type FilterModalValueType,
-} from '@/components/filter-modal'
+  FilterModalValueType,
+} from '@/components/dashboard/type'
+// lodash
 import map from 'lodash/map'
 const _ = {
   map,
 }
 
-export const useLegislativeMeetingFilters = (
-  currentMeetingTerm: number,
+export const useLegislativeMeetingFilters = ({
+  legislatorSlug,
+  currentMeetingTerm,
+  currentMeetingSession,
+}: {
+  legislatorSlug?: string
+  currentMeetingTerm: number
   currentMeetingSession: number[]
-) => {
+}) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterCount, setFilterCount] = useState(0)
   const [filterValues, setFilterValues] = useState({
@@ -25,7 +36,14 @@ export const useLegislativeMeetingFilters = (
     meetingSession: currentMeetingSession.map(String),
   })
 
-  const legislativeMeetingState = useLegislativeMeeting()
+  const allMeetingState = useLegislativeMeeting()
+  const byLegislatorMeetingState = useLegislativeMeetingByLegislator(
+    legislatorSlug || ''
+  )
+  const legislativeMeetingState = legislatorSlug
+    ? byLegislatorMeetingState
+    : allMeetingState
+
   const legislativeMeetingSessionState = useLegislativeMeetingSession(
     filterValues.meeting as string
   )
@@ -126,10 +144,11 @@ export const useLegislativeMeetingFilters = (
       disabled: false,
       label: '屆期',
       key: 'meeting',
-      defaultValue: currentMeetingTerm.toString(),
+      defaultValue:
+        legislativeMeetingState.legislativeMeetings[0]?.term.toString(),
       isLoading: legislativeMeetingState.isLoading,
       options: _.map(
-        legislativeMeetingState.legislativeMeeting,
+        legislativeMeetingState.legislativeMeetings,
         ({ term }: { term: number }) => ({
           label: `第 ${term} 屆`,
           value: term.toString(),
@@ -139,7 +158,7 @@ export const useLegislativeMeetingFilters = (
     {
       type: SelectorType.Multiple,
       disabled: false,
-      defaultValue: currentMeetingSession.map(String),
+      defaultValue: ['all'],
       label: '會期',
       key: 'meetingSession',
       isLoading: legislativeMeetingSessionState.isLoading,
@@ -156,9 +175,10 @@ export const useLegislativeMeetingFilters = (
             startTime: string
             endTime: string
           }) => ({
-            label: `第 ${term} 會期(${formatDateToYearMonth(
-              startTime
-            )}-${formatDateToYearMonth(endTime)})`,
+            label: `第 ${term} 會期(${formatDate(
+              startTime,
+              'YYYY/M'
+            )}-${formatDate(endTime, 'YYYY/M')})`,
             value: term.toString(),
           })
         ),

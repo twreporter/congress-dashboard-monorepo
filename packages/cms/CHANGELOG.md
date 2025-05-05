@@ -1,5 +1,66 @@
 # Changelog
 
+## 1.0.0-beta.4, 2025-05-05
+
+### Notable Changes
+
+- fix
+  - update alert wording when failed to add twreporter article
+
+### Commits
+
+- [[`f7556f50a4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f7556f50a4)] - **fix(cms)**: update alert wording when failed (Aylie Chou)
+
+
+## 1.0.0-beta.3, 2025-05-02
+
+### Notable Changes
+
+- fix
+  - update default value of twreporter url
+
+### Commits
+
+- [[`a6c380ab29`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a6c380ab29)] - **fix(cms)**: update default value of twreporter url (Aylie Chou)
+
+## 1.0.0-beta.2, 2025-05-01
+
+### Notable Changes
+
+- fix
+  - add `NEXT_PUBLIC` for public env & add .env.dev.public file
+
+### Commits
+
+- [[`505d7e8f9b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/505d7e8f9b)] - **fix(cms)**: add `NEXT_PUBLIC` for public env (Aylie Chou)
+
+## 1.0.0-beta.1, 2025-04-30
+
+### Notable Changes
+
+- feat
+  - add custom sql endpoints for home page fetchers
+
+### Commits
+
+- [[`0a034fbd79`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0a034fbd79)] - **fix(cms)**: typo (Aylie Chou)
+- [[`f8f83f529f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f8f83f529f)] - **fix(cms)**: update type `TopicForLegislator` (Aylie Chou)
+- [[`4e7c6aafeb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4e7c6aafeb)] - **feat(cms)**: add `topNTopicsOfLegislators` endpoint (Aylie Chou)
+- [[`661116df76`](https://github.com/twreporter/congress-dashboard-monorepo/commit/661116df76)] - **feat(cms)**: add custom graphql endpoints (Aylie Chou)
+
+## 1.0.0-beta.0, 2025-04-30
+
+### Notable Changes
+
+- feat
+  - add field & migration for related reporter articles
+
+### Commits
+
+- [[`8c2931e5d6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8c2931e5d6)] - **fix(cms)**: add migration file (Aylie Chou)
+- [[`c48310bfa3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c48310bfa3)] - **fix(cms)**: add alert when add twreporter article (Aylie Chou)
+- [[`b3997e72c4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b3997e72c4)] - **feat(cms)**: add field for related reporter articles (Aylie Chou)
+
 ## 1.0.0-rc.1, 2025-04-22
 
 ### Notable Changes
@@ -9,7 +70,6 @@
   - new columns for legislator & legislativeYuanMember
 - fix
   - reset Dockerfile
-  - install all dependencies for docker image
   - install all dependencies for docker image
   - update Dockerfile to use corepack
   - update Dockerfile with multi stage
@@ -86,8 +146,7 @@
   - init cms
     - access-control
     - system user access
-  - READEME & add dockerfile for cms
-
+  - README & add dockerfile for cms
 ### Commits
 
 - [[`e04dc0a5c9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e04dc0a5c9)] - **fix(cms)**: connect legislativeMeeting & fix legislativeYuanMember update logic (Lucien)

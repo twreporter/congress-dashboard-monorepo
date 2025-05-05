@@ -8,6 +8,34 @@ export type LegislativeMeeting = {
   term: number
 }
 
+export const fetchLegislativeMeeting = async (): Promise<
+  LegislativeMeeting[]
+> => {
+  try {
+    const data = await keystoneFetch<{
+      legislativeMeetings: LegislativeMeeting[]
+    }>(
+      JSON.stringify({
+        query: `
+          query LegislativeMeetings {
+            legislativeMeetings(orderBy: [{ term: desc }]) {
+              id
+              term
+            }
+          }
+        `,
+      }),
+      false
+    )
+    return data?.data?.legislativeMeetings || []
+  } catch (err) {
+    throw new Error(`Failed to fetch legislative meetings. err: ${err}`)
+  }
+}
+
+/* fetchLegislativeMeetingSession
+ *   fetch legislative meeing sessions in given term & order by term asc
+ */
 export type LegislativeMeetingSession = {
   id: number
   term: number
@@ -15,30 +43,6 @@ export type LegislativeMeetingSession = {
   endTime: string
 }
 
-export const fetchLegislativeMeeting = async (): Promise<
-  LegislativeMeeting[]
-> => {
-  const data = await keystoneFetch<{
-    legislativeMeetings: LegislativeMeeting[]
-  }>(
-    JSON.stringify({
-      query: `
-        query Query {
-          legislativeMeetings(orderBy: [{ term: desc }]) {
-            id
-            term
-          }
-        }
-      `,
-    }),
-    false
-  )
-  return data?.data?.legislativeMeetings || []
-}
-
-/* fetchLegislativeMeetingSession
- *   fetch legislative meeing sessions in given term & order by term asc
- */
 export const fetchLegislativeMeetingSession = async (
   legislativeMeetingTerm: string
 ): Promise<LegislativeMeetingSession[]> => {
@@ -65,8 +69,12 @@ export const fetchLegislativeMeetingSession = async (
     orderBy,
   }
 
-  const data = await keystoneFetch<{
-    legislativeMeetingSessions: LegislativeMeetingSession[]
-  }>(JSON.stringify({ query, variables }), false)
-  return data?.data?.legislativeMeetingSessions || []
+  try {
+    const data = await keystoneFetch<{
+      legislativeMeetingSessions: LegislativeMeetingSession[]
+    }>(JSON.stringify({ query, variables }), false)
+    return data?.data?.legislativeMeetingSessions || []
+  } catch (err) {
+    throw new Error(`Failed to fetch meeting sessions. err: ${err}`)
+  }
 }

@@ -1,11 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 // @twreporter
-import {
-  DesktopAndAbove,
-  TabletAndBelow,
-} from '@twreporter/react-components/lib/rwd'
+import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 // components
 import LegislatorInfo from '@/components/legislator/legislator-info'
 import LegislatorStatistics from '@/components/legislator/legislator-statistics'
@@ -21,11 +18,13 @@ import {
   DesktopAsideRight,
   ListContainer,
 } from '@/components/legislator/styles'
-// fetcher
+// type
 import {
   type LegislatorFromRes,
   type TopicData,
 } from '@/fetchers/server/legislator'
+// fetcher
+import { useLegislativeMeeting } from '@/fetchers/legislative-meeting'
 // hooks
 import { useLegislatorData } from '@/components/legislator/hooks/use-legislator-data'
 // custom hooks
@@ -46,23 +45,32 @@ const Legislator: React.FC<LegislatorProps> = ({
   currentMeetingSession,
 }) => {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [filterCount, setFilterCount] = useState<number>(0)
   const [isLegislatorActive, setIsLegislatorActive] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [searchParams])
+
+  const { legislator, topics, speechesByTopic } = useLegislatorData(
+    legislatorData,
+    topicsData
+  )
 
   const {
     isFilterOpen,
     setIsFilterOpen,
     filterValues,
     handleFilterValueChange,
-    legislativeMeetingState,
     legislativeMeetingSessionState,
     filterOptions,
-  } = useLegislativeMeetingFilters(currentMeetingTerm, currentMeetingSession)
-
-  const { legislator, topics, speechesByTopic } = useLegislatorData(
-    legislatorData,
-    topicsData
-  )
+  } = useLegislativeMeetingFilters({
+    legislatorSlug: legislator.slug,
+    currentMeetingTerm,
+    currentMeetingSession,
+  })
 
   const openFilter = () => {
     setIsFilterOpen((prev) => !prev)
@@ -97,6 +105,7 @@ const Legislator: React.FC<LegislatorProps> = ({
         sessionTermValue
       )}`
       router.push(newUrl)
+      setIsLoading(true)
       setIsFilterOpen(false)
     } catch (error) {
       console.error('Error processing filter values:', error)
@@ -122,23 +131,19 @@ const Legislator: React.FC<LegislatorProps> = ({
         setFilterCount(currentMeetingSession.length)
       }
     }
-  }, [
-    currentMeetingTerm,
-    currentMeetingSession,
-    legislativeMeetingSessionState,
-  ])
+  }, [currentMeetingTerm, currentMeetingSession])
 
+  const { legislativeMeetings } = useLegislativeMeeting()
   useEffect(() => {
     // if the legislator's meeting term matches the latest meeting term, set isLegislatorActive to true
     if (
-      legislatorData.legislativeMeeting.term ===
-      legislativeMeetingState?.legislativeMeeting[0]?.term
+      legislatorData.legislativeMeeting.term === legislativeMeetings[0]?.term
     ) {
       setIsLegislatorActive(true)
     } else {
       setIsLegislatorActive(false)
     }
-  }, [legislativeMeetingState, legislatorData])
+  }, [legislativeMeetings, legislatorData])
 
   return (
     <>
@@ -148,34 +153,34 @@ const Legislator: React.FC<LegislatorProps> = ({
         filterCount={filterCount}
         onFilterClick={openFilter}
       >
-        <DesktopAndAbove>
-          <DesktopContainer>
-            <DesktopAsideLeft>
-              <LegislatorInfo
-                legislator={legislator}
-                isLegislatorActive={isLegislatorActive}
+        <DesktopContainer>
+          <DesktopAsideLeft>
+            <LegislatorInfo
+              legislator={legislator}
+              isLegislatorActive={isLegislatorActive}
+            />
+            <Feedback />
+          </DesktopAsideLeft>
+          <DesktopAsideRight>
+            <LegislatorStatistics
+              committees={legislator.committees}
+              proposalSuccessCount={legislator.proposalSuccessCount}
+              meetingTermCount={legislator.meetingTermCount}
+              meetingTermCountInfo={legislator.meetingTermCountInfo}
+            />
+            <ListContainer>
+              <LegislatorList
+                isLoading={isLoading}
+                legislatorSlug={legislator.slug}
+                legislatorName={legislator.name}
+                topics={topics}
+                speechesByTopic={speechesByTopic}
+                currentMeetingTerm={currentMeetingTerm}
+                currentMeetingSession={currentMeetingSession}
               />
-              <Feedback />
-            </DesktopAsideLeft>
-            <DesktopAsideRight>
-              <LegislatorStatistics
-                committees={legislator.committees}
-                proposalSuccessCount={legislator.proposalSuccessCount}
-                meetingTermCount={legislator.meetingTermCount}
-                meetingTermCountInfo={legislator.meetingTermCountInfo}
-              />
-              <ListContainer>
-                <LegislatorList
-                  legislatorSlug={legislator.slug}
-                  topics={topics}
-                  speechesByTopic={speechesByTopic}
-                  currentMeetingTerm={currentMeetingTerm}
-                  currentMeetingSession={currentMeetingSession}
-                />
-              </ListContainer>
-            </DesktopAsideRight>
-          </DesktopContainer>
-        </DesktopAndAbove>
+            </ListContainer>
+          </DesktopAsideRight>
+        </DesktopContainer>
         <TabletAndBelow>
           <ContentBlock>
             <LegislatorInfo
@@ -190,7 +195,9 @@ const Legislator: React.FC<LegislatorProps> = ({
             />
             <ListContainer>
               <LegislatorList
+                isLoading={isLoading}
                 legislatorSlug={legislator.slug}
+                legislatorName={legislator.name}
                 topics={topics}
                 speechesByTopic={speechesByTopic}
                 currentMeetingTerm={currentMeetingTerm}

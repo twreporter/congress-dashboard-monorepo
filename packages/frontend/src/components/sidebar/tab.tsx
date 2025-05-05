@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 // components
-import { ImageWithSkeleton } from '@/components/skeleton'
+import { ImageWithSkeleton, CircleRaw } from '@/components/skeleton'
 // twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 import {
@@ -38,30 +38,36 @@ const Box = styled.div<{ $active: boolean }>`
 
 export type TabProps = {
   slug?: string
-  name: string
+  name?: string
   count?: number
   avatar?: string
+  showAvatar?: boolean
   selected?: boolean
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
   className?: string
 }
 const Tab: React.FC<TabProps> = ({
-  name,
+  name = '',
   count = 0,
   avatar,
+  showAvatar = false,
   selected = false,
   onClick,
   className,
 }: TabProps) => {
   return (
     <Box $active={selected} onClick={onClick} className={className}>
-      {avatar ? (
-        <ImageWithSkeleton
-          src={avatar}
-          alt={`${name} avatar on tab`}
-          width={36}
-          height={36}
-        />
+      {showAvatar ? (
+        avatar ? (
+          <ImageWithSkeleton
+            src={avatar}
+            alt={`${name} avatar on tab`}
+            width={36}
+            height={36}
+          />
+        ) : (
+          <CircleRaw width={36} height={36} />
+        )
       ) : null}
       <Name text={`${name}${count ? `(${count})` : ''}`} $active={selected} />
     </Box>

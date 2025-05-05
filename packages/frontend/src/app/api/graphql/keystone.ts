@@ -5,6 +5,25 @@ export interface GraphQLResponse<T> {
   errors?: { message: string }[]
 }
 
+// 處理 graphql null -> undefined
+const transformNullToUndefined = <T>(obj: T): T => {
+  if (Array.isArray(obj)) {
+    return obj.map(transformNullToUndefined) as T
+  } else if (obj !== null && typeof obj === 'object') {
+    const result: Record<string, unknown> = {}
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const value = (obj as Record<string, unknown>)[key]
+        if (value !== null) {
+          result[key] = transformNullToUndefined(value)
+        }
+      }
+    }
+    return result as T
+  }
+  return obj
+}
+
 export async function keystoneFetch<T>(
   bodyString: string,
   keepAlive = true
@@ -27,8 +46,10 @@ export async function keystoneFetch<T>(
   if (!res.ok) {
     throw new Error(`Keystone API Error: ${res.statusText}`)
   }
-  const data = await res.json()
-  return data
+
+  const raw = await res.json()
+  const cleaned = transformNullToUndefined(raw)
+  return cleaned
 }
 
 export default keystoneFetch
