@@ -86,12 +86,6 @@ export const SearchBox = ({
   }
 
   useEffect(() => {
-    if (autoFocus) {
-      inputRef.current?.focus()
-    }
-  }, [autoFocus])
-
-  useEffect(() => {
     setInputValue(query)
   }, [query])
 
@@ -104,6 +98,7 @@ export const SearchBox = ({
         value={inputValue}
         onChange={handleOnChange}
         placeholder="搜尋立委和議題"
+        autoFocus={autoFocus}
       />
       {inputValue && (
         <ClearButton onClick={clearQuery}>
