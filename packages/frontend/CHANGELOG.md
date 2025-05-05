@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.0-beta.13, 2025-05-05
+
+### Notable Changes
+
+- fix
+  - typo & fix type check
+
+### Commits
+
+- [[`b13a7282dc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b13a7282dc)] - **fix(frontend)**: typo & fix type check (Aylie Chou)
+
+
 ## 1.0.0-beta.12, 2025-05-04
 
 ### Notable Changes
