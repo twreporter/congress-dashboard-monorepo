@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, CSSProperties } from 'react'
 import styled from 'styled-components'
 // fetcher
 import useTwreporterArticle from '@/fetchers/twreporter-article'
@@ -50,9 +50,9 @@ const TabletOnly = styled.div`
     display: block;  
   `}
 `
-const imageStyle = {
+const imageStyle: CSSProperties = {
   flex: 'none',
-  ObjectFit: 'cover',
+  objectFit: 'cover',
 }
 
 type TwreporterArticleProps = {
