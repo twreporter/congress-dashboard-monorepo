@@ -70,7 +70,7 @@ export const SearchBox = ({
   autoFocus: boolean
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
-  const { query, refine: _refine } = useSearchBox()
+  const { query, refine: _refine, clear } = useSearchBox()
   const [inputValue, setInputValue] = useState(query)
   const refine = useMemo(() => _.debounce(_refine, 500), [_refine])
 
@@ -82,7 +82,7 @@ export const SearchBox = ({
 
   const clearQuery = () => {
     setInputValue('')
-    refine('')
+    clear()
   }
 
   useEffect(() => {
