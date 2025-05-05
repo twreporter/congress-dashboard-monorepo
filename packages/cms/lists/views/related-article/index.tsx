@@ -79,9 +79,12 @@ export const Field = ({
       setSlugs([inputSlug].concat(slugs))
       setInputSlug('')
     } catch (err) {
+      console.error(
+        `Failed to add twreporter article. slug: ${inputSlug}, err: ${err}`
+      )
       alert(`
-        無法加入此文章，重新輸入文章 slug 再試一次。
-        error code: ${err}
+        查無此文章，請確認文章 slug 並再試一次。
+        如文章 slug 正確請截圖回報產品經理。
       `)
     }
   }
