@@ -64,10 +64,12 @@ export const SearchBox = ({
   className,
   variant,
   autoFocus,
+  onFocus,
 }: {
   className?: string
   variant: LayoutVariant
   autoFocus: boolean
+  onFocus?: () => void
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { query, refine: _refine, clear } = useSearchBox()
@@ -99,6 +101,7 @@ export const SearchBox = ({
         onChange={handleOnChange}
         placeholder="搜尋立委和議題"
         autoFocus={autoFocus}
+        onFocus={onFocus}
       />
       {inputValue && (
         <ClearButton onClick={clearQuery}>

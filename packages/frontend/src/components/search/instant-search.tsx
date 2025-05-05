@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import {
   InstantHits as _InstantHits,
@@ -43,12 +43,24 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
   /* TODO: add mobile styles */
 `
 
-const InstantHits = styled(_InstantHits)`
+const InstantHits = styled(_InstantHits)<{ $hide: boolean }>`
   position: absolute;
+  ${({ $hide }) => {
+    if ($hide) {
+      return `display: none;`
+    }
+    return `display: block;`
+  }}
 `
 
-const ClickOutsideWidget = ({ containerRef }) => {
-  const { query, clear } = useSearchBox()
+const ClickOutsideWidget = ({
+  containerRef,
+  onClickOutside,
+}: {
+  containerRef: React.RefObject<HTMLElement | null>
+  onClickOutside: () => void
+}) => {
+  const { query } = useSearchBox()
 
   useEffect(() => {
     if (query === '') {
@@ -60,7 +72,7 @@ const ClickOutsideWidget = ({ containerRef }) => {
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        clear()
+        onClickOutside()
       }
     }
 
@@ -68,7 +80,7 @@ const ClickOutsideWidget = ({ containerRef }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [containerRef, query])
+  }, [containerRef, onClickOutside, query])
 
   return null
 }
@@ -83,12 +95,25 @@ export const AlgoliaInstantSearch = ({
   autoFocus?: boolean
 }) => {
   const containerRef = useRef(null)
+  const [focused, setFocused] = useState(true)
+
   return (
     <Container ref={containerRef} className={className} $variant={variant}>
       <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
-        <SearchBox variant={variant} autoFocus={autoFocus} />
-        <InstantHits />
-        <ClickOutsideWidget containerRef={containerRef} />
+        <SearchBox
+          variant={variant}
+          autoFocus={autoFocus}
+          onFocus={() => {
+            setFocused(true)
+          }}
+        />
+        <InstantHits $hide={!focused} />
+        <ClickOutsideWidget
+          containerRef={containerRef}
+          onClickOutside={() => {
+            setFocused(false)
+          }}
+        />
       </InstantSearch>
     </Container>
   )
