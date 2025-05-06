@@ -40,6 +40,7 @@ export type FormattedFilterValue = {
   sessionIds: number[]
   partyIds: number[]
   constituency: string[]
+  committeeSlugs: string[]
 }
 
 export type FilterFormatter = (

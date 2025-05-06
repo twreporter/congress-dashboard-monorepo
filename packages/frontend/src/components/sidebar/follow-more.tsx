@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+// constant
+import { InternalRoutes } from '@/constants/navigation-link'
 // component
 import PartyTag from '@/components/dashboard/card/party-tag'
 import { CircleRaw } from '@/components/skeleton'
@@ -13,6 +15,7 @@ const LegislatorItem = styled.div`
   flex-direction: column;
   align-items: center;
   width: 56px;
+  cursor: pointer;
 
   &:hover {
     opacity: 0.7;
@@ -46,23 +49,34 @@ export type LegislatorProps = {
   avatar?: string
   partyAvatar?: string
   count?: number
-  slug?: string
+  slug: string
 }
 export const Legislator: React.FC<LegislatorProps> = ({
   name = '',
   avatar,
   partyAvatar,
   count,
-}: LegislatorProps) => (
-  <LegislatorItem>
-    <AvatarContainer>
-      {avatar ? <Avatar src={avatar} /> : <CircleRaw width={56} height={56} />}
-      {partyAvatar ? <Party avatar={partyAvatar} /> : null}
-    </AvatarContainer>
-    <Text text={name} />
-    <Text text={`(${count})`} />
-  </LegislatorItem>
-)
+  slug,
+}: LegislatorProps) => {
+  const gotoLegislator = () => {
+    window.open(`${InternalRoutes.Legislator}/${slug}`, '_self')
+  }
+
+  return (
+    <LegislatorItem onClick={gotoLegislator}>
+      <AvatarContainer>
+        {avatar ? (
+          <Avatar src={avatar} />
+        ) : (
+          <CircleRaw width={56} height={56} />
+        )}
+        {partyAvatar ? <Party avatar={partyAvatar} /> : null}
+      </AvatarContainer>
+      <Text text={name} />
+      <Text text={`(${count})`} />
+    </LegislatorItem>
+  )
+}
 
 // issue component
 const TagName = styled(P2)`
@@ -79,6 +93,7 @@ const TagItem = styled.div`
   min-width: 0;
   border: 1px solid ${colorGrayscale.gray600};
   flex-shrink: 0;
+  cursor: pointer;
 
   &:hover {
     border: 1px solid ${colorGrayscale.gray800};
@@ -92,12 +107,20 @@ const TagItem = styled.div`
 export type IssueProps = {
   name?: string
   count?: number
+  slug: string
 }
 export const Issue: React.FC<IssueProps> = ({
   name = '',
   count,
-}: IssueProps) => (
-  <TagItem>
-    <TagName>{count ? `${name}(${count})` : name}</TagName>
-  </TagItem>
-)
+  slug,
+}: IssueProps) => {
+  const gotoIssue = () => {
+    window.open(`${InternalRoutes.Topic}/${slug}`, '_self')
+  }
+
+  return (
+    <TagItem onClick={gotoIssue}>
+      <TagName>{count ? `${name}(${count})` : name}</TagName>
+    </TagItem>
+  )
+}

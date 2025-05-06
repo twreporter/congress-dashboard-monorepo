@@ -3,8 +3,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 // components
-import Tab, { type TabProps } from '@/components/sidebar/tab'
+import Tab from '@/components/sidebar/tab'
 import { Gap } from '@/components/skeleton'
+// type
+import type { TabProps } from '@/components/sidebar/type'
 // style
 import {
   FlexRow,
@@ -111,7 +113,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   const gotoPage = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    alert(`go to ${title} page, path: ${link}`)
+    window.open(link, '_self')
   }
   const closePage = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()

@@ -26,6 +26,7 @@ type LoadMoreLegislatorAndTopTopics = {
 type FetchLegislatorAndTopTopicsParams = LoadMoreLegislatorAndTopTopics & {
   partyIds?: number[]
   constituencies?: string[]
+  committeeSlugs?: string[]
 }
 const useLegislator = () => {
   const [legislatorPool, setLegislatorPool] = useState<Legislator[]>([])
@@ -35,11 +36,14 @@ const useLegislator = () => {
     legislativeMeetingSessionIds,
     partyIds,
     constituencies,
+    committeeSlugs,
   }: FetchLegislatorAndTopTopicsParams) => {
     const legislatorYuanMembers = await fetchLegislators({
       legislativeMeetingId,
+      legislativeMeetingSessionIds,
       partyIds,
       constituencies,
+      committeeSlugs,
     })
     const legislators = _.shuffle(
       _.map(legislatorYuanMembers, ({ legislator, party, id, ...rest }) => ({
