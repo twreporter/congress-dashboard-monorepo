@@ -1,4 +1,9 @@
-import { text, timestamp } from '@keystone-6/core/fields'
+import {
+  text,
+  timestamp,
+  type TimestampFieldConfig,
+} from '@keystone-6/core/fields'
+import { type BaseListTypeInfo } from '@keystone-6/core/types'
 
 // ref: https://regex101.com/r/gilHCG/1
 export const URL_VALIDATION_REGEX =
@@ -16,20 +21,24 @@ export const SLUG = text({
   isIndexed: 'unique',
 })
 
-export const CREATED_AT = timestamp({
-  defaultValue: { kind: 'now' },
-  ui: {
-    createView: { fieldMode: 'hidden' },
-    itemView: { fieldMode: 'read' },
-  },
-})
+export const CREATED_AT = (opts: TimestampFieldConfig<BaseListTypeInfo> = {}) =>
+  timestamp({
+    defaultValue: { kind: 'now' },
+    ui: {
+      createView: { fieldMode: 'hidden' },
+      itemView: { fieldMode: 'read' },
+    },
+    ...opts,
+  })
 
-export const UPDATED_AT = timestamp({
-  db: {
-    updatedAt: true,
-  },
-  ui: {
-    createView: { fieldMode: 'hidden' },
-    itemView: { fieldMode: 'read' },
-  },
-})
+export const UPDATED_AT = (opts: TimestampFieldConfig<BaseListTypeInfo> = {}) =>
+  timestamp({
+    db: {
+      updatedAt: true,
+    },
+    ui: {
+      createView: { fieldMode: 'hidden' },
+      itemView: { fieldMode: 'read' },
+    },
+    ...opts,
+  })

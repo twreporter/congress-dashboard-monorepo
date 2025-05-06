@@ -38,8 +38,8 @@ const listConfigurations = list({
     meetingTermCountInfo: text({
       label: '立委任期屆數說明',
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '立法委員',

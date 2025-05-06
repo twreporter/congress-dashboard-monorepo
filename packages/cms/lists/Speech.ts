@@ -71,8 +71,8 @@ const listConfigurations = list({
         labelField: 'title',
       },
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '逐字稿',
