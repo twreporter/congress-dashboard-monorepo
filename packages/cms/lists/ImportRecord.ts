@@ -791,6 +791,7 @@ const listConfigurations = list({
       label: '紀錄名稱',
       validation: { isRequired: true },
       ui: { itemView: { fieldMode: 'edit' } },
+      isOrderable: false,
     }),
     uploadData: uploader({
       label: '上傳資料',
@@ -804,8 +805,8 @@ const listConfigurations = list({
         createView: { fieldMode: 'hidden' },
       },
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT({ isOrderable: false }),
+    updatedAt: UPDATED_AT({ isOrderable: false }),
   },
 
   ui: {
@@ -813,7 +814,7 @@ const listConfigurations = list({
     labelField: 'recordName',
     listView: {
       initialColumns: ['recordName', 'uploadData', 'createdAt', 'updatedAt'],
-      initialSort: { field: 'createdAt', direction: 'DESC' },
+      initialSort: { field: 'id', direction: 'DESC' },
       pageSize: 50,
     },
     hideDelete: ({ session }) => {
@@ -840,7 +841,7 @@ const listConfigurations = list({
     resolveInput: {
       create: ({ resolvedData, context }) => {
         const { session } = context
-        resolvedData.importer = { connect: { id: session.itemId } }
+        resolvedData.importer = { connect: { id: Number(session.itemId) } }
         return resolvedData
       },
     },

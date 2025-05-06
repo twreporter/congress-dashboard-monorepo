@@ -65,8 +65,8 @@ const listConfigurations = list({
         },
       },
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '編輯精選',

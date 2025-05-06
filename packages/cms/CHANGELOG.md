@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.3, 2025-05-06
+
+### Notable Changes
+
+- fix
+  - set default sort to id for import record
+
+### Commits
+
+- [[`64c898ce72`](https://github.com/twreporter/congress-dashboard-monorepo/commit/64c898ce72)] - **fix(cms)**: set default sort to id for import record (Lucien)
+
 ## 1.0.0-rc.2, 2025-05-05
 
 ### Notable Changes

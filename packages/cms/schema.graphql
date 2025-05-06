@@ -1132,9 +1132,6 @@ enum ListNameEnum {
 
 input ImportRecordOrderByInput {
   id: OrderDirection
-  recordName: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
 }
 
 input ImportRecordUpdateInput {

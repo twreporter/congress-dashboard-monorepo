@@ -78,8 +78,8 @@ const listConfigurations = list({
         isRequired: true,
       },
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '立法院會期',
