@@ -1470,6 +1470,7 @@ type CustomImage {
 }
 
 type LegislatorForTopic {
+  id: Int!
   name: String!
   party: Int
   count: Int

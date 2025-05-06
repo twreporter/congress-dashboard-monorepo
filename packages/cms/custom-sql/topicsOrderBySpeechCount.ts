@@ -96,7 +96,7 @@ export const getTop5LegislatorSql = ({
         SELECT *, ROW_NUMBER() OVER (PARTITION BY b_id ORDER BY l_count DESC) AS rnk
         FROM l_counts
       )
-      SELECT rl.b_id as topicId, rl.l_count as count, l.name, m.party, l.slug, l.imageLink, p.imageFile_id as imageId, p.imageFile_extension as imageExtension
+      SELECT rl.b_id as topicId, rl.l_count as count, m.id, l.name, m.party, l.slug, l.imageLink, p.imageFile_id as imageId, p.imageFile_extension as imageExtension
       FROM Rank_l rl
       JOIN LegislativeYuanMember m ON m.id=rl.l_id
       JOIN Legislator l ON m.legislator=l.id
@@ -122,7 +122,7 @@ export const getTop5LegislatorSql = ({
         SELECT *, ROW_NUMBER() OVER (PARTITION BY b_id ORDER BY l_count DESC) AS rnk
         FROM l_counts
       )
-      SELECT rl.b_id as topicId, rl.l_count as count, l.name, m.party, l.slug, l.imageLink, p.imageFile_id as imageId, p.imageFile_extension as imageExtension
+      SELECT rl.b_id as topicId, rl.l_count as count, m.id, l.name, m.party, l.slug, l.imageLink, p.imageFile_id as imageId, p.imageFile_extension as imageExtension
       FROM Rank_l rl
       JOIN LegislativeYuanMember m ON m.id=rl.l_id
       JOIN Legislator l ON m.legislator=l.id
@@ -147,7 +147,7 @@ export const getTop5LegislatorSql = ({
         SELECT *, ROW_NUMBER() OVER (PARTITION BY b_id ORDER BY l_count DESC) AS rnk
         FROM l_counts
       )
-      SELECT rl.b_id as topicId, rl.l_count as count, l.name, m.party, l.slug, l.imageLink, p.imageFile_id as imageId, p.imageFile_extension as imageExtension
+      SELECT rl.b_id as topicId, rl.l_count as count, m.id, l.name, m.party, l.slug, l.imageLink, p.imageFile_id as imageId, p.imageFile_extension as imageExtension
       FROM Rank_l rl
       JOIN LegislativeYuanMember m ON m.id=rl.l_id
       JOIN Legislator l ON m.legislator=l.id
@@ -174,7 +174,7 @@ export const getTop5LegislatorSql = ({
         SELECT *, ROW_NUMBER() OVER (PARTITION BY b_id ORDER BY l_count DESC) AS rnk
         FROM l_counts
       )
-      SELECT rl.b_id as topicId, rl.l_count as count, l.name, m.party, l.slug, l.imageLink, p.imageFile_id as imageId, p.imageFile_extension as imageExtension
+      SELECT rl.b_id as topicId, rl.l_count as count, m.id, l.name, m.party, l.slug, l.imageLink, p.imageFile_id as imageId, p.imageFile_extension as imageExtension
       FROM Rank_l rl
       JOIN LegislativeYuanMember m ON m.id=rl.l_id
       JOIN Legislator l ON m.legislator=l.id

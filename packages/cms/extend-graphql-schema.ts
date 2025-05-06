@@ -21,6 +21,7 @@ type TopicWithSpeechCount = {
   legislatorCount: bigint
 }
 type LegislatorForTopic = {
+  id: number
   slug: string
   name: string
   count?: number
@@ -60,6 +61,7 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
         imageFile: ImageFileWithUrlOnly!
       }
       type LegislatorForTopic {
+        id: Int!
         name: String!
         party: Int
         count: Int
