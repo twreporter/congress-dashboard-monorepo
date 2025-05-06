@@ -127,8 +127,8 @@ const listConfigurations = list({
     proposalSuccessCount: integer({
       label: '提案通過數',
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '立委屆資',
