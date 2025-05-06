@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.4, 2025-05-06
+
+### Notable Changes
+
+- fix
+  - use connect instead of set for create relationship
+
+### Commits
+
+- [[`cc7a8e3335`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cc7a8e3335)] - **fix(cms)**: use connect instead of set for create relationship (Lucien)
+
 ## 1.0.0-rc.3, 2025-05-06
 
 ### Notable Changes
