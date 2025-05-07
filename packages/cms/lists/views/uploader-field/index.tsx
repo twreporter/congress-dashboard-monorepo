@@ -404,6 +404,9 @@ export function Field({
                   注意：以下 slug
                   已存在於資料庫中，將會更新現有資料而非新增記錄：
                   <br />
+                  不會覆蓋舊有關聯，EX. 原本是 [1, 2, 3]，上傳 [4, 5, 6]
+                  之後會變成 [1, 2, 3, 4, 5, 6]
+                  <br />
                   {slugDuplicates.join(', ')}
                 </WarningText>
               )}
