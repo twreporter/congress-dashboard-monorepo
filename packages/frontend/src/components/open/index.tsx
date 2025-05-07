@@ -86,7 +86,8 @@ const InstantSearchContainer = styled.div`
   `}
 
   ${mq.mobileOnly`
-    width: 327px;
+    width: 100%;
+    max-width: 480px;
   `}
 `
 
