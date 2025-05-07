@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
+import useWindowWidth from '@/hooks/use-window-width'
 import styled from 'styled-components'
+import type { LayoutVariant } from '@/components/search/constants'
+import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import {
   InstantHits as _InstantHits,
   defaultIndexName,
 } from '@/components/search/instant-hits'
 import { InstantSearch, useSearchBox } from 'react-instantsearch'
-import { SearchBox, LayoutVariants } from '@/components/search/search-box'
-import type { LayoutVariant } from '@/components/search/search-box'
+import { LayoutVariants } from '@/components/search/constants'
+import { SearchBox } from '@/components/search/search-box'
+import { SearchModal } from '@/components/search/modal'
 import { ZIndex } from '@/styles/z-index'
 import { liteClient as algoliasearch } from 'algoliasearch/lite'
 
@@ -96,15 +100,34 @@ export const AlgoliaInstantSearch = ({
 }) => {
   const containerRef = useRef(null)
   const [focused, setFocused] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const windowWidth = useWindowWidth()
+
+  if (isModalOpen) {
+    return (
+      <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
+        <SearchModal
+          onClose={() => {
+            setIsModalOpen(false)
+          }}
+        />
+      </InstantSearch>
+    )
+  }
 
   return (
-    <Container ref={containerRef} className={className} $variant={variant}>
-      <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
+    <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
+      <Container ref={containerRef} className={className} $variant={variant}>
         <SearchBox
           variant={variant}
           autoFocus={autoFocus}
           onFocus={() => {
             setFocused(true)
+
+            // For mobile, open the search modal
+            if (windowWidth < DEFAULT_SCREEN.tablet.minWidth) {
+              setIsModalOpen(true)
+            }
           }}
         />
         <InstantHits $hide={!focused} />
@@ -114,7 +137,7 @@ export const AlgoliaInstantSearch = ({
             setFocused(false)
           }}
         />
-      </InstantSearch>
-    </Container>
+      </Container>
+    </InstantSearch>
   )
 }
