@@ -30,9 +30,10 @@ import {
   Legislator,
   type LegislatorProps,
 } from '@/components/sidebar/follow-more'
-import { type TabProps } from '@/components/sidebar/tab'
 import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
+// type
+import type { TabProps } from '@/components/sidebar/type'
 // utils
 import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
 // constants
