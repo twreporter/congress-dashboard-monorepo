@@ -20,9 +20,19 @@ export async function generateMetadata({
   const { title, legislativeYuanMember } = speech
   const { legislator } = legislativeYuanMember
   const { name } = legislator
+  const titleForMetaData =
+    title.length > 15 ? `${title.slice(0, 15)}...` : title
   return {
-    title: `逐字稿 - ${name} - ${title}`,
-    description: `議會逐字稿 - ${title}`,
+    title: `逐字稿｜${name}：${titleForMetaData} - 報導者觀測站`,
+    description: '報導者議會透視版',
+    alternates: {
+      canonical: `https://lawmaker.twreporter/a/${slug}`,
+    },
+    openGraph: {
+      title: `逐字稿｜${name}：${titleForMetaData} - 報導者觀測站`,
+      url: `https://lawmaker.twreporter/a/${slug}`,
+      type: 'article',
+    },
   }
 }
 
