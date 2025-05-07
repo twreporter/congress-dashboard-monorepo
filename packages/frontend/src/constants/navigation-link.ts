@@ -17,8 +17,8 @@ export enum ExternalRoutes {
 }
 
 export const COMMON_MENU_LINKS: NavigationLink[] = [
-  { text: '發言主頁', href: InternalRoutes.Home, target: '_self' },
-  { text: '關於透視板', href: InternalRoutes.About, target: '_self' },
+  { text: '觀測站首頁', href: InternalRoutes.Home, target: '_self' },
+  { text: '關於觀測站', href: InternalRoutes.About, target: '_self' },
 ]
 
 export const SECONDARY_LINKS: NavigationLink[] = [

@@ -42,7 +42,7 @@ const Box = styled.div`
 `
 const Title = styled.div`
   font-size: 48px;
-  text-alignment: center;
+  text-align: center;
   color: ${colorGrayscale.gray900};
 
   ${mq.tabletOnly`
