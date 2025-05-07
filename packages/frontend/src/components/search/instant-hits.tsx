@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
+import type { LayoutVariant } from '@/components/search/constants'
+import { LayoutVariants } from '@/components/search/constants'
 import { useInView } from 'react-intersection-observer'
 import type {
   LegislatorRawHit,
@@ -29,16 +31,31 @@ const InstantSearchStatus = {
   Error: 'error',
 } as const
 
-const Container = styled.div`
+const Container = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
   max-height: 320px;
   overflow: scroll;
   background-color: ${colorGrayscale.white};
-  border-radius: 8px;
-  padding: 8px 0;
-  margin-top: 8px;
-  box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
 
+  ${({ $variant }) => {
+    switch ($variant) {
+      case LayoutVariants.Modal: {
+        return `
+          border-top: 1px solid ${colorGrayscale.gray300};
+        `
+      }
+      case LayoutVariants.Header:
+      case LayoutVariants.Default:
+      default: {
+        return `
+          border-radius: 8px;
+          padding: 8px 0;
+          margin-top: 8px;
+          box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
+        `
+      }
+    }
+  }}
   a {
     text-decoration: none;
   }
@@ -74,7 +91,9 @@ const SearchText = styled.div`
 `
 
 const Rows = styled.div`
-  border-top: 1px solid ${colorGrayscale.gray300};
+  &:not(:empty) {
+    border-top: 1px solid ${colorGrayscale.gray300};
+  }
 `
 
 // TODO: replace loading indicator after design ready
@@ -115,7 +134,13 @@ enum IndexNameEnum {
 
 export const defaultIndexName = IndexNameEnum.Legislator
 
-export const InstantHits = ({ className }: { className?: string }) => {
+export const InstantHits = ({
+  className,
+  variant = LayoutVariants.Default,
+}: {
+  className?: string
+  variant?: LayoutVariant
+}) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { query } = useSearchBox()
   const [stage, setStage] = useState(SearchStageEnum.Legislator)
@@ -125,7 +150,7 @@ export const InstantHits = ({ className }: { className?: string }) => {
   }
 
   return (
-    <Container ref={containerRef} className={className}>
+    <Container ref={containerRef} className={className} $variant={variant}>
       {/* TODO: change to `next/link` when search page is ready */}
       <a href="" target="_self">
         <FirstRow>
@@ -266,7 +291,7 @@ const LoadMore = ({
     }
 
     load()
-  }, [query, inView, isLoading, renderState, stage, setStage])
+  }, [query, inView, isLoading, renderState, stage, setStage, noMoreHits])
 
   return (
     <div>

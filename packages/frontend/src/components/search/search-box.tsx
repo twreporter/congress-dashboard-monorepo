@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react'
 import debounce from 'lodash/debounce'
 import styled from 'styled-components'
+import type { LayoutVariant } from '@/components/search/constants'
+import { LayoutVariants } from '@/components/search/constants'
 import { Search as IconSearch, X as IconX } from '@/components/search/icons'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { useSearchBox } from 'react-instantsearch'
@@ -9,28 +11,27 @@ const _ = {
   debounce,
 }
 
-export const LayoutVariants = {
-  Default: 'default', // search bar in the body of the page
-  Header: 'header', // search bar in the header
-} as const
-
-export type LayoutVariant = (typeof LayoutVariants)[keyof typeof LayoutVariants]
-
 const Container = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
   background-color: ${colorGrayscale.white};
 
   ${({ $variant }) => {
-    if ($variant === LayoutVariants.Header) {
-      return `
-        padding: 8px 20px;
+    switch ($variant) {
+      case LayoutVariants.Modal:
+      case LayoutVariants.Header: {
+        return `
+          padding: 8px 20px;
+          height: 40px;
+        `
+      }
+      case LayoutVariants.Default:
+      default: {
+        return `
+        padding: 12px 24px;
         height: 40px;
-      `
+        `
+      }
     }
-    return `
-      padding: 12px 20px;
-      height: 48px;
-    `
   }}
 
   display: flex;
