@@ -28,6 +28,7 @@ import {
 import HamburgerMenu from '@/components/hamburger-menu'
 // hooks
 import useWindowWidth from '@/hooks/use-window-width'
+import { useScrollLock } from '@/hooks/use-scroll-lock'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
@@ -154,23 +155,14 @@ const Header: React.FC = () => {
     setIsHamburgerOpen((prev) => !prev)
   }, [])
 
+  // Handle body scroll lock
+  useScrollLock(isHamburgerOpen)
+
   useEffect(() => {
     if (windowWidth >= DEFAULT_SCREEN.tablet.minWidth) {
       setIsHamburgerOpen(false)
     }
   }, [windowWidth])
-
-  // Handle body scroll lock
-  useEffect(() => {
-    if (isHamburgerOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isHamburgerOpen])
 
   // search functions
   const [isSearchOpen, setIsSearchOpen] = useState(false)
