@@ -174,29 +174,27 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
             <ControlTabDate weight={P1.Weight.BOLD} text={date} />
             <ControlTabTitle weight={P1.Weight.BOLD} text={title} />
           </DateAndTitle>
-          <DesktopAndAbove>
-            <ControlItems>
-              <CustomPillButton
-                onClick={() => window.open(iVODLink, '_blank')}
-                leftIconComponent={<Video releaseBranch={releaseBranch} />}
-                text={'iVOD'}
-              />
-              <Spacing $width={24} />
-              <P1Gray600 weight={P1.Weight.BOLD} text="質詢片段切換" />
-              <Spacing $width={12} />
-              <IconButton
-                disabled={isFirstSpeech}
-                direction={IconButton.Direction.LEFT}
-                onClick={() => handleSwitchSpeech(Direction.PREV)}
-              />
-              <Spacing $width={8} />
-              <IconButton
-                disabled={isLastSpeech}
-                direction={IconButton.Direction.RIGHT}
-                onClick={() => handleSwitchSpeech(Direction.NEXT)}
-              />
-            </ControlItems>
-          </DesktopAndAbove>
+          <ControlItems>
+            <CustomPillButton
+              onClick={() => window.open(iVODLink, '_blank')}
+              leftIconComponent={<Video releaseBranch={releaseBranch} />}
+              text={'iVOD'}
+            />
+            <Spacing $width={24} />
+            <P1Gray600 weight={P1.Weight.BOLD} text="質詢片段切換" />
+            <Spacing $width={12} />
+            <IconButton
+              disabled={isFirstSpeech}
+              direction={IconButton.Direction.LEFT}
+              onClick={() => handleSwitchSpeech(Direction.PREV)}
+            />
+            <Spacing $width={8} />
+            <IconButton
+              disabled={isLastSpeech}
+              direction={IconButton.Direction.RIGHT}
+              onClick={() => handleSwitchSpeech(Direction.NEXT)}
+            />
+          </ControlItems>
         </ControlTab>
       </ControlTabContainer>
       <LeadingContainer ref={leadingRef}>

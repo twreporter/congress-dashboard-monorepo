@@ -117,7 +117,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
             <P1SupportiveHeavy text={legislator.name} />
           </Link>
         </LegislatorBlock>
-        <P2Gray600 text={attendee} />
+        <P2Gray600 text={`列席質詢對象／${attendee}`} />
       </LegislatorAndAttendeeBlock>
       <IssueTagsBlock>
         {relatedTopics.map((topic) => (

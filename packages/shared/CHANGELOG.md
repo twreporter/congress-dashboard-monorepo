@@ -1,6 +1,17 @@
 # Changelog
 
-## 0.0.4, 2025-04-22 (Current)
+## 0.0.5, 2025-05-07 (Current)
+
+### Notable Changes
+
+- fix
+  - typo & number
+
+### Commits
+
+- [[`c6f75c633b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c6f75c633b)] - **fix(shared)**: typo & number (Lucien)
+
+## 0.0.4, 2025-04-22
 
 ### Notable Changes
 
