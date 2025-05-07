@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.0-rc.3, 2025-05-07
+
+### Notable Changes
+
+- fix
+  - typo and speech page title 
+- chore
+  - update @twreporter packages
+
+### Commits
+
+- [[`4780890cf3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4780890cf3)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`e21051e087`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e21051e087)] - Merge remote-tracking branch 'upstream/master' into fix/frontend-typo (Lucien)
+- [[`58f4d40178`](https://github.com/twreporter/congress-dashboard-monorepo/commit/58f4d40178)] - **fix(frontend)**: typo and speech page title (Lucien)
+
 ## 1.0.0-rc.2, 2025-05-05
 
 ### Notable Changes
