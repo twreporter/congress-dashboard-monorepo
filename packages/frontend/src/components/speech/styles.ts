@@ -204,8 +204,12 @@ export const DateAndTitle = styled.div`
 
 export const ControlItems = styled.div`
   display: flex;
+  flex: 0 0 auto;
   flex-direction: row;
   align-items: center;
+  ${mq.tabletAndBelow`
+    display: none;
+  `}
 `
 
 export const Spacing = styled.div<{ $width?: number; $height?: number }>`
