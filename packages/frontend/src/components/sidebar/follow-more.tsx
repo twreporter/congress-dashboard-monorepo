@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 // constant
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 // component
 import PartyTag from '@/components/dashboard/card/party-tag'
 import { CircleRaw } from '@/components/skeleton'
