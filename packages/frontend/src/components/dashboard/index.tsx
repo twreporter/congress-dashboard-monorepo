@@ -9,6 +9,7 @@ import type { partyData } from '@/fetchers/party'
 import type { LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
 import type { SidebarIssueProps } from '@/components/sidebar'
 import type { Legislator } from '@/components/dashboard/type'
+import type { FilterModalValueType } from '@/components/dashboard/type'
 // utils
 import toastr from '@/utils/toastr'
 // enum
@@ -19,6 +20,7 @@ import { DashboardContext } from '@/components/dashboard/context'
 import useFilter from '@/components/dashboard/hook/use-filter'
 import useTopic from '@/components/dashboard/hook/use-topic'
 import useLegislator from '@/components/dashboard/hook/use-legislator'
+import useOutsideClick from '@/hooks/use-outside-click'
 // components
 import FunctionBar from '@/components/dashboard/function-bar'
 import {
@@ -44,7 +46,6 @@ import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 import { ZIndex } from '@/styles/z-index'
 // lodash
 import { find } from 'lodash'
-import { FilterModalValueType } from './type'
 const _ = {
   find,
 }
@@ -236,6 +237,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [sidebarHuman, setSidebarHuman] = useState<SidebarLegislatorProps>({
     title: '',
     slug: '',
+    issueList: [],
   })
   const [sidebarGap, setSidebarGap] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
@@ -331,10 +333,14 @@ const Dashboard: React.FC<DashboardProps> = ({
     setSidebarHuman({
       slug: activeLegislator.slug,
       title: `${activeLegislator.name}`,
+      note: activeLegislator.note,
       issueList: activeLegislator.tags,
     })
   }
   const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
+    e.preventDefault()
+    e.stopPropagation()
+
     setActiveCardIndex(index)
 
     // set sidebar data
@@ -403,13 +409,14 @@ const Dashboard: React.FC<DashboardProps> = ({
     filterModalValue: FilterModalValueType
   ) => {
     setLegislators([])
-    const { meetingId, sessionIds, partyIds, constituency } =
+    const { meetingId, sessionIds, partyIds, constituency, committeeSlugs } =
       formatter(filterModalValue)
     const legislators = await fetchLegislatorAndTopTopics({
       legislativeMeetingId: meetingId,
       legislativeMeetingSessionIds: sessionIds,
       partyIds,
       constituencies: constituency,
+      committeeSlugs,
     })
     setLegislators(legislators)
     setShouldToastrOnHuman(true)
@@ -421,6 +428,8 @@ const Dashboard: React.FC<DashboardProps> = ({
     setFilterValues,
     formattedFilterValues,
   }
+
+  useOutsideClick(closeSidebar)
 
   return (
     <DashboardContext.Provider value={contextValue}>

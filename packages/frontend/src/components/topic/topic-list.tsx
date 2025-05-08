@@ -27,9 +27,10 @@ import CardsOfTheYear, {
   type CardsOfTheYearProps,
 } from '@/components/sidebar/card'
 import { Issue, type IssueProps } from '@/components/sidebar/follow-more'
-import { type TabProps } from '@/components/sidebar/tab'
 import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
+// type
+import type { TabProps } from '@/components/sidebar/type'
 // constants
 import { InternalRoutes } from '@/constants/routes'
 // fetcher

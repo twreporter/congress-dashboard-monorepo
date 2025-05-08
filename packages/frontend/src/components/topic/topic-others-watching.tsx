@@ -68,7 +68,7 @@ const TopicOthersWatching: React.FC<TopicOthersWatchingProps> = ({
             )}`}
             key={`others-watching-tag-${index}`}
           >
-            <Issue name={`#${tag.title}`} />
+            <Issue name={`#${tag.title}`} slug={tag.slug} />
           </Link>
         ))}
       </TopicsContainer>
