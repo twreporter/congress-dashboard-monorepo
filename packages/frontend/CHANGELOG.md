@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0-rc.6, 2025-05-09
+
+### Notable Changes
+
+- chore
+  - change image & api host to new url
+
+### Commits
+
+- [[`7c83255781`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c83255781)] - Merge remote-tracking branch 'upstream/master' into chore/image-host (Lucien)
+- [[`3928ca6553`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3928ca6553)] - **chore(frontend)**: change image & api host to new url (Lucien)
+- [[`5bf26a6d19`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5bf26a6d19)] - **chore(frontend)**: change image & api host (Lucien)
+
 ## 1.0.0-rc.5, 2025-05-09
 
 ### Notable Changes
