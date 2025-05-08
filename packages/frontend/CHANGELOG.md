@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.0.0-rc.5, 2025-05-09
+
+### Notable Changes
+
+- feat
+  - add favicon and change site title
+  - add metadata for dynamic page
+- fix
+  - use internal route constant
+  - separate links and routes
+
+### Commits
+
+- [[`8add5dbc12`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8add5dbc12)] - Merge remote-tracking branch 'upstream/master' into feature/frontend-title-metadata (Lucien)
+- [[`7b31b58161`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b31b58161)] - **fix(frontend)**: separate links and routes (Lucien)
+- [[`fb83467970`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fb83467970)] - **fix(frontend)**: use internal route constant (Lucien)
+- [[`4a5b8f1ba8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4a5b8f1ba8)] - **feat(frontend)**: add metadata for dynamic page (Lucien)
+- [[`2dfff8c096`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2dfff8c096)] - **feat(frontend)**: add favicon and change site title (Lucien)
+
 ## 1.0.0-rc.4, 2025-05-08
 
 ### Notable Changes
