@@ -17,7 +17,7 @@ import origins from '@twreporter/core/lib/constants/request-origins'
 import Logo from '@/components/footer/logo'
 import FooterLink, { TextSize } from '@/components/footer/link'
 // constants
-import { InternalRoutes, ExternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes, ExternalRoutes } from '@/constants/routes'
 
 const StyledFooter = styled.footer`
   width: 100%;
@@ -144,7 +144,7 @@ const TabletAndBelowWithFlex = styled(TabletAndBelow)`
     display: flex !important;
   `}
 `
-
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
 const Footer: React.FC = () => {
   const BottomLinks = ({ releaseBranch = releaseBranchConsts.release }) => {
     const mainOrigin = origins.forClientSideRendering[releaseBranch].main
@@ -172,14 +172,14 @@ const Footer: React.FC = () => {
         <UpperContainer>
           <InfoContainer>
             {/* TODO: releaseBranch */}
-            <Logo releaseBranch={releaseBranchConsts.release} />
+            <Logo releaseBranch={releaseBranch} />
             <P2Gray600 text="台灣第一個由公益基金會成立的網路媒體，致力於公共領域調查報導，打造多元進步的媒體環境。" />
           </InfoContainer>
           <LinksContainer>
             <LinkGroup>
               <FooterLink
                 href={InternalRoutes.About}
-                text="關於儀表板"
+                text="關於觀測站"
                 target="_self"
               />
               <FooterLink
@@ -210,10 +210,10 @@ const Footer: React.FC = () => {
             <P3Gray600 text={fundraisingId} />
             <DesktopAndAboveWithFlex>
               <P3Gray600 text="｜" />
-              <BottomLinks releaseBranch={releaseBranchConsts.release} />
+              <BottomLinks releaseBranch={releaseBranch} />
             </DesktopAndAboveWithFlex>
             <TabletAndBelowWithFlex>
-              <BottomLinks releaseBranch={releaseBranchConsts.release} />
+              <BottomLinks releaseBranch={releaseBranch} />
             </TabletAndBelowWithFlex>
           </BottomSection>
           <BottomSection>

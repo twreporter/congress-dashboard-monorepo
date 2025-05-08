@@ -13,7 +13,7 @@ import { P1SupportiveHeavy, P2Gray600 } from '@/components/speech/styles'
 // components
 import IssueTag from '@/components/button/issue-tag'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 
 export const AsideInfoContainer = styled.div`
   display: flex;

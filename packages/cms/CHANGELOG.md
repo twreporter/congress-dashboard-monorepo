@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.7, 2025-05-09
+
+### Notable Changes
+
+- feat
+  - add favicon and change site title
+
+### Commits
+
+- [[`c806e3dab3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c806e3dab3)] - **feat(cms)**: add favicon and change site title (Lucien)
+
 ## 1.0.0-rc.6, 2025-05-08
 
 ### Notable Changes

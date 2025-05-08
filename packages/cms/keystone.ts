@@ -1,5 +1,6 @@
 import { config } from '@keystone-6/core'
 import express from 'express'
+import Path from 'path'
 import envVars from './environment-variables'
 import { listDefinition as lists } from './lists'
 import { withAuth, session } from './auth'
@@ -17,6 +18,15 @@ export default withAuth(
     ui: {
       // For our starter, we check that someone has session data before letting them see the Admin UI.
       isAccessAllowed: (context) => !!context.session?.data,
+      getAdditionalFiles: [
+        async () => [
+          {
+            mode: 'copy',
+            inputPath: Path.resolve('public/favicon.ico'),
+            outputPath: 'public/favicon.ico',
+          },
+        ],
+      ],
     },
     lists,
     session,

@@ -9,7 +9,7 @@ import {
 } from '@twreporter/core/lib/constants/color'
 import { P1, P2, P4 } from '@twreporter/react-components/lib/text/paragraph'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 
 // date stamp component
 const getDateFormat = (date: Date) => {
