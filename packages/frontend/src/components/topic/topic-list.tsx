@@ -31,7 +31,7 @@ import { type TabProps } from '@/components/sidebar/tab'
 import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 // fetcher
 import { fetchTopTopicsForLegislator } from '@/fetchers/topic'
 import { type SpeechData } from '@/fetchers/server/topic'

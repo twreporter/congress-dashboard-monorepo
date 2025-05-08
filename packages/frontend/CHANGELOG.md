@@ -1,5 +1,50 @@
 # Changelog
 
+## 1.0.0-rc.5, 2025-05-09
+
+### Notable Changes
+
+- feat
+  - add favicon and change site title
+  - add metadata for dynamic page
+- fix
+  - use internal route constant
+  - separate links and routes
+
+### Commits
+
+- [[`8add5dbc12`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8add5dbc12)] - Merge remote-tracking branch 'upstream/master' into feature/frontend-title-metadata (Lucien)
+- [[`7b31b58161`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b31b58161)] - **fix(frontend)**: separate links and routes (Lucien)
+- [[`fb83467970`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fb83467970)] - **fix(frontend)**: use internal route constant (Lucien)
+- [[`4a5b8f1ba8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4a5b8f1ba8)] - **feat(frontend)**: add metadata for dynamic page (Lucien)
+- [[`2dfff8c096`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2dfff8c096)] - **feat(frontend)**: add favicon and change site title (Lucien)
+
+## 1.0.0-rc.4, 2025-05-08
+
+### Notable Changes
+
+- chore
+  - update @twreporter packages
+
+### Commits
+
+- [[`eb0bf7b7f0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/eb0bf7b7f0)] - **chore(frontend)**: update @twreporter packages (Lucien)
+
+## 1.0.0-rc.3, 2025-05-07
+
+### Notable Changes
+
+- fix
+  - typo and speech page title 
+- chore
+  - update @twreporter packages
+
+### Commits
+
+- [[`4780890cf3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4780890cf3)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`e21051e087`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e21051e087)] - Merge remote-tracking branch 'upstream/master' into fix/frontend-typo (Lucien)
+- [[`58f4d40178`](https://github.com/twreporter/congress-dashboard-monorepo/commit/58f4d40178)] - **fix(frontend)**: typo and speech page title (Lucien)
+
 ## 1.0.0-rc.2, 2025-05-05
 
 ### Notable Changes

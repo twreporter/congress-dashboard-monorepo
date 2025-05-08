@@ -436,7 +436,7 @@ const importHandlers: Record<
             data: {
               title,
               speeches: {
-                set: speeches.map((speech) => ({ id: speech.id })),
+                connect: speeches.map((speech) => ({ id: speech.id })),
               },
             },
           })
@@ -695,7 +695,7 @@ const importHandlers: Record<
             where: { id: existingCommitteeMember.id },
             data: {
               committee: {
-                set: committees.map((committee) => ({ id: committee.id })),
+                connect: committees.map((committee) => ({ id: committee.id })),
               },
             },
           })
@@ -815,7 +815,7 @@ const listConfigurations = list({
     listView: {
       initialColumns: ['recordName', 'uploadData', 'createdAt', 'updatedAt'],
       initialSort: { field: 'id', direction: 'DESC' },
-      pageSize: 50,
+      pageSize: 5, // Set the limit to 5 to prevent long loading times.
     },
     hideDelete: ({ session }) => {
       const role = session?.data?.role

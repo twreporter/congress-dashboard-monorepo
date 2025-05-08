@@ -30,7 +30,7 @@ import { useLegislatorData } from '@/components/legislator/hooks/use-legislator-
 // custom hooks
 import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 
 type LegislatorProps = {
   legislatorData: LegislatorFromRes
