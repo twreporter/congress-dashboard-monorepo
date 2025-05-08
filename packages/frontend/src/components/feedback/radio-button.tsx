@@ -58,7 +58,7 @@ const SelectedIcon: FC<IconProps> = ({ disabled = false }) => {
             r="7.5"
             fill={colorGrayscale.white}
             stroke={colorSupportive.heavy}
-            stroke-width="5"
+            strokeWidth="5"
           />
         )}
         {disabled ? (

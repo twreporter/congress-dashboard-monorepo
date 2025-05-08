@@ -1,5 +1,3 @@
-'use client'
-
 // constants
 import { SNACK_BAR_ID } from '@/constants'
 

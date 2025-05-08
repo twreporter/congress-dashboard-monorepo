@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, MouseEvent } from 'react'
 import styled from 'styled-components'
 // component
 import RadioButton from '@/components/feedback/radio-button'
@@ -54,6 +54,7 @@ const Description = styled(P1)`
 type SelectCardProps = RadioButtonProps & {
   title: string
   description?: string
+  onChange: () => void | RadioButtonProps['onChange']
 }
 
 const SelectCard: FC<SelectCardProps> = ({
@@ -61,8 +62,19 @@ const SelectCard: FC<SelectCardProps> = ({
   description,
   ...radioProps
 }) => {
+  const select = (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (typeof radioProps.onChange === 'function') {
+      radioProps.onChange()
+    }
+  }
   return (
-    <Container $selected={radioProps.checked} $disabled={radioProps.disabled}>
+    <Container
+      $selected={radioProps.checked}
+      $disabled={radioProps.disabled}
+      onClick={select}
+    >
       <Radio {...radioProps} />
       <FlexColumn>
         <Title text={title} />
