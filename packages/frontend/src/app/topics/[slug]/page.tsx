@@ -6,6 +6,8 @@ import TopicPage from '@/components/topic'
 import { fetchTopic } from '@/fetchers/server/topic'
 // utils
 import { validateMeetingParams } from '@/utils/validate-meeting-params'
+// constants
+import { InternalRoutes } from '@/constants/routes'
 
 export const dynamicParams = true
 
@@ -32,10 +34,18 @@ export async function generateMetadata({
     notFound()
   }
 
-  const { title, speechesCount } = topic
+  const { title } = topic
   return {
-    title: `議題 - ${title}`,
-    description: `議題頁, ${speechesCount} 筆相關發言摘要`,
+    title: `議題｜${title} - 報導者觀測站`,
+    description: '報導者議會透視版',
+    alternates: {
+      canonical: `https://lawmaker.twreporter.org${InternalRoutes.Topic}/${slug}`,
+    },
+    openGraph: {
+      title: `議題｜${title} - 報導者觀測站`,
+      url: `https://lawmaker.twreporter.org${InternalRoutes.Topic}/${slug}`,
+      type: 'article',
+    },
   }
 }
 

@@ -18,7 +18,7 @@ import fetchLegislatorsOfATopic from '@/fetchers/legislator'
 import fetchTopicOfALegislator from '@/fetchers/topic'
 import useSpeech from '@/fetchers/speech'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 // components
 import TitleSection, {
   TitleSectionProps,

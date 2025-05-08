@@ -36,7 +36,7 @@ import FilterModal from '@/components/sidebar/filter-modal'
 // utils
 import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // lodash
