@@ -128,6 +128,7 @@ export type TopNTopicData = {
   speechCount: number
   legislatorCount: number
   legislators: {
+    id: number
     count: number
     name?: string
     slug: string
@@ -155,6 +156,7 @@ export const fetchTopNTopics = async ({
         speechCount
         title
         legislators {
+          id
           count
           name
           imageLink

@@ -56,13 +56,3 @@ export const mockLegislators = [
     slug: 'test-5',
   },
 ]
-
-export function mockGetIssue(slug?: string) {
-  console.log(`get mock issue for ${slug}`)
-  return mockIssueList
-}
-
-export function mockGetLegislator(slug?: string) {
-  console.log(`get mock legislator for ${slug}`)
-  return mockLegislators
-}

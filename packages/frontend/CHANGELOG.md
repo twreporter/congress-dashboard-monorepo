@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0-rc.7, 2025-05-09
+
+### Notable Changes
+
+- feat
+  - add more fetcher for home page
+
+### Commits
+
+- [[`3dc98714ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3dc98714ed)] - **fix(frontend)**: apply useOutsideClick in `@/hook` (Aylie Chou)
+- [[`20517860ec`](https://github.com/twreporter/congress-dashboard-monorepo/commit/20517860ec)] - **fix(frontend)**: address review comments (Aylie Chou)
+- [[`af61f17421`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af61f17421)] - **fix(frontend)**: resolve yarn build fail (Aylie Chou)
+- [[`54d7db8517`](https://github.com/twreporter/congress-dashboard-monorepo/commit/54d7db8517)] - **feat(frontend)**: add more fetcher for home page (Aylie Chou)
+
 ## 1.0.0-rc.6, 2025-05-09
 
 ### Notable Changes

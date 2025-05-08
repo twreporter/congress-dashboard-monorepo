@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.8, 2025-05-09
+
+### Notable Changes
+
+- fix
+  - add `id` for return data
+
+### Commits
+
+- [[`a41bb3cff5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a41bb3cff5)] - **fix(cms)**: add `id` for return data (Aylie Chou)
+
 ## 1.0.0-rc.7, 2025-05-09
 
 ### Notable Changes
