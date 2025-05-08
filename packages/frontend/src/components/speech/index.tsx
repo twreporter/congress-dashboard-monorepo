@@ -49,7 +49,7 @@ import { type SpeechFromRes } from '@/fetchers/server/speech'
 import { useSpeechData } from '@/components/speech/hooks/use-speech-data'
 import { useScrollStage } from '@/components/speech/hooks/use-scroll-stage'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 
 const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
   ${mq.desktopAndAbove`

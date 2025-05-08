@@ -15,7 +15,7 @@ import {
   EditorSelectType,
 } from '@/fetchers/server/editor-pickor'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'

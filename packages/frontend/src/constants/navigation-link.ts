@@ -1,20 +1,6 @@
 import { PillButton } from '@twreporter/react-components/lib/button'
 import { NavigationLink, PillBtnNavigationLink } from '@/types/navigation-link'
-
-export enum InternalRoutes {
-  Home = '/',
-  About = '/about',
-  Feedback = '/feedback', // TODO: need to change
-  Legislator = '/lawmaker',
-  Topic = '/topics',
-  Speech = '/a',
-}
-
-export enum ExternalRoutes {
-  Medium = 'https://medium.com/twreporter',
-  Subscription = 'https://www.twreporter.org/account/email-subscription',
-  Support = 'https://support.twreporter.org/',
-}
+import { InternalRoutes, ExternalRoutes } from '@/constants/routes'
 
 export const COMMON_MENU_LINKS: NavigationLink[] = [
   { text: '觀測站首頁', href: InternalRoutes.Home, target: '_self' },

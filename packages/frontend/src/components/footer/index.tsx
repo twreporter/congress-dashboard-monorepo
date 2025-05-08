@@ -17,7 +17,7 @@ import origins from '@twreporter/core/lib/constants/request-origins'
 import Logo from '@/components/footer/logo'
 import FooterLink, { TextSize } from '@/components/footer/link'
 // constants
-import { InternalRoutes, ExternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes, ExternalRoutes } from '@/constants/routes'
 
 const StyledFooter = styled.footer`
   width: 100%;

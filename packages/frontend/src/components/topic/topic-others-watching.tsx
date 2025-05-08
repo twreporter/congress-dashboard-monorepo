@@ -9,7 +9,7 @@ import mq from '@twreporter/core/lib/utils/media-query'
 import { H4Title } from '@/components/topic/styles'
 import { Issue } from '@/components/sidebar/follow-more'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 
 const OthersWatchingBlock = styled.div`
   display: flex;

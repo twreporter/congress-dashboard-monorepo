@@ -12,7 +12,7 @@ import LegislatorPage from '@/components/legislator'
 // utils
 import { validateMeetingParams } from '@/utils/validate-meeting-params'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 
 export const dynamicParams = true
 

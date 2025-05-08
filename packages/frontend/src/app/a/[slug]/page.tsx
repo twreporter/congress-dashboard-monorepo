@@ -5,7 +5,7 @@ import SpeechPage from '@/components/speech'
 // fetcher
 import { fetchSpeech, fetchSpeechGroup } from '@/fetchers/server/speech'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 
 export const dynamicParams = true
 
