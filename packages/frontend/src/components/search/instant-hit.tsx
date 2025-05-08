@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
-import { Highlight } from 'react-instantsearch'
+import { Highlight, Snippet } from 'react-instantsearch'
 import { Issue as IconIssue } from '@/components/search/icons'
 import {
   colorGrayscale,
@@ -41,6 +41,7 @@ export type TopicRawHit = Hit<{
   shortDesc: string
   latestSpeechAt?: string
   href: string
+  relatedMessageCount: number
 }>
 
 const Avatar = styled.div`
@@ -93,7 +94,7 @@ const InstantHitContainer = styled.div`
     background-color: ${colorGrayscale.gray100};
   }
 
-  /* overwrite InstantSearch Highlight styles */
+  /* overwrite InstantSearch Highlight and Snippet styles */
   .ais-Highlight {
     font-size: 16px;
     font-weight: 700;
@@ -101,8 +102,9 @@ const InstantHitContainer = styled.div`
     color: ${colorGrayscale.gray800};
   }
 
-  /* overwrite InstantSearch Highlight styles */
-  .ais-Highlight-highlighted {
+  /* overwrite InstantSearch Highlight and Snippet styles */
+  .ais-Highlight-highlighted,
+  .ais-Snippet-highlighted {
     color: ${colorSupportive.heavy};
   }
 
@@ -138,8 +140,10 @@ export function InstantTopicHit({ hit }: { hit: TopicRawHit }) {
       </Avatar>
       <Text>
         <Highlight highlightedTagName="span" attribute="name" hit={hit} />
-        {/* TODO: use Snippet to truncate text and highlight keyword */}
-        <p>{hit.shortDesc}</p>
+        <p>
+          <span>共{hit.relatedMessageCount}筆相關留言，</span>
+          <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
+        </p>
       </Text>
     </InstantHitContainer>
   )
