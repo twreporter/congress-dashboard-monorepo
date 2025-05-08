@@ -21,11 +21,11 @@ import { Hamburger, Cross } from '@twreporter/react-components/lib/icon'
 import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import { Search as SearchIcon } from '@twreporter/react-components/lib/icon'
 import { SearchBar } from '@twreporter/react-components/lib/input'
-import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
 // hooks
 import useWindowWidth from '@/hooks/use-window-width'
+import useOutsideClick from '@/hooks/use-outside-click'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
@@ -177,7 +177,9 @@ const Header: React.FC = () => {
     if (!ref.current) {
       return
     }
-    const input = ref.current.getElementsByTagName('INPUT')[0]
+    const input = ref.current.getElementsByTagName(
+      'INPUT'
+    )[0] as HTMLInputElement
     if (input) {
       input.focus()
     }

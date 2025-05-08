@@ -2,6 +2,8 @@
 
 import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
+// hook
+import useOutsideClick from '@/hooks/use-outside-click'
 // @twreporter
 import {
   colorGrayscale,
@@ -9,7 +11,6 @@ import {
 } from '@twreporter/core/lib/constants/color'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import mq from '@twreporter/core/lib/utils/media-query'
-import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 // lodash
 import throttle from 'lodash/throttle'
 const _ = {
