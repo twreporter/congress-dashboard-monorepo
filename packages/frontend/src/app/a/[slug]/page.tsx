@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation'
 import SpeechPage from '@/components/speech'
 // fetcher
 import { fetchSpeech, fetchSpeechGroup } from '@/fetchers/server/speech'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 
 export const dynamicParams = true
 
@@ -26,11 +28,11 @@ export async function generateMetadata({
     title: `逐字稿｜${name}：${titleForMetaData} - 報導者觀測站`,
     description: '報導者議會透視版',
     alternates: {
-      canonical: `https://lawmaker.twreporter/a/${slug}`,
+      canonical: `https://lawmaker.twreporter${InternalRoutes.Speech}/${slug}`,
     },
     openGraph: {
       title: `逐字稿｜${name}：${titleForMetaData} - 報導者觀測站`,
-      url: `https://lawmaker.twreporter/a/${slug}`,
+      url: `https://lawmaker.twreporter${InternalRoutes.Speech}/${slug}`,
       type: 'article',
     },
   }

@@ -11,6 +11,8 @@ import {
 import LegislatorPage from '@/components/legislator'
 // utils
 import { validateMeetingParams } from '@/utils/validate-meeting-params'
+// constants
+import { InternalRoutes } from '@/constants/navigation-link'
 
 export const dynamicParams = true
 
@@ -43,11 +45,11 @@ export async function generateMetadata({
     title: `立委｜${data?.legislator.name} - 報導者觀測站`,
     description: '報導者議會透視版',
     alternates: {
-      canonical: `https://lawmaker.twreporter.org/lawmaker/${slug}`,
+      canonical: `https://lawmaker.twreporter.org${InternalRoutes.Legislator}/${slug}`,
     },
     openGraph: {
       title: `立委｜${data?.legislator.name} - 報導者觀測站`,
-      url: `https://lawmaker.twreporter.org/lawmaker/${slug}`,
+      url: `https://lawmaker.twreporter.org${InternalRoutes.Legislator}/${slug}`,
       type: 'profile',
     },
   }
