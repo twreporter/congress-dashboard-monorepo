@@ -14,10 +14,9 @@ import { SearchModal } from '@/components/search/modal'
 import { ZIndex } from '@/styles/z-index'
 import { liteClient as algoliasearch } from 'algoliasearch/lite'
 
-// TODO: move to constants file and read them from environment variables
 const algoliaConfig = {
-  appID: 'V2C76WIIQK',
-  searchAPIKey: '7d7fdff9202f5e67c6435f9613be11d9',
+  appID: process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || '',
+  searchAPIKey: process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY || '',
 }
 
 const searchClient = algoliasearch(
