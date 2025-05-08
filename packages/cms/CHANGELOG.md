@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.6, 2025-05-08
+
+### Notable Changes
+
+- chore
+  - update @twreporter packages
+
+### Commits
+
+- [[`bc37ad574e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bc37ad574e)] - **chore(cms)**: update @twreporter packages (Lucien)
+
 ## 1.0.0-rc.5, 2025-05-07
 
 ### Notable Changes
