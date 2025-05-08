@@ -2,18 +2,18 @@ import useSWR from 'swr'
 // util
 import { sortByCountDesc } from '@/fetchers/utils'
 
-type committeeForReturn = {
+type CommitteeForReturn = {
   count: number
   name: string
 }
-type committeeData = {
+type CommitteeData = {
   committee: {
     name: string
     slug: string
   }[]
   committeeCount: number
 }
-export type stateType<T> = {
+type StateType<T> = {
   committees: T[]
   isLoading: boolean
   error?: Error
@@ -76,9 +76,9 @@ const fetchCommitteeMember = async ({
     return []
   }
 
-  type GroupedData = Record<string, committeeForReturn>
+  type GroupedData = Record<string, CommitteeForReturn>
   const committeeGrouped: GroupedData = committee.reduce(
-    (acc, { committee }: committeeData) => {
+    (acc, { committee }: CommitteeData) => {
       if (!committee || committee.length === 0) {
         return acc
       }
@@ -99,7 +99,7 @@ const fetchCommitteeMember = async ({
 }
 const useCommitteeMember = (
   params?: FetchCommitteeMemberParams
-): stateType<committeeForReturn> => {
+): StateType<CommitteeForReturn> => {
   const { data, isLoading, error } = useSWR(
     params ? params : null,
     fetchCommitteeMember

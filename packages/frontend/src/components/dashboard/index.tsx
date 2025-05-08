@@ -9,7 +9,7 @@ import type { partyData } from '@/fetchers/party'
 import type { LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
 import type { SidebarIssueProps } from '@/components/sidebar'
 import type { Legislator } from '@/components/dashboard/type'
-import type { FilterModalValueType } from './type'
+import type { FilterModalValueType } from '@/components/dashboard/type'
 // utils
 import toastr from '@/utils/toastr'
 // enum

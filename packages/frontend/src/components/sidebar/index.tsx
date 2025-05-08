@@ -183,7 +183,9 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 
   const fetchFilterOptions = (legislatorSlug: string) => {
     if (!formattedFilterValues) {
-      throw `Failed to fetch filter options. err: filter value undefined.`
+      throw new Error(
+        `Failed to fetch filter options. err: filter value undefined.`
+      )
     }
     return fetchLegislatorsOfATopic({
       slug: legislatorSlug,
@@ -369,7 +371,9 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
 
   const fetchFilterOptions = (legislatorSlug: string) => {
     if (!formattedFilterValues) {
-      throw `Failed to fetch filter options. err: filter value undefined.`
+      throw new Error(
+        `Failed to fetch filter options. err: filter value undefined.`
+      )
     }
     return fetchTopicOfALegislator({
       slug: legislatorSlug,
