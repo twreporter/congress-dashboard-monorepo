@@ -28,11 +28,11 @@ export async function generateMetadata({
     title: `逐字稿｜${name}：${titleForMetaData} - 報導者觀測站`,
     description: '報導者議會透視版',
     alternates: {
-      canonical: `https://lawmaker.twreporter${InternalRoutes.Speech}/${slug}`,
+      canonical: `https://lawmaker.twreporter.org${InternalRoutes.Speech}/${slug}`,
     },
     openGraph: {
       title: `逐字稿｜${name}：${titleForMetaData} - 報導者觀測站`,
-      url: `https://lawmaker.twreporter${InternalRoutes.Speech}/${slug}`,
+      url: `https://lawmaker.twreporter.org${InternalRoutes.Speech}/${slug}`,
       type: 'article',
     },
   }
