@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.9, 2025-05-09
+
+### Notable Changes
+
+- fix
+  - hide attendee & topic if empty
+
+### Commits
+
+- [[`9d5db23aff`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9d5db23aff)] - **fix(frontend)**: hide attendee & topic if empty (Lucien)
+
 ## 1.0.0-rc.8, 2025-05-09
 
 ### Notable Changes

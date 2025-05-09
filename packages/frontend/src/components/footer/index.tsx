@@ -171,7 +171,6 @@ const Footer: React.FC = () => {
       <FooterSection>
         <UpperContainer>
           <InfoContainer>
-            {/* TODO: releaseBranch */}
             <Logo releaseBranch={releaseBranch} />
             <P2Gray600 text="台灣第一個由公益基金會成立的網路媒體，致力於公共領域調查報導，打造多元進步的媒體環境。" />
           </InfoContainer>
