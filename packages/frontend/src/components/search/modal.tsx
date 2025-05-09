@@ -8,7 +8,7 @@ import { SearchBox } from '@/components/search/search-box'
 import { LayoutVariants } from '@/components/search/constants'
 import { ZIndex } from '@/styles/z-index'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import { useScrollLock } from '@/hooks/use-scroll-lock'
+import { useBodyScrollLock } from '@/hooks/use-scroll-lock'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
@@ -38,7 +38,10 @@ export const SearchModal = ({
   onClose: () => void
 }) => {
   // Lock body scroll
-  useScrollLock(true)
+  useBodyScrollLock({
+    toLock: true,
+    lockID: 'search-modal',
+  })
 
   return ReactDOM.createPortal(
     <Overlay className={className}>
