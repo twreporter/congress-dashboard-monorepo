@@ -196,6 +196,7 @@ export const ControlTab = styled.div<{ $isHeaderAbove?: boolean }>`
 export const DateAndTitle = styled.div`
   display: flex;
   flex-direction: row;
+  overflow: hidden;
   gap: 12px;
   ${mq.mobileOnly`
     width: 100%;
