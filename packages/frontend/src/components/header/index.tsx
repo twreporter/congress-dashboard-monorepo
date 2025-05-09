@@ -28,7 +28,7 @@ import {
 import HamburgerMenu from '@/components/hamburger-menu'
 // hooks
 import useWindowWidth from '@/hooks/use-window-width'
-import { useScrollLock } from '@/hooks/use-scroll-lock'
+import { useBodyScrollLock } from '@/hooks/use-scroll-lock'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
@@ -156,7 +156,10 @@ const Header: React.FC = () => {
   }, [])
 
   // Handle body scroll lock
-  useScrollLock(isHamburgerOpen)
+  useBodyScrollLock({
+    toLock: isHamburgerOpen,
+    lockID: 'hambuger',
+  })
 
   useEffect(() => {
     if (windowWidth >= DEFAULT_SCREEN.tablet.minWidth) {

@@ -1,14 +1,23 @@
 import { useEffect } from 'react'
 
-export const useScrollLock = (lock?: boolean) => {
+export const useBodyScrollLock = ({
+  toLock,
+  lockID = '',
+}: {
+  toLock: boolean
+  lockID?: string
+}) => {
   useEffect(() => {
-    if (lock) {
-      document.body.style.overflow = 'hidden'
+    const className = lockID ? `scroll-lock--${lockID}` : `scroll-lock`
+
+    if (toLock) {
+      document.body.classList.add(className)
     } else {
-      document.body.style.overflow = 'unset'
+      document.body.classList.remove(className)
     }
+
     return () => {
-      document.body.style.overflow = 'unset'
+      document.body.classList.remove(className)
     }
-  }, [lock])
+  }, [toLock, lockID])
 }
