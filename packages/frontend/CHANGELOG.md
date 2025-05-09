@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.8, 2025-05-09
+
+### Notable Changes
+
+- fix
+  - add overflow hidden for title
+
+### Commits
+
+- [[`11b5c30734`](https://github.com/twreporter/congress-dashboard-monorepo/commit/11b5c30734)] - **fix(frontend)**: add overflow hidden for title (Lucien)
+
 ## 1.0.0-rc.7, 2025-05-09
 
 ### Notable Changes
