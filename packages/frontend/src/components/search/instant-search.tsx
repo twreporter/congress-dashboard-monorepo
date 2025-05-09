@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import useWindowWidth from '@/hooks/use-window-width'
 import styled from 'styled-components'
 import type { LayoutVariant } from '@/components/search/constants'
@@ -13,16 +13,6 @@ import { SearchBox } from '@/components/search/search-box'
 import { SearchModal } from '@/components/search/modal'
 import { ZIndex } from '@/styles/z-index'
 import { liteClient as algoliasearch } from 'algoliasearch/lite'
-
-const algoliaConfig = {
-  appID: process.env.NEXT_PUBLIC_ALGOLIA_APP_ID || '',
-  searchAPIKey: process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY || '',
-}
-
-const searchClient = algoliasearch(
-  algoliaConfig.appID,
-  algoliaConfig.searchAPIKey
-)
 
 export { LayoutVariants }
 
@@ -101,6 +91,25 @@ export const AlgoliaInstantSearch = ({
   const [focused, setFocused] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const windowWidth = useWindowWidth()
+
+  const searchClient = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return null // Don't init on server
+    }
+    const appID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID
+    const searchKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY
+
+    if (!appID || !searchKey) {
+      console.warn('Missing Algolia credentials')
+      return null
+    }
+
+    return algoliasearch(appID, searchKey)
+  }, [])
+
+  if (!searchClient) {
+    return null // Avoid render if client not ready
+  }
 
   if (isModalOpen) {
     return (
