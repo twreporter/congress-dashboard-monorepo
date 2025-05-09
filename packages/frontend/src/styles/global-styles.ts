@@ -11,6 +11,10 @@ const GlobalStyles = createGlobalStyle`
     margin-top: 64px; // header height
   }
 
+  body.scroll-lock, body[class*='scroll-lock--'] {
+    overflow: hidden;
+  }
+
   @media print {
     .hidden-print {
       display: none !important;
