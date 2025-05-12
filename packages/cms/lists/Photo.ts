@@ -18,8 +18,8 @@ const listConfigurations = list({
     imageFile: image({
       storage: 'images',
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: 'Photos',

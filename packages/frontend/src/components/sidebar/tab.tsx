@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 // components
 import { ImageWithSkeleton, CircleRaw } from '@/components/skeleton'
+// type
+import { TabProps } from '@/components/sidebar/type'
 // twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 import {
@@ -36,16 +38,6 @@ const Box = styled.div<{ $active: boolean }>`
   `}
 `
 
-export type TabProps = {
-  slug?: string
-  name?: string
-  count?: number
-  avatar?: string
-  showAvatar?: boolean
-  selected?: boolean
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void
-  className?: string
-}
 const Tab: React.FC<TabProps> = ({
   name = '',
   count = 0,

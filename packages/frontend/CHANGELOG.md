@@ -1,5 +1,99 @@
 # Changelog
 
+## 1.0.0-rc.9, 2025-05-09
+
+### Notable Changes
+
+- fix
+  - hide attendee & topic if empty
+
+### Commits
+
+- [[`9d5db23aff`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9d5db23aff)] - **fix(frontend)**: hide attendee & topic if empty (Lucien)
+
+## 1.0.0-rc.8, 2025-05-09
+
+### Notable Changes
+
+- fix
+  - add overflow hidden for title
+
+### Commits
+
+- [[`11b5c30734`](https://github.com/twreporter/congress-dashboard-monorepo/commit/11b5c30734)] - **fix(frontend)**: add overflow hidden for title (Lucien)
+
+## 1.0.0-rc.7, 2025-05-09
+
+### Notable Changes
+
+- feat
+  - add more fetcher for home page
+
+### Commits
+
+- [[`3dc98714ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3dc98714ed)] - **fix(frontend)**: apply useOutsideClick in `@/hook` (Aylie Chou)
+- [[`20517860ec`](https://github.com/twreporter/congress-dashboard-monorepo/commit/20517860ec)] - **fix(frontend)**: address review comments (Aylie Chou)
+- [[`af61f17421`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af61f17421)] - **fix(frontend)**: resolve yarn build fail (Aylie Chou)
+- [[`54d7db8517`](https://github.com/twreporter/congress-dashboard-monorepo/commit/54d7db8517)] - **feat(frontend)**: add more fetcher for home page (Aylie Chou)
+
+## 1.0.0-rc.6, 2025-05-09
+
+### Notable Changes
+
+- chore
+  - change image & api host to new url
+
+### Commits
+
+- [[`7c83255781`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c83255781)] - Merge remote-tracking branch 'upstream/master' into chore/image-host (Lucien)
+- [[`3928ca6553`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3928ca6553)] - **chore(frontend)**: change image & api host to new url (Lucien)
+- [[`5bf26a6d19`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5bf26a6d19)] - **chore(frontend)**: change image & api host (Lucien)
+
+## 1.0.0-rc.5, 2025-05-09
+
+### Notable Changes
+
+- feat
+  - add favicon and change site title
+  - add metadata for dynamic page
+- fix
+  - use internal route constant
+  - separate links and routes
+
+### Commits
+
+- [[`8add5dbc12`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8add5dbc12)] - Merge remote-tracking branch 'upstream/master' into feature/frontend-title-metadata (Lucien)
+- [[`7b31b58161`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b31b58161)] - **fix(frontend)**: separate links and routes (Lucien)
+- [[`fb83467970`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fb83467970)] - **fix(frontend)**: use internal route constant (Lucien)
+- [[`4a5b8f1ba8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4a5b8f1ba8)] - **feat(frontend)**: add metadata for dynamic page (Lucien)
+- [[`2dfff8c096`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2dfff8c096)] - **feat(frontend)**: add favicon and change site title (Lucien)
+
+## 1.0.0-rc.4, 2025-05-08
+
+### Notable Changes
+
+- chore
+  - update @twreporter packages
+
+### Commits
+
+- [[`eb0bf7b7f0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/eb0bf7b7f0)] - **chore(frontend)**: update @twreporter packages (Lucien)
+
+## 1.0.0-rc.3, 2025-05-07
+
+### Notable Changes
+
+- fix
+  - typo and speech page title 
+- chore
+  - update @twreporter packages
+
+### Commits
+
+- [[`4780890cf3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4780890cf3)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`e21051e087`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e21051e087)] - Merge remote-tracking branch 'upstream/master' into fix/frontend-typo (Lucien)
+- [[`58f4d40178`](https://github.com/twreporter/congress-dashboard-monorepo/commit/58f4d40178)] - **fix(frontend)**: typo and speech page title (Lucien)
+
 ## 1.0.0-rc.2, 2025-05-05
 
 ### Notable Changes

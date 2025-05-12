@@ -22,8 +22,8 @@ const listConfigurations = list({
     imageLink: text({
       label: 'ImageLink',
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '政黨',

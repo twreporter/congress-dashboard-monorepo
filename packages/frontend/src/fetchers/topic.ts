@@ -100,6 +100,7 @@ export const fetchTopNTopics = async ({
         speechCount
         title
         legislators {
+          id
           count
           name
           imageLink
@@ -149,39 +150,60 @@ export type TopicForFilter = {
   count: number
 }
 
-const fetchTopicOfALegislator = async (legislatorSlug: string) => {
+type FetchTopicOfALegislatorParams = {
+  slug: string
+  legislativeMeetingId: number
+  legislativeMeetingSessionIds?: number[]
+}
+
+export const fetchTopicOfALegislator = async ({
+  slug,
+  legislativeMeetingId,
+  legislativeMeetingSessionIds,
+}: FetchTopicOfALegislatorParams) => {
   const url = process.env.NEXT_PUBLIC_API_URL as string
+  const query = `
+    query GetTopicOfALegislator($speechesWhere: SpeechWhereInput!) {
+      topics {
+        slug
+        title
+        speechesCount(where: $speechesWhere)
+      }
+    }
+  `
+  const variables = {
+    speechesWhere: {
+      legislativeYuanMember: {
+        legislator: {
+          slug: {
+            equals: slug,
+          },
+        },
+      },
+      legislativeMeeting: {
+        id: {
+          equals: legislativeMeetingId,
+        },
+      },
+    },
+  }
+  if (legislativeMeetingSessionIds && legislativeMeetingSessionIds.length > 0) {
+    variables.speechesWhere['legislativeMeetingSession'] = {
+      id: {
+        in: legislativeMeetingSessionIds,
+      },
+    }
+  }
   const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      query: `
-        query GetTopicOfALegislator($speechesWhere: SpeechWhereInput!) {
-          topics {
-            slug
-            title
-            speechesCount(where: $speechesWhere)
-          }
-        }
-      `,
-      variables: {
-        speechesWhere: {
-          legislativeYuanMember: {
-            legislator: {
-              slug: {
-                equals: legislatorSlug,
-              },
-            },
-          },
-        },
-      },
-    }),
+    body: JSON.stringify({ query, variables }),
   })
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch topics of a legislator: ${legislatorSlug}`)
+    throw new Error(`Failed to fetch topics of a legislator: ${slug}`)
   }
   const data = await res.json()
 
@@ -197,5 +219,3 @@ const fetchTopicOfALegislator = async (legislatorSlug: string) => {
     .sort(sortByCountDesc)
   return topicOrderBySpeechCount
 }
-
-export default fetchTopicOfALegislator

@@ -7,7 +7,9 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { DesktopAndAbove } from '@twreporter/react-components/lib/rwd'
 // components
-import Tab, { type TabProps } from '@/components/sidebar/tab'
+import Tab from '@/components/sidebar/tab'
+// type
+import type { TabProps } from '@/components/sidebar/type'
 
 const TabGroup = styled.div`
   display: flex;

@@ -35,8 +35,8 @@ const listConfigurations = list({
       label: '委員會',
       many: true,
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '立法院屆期',

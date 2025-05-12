@@ -436,7 +436,7 @@ const importHandlers: Record<
             data: {
               title,
               speeches: {
-                set: speeches.map((speech) => ({ id: speech.id })),
+                connect: speeches.map((speech) => ({ id: speech.id })),
               },
             },
           })
@@ -695,7 +695,7 @@ const importHandlers: Record<
             where: { id: existingCommitteeMember.id },
             data: {
               committee: {
-                set: committees.map((committee) => ({ id: committee.id })),
+                connect: committees.map((committee) => ({ id: committee.id })),
               },
             },
           })
@@ -791,6 +791,7 @@ const listConfigurations = list({
       label: '紀錄名稱',
       validation: { isRequired: true },
       ui: { itemView: { fieldMode: 'edit' } },
+      isOrderable: false,
     }),
     uploadData: uploader({
       label: '上傳資料',
@@ -804,8 +805,8 @@ const listConfigurations = list({
         createView: { fieldMode: 'hidden' },
       },
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT({ isOrderable: false }),
+    updatedAt: UPDATED_AT({ isOrderable: false }),
   },
 
   ui: {
@@ -813,8 +814,8 @@ const listConfigurations = list({
     labelField: 'recordName',
     listView: {
       initialColumns: ['recordName', 'uploadData', 'createdAt', 'updatedAt'],
-      initialSort: { field: 'createdAt', direction: 'DESC' },
-      pageSize: 50,
+      initialSort: { field: 'id', direction: 'DESC' },
+      pageSize: 5, // Set the limit to 5 to prevent long loading times.
     },
     hideDelete: ({ session }) => {
       const role = session?.data?.role
@@ -840,7 +841,7 @@ const listConfigurations = list({
     resolveInput: {
       create: ({ resolvedData, context }) => {
         const { session } = context
-        resolvedData.importer = { connect: { id: session.itemId } }
+        resolvedData.importer = { connect: { id: Number(session.itemId) } }
         return resolvedData
       },
     },

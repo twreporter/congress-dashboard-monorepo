@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
+// hook
+import useOutsideClick from '@/hooks/use-outside-click'
 // @twreporter
-import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 import type { SingleSelectProps, Option } from './types'
 import { DropdownMenu } from './dropdown-menu'
 import { isOptionGroup } from './utils'
