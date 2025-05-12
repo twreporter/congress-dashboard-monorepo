@@ -32,8 +32,8 @@ const listConfigurations = list({
         labelField: 'name',
       },
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '委員會屆資',

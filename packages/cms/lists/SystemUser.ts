@@ -46,8 +46,8 @@ const listConfigurations = list({
       ],
       validation: { isRequired: true },
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     isHidden: ({ session }) => {

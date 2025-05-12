@@ -13,8 +13,16 @@ import SnackBar from '@/components/snack-bar'
 import { ScrollProvider } from '@/contexts/scroll-context'
 
 export const metadata: Metadata = {
-  title: 'Twreporter Congress Dashboard',
+  title: '報導者觀測站：一起監督立委議員問政',
   description: '報導者議會透視版',
+  alternates: {
+    canonical: 'https://lawmaker.twreporter.org',
+  },
+  openGraph: {
+    title: '報導者觀測站：一起監督立委議員問政',
+    url: 'https://lawmaker.twreporter.org',
+    type: 'article',
+  },
 }
 
 export default function RootLayout({

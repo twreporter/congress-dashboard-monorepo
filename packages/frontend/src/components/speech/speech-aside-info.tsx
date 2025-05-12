@@ -13,7 +13,7 @@ import { P1SupportiveHeavy, P2Gray600 } from '@/components/speech/styles'
 // components
 import IssueTag from '@/components/button/issue-tag'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 
 export const AsideInfoContainer = styled.div`
   display: flex;
@@ -97,13 +97,13 @@ export const SlashIcon = () => (
 
 type AsideInfoProps = {
   legislator: { name: string; slug: string }
-  attendee: string
-  relatedTopics: { title: string; slug: string }[]
+  attendee?: string
+  relatedTopics?: { title: string; slug: string }[]
 }
 const AsideInfo: React.FC<AsideInfoProps> = ({
   legislator,
   attendee,
-  relatedTopics,
+  relatedTopics = [],
 }) => {
   return (
     <AsideInfoContainer>
@@ -117,15 +117,20 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
             <P1SupportiveHeavy text={legislator.name} />
           </Link>
         </LegislatorBlock>
-        <P2Gray600 text={attendee} />
+        {attendee ? <P2Gray600 text={`列席質詢對象／${attendee}`} /> : null}
       </LegislatorAndAttendeeBlock>
-      <IssueTagsBlock>
-        {relatedTopics.map((topic) => (
-          <Link href={`${InternalRoutes.Topic}/${topic.slug}`} key={topic.slug}>
-            <IssueTag text={topic.title} />
-          </Link>
-        ))}
-      </IssueTagsBlock>
+      {relatedTopics.length > 0 ? (
+        <IssueTagsBlock>
+          {relatedTopics.map((topic) => (
+            <Link
+              href={`${InternalRoutes.Topic}/${topic.slug}`}
+              key={topic.slug}
+            >
+              <IssueTag text={topic.title} />
+            </Link>
+          ))}
+        </IssueTagsBlock>
+      ) : null}
     </AsideInfoContainer>
   )
 }

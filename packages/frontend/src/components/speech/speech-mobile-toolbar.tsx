@@ -2,6 +2,8 @@
 import React, { useState, createContext, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
+// hook
+import useOutsideClick from '@/hooks/use-outside-click'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { IconWithTextButton } from '@twreporter/react-components/lib/button'
@@ -17,7 +19,6 @@ import {
   Report,
   Switch,
 } from '@twreporter/react-components/lib/icon'
-import useOutsideClick from '@twreporter/react-components/lib/hook/use-outside-click'
 // components
 import TabBarButton from '@/components/button/tab-bar-button'
 // toastr

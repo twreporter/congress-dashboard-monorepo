@@ -145,7 +145,7 @@ const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
         <CountInfo>
           <CountInfoTitle>
             <P1Gray800 text="提案通過數" />
-            <Tooltip tooltip="僅統計所選屆期的主提案通過數" />
+            <Tooltip tooltip="僅統計所選屆期的主提法案三讀通過數" />
           </CountInfoTitle>
           <CountInfoValue $isOverMaxNumber={isOverMaxCount}>
             {proposalSuccessCount > 999 ? '999+' : proposalSuccessCount}

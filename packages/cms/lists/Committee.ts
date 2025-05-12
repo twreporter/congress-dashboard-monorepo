@@ -29,8 +29,8 @@ const listConfigurations = list({
       ],
       isIndexed: true,
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '委員會',

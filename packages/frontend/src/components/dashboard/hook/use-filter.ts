@@ -37,8 +37,9 @@ const useFilter = (meetings) => {
             Number(idString)
           )
     const constituency = filterValues.constituency as string[]
+    const committeeSlugs = filterValues.committee as string[]
 
-    return { meetingId, sessionIds, partyIds, constituency }
+    return { meetingId, sessionIds, partyIds, constituency, committeeSlugs }
   }
 
   const formattedFilterValues = useMemo(

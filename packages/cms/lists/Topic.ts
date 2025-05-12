@@ -50,8 +50,8 @@ const listConfigurations = list({
         views: './lists/views/related-article',
       },
     }),
-    createdAt: CREATED_AT,
-    updatedAt: UPDATED_AT,
+    createdAt: CREATED_AT(),
+    updatedAt: UPDATED_AT(),
   },
   ui: {
     label: '議題',

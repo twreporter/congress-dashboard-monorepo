@@ -15,7 +15,7 @@ import {
   EditorSelectType,
 } from '@/fetchers/server/editor-pickor'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
@@ -42,7 +42,7 @@ const Box = styled.div`
 `
 const Title = styled.div`
   font-size: 48px;
-  text-alignment: center;
+  text-align: center;
   color: ${colorGrayscale.gray900};
 
   ${mq.tabletOnly`

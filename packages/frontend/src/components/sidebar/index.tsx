@@ -5,20 +5,23 @@ import React, {
   useMemo,
   useState,
   useContext,
-  useRef,
   RefAttributes,
 } from 'react'
 import styled from 'styled-components'
-// mock config
-import { mockGetIssue, mockGetLegislator } from '@/components/sidebar/config'
 // context
 import { DashboardContext } from '@/components/dashboard/context'
 // fetcher
-import fetchLegislatorsOfATopic from '@/fetchers/legislator'
-import fetchTopicOfALegislator from '@/fetchers/topic'
+import { fetchLegislatorsOfATopic } from '@/fetchers/legislator'
+import { fetchTopicOfALegislator } from '@/fetchers/topic'
 import useSpeech from '@/fetchers/speech'
+import useCommitteeMember from '@/fetchers/committee-member'
+// hook
+import {
+  useMoreTopics,
+  useMoreLegislators,
+} from '@/components/sidebar/hook/use-follow-more'
 // constants
-import { InternalRoutes } from '@/constants/navigation-link'
+import { InternalRoutes } from '@/constants/routes'
 // components
 import TitleSection, {
   TitleSectionProps,
@@ -37,6 +40,7 @@ import FilterModal from '@/components/sidebar/filter-modal'
 import { Loader } from '@/components/loader'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
+import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import {
   colorGrayscale,
   colorOpacity,
@@ -117,7 +121,7 @@ export function groupSummary(summaryList: SummaryCardProps[]) {
 export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
   count: TitleSectionProps['count']
-  legislatorList?: TitleSectionProps['tabs']
+  legislatorList?: TitleSectionProps['tabs'] & { id?: number }
   slug: string
   onClose?: () => void
   className?: string
@@ -138,10 +142,6 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   const selectedLegislator = useMemo(
     () => _.get(tabList, selectedTab),
     [tabList, selectedTab]
-  )
-  const issueList: IssueProps[] = useMemo(
-    () => (selectedLegislator ? mockGetIssue(selectedLegislator.slug) : []),
-    [selectedLegislator]
   )
   const followMoreTitle: string = useMemo(
     () => `${_.get(selectedLegislator, ['name'], '')} 近期關注的五大議題：`,
@@ -166,12 +166,39 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
     () => groupSummary(summaryList),
     [summaryList]
   )
+  const followMoreState = useMoreTopics(
+    formattedFilterValues && selectedLegislator && selectedLegislator.id
+      ? {
+          legislatorId: selectedLegislator.id,
+          excluideTopicSlug: slug,
+          legislativeMeetingId: formattedFilterValues?.meetingId,
+          legislativeMeetingSessionIds: formattedFilterValues?.sessionIds,
+        }
+      : undefined
+  )
+  const issueList: IssueProps[] = useMemo(
+    () => followMoreState.topics || [],
+    [followMoreState.topics]
+  )
+
+  const fetchFilterOptions = (legislatorSlug: string) => {
+    if (!formattedFilterValues) {
+      throw new Error(
+        `Failed to fetch filter options. err: filter value undefined.`
+      )
+    }
+    return fetchLegislatorsOfATopic({
+      slug: legislatorSlug,
+      legislativeMeetingId: formattedFilterValues?.meetingId,
+      legislativeMeetingSessionIds: formattedFilterValues?.sessionIds,
+    })
+  }
 
   useEffect(() => {
     if (speechState.speeches != undefined) {
-      setIsLoading(speechState.isLoading)
+      setIsLoading(speechState.isLoading && followMoreState.isLoading)
     }
-  }, [speechState.speeches, speechState.isLoading])
+  }, [speechState.speeches, speechState.isLoading, followMoreState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
@@ -191,7 +218,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
           count={count}
           tabs={tabList}
           showTabAvatar={true}
-          link={`${InternalRoutes.Legislator}/${slug}`}
+          link={`${InternalRoutes.Topic}/${slug}`}
           onSelectTab={setSelectedTab}
           onOpenFilterModal={() => setShowFilter(true)}
           onClose={onClose}
@@ -229,7 +256,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
             title={`${title} 的相關發言篩選`}
             slug={slug}
             initialSelectedOption={tabList}
-            fetcher={fetchLegislatorsOfATopic}
+            fetcher={fetchFilterOptions}
             onClose={() => {
               setShowFilter(false)
             }}
@@ -247,20 +274,23 @@ const FollowMoreLegislator = styled.div`
   display: flex;
   overflow-x: scroll;
 `
+const Note = styled(P1)`
+  color: ${colorGrayscale.gray800};
+`
 
 export interface SidebarLegislatorProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
-  subtitle?: TitleSectionProps['subtitle']
   issueList?: TitleSectionProps['tabs']
   slug: string
+  note?: string
   onClose?: () => void
   className?: string
 }
 export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   slug,
   title,
-  subtitle,
   issueList = [],
+  note,
   onClose,
   className,
   ref,
@@ -269,20 +299,40 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   const [tabList, setTabList] = useState(issueList)
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
-  const hasInitialized = useRef(false)
+  const showNote = useMemo(
+    () => note && issueList.length === 0,
+    [note, issueList]
+  )
   const selectedIssue = useMemo(
     () => _.get(tabList, selectedTab),
     [tabList, selectedTab]
-  )
-  const legislatorList: LegislatorProps[] = useMemo(
-    () => mockGetLegislator(selectedIssue?.slug),
-    [selectedIssue]
   )
   const followMoreTitle: string = useMemo(
     () => `關注 ${_.get(selectedIssue, ['name'], '')} 主題的其他人：`,
     [selectedIssue]
   )
   const { formattedFilterValues } = useContext(DashboardContext)
+  const { committees } = useCommitteeMember(
+    formattedFilterValues
+      ? {
+          slug,
+          legislativeMeetingId: formattedFilterValues.meetingId,
+        }
+      : undefined
+  )
+  const subtitle = useMemo(() => {
+    if (!committees || committees.length === 0) {
+      return ''
+    }
+    return committees.reduce((acc, { count, name }, index) => {
+      if (index !== 0) {
+        acc += '、'
+      }
+      acc += `${name}(${count}會期)`
+
+      return acc
+    }, '本屆加入：')
+  }, [committees])
   const speechState = useSpeech(
     formattedFilterValues && selectedIssue
       ? {
@@ -301,11 +351,40 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
     () => groupSummary(summaryList),
     [summaryList]
   )
+  const followMoreState = useMoreLegislators(
+    formattedFilterValues && selectedIssue && selectedIssue.slug
+      ? {
+          topicSlug: selectedIssue.slug,
+          excluideLegislatorSlug: slug,
+          legislativeMeetingId: formattedFilterValues?.meetingId,
+          legislativeMeetingSessionIds: formattedFilterValues?.sessionIds,
+          partyIds: formattedFilterValues.partyIds,
+          constituencies: formattedFilterValues.constituency,
+          committeeSlugs: formattedFilterValues.committeeSlugs,
+        }
+      : undefined
+  )
+  const legislatorList: LegislatorProps[] = useMemo(
+    () => followMoreState.legislators || [],
+    [followMoreState.legislators]
+  )
+
+  const fetchFilterOptions = (legislatorSlug: string) => {
+    if (!formattedFilterValues) {
+      throw new Error(
+        `Failed to fetch filter options. err: filter value undefined.`
+      )
+    }
+    return fetchTopicOfALegislator({
+      slug: legislatorSlug,
+      legislativeMeetingId: formattedFilterValues?.meetingId,
+      legislativeMeetingSessionIds: formattedFilterValues?.sessionIds,
+    })
+  }
 
   useEffect(() => {
-    if (!hasInitialized.current && issueList.length > 0) {
+    if (issueList) {
       setTabList(issueList)
-      hasInitialized.current = true
     }
   }, [issueList])
 
@@ -327,12 +406,16 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
           subtitle={subtitle}
           tabs={tabList}
           showTabAvatar={false}
-          link={`${InternalRoutes.Topic}/${slug}`}
+          link={`${InternalRoutes.Legislator}/${slug}`}
           onSelectTab={setSelectedTab}
           onClose={onClose}
           onOpenFilterModal={() => setShowFilter(true)}
         />
-        {isLoading ? (
+        {showNote ? (
+          <Body>
+            <Note text={note} />
+          </Body>
+        ) : isLoading ? (
           <Loader />
         ) : (
           <Body>
@@ -371,7 +454,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
             subtitle={subtitle}
             slug={slug}
             initialSelectedOption={tabList}
-            fetcher={fetchTopicOfALegislator}
+            fetcher={fetchFilterOptions}
             onClose={() => {
               setShowFilter(false)
             }}
