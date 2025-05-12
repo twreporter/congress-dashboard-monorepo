@@ -42,7 +42,7 @@ const SelectedIcon: FC<IconProps> = ({ disabled = false }) => {
       viewBox="0 0 20 20"
       fill="none"
     >
-      <g clip-path="url(#clip0_4096_288580)">
+      <g clipPath="url(#clip0_4096_288580)">
         {disabled ? (
           <circle
             cx="10"
@@ -85,7 +85,7 @@ const UnselectedIcon: FC<IconProps> = ({ disabled = false }) => {
       viewBox="0 0 20 20"
       fill="none"
     >
-      <g clip-path="url(#clip0_4096_288582)">
+      <g clipPath="url(#clip0_4096_288582)">
         <circle cx="10" cy="10" r="9.5" fill={fill} stroke={stroke} />
       </g>
       <defs>
