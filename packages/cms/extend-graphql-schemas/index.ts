@@ -5,8 +5,8 @@ import { mergeSchemas } from '@graphql-tools/schema'
 import {
   getTopicsSql,
   getTop5LegislatorSql,
-} from './custom-sql/topicsOrderBySpeechCount'
-import { getLegislatorsSql } from './custom-sql/topNTopicsOfLegislators'
+} from '../custom-sql/topicsOrderBySpeechCount'
+import { getLegislatorsSql } from '../custom-sql/topNTopicsOfLegislators'
 // lodash
 import { groupBy } from 'lodash'
 const _ = {
