@@ -1,4 +1,4 @@
-import { Context } from '.keystone/types'
+import { TypedKeystoneContext } from '../types/context'
 import { gql } from 'graphql-tag'
 // custom sql
 import {
@@ -92,25 +92,24 @@ export const topicsOrderBySpeechCountResolver = {
         skip?: number
         topicIds?: number[]
       },
-      context: Context
+      context: TypedKeystoneContext
     ) => {
-      const topics = await context.prisma.$queryRaw<TopicWithSpeechCount[]>(
+      const topics: TopicWithSpeechCount[] = await context.prisma.$queryRaw(
         getTopicsSql({ meetingId, sessionIds, partyIds, take, skip })
       )
       if (!topics || topics.length === 0) {
         return []
       }
       const topicIds = topics.map(({ id }) => id)
-      const top5legislators = await context.prisma.$queryRaw<
-        LegislatorForTopicRaw[]
-      >(
-        getTop5LegislatorSql({
-          meetingId,
-          sessionIds,
-          partyIds,
-          topicIds,
-        })
-      )
+      const top5legislators: LegislatorForTopicRaw[] =
+        await context.prisma.$queryRaw(
+          getTop5LegislatorSql({
+            meetingId,
+            sessionIds,
+            partyIds,
+            topicIds,
+          })
+        )
       type GroupedLegislators = {
         [topicId: number]: Array<LegislatorForTopic>
       }
