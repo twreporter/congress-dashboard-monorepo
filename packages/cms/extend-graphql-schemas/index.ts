@@ -6,6 +6,10 @@ import {
   getTopicsSql,
   getTop5LegislatorSql,
 } from '../custom-sql/topicsOrderBySpeechCount'
+import {
+  recentSpeechTopicStatsTypeDefs,
+  recentSpeechTopicStatsResolvers,
+} from './recent-speech-topic-stats'
 import { getLegislatorsSql } from '../custom-sql/topNTopicsOfLegislators'
 // lodash
 import { groupBy } from 'lodash'
@@ -52,7 +56,8 @@ type LegislatorWithTopTopics = TopicForLegislator & {
 const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
     schemas: [baseSchema],
-    typeDefs: `
+    typeDefs: [
+      `
       """ custom type for topicsOrderBySpeechCount """
       type ImageFileWithUrlOnly {
         url: String!
@@ -96,96 +101,108 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
         topNTopicsOfLegislators(legislatorIds: [Int!]!, meetingId: Int!, sessionIds: [Int] = [], take: Int = 10): [LegislatorWIthTopTopics]
       }
     `,
-    resolvers: {
-      Query: {
-        topicsOrderBySpeechCount: async (
-          _root,
-          { meetingId, sessionIds, partyIds, take, skip },
-          context: Context
-        ) => {
-          const topics = await context.prisma.$queryRaw<TopicWithSpeechCount[]>(
-            getTopicsSql({ meetingId, sessionIds, partyIds, take, skip })
-          )
-          if (!topics || topics.length === 0) {
-            return []
-          }
-          const topicIds = topics.map(({ id }) => id)
-          const top5legislators = await context.prisma.$queryRaw<
-            LegislatorForTopicRaw[]
-          >(getTop5LegislatorSql({ meetingId, sessionIds, partyIds, topicIds }))
-          type GroupedLegislators = {
-            [topicId: number]: Array<LegislatorForTopic>
-          }
-          const top5legislatorsGrouped = top5legislators.reduce(
-            (
-              acc: GroupedLegislators,
-              { count, topicId, imageId, imageExtension, ...rest }
-            ) => {
-              if (!acc[topicId]) {
-                acc[topicId] = []
-              }
-              let image
-              if (imageId && imageExtension) {
-                image = {
-                  imageFile: {
-                    url: `/images/${imageId}.${imageExtension}`, // todo: use config in keystone.config
-                  },
-                }
-              }
-              const res = {
-                ...rest,
-                count: Number(count),
-                image,
-              }
-              acc[topicId].push(res)
-              return acc
-            },
-            {} as GroupedLegislators
-          )
-          return topics.map(
-            ({ speechCount, legislatorCount, id, ...rest }) => ({
-              ...rest,
-              id,
-              speechCount: Number(speechCount),
-              legislatorCount: Number(legislatorCount),
-              legislators: top5legislatorsGrouped[id],
-            })
-          )
-        },
-        topNTopicsOfLegislators: async (
-          _root,
-          { legislatorIds, meetingId, sessionIds, take },
-          context: Context
-        ) => {
-          const topics = await context.prisma.$queryRaw<
-            LegislatorWithTopTopics[]
-          >(getLegislatorsSql({ legislatorIds, meetingId, sessionIds, take }))
-          type GroupedTopics = {
-            [legislatorId: number]: Array<TopicForLegislator>
-          }
-          const topicsGrouped = topics.reduce(
-            (acc: GroupedTopics, { legislatorId, count, title, ...rest }) => {
-              if (!acc[legislatorId]) {
-                acc[legislatorId] = []
-              }
-              acc[legislatorId].push({
-                ...rest,
-                title,
-                name: title,
-                count: Number(count),
+      recentSpeechTopicStatsTypeDefs,
+    ],
+    resolvers: [
+      {
+        Query: {
+          topicsOrderBySpeechCount: async (
+            _root,
+            { meetingId, sessionIds, partyIds, take, skip },
+            context: Context
+          ) => {
+            const topics = await context.prisma.$queryRaw<
+              TopicWithSpeechCount[]
+            >(getTopicsSql({ meetingId, sessionIds, partyIds, take, skip }))
+            if (!topics || topics.length === 0) {
+              return []
+            }
+            const topicIds = topics.map(({ id }) => id)
+            const top5legislators = await context.prisma.$queryRaw<
+              LegislatorForTopicRaw[]
+            >(
+              getTop5LegislatorSql({
+                meetingId,
+                sessionIds,
+                partyIds,
+                topicIds,
               })
-              return acc
-            },
-            {} as GroupedTopics
-          )
+            )
+            type GroupedLegislators = {
+              [topicId: number]: Array<LegislatorForTopic>
+            }
+            const top5legislatorsGrouped = top5legislators.reduce(
+              (
+                acc: GroupedLegislators,
+                { count, topicId, imageId, imageExtension, ...rest }
+              ) => {
+                if (!acc[topicId]) {
+                  acc[topicId] = []
+                }
+                let image
+                if (imageId && imageExtension) {
+                  image = {
+                    imageFile: {
+                      url: `/images/${imageId}.${imageExtension}`, // todo: use config in keystone.config
+                    },
+                  }
+                }
+                const res = {
+                  ...rest,
+                  count: Number(count),
+                  image,
+                }
+                acc[topicId].push(res)
+                return acc
+              },
+              {} as GroupedLegislators
+            )
+            return topics.map(
+              ({ speechCount, legislatorCount, id, ...rest }) => ({
+                ...rest,
+                id,
+                speechCount: Number(speechCount),
+                legislatorCount: Number(legislatorCount),
+                legislators: top5legislatorsGrouped[id],
+              })
+            )
+          },
+          topNTopicsOfLegislators: async (
+            _root,
+            { legislatorIds, meetingId, sessionIds, take },
+            context: Context
+          ) => {
+            const topics = await context.prisma.$queryRaw<
+              LegislatorWithTopTopics[]
+            >(getLegislatorsSql({ legislatorIds, meetingId, sessionIds, take }))
+            type GroupedTopics = {
+              [legislatorId: number]: Array<TopicForLegislator>
+            }
+            const topicsGrouped = topics.reduce(
+              (acc: GroupedTopics, { legislatorId, count, title, ...rest }) => {
+                if (!acc[legislatorId]) {
+                  acc[legislatorId] = []
+                }
+                acc[legislatorId].push({
+                  ...rest,
+                  title,
+                  name: title,
+                  count: Number(count),
+                })
+                return acc
+              },
+              {} as GroupedTopics
+            )
 
-          return legislatorIds.map((id: number) => ({
-            id,
-            topics: topicsGrouped[id],
-          }))
+            return legislatorIds.map((id: number) => ({
+              id,
+              topics: topicsGrouped[id],
+            }))
+          },
         },
       },
-    },
+      recentSpeechTopicStatsResolvers,
+    ],
   })
 }
 
