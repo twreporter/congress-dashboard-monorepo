@@ -1,4 +1,4 @@
-import { Context } from '.keystone/types'
+import { TypedKeystoneContext } from '../types/context'
 import { getLegislatorsSql } from '../custom-sql/topNTopicsOfLegislators'
 import { gql } from 'graphql-tag'
 // lodash
@@ -60,9 +60,9 @@ export const topNTopicsOfLegislatorsResolver = {
         sessionIds?: number[]
         take?: number
       },
-      context: Context
+      context: TypedKeystoneContext
     ) => {
-      const topics = await context.prisma.$queryRaw<LegislatorWithTopTopics[]>(
+      const topics: LegislatorWithTopTopics[] = await context.prisma.$queryRaw(
         getLegislatorsSql({ legislatorIds, meetingId, sessionIds, take })
       )
       type GroupedTopics = {
