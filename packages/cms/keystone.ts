@@ -4,7 +4,7 @@ import Path from 'path'
 import envVars from './environment-variables'
 import { listDefinition as lists } from './lists'
 import { withAuth, session } from './auth'
-import extendGraphqlSchema from './extend-graphql-schema'
+import extendGraphqlSchema from './extend-graphql-schemas/index'
 
 export default withAuth(
   config({
