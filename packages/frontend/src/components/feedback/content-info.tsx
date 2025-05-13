@@ -1,13 +1,16 @@
 'use client'
 
-import React, { FC, useContext, useState } from 'react'
+import React, { FC, useContext, useState, useMemo } from 'react'
 // context
 import { FeedbackContext } from '@/components/feedback/context'
+// util
+import { emailValidator } from '@/utils/validate-email'
+// enum
+import { FeedbackType } from '@/components/feedback/enum'
 // type
 import type { ContentDetail } from '@/components/feedback/type'
 // component
 import { TextOption, TextareaOption } from '@/components/feedback/option-group'
-
 // style
 import {
   Box,
@@ -25,20 +28,31 @@ import { Cross } from '@twreporter/react-components/lib/icon'
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 type ContentInfoProps = {
-  setFeedbackValue?: (contentDetail: ContentDetail) => void
+  submit?: (contentDetail: ContentDetail) => void
 }
 
-const ContentInfo: FC<ContentInfoProps> = ({ setFeedbackValue }) => {
+const ContentInfo: FC<ContentInfoProps> = ({ submit }) => {
   const { prevStep, closeFeedback } = useContext(FeedbackContext)
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
+  const [isEmailValid, setIsEmailValid] = useState(true)
   const [problem, setProblem] = useState('')
 
-  const submit = () => {
-    // todo: add validation
+  const emailError = useMemo(
+    () => (!isEmailValid && email ? '電子信箱格式錯誤，請重新輸入' : ''),
+    [email, isEmailValid]
+  )
 
-    if (typeof setFeedbackValue === 'function') {
-      setFeedbackValue({ username, email, problem })
+  const validateEmail = () => {
+    setIsEmailValid(emailValidator(email))
+  }
+
+  const handleSubmit = () => {
+    if (!isEmailValid) {
+      return
+    }
+    if (typeof submit === 'function') {
+      submit({ type: FeedbackType.Content, username, email, problem })
     }
   }
 
@@ -63,7 +77,9 @@ const ContentInfo: FC<ContentInfoProps> = ({ setFeedbackValue }) => {
           placeholder={'twreporter@gmail.com'}
           value={email}
           type={'email'}
+          error={emailError}
           onChange={(e) => setEmail(e.target.value)}
+          onBlur={validateEmail}
         />
         <TextareaOption
           label={'問題描述'}
@@ -86,7 +102,8 @@ const ContentInfo: FC<ContentInfoProps> = ({ setFeedbackValue }) => {
           type={PillButton.Type.PRIMARY}
           size={PillButton.Size.L}
           text={'完成送出'}
-          onClick={submit}
+          onClick={handleSubmit}
+          disabled={!isEmailValid}
         />
       </ActionBlock>
     </Box>

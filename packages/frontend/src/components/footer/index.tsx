@@ -18,6 +18,8 @@ import Logo from '@/components/footer/logo'
 import FooterLink, { TextSize } from '@/components/footer/link'
 // constants
 import { InternalRoutes, ExternalRoutes } from '@/constants/routes'
+// utils
+import { openFeedback } from '@/utils/feedback'
 
 const StyledFooter = styled.footer`
   width: 100%;
@@ -144,7 +146,16 @@ const TabletAndBelowWithFlex = styled(TabletAndBelow)`
     display: flex !important;
   `}
 `
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
+const Feedback = styled(P2Gray600)`
+  cursor: pointer;
+
+  &:hover {
+    color: ${colorGrayscale.gray800};
+  }
+`
+
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+
 const Footer: React.FC = () => {
   const BottomLinks = ({ releaseBranch = releaseBranchConsts.release }) => {
     const mainOrigin = origins.forClientSideRendering[releaseBranch].main
@@ -181,11 +192,7 @@ const Footer: React.FC = () => {
                 text="關於觀測站"
                 target="_self"
               />
-              <FooterLink
-                href={InternalRoutes.Feedback}
-                text="意見回饋"
-                target="_self"
-              />
+              <Feedback text="意見回饋" onClick={openFeedback} />
             </LinkGroup>
             <LinkGroup>
               <FooterLink

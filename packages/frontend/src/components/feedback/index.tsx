@@ -5,15 +5,13 @@ import styled, { css } from 'styled-components'
 // context
 import { FeedbackContext } from '@/components/feedback/context'
 // type
-import type {
-  FeedbackValue,
-  ContentDetail,
-  ProductDetail,
-} from '@/components/feedback/type'
+import type { ContentDetail, ProductDetail } from '@/components/feedback/type'
 // enum
 import { FeedbackType } from '@/components/feedback/enum'
 // constant
 import { FEEDBACK_ID } from '@/constants'
+// util
+import { closeFeedback } from '@/utils/feedback'
 // style
 import { ZIndex } from '@/styles/z-index'
 // component
@@ -35,12 +33,13 @@ const maskCss = css`
 `
 const Container = styled.div`
   ${maskCss}
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: ${ZIndex.Feedback};
   overflow: hidden;
   background-color: ${colorGrayscale.gray100};
+  display: none;
 `
 
 const Mask = styled.div`
@@ -60,62 +59,37 @@ const Dialog = styled.div`
 
 const Feedback: FC = () => {
   const [step, setStep] = useState(1)
-  const [feedbackValue, setFeedbackValue] = useState<FeedbackValue>({
-    fromUrl: '',
-    problem: '',
-  })
+  const [type, setType] = useState<FeedbackType>()
 
-  const setTypeValue = (type: FeedbackType) => {
-    setFeedbackValue((feedbackValue) => {
-      feedbackValue.type = type
-      return feedbackValue
-    })
-  }
-  const setContentValue = (detail: ContentDetail) => {
-    setFeedbackValue((feedbackValue) => {
-      feedbackValue.email = detail.email
-      feedbackValue.username = detail.username
-      feedbackValue.problem = detail.problem
-      return feedbackValue
-    })
-  }
-  const setProductValue = (detail: ProductDetail) => {
-    setFeedbackValue((feedbackValue) => {
-      feedbackValue.deviceType = detail.deviceType
-      feedbackValue.osType = detail.osType
-      feedbackValue.browserType = detail.browserType
-      feedbackValue.email = detail.email
-      feedbackValue.problemType = detail.problemType
-      feedbackValue.username = detail.username
-      feedbackValue.problem = detail.problem
-
-      return feedbackValue
-    })
-  }
-  const contextJSX =
-    step === 1 ? (
-      <ChooseFeedbackType setFeedbackValue={setTypeValue} />
-    ) : feedbackValue.type === FeedbackType.Content ? (
-      <ContentInfo setFeedbackValue={setContentValue} />
-    ) : (
-      <ProductInfo setFeedbackValue={setProductValue} />
-    )
-
-  const closeFeedback = () => {
-    console.log('close feedback')
-  }
   const nextStep = () => {
     setStep((step) => step + 1)
   }
+
   const prevStep = () => {
     setStep((step) => step - 1)
   }
+
+  const submit = (data: ContentDetail | ProductDetail) => {
+    const userAgent = window.navigator.userAgent
+    const url = window.location.href
+    console.log('submit', url, userAgent, data)
+    setStep(1)
+    closeFeedback()
+  }
+
+  const contextJSX =
+    step === 1 ? (
+      <ChooseFeedbackType setFeedbackValue={setType} />
+    ) : type === FeedbackType.Content ? (
+      <ContentInfo submit={submit} />
+    ) : (
+      <ProductInfo submit={submit} />
+    )
 
   const contextValue = {
     closeFeedback,
     nextStep,
     prevStep,
-    feedbackValue,
   }
 
   return (

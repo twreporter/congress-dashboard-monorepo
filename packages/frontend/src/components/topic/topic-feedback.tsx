@@ -1,12 +1,11 @@
 'use client'
 import React from 'react'
 import styled from 'styled-components'
-import Link from 'next/link'
+// util
+import { openFeedback } from '@/utils/feedback'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
-// constants
-import { InternalRoutes } from '@/constants/routes'
 
 const Feedback = styled.div`
   display: flex;
@@ -35,9 +34,7 @@ const TopicFeedback: React.FC = () => {
     <Feedback>
       <span>
         發現什麼問題嗎？透過
-        <Link href={`${InternalRoutes.Feedback}`} target="_blank">
-          問題回報
-        </Link>
+        <span onClick={openFeedback}>問題回報</span>
         告訴我們，一起讓這裡變得更好！
       </span>
     </Feedback>

@@ -6,27 +6,20 @@ import {
   BrowserType,
 } from '@/components/feedback/enum'
 
-export type FeedbackValue = ContentDetail & {
-  fromUrl: string
-  type?: FeedbackType
-  problemType?: ProductProblemType
-  deviceType?: DeviceType
-  osType?: OSType
-  browserType?: BrowserType
-}
-
 export type ContentDetail = {
+  type: FeedbackType
   username?: string
   email?: string
   problem: string
 }
 
 export type ProductDetail = {
+  type: FeedbackType
   username?: string
   email?: string
   problemType: ProductProblemType
   deviceType: DeviceType
-  osType: OSType
-  browserType: BrowserType
+  osType: OSType | string
+  browserType: BrowserType | string
   problem: string
 }

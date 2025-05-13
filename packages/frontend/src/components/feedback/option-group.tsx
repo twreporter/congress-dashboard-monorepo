@@ -1,12 +1,15 @@
-import React, { FC, ChangeEvent } from 'react'
-import styled, { css } from 'styled-components'
+import React, { FC, ChangeEvent, FocusEvent } from 'react'
+import styled from 'styled-components'
 // type
 import type { RadioButtonProps } from '@/components/feedback/radio-button'
+// style
+import { inputCss } from '@/components/feedback/style'
 // @twreporter
-import { P1, P2 } from '@twreporter/react-components/lib/text/paragraph'
+import { P1, P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
 import {
   colorGrayscale,
   colorBrand,
+  COLOR_SEMANTIC,
 } from '@twreporter/core/lib/constants/color'
 import RadioButton from '@/components/feedback/radio-button'
 
@@ -33,22 +36,24 @@ const Label = styled(P2)<{ $isRequired: boolean }>`
   `
       : ''}
 `
-const TextLength = styled(P2)`
-  color: ${colorGrayscale.gray500};
+const TextLength = styled(P2)<{ $invalid: boolean }>`
+  color: ${(props) =>
+    props.$invalid ? colorBrand.heavy : colorGrayscale.gray500};
 `
-const inputCss = css`
-  font-size: 16px;
-  line-height: 150%;
-
-  ::placeholder {
-    color: ${colorGrayscale.gray500};
-  }
+const ErrorMsg = styled(P3)`
+  color: ${COLOR_SEMANTIC.danger};
 `
-const InputText = styled.input`
+const InputText = styled.input<{
+  $isError: boolean
+  disabled?: boolean
+}>`
   ${inputCss}
   padding: 8px 12px;
 `
-const InputTextarea = styled.textarea`
+const InputTextarea = styled.textarea<{
+  $isError?: boolean
+  disabled?: boolean
+}>`
   ${inputCss}
   padding: 12px;
   height: 144px;
@@ -60,11 +65,13 @@ type InputProps = {
   disabled?: boolean
   type?: 'text' | 'email' | 'number'
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+  onBlur?: (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void
 }
 
 type OptionProps = {
   label: string
   required?: boolean
+  error?: string
 }
 
 type TextOptionProps = InputProps & OptionProps
@@ -72,12 +79,14 @@ export const TextOption: FC<TextOptionProps> = ({
   label,
   required = false,
   type = 'text',
+  error,
   ...inputProps
 }) => {
   return (
     <OptionBox>
       <Label text={label} weight={P2.Weight.BOLD} $isRequired={required} />
-      <InputText type={type} {...inputProps} />
+      <InputText type={type} $isError={!!error} {...inputProps} />
+      {error ? <ErrorMsg text={error} /> : null}
     </OptionBox>
   )
 }
@@ -93,12 +102,15 @@ export const TextareaOption: FC<TextareaOptionProps> = ({
   maxLength,
   ...inputProps
 }) => {
-  const textLengthString = `${inputProps.value.length}/${maxLength}`
+  const reachCharLimit = inputProps.value.length === maxLength
+  const textLengthString = `${reachCharLimit ? '已達字數上限 ' : ''}${
+    inputProps.value.length
+  }/${maxLength}`
   return (
     <OptionBox>
       <TitleBox>
         <Label text={label} weight={P2.Weight.BOLD} $isRequired={required} />
-        <TextLength text={textLengthString} />
+        <TextLength text={textLengthString} $invalid={reachCharLimit} />
       </TitleBox>
       <InputTextarea maxLength={maxLength} {...inputProps} />
     </OptionBox>
@@ -109,20 +121,51 @@ export const TextareaOption: FC<TextareaOptionProps> = ({
 const RadioBox = styled.div<{ $column: number }>`
   display: grid;
   grid-template-columns: repeat(${(props) => props.$column}, 1fr);
-  gap: 8px;
+  column-gap: 24px;
 `
 const RadioLabel = styled(P1)`
   color: ${colorGrayscale.gray800};
+  flex: none;
 `
 const RadioOption = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+  height: 32px;
 `
+const RadioInput = styled.input`
+  ${inputCss}
+  padding: 4px 8px;
+  max-width: 100%;
+  height: 32px;
+  width: 128px;
+`
+
+type RadioWithLabelProps = RadioButtonProps & {
+  label: string
+  showInputOnChecked?: boolean
+  onInputChange?: (e: ChangeEvent<HTMLInputElement>) => void
+}
+const RadioWithLabel: FC<RadioWithLabelProps> = ({
+  label,
+  showInputOnChecked = false,
+  onInputChange,
+  ...radioProps
+}) => {
+  return (
+    <RadioOption>
+      <RadioButton {...radioProps} />
+      <RadioLabel text={label} />
+      {showInputOnChecked && radioProps.checked ? (
+        <RadioInput onChange={onInputChange} />
+      ) : null}
+    </RadioOption>
+  )
+}
 
 type RadioGroupOptionProps = OptionProps & {
   columnNum?: number
-  options: (RadioButtonProps & { label: string })[]
+  options: RadioWithLabelProps[]
 }
 export const RadioGroupOption: FC<RadioGroupOptionProps> = ({
   label,
@@ -134,11 +177,8 @@ export const RadioGroupOption: FC<RadioGroupOptionProps> = ({
     <OptionBox>
       <Label text={label} weight={P2.Weight.BOLD} $isRequired={required} />
       <RadioBox $column={columnNum}>
-        {options.map(({ label, ...radioProps }, index) => (
-          <RadioOption key={`radio-option-${index}`}>
-            <RadioButton {...radioProps} />
-            <RadioLabel text={label} />
-          </RadioOption>
+        {options.map((optionProps, index) => (
+          <RadioWithLabel key={`radio-option-${index}`} {...optionProps} />
         ))}
       </RadioBox>
     </OptionBox>

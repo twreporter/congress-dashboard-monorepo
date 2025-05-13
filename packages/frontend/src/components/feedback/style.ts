@@ -1,7 +1,10 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import {
+  colorGrayscale,
+  COLOR_SEMANTIC,
+} from '@twreporter/core/lib/constants/color'
 import { PillButton } from '@twreporter/react-components/lib/button'
 
 export const Box = styled.div`
@@ -46,4 +49,39 @@ export const ActionButton = styled(PillButton)`
   width: 144px !important;
   align-items: center;
   justify-content: center;
+`
+
+export const inputCss = css<{
+  $isError?: boolean
+  disabled?: boolean
+}>`
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 150%;
+  outline: none;
+
+  ::placeholder {
+    color: ${colorGrayscale.gray500};
+  }
+
+  ${(props) =>
+    props.disabled
+      ? `
+    border: 1px solid ${colorGrayscale.gray300};
+    background-color: ${colorGrayscale.gray100};
+  `
+      : props.$isError
+      ? `
+    border: 1px solid ${COLOR_SEMANTIC.danger};
+    background-color: ${colorGrayscale.white};
+  `
+      : `
+    border: 1px solid ${colorGrayscale.gray300};
+    background-color: ${colorGrayscale.white};
+
+    &:hover, &:focus-visible, &:active {
+      border: 1px solid ${colorGrayscale.gray600};
+      outline: none;
+    }
+  `}
 `

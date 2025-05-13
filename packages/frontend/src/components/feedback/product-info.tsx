@@ -3,8 +3,11 @@
 import React, { FC, useContext, useState, useMemo } from 'react'
 // context
 import { FeedbackContext } from '@/components/feedback/context'
+// util
+import { emailValidator } from '@/utils/validate-email'
 // enum
 import {
+  FeedbackType,
   ProductProblemType,
   DeviceType,
   OSType,
@@ -35,38 +38,58 @@ import { Cross } from '@twreporter/react-components/lib/icon'
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 type ProductInfoProps = {
-  setFeedbackValue?: (productDetail: ProductDetail) => void
+  submit?: (productDetail: ProductDetail) => void
 }
 
-const ProductInfo: FC<ProductInfoProps> = ({ setFeedbackValue }) => {
+const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
   const { prevStep, closeFeedback } = useContext(FeedbackContext)
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
+  const [isEmailValid, setIsEmailValid] = useState(true)
   const [problemType, setProblemType] = useState<ProductProblemType>()
   const [deviceType, setDeviceType] = useState<DeviceType>()
   const [osType, setOSType] = useState<OSType>()
+  const [osOther, setOSOther] = useState('')
   const [browserType, setBrowserType] = useState<BrowserType>()
+  const [browserOther, setBrowserOther] = useState('')
   const [problem, setProblem] = useState('')
 
-  const cannotSubmit = useMemo(
-    () => !problemType || !deviceType || !osType || !browserType,
-    [problemType, deviceType, osType, browserType]
+  const emailError = useMemo(
+    () => (!isEmailValid && email ? '電子信箱格式錯誤，請重新輸入' : ''),
+    [email, isEmailValid]
   )
 
-  const submit = () => {
-    // todo: add validation
-    if (!problemType || !deviceType || !osType || !browserType) {
+  const validateEmail = () => {
+    if (!email) {
+      setIsEmailValid(true)
+      return
+    }
+    setIsEmailValid(emailValidator(email))
+  }
+
+  const cannotSubmit = useMemo(
+    () =>
+      !isEmailValid || !problemType || !deviceType || !osType || !browserType,
+    [isEmailValid, problemType, deviceType, osType, browserType]
+  )
+
+  const handleSubmit = () => {
+    if (cannotSubmit) {
       return
     }
 
-    if (typeof setFeedbackValue === 'function') {
-      setFeedbackValue({
+    if (typeof submit === 'function') {
+      submit({
+        type: FeedbackType.Product,
         username,
         email,
-        problemType,
-        deviceType,
-        osType,
-        browserType,
+        problemType: problemType!,
+        deviceType: deviceType!,
+        osType: osType! === OSType.Other ? osOther || osType! : osType!,
+        browserType:
+          browserType! === BrowserType.Other
+            ? browserOther || browserType!
+            : browserType!,
         problem,
       })
     }
@@ -93,7 +116,9 @@ const ProductInfo: FC<ProductInfoProps> = ({ setFeedbackValue }) => {
           placeholder={'twreporter@gmail.com'}
           value={email}
           type={'email'}
+          error={emailError}
           onChange={(e) => setEmail(e.target.value)}
+          onBlur={validateEmail}
         />
         <RadioGroupOption
           label={'問題類型'}
@@ -178,6 +203,8 @@ const ProductInfo: FC<ProductInfoProps> = ({ setFeedbackValue }) => {
               label: '其他',
               checked: osType === OSType.Other,
               onChange: () => setOSType(OSType.Other),
+              showInputOnChecked: true,
+              onInputChange: (e) => setOSOther(e.target.value),
             },
           ]}
         />
@@ -197,6 +224,11 @@ const ProductInfo: FC<ProductInfoProps> = ({ setFeedbackValue }) => {
               onChange: () => setBrowserType(BrowserType.Safari),
             },
             {
+              label: 'Firefox',
+              checked: browserType === BrowserType.Firefox,
+              onChange: () => setBrowserType(BrowserType.Firefox),
+            },
+            {
               label: 'Edge',
               checked: browserType === BrowserType.Edge,
               onChange: () => setBrowserType(BrowserType.Edge),
@@ -210,6 +242,8 @@ const ProductInfo: FC<ProductInfoProps> = ({ setFeedbackValue }) => {
               label: '其他',
               checked: browserType === BrowserType.Other,
               onChange: () => setBrowserType(BrowserType.Other),
+              showInputOnChecked: true,
+              onInputChange: (e) => setBrowserOther(e.target.value),
             },
           ]}
         />
@@ -235,7 +269,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ setFeedbackValue }) => {
           size={PillButton.Size.L}
           text={'完成送出'}
           disabled={cannotSubmit}
-          onClick={submit}
+          onClick={handleSubmit}
         />
       </ActionBlock>
     </Box>
