@@ -12,6 +12,7 @@ import {
   COLOR_SEMANTIC,
 } from '@twreporter/core/lib/constants/color'
 import RadioButton from '@/components/feedback/radio-button'
+import mq from '@twreporter/core/lib/utils/media-query'
 
 const OptionBox = styled.div`
   display: flex;
@@ -122,6 +123,10 @@ const RadioBox = styled.div<{ $column: number }>`
   display: grid;
   grid-template-columns: repeat(${(props) => props.$column}, 1fr);
   column-gap: 24px;
+
+  ${mq.mobileOnly`
+    grid-template-columns: repeat(1, 1fr);
+  `}
 `
 const RadioLabel = styled(P1)`
   color: ${colorGrayscale.gray800};

@@ -25,7 +25,7 @@ const Container = styled.div<{ $selected: boolean; $disabled?: boolean }>`
   width: 432px;
   cursor: ${(props) => (props.$disabled ? 'default' : 'pointer')};
 
-  ${mq.tabletAndBelow`
+  ${mq.mobileOnly`
     width: 327px;
   `}
 

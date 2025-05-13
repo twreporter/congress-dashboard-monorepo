@@ -6,9 +6,14 @@ import {
   COLOR_SEMANTIC,
 } from '@twreporter/core/lib/constants/color'
 import { PillButton } from '@twreporter/react-components/lib/button'
+import mq from '@twreporter/core/lib/utils/media-query'
 
 export const Box = styled.div`
   width: 100%;
+
+  ${mq.mobileOnly`
+    height: 100%;  
+  `}
 `
 
 export const TitleBlock = styled.div`
@@ -27,7 +32,13 @@ export const OptionBlock = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 24px;
+
+  ${mq.mobileOnly`
+    padding: 24px;
+    gap: 20px;
+  `}
 `
 
 export const ActionBlock = styled.div`
@@ -38,6 +49,12 @@ export const ActionBlock = styled.div`
   position: sticky;
   bottom: 0;
   background-color: white;
+
+  ${mq.mobileOnly`
+    padding: 24px;
+    gap: 10px;
+    top: calc(100vh - 90px);
+  `}
 `
 
 export const Title = styled(H5)`
@@ -46,9 +63,16 @@ export const Title = styled(H5)`
 
 export const ActionButton = styled(PillButton)`
   display: flex;
-  width: 144px !important;
   align-items: center;
   justify-content: center;
+
+  ${mq.tabletAndAbove`
+      width: 144px !important;
+  `}
+
+  ${mq.mobileOnly`
+    flex: 1;
+  `}
 `
 
 export const inputCss = css<{

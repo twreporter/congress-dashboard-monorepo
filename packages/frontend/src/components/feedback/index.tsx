@@ -25,6 +25,7 @@ import {
   colorGrayscale,
   colorOpacity,
 } from '@twreporter/core/lib/constants/color'
+import mq from '@twreporter/core/lib/utils/media-query'
 
 const maskCss = css`
   width: 100vw;
@@ -42,12 +43,19 @@ const Container = styled.div`
   overflow: hidden;
   background-color: ${colorGrayscale.gray100};
   display: none;
+
+  ${mq.mobileOnly`
+    background-color: ${colorGrayscale.white}  
+  `}
 `
 
 const Mask = styled.div`
   ${maskCss}
-  padding: 64px 0;
-  background-color: ${colorOpacity['black_0.2']};
+
+  ${mq.tabletAndAbove`  
+    padding: 64px 0;
+    background-color: ${colorOpacity['black_0.2']};
+  `}
 `
 
 const Dialog = styled.div`
@@ -57,6 +65,11 @@ const Dialog = styled.div`
   background-color: ${colorGrayscale.white};
   border-radius: 8px;
   box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
+
+  ${mq.mobileOnly`
+    width: 100%;
+    height: 100%;
+  `}
 `
 
 const Feedback: FC = () => {
