@@ -7,14 +7,14 @@ import {
 } from '@/components/feedback/enum'
 
 export type ContentDetail = {
-  type: FeedbackType
+  type: FeedbackType.Content
   username?: string
   email?: string
   problem: string
 }
 
 export type ProductDetail = {
-  type: FeedbackType
+  type: FeedbackType.Product
   username?: string
   email?: string
   problemType: ProductProblemType

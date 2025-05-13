@@ -2,6 +2,8 @@
 
 import React, { FC, useState } from 'react'
 import styled, { css } from 'styled-components'
+// api
+import feedback from '@/fetchers/feedback'
 // context
 import { FeedbackContext } from '@/components/feedback/context'
 // type
@@ -69,10 +71,11 @@ const Feedback: FC = () => {
     setStep((step) => step - 1)
   }
 
-  const submit = (data: ContentDetail | ProductDetail) => {
+  const submit = async (data: ContentDetail | ProductDetail) => {
     const userAgent = window.navigator.userAgent
     const url = window.location.href
     console.log('submit', url, userAgent, data)
+    await feedback({ userAgent, fromUrl: url, ...data })
     setStep(1)
     closeFeedback()
   }
