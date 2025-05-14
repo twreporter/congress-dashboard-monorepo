@@ -246,6 +246,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
           <FilterModal
             title={`${legislatorName} 的相關發言篩選`}
             slug={legislatorSlug}
+            placeholder={'篩選議題'}
             initialSelectedOption={tabList}
             onClose={() => {
               setShowFilter(false)
