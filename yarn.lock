@@ -3802,6 +3802,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@material-symbols/svg-400@npm:^0.27.2":
+  version: 0.27.2
+  resolution: "@material-symbols/svg-400@npm:0.27.2"
+  checksum: 10c0/ab347b00cd2cb38859ada8b2e013cd334c0173588fe62039fc10d1e116b312b135a4f8c8e283f33a4295affa42dbc4df69fb781c96098e1c68f64a72c71bbd61
+  languageName: node
+  linkType: hard
+
 "@mdx-js/react@npm:^3.0.0":
   version: 3.1.0
   resolution: "@mdx-js/react@npm:3.1.0"
@@ -6311,6 +6318,7 @@ __metadata:
     "@storybook/test": "npm:^8.5.1"
     "@twreporter/congress-dashboard-shared": "npm:0.0.6"
     "@twreporter/core": "npm:^1.24.4"
+    "@twreporter/react-article-components": "npm:2.5.11-rc.0"
     "@twreporter/react-components": "npm:^9.7.0-rc.0"
     "@types/lodash": "npm:^4"
     "@types/node": "npm:^20"
@@ -6349,6 +6357,28 @@ __metadata:
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
   checksum: 10c0/39410e30387e6d7a7fd4d01ee8c158fe32531f8202ce74edbe06fba2d2d0a1604c9ac1fc80ead988f657da2f83a345aa03881aa28009176c8c3d7886b2c91584
+  languageName: node
+  linkType: hard
+
+"@twreporter/react-article-components@npm:2.5.11-rc.0":
+  version: 2.5.11-rc.0
+  resolution: "@twreporter/react-article-components@npm:2.5.11-rc.0"
+  dependencies:
+    "@twreporter/core": "npm:^1.24.4"
+    "@twreporter/react-components": "npm:^9.7.0-rc.0"
+    "@twreporter/redux": "npm:^8.3.3"
+    "@twreporter/universal-header": "npm:^3.0.16-rc.0"
+    howler: "npm:^2.2.3"
+    lodash: "npm:^4.17.11"
+    memoize-one: "npm:^5.0.5"
+    prop-types: "npm:^15.0.0"
+    react: "npm:^18.2.0"
+    react-redux: "npm:^9.1.2"
+    react-waypoint: "npm:^10.3.0"
+    smooth-scroll: "npm:16.1.3"
+    styled-components: "npm:^6.0.0"
+    stylis: "npm:^4.0.0"
+  checksum: 10c0/eaae5014083d7736486a3058cf756d940a4fac7153e79e30dd598bbddab5383456a1eabc4e4a2310a72791642769eb86ead874d5e11a3a526e689b81ef8d80f2
   languageName: node
   linkType: hard
 
@@ -6392,6 +6422,29 @@ __metadata:
     redux: "npm:^5.0.1"
     redux-thunk: "npm:^3.1.0"
   checksum: 10c0/f636eb189b7a24538213bcb269affe68802dc56dada116a4a6644aa092d859d940acd630cb23c2378708be4099b2b79533b3ed2fc94b63d44b09c33d3d181524
+  languageName: node
+  linkType: hard
+
+"@twreporter/universal-header@npm:^3.0.16-rc.0":
+  version: 3.0.16-rc.0
+  resolution: "@twreporter/universal-header@npm:3.0.16-rc.0"
+  dependencies:
+    "@material-symbols/svg-400": "npm:^0.27.2"
+    "@reduxjs/toolkit": "npm:^2.2.5"
+    "@twreporter/core": "npm:^1.24.4"
+    "@twreporter/react-components": "npm:^9.7.0-rc.0"
+    lodash: "npm:^4.17.11"
+    prop-types: "npm:^15.6.2"
+    querystring: "npm:^0.2.0"
+    react: "npm:^18.2.0"
+    react-redux: "npm:^9.1.2"
+    react-router-dom: "npm:^5.1.2"
+    react-transition-group: "npm:^4.4.5"
+    redux: "npm:^5.0.1"
+    redux-thunk: "npm:^3.1.0"
+    styled-components: "npm:^6.0.0"
+    stylis: "npm:^4.0.0"
+  checksum: 10c0/afe2d37822d5319649dc3a90589139426da9e0199fde526e992e93387e69e78d2042fbbfafba00e727d348a3260977d850efdf742b46d1c11136907f72331f91
   languageName: node
   linkType: hard
 
@@ -12621,6 +12674,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"howler@npm:^2.2.3":
+  version: 2.2.4
+  resolution: "howler@npm:2.2.4"
+  checksum: 10c0/74a295f56fd9b2abce122b27ed12c33fa195fb8a76832803e92d8e462a1eca803b55f44c14db052211d0cfab85c7c5249664c68d95bbbc16c775fac73866c6ef
+  languageName: node
+  linkType: hard
+
 "html-entities@npm:^2.1.0, html-entities@npm:^2.5.2":
   version: 2.5.2
   resolution: "html-entities@npm:2.5.2"
@@ -14300,7 +14360,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.0.0, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4":
+"lodash@npm:^4.0.0, lodash@npm:^4.17.11, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -17597,6 +17657,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"querystring@npm:^0.2.0":
+  version: 0.2.1
+  resolution: "querystring@npm:0.2.1"
+  checksum: 10c0/6841b32bec4f16ffe7f5b5e4373b47ad451f079cde3a7f45e63e550f0ecfd8f8189ef81fb50079413b3fc1c59b06146e4c98192cb74ed7981aca72090466cd94
+  languageName: node
+  linkType: hard
+
 "queue-microtask@npm:^1.2.2":
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
@@ -19901,6 +19968,13 @@ __metadata:
   version: 4.2.0
   resolution: "smart-buffer@npm:4.2.0"
   checksum: 10c0/a16775323e1404dd43fabafe7460be13a471e021637bc7889468eb45ce6a6b207261f454e4e530a19500cc962c4cc5348583520843b363f4193cee5c00e1e539
+  languageName: node
+  linkType: hard
+
+"smooth-scroll@npm:16.1.3":
+  version: 16.1.3
+  resolution: "smooth-scroll@npm:16.1.3"
+  checksum: 10c0/2772e4e3e459d4977013b6a1c4271c23ad4805112038a5da86810dee63da6a983aa5e312f398c4cd4f25365ef4d4dd34b4e0d72a6fee198de5a8977609c4d184
   languageName: node
   linkType: hard
 
