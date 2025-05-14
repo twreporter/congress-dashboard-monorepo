@@ -106,7 +106,7 @@ export const useLegislatorData = (
       slug: topic.slug,
       name: topic.title,
       count: topic.speechesCount,
-    }))
+    })).sort((a, b) => b.count - a.count)
 
     const speechesByTopic = _.mapValues(
       _.groupBy(topicsData, 'slug'),

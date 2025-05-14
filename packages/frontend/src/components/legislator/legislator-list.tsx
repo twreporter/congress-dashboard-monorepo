@@ -40,11 +40,6 @@ import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
 import { InternalRoutes } from '@/constants/routes'
 // z-index
 import { ZIndex } from '@/styles/z-index'
-// lodash
-import get from 'lodash/get'
-const _ = {
-  get,
-}
 
 const LegislatorContainer = styled.div`
   gap: 32px;
@@ -110,21 +105,28 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
   const [tabList, setTabList] = useState(
-    topics.map((topic) => ({ ...topic, showAvatar: false })) as TabProps[]
+    topics
+      .map((topic) => ({ ...topic, showAvatar: false }))
+      .slice(0, 5) as TabProps[]
   )
 
   useEffect(() => {
-    setTabList(topics.map((topic) => ({ ...topic, showAvatar: false })))
+    setTabList(
+      topics.map((topic) => ({ ...topic, showAvatar: false })).slice(0, 5)
+    )
   }, [topics])
 
   const selectedTopic = useMemo(() => {
-    if (topics.length === 0) return null
-    return topics[selectedTab] || topics[0]
-  }, [topics, selectedTab])
-  const followMoreTitle: string = useMemo(
-    () => `關注 ${_.get(selectedTopic, ['name'], '')} 主題的其他人：`,
+    if (topics.length === 0 || !tabList[selectedTab]) return null
+    const currentSlug = tabList[selectedTab].slug
+    return topics.find((topic) => topic.slug === currentSlug) || null
+  }, [topics, selectedTab, tabList])
+
+  const followMoreTitle = useMemo(
+    () => (selectedTopic ? `${selectedTopic.name} 主題的其他人：` : ''),
     [selectedTopic]
   )
+
   const summaryList: SummaryCardProps[] = useMemo(() => {
     if (!selectedTopic) return []
     return speechesByTopic[selectedTopic.slug].map(
@@ -136,12 +138,17 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
       })
     )
   }, [selectedTopic, speechesByTopic])
+
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
     () => groupSummary(summaryList),
     [summaryList]
   )
 
-  const { data: topLegislators, error: topLegislatorsError } = useSWR(
+  const {
+    data: topLegislators,
+    error: topLegislatorsError,
+    isLoading: isLoadingTopLegislators,
+  } = useSWR(
     selectedTopic?.slug
       ? [
           'fetchTopLegislatorsBySpeechCount',
@@ -177,6 +184,15 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
 
   const handleTabChange = useCallback((index: number) => {
     setSelectedTab(index)
+  }, [])
+
+  const handleFilterConfirm = useCallback((filterList: TabProps[]) => {
+    setTabList(filterList.map((topic) => ({ ...topic, showAvatar: false })))
+    setSelectedTab(0)
+  }, [])
+
+  const closeFilter = useCallback(() => {
+    setShowFilter(false)
   }, [])
 
   if (isLoading) {
@@ -223,6 +239,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
           )}
         </SummarySection>
         <FollowMoreItems title={followMoreTitle}>
+          {isLoadingTopLegislators && <Loader useAbsolute={false} />}
           {legislatorList.length > 0 ? (
             <LegislatorContainer>
               {legislatorList.map((props, index: number) => (
@@ -246,11 +263,10 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
           <FilterModal
             title={`${legislatorName} 的相關發言篩選`}
             slug={legislatorSlug}
+            initialOption={topics}
             initialSelectedOption={tabList}
-            onClose={() => {
-              setShowFilter(false)
-            }}
-            onConfirmSelection={setTabList}
+            onClose={closeFilter}
+            onConfirmSelection={handleFilterConfirm}
           />
         </FilterBox>
       </FilterMask>
