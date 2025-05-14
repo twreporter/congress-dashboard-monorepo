@@ -196,7 +196,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 
   useEffect(() => {
     if (speechState.speeches != undefined) {
-      setIsLoading(speechState.isLoading && followMoreState.isLoading)
+      setIsLoading(speechState.isLoading || followMoreState.isLoading)
     }
   }, [speechState.speeches, speechState.isLoading, followMoreState.isLoading])
 
@@ -255,6 +255,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
           <FilterModal
             title={`${title} 的相關發言篩選`}
             slug={slug}
+            placeholder={'篩選立委'}
             initialSelectedOption={tabList}
             fetcher={fetchFilterOptions}
             onClose={() => {
@@ -453,6 +454,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
             title={`${title} 的相關發言篩選`}
             subtitle={subtitle}
             slug={slug}
+            placeholder={'篩選議題'}
             initialSelectedOption={tabList}
             fetcher={fetchFilterOptions}
             onClose={() => {

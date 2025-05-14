@@ -1,4 +1,5 @@
 export enum ZIndex {
+  Tooltip = 500,
   ControlBar = 900,
   Header = 1000,
   Bar = Header,

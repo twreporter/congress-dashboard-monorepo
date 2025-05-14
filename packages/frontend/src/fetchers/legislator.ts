@@ -2,6 +2,11 @@
 
 // utils
 import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
+// @twreporter
+import {
+  MemberType,
+  Constituency,
+} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 // lodash
 import { isEmpty } from 'lodash'
 const _ = {
@@ -162,7 +167,8 @@ type LegislatorFromRes = {
   party: {
     image?: keystoneImage
   }
-  constituency?: string
+  type?: MemberType
+  constituency?: Constituency
   tootip?: string
   note?: string
 }[]
@@ -195,6 +201,7 @@ export const fetchLegislators = async ({
           name
         }
         constituency
+        type
         party {
           image {
             imageFile {

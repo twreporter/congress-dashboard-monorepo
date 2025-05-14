@@ -16,6 +16,8 @@ import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
 import {
   MEMBER_TYPE_LABEL,
   MemberType,
+  Constituency,
+  CONSTITUENCY_LABEL,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 import {
   colorGrayscale,
@@ -155,6 +157,7 @@ export type CardHumanProps = {
   tooltip?: string
   note?: string
   type?: MemberType
+  constituency?: Constituency
   tags?: Tag[]
   avatar?: string
   partyAvatar?: string
@@ -167,6 +170,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
   tooltip = '',
   note = '',
   type = MemberType.Constituency,
+  constituency,
   tags = [],
   avatar = '',
   partyAvatar = '',
@@ -180,19 +184,31 @@ const CardHuman: React.FC<CardHumanProps> = ({
   const [visibleTagCount, setVisibleTagCount] = useState(tags.length)
   const tagBoxRef = useRef<HTMLInputElement>(null)
   const tagRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  const tagBoxWidth = useRef(0)
   useEffect(() => {
     const tagBox = tagBoxRef.current
     if (tagBox) {
       const calculateVisibleTags = _.throttle(() => {
         if (!tagBox) return
+        if (tagBoxWidth.current === tagBox.clientWidth) {
+          return
+        }
+        tagBoxWidth.current = tagBox.clientWidth
+
         // tags can show at least two lines
         const availableLines = size === CardSize.L ? 3 : 2
-        const availableWidth = tagBox.clientWidth * availableLines
+        const oneLineWidth = tagBox.clientWidth
+        const moreWidth = 40
         // Calculate how many tags can fit
-        let totalWidth = 0
+        let usedLines = 0
+        let curentLineUsedWidth = 0
         let count = 0
         // Add width of each tag
         for (let i = 0; i < tags.length; i++) {
+          if (usedLines === availableLines) {
+            break
+          }
+
           const tag = tags[i]
           const tagElement = tagRefs.current.get(tag.name)
           let tagWidth = 0
@@ -201,12 +217,25 @@ const CardHuman: React.FC<CardHumanProps> = ({
           } else {
             tagWidth = 108 // Default estimated width if tag not yet rendered
           }
-          // "..." tag width approx 40px
-          if (totalWidth + tagWidth < availableWidth - 40) {
-            totalWidth += tagWidth
+
+          const isLastLine = usedLines === availableLines - 1
+          const shouldCalucalateMoreWidth = isLastLine && i < tags.length - 1
+          const toOccupyWidth = shouldCalucalateMoreWidth
+            ? tagWidth + moreWidth
+            : tagWidth
+
+          // can fit current line
+          if (toOccupyWidth + curentLineUsedWidth < oneLineWidth) {
+            curentLineUsedWidth += toOccupyWidth
             count++
           } else {
-            break
+            // try to put it in next line
+            if (isLastLine) {
+              break
+            }
+            usedLines++
+            curentLineUsedWidth = toOccupyWidth
+            count++
           }
         }
         setVisibleTagCount(Math.max(1, count))
@@ -248,7 +277,13 @@ const CardHuman: React.FC<CardHumanProps> = ({
             <Name text={name} />
             {tooltip ? <Tooltip tooltip={tooltip} /> : null}
           </Title>
-          <Type text={MEMBER_TYPE_LABEL[type]} />
+          <Type
+            text={
+              type === MemberType.Constituency && constituency
+                ? CONSTITUENCY_LABEL[constituency]
+                : MEMBER_TYPE_LABEL[type]
+            }
+          />
         </div>
         {isShowTag ? (
           <TagContainer ref={tagBoxRef}>
