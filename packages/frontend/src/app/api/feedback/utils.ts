@@ -79,13 +79,13 @@ export const generatePayloadFromFeedback: generatePayloadFromFeedbackType = (
   feedback
 ) => {
   if (feedback.type === FeedbackType.Content) {
-    const emailText = feedback.email ? `（{${feedback.email}）` : ''
+    const emailText = feedback.email ? `（${feedback.email}）` : ''
     const problemText = feedback.problem ? `「${feedback.problem}」` : ''
     return `:pencil2:${feedback.username}${emailText}回報${problemText}來自 ${feedback.fromUrl}`
   }
 
   // product feedback
-  const emailText = feedback.email ? `（{${feedback.email}）` : ''
+  const emailText = feedback.email ? `（${feedback.email}）` : ''
   const problemText = feedback.problem ? `「${feedback.problem}」` : ''
   return `:hammer_and_wrench:${
     feedback.username

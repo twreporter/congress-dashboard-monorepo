@@ -20,7 +20,7 @@ export enum OSType {
   Windows = 'windows',
   Mac = 'mac',
   Ios = 'ios',
-  Android = 'andriod',
+  Android = 'android',
   Linux = 'linux',
   Other = 'other',
 }
