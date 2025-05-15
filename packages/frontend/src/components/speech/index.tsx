@@ -50,6 +50,8 @@ import { useSpeechData } from '@/components/speech/hooks/use-speech-data'
 import { useScrollStage } from '@/components/speech/hooks/use-scroll-stage'
 // constants
 import { InternalRoutes } from '@/constants/routes'
+// utils
+import { openFeedback } from '@/utils/feedback'
 
 const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
   ${mq.desktopAndAbove`
@@ -254,7 +256,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
           <SpeechAsideInfo {...asideInfoProps} />
         </TabletAndBelowWithFlex>
         <DesktopAndAboveWithFlex>
-          <Feedback>
+          <Feedback onClick={openFeedback}>
             <CustomPillButton
               leftIconComponent={<Report releaseBranch={releaseBranch} />}
               text={'問題回報'}
