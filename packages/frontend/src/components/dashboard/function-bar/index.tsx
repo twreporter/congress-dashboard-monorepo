@@ -187,9 +187,10 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     `立法院｜第${latestMettingTerm}屆｜全部會期`
   )
   const [filterCount, setFilterCount] = useState(0)
+  const [currentFilterValue, setCurrentFilterValue] = useState(filterValues)
 
   const sessionState = useLegislativeMeetingSession(
-    filterValues.meeting as string
+    currentFilterValue.meeting as string
   )
   const committeeState = useCommittee()
 
@@ -313,6 +314,20 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     return options
   }
 
+  const handleChange = ({
+    meeting,
+    meetingSession,
+    ...other
+  }: FilterModalValueType) => {
+    const newSession =
+      meeting === currentFilterValue.meeting ? meetingSession : ['all']
+    setCurrentFilterValue({
+      meeting,
+      meetingSession: newSession,
+      ...other,
+    })
+  }
+
   const handleSubmit = (filterModalValue: FilterModalValueType) => {
     if (_.isEqual(filterModalValue, filterValues)) {
       return
@@ -376,15 +391,18 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
               <TabletAndAbove>
                 <FilterString>{filterString}</FilterString>
               </TabletAndAbove>
-              <FilterButton filterCount={filterCount} />
+              <FilterButton
+                filterCount={tabType === Option.Issue ? 0 : filterCount}
+              />
             </Filter>
           </Bar>
           <FilterModal
             isOpen={isFilterOpen}
             setIsOpen={setIsFilterOpen}
             onSubmit={handleSubmit}
+            onChange={handleChange}
             options={getFilterOptions()}
-            value={filterValues}
+            value={currentFilterValue}
           />
         </Box>
         <HorizaontalLine

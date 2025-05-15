@@ -8,9 +8,11 @@ import {
   Constituency,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 // lodash
-import { isEmpty } from 'lodash'
+import { isEmpty, remove, includes } from 'lodash'
 const _ = {
   isEmpty,
+  remove,
+  includes,
 }
 
 /* fetchTopLegislatorsBySpeechCount
@@ -216,22 +218,61 @@ export const fetchLegislators = async ({
     }
   `
   const where = {
-    legislativeMeeting: {
-      id: {
-        equals: legislativeMeetingId,
+    AND: [
+      {
+        legislativeMeeting: {
+          id: {
+            equals: legislativeMeetingId,
+          },
+        },
       },
-    },
+    ],
   }
   if (partyIds && partyIds.length > 0) {
-    where['party'] = {
+    where.AND[0]['party'] = {
       id: {
         in: partyIds,
       },
     }
   }
   if (constituencies && constituencies.length > 0) {
-    where['constituency'] = {
-      in: constituencies,
+    const typeFilter = _.remove(constituencies, (value) => {
+      return _.includes(
+        [
+          MemberType.NationwideAndOverseas,
+          MemberType.HighlandAboriginal,
+          MemberType.LowlandAboriginal,
+        ],
+        value
+      )
+    })
+    const hasTypeFilter = typeFilter && typeFilter.length > 0
+    const hasCityFilter = constituencies && constituencies.length > 0
+    const needOr = hasTypeFilter && hasCityFilter
+    if (needOr) {
+      where['OR'] = [
+        {
+          type: {
+            in: typeFilter,
+          },
+        },
+        {
+          city: {
+            in: constituencies,
+          },
+        },
+      ]
+    } else {
+      if (hasTypeFilter) {
+        where.AND[0]['type'] = {
+          in: typeFilter,
+        }
+      }
+      if (hasCityFilter) {
+        where.AND[0]['city'] = {
+          in: constituencies,
+        }
+      }
     }
   }
   if (committeeSlugs && committeeSlugs.length > 0) {
@@ -256,7 +297,7 @@ export const fetchLegislators = async ({
         },
       }
     }
-    where['sessionAndCommittee'] = sessionAndCommitteeWhere
+    where.AND[0]['sessionAndCommittee'] = sessionAndCommitteeWhere
   }
 
   const url = process.env.NEXT_PUBLIC_API_URL as string
