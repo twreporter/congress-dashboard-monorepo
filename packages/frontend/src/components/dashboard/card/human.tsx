@@ -201,7 +201,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
         const moreWidth = 40
         // Calculate how many tags can fit
         let usedLines = 0
-        let curentLineUsedWidth = 0
+        let currentLineUsedWidth = 0
         let count = 0
         // Add width of each tag
         for (let i = 0; i < tags.length; i++) {
@@ -219,14 +219,14 @@ const CardHuman: React.FC<CardHumanProps> = ({
           }
 
           const isLastLine = usedLines === availableLines - 1
-          const shouldCalucalateMoreWidth = isLastLine && i < tags.length - 1
-          const toOccupyWidth = shouldCalucalateMoreWidth
+          const shouldCalculateMoreWidth = isLastLine && i < tags.length - 1
+          const toOccupyWidth = shouldCalculateMoreWidth
             ? tagWidth + moreWidth
             : tagWidth
 
           // can fit current line
-          if (toOccupyWidth + curentLineUsedWidth < oneLineWidth) {
-            curentLineUsedWidth += toOccupyWidth
+          if (toOccupyWidth + currentLineUsedWidth < oneLineWidth) {
+            currentLineUsedWidth += toOccupyWidth
             count++
           } else {
             // try to put it in next line
@@ -234,7 +234,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
               break
             }
             usedLines++
-            curentLineUsedWidth = toOccupyWidth
+            currentLineUsedWidth = toOccupyWidth
             count++
           }
         }
