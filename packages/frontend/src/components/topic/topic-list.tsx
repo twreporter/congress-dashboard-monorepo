@@ -251,6 +251,7 @@ const TopicList: React.FC<TopicListProps> = ({
           <FilterModal
             title={`${topicTitle} 的相關發言篩選`}
             slug={topicSlug}
+            placeholder={'篩選立委'}
             initialSelectedOption={tabList}
             onClose={() => {
               setShowFilter(false)

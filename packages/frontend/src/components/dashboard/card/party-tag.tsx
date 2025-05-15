@@ -10,6 +10,7 @@ const Avatar = styled.img`
   display: block;
   border-radius: 50%;
   box-shadow: 0px 0px 4px 0px ${colorOpacity['black_0.2']};
+  object-fit: cover;
 `
 const Tag = styled.div<{ $size: TagSize }>`
   position: relative;
