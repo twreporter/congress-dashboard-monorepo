@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 // fetcher
 import { type TopicData } from '@/fetchers/server/topic'
 // util
-import { getImageLink } from '@/fetchers/utils'
+import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // lodash
 import groupBy from 'lodash/groupBy'
 
@@ -31,7 +31,7 @@ export const useTopicData = (topic: TopicData | null) => {
         avatar: getImageLink(speeches[0].legislativeYuanMember.legislator),
         count: speeches.length,
       }))
-      .sort((a, b) => b.count - a.count)
+      .sort(sortByCountDesc)
     return { legislatorCount, legislatorsData, speechesByLegislator }
   }, [topic?.speeches])
 }

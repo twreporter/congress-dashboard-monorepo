@@ -5,7 +5,7 @@ import {
   type TopicData,
 } from '@/fetchers/server/legislator'
 // utils
-import { getImageLink } from '@/fetchers/utils'
+import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // @twreporter
 import {
   MEMBER_TYPE_LABEL,
@@ -106,7 +106,7 @@ export const useLegislatorData = (
       slug: topic.slug,
       name: topic.title,
       count: topic.speechesCount,
-    })).sort((a, b) => b.count - a.count)
+    })).sort(sortByCountDesc)
 
     const speechesByTopic = _.mapValues(
       _.groupBy(topicsData, 'slug'),
