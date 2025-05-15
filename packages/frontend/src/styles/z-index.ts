@@ -5,4 +5,5 @@ export enum ZIndex {
   HamburgerMenu = 1100,
   FilterModal = 1200,
   SideBar = 3000,
+  Feedback = 5000,
 }

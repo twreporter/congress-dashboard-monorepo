@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
+// util
+import { openFeedback } from '@/utils/feedback'
 // type
 import type { FilterOption } from '@/components/sidebar/type'
 // components
@@ -84,7 +86,8 @@ const Error: React.FC = () => (
       <ErrorDesc text={'請嘗試重新整理頁面。若仍無法正常顯示，'} />
       <ErrorDesc>
         歡迎點此
-        <TextButtonInP>回報問題</TextButtonInP>以協助我們改善。
+        <TextButtonInP onClick={openFeedback}>回報問題</TextButtonInP>
+        以協助我們改善。
       </ErrorDesc>
     </Desc>
   </ErrorBox>
