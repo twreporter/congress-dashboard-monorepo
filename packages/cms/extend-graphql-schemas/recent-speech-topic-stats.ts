@@ -40,11 +40,15 @@ export const recentSpeechTopicStatsTypeDefs = gql`
 
   extend type Query {
     """
+    Goal:
+    Retrieve topics with speeches being on or after the specified \`after\` date,
+    and count the number of member speeches per topic.
+
     Returns:
     - member speech counts grouped by topic
-    - a flat list of recent speeches (with pagination)
+    - a flat list of speeches whose \`date\` is on or after the \`after\` date
 
-    Topics are derived from recent speeches.
+    Speeches are derived from topics.
     """
     recentSpeechTopicStats(
       take: Int = 50
