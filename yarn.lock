@@ -6441,6 +6441,7 @@ __metadata:
     "@keystone-6/core": "npm:^6.0.0"
     "@keystone-6/fields-document": "npm:^9.0.0"
     "@twreporter/congress-dashboard-shared": "npm:0.0.6"
+    "@twreporter/errors": "npm:^1.1.2"
     "@types/papaparse": "npm:^5"
     changelog-maker: "npm:^4.1.1"
     lodash: "npm:^4.17.21"
@@ -6509,6 +6510,15 @@ __metadata:
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
   checksum: 10c0/39410e30387e6d7a7fd4d01ee8c158fe32531f8202ce74edbe06fba2d2d0a1604c9ac1fc80ead988f657da2f83a345aa03881aa28009176c8c3d7886b2c91584
+  languageName: node
+  linkType: hard
+
+"@twreporter/errors@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@twreporter/errors@npm:1.1.2"
+  dependencies:
+    lodash.get: "npm:4"
+  checksum: 10c0/8c83ccb83948a6a4d2bcd63a90193a6a818367b9caf68da7121ebafaa31ab60d83b757b8f0f49b185d3b70b17bac3e47f296103fa71fb089485b278b5eac3bcb
   languageName: node
   linkType: hard
 
@@ -14591,6 +14601,13 @@ __metadata:
   version: 4.1.0
   resolution: "lodash.deburr@npm:4.1.0"
   checksum: 10c0/30c068e9c3b21d65d260887a8849fa7b94692f868adcc4527136c296b4e71ced7149f58e0f37154d3c56d7950cc605ad3e10b2ee0baedf5638af0befc5013ebc
+  languageName: node
+  linkType: hard
+
+"lodash.get@npm:4":
+  version: 4.4.2
+  resolution: "lodash.get@npm:4.4.2"
+  checksum: 10c0/48f40d471a1654397ed41685495acb31498d5ed696185ac8973daef424a749ca0c7871bf7b665d5c14f5cc479394479e0307e781f61d5573831769593411be6e
   languageName: node
   linkType: hard
 
