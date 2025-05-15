@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: '報導者觀測站：一起監督立委議員問政',
     url: 'https://lawmaker.twreporter.org',
-    type: 'article',
+    type: 'website',
   },
 }
 

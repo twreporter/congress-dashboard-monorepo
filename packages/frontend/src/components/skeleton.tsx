@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import styled, { keyframes, css } from 'styled-components'
 import Image, { type ImageProps } from 'next/image'
 // @twreporter
@@ -71,8 +71,9 @@ export const GapHorizontal = styled.div<{ $gap: number }>`
 `
 
 // image with skeleton component
-const imageStyle = {
+const imageStyle: CSSProperties = {
   borderRadius: '50%',
+  objectFit: 'cover',
 }
 const gray200Base64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN89B8AAskB44g04okAAAAASUVORK5CYII='

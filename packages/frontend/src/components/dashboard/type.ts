@@ -2,6 +2,11 @@
 import { SelectorType } from '@/components/selector'
 // type
 import type { OptionGroup, Option } from '@/components/selector/types'
+// @twreporter
+import {
+  MemberType,
+  Constituency,
+} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 
 export type FilterOption = {
   type: SelectorType
@@ -28,6 +33,8 @@ export type Legislator = {
   note?: string
   count?: number
   tags?: Tag[]
+  type?: MemberType
+  constituency?: Constituency
 }
 
 export type Tag = {

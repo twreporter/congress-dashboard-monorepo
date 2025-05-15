@@ -167,7 +167,7 @@ const Text = styled(P2)`
   color: ${colorGrayscale.gray800};
 `
 const ConfirmBox = styled.div`
-  position: absolute;
+  position: sticky;
   bottom: 0;
   z-index: 1;
   width: 100%;
@@ -212,6 +212,7 @@ type FilterModalProps = {
   slug: string
   title: string
   subtitle?: string
+  placeholder?: string
   initialSelectedOption?: FilterOption[]
   fetcher?: (slug: string) => Promise<FilterOption[]>
   onClose: () => void
@@ -231,6 +232,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   title,
   slug,
   subtitle,
+  placeholder,
   initialSelectedOption = [],
   fetcher,
   onClose,
@@ -415,6 +417,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
               }}
             />
             <Search
+              placeholder={placeholder}
               handleChange={setKeyword}
               handleFocus={() => {
                 setIsSearchMode(true)
