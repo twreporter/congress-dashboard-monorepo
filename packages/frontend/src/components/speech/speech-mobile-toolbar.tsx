@@ -338,4 +338,35 @@ const MobileToolbar: React.FC<MobileToolbarProps> = ({
   )
 }
 
+type AboutPageMobileToolbarProps = {
+  onFontSizeChange: () => void
+  scrollStage: number
+}
+export const AboutPageMobileToolbar: React.FC<AboutPageMobileToolbarProps> = ({
+  onFontSizeChange,
+  scrollStage,
+}) => {
+  const [buttonGroup, setButtonGroup] = useState<ButtonGroupType>('none')
+  const isHidden = scrollStage >= 3
+  const hideText = scrollStage >= 2
+  const contextValue = { hideText, setButtonGroup }
+
+  useEffect(() => {
+    setButtonGroup('none')
+  }, [scrollStage])
+
+  return (
+    <MobileToolbarContext.Provider value={contextValue}>
+      <MobileToolbarContainer $isHidden={isHidden} $hideText={hideText}>
+        <ToolBar>
+          <FeedbackButton />
+          <ShareButton />
+          <FontSizeButton onClick={onFontSizeChange} />
+          <ShareButtonGroup isShow={buttonGroup === 'share'} />
+        </ToolBar>
+      </MobileToolbarContainer>
+    </MobileToolbarContext.Provider>
+  )
+}
+
 export default MobileToolbar
