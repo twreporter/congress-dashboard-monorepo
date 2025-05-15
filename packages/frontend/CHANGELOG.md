@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0-rc.11, 2025-05-15
+
+### Notable Changes
+
+- fix
+  - address defects in home page
+
+### Commits
+
+- [[`e8e4e36c63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8e4e36c63)] - **fix(frontend)**: typo (Aylie Chou)
+- [[`38761bef95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/38761bef95)] - **fix(frontend)**: add placeholder for filter modal (Aylie Chou)
+- [[`ea95712647`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ea95712647)] - **fix(frontend)**: address defects in home page (Aylie Chou)
+
 ## 1.0.0-rc.10, 2025-05-15
 
 ### Notable Changes
