@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.0.0-rc.14, 2025-05-16
+
+### Notable Changes
+
+- fix
+  - defects in function bar filter modal
+
+### Commits
+
+- [[`6b8148d33a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b8148d33a)] - **fix(frontend)**: fix functionBar filter modal defect (Aylie Chou)
+
+## 1.0.0-rc.13, 2025-05-16
+
+### Notable Changes
+
+- fix
+  - legislator page follow more scroll no padding
+
+### Commits
+
+- [[`b6808eda51`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b6808eda51)] - **fix(frontend)**: legislator page follow more scroll no padding (Lucien)
+
+
 ## 1.0.0-rc.12, 2025-05-16
 
 ### Notable Changes
@@ -12,9 +35,9 @@
 
 ### Commits
 
-* \[[`3e1fc5884d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3e1fc5884d)] - **chore(frontend)**: sync master (Lucien)
-* \[[`dae8ebf305`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dae8ebf305)] - **fix(frontend)**: use sort from fetcher utils (Lucien)
-* \[[`df9a53a7a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/df9a53a7a9)] - **fix(frontend)**: topic and legislator page sidebar filter (Lucien)
+- [[`3e1fc5884d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3e1fc5884d)] - **chore(frontend)**: sync master (Lucien)
+- [[`dae8ebf305`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dae8ebf305)] - **fix(frontend)**: use sort from fetcher utils (Lucien)
+- [[`df9a53a7a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/df9a53a7a9)] - **fix(frontend)**: topic and legislator page sidebar filter (Lucien)
 
 ## 1.0.0-rc.11, 2025-05-15
 
