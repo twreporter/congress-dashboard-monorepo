@@ -3,7 +3,7 @@ import errors from '@twreporter/errors'
 import type { TypedKeystoneContext } from '../types/context'
 import { gql } from 'graphql-tag'
 
-export const recentSpeechTopicStatsTypeDefs = gql`
+const typeDefs = `
   type MemberSpeechCount {
     memberId: ID!
     name: String!
@@ -24,6 +24,10 @@ export const recentSpeechTopicStatsTypeDefs = gql`
     distinctMemberCount: Int!
     members: [MemberSpeechCount!]!
   }
+`
+
+export const recentSpeechTopicStatsTypeDefs = gql`
+  ${typeDefs}
 
   type SpeechSummary {
     id: ID!
@@ -414,6 +418,279 @@ export const recentSpeechTopicStatsResolvers = {
               skip,
               cursor,
               after,
+            },
+          }
+        )
+        // Trigger Error Reporting
+        console.log(
+          JSON.stringify({
+            severity: 'ERROR',
+            message: errors.helpers.printAll(err, {
+              withStack: true,
+              withPayload: true,
+            }),
+          })
+        )
+        throw err
+      }
+    },
+  },
+}
+
+export const historySpeechTopicStatsTypeDefs = gql`
+  ${typeDefs}
+
+  type HistorySpeechTopicStatsResult {
+    topics: [MemberSpeechCountByTopic!]!
+  }
+
+  extend type Query {
+    """
+    Goal:
+    Retrieve topics with speeches in the specified meetingTerm and sessionTerm,
+    and count the number of member speeches per topic.
+
+    Returns:
+    - member speech counts grouped by topic
+    """
+    historySpeechTopicStats(
+      take: Int = 50
+      skip: Int = 0
+      cursor: ID
+      meetingTerm: Int
+      sessionTerm: Int = 1
+      debug: Boolean = false
+    ): HistorySpeechTopicStatsResult!
+  }
+`
+
+type HistorySpeechTopicStatsResult = {
+  topics: MemberSpeechCountByTopic[]
+}
+
+export const historySpeechTopicStatsResolvers = {
+  Query: {
+    historySpeechTopicStats: async (
+      _parent: unknown,
+      {
+        take = 50,
+        skip = 0,
+        cursor,
+        meetingTerm,
+        sessionTerm = 1,
+        debug = false,
+      }: {
+        take?: number
+        skip?: number
+        cursor?: string
+        meetingTerm: number
+        sessionTerm?: number
+        debug?: boolean
+      },
+      context: TypedKeystoneContext
+    ): Promise<HistorySpeechTopicStatsResult> => {
+      try {
+        console.time(
+          JSON.stringify({
+            severity: 'INFO',
+            message: 'historySpeechTopicStats executing',
+            jsonPayload: {
+              args: {
+                take,
+                skip,
+                cursor,
+                meetingTerm,
+                sessionTerm,
+              },
+            },
+          })
+        )
+
+        const topicRecords: TopicRecord[] = await context.prisma.topic.findMany(
+          {
+            take,
+            skip,
+            cursor: cursor ? { id: Number(cursor) } : undefined,
+            where: {
+              // Filter topics that have at least one speech in the specified meetingTerm and sessionTerm
+              speeches: {
+                some: {
+                  legislativeMeeting: {
+                    term: {
+                      equals: meetingTerm,
+                    },
+                  },
+                  ...(sessionTerm && {
+                    legislativeMeetingSession: {
+                      term: {
+                        equals: sessionTerm,
+                      },
+                    },
+                  }),
+                },
+              },
+            },
+            select: {
+              id: true,
+              slug: true,
+              title: true,
+              speeches: {
+                where: {
+                  legislativeMeeting: {
+                    term: {
+                      equals: meetingTerm,
+                    },
+                  },
+                  ...(sessionTerm && {
+                    legislativeMeetingSession: {
+                      term: {
+                        equals: sessionTerm,
+                      },
+                    },
+                  }),
+                },
+                orderBy: { date: 'asc' },
+                select: {
+                  id: true,
+                  title: true,
+                  date: true,
+                  legislativeMeeting: {
+                    select: { term: true },
+                  },
+                  legislativeMeetingSession: { select: { term: true } },
+                  legislativeYuanMember: {
+                    select: {
+                      id: true,
+                      legislator: { select: { name: true } },
+                    },
+                  },
+                },
+              },
+            },
+          }
+        )
+
+        if (debug) {
+          console.log(
+            JSON.stringify({
+              severity: 'DEBUG',
+              message: 'Prisma returned records.',
+              jsonPayload: {
+                topicRecords,
+              },
+            })
+          )
+        }
+
+        // Use a map to group topics uniquely by slug + meeting/session term
+        const topicMap = new Map<
+          string,
+          {
+            topicInfo: TopicInfo
+            memberMap: Map<string, MemberSpeechCount>
+          }
+        >()
+
+        for (const topicRecord of topicRecords) {
+          const speeches = topicRecord.speeches
+          for (const speech of speeches) {
+            // Composite key to separate topics by session/term
+            const topicMapKey = `${topicRecord.slug}_${speech.legislativeMeeting?.term}_${speech.legislativeMeetingSession?.term}`
+
+            // Initialize topic info in map if not yet present
+            if (!topicMap.has(topicMapKey)) {
+              topicMap.set(topicMapKey, {
+                topicInfo: {
+                  id: topicRecord.id,
+                  slug: topicRecord.slug,
+                  title: topicRecord.title,
+                  lastSpeechAt: speech.date.toISOString(),
+                  meetingTerm: speech.legislativeMeeting?.term,
+                  sessionTerm: speech.legislativeMeetingSession?.term,
+                },
+                memberMap: new Map(),
+              })
+            } else {
+              // Update latest speech date for this topic instance
+              const topicInfo = topicMap.get(topicMapKey)?.topicInfo
+              if (
+                topicInfo &&
+                new Date(topicInfo.lastSpeechAt) < new Date(speech.date)
+              ) {
+                topicInfo.lastSpeechAt = speech.date.toISOString()
+              }
+            }
+
+            const member = speech.legislativeYuanMember
+            const memberMap = topicMap.get(topicMapKey)?.memberMap
+            const existing = memberMap?.get(member.id)
+
+            if (existing) {
+              // If already counted, increment speech count
+              existing.count += 1
+            } else {
+              // Otherwise, add a new member speech record
+              memberMap?.set(member.id, {
+                memberId: member.id,
+                name: member.legislator?.name ?? '',
+                count: 1,
+              })
+            }
+          }
+        }
+
+        const topics = Array.from(topicMap.entries()).map(
+          ([, { topicInfo, memberMap }]) => ({
+            topicInfo,
+            // Number of distinct members who spoke on this topic
+            distinctMemberCount: memberMap.size,
+            members: Array.from(memberMap.values()).sort(
+              (a, b) => b.count - a.count
+            ),
+          })
+        )
+
+        if (debug) {
+          console.log(
+            JSON.stringify({
+              severity: 'DEBUG',
+              message: 'Query returned value: ',
+              jsonPayload: {
+                topics,
+              },
+            })
+          )
+        }
+
+        console.timeEnd(
+          JSON.stringify({
+            severity: 'INFO',
+            message: 'historySpeechTopicStats executing',
+            jsonPayload: {
+              args: {
+                take,
+                skip,
+                cursor,
+                meetingTerm,
+                sessionTerm,
+              },
+            },
+          })
+        )
+
+        return { topics }
+      } catch (_err) {
+        const err = errors.helpers.wrap(
+          _err,
+          'GraphQL Resolver Error',
+          'Error to execute historySpeechTopicStats query',
+          {
+            args: {
+              take,
+              skip,
+              cursor,
+              meetingTerm,
+              sessionTerm,
             },
           }
         )

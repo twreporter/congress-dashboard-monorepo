@@ -4,6 +4,8 @@ import { mergeSchemas } from '@graphql-tools/schema'
 import {
   recentSpeechTopicStatsTypeDefs,
   recentSpeechTopicStatsResolvers,
+  historySpeechTopicStatsTypeDefs,
+  historySpeechTopicStatsResolvers,
 } from './recent-speech-topic-stats'
 import {
   topNTopicsOfLegislatorsTypeDefs,
@@ -19,11 +21,13 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
     schemas: [baseSchema],
     typeDefs: [
       recentSpeechTopicStatsTypeDefs,
+      historySpeechTopicStatsTypeDefs,
       topNTopicsOfLegislatorsTypeDefs,
       topicsOrderBySpeechCountTypeDefs,
     ],
     resolvers: [
       recentSpeechTopicStatsResolvers,
+      historySpeechTopicStatsResolvers,
       topNTopicsOfLegislatorsResolver,
       topicsOrderBySpeechCountResolver,
     ],
