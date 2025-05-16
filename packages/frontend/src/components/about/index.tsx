@@ -78,13 +78,7 @@ const AboutPage: React.FC<AboutPageProps> = ({
   const { setTabElement } = useScrollContext()
   const scrollStage = useScrollStage()
 
-  const summary = brief.api_data
-    .map((item) => {
-      const { content } = item
-      return content
-    })
-    .concat()
-    .toString()
+  const summary = brief.api_data.flatMap((item) => item.content).join('')
 
   const cycleFontSize = useCallback(() => {
     setFontSize((current) =>
