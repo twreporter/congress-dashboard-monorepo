@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0-rc.12, 2025-05-16
+
+### Notable Changes
+
+- fix
+  - topic and legislator page sidebar filter
+  - use sort from fetcher utils
+- chore
+  - sync master
+
+### Commits
+
+* \[[`3e1fc5884d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3e1fc5884d)] - **chore(frontend)**: sync master (Lucien)
+* \[[`dae8ebf305`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dae8ebf305)] - **fix(frontend)**: use sort from fetcher utils (Lucien)
+* \[[`df9a53a7a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/df9a53a7a9)] - **fix(frontend)**: topic and legislator page sidebar filter (Lucien)
+
 ## 1.0.0-rc.11, 2025-05-15
 
 ### Notable Changes
