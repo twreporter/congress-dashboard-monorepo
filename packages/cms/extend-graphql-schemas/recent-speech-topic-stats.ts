@@ -1,6 +1,6 @@
 // @ts-ignore @twreporter/errors lacks of type definition
 import errors from '@twreporter/errors'
-import { TypedKeystoneContext } from '../types/context'
+import type { TypedKeystoneContext } from '../types/context'
 import { gql } from 'graphql-tag'
 
 export const recentSpeechTopicStatsTypeDefs = gql`
@@ -182,6 +182,9 @@ export const recentSpeechTopicStatsResolvers = {
                   gte: 1,
                 },
               },
+              legislativeYuanMember: {
+                isNot: null,
+              },
             },
             select: {
               id: true,
@@ -304,11 +307,6 @@ export const recentSpeechTopicStatsResolvers = {
         for (const topicRecord of topicRecords) {
           const speeches = topicRecord.speeches
           for (const speech of speeches) {
-            const member = speech.legislativeYuanMember
-            if (!member?.id) {
-              continue
-            }
-
             // Composite key to separate topics by session/term
             const topicMapKey = `${topicRecord.slug}_${speech.legislativeMeeting?.term}_${speech.legislativeMeetingSession?.term}`
 
@@ -336,6 +334,7 @@ export const recentSpeechTopicStatsResolvers = {
               }
             }
 
+            const member = speech.legislativeYuanMember
             const memberMap = topicMap.get(topicMapKey)?.memberMap
             const existing = memberMap?.get(member.id)
 

@@ -1,4 +1,4 @@
-import { TypedKeystoneContext } from '../types/context'
+import type { TypedKeystoneContext } from '../types/context'
 import { getLegislatorsSql } from '../custom-sql/topNTopicsOfLegislators'
 import { gql } from 'graphql-tag'
 // lodash
