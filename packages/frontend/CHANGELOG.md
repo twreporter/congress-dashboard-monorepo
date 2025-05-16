@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.14, 2025-05-16
+
+### Notable Changes
+
+- fix
+  - defects in function bar filter modal
+
+### Commits
+
+- [[`6b8148d33a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b8148d33a)] - **fix(frontend)**: fix functionBar filter modal defect (Aylie Chou)
+
 ## 1.0.0-rc.13, 2025-05-16
 
 ### Notable Changes
