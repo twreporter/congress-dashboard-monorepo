@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.0.0-rc.15, 2025-05-16
+
+### Notable Changes
+
+- feat
+  - use cache function for getAboutPage
+  - use openFeedback
+  - get about page data from go-api
+  - add about page & donation box
+  - add react-article-components packages
+- fix
+  - force dynamic to about page
+  - use flatMap address comment from copilot
+- chore
+  - sync master
+
+### Commits
+
+- [[`3d8e07ec62`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3d8e07ec62)] - Merge remote-tracking branch 'upstream/master' into feature/frontend-about-page (Lucien)
+- [[`229f1ee56f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/229f1ee56f)] - **feat(frontend)**: use cache function for getAboutPage (Lucien)
+- [[`c95646c6ef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c95646c6ef)] - **feat(frontend)**: use openFeedback (Lucien)
+- [[`ff144a9e81`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff144a9e81)] - **fix(frontend)**: force dynamic to about page (Lucien)
+- [[`d439f9ff8b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d439f9ff8b)] - **feat(frontend)**: add env page slug for staging (Lucien)
+- [[`a90bc775e9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a90bc775e9)] - **chore(frontend)**: sync master (Lucien)
+- [[`c6256762d9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c6256762d9)] - **fix(frontend)**: use flatMap address comment from copilot (Lucien)
+- [[`adaec9dd50`](https://github.com/twreporter/congress-dashboard-monorepo/commit/adaec9dd50)] - **feat(frontend)**: get about page data from go-api (Lucien)
+- [[`2fb1f5bc63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2fb1f5bc63)] - **feat(frontend)**: add about page & donation box (Lucien)
+- [[`39157d5939`](https://github.com/twreporter/congress-dashboard-monorepo/commit/39157d5939)] - **feat(frontend)**: add react-article-components packages (Lucien)
+
 ## 1.0.0-rc.14, 2025-05-16
 
 ### Notable Changes
