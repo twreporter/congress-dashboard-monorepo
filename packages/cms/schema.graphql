@@ -1327,7 +1327,17 @@ type Query {
   
   Speeches are derived from topics.
   """
-  recentSpeechTopicStats(take: Int = 50, skip: Int = 0, cursor: ID, after: CalendarDay, debug: Boolean = false): RecentSpeechTopicStatsResult!
+  recentSpeechTopicStats(take: Int = 50, skip: Int = 0, cursor: ID, after: CalendarDay!, debug: Boolean = false): SpeechTopicStatsResult!
+
+  """
+  Goal:
+  Retrieve topics with speeches in the specified meetingTerm and sessionTerm,
+  and count the number of member speeches per topic.
+  
+  Returns:
+  - member speech counts grouped by topic
+  """
+  historySpeechTopicStats(take: Int = 50, skip: Int = 0, cursor: ID, meetingTerm: Int!, sessionTerm: Int, debug: Boolean = false): SpeechTopicStatsResult!
 
   """Get top N topic of a legislator order by speech cound desc"""
   topNTopicsOfLegislators(legislatorIds: [Int!]!, meetingId: Int!, sessionIds: [Int] = [], take: Int = 10): [LegislatorWIthTopTopics]
@@ -1502,7 +1512,7 @@ type SpeechSummary {
   date: String!
 }
 
-type RecentSpeechTopicStatsResult {
+type SpeechTopicStatsResult {
   topics: [MemberSpeechCountByTopic!]!
   speeches: [SpeechSummary!]!
 }
