@@ -284,6 +284,7 @@ const TopicList: React.FC<TopicListProps> = ({
             title={`${topicTitle} 的相關發言篩選`}
             slug={topicSlug}
             initialOption={legislatorsData}
+            placeholder={'篩選立委'}
             initialSelectedOption={tabList}
             onClose={closeFilter}
             onConfirmSelection={handleFilterConfirm}
