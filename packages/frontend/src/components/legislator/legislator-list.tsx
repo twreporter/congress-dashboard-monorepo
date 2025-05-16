@@ -46,6 +46,10 @@ const LegislatorContainer = styled.div`
   display: flex;
   overflow-x: scroll;
   scrollbar-width: none;
+  margin-left: -24px;
+  margin-right: -24px;
+  padding-left: 24px;
+  padding-right: 24px;
   a {
     text-decoration: none;
   }
