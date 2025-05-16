@@ -24,10 +24,6 @@ const typeDefs = `
     distinctMemberCount: Int!
     members: [MemberSpeechCount!]!
   }
-`
-
-export const recentSpeechTopicStatsTypeDefs = gql`
-  ${typeDefs}
 
   type SpeechSummary {
     id: ID!
@@ -37,10 +33,14 @@ export const recentSpeechTopicStatsTypeDefs = gql`
     date: String!
   }
 
-  type RecentSpeechTopicStatsResult {
+  type SpeechTopicStatsResult {
     topics: [MemberSpeechCountByTopic!]!
     speeches: [SpeechSummary!]!
   }
+`
+
+export const recentSpeechTopicStatsTypeDefs = gql`
+  ${typeDefs}
 
   extend type Query {
     """
@@ -58,9 +58,9 @@ export const recentSpeechTopicStatsTypeDefs = gql`
       take: Int = 50
       skip: Int = 0
       cursor: ID
-      after: CalendarDay
+      after: CalendarDay!
       debug: Boolean = false
-    ): RecentSpeechTopicStatsResult!
+    ): SpeechTopicStatsResult!
   }
 `
 
@@ -126,7 +126,7 @@ type SpeechSummary = {
   sessionTerm?: number
 }
 
-type RecentSpeechTopicStatsResult = {
+type SpeechTopicStatsResult = {
   topics: MemberSpeechCountByTopic[]
   speeches: SpeechSummary[]
 }
@@ -149,7 +149,7 @@ export const recentSpeechTopicStatsResolvers = {
         debug?: boolean
       },
       context: TypedKeystoneContext
-    ): Promise<RecentSpeechTopicStatsResult> => {
+    ): Promise<SpeechTopicStatsResult> => {
       try {
         console.time(
           JSON.stringify({
@@ -360,10 +360,6 @@ export const recentSpeechTopicStatsResolvers = {
 export const historySpeechTopicStatsTypeDefs = gql`
   ${typeDefs}
 
-  type HistorySpeechTopicStatsResult {
-    topics: [MemberSpeechCountByTopic!]!
-  }
-
   extend type Query {
     """
     Goal:
@@ -377,16 +373,12 @@ export const historySpeechTopicStatsTypeDefs = gql`
       take: Int = 50
       skip: Int = 0
       cursor: ID
-      meetingTerm: Int
-      sessionTerm: Int = 1
+      meetingTerm: Int!
+      sessionTerm: Int
       debug: Boolean = false
-    ): HistorySpeechTopicStatsResult!
+    ): SpeechTopicStatsResult!
   }
 `
-
-type HistorySpeechTopicStatsResult = {
-  topics: MemberSpeechCountByTopic[]
-}
 
 export const historySpeechTopicStatsResolvers = {
   Query: {
@@ -397,7 +389,7 @@ export const historySpeechTopicStatsResolvers = {
         skip = 0,
         cursor,
         meetingTerm,
-        sessionTerm = 1,
+        sessionTerm,
         debug = false,
       }: {
         take?: number
@@ -408,7 +400,7 @@ export const historySpeechTopicStatsResolvers = {
         debug?: boolean
       },
       context: TypedKeystoneContext
-    ): Promise<HistorySpeechTopicStatsResult> => {
+    ): Promise<SpeechTopicStatsResult> => {
       try {
         console.time(
           JSON.stringify({
@@ -502,7 +494,7 @@ export const historySpeechTopicStatsResolvers = {
           )
         }
 
-        const { topics } = processTopicRecords(topicRecords)
+        const { topics, speeches } = processTopicRecords(topicRecords)
 
         if (debug) {
           console.log(
@@ -532,7 +524,7 @@ export const historySpeechTopicStatsResolvers = {
           })
         )
 
-        return { topics }
+        return { topics, speeches }
       } catch (_err) {
         const err = errors.helpers.wrap(
           _err,
@@ -566,7 +558,7 @@ export const historySpeechTopicStatsResolvers = {
 
 function processTopicRecords(
   topicRecords: TopicRecord[]
-): RecentSpeechTopicStatsResult {
+): SpeechTopicStatsResult {
   // Use a map to group topics uniquely by slug + meeting/session term
   const topicMap = new Map<
     string,
