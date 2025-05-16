@@ -296,87 +296,7 @@ export const recentSpeechTopicStatsResolvers = {
           )
         }
 
-        // Use a map to group topics uniquely by slug + meeting/session term
-        const topicMap = new Map<
-          string,
-          {
-            topicInfo: TopicInfo
-            memberMap: Map<string, MemberSpeechCount>
-          }
-        >()
-
-        // Use a map to collect deduplicated speeches
-        const allSpeechMap = new Map<string, SpeechSummary>()
-
-        for (const topicRecord of topicRecords) {
-          const speeches = topicRecord.speeches
-          for (const speech of speeches) {
-            // Composite key to separate topics by session/term
-            const topicMapKey = `${topicRecord.slug}_${speech.legislativeMeeting?.term}_${speech.legislativeMeetingSession?.term}`
-
-            // Initialize topic info in map if not yet present
-            if (!topicMap.has(topicMapKey)) {
-              topicMap.set(topicMapKey, {
-                topicInfo: {
-                  id: topicRecord.id,
-                  slug: topicRecord.slug,
-                  title: topicRecord.title,
-                  lastSpeechAt: speech.date.toISOString(),
-                  meetingTerm: speech.legislativeMeeting?.term,
-                  sessionTerm: speech.legislativeMeetingSession?.term,
-                },
-                memberMap: new Map(),
-              })
-            } else {
-              // Update latest speech date for this topic instance
-              const topicInfo = topicMap.get(topicMapKey)?.topicInfo
-              if (
-                topicInfo &&
-                new Date(topicInfo.lastSpeechAt) < new Date(speech.date)
-              ) {
-                topicInfo.lastSpeechAt = speech.date.toISOString()
-              }
-            }
-
-            const member = speech.legislativeYuanMember
-            const memberMap = topicMap.get(topicMapKey)?.memberMap
-            const existing = memberMap?.get(member.id)
-
-            if (existing) {
-              // If already counted, increment speech count
-              existing.count += 1
-            } else {
-              // Otherwise, add a new member speech record
-              memberMap?.set(member.id, {
-                memberId: member.id,
-                name: member.legislator?.name ?? '',
-                count: 1,
-              })
-            }
-
-            // Collect deduplicated speeches
-            allSpeechMap.set(speech.id, {
-              id: speech.id,
-              title: speech.title,
-              meetingTerm: speech.legislativeMeeting?.term,
-              sessionTerm: speech.legislativeMeetingSession?.term,
-              date: speech.date.toISOString(),
-            })
-          }
-        }
-
-        const topics = Array.from(topicMap.entries()).map(
-          ([, { topicInfo, memberMap }]) => ({
-            topicInfo,
-            // Number of distinct members who spoke on this topic
-            distinctMemberCount: memberMap.size,
-            members: Array.from(memberMap.values()).sort(
-              (a, b) => b.count - a.count
-            ),
-          })
-        )
-
-        const allSpeeches = Array.from(allSpeechMap.values())
+        const { topics, speeches } = processTopicRecords(topicRecords)
 
         if (debug) {
           console.log(
@@ -385,7 +305,7 @@ export const recentSpeechTopicStatsResolvers = {
               message: 'Query returned value: ',
               jsonPayload: {
                 topics,
-                speeches: allSpeeches,
+                speeches,
               },
             })
           )
@@ -406,7 +326,7 @@ export const recentSpeechTopicStatsResolvers = {
           })
         )
 
-        return { topics, speeches: allSpeeches }
+        return { topics, speeches }
       } catch (_err) {
         const err = errors.helpers.wrap(
           _err,
@@ -582,73 +502,7 @@ export const historySpeechTopicStatsResolvers = {
           )
         }
 
-        // Use a map to group topics uniquely by slug + meeting/session term
-        const topicMap = new Map<
-          string,
-          {
-            topicInfo: TopicInfo
-            memberMap: Map<string, MemberSpeechCount>
-          }
-        >()
-
-        for (const topicRecord of topicRecords) {
-          const speeches = topicRecord.speeches
-          for (const speech of speeches) {
-            // Composite key to separate topics by session/term
-            const topicMapKey = `${topicRecord.slug}_${speech.legislativeMeeting?.term}_${speech.legislativeMeetingSession?.term}`
-
-            // Initialize topic info in map if not yet present
-            if (!topicMap.has(topicMapKey)) {
-              topicMap.set(topicMapKey, {
-                topicInfo: {
-                  id: topicRecord.id,
-                  slug: topicRecord.slug,
-                  title: topicRecord.title,
-                  lastSpeechAt: speech.date.toISOString(),
-                  meetingTerm: speech.legislativeMeeting?.term,
-                  sessionTerm: speech.legislativeMeetingSession?.term,
-                },
-                memberMap: new Map(),
-              })
-            } else {
-              // Update latest speech date for this topic instance
-              const topicInfo = topicMap.get(topicMapKey)?.topicInfo
-              if (
-                topicInfo &&
-                new Date(topicInfo.lastSpeechAt) < new Date(speech.date)
-              ) {
-                topicInfo.lastSpeechAt = speech.date.toISOString()
-              }
-            }
-
-            const member = speech.legislativeYuanMember
-            const memberMap = topicMap.get(topicMapKey)?.memberMap
-            const existing = memberMap?.get(member.id)
-
-            if (existing) {
-              // If already counted, increment speech count
-              existing.count += 1
-            } else {
-              // Otherwise, add a new member speech record
-              memberMap?.set(member.id, {
-                memberId: member.id,
-                name: member.legislator?.name ?? '',
-                count: 1,
-              })
-            }
-          }
-        }
-
-        const topics = Array.from(topicMap.entries()).map(
-          ([, { topicInfo, memberMap }]) => ({
-            topicInfo,
-            // Number of distinct members who spoke on this topic
-            distinctMemberCount: memberMap.size,
-            members: Array.from(memberMap.values()).sort(
-              (a, b) => b.count - a.count
-            ),
-          })
-        )
+        const { topics } = processTopicRecords(topicRecords)
 
         if (debug) {
           console.log(
@@ -708,4 +562,93 @@ export const historySpeechTopicStatsResolvers = {
       }
     },
   },
+}
+
+function processTopicRecords(
+  topicRecords: TopicRecord[]
+): RecentSpeechTopicStatsResult {
+  // Use a map to group topics uniquely by slug + meeting/session term
+  const topicMap = new Map<
+    string,
+    {
+      topicInfo: TopicInfo
+      memberMap: Map<string, MemberSpeechCount>
+    }
+  >()
+
+  // Use a map to collect deduplicated speeches
+  const allSpeechMap = new Map<string, SpeechSummary>()
+
+  for (const topicRecord of topicRecords) {
+    const speeches = topicRecord.speeches
+    for (const speech of speeches) {
+      // Composite key to separate topics by session/term
+      const topicMapKey = `${topicRecord.slug}_${speech.legislativeMeeting?.term}_${speech.legislativeMeetingSession?.term}`
+
+      // Initialize topic info in map if not yet present
+      if (!topicMap.has(topicMapKey)) {
+        topicMap.set(topicMapKey, {
+          topicInfo: {
+            id: topicRecord.id,
+            slug: topicRecord.slug,
+            title: topicRecord.title,
+            lastSpeechAt: speech.date.toISOString(),
+            meetingTerm: speech.legislativeMeeting?.term,
+            sessionTerm: speech.legislativeMeetingSession?.term,
+          },
+          memberMap: new Map(),
+        })
+      } else {
+        // Update latest speech date for this topic instance
+        const topicInfo = topicMap.get(topicMapKey)?.topicInfo
+        if (
+          topicInfo &&
+          new Date(topicInfo.lastSpeechAt) < new Date(speech.date)
+        ) {
+          topicInfo.lastSpeechAt = speech.date.toISOString()
+        }
+      }
+
+      const member = speech.legislativeYuanMember
+      const memberMap = topicMap.get(topicMapKey)?.memberMap
+      const existing = memberMap?.get(member.id)
+
+      if (existing) {
+        // If already counted, increment speech count
+        existing.count += 1
+      } else {
+        // Otherwise, add a new member speech record
+        memberMap?.set(member.id, {
+          memberId: member.id,
+          name: member.legislator?.name ?? '',
+          count: 1,
+        })
+      }
+
+      // Collect deduplicated speeches
+      allSpeechMap.set(speech.id, {
+        id: speech.id,
+        title: speech.title,
+        meetingTerm: speech.legislativeMeeting?.term,
+        sessionTerm: speech.legislativeMeetingSession?.term,
+        date: speech.date.toISOString(),
+      })
+    }
+  }
+
+  const topics = Array.from(topicMap.entries()).map(
+    ([, { topicInfo, memberMap }]) => ({
+      topicInfo,
+      // Number of distinct members who spoke on this topic
+      distinctMemberCount: memberMap.size,
+      members: Array.from(memberMap.values()).sort((a, b) => b.count - a.count),
+    })
+  )
+
+  const allSpeeches = Array.from(allSpeechMap.values())
+
+  return {
+    topics,
+    speeches: allSpeeches,
+  }
 }
