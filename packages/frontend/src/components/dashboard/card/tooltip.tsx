@@ -4,6 +4,8 @@ import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 // hook
 import useOutsideClick from '@/hooks/use-outside-click'
+// style
+import { ZIndex } from '@/styles/z-index'
 // @twreporter
 import {
   colorGrayscale,
@@ -73,6 +75,7 @@ const Detail = styled.div<{
   $show: boolean
   $position: { top: boolean; left: boolean }
 }>`
+  z-index: ${ZIndex.Tooltip};
   position: absolute;
   ${(props) =>
     props.$position.top ? 'bottom: 28px;' : 'top: 28px;'} // icon height(24) + 4

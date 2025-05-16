@@ -9,6 +9,7 @@ import GlobalStyles from '@/styles/global-styles'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import SnackBar from '@/components/snack-bar'
+import Feedback from '@/components/feedback'
 // context
 import { ScrollProvider } from '@/contexts/scroll-context'
 
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: '報導者觀測站：一起監督立委議員問政',
     url: 'https://lawmaker.twreporter.org',
-    type: 'article',
+    type: 'website',
   },
 }
 
@@ -37,6 +38,7 @@ export default function RootLayout({
           <ScrollProvider>
             <GlobalStyles />
             <Header />
+            <Feedback />
             <main>{children}</main>
             <Footer />
           </ScrollProvider>

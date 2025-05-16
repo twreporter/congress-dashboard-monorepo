@@ -1,5 +1,51 @@
 # Changelog
 
+## 1.0.0-rc.12, 2025-05-16
+
+### Notable Changes
+
+- fix
+  - topic and legislator page sidebar filter
+  - use sort from fetcher utils
+- chore
+  - sync master
+
+### Commits
+
+* \[[`3e1fc5884d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3e1fc5884d)] - **chore(frontend)**: sync master (Lucien)
+* \[[`dae8ebf305`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dae8ebf305)] - **fix(frontend)**: use sort from fetcher utils (Lucien)
+* \[[`df9a53a7a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/df9a53a7a9)] - **fix(frontend)**: topic and legislator page sidebar filter (Lucien)
+
+## 1.0.0-rc.11, 2025-05-15
+
+### Notable Changes
+
+- fix
+  - address defects in home page
+
+### Commits
+
+- [[`e8e4e36c63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8e4e36c63)] - **fix(frontend)**: typo (Aylie Chou)
+- [[`38761bef95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/38761bef95)] - **fix(frontend)**: add placeholder for filter modal (Aylie Chou)
+- [[`ea95712647`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ea95712647)] - **fix(frontend)**: address defects in home page (Aylie Chou)
+
+## 1.0.0-rc.10, 2025-05-15
+
+### Notable Changes
+
+- feat
+  - add feedback components & api
+
+### Commits
+
+- [[`50ceae3e2b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/50ceae3e2b)] - **fix(frontend)**: typo (Aylie Chou)
+- [[`245f699043`](https://github.com/twreporter/congress-dashboard-monorepo/commit/245f699043)] - **fix(frontend)**: add mobile style (Aylie Chou)
+- [[`ad9c45d8b5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ad9c45d8b5)] - **feat(frontend)**: add `/api/feedback` endpoint (Aylie Chou)
+- [[`051fdd9b9f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/051fdd9b9f)] - **feat(frontend)**: add feedback utils & valid email (Aylie Chou)
+- [[`6976888509`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6976888509)] - **feat(frontend)**: add components for feedback (Aylie Chou)
+- [[`52a02c8c91`](https://github.com/twreporter/congress-dashboard-monorepo/commit/52a02c8c91)] - **feat(frontend)**: add `Feedback` & step 1 component (Aylie Chou)
+- [[`0a54fe46a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0a54fe46a9)] - **feat(frontend)**: add comoponents for feedback (Aylie Chou)
+
 ## 1.0.0-rc.9, 2025-05-09
 
 ### Notable Changes

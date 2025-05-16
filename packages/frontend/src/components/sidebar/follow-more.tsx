@@ -5,6 +5,8 @@ import { InternalRoutes } from '@/constants/routes'
 // component
 import PartyTag from '@/components/dashboard/card/party-tag'
 import { CircleRaw } from '@/components/skeleton'
+// style
+import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
@@ -28,6 +30,7 @@ const Avatar = styled.img`
   width: 56px;
   height: 56px;
   border-radius: 50%;
+  object-fit: cover;
 `
 const Party = styled(PartyTag)`
   &,
@@ -42,6 +45,9 @@ const Party = styled(PartyTag)`
 `
 const Text = styled(P3)`
   color: ${colorGrayscale.gray800};
+  display: inline-block;
+  max-width: 100%;
+  ${textOverflowEllipsisCss}
 `
 
 export type LegislatorProps = {

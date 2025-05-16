@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
+// util
+import { openFeedback } from '@/utils/feedback'
 // type
 import type { FilterOption } from '@/components/sidebar/type'
 // components
@@ -84,7 +86,8 @@ const Error: React.FC = () => (
       <ErrorDesc text={'請嘗試重新整理頁面。若仍無法正常顯示，'} />
       <ErrorDesc>
         歡迎點此
-        <TextButtonInP>回報問題</TextButtonInP>以協助我們改善。
+        <TextButtonInP onClick={openFeedback}>回報問題</TextButtonInP>
+        以協助我們改善。
       </ErrorDesc>
     </Desc>
   </ErrorBox>
@@ -164,7 +167,7 @@ const Text = styled(P2)`
   color: ${colorGrayscale.gray800};
 `
 const ConfirmBox = styled.div`
-  position: absolute;
+  position: sticky;
   bottom: 0;
   z-index: 1;
   width: 100%;
@@ -209,6 +212,8 @@ type FilterModalProps = {
   slug: string
   title: string
   subtitle?: string
+  initialOption?: FilterOption[]
+  placeholder?: string
   initialSelectedOption?: FilterOption[]
   fetcher?: (slug: string) => Promise<FilterOption[]>
   onClose: () => void
@@ -228,6 +233,8 @@ const FilterModal: React.FC<FilterModalProps> = ({
   title,
   slug,
   subtitle,
+  initialOption = [],
+  placeholder,
   initialSelectedOption = [],
   fetcher,
   onClose,
@@ -235,7 +242,14 @@ const FilterModal: React.FC<FilterModalProps> = ({
 }) => {
   const topBoxRef = useRef<HTMLDivElement>(null)
   const [options, setOptions] = useState<FilterOption[]>(
-    _.map(initialSelectedOption, (option) => ({ selected: true, ...option }))
+    _.map(initialOption, (option) => {
+      const isSelected =
+        _.findIndex(
+          initialSelectedOption,
+          (selectedOption) => selectedOption.slug === option.slug
+        ) !== -1
+      return { ...option, selected: isSelected }
+    })
   )
   const [selectedOptions, setSelectedOptions] = useState(initialSelectedOption)
   const [hasLoaded, setHasLoaded] = useState(!fetcher) // Set to true if no fetcher
@@ -294,12 +308,19 @@ const FilterModal: React.FC<FilterModalProps> = ({
     if (!data || hasLoaded) return
     const newOptions = _.unionBy(
       options,
-      _.map(data, (item) => ({ selected: false, ...item })),
+      _.map(data, (item) => {
+        const isSelected =
+          _.findIndex(
+            initialSelectedOption,
+            (selectedOption) => selectedOption.slug === item.slug
+          ) !== -1
+        return { selected: isSelected, ...item }
+      }),
       'slug'
     )
     setOptions(newOptions)
     setHasLoaded(true)
-  }, [data, hasLoaded, options])
+  }, [data, hasLoaded, options, initialSelectedOption])
 
   useEffect(() => {
     if (!isSearchMode) {
@@ -412,6 +433,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
               }}
             />
             <Search
+              placeholder={placeholder}
               handleChange={setKeyword}
               handleFocus={() => {
                 setIsSearchMode(true)

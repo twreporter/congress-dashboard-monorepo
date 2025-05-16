@@ -9,6 +9,8 @@ import type { Legislator } from '@/components/dashboard/type'
 // components
 import { Triangle, Circle, Gap } from '@/components/skeleton'
 import PartyTag from '@/components/dashboard/card/party-tag'
+// style
+import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
 // @twreporter
 import {
   colorGrayscale,
@@ -101,6 +103,7 @@ const Avatar = styled.img`
   width: 56px;
   height: 56px;
   border-radius: 50%;
+  object-fit: cover;
 `
 const Party = styled(PartyTag)`
   width: 16px;
@@ -111,6 +114,9 @@ const Party = styled(PartyTag)`
 `
 const Text = styled(P3)`
   color: ${colorGrayscale.gray800};
+  display: inline-block;
+  max-width: 100%;
+  ${textOverflowEllipsisCss}
 `
 
 export type CardIssueProps = {
