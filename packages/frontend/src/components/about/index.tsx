@@ -34,6 +34,8 @@ import { FontSize, FontSizeOffset } from '@/components/speech'
 import { useScrollContext } from '@/contexts/scroll-context'
 // hooks
 import { useScrollStage } from '@/components/speech/hooks/use-scroll-stage'
+// utils
+import { openFeedback } from '@/utils/feedback'
 
 const DividerWrapper = styled.div`
   ${mq.desktopAndAbove`
@@ -129,6 +131,7 @@ const AboutPage: React.FC<AboutPageProps> = ({
         <DesktopAndAboveWithFlex>
           <Feedback>
             <CustomPillButton
+              onClick={openFeedback}
               leftIconComponent={<Report releaseBranch={releaseBranch} />}
               text={'問題回報'}
             />
