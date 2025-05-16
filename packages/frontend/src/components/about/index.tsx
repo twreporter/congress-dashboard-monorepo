@@ -24,9 +24,9 @@ import SpeechTitle from '@/components/speech/speech-title'
 import SpeechAsideToolBar from '@/components/speech/speech-aside-toolbar'
 import SpeechSummary from '@/components/speech/speech-summary'
 import SeparationCurve from '@/components/speech/separation-curve'
-import SpeechContent from '@/components/speech/speech-content'
 import { AboutPageMobileToolbar } from '@/components/speech/speech-mobile-toolbar'
 import CustomPillButton from '@/components/button/pill-button'
+import AboutPageContent from '@/components/about/content'
 import DonationBox from '@/components/about/donation-box'
 // constants
 import { FontSize, FontSizeOffset } from '@/components/speech'
@@ -52,18 +52,39 @@ const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
 `
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-const AboutPage = () => {
+export type Content = {
+  api_data: {
+    alignment: string
+    content: string[]
+    id: string
+    style: object
+    type: string
+  }[]
+}
+type AboutPageProps = {
+  title: string
+  subtitle: string
+  brief: Content
+  content: Content
+}
+const AboutPage: React.FC<AboutPageProps> = ({
+  title,
+  subtitle,
+  brief,
+  content,
+}) => {
   const [fontSize, setFontSize] = useState(FontSize.SMALL)
   const leadingRef = useRef<HTMLDivElement>(null)
   const { setTabElement } = useScrollContext()
   const scrollStage = useScrollStage()
-  // mock data
-  const date = '關於觀測站'
-  const title = '報導者觀測站——立委選舉結束後，監督問政內容才要開始'
-  const summary =
-    '「報導者觀測站」是一個立委發言觀察與監督平台，我們運用生成式AI及自然語言處理技術將數十萬筆立委的發言紀錄進行議題分類與摘要（目前起始點是從2020年第10屆立委問政開始），全面解析所有立委在任期內的問政內容與其關注焦點，讓議場上的對話不再只是即時新聞中的破碎資訊，或像卷宗般束之高閣，而是以完整、白話、近用性高的方式呈現，期待能梳理出更具透明度與公共性的公民監督立委問政方式。'
-  const content =
-    '「報導者觀測站」是一個立委發言觀察與監督平台，我們運用生成式AI及自然語言處理技術將數十萬筆立委的發言紀錄進行議題分類與摘要（目前起始點是從2020年第10屆立委問政開始），全面解析所有立委在任期內的問政內容與其關注焦點，讓議場上的對話不再只是即時新聞中的破碎資訊，或像卷宗般束之高閣，而是以完整、白話、近用性高的方式呈現，期待能梳理出更具透明度與公共性的公民監督立委問政方式。「報導者觀測站」是一個立委發言觀察與監督平台，我們運用生成式AI及自然語言處理技術將數十萬筆立委的發言紀錄進行議題分類與摘要（目前起始點是從2020年第10屆立委問政開始），全面解析所有立委在任期內的問政內容與其關注焦點，讓議場上的對話不再只是即時新聞中的破碎資訊，或像卷宗般束之高閣，而是以完整、白話、近用性高的方式呈現，期待能梳理出更具透明度與公共性的公民監督立委問政方式。「報導者觀測站」是一個立委發言觀察與監督平台，我們運用生成式AI及自然語言處理技術將數十萬筆立委的發言紀錄進行議題分類與摘要（目前起始點是從2020年第10屆立委問政開始），全面解析所有立委在任期內的問政內容與其關注焦點，讓議場上的對話不再只是即時新聞中的破碎資訊，或像卷宗般束之高閣，而是以完整、白話、近用性高的方式呈現，期待能梳理出更具透明度與公共性的公民監督立委問政方式。「報導者觀測站」是一個立委發言觀察與監督平台，我們運用生成式AI及自然語言處理技術將數十萬筆立委的發言紀錄進行議題分類與摘要（目前起始點是從2020年第10屆立委問政開始），全面解析所有立委在任期內的問政內容與其關注焦點，讓議場上的對話不再只是即時新聞中的破碎資訊，或像卷宗般束之高閣，而是以完整、白話、近用性高的方式呈現，期待能梳理出更具透明度與公共性的公民監督立委問政方式。「報導者觀測站」是一個立委發言觀察與監督平台，我們運用生成式AI及自然語言處理技術將數十萬筆立委的發言紀錄進行議題分類與摘要（目前起始點是從2020年第10屆立委問政開始），全面解析所有立委在任期內的問政內容與其關注焦點，讓議場上的對話不再只是即時新聞中的破碎資訊，或像卷宗般束之高閣，而是以完整、白話、近用性高的方式呈現，期待能梳理出更具透明度與公共性的公民監督立委問政方式。'
+
+  const summary = brief.api_data
+    .map((item) => {
+      const { content } = item
+      return content
+    })
+    .concat()
+    .toString()
 
   const cycleFontSize = useCallback(() => {
     setFontSize((current) =>
@@ -84,7 +105,7 @@ const AboutPage = () => {
   return (
     <SpeechContainer>
       <LeadingContainer ref={leadingRef}>
-        <SpeechSubtitle date={date} />
+        <SpeechSubtitle date={subtitle} />
         <SpeechTitle title={title} />
       </LeadingContainer>
       <BodyContainer>
@@ -105,7 +126,7 @@ const AboutPage = () => {
             fontSizeOffset={FontSizeOffset[fontSize]}
           />
           <SeparationCurve />
-          <SpeechContent
+          <AboutPageContent
             content={content}
             fontSizeOffset={FontSizeOffset[fontSize]}
           />
