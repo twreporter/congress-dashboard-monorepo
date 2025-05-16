@@ -6,7 +6,7 @@ import {
   recentSpeechTopicStatsResolvers,
   historySpeechTopicStatsTypeDefs,
   historySpeechTopicStatsResolvers,
-} from './recent-speech-topic-stats'
+} from './speech-topic-stats'
 import {
   topNTopicsOfLegislatorsTypeDefs,
   topNTopicsOfLegislatorsResolver,
