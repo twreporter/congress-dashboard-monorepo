@@ -1,4 +1,4 @@
-import { TypedKeystoneContext } from '../types/context'
+import type { TypedKeystoneContext } from '../types/context'
 import { gql } from 'graphql-tag'
 // custom sql
 import {
