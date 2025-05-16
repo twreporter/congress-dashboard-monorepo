@@ -79,15 +79,15 @@ const AboutPageContent: React.FC<AboutPageContentProps> = ({
 }) => {
   return (
     <Container $fontSizeOffset={fontSizeOffset}>
-      {content.api_data.map((item, index) => {
+      {content.api_data.map((item) => {
         if (item.type === 'infobox') {
           return (
-            <InfoBoxContainer key={index}>
+            <InfoBoxContainer key={item.id}>
               <InfoBox>{renderElement(item)}</InfoBox>
             </InfoBoxContainer>
           )
         } else {
-          return <NoPaddingX key={index}>{renderElement(item)}</NoPaddingX>
+          return <NoPaddingX key={item.id}>{renderElement(item)}</NoPaddingX>
         }
       })}
     </Container>

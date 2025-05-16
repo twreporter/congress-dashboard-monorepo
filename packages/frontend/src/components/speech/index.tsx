@@ -41,6 +41,7 @@ import SpeechContent from '@/components/speech/speech-content'
 import SpeechMobileToolbar from '@/components/speech/speech-mobile-toolbar'
 import IconButton from '@/components/button/icon-button'
 import CustomPillButton from '@/components/button/pill-button'
+import DonationBox from '@/components/about/donation-box'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 // type
@@ -251,6 +252,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
             content={content}
             fontSizeOffset={FontSizeOffset[fontSize]}
           />
+          <DonationBox />
         </ContentBlock>
         <TabletAndBelowWithFlex>
           <SpeechAsideInfo {...asideInfoProps} />
