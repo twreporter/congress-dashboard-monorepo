@@ -88,6 +88,19 @@ const listConfigurations = list({
         labelField: 'term',
       },
     }),
+    speeches: relationship({
+      ref: 'Speech.legislativeYuanMember',
+      label: '發言紀錄',
+      many: true,
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
     sessionAndCommittee: relationship({
       ref: 'CommitteeMember.legislativeYuanMember',
       many: true,
