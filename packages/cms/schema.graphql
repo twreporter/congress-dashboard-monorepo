@@ -1323,16 +1323,16 @@ type Query {
 
   """
   Goal:
-  Retrieve topics with speeches being on or after the specified `after` date,
+  Retrieve topics with speeches updated after the specified `updatedAfter` date,
   and count the number of member speeches per topic.
   
   Returns:
   - member speech counts grouped by topic
-  - a flat list of speeches whose `date` is on or after the `after` date
+  - a flat list of speeches whose `updatedAt` is after the `updatedAfter` date
   
   Speeches are derived from topics.
   """
-  recentSpeechTopicStats(take: Int = 50, skip: Int = 0, cursor: ID, after: CalendarDay, debug: Boolean = false): RecentSpeechTopicStatsResult!
+  recentSpeechTopicStats(take: Int = 50, skip: Int = 0, cursor: ID, updatedAfter: CalendarDay, debug: Boolean = false): RecentSpeechTopicStatsResult!
 
   """Get top N topic of a legislator order by speech cound desc"""
   topNTopicsOfLegislators(legislatorIds: [Int!]!, meetingId: Int!, sessionIds: [Int] = [], take: Int = 10): [LegislatorWIthTopTopics]
@@ -1505,6 +1505,8 @@ type SpeechSummary {
   meetingTerm: Int
   sessionTerm: Int
   date: String!
+  createdAt: String!
+  updatedAt: String!
 }
 
 type RecentSpeechTopicStatsResult {
