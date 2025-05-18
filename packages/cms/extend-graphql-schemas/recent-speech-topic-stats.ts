@@ -31,6 +31,8 @@ export const recentSpeechTopicStatsTypeDefs = gql`
     meetingTerm: Int
     sessionTerm: Int
     date: String!
+    createdAt: String!
+    updatedAt: String!
   }
 
   type RecentSpeechTopicStatsResult {
@@ -41,12 +43,12 @@ export const recentSpeechTopicStatsTypeDefs = gql`
   extend type Query {
     """
     Goal:
-    Retrieve topics with speeches being on or after the specified \`after\` date,
+    Retrieve topics with speeches updated after the specified \`updatedAfter\` date,
     and count the number of member speeches per topic.
 
     Returns:
     - member speech counts grouped by topic
-    - a flat list of speeches whose \`date\` is on or after the \`after\` date
+    - a flat list of speeches whose \`updatedAt\` is after the \`updatedAfter\` date
 
     Speeches are derived from topics.
     """
@@ -54,42 +56,50 @@ export const recentSpeechTopicStatsTypeDefs = gql`
       take: Int = 50
       skip: Int = 0
       cursor: ID
-      after: CalendarDay
+      updatedAfter: CalendarDay
       debug: Boolean = false
     ): RecentSpeechTopicStatsResult!
   }
 `
 
 type SpeechRecord = {
-  id: string
+  id: number
+  title: string
+  date: Date
+  topics: {
+    id: number
+    slug: string
+  }[]
   legislativeMeeting: {
     term: number
-  }
+  } | null
   legislativeMeetingSession: {
     term: number
-  }
+  } | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 type TopicRecord = {
-  id: string
+  id: number
   slug: string
   title: string
   speeches: {
-    id: string
+    id: number
     title: string
     date: Date
     legislativeMeeting: {
       term: number
-    }
+    } | null
     legislativeMeetingSession: {
       term: number
-    }
+    } | null
     legislativeYuanMember: {
-      id: string
+      id: number
       legislator: {
         name: string
-      }
-    }
+      } | null
+    } | null
   }[]
 }
 
@@ -135,13 +145,13 @@ export const recentSpeechTopicStatsResolvers = {
         take = 50,
         skip = 0,
         cursor,
-        after,
+        updatedAfter,
         debug = false,
       }: {
         take?: number
         skip?: number
         cursor?: string
-        after: string
+        updatedAfter: string
         debug?: boolean
       },
       context: TypedKeystoneContext
@@ -156,31 +166,27 @@ export const recentSpeechTopicStatsResolvers = {
                 take,
                 skip,
                 cursor,
-                after,
+                updatedAfter,
               },
             },
           })
         )
 
-        // Fetch the earliest speech on or after the `after` date
-        const speechRecord: SpeechRecord =
-          await context.prisma.speech.findFirst({
-            orderBy: { date: 'asc' },
+        const speechRecords: SpeechRecord[] =
+          await context.prisma.speech.findMany({
+            take,
+            skip,
+            cursor: cursor ? { id: Number(cursor) } : undefined,
             where: {
-              // Filter speeches on or after the specified `after` date
-              date: {
-                gte: new Date(after),
+              // Fetch speeches updated after the specified date with valid meeting and session data
+              updatedAt: {
+                gte: new Date(updatedAfter),
               },
-              // Ensure the speech has valid meeting and session terms (>= 1)
               legislativeMeeting: {
-                term: {
-                  gte: 1,
-                },
+                isNot: null,
               },
               legislativeMeetingSession: {
-                term: {
-                  gte: 1,
-                },
+                isNot: null,
               },
               legislativeYuanMember: {
                 isNot: null,
@@ -188,96 +194,109 @@ export const recentSpeechTopicStatsResolvers = {
             },
             select: {
               id: true,
+              title: true,
+              date: true,
+              createdAt: true,
+              updatedAt: true,
+              topics: {
+                select: {
+                  id: true,
+                  slug: true,
+                },
+              },
               legislativeMeeting: {
-                select: { term: true },
+                select: {
+                  term: true,
+                },
               },
               legislativeMeetingSession: {
-                select: { term: true },
+                select: {
+                  term: true,
+                },
               },
             },
           })
 
         // Return empty result if no matching speech is found
-        if (!speechRecord) {
+        if (speechRecords.length === 0) {
           return {
             topics: [],
             speeches: [],
           }
         }
 
-        const meetingTerm = speechRecord.legislativeMeeting.term
-        const sessionTerm = speechRecord.legislativeMeetingSession.term
+        // Group topic slugs by a composite key of meetingTerm and sessionTerm
+        // This ensures that the same topic appearing in different legislative sessions is counted separately
+        const groupedTopics: Record<string, string[]> = {}
+        for (const r of speechRecords) {
+          for (const t of r.topics) {
+            const key = `${r.legislativeMeeting?.term}_${r.legislativeMeetingSession?.term}`
+            if (!groupedTopics[key]) {
+              groupedTopics[key] = []
+            }
+            if (groupedTopics[key].indexOf(t.slug) === -1) {
+              groupedTopics[key].push(t.slug)
+            }
+          }
+        }
 
-        const topicRecords: TopicRecord[] = await context.prisma.topic.findMany(
-          {
-            take,
-            skip,
-            cursor: cursor ? { id: Number(cursor) } : undefined,
-            where: {
-              // Filter topics that have at least one speech after the specified `after` date
-              speeches: {
-                some: {
-                  date: {
-                    gte: new Date(after),
+        const topicQueryTasks = Object.entries(groupedTopics).map(
+          ([key, topicSlugs]) => {
+            return async () => {
+              const [meetingTermStr, sessionTermStr] = key.split('_')
+              const meetingTerm = parseInt(meetingTermStr, 10)
+              const sessionTerm = parseInt(sessionTermStr, 10)
+
+              return context.prisma.topic.findMany({
+                // Retrieve topics by slug list only.
+                // Then, filter their associated speeches by matching meetingTerm and sessionTerm (and ensuring the speaker is a member).
+                where: {
+                  slug: {
+                    in: topicSlugs,
                   },
                 },
-              },
-            },
-            select: {
-              id: true,
-              slug: true,
-              title: true,
-              speeches: {
-                where: {
-                  /**
-                   * Filter speeches using the following logic:
-                   *  - Either the `legislativeMeeting.term` is greater than the `meetingTerm`.
-                   *  - OR the `legislativeMeeting.term` is equal to `meetingTerm`,
-                   *    AND the `legislativeMeetingSession.term` is greater than or equal to `sessionTerm`.
-                   * This ensures that we won't fetch all the speeches at once.
-                   */
-                  OR: [
-                    {
-                      legislativeMeeting: {
-                        term: {
-                          gt: meetingTerm,
-                        },
-                      },
-                    },
-                    {
-                      legislativeMeeting: {
-                        term: {
-                          equals: meetingTerm,
-                        },
-                      },
-                      legislativeMeetingSession: {
-                        term: {
-                          gte: sessionTerm,
-                        },
-                      },
-                    },
-                  ],
-                },
-                orderBy: { date: 'asc' },
                 select: {
                   id: true,
+                  slug: true,
                   title: true,
-                  date: true,
-                  legislativeMeeting: {
-                    select: { term: true },
-                  },
-                  legislativeMeetingSession: { select: { term: true } },
-                  legislativeYuanMember: {
+                  speeches: {
+                    // Only include speeches made by members within the specified meeting/session term
+                    where: {
+                      legislativeMeeting: {
+                        term: { equals: meetingTerm },
+                      },
+                      legislativeMeetingSession: {
+                        term: { equals: sessionTerm },
+                      },
+                      legislativeYuanMember: {
+                        isNot: null,
+                      },
+                    },
+                    orderBy: { date: 'asc' },
                     select: {
                       id: true,
-                      legislator: { select: { name: true } },
+                      title: true,
+                      date: true,
+                      legislativeMeeting: { select: { term: true } },
+                      legislativeMeetingSession: { select: { term: true } },
+                      legislativeYuanMember: {
+                        select: {
+                          id: true,
+                          legislator: { select: { name: true } },
+                        },
+                      },
                     },
                   },
                 },
-              },
-            },
+              })
+            }
           }
         )
+
+        // Execute queries in parallel using `runInBatches` to limit concurrency
+        // and prevent overloading the system with too many simultaneous operations.
+        const topicQueryResults = await runInBatches(topicQueryTasks, 10)
+        const topicRecords: TopicRecord[] = topicQueryResults.flat()
 
         if (debug) {
           console.log(
@@ -285,7 +304,6 @@ export const recentSpeechTopicStatsResolvers = {
               severity: 'DEBUG',
               message: 'Prisma returned records.',
               jsonPayload: {
-                speechRecord,
                 topicRecords,
               },
             })
@@ -301,9 +319,6 @@ export const recentSpeechTopicStatsResolvers = {
           }
         >()
 
-        // Use a map to collect deduplicated speeches
-        const allSpeechMap = new Map<string, SpeechSummary>()
-
         for (const topicRecord of topicRecords) {
           const speeches = topicRecord.speeches
           for (const speech of speeches) {
@@ -314,7 +329,7 @@ export const recentSpeechTopicStatsResolvers = {
             if (!topicMap.has(topicMapKey)) {
               topicMap.set(topicMapKey, {
                 topicInfo: {
-                  id: topicRecord.id,
+                  id: topicRecord.id.toString(),
                   slug: topicRecord.slug,
                   title: topicRecord.title,
                   lastSpeechAt: speech.date.toISOString(),
@@ -334,30 +349,22 @@ export const recentSpeechTopicStatsResolvers = {
               }
             }
 
-            const member = speech.legislativeYuanMember
+            const member = speech.legislativeYuanMember!
             const memberMap = topicMap.get(topicMapKey)?.memberMap
-            const existing = memberMap?.get(member.id)
+            const memberId = member.id.toString()
+            const existing = memberMap?.get(memberId)
 
             if (existing) {
               // If already counted, increment speech count
               existing.count += 1
             } else {
               // Otherwise, add a new member speech record
-              memberMap?.set(member.id, {
-                memberId: member.id,
+              memberMap?.set(memberId, {
+                memberId,
                 name: member.legislator?.name ?? '',
                 count: 1,
               })
             }
-
-            // Collect deduplicated speeches
-            allSpeechMap.set(speech.id, {
-              id: speech.id,
-              title: speech.title,
-              meetingTerm: speech.legislativeMeeting?.term,
-              sessionTerm: speech.legislativeMeetingSession?.term,
-              date: speech.date.toISOString(),
-            })
           }
         }
 
@@ -372,7 +379,17 @@ export const recentSpeechTopicStatsResolvers = {
           })
         )
 
-        const allSpeeches = Array.from(allSpeechMap.values())
+        const speeches = speechRecords.map((s) => {
+          return {
+            id: s.id.toString(),
+            date: s.date.toISOString(),
+            title: s.title,
+            meetingTerm: s.legislativeMeeting?.term,
+            sessionTerm: s.legislativeMeetingSession?.term,
+            createdAt: s.createdAt?.toISOString(),
+            updatedAt: s.updatedAt?.toISOString(),
+          }
+        })
 
         if (debug) {
           console.log(
@@ -381,7 +398,7 @@ export const recentSpeechTopicStatsResolvers = {
               message: 'Query returned value: ',
               jsonPayload: {
                 topics,
-                speeches: allSpeeches,
+                speeches,
               },
             })
           )
@@ -396,13 +413,13 @@ export const recentSpeechTopicStatsResolvers = {
                 take,
                 skip,
                 cursor,
-                after,
+                updatedAfter,
               },
             },
           })
         )
 
-        return { topics, speeches: allSpeeches }
+        return { topics, speeches }
       } catch (_err) {
         const err = errors.helpers.wrap(
           _err,
@@ -413,7 +430,7 @@ export const recentSpeechTopicStatsResolvers = {
               take,
               skip,
               cursor,
-              after,
+              updatedAfter,
             },
           }
         )
@@ -431,4 +448,19 @@ export const recentSpeechTopicStatsResolvers = {
       }
     },
   },
+}
+
+async function runInBatches<T>(
+  tasks: (() => Promise<T>)[],
+  batchSize: number
+): Promise<T[]> {
+  const results: T[] = []
+
+  for (let i = 0; i < tasks.length; i += batchSize) {
+    const batch = tasks.slice(i, i + batchSize)
+    const batchResults = await Promise.all(batch.map((task) => task()))
+    results.push(...batchResults)
+  }
+
+  return results
 }
