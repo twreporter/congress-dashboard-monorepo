@@ -4,11 +4,10 @@ type UnsafeFallbackContext =
 
 // Attempt to import the fully typed context from .keystone/types
 // This is a type-only import — it won’t cause runtime issues
-type SafeContext =
-  // Use the generated types if available (after `keystone dev` or `build`)
-  | import('.keystone/types').Context
-  // Otherwise fall back to the unsafe version to avoid TS errors
-  | UnsafeFallbackContext
+import type { Context as SafeContext } from '.keystone/types'
 
 // Export a unified context type for safe use across the project
-export type TypedKeystoneContext = SafeContext
+// Fallback to UnsafeFallbackContext only if SafeContext is unavailable
+export type TypedKeystoneContext = unknown extends SafeContext
+  ? UnsafeFallbackContext
+  : SafeContext
