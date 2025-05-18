@@ -73,7 +73,9 @@ const listConfigurations = list({
       },
     }),
     createdAt: CREATED_AT(),
-    updatedAt: UPDATED_AT(),
+    updatedAt: UPDATED_AT({
+      isIndexed: true,
+    }),
   },
   ui: {
     label: '逐字稿',
