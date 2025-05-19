@@ -1,10 +1,14 @@
 'use client'
 
-import React, { FC, useContext, useState, useMemo } from 'react'
+import React, { FC, useContext, useState, useMemo, useCallback } from 'react'
 // context
 import { FeedbackContext } from '@/components/feedback/context'
 // util
 import { emailValidator } from '@/utils/validate-email'
+import {
+  createToggleFunc,
+  createTypeWithOtherFormatter,
+} from '@/components/feedback/util'
 // enum
 import {
   FeedbackType,
@@ -34,6 +38,8 @@ import {
 // @twreporter
 import { PillButton } from '@twreporter/react-components/lib/button'
 import { Cross } from '@twreporter/react-components/lib/icon'
+// lodash
+import { includes } from 'lodash'
 
 // global var
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
@@ -48,12 +54,41 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(true)
   const [problemType, setProblemType] = useState<ProductProblemType>()
-  const [deviceType, setDeviceType] = useState<DeviceType>()
-  const [osType, setOSType] = useState<OSType>()
+  const [deviceType, setDeviceType] = useState<DeviceType[]>([])
+  const [osType, setOSType] = useState<OSType[]>([])
   const [osOther, setOSOther] = useState('')
-  const [browserType, setBrowserType] = useState<BrowserType>()
+  const [browserType, setBrowserType] = useState<BrowserType[]>([])
   const [browserOther, setBrowserOther] = useState('')
   const [problem, setProblem] = useState('')
+
+  const noopFunc = useCallback(() => {}, [])
+  // create toggle func
+  const toggleDeviceType = useCallback(
+    createToggleFunc<DeviceType>(deviceType, setDeviceType),
+    [deviceType, setDeviceType]
+  )
+  const toggleOsType = useCallback(
+    createToggleFunc<OSType>(osType, setOSType),
+    [osType, setOSType]
+  )
+  const toggleBrowserType = useCallback(
+    createToggleFunc<BrowserType>(browserType, setBrowserType),
+    [browserType, setBrowserType]
+  )
+  // create formatter func
+  const osTypeFormatter = useCallback(
+    () => createTypeWithOtherFormatter<OSType>(osType, osOther, OSType.Other),
+    [osType, osOther]
+  )
+  const browserTypeFormatter = useCallback(
+    () =>
+      createTypeWithOtherFormatter<BrowserType>(
+        browserType,
+        browserOther,
+        BrowserType.Other
+      ),
+    [browserType, browserOther]
+  )
 
   const emailError = useMemo(
     () => (!isEmailValid && email ? '電子信箱格式錯誤，請重新輸入' : ''),
@@ -72,9 +107,9 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
     () =>
       !isEmailValid ||
       !problemType ||
-      !deviceType ||
-      !osType ||
-      !browserType ||
+      deviceType.length === 0 ||
+      osType.length === 0 ||
+      browserType.length === 0 ||
       !problem,
     [isEmailValid, problemType, deviceType, osType, browserType, problem]
   )
@@ -91,11 +126,8 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
         email,
         problemType: problemType!,
         deviceType: deviceType!,
-        osType: osType! === OSType.Other ? osOther || osType! : osType!,
-        browserType:
-          browserType! === BrowserType.Other
-            ? browserOther || browserType!
-            : browserType!,
+        osType: osTypeFormatter(),
+        browserType: browserTypeFormatter(),
         problem,
       })
     }
@@ -160,18 +192,21 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
           options={[
             {
               label: '桌機/筆電',
-              checked: deviceType === DeviceType.Desktop,
-              onChange: () => setDeviceType(DeviceType.Desktop),
+              checked: includes(deviceType, DeviceType.Desktop),
+              onClick: (e) => toggleDeviceType(e, DeviceType.Desktop),
+              onChange: noopFunc,
             },
             {
               label: '手機',
-              checked: deviceType === DeviceType.Mobile,
-              onChange: () => setDeviceType(DeviceType.Mobile),
+              checked: includes(deviceType, DeviceType.Mobile),
+              onClick: (e) => toggleDeviceType(e, DeviceType.Mobile),
+              onChange: noopFunc,
             },
             {
               label: '平板',
-              checked: deviceType === DeviceType.Tablet,
-              onChange: () => setDeviceType(DeviceType.Tablet),
+              checked: includes(deviceType, DeviceType.Tablet),
+              onClick: (e) => toggleDeviceType(e, DeviceType.Tablet),
+              onChange: noopFunc,
             },
           ]}
         />
@@ -182,33 +217,39 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
           options={[
             {
               label: 'Windows',
-              checked: osType === OSType.Windows,
-              onChange: () => setOSType(OSType.Windows),
+              checked: includes(osType, OSType.Windows),
+              onClick: (e) => toggleOsType(e, OSType.Windows),
+              onChange: noopFunc,
             },
             {
               label: 'MacOS',
-              checked: osType === OSType.Mac,
-              onChange: () => setOSType(OSType.Mac),
+              checked: includes(osType, OSType.Mac),
+              onClick: (e) => toggleOsType(e, OSType.Mac),
+              onChange: noopFunc,
             },
             {
               label: 'iOS',
-              checked: osType === OSType.Ios,
-              onChange: () => setOSType(OSType.Ios),
+              checked: includes(osType, OSType.Ios),
+              onClick: (e) => toggleOsType(e, OSType.Ios),
+              onChange: noopFunc,
             },
             {
               label: 'Android',
-              checked: osType === OSType.Android,
-              onChange: () => setOSType(OSType.Android),
+              checked: includes(osType, OSType.Android),
+              onClick: (e) => toggleOsType(e, OSType.Android),
+              onChange: noopFunc,
             },
             {
               label: 'Linux',
-              checked: osType === OSType.Linux,
-              onChange: () => setOSType(OSType.Linux),
+              checked: includes(osType, OSType.Linux),
+              onClick: (e) => toggleOsType(e, OSType.Linux),
+              onChange: noopFunc,
             },
             {
               label: '其他',
-              checked: osType === OSType.Other,
-              onChange: () => setOSType(OSType.Other),
+              checked: includes(osType, OSType.Other),
+              onClick: (e) => toggleOsType(e, OSType.Other),
+              onChange: noopFunc,
               showInputOnChecked: true,
               onInputChange: (e) => setOSOther(e.target.value),
             },
@@ -221,39 +262,46 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
           options={[
             {
               label: 'Chrome',
-              checked: browserType === BrowserType.Chrome,
-              onChange: () => setBrowserType(BrowserType.Chrome),
+              checked: includes(browserType, BrowserType.Chrome),
+              onClick: (e) => toggleBrowserType(e, BrowserType.Chrome),
+              onChange: noopFunc,
             },
             {
               label: 'Safari',
-              checked: browserType === BrowserType.Safari,
-              onChange: () => setBrowserType(BrowserType.Safari),
+              checked: includes(browserType, BrowserType.Safari),
+              onClick: (e) => toggleBrowserType(e, BrowserType.Safari),
+              onChange: noopFunc,
             },
             {
               label: 'Firefox',
-              checked: browserType === BrowserType.Firefox,
-              onChange: () => setBrowserType(BrowserType.Firefox),
+              checked: includes(browserType, BrowserType.Firefox),
+              onClick: (e) => toggleBrowserType(e, BrowserType.Firefox),
+              onChange: noopFunc,
             },
             {
               label: 'Edge',
-              checked: browserType === BrowserType.Edge,
-              onChange: () => setBrowserType(BrowserType.Edge),
+              checked: includes(browserType, BrowserType.Edge),
+              onClick: (e) => toggleBrowserType(e, BrowserType.Edge),
+              onChange: noopFunc,
             },
             {
               label: 'Opera',
-              checked: browserType === BrowserType.Opera,
-              onChange: () => setBrowserType(BrowserType.Opera),
+              checked: includes(browserType, BrowserType.Opera),
+              onClick: (e) => toggleBrowserType(e, BrowserType.Opera),
+              onChange: noopFunc,
             },
             {
               label: '其他',
-              checked: browserType === BrowserType.Other,
-              onChange: () => setBrowserType(BrowserType.Other),
+              checked: includes(browserType, BrowserType.Other),
+              onClick: (e) => toggleBrowserType(e, BrowserType.Other),
+              onChange: noopFunc,
               showInputOnChecked: true,
               onInputChange: (e) => setBrowserOther(e.target.value),
             },
           ]}
         />
         <TextareaOption
+          required={true}
           label={'問題描述'}
           placeholder={'請描述您發現的異常內容'}
           value={problem}

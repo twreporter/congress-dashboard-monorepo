@@ -18,8 +18,8 @@ export type ProductDetail = {
   username?: string
   email?: string
   problemType: ProductProblemType
-  deviceType: DeviceType
-  osType: OSType | string
-  browserType: BrowserType | string
+  deviceType: DeviceType[]
+  osType: (OSType | string)[]
+  browserType: (BrowserType | string)[]
   problem: string
 }
