@@ -12,10 +12,11 @@ import {
   OptionBlock,
   ActionBlock,
   Title,
+  CloseButton,
   ActionButton,
 } from '@/components/feedback/style'
 // @twreporter
-import { IconButton, PillButton } from '@twreporter/react-components/lib/button'
+import { PillButton } from '@twreporter/react-components/lib/button'
 import { Cross } from '@twreporter/react-components/lib/icon'
 
 // global var
@@ -44,7 +45,7 @@ const ChooseFeedbackType: FC<ChooseFeedbackTypeProps> = ({
     <Box>
       <TitleBlock>
         <Title text={'選擇回報類型'} />
-        <IconButton
+        <CloseButton
           iconComponent={<Cross releaseBranch={releaseBranch} />}
           onClick={closeFeedback}
         />

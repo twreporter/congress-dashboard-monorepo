@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.17, 2025-05-19
+
+### Notable Changes
+
+- fix
+  - address defects of feedback
+
+### Commits
+
+- [[`14d4af0f0c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/14d4af0f0c)] - **fix(frontend)**: address defects of Feedback (Aylie Chou)
+
 ## 1.0.0-rc.16, 2025-05-19
 
 ### Notable Changes
