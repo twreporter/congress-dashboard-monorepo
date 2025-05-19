@@ -51,7 +51,7 @@ const getOSText = (osType: OSType | string): string => {
       return 'Linux'
     case OSType.Other:
     default:
-      return osType || '其他'
+      return `其他（${osType}）`
   }
 }
 
@@ -69,8 +69,15 @@ const getBrowserText = (browserType: BrowserType | string): string => {
       return 'Opera'
     case BrowserType.Other:
     default:
-      return browserType || '其他'
+      return `其他（${browserType}）`
   }
+}
+
+function getMultiSelectText<T>(
+  values: T[],
+  formatter: (values: T) => string
+): string {
+  return values.map(formatter).join('、')
 }
 
 type generatePayloadFromFeedbackType = (feedback: Feedback) => string
@@ -81,7 +88,7 @@ export const generatePayloadFromFeedback: generatePayloadFromFeedbackType = (
   if (feedback.type === FeedbackType.Content) {
     const emailText = feedback.email ? `（${feedback.email}）` : ''
     const problemText = feedback.problem ? `「${feedback.problem}」` : ''
-    return `:pencil2:${feedback.username}${emailText}回報${problemText}來自 ${feedback.fromUrl}`
+    return `:pencil2:${feedback.username}${emailText} 回報${problemText}來自 ${feedback.fromUrl}`
   }
 
   // product feedback
@@ -89,12 +96,12 @@ export const generatePayloadFromFeedback: generatePayloadFromFeedbackType = (
   const problemText = feedback.problem ? `「${feedback.problem}」` : ''
   return `:hammer_and_wrench:${
     feedback.username
-  }${emailText}回報【${getTypeText(feedback.problemType)}】${problemText}來自 ${
-    feedback.fromUrl
-  }
-    ＊裝置類型：${getDeviceText(feedback.deviceType)}
-    ＊作業系統：${getOSText(feedback.osType)}
-    ＊瀏覽器：${getBrowserText(feedback.browserType)}
+  }${emailText} 回報【${getTypeText(
+    feedback.problemType
+  )}】${problemText}來自 ${feedback.fromUrl}
+    ＊裝置類型：${getMultiSelectText(feedback.deviceType, getDeviceText)}
+    ＊作業系統：${getMultiSelectText(feedback.osType, getOSText)}
+    ＊瀏覽器：${getMultiSelectText(feedback.browserType, getBrowserText)}
   `
 }
 

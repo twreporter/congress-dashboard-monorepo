@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC } from 'react'
+import React, { ChangeEvent, FC, MouseEvent } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import {
@@ -100,21 +100,23 @@ const UnselectedIcon: FC<IconProps> = ({ disabled = false }) => {
 export type RadioButtonProps = {
   checked: boolean
   disabled?: boolean
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
   name?: string
   value?: string
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+  onClick?: (e: MouseEvent) => void
   className?: string
 }
 
 const RadioButton: FC<RadioButtonProps> = ({
   checked,
   disabled = false,
-  onChange,
   name,
   value,
+  onChange,
+  onClick,
   className,
 }) => (
-  <Label disabled={disabled} className={className}>
+  <Label disabled={disabled} className={className} onClick={onClick}>
     <HiddenRadio
       checked={checked}
       disabled={disabled}
