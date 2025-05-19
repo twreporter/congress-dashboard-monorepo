@@ -5,7 +5,7 @@ import {
   colorGrayscale,
   COLOR_SEMANTIC,
 } from '@twreporter/core/lib/constants/color'
-import { PillButton } from '@twreporter/react-components/lib/button'
+import { PillButton, IconButton } from '@twreporter/react-components/lib/button'
 import mq from '@twreporter/core/lib/utils/media-query'
 
 export const Box = styled.div`
@@ -25,6 +25,7 @@ export const TitleBlock = styled.div`
   top: 0;
   background-color: white;
   z-index: 1;
+  position: relative;
 `
 
 export const OptionBlock = styled.div`
@@ -61,6 +62,11 @@ export const Title = styled(H5)`
   color: ${colorGrayscale.gray800};
 `
 
+export const CloseButton = styled(IconButton)`
+  position: absolute;
+  right: 16px;
+`
+
 export const ActionButton = styled(PillButton)`
   display: flex;
   align-items: center;
@@ -84,7 +90,7 @@ export const inputCss = css<{
   line-height: 150%;
   outline: none;
 
-  ::placeholder {
+  &::placeholder {
     color: ${colorGrayscale.gray500};
   }
 
