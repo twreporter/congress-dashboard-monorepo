@@ -86,7 +86,6 @@ const Feedback: FC = () => {
   const submit = async (data: ContentDetail | ProductDetail) => {
     const userAgent = window.navigator.userAgent
     const url = window.location.href
-    console.log('submit', url, userAgent, data)
     await feedback({ userAgent, fromUrl: url, ...data })
     setStep(1)
     closeFeedback()
