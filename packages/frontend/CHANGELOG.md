@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.0-rc.18, 2025-05-19
+
+### Notable Changes
+
+- feat
+  - support multi-select feedback
+
+### Commits
+
+- [[`86dcddfb74`](https://github.com/twreporter/congress-dashboard-monorepo/commit/86dcddfb74)] - **fix(frontend)**: fix review comments (Aylie Chou)
+- [[`9b1a1cc331`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9b1a1cc331)] - **feat(frontend)**: support multi-select feedback (Aylie Chou)
+
 ## 1.0.0-rc.17, 2025-05-19
 
 ### Notable Changes
