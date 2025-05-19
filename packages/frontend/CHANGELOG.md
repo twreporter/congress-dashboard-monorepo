@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0-rc.16, 2025-05-19
+
+### Notable Changes
+
+- feat
+  - add donation box for speech page
+- fix
+  - use id instead of index for key
+
+### Commits
+
+- [[`56564f7068`](https://github.com/twreporter/congress-dashboard-monorepo/commit/56564f7068)] - **fix(frontend)**: use id instead of index for key (Lucien)
+- [[`69b66bcf23`](https://github.com/twreporter/congress-dashboard-monorepo/commit/69b66bcf23)] - **feat(frontend)**: add donation box for speech page (Lucien)
+
 ## 1.0.0-rc.15, 2025-05-16
 
 ### Notable Changes
