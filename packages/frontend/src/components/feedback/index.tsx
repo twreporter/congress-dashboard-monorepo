@@ -41,7 +41,6 @@ const Container = styled.div`
   left: 0;
   z-index: ${ZIndex.Feedback};
   overflow: hidden;
-  background-color: ${colorGrayscale.gray100};
   display: none;
 
   ${mq.mobileOnly`

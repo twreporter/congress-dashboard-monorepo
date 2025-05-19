@@ -7,7 +7,7 @@ import { openFeedback } from '@/utils/feedback'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 
-const Feedback = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: row;
   padding: 24px;
@@ -20,24 +20,27 @@ const Feedback = styled.div`
     font-weight: 400;
     line-height: 150%;
   }
-  a {
-    color: ${colorGrayscale.gray800};
-    text-decoration-color: ${colorGrayscale.gray800};
-  }
   ${mq.tabletAndBelow`
     width: 100%;
   `}
 `
+const Feedback = styled.span`
+  color: ${colorGrayscale.gray800};
+  text-decoration: underline;
+  text-decoration-color: ${colorGrayscale.gray800};
+  text-underline-offset: 2px;
+  cursor: pointer;
+`
 
 const TopicFeedback: React.FC = () => {
   return (
-    <Feedback>
+    <Container>
       <span>
         發現什麼問題嗎？透過
-        <span onClick={openFeedback}>問題回報</span>
+        <Feedback onClick={openFeedback}>問題回報</Feedback>
         告訴我們，一起讓這裡變得更好！
       </span>
-    </Feedback>
+    </Container>
   )
 }
 

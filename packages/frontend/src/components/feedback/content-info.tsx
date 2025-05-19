@@ -18,10 +18,11 @@ import {
   OptionBlock,
   ActionBlock,
   Title,
+  CloseButton,
   ActionButton,
 } from '@/components/feedback/style'
 // @twreporter
-import { IconButton, PillButton } from '@twreporter/react-components/lib/button'
+import { PillButton } from '@twreporter/react-components/lib/button'
 import { Cross } from '@twreporter/react-components/lib/icon'
 
 // global var
@@ -37,6 +38,10 @@ const ContentInfo: FC<ContentInfoProps> = ({ submit }) => {
   const [email, setEmail] = useState('')
   const [isEmailValid, setIsEmailValid] = useState(true)
   const [problem, setProblem] = useState('')
+  const isFormValid = useMemo(
+    () => isEmailValid && problem.length > 0,
+    [isEmailValid, problem]
+  )
 
   const emailError = useMemo(
     () => (!isEmailValid && email ? '電子信箱格式錯誤，請重新輸入' : ''),
@@ -44,11 +49,15 @@ const ContentInfo: FC<ContentInfoProps> = ({ submit }) => {
   )
 
   const validateEmail = () => {
+    if (!email) {
+      setIsEmailValid(true)
+      return
+    }
     setIsEmailValid(emailValidator(email))
   }
 
   const handleSubmit = () => {
-    if (!isEmailValid) {
+    if (!isFormValid) {
       return
     }
     if (typeof submit === 'function') {
@@ -60,7 +69,7 @@ const ContentInfo: FC<ContentInfoProps> = ({ submit }) => {
     <Box>
       <TitleBlock>
         <Title text={'選擇回報類型'} />
-        <IconButton
+        <CloseButton
           iconComponent={<Cross releaseBranch={releaseBranch} />}
           onClick={closeFeedback}
         />
@@ -82,6 +91,7 @@ const ContentInfo: FC<ContentInfoProps> = ({ submit }) => {
           onBlur={validateEmail}
         />
         <TextareaOption
+          required={true}
           label={'問題描述'}
           placeholder={'請描述您發現的異常內容'}
           value={problem}
@@ -103,7 +113,7 @@ const ContentInfo: FC<ContentInfoProps> = ({ submit }) => {
           size={PillButton.Size.L}
           text={'完成送出'}
           onClick={handleSubmit}
-          disabled={!isEmailValid}
+          disabled={!isFormValid}
         />
       </ActionBlock>
     </Box>
