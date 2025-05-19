@@ -40,9 +40,6 @@ import { PillButton } from '@twreporter/react-components/lib/button'
 import { Cross } from '@twreporter/react-components/lib/icon'
 // lodash
 import { includes } from 'lodash'
-const _ = {
-  includes,
-}
 
 // global var
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
@@ -195,19 +192,19 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
           options={[
             {
               label: '桌機/筆電',
-              checked: _.includes(deviceType, DeviceType.Desktop),
+              checked: includes(deviceType, DeviceType.Desktop),
               onClick: (e) => toggleDeviceType(e, DeviceType.Desktop),
               onChange: noopFunc,
             },
             {
               label: '手機',
-              checked: _.includes(deviceType, DeviceType.Mobile),
+              checked: includes(deviceType, DeviceType.Mobile),
               onClick: (e) => toggleDeviceType(e, DeviceType.Mobile),
               onChange: noopFunc,
             },
             {
               label: '平板',
-              checked: _.includes(deviceType, DeviceType.Tablet),
+              checked: includes(deviceType, DeviceType.Tablet),
               onClick: (e) => toggleDeviceType(e, DeviceType.Tablet),
               onChange: noopFunc,
             },
@@ -220,37 +217,37 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
           options={[
             {
               label: 'Windows',
-              checked: _.includes(osType, OSType.Windows),
+              checked: includes(osType, OSType.Windows),
               onClick: (e) => toggleOsType(e, OSType.Windows),
               onChange: noopFunc,
             },
             {
               label: 'MacOS',
-              checked: _.includes(osType, OSType.Mac),
+              checked: includes(osType, OSType.Mac),
               onClick: (e) => toggleOsType(e, OSType.Mac),
               onChange: noopFunc,
             },
             {
               label: 'iOS',
-              checked: _.includes(osType, OSType.Ios),
+              checked: includes(osType, OSType.Ios),
               onClick: (e) => toggleOsType(e, OSType.Ios),
               onChange: noopFunc,
             },
             {
               label: 'Android',
-              checked: _.includes(osType, OSType.Android),
+              checked: includes(osType, OSType.Android),
               onClick: (e) => toggleOsType(e, OSType.Android),
               onChange: noopFunc,
             },
             {
               label: 'Linux',
-              checked: _.includes(osType, OSType.Linux),
+              checked: includes(osType, OSType.Linux),
               onClick: (e) => toggleOsType(e, OSType.Linux),
               onChange: noopFunc,
             },
             {
               label: '其他',
-              checked: _.includes(osType, OSType.Other),
+              checked: includes(osType, OSType.Other),
               onClick: (e) => toggleOsType(e, OSType.Other),
               onChange: noopFunc,
               showInputOnChecked: true,
@@ -265,37 +262,37 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
           options={[
             {
               label: 'Chrome',
-              checked: _.includes(browserType, BrowserType.Chrome),
+              checked: includes(browserType, BrowserType.Chrome),
               onClick: (e) => toggleBrowserType(e, BrowserType.Chrome),
               onChange: noopFunc,
             },
             {
               label: 'Safari',
-              checked: _.includes(browserType, BrowserType.Safari),
+              checked: includes(browserType, BrowserType.Safari),
               onClick: (e) => toggleBrowserType(e, BrowserType.Safari),
               onChange: noopFunc,
             },
             {
               label: 'Firefox',
-              checked: _.includes(browserType, BrowserType.Firefox),
+              checked: includes(browserType, BrowserType.Firefox),
               onClick: (e) => toggleBrowserType(e, BrowserType.Firefox),
               onChange: noopFunc,
             },
             {
               label: 'Edge',
-              checked: _.includes(browserType, BrowserType.Edge),
+              checked: includes(browserType, BrowserType.Edge),
               onClick: (e) => toggleBrowserType(e, BrowserType.Edge),
               onChange: noopFunc,
             },
             {
               label: 'Opera',
-              checked: _.includes(browserType, BrowserType.Opera),
+              checked: includes(browserType, BrowserType.Opera),
               onClick: (e) => toggleBrowserType(e, BrowserType.Opera),
               onChange: noopFunc,
             },
             {
               label: '其他',
-              checked: _.includes(browserType, BrowserType.Other),
+              checked: includes(browserType, BrowserType.Other),
               onClick: (e) => toggleBrowserType(e, BrowserType.Other),
               onChange: noopFunc,
               showInputOnChecked: true,

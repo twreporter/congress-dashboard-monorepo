@@ -1,10 +1,5 @@
 import { MouseEvent, Dispatch, SetStateAction } from 'react'
 import { includes, filter, concat } from 'lodash'
-const _ = {
-  includes,
-  filter,
-  concat,
-}
 
 export function createToggleFunc<T>(
   items: T[],
@@ -14,10 +9,10 @@ export function createToggleFunc<T>(
     e.preventDefault()
     e.stopPropagation()
 
-    if (_.includes(items, toggle)) {
-      setItems(_.filter(items, (item) => item !== toggle))
+    if (includes(items, toggle)) {
+      setItems(filter(items, (item) => item !== toggle))
     } else {
-      setItems(_.concat(items, toggle))
+      setItems(concat(items, toggle))
     }
   }
 }

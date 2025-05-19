@@ -77,15 +77,7 @@ function getMultiSelectText<T>(
   values: T[],
   formatter: (values: T) => string
 ): string {
-  let result = ''
-  values.forEach((value) => {
-    if (result) {
-      result += '、'
-    }
-    result += formatter(value)
-  })
-
-  return result
+  return values.map(formatter).join('、')
 }
 
 type generatePayloadFromFeedbackType = (feedback: Feedback) => string
