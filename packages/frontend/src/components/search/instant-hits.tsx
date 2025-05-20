@@ -40,7 +40,6 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
     switch ($variant) {
       case LayoutVariants.Modal: {
         return `
-          border-top: 1px solid ${colorGrayscale.gray300};
           height: 100%;
         `
       }
