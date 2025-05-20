@@ -177,6 +177,11 @@ export const recentSpeechTopicStatsResolvers = {
             take,
             skip,
             cursor: cursor ? { id: Number(cursor) } : undefined,
+            orderBy: [
+              {
+                id: 'asc',
+              },
+            ],
             where: {
               // Fetch speeches updated after the specified date with valid meeting and session data
               updatedAt: {
