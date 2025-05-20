@@ -67,7 +67,8 @@ const FirstRow = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 16px 12px 16px;
+  padding: 8px 16px;
+  margin: 4px 0;
 
   &:hover {
     background-color: ${colorGrayscale.gray100};
