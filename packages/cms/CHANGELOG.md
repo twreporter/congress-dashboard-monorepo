@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.9, 2025-05-20
+
+### Notable Changes
+- refactor
+  - two-sided relationship between speech and legislativeYuanMember
+
+### Commits
+
+- [[`c53601e031`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c53601e031)] - **chore(cms)**: update schema.(graphql,prisma) (nickhsine)
+- [[`c1b7ccf432`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c1b7ccf432)] - **refactor(cms)**: two-sided relationship between speech and legislativeYuanMember (nickhsine)
+
 ## 1.0.0-rc.8, 2025-05-09
 
 ### Notable Changes
