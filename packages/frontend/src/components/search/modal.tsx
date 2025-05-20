@@ -27,6 +27,8 @@ const SearchBoxContainer = styled.div`
   align-items: center;
   gap: 28px;
 
+  border-bottom: 1px solid ${colorGrayscale.gray300};
+
   padding: 12px 36px 12px 24px;
 `
 

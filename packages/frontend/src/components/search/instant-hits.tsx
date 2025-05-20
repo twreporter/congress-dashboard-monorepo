@@ -33,7 +33,6 @@ const InstantSearchStatus = {
 
 const Container = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
-  max-height: 320px;
   overflow: scroll;
   background-color: ${colorGrayscale.white};
 
@@ -41,7 +40,7 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
     switch ($variant) {
       case LayoutVariants.Modal: {
         return `
-          border-top: 1px solid ${colorGrayscale.gray300};
+          height: 100%;
         `
       }
       case LayoutVariants.Header:
@@ -52,6 +51,8 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
           padding: 8px 0;
           margin-top: 8px;
           box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
+
+          max-height: 320px;
         `
       }
     }
@@ -66,7 +67,8 @@ const FirstRow = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 16px 12px 16px;
+  padding: 8px 16px;
+  margin: 4px 0;
 
   &:hover {
     background-color: ${colorGrayscale.gray100};

@@ -112,7 +112,7 @@ export const SearchBox = ({
         type="text"
         value={inputValue}
         onChange={handleOnChange}
-        placeholder={isFocused ? '' : defaultPlaceholder}
+        placeholder={defaultPlaceholder}
         autoFocus={autoFocus}
         onFocus={() => {
           setIsFocused(true)
