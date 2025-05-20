@@ -33,7 +33,6 @@ const InstantSearchStatus = {
 
 const Container = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
-  max-height: 320px;
   overflow: scroll;
   background-color: ${colorGrayscale.white};
 
@@ -42,6 +41,7 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
       case LayoutVariants.Modal: {
         return `
           border-top: 1px solid ${colorGrayscale.gray300};
+          height: 100%;
         `
       }
       case LayoutVariants.Header:
@@ -52,6 +52,8 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
           padding: 8px 0;
           margin-top: 8px;
           box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
+
+          max-height: 320px;
         `
       }
     }
