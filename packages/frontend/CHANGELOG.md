@@ -1,5 +1,140 @@
 # Changelog
 
+## 1.0.0-rc.18, 2025-05-19
+
+### Notable Changes
+
+- feat
+  - support multi-select feedback
+
+### Commits
+
+- [[`86dcddfb74`](https://github.com/twreporter/congress-dashboard-monorepo/commit/86dcddfb74)] - **fix(frontend)**: fix review comments (Aylie Chou)
+- [[`9b1a1cc331`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9b1a1cc331)] - **feat(frontend)**: support multi-select feedback (Aylie Chou)
+
+## 1.0.0-rc.17, 2025-05-19
+
+### Notable Changes
+
+- fix
+  - address defects of feedback
+
+### Commits
+
+- [[`14d4af0f0c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/14d4af0f0c)] - **fix(frontend)**: address defects of Feedback (Aylie Chou)
+
+## 1.0.0-rc.16, 2025-05-19
+
+### Notable Changes
+
+- feat
+  - add donation box for speech page
+- fix
+  - use id instead of index for key
+
+### Commits
+
+- [[`56564f7068`](https://github.com/twreporter/congress-dashboard-monorepo/commit/56564f7068)] - **fix(frontend)**: use id instead of index for key (Lucien)
+- [[`69b66bcf23`](https://github.com/twreporter/congress-dashboard-monorepo/commit/69b66bcf23)] - **feat(frontend)**: add donation box for speech page (Lucien)
+
+## 1.0.0-rc.15, 2025-05-16
+
+### Notable Changes
+
+- feat
+  - use cache function for getAboutPage
+  - use openFeedback
+  - get about page data from go-api
+  - add about page & donation box
+  - add react-article-components packages
+- fix
+  - force dynamic to about page
+  - use flatMap address comment from copilot
+- chore
+  - sync master
+
+### Commits
+
+- [[`3d8e07ec62`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3d8e07ec62)] - Merge remote-tracking branch 'upstream/master' into feature/frontend-about-page (Lucien)
+- [[`229f1ee56f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/229f1ee56f)] - **feat(frontend)**: use cache function for getAboutPage (Lucien)
+- [[`c95646c6ef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c95646c6ef)] - **feat(frontend)**: use openFeedback (Lucien)
+- [[`ff144a9e81`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff144a9e81)] - **fix(frontend)**: force dynamic to about page (Lucien)
+- [[`d439f9ff8b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d439f9ff8b)] - **feat(frontend)**: add env page slug for staging (Lucien)
+- [[`a90bc775e9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a90bc775e9)] - **chore(frontend)**: sync master (Lucien)
+- [[`c6256762d9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c6256762d9)] - **fix(frontend)**: use flatMap address comment from copilot (Lucien)
+- [[`adaec9dd50`](https://github.com/twreporter/congress-dashboard-monorepo/commit/adaec9dd50)] - **feat(frontend)**: get about page data from go-api (Lucien)
+- [[`2fb1f5bc63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2fb1f5bc63)] - **feat(frontend)**: add about page & donation box (Lucien)
+- [[`39157d5939`](https://github.com/twreporter/congress-dashboard-monorepo/commit/39157d5939)] - **feat(frontend)**: add react-article-components packages (Lucien)
+
+## 1.0.0-rc.14, 2025-05-16
+
+### Notable Changes
+
+- fix
+  - defects in function bar filter modal
+
+### Commits
+
+- [[`6b8148d33a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b8148d33a)] - **fix(frontend)**: fix functionBar filter modal defect (Aylie Chou)
+
+## 1.0.0-rc.13, 2025-05-16
+
+### Notable Changes
+
+- fix
+  - legislator page follow more scroll no padding
+
+### Commits
+
+- [[`b6808eda51`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b6808eda51)] - **fix(frontend)**: legislator page follow more scroll no padding (Lucien)
+
+
+## 1.0.0-rc.12, 2025-05-16
+
+### Notable Changes
+
+- fix
+  - topic and legislator page sidebar filter
+  - use sort from fetcher utils
+- chore
+  - sync master
+
+### Commits
+
+- [[`3e1fc5884d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3e1fc5884d)] - **chore(frontend)**: sync master (Lucien)
+- [[`dae8ebf305`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dae8ebf305)] - **fix(frontend)**: use sort from fetcher utils (Lucien)
+- [[`df9a53a7a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/df9a53a7a9)] - **fix(frontend)**: topic and legislator page sidebar filter (Lucien)
+
+## 1.0.0-rc.11, 2025-05-15
+
+### Notable Changes
+
+- fix
+  - address defects in home page
+
+### Commits
+
+- [[`e8e4e36c63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8e4e36c63)] - **fix(frontend)**: typo (Aylie Chou)
+- [[`38761bef95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/38761bef95)] - **fix(frontend)**: add placeholder for filter modal (Aylie Chou)
+- [[`ea95712647`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ea95712647)] - **fix(frontend)**: address defects in home page (Aylie Chou)
+
+## 1.0.0-rc.10, 2025-05-15
+
+### Notable Changes
+
+- feat
+  - add feedback components & api
+
+### Commits
+
+- [[`50ceae3e2b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/50ceae3e2b)] - **fix(frontend)**: typo (Aylie Chou)
+- [[`245f699043`](https://github.com/twreporter/congress-dashboard-monorepo/commit/245f699043)] - **fix(frontend)**: add mobile style (Aylie Chou)
+- [[`ad9c45d8b5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ad9c45d8b5)] - **feat(frontend)**: add `/api/feedback` endpoint (Aylie Chou)
+- [[`051fdd9b9f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/051fdd9b9f)] - **feat(frontend)**: add feedback utils & valid email (Aylie Chou)
+- [[`6976888509`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6976888509)] - **feat(frontend)**: add components for feedback (Aylie Chou)
+- [[`52a02c8c91`](https://github.com/twreporter/congress-dashboard-monorepo/commit/52a02c8c91)] - **feat(frontend)**: add `Feedback` & step 1 component (Aylie Chou)
+- [[`0a54fe46a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0a54fe46a9)] - **feat(frontend)**: add comoponents for feedback (Aylie Chou)
+
 ## 1.0.0-rc.9, 2025-05-09
 
 ### Notable Changes

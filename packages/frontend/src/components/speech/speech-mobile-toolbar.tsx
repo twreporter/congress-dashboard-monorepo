@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, createContext, useContext, useEffect } from 'react'
 import styled from 'styled-components'
-import Link from 'next/link'
 // hook
 import useOutsideClick from '@/hooks/use-outside-click'
 // @twreporter
@@ -25,6 +24,8 @@ import TabBarButton from '@/components/button/tab-bar-button'
 import toastr from '@/utils/toastr'
 // constants
 import { Direction } from '@/components/speech'
+// util
+import { openFeedback } from '@/utils/feedback'
 
 // styles
 const MobileToolbarContainer = styled.div<{
@@ -93,14 +94,12 @@ const MobileToolbarContext = createContext<{
 const FeedbackButton: React.FC = () => {
   const { hideText } = useContext(MobileToolbarContext)
   return (
-    <ButtonContainer>
-      <Link href="/feedback">
-        <IconWithTextButton
-          text="問題回報"
-          iconComponent={<Report releaseBranch={releaseBranch} />}
-          hideText={hideText}
-        />
-      </Link>
+    <ButtonContainer onClick={openFeedback}>
+      <IconWithTextButton
+        text="問題回報"
+        iconComponent={<Report releaseBranch={releaseBranch} />}
+        hideText={hideText}
+      />
     </ButtonContainer>
   )
 }
@@ -332,6 +331,37 @@ const MobileToolbar: React.FC<MobileToolbarProps> = ({
             isFirstSpeech={isFirstSpeech}
             isLastSpeech={isLastSpeech}
           />
+        </ToolBar>
+      </MobileToolbarContainer>
+    </MobileToolbarContext.Provider>
+  )
+}
+
+type AboutPageMobileToolbarProps = {
+  onFontSizeChange: () => void
+  scrollStage: number
+}
+export const AboutPageMobileToolbar: React.FC<AboutPageMobileToolbarProps> = ({
+  onFontSizeChange,
+  scrollStage,
+}) => {
+  const [buttonGroup, setButtonGroup] = useState<ButtonGroupType>('none')
+  const isHidden = scrollStage >= 3
+  const hideText = scrollStage >= 2
+  const contextValue = { hideText, setButtonGroup }
+
+  useEffect(() => {
+    setButtonGroup('none')
+  }, [scrollStage])
+
+  return (
+    <MobileToolbarContext.Provider value={contextValue}>
+      <MobileToolbarContainer $isHidden={isHidden} $hideText={hideText}>
+        <ToolBar>
+          <FeedbackButton />
+          <ShareButton />
+          <FontSizeButton onClick={onFontSizeChange} />
+          <ShareButtonGroup isShow={buttonGroup === 'share'} />
         </ToolBar>
       </MobileToolbarContainer>
     </MobileToolbarContext.Provider>

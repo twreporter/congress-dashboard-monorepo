@@ -20,7 +20,7 @@ import {
 } from '@/components/layout/speech-summary-list/layout'
 import TabNavigation from '@/components/layout/speech-summary-list/tab-navigation'
 import FollowMoreItems from '@/components/layout/speech-summary-list/follow-more-items'
-//  compoents
+//  components
 import { groupSummary } from '@/components/sidebar'
 import CardsOfTheYear, {
   type SummaryCardProps,
@@ -29,7 +29,7 @@ import CardsOfTheYear, {
 import { Issue, type IssueProps } from '@/components/sidebar/follow-more'
 import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
-// type
+// types
 import type { TabProps } from '@/components/sidebar/type'
 // constants
 import { InternalRoutes } from '@/constants/routes'
@@ -38,11 +38,6 @@ import { fetchTopTopicsForLegislator } from '@/fetchers/topic'
 import { type SpeechData } from '@/fetchers/server/topic'
 // z-index
 import { ZIndex } from '@/styles/z-index'
-// lodash
-import get from 'lodash/get'
-const _ = {
-  get,
-}
 
 const TopicContainer = styled.div`
   gap: 12px;
@@ -111,24 +106,38 @@ const TopicList: React.FC<TopicListProps> = ({
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
   const [tabList, setTabList] = useState(
-    legislatorsData.map((legislator) => ({
-      ...legislator,
-      showAvatar: true,
-    })) as TabProps[]
+    legislatorsData
+      .map((legislator) => ({
+        ...legislator,
+        showAvatar: true,
+      }))
+      .slice(0, 5) as TabProps[]
   )
 
   useEffect(() => {
-    setTabList(
-      legislatorsData.map((legislator) => ({ ...legislator, showAvatar: true }))
-    )
+    if (legislatorsData.length > 0) {
+      setTabList(
+        legislatorsData
+          .slice(0, 5)
+          .map((legislator) => ({ ...legislator, showAvatar: true }))
+      )
+    }
   }, [legislatorsData])
 
   const selectedLegislator = useMemo(() => {
-    if (legislatorsData.length === 0) return null
-    return legislatorsData[selectedTab] || legislatorsData[0]
-  }, [legislatorsData, selectedTab])
-  const summaryList: SummaryCardProps[] = useMemo(() => {
-    if (!selectedLegislator) return []
+    if (legislatorsData.length === 0 || !tabList[selectedTab]) return null
+
+    const currentSlug = tabList[selectedTab].slug
+    return (
+      legislatorsData.find((legislator) => legislator.slug === currentSlug) ||
+      null
+    )
+  }, [legislatorsData, selectedTab, tabList])
+
+  const summaryList = useMemo<SummaryCardProps[]>(() => {
+    if (!selectedLegislator || !speechesByLegislator[selectedLegislator.slug])
+      return []
+
     return speechesByLegislator[selectedLegislator.slug].map(
       ({ title, date, summary, slug }) => ({
         title,
@@ -138,7 +147,12 @@ const TopicList: React.FC<TopicListProps> = ({
       })
     )
   }, [selectedLegislator, speechesByLegislator])
-  const { data: topTopics, error: topTopicsError } = useSWR(
+
+  const {
+    data: topTopics,
+    error: topTopicsError,
+    isLoading: isLoadingTopTopics,
+  } = useSWR(
     selectedLegislator?.slug
       ? [
           'fetchTopTopicsForLegislator',
@@ -156,10 +170,9 @@ const TopicList: React.FC<TopicListProps> = ({
           })
         : null
   )
-  const issueList: (IssueProps & { slug: string })[] = useMemo(() => {
-    if (!selectedLegislator) return []
-    if (topTopicsError) return []
-    if (!topTopics) return []
+
+  const issueList = useMemo<(IssueProps & { slug: string })[]>(() => {
+    if (!selectedLegislator || topTopicsError || !topTopics) return []
 
     return topTopics.map((topic) => ({
       name: topic.title,
@@ -167,21 +180,39 @@ const TopicList: React.FC<TopicListProps> = ({
       count: topic.speechesCount,
     }))
   }, [selectedLegislator, topTopics, topTopicsError])
-  const followMoreTitle: string = useMemo(
-    () => `${_.get(selectedLegislator, ['name'], '')} 近期關注的五大議題：`,
+
+  const followMoreTitle = useMemo(
+    () =>
+      selectedLegislator
+        ? `${selectedLegislator.name} 近期關注的五大議題：`
+        : '',
     [selectedLegislator]
   )
-  const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
+
+  const summaryGroupByYear = useMemo(
     () => groupSummary(summaryList),
     [summaryList]
   )
+
   const openFilter = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     e.stopPropagation()
     setShowFilter(true)
   }, [])
+
   const handleTabChange = useCallback((index: number) => {
     setSelectedTab(index)
+  }, [])
+
+  const handleFilterConfirm = useCallback((filterList: TabProps[]) => {
+    setTabList(
+      filterList.map((legislator) => ({ ...legislator, showAvatar: true }))
+    )
+    setSelectedTab(0)
+  }, [])
+
+  const closeFilter = useCallback(() => {
+    setShowFilter(false)
   }, [])
 
   if (isLoading) {
@@ -228,9 +259,10 @@ const TopicList: React.FC<TopicListProps> = ({
           )}
         </SummarySection>
         <FollowMoreItems title={followMoreTitle}>
-          {issueList.length > 0 ? (
+          {isLoadingTopTopics && <Loader useAbsolute={false} />}
+          {issueList.length > 0 && (
             <TopicContainer>
-              {issueList.map((props, index: number) => (
+              {issueList.map((props, index) => (
                 <Link
                   href={`${InternalRoutes.Topic}/${
                     props.slug
@@ -243,7 +275,7 @@ const TopicList: React.FC<TopicListProps> = ({
                 </Link>
               ))}
             </TopicContainer>
-          ) : null}
+          )}
         </FollowMoreItems>
       </Body>
       <FilterMask $show={showFilter}>
@@ -251,11 +283,11 @@ const TopicList: React.FC<TopicListProps> = ({
           <FilterModal
             title={`${topicTitle} 的相關發言篩選`}
             slug={topicSlug}
+            initialOption={legislatorsData}
+            placeholder={'篩選立委'}
             initialSelectedOption={tabList}
-            onClose={() => {
-              setShowFilter(false)
-            }}
-            onConfirmSelection={setTabList}
+            onClose={closeFilter}
+            onConfirmSelection={handleFilterConfirm}
           />
         </FilterBox>
       </FilterMask>

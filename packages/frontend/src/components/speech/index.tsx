@@ -41,6 +41,7 @@ import SpeechContent from '@/components/speech/speech-content'
 import SpeechMobileToolbar from '@/components/speech/speech-mobile-toolbar'
 import IconButton from '@/components/button/icon-button'
 import CustomPillButton from '@/components/button/pill-button'
+import DonationBox from '@/components/about/donation-box'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 // type
@@ -50,6 +51,8 @@ import { useSpeechData } from '@/components/speech/hooks/use-speech-data'
 import { useScrollStage } from '@/components/speech/hooks/use-scroll-stage'
 // constants
 import { InternalRoutes } from '@/constants/routes'
+// utils
+import { openFeedback } from '@/utils/feedback'
 
 const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
   ${mq.desktopAndAbove`
@@ -249,12 +252,13 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
             content={content}
             fontSizeOffset={FontSizeOffset[fontSize]}
           />
+          <DonationBox />
         </ContentBlock>
         <TabletAndBelowWithFlex>
           <SpeechAsideInfo {...asideInfoProps} />
         </TabletAndBelowWithFlex>
         <DesktopAndAboveWithFlex>
-          <Feedback>
+          <Feedback onClick={openFeedback}>
             <CustomPillButton
               leftIconComponent={<Report releaseBranch={releaseBranch} />}
               text={'問題回報'}

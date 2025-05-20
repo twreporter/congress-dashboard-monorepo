@@ -12,6 +12,7 @@ import type { Legislator } from '@/components/dashboard/type'
 import type { FilterModalValueType } from '@/components/dashboard/type'
 // utils
 import toastr from '@/utils/toastr'
+import { isMobile } from '@/utils/rwd'
 // enum
 import { Option } from '@/components/dashboard/enum'
 // context
@@ -46,6 +47,7 @@ import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
 import { ZIndex } from '@/styles/z-index'
 // lodash
 import { find } from 'lodash'
+import { InternalRoutes } from '@/constants/routes'
 const _ = {
   find,
 }
@@ -106,12 +108,12 @@ const CardIssueBox = styled.div<{ $active: boolean }>`
 const CardHumanBox = styled.div<{ $active: boolean }>`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-gap: 24px;
   ${(props) => (props.$active ? '' : 'display: none !important;')}
 
   ${mq.mobileOnly`
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, minmax(0, 1fr));
     grid-gap: 20px;
 
     & > * {
@@ -337,11 +339,27 @@ const Dashboard: React.FC<DashboardProps> = ({
       issueList: activeLegislator.tags,
     })
   }
+  const gotoTopic = (index: number) => {
+    const activeTopic = topics[index]
+    const url = `${InternalRoutes.Topic}/${activeTopic.slug}`
+    window.open(url, '_self')
+  }
+  const gotoHuman = (index: number) => {
+    const activeLegislator = legislators[index]
+    const url = `${InternalRoutes.Legislator}/${activeLegislator.slug}`
+    window.open(url, '_self')
+  }
   const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
     e.preventDefault()
     e.stopPropagation()
 
     setActiveCardIndex(index)
+
+    if (isMobile()) {
+      const opener = selectedType === Option.Issue ? gotoTopic : gotoHuman
+      opener(index)
+      return
+    }
 
     // set sidebar data
     const updater =
@@ -429,11 +447,11 @@ const Dashboard: React.FC<DashboardProps> = ({
     formattedFilterValues,
   }
 
-  useOutsideClick(closeSidebar)
+  const ref = useOutsideClick(closeSidebar)
 
   return (
     <DashboardContext.Provider value={contextValue}>
-      <Box id={anchorId}>
+      <Box id={anchorId} ref={ref}>
         <StyledFunctionBar
           setTab={setTab}
           parties={parties}

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 // fetcher
 import { type TopicData } from '@/fetchers/server/topic'
 // util
-import { getImageLink } from '@/fetchers/utils'
+import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // lodash
 import groupBy from 'lodash/groupBy'
 
@@ -24,14 +24,14 @@ export const useTopicData = (topic: TopicData | null) => {
       (speech) => speech.legislativeYuanMember.legislator.slug
     )
     const legislatorCount = Object.keys(speechesByLegislator).length
-    const legislatorsData = Object.entries(speechesByLegislator).map(
-      ([slug, speeches]) => ({
+    const legislatorsData = Object.entries(speechesByLegislator)
+      .map(([slug, speeches]) => ({
         name: speeches[0].legislativeYuanMember.legislator.name,
         slug,
         avatar: getImageLink(speeches[0].legislativeYuanMember.legislator),
         count: speeches.length,
-      })
-    )
+      }))
+      .sort(sortByCountDesc)
     return { legislatorCount, legislatorsData, speechesByLegislator }
   }, [topic?.speeches])
 }
