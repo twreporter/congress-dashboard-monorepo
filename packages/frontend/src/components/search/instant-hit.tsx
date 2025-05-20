@@ -126,7 +126,7 @@ export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
       </Avatar>
       <Text>
         <Highlight highlightedTagName="span" attribute="name" hit={hit} />
-        <p>{hit.shortDesc}</p>
+        <p>{hit.desc}</p>
       </Text>
     </InstantHitContainer>
   )
