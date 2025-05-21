@@ -50,6 +50,7 @@ const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
   ${mq.desktopAndAbove`
     display: flex !important;
     flex: 1;
+    padding-bottom: 50px;
   `}
 `
 
@@ -108,6 +109,7 @@ const AboutPage: React.FC<AboutPageProps> = ({
         <DesktopAndAboveWithFlex>
           <AsideBlock>
             <SpeechAsideToolBar
+              forAboutPage={true}
               onFontSizeChange={cycleFontSize}
               currentFontSize={fontSize}
             />
@@ -126,7 +128,6 @@ const AboutPage: React.FC<AboutPageProps> = ({
             content={content}
             fontSizeOffset={FontSizeOffset[fontSize]}
           />
-          <DonationBox />
         </ContentBlock>
         <DesktopAndAboveWithFlex>
           <Feedback>
@@ -138,6 +139,7 @@ const AboutPage: React.FC<AboutPageProps> = ({
           </Feedback>
         </DesktopAndAboveWithFlex>
       </BodyContainer>
+      <DonationBox />
       <TabletAndBelow className="hidden-print">
         <AboutPageMobileToolbar
           onFontSizeChange={cycleFontSize}
