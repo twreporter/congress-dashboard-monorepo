@@ -25,7 +25,12 @@ export const TitleBlock = styled.div`
   top: 0;
   background-color: white;
   z-index: 1;
-  position: relative;
+
+  ${mq.mobileOnly`
+    border-bottom: 1px solid ${colorGrayscale.gray300};
+    position: fixed;
+    width: 100%;
+  `}
 `
 
 export const OptionBlock = styled.div`
@@ -37,7 +42,7 @@ export const OptionBlock = styled.div`
   gap: 24px;
 
   ${mq.mobileOnly`
-    padding: 24px;
+    padding: 84px 24px 24px 24px;
     gap: 20px;
   `}
 `
@@ -54,7 +59,8 @@ export const ActionBlock = styled.div`
   ${mq.mobileOnly`
     padding: 24px;
     gap: 10px;
-    top: calc(100vh - 90px);
+    top: calc(100% - 92px);
+    border-top: 1px solid ${colorGrayscale.gray300};
   `}
 `
 
