@@ -16,23 +16,20 @@ const Container = styled.div`
 `
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-const notFoundTitle = '找不到這個頁面'
-const guideText = '請返回首頁，試著搜尋其他內容'
-const buttonText = '回首頁'
-const buttonUrl = '/'
-export default function NotFound() {
+const loadingTitle = '資料處理中，請稍候⋯⋯'
+const guideText = '我們正在載入最新內容，很快就好！'
+const Loading = () => {
   return (
     <Container>
       <EmptyState
         releaseBranch={releaseBranch}
-        style={EmptyState.Style.DEFAULT}
-        title={notFoundTitle}
+        style={EmptyState.Style.UNDER_CONSTRUCTION}
+        title={loadingTitle}
         showGuide={true}
-        showButton={true}
+        showButton={false}
         guide={guideText}
-        buttonText={buttonText}
-        buttonUrl={buttonUrl}
       />
     </Container>
   )
 }
+export default Loading

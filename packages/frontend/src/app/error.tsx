@@ -7,13 +7,15 @@ import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 // utils
 import { openFeedback } from '@/utils/feedback'
 
-const ErrorContainer = styled.div`
+const Container = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
   background-color: ${colorGrayscale.gray100};
   padding-top: 72px;
   padding-bottom: 120px;
+  justify-content: center;
+  align-items: center;
 `
 
 const GuideContainer = styled.div`
@@ -41,7 +43,7 @@ export default function Error() {
     openFeedback()
   }
   return (
-    <ErrorContainer>
+    <Container>
       <title>資料載入失敗</title>
       <EmptyState
         releaseBranch={releaseBranch}
@@ -53,6 +55,6 @@ export default function Error() {
         buttonText={buttonText}
         buttonOnclick={handleClick}
       />
-    </ErrorContainer>
+    </Container>
   )
 }
