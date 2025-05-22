@@ -2,7 +2,10 @@ import React, { CSSProperties } from 'react'
 import styled, { keyframes, css } from 'styled-components'
 import Image, { type ImageProps } from 'next/image'
 // @twreporter
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import {
+  colorGrayscale,
+  colorOpacity,
+} from '@twreporter/core/lib/constants/color'
 
 const shimmer = keyframes`
   100% {
@@ -74,6 +77,7 @@ export const GapHorizontal = styled.div<{ $gap: number }>`
 const imageStyle: CSSProperties = {
   borderRadius: '50%',
   objectFit: 'cover',
+  border: `1px solid ${colorOpacity['black_0.05']}`,
 }
 const gray200Base64 =
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN89B8AAskB44g04okAAAAASUVORK5CYII='

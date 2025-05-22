@@ -10,7 +10,7 @@ import type { Legislator } from '@/components/dashboard/type'
 import { Triangle, Circle, Gap } from '@/components/skeleton'
 import PartyTag from '@/components/dashboard/card/party-tag'
 // style
-import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
+import { textOverflowEllipsisCss, AvatarCircleCss } from '@/styles/cheetsheet'
 // @twreporter
 import {
   colorGrayscale,
@@ -100,10 +100,10 @@ const AvatarContainer = styled.div`
   position: relative;
 `
 const Avatar = styled.img`
+  ${AvatarCircleCss}
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  object-fit: cover;
 `
 const Party = styled(PartyTag)`
   width: 16px;
