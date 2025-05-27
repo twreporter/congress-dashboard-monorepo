@@ -8,10 +8,10 @@ import {
   Constituency,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 // lodash
-import { isEmpty, remove, includes } from 'lodash'
+import { isEmpty, filter, includes } from 'lodash'
 const _ = {
   isEmpty,
-  remove,
+  filter,
   includes,
 }
 
@@ -236,7 +236,7 @@ export const fetchLegislators = async ({
     }
   }
   if (constituencies && constituencies.length > 0) {
-    const typeFilter = _.remove(constituencies, (value) => {
+    const typeFilter = _.filter(constituencies, (value) => {
       return _.includes(
         [
           MemberType.NationwideAndOverseas,
@@ -246,8 +246,18 @@ export const fetchLegislators = async ({
         value
       )
     })
+    const cityFilter = _.filter(constituencies, (value) => {
+      return !_.includes(
+        [
+          MemberType.NationwideAndOverseas,
+          MemberType.HighlandAboriginal,
+          MemberType.LowlandAboriginal,
+        ],
+        value
+      )
+    })
     const hasTypeFilter = typeFilter && typeFilter.length > 0
-    const hasCityFilter = constituencies && constituencies.length > 0
+    const hasCityFilter = cityFilter && cityFilter.length > 0
     const needOr = hasTypeFilter && hasCityFilter
     if (needOr) {
       where['OR'] = [
@@ -258,7 +268,7 @@ export const fetchLegislators = async ({
         },
         {
           city: {
-            in: constituencies,
+            in: cityFilter,
           },
         },
       ]
@@ -270,7 +280,7 @@ export const fetchLegislators = async ({
       }
       if (hasCityFilter) {
         where.AND[0]['city'] = {
-          in: constituencies,
+          in: cityFilter,
         }
       }
     }

@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 // components
-import { ImageWithSkeleton, CircleRaw } from '@/components/skeleton'
+import { CircleRaw } from '@/components/skeleton'
+import ImageWithSkeleton from '@/components/image-with-skeleton'
 // type
 import { TabProps } from '@/components/sidebar/type'
 // twreporter

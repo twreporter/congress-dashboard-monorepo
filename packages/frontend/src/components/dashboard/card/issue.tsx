@@ -8,9 +8,10 @@ import { TagSize } from '@/components/dashboard/enum'
 import type { Legislator } from '@/components/dashboard/type'
 // components
 import { Triangle, Circle, Gap } from '@/components/skeleton'
+import ImageWithSkeleton from '@/components/image-with-skeleton'
 import PartyTag from '@/components/dashboard/card/party-tag'
 // style
-import { textOverflowEllipsisCss, AvatarCircleCss } from '@/styles/cheetsheet'
+import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
 // @twreporter
 import {
   colorGrayscale,
@@ -99,12 +100,6 @@ const LegislatorItem = styled.div`
 const AvatarContainer = styled.div`
   position: relative;
 `
-const Avatar = styled.img`
-  ${AvatarCircleCss}
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-`
 const Party = styled(PartyTag)`
   width: 16px;
   height: 16px;
@@ -157,7 +152,16 @@ const CardIssue: React.FC<CardIssueProps> = ({
             return (
               <LegislatorItem key={`legislator-${index}`}>
                 <AvatarContainer>
-                  {avatar ? <Avatar src={avatar} /> : <Circle />}
+                  {avatar ? (
+                    <ImageWithSkeleton
+                      src={avatar}
+                      width={56}
+                      height={56}
+                      alt={`${name}-avatar`}
+                    />
+                  ) : (
+                    <Circle />
+                  )}
                   {partyAvatar ? (
                     <Party avatar={partyAvatar} size={TagSize.S} />
                   ) : null}
