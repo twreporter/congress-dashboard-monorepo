@@ -74,6 +74,7 @@ const FilterBox = styled.div<{ $show: boolean }>`
   ${(props) => (props.$show ? '' : 'display: none;')}
   height: 100%;
   position: relative;
+  overflow-y: hidden;
 `
 const Body = styled.div`
   display: flex;
@@ -193,6 +194,10 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
       legislativeMeetingSessionIds: formattedFilterValues?.sessionIds,
     })
   }
+
+  useEffect(() => {
+    setIsLoading(true)
+  }, [slug])
 
   useEffect(() => {
     if (speechState.speeches != undefined) {
@@ -384,6 +389,10 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   }
 
   useEffect(() => {
+    setIsLoading(true)
+  }, [slug])
+
+  useEffect(() => {
     if (issueList) {
       setTabList(issueList)
     }
@@ -391,9 +400,9 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
 
   useEffect(() => {
     if (speechState.speeches != undefined) {
-      setIsLoading(speechState.isLoading)
+      setIsLoading(speechState.isLoading || followMoreState.isLoading)
     }
-  }, [speechState.speeches, speechState.isLoading])
+  }, [speechState.speeches, speechState.isLoading, followMoreState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
