@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.9, 2025-06-03
+
+### Notable Changes
+
+- fix
+  - read public config in runtime
+
+### Commits
+
+- [[`e2d4e9a8b6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e2d4e9a8b6)] - **fix(cms)**: read public config in runtime (Aylie Chou)
+
 ## 1.0.0-rc.8, 2025-05-09
 
 ### Notable Changes
