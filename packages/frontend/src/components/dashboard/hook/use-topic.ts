@@ -40,7 +40,6 @@ const useTopic = (parties: partyData[]) => {
             }
           }) || []
       })
-      console.log('topics', topics)
 
       return topics
     },
