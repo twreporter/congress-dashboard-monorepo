@@ -1,7 +1,9 @@
+'use client'
+
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import styled from '@emotion/styled'
-// config
-import env from '../../../environment-variables'
+// util
+import { getTwreporterApiUrl } from './util'
 // type
 import type {
   FieldControllerConfig,
@@ -42,7 +44,8 @@ const boxStyle = {
 }
 
 const getTwreporterArticle = async (slug: string) => {
-  const url = `${env.twreporterApiUrl}/v2/posts/${slug}?full=false`
+  const twreporterApiUrl = getTwreporterApiUrl()
+  const url = `${twreporterApiUrl}/v2/posts/${slug}?full=false`
   const res = await fetch(url, {
     method: 'GET',
     headers: {
