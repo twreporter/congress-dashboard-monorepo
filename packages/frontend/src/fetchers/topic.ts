@@ -105,6 +105,7 @@ export const fetchTopNTopics = async ({
           name
           imageLink
           slug
+          party
           image {
             imageFile {
               url

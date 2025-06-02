@@ -6,7 +6,7 @@ import { InternalRoutes } from '@/constants/routes'
 import PartyTag from '@/components/dashboard/card/party-tag'
 import { CircleRaw } from '@/components/skeleton'
 // style
-import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
+import { textOverflowEllipsisCss, AvatarCircleCss } from '@/styles/cheetsheet'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
@@ -27,10 +27,10 @@ const AvatarContainer = styled.div`
   position: relative;
 `
 const Avatar = styled.img`
+  ${AvatarCircleCss}
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  object-fit: cover;
 `
 const Party = styled(PartyTag)`
   &,

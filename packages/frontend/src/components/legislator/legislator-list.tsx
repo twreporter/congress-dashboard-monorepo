@@ -77,6 +77,7 @@ const FilterBox = styled.div<{ $show: boolean }>`
   height: 100vh;
   background-color: ${colorGrayscale.white};
   overflow-x: hidden;
+  overflow-y: hidden;
   box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
   z-index: ${ZIndex.SideBar};
   ${mq.mobileOnly`

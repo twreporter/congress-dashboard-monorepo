@@ -3,7 +3,7 @@ import styled from 'styled-components'
 // type
 import { SelectTagProps } from '@/components/sidebar/type'
 // components
-import { ImageWithSkeleton } from '@/components/skeleton'
+import ImageWithSkeleton from '@/components/image-with-skeleton'
 // @twreporter
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
