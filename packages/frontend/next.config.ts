@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
       'dev.twreporter.org',
       'staging.twreporter.org',
       'twreporter.org',
+      'dev-lawmaker-storage.twreporter.org',
+      'staging-lawmaker-storage.twreporter.org',
+      'lawmaker-storage.twreporter.org',
     ],
   },
 }

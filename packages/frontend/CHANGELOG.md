@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0-rc.20, 2025-06-03
+
+### Notable Changes
+
+- fix
+  - update style of circle avatar
+  - address defects of home page
+
+### Commits
+
+- [[`082e61400e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/082e61400e)] - **fix(frontend)**: remove console log (Aylie Chou)
+- [[`48f9fc6c08`](https://github.com/twreporter/congress-dashboard-monorepo/commit/48f9fc6c08)] - **fix(frontend)**: address defects of home page (Aylie Chou)
+- [[`b6fc01e1dd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b6fc01e1dd)] - **fix(frontend)**: update style of circle avatar (Aylie Chou)
+
 ## 1.0.0-rc.19, 2025-06-02
 
 ### Notable Changes

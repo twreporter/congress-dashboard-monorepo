@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useMemo, useRef } from 'react'
+import React, { useEffect, useState, useMemo, useRef, MouseEvent } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 // util
@@ -111,6 +111,9 @@ const ContentBox = styled.div<{
   $topBoxHeight: number
   $isSearchMode: boolean
 }>`
+  overflow-y: scroll;
+  height: 100%;
+  max-height: calc(100% - 90px);
   transition: transform 0.4s ease-in-out;
   ${(props) =>
     props.$isSearchMode
@@ -127,6 +130,7 @@ const HorizontalLine = styled.div<{ $show: boolean }>`
 `
 const SearchBox = styled(FlexRow)<{ $isSearchMode: boolean }>`
   padding: 24px 24px 0 24px;
+  background-color: ${colorGrayscale.white};
 
   ${(props) =>
     props.$isSearchMode
@@ -146,7 +150,6 @@ const SearchBox = styled(FlexRow)<{ $isSearchMode: boolean }>`
 `
 const SelectBox = styled(FlexColumn)`
   padding: 24px;
-  overflow-y: scroll;
 
   ${HorizontalLine} {
     margin: 24px 0;
@@ -166,8 +169,8 @@ const TagBox = styled.div`
 const Text = styled(P2)`
   color: ${colorGrayscale.gray800};
 `
-const ConfirmBox = styled.div`
-  position: sticky;
+const ConfirmBox = styled.div<{ $isLoading: boolean }>`
+  position: ${(props) => (props.$isLoading ? 'fixed' : 'sticky')};
   bottom: 0;
   z-index: 1;
   width: 100%;
@@ -271,7 +274,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   )
   const topBoxHeight = useMemo(
     () => (topBoxRef.current ? topBoxRef.current.offsetHeight : 0),
-    [topBoxRef.current]
+    [topBoxRef]
   )
 
   const { toastr, showSnackBar, snackBarText } = useSnackBar()
@@ -391,7 +394,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
       setOptions(updatedOptions)
     }
   }
-  const confirmSelect = () => {
+  const confirmSelect = (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
     onConfirmSelection(selectedOptions)
     onClose()
   }
@@ -479,7 +485,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
           </SelectBox>
         </ContentBox>
       )}
-      <ConfirmBox>
+      <ConfirmBox $isLoading={isShowLoading}>
         <ConfirmBoxRelative>
           <SnackBarContainer $showSnackBar={showSnackBar}>
             <SnackBar text={snackBarText} />

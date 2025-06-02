@@ -16,6 +16,7 @@ import { IconButton } from '@twreporter/react-components/lib/button'
 import { OpenInNew } from '@twreporter/react-components/lib/icon'
 // styles
 import { H3Gray900, P1Gray800 } from '@/components/legislator/styles'
+import { AvatarCircleCss } from '@/styles/cheetsheet'
 // components
 import PartyTag from '@/components/dashboard/card/party-tag'
 // enums
@@ -63,6 +64,7 @@ const LegislatorImageContainer = styled.div`
 `
 
 const LegislatorImage = styled.img`
+  ${AvatarCircleCss}
   width: 300px;
   aspect-ratio: 3.5 / 4.5;
   border-radius: 8px 8px 0 0;
