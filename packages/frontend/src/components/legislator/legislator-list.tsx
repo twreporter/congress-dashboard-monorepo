@@ -23,13 +23,9 @@ import FollowMoreItems from '@/components/layout/speech-summary-list/follow-more
 //  components
 import { groupSummary } from '@/components/sidebar'
 import CardsOfTheYear, {
-  type SummaryCardProps,
   type CardsOfTheYearProps,
 } from '@/components/sidebar/card'
-import {
-  Legislator,
-  type LegislatorProps,
-} from '@/components/sidebar/follow-more'
+import { Legislator } from '@/components/sidebar/follow-more'
 import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
 // type
@@ -40,6 +36,10 @@ import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
 import { InternalRoutes } from '@/constants/routes'
 // z-index
 import { ZIndex } from '@/styles/z-index'
+
+const maxTabs = 5
+const mapToTabItems = (items: TabProps[]): TabProps[] =>
+  items.map((item) => ({ ...item, showAvatar: false }))
 
 const LegislatorContainer = styled.div`
   gap: 32px;
@@ -108,16 +108,12 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
-  const [tabList, setTabList] = useState(
-    topics
-      .map((topic) => ({ ...topic, showAvatar: false }))
-      .slice(0, 5) as TabProps[]
-  )
 
+  const [tabList, setTabList] = useState(() =>
+    mapToTabItems(topics).slice(0, maxTabs)
+  )
   useEffect(() => {
-    setTabList(
-      topics.map((topic) => ({ ...topic, showAvatar: false })).slice(0, 5)
-    )
+    setTabList(mapToTabItems(topics).slice(0, maxTabs))
   }, [topics])
 
   const selectedTopic = useMemo(() => {
@@ -131,54 +127,43 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
     [selectedTopic]
   )
 
-  const summaryList: SummaryCardProps[] = useMemo(() => {
+  const summaryGroupByYear = useMemo(() => {
     if (!selectedTopic) return []
-    return speechesByTopic[selectedTopic.slug].map(
-      ({ title, date, summary, slug }) => ({
-        title,
-        date: new Date(date),
-        summary,
-        slug,
-      })
+    return groupSummary(
+      speechesByTopic[selectedTopic.slug].map(
+        ({ title, date, summary, slug }) => ({
+          title,
+          date: new Date(date),
+          summary,
+          slug,
+        })
+      )
     )
   }, [selectedTopic, speechesByTopic])
 
-  const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(summaryList),
-    [summaryList]
-  )
-
   const {
-    data: topLegislators,
-    error: topLegislatorsError,
+    data: topLegislators = [],
+    error: swrError,
     isLoading: isLoadingTopLegislators,
   } = useSWR(
-    selectedTopic?.slug
+    selectedTopic
       ? [
-          'fetchTopLegislatorsBySpeechCount',
+          'fetchTopLegislators',
           selectedTopic.slug,
           currentMeetingTerm,
           currentMeetingSession,
+          legislatorSlug,
         ]
       : null,
-    () =>
-      selectedTopic?.slug
-        ? fetchTopLegislatorsBySpeechCount({
-            topicSlug: selectedTopic.slug,
-            legislativeMeetingTerm: currentMeetingTerm,
-            legislativeMeetingSessionTerms: currentMeetingSession,
-            legislatorSlug,
-          })
-        : null
+    ([, topicSlug, term, sessions, slug]) =>
+      fetchTopLegislatorsBySpeechCount({
+        topicSlug,
+        legislativeMeetingTerm: term,
+        legislativeMeetingSessionTerms: sessions,
+        legislatorSlug: slug,
+      })
   )
-
-  const legislatorList: LegislatorProps[] = useMemo(() => {
-    if (!selectedTopic) return []
-    if (topLegislatorsError) return []
-    if (!topLegislators) return []
-
-    return topLegislators
-  }, [selectedTopic, topLegislators, topLegislatorsError])
+  const legislatorList = !swrError && selectedTopic ? topLegislators : []
 
   const openFilter = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()

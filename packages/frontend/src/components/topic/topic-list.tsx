@@ -39,6 +39,10 @@ import { type SpeechData } from '@/fetchers/server/topic'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 
+const maxTabs = 5
+const mapToTabItems = (items: LegislatorData[]): TabProps[] =>
+  items.map((legislator) => ({ ...legislator, showAvatar: true }))
+
 const TopicContainer = styled.div`
   gap: 12px;
   display: flex;
@@ -105,23 +109,12 @@ const TopicList: React.FC<TopicListProps> = ({
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
-  const [tabList, setTabList] = useState(
-    legislatorsData
-      .map((legislator) => ({
-        ...legislator,
-        showAvatar: true,
-      }))
-      .slice(0, 5) as TabProps[]
+  const [tabList, setTabList] = useState(() =>
+    mapToTabItems(legislatorsData).slice(0, maxTabs)
   )
 
   useEffect(() => {
-    if (legislatorsData.length > 0) {
-      setTabList(
-        legislatorsData
-          .slice(0, 5)
-          .map((legislator) => ({ ...legislator, showAvatar: true }))
-      )
-    }
+    setTabList(mapToTabItems(legislatorsData).slice(0, maxTabs))
   }, [legislatorsData])
 
   const selectedLegislator = useMemo(() => {
@@ -161,14 +154,12 @@ const TopicList: React.FC<TopicListProps> = ({
           currentMeetingSession,
         ]
       : null,
-    () =>
-      selectedLegislator?.slug
-        ? fetchTopTopicsForLegislator({
-            legislatorSlug: selectedLegislator.slug,
-            legislativeMeeting: currentMeetingTerm,
-            legislativeMeetingSession: currentMeetingSession,
-          })
-        : null
+    ([, slug, term, sessions]) =>
+      fetchTopTopicsForLegislator({
+        legislatorSlug: slug,
+        legislativeMeeting: term,
+        legislativeMeetingSession: sessions,
+      })
   )
 
   const issueList = useMemo<(IssueProps & { slug: string })[]>(() => {
