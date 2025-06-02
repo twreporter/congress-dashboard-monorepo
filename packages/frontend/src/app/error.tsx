@@ -1,5 +1,7 @@
 'use client'
+import Head from 'next/head'
 import styled from 'styled-components'
+import { MouseEvent } from 'react'
 // @twreporter
 import EmptyState from '@twreporter/react-components/lib/empty-state'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
@@ -38,13 +40,15 @@ const guideText = (
 )
 const buttonText = '問題回報'
 export default function Error() {
-  const handleClick = (e) => {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     openFeedback()
   }
   return (
     <Container>
-      <title>資料載入失敗</title>
+      <Head>
+        <title>資料載入失敗</title>
+      </Head>
       <EmptyState
         releaseBranch={releaseBranch}
         style={EmptyState.Style.PENCIL}
