@@ -29,9 +29,9 @@ function changeFontSizeToPct(fontSize: FontSize): string {
   }
 }
 
-const Container = styled.div`
+const Container = styled.div<{ $forAboutPage?: boolean }>`
   height: 100%;
-  margin: 80px 0;
+  margin: ${(props) => (props.$forAboutPage ? '0' : '80px 0')};
 `
 
 const ToolsContainer = styled.div`
@@ -161,15 +161,17 @@ const LineShareBT: React.FC = () => {
 type AsideToolbarProps = {
   onFontSizeChange: () => void
   currentFontSize: FontSize
+  forAboutPage?: boolean
 }
 const AsideToolbar: React.FC<AsideToolbarProps> = ({
   onFontSizeChange,
   currentFontSize,
+  forAboutPage = false,
 }) => {
   const onPrinterClick = () => window.print()
 
   return (
-    <Container>
+    <Container $forAboutPage={forAboutPage}>
       <ToolsContainer>
         <TextIconBlock $currentFontSize={currentFontSize}>
           <Text onClick={onFontSizeChange} releaseBranch={releaseBranch} />
