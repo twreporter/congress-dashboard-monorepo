@@ -22,6 +22,7 @@ import useFilter from '@/components/dashboard/hook/use-filter'
 import useTopic from '@/components/dashboard/hook/use-topic'
 import useLegislator from '@/components/dashboard/hook/use-legislator'
 import useOutsideClick from '@/hooks/use-outside-click'
+import useWindowWidth from '@/hooks/use-window-width'
 // components
 import FunctionBar from '@/components/dashboard/function-bar'
 import {
@@ -38,6 +39,7 @@ import {
   type SidebarLegislatorProps,
 } from '@/components/sidebar'
 import { GapHorizontal } from '@/components/skeleton'
+import EmptyContent from '@/components/dashboard/empty-state'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -105,23 +107,28 @@ const CardIssueBox = styled.div<{ $active: boolean }>`
   gap: 24px;
   ${(props) => (props.$active ? '' : 'display: none !important;')}
 `
-const CardHumanBox = styled.div<{ $active: boolean }>`
+const CardHumanBox = styled.div<{
+  $active: boolean
+  $showBottomPadding: boolean
+}>`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-gap: 24px;
   ${(props) => (props.$active ? '' : 'display: none !important;')}
+  ${(props) => (props.$showBottomPadding ? 'padding-bottom: 24px;' : '')}
 
   ${mq.mobileOnly`
     grid-template-columns: repeat(1, minmax(0, 1fr));
     grid-gap: 20px;
+    ${(props) => (props.$showBottomPadding ? 'padding-bottom: 20px;' : '')}
 
     & > * {
       width: calc(100vw - 48px);
     }
   `}
 `
-const LoadMore = styled(PillButton)`
+const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
   margin: 64px 0 120px 0;
   justify-content: center;
   width: 300px !important;
@@ -130,6 +137,8 @@ const LoadMore = styled(PillButton)`
     margin: 32px 0 64px 0;
     width: calc(100% - 32px) !important;
   `}
+
+  ${(props) => (props.$hidden ? 'display: none;' : '')}
 `
 const sidebarCss = css<{ $show: boolean }>`
   transform: translateX(${(props) => (props.$show ? 0 : 520)}px);
@@ -222,6 +231,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   parties = [],
   meetings = [],
 }) => {
+  const windowWidth = useWindowWidth()
   const latestMeetingId = useMemo(() => meetings[0]?.id, [meetings])
   const [selectedType, setSelectedType] = useState(Option.Issue)
   const [activeCardIndex, setActiveCardIndex] = useState(-1)
@@ -242,9 +252,18 @@ const Dashboard: React.FC<DashboardProps> = ({
     issueList: [],
   })
   const [sidebarGap, setSidebarGap] = useState(0)
-  const [windowWidth, setWindowWidth] = useState(0)
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
   const cardRef = useRef<HTMLDivElement>(null)
+  const isShowLoadMore = useMemo(() => {
+    const currentListLength =
+      selectedType === Option.Issue ? topics.length : legislators.length
+    return currentListLength > 10 ? currentListLength % 10 === 0 : false
+  }, [selectedType, topics, legislators])
+  const isShowEmpty = useMemo(() => {
+    const currentListLength =
+      selectedType === Option.Issue ? topics.length : legislators.length
+    return currentListLength === 0
+  }, [selectedType, topics, legislators])
 
   const { filterValues, setFilterValues, formatter, formattedFilterValues } =
     useFilter(meetings)
@@ -253,10 +272,6 @@ const Dashboard: React.FC<DashboardProps> = ({
     useLegislator()
 
   useEffect(() => {
-    if (window) {
-      setWindowWidth(window.innerWidth)
-    }
-
     const initializeLegislator = async () => {
       const legislators = await fetchLegislatorAndTopTopics({
         legislativeMeetingId: Number(latestMeetingId),
@@ -277,16 +292,16 @@ const Dashboard: React.FC<DashboardProps> = ({
     setShowSidebar(false)
   }, [selectedType])
 
-  useEffect(() => {
-    if (activeCardIndex > -1) {
-      setShowSidebar(true)
-    }
-  }, [activeCardIndex])
-
   const setTab = (value: Option) => {
     setActiveCardIndex(-1)
     setSelectedType(value)
   }
+  const closeSidebar = () => {
+    setShowSidebar(false)
+    setSidebarGap(0)
+    setActiveCardIndex(-1)
+  }
+
   const loadMore = async () => {
     setIsLoading(true)
     const loadMoreFunc =
@@ -316,11 +331,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     })
     setLegislators((legislators) => legislators.concat(moreLegislators))
   }
-  const closeSidebar = () => {
-    setShowSidebar(false)
-    setSidebarGap(0)
-    setActiveCardIndex(-1)
-  }
+
   const updateSidebarTopic = (index: number) => {
     const activeTopic = topics[index]
     setSidebarTopic({
@@ -339,6 +350,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       issueList: activeLegislator.tags,
     })
   }
+
   const gotoTopic = (index: number) => {
     const activeTopic = topics[index]
     const url = `${InternalRoutes.Topic}/${activeTopic.slug}`
@@ -349,23 +361,8 @@ const Dashboard: React.FC<DashboardProps> = ({
     const url = `${InternalRoutes.Legislator}/${activeLegislator.slug}`
     window.open(url, '_self')
   }
-  const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
-    e.preventDefault()
-    e.stopPropagation()
 
-    setActiveCardIndex(index)
-
-    if (isMobile()) {
-      const opener = selectedType === Option.Issue ? gotoTopic : gotoHuman
-      opener(index)
-      return
-    }
-
-    // set sidebar data
-    const updater =
-      selectedType === Option.Issue ? updateSidebarTopic : updateSidebarHuman
-    updater(index)
-
+  const calculateSidebarGap = () => {
     // set animations for sidebar
     let newSidebarGap = 520 + 24
     const sidebarComponent = sidebarRefs.current[selectedType]
@@ -383,6 +380,40 @@ const Dashboard: React.FC<DashboardProps> = ({
       }
     }
     setSidebarGap(newSidebarGap > 0 ? newSidebarGap : 0)
+  }
+  useEffect(() => {
+    if (showSidebar) {
+      calculateSidebarGap()
+    }
+  }, [windowWidth, showSidebar])
+  useEffect(() => {
+    if (activeCardIndex > -1) {
+      setShowSidebar(true)
+    }
+  }, [activeCardIndex])
+
+  const onClickCard = (e: React.MouseEvent<HTMLElement>, index: number) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (isMobile()) {
+      const opener = selectedType === Option.Issue ? gotoTopic : gotoHuman
+      opener(index)
+      return
+    }
+
+    // toggle sidebar
+    if (index === activeCardIndex) {
+      closeSidebar()
+      return
+    }
+
+    setActiveCardIndex(index)
+
+    // set sidebar data
+    const updater =
+      selectedType === Option.Issue ? updateSidebarTopic : updateSidebarHuman
+    updater(index)
 
     const cardElement = e.currentTarget as HTMLElement
     if (cardElement) {
@@ -390,7 +421,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         behavior: 'smooth',
         block: 'center',
       })
-      const isRightItem = cardElement.offsetLeft > window.innerWidth / 2
+      const isRightItem = cardElement.offsetLeft > windowWidth / 2
       if (selectedType === Option.Human && isRightItem) {
         window.setTimeout(() => {
           cardElement.scrollIntoView({
@@ -402,6 +433,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       }
     }
   }
+
   const onChangeFilter = async (filterModalValue: FilterModalValueType) => {
     setIsLoading(true)
     await Promise.all([
@@ -437,7 +469,9 @@ const Dashboard: React.FC<DashboardProps> = ({
       committeeSlugs,
     })
     setLegislators(legislators)
-    setShouldToastrOnHuman(true)
+    if (legislators.length > 0) {
+      setShouldToastrOnHuman(true)
+    }
   }
 
   const contextValue = {
@@ -458,90 +492,98 @@ const Dashboard: React.FC<DashboardProps> = ({
           meetings={meetings}
           onChangeFilter={onChangeFilter}
         />
-        <CardSection
-          $isScroll={showSidebar}
-          $isSidebarOpened={showSidebar}
-          $windowWidth={windowWidth}
-        >
-          <CardBox ref={cardRef}>
-            <CardIssueBox $active={selectedType === Option.Issue}>
-              {topics.map(
-                (
-                  { title, speechCount, legislatorCount, legislators },
-                  index
-                ) => (
-                  <CardIssueRWD
-                    key={`issue-card-${index}`}
-                    title={title}
-                    subTitle={`共 ${speechCount} 筆相關發言（${legislatorCount}人）`}
-                    legislators={legislators}
+        {isShowEmpty ? (
+          <EmptyContent />
+        ) : (
+          <CardSection
+            $isScroll={showSidebar}
+            $isSidebarOpened={showSidebar}
+            $windowWidth={windowWidth}
+          >
+            <CardBox ref={cardRef}>
+              <CardIssueBox $active={selectedType === Option.Issue}>
+                {topics.map(
+                  (
+                    { title, speechCount, legislatorCount, legislators },
+                    index
+                  ) => (
+                    <CardIssueRWD
+                      key={`issue-card-${index}`}
+                      title={title}
+                      subTitle={`共 ${speechCount} 筆相關發言（${legislatorCount}人）`}
+                      legislators={legislators}
+                      selected={activeCardIndex === index}
+                      onClick={(e: React.MouseEvent<HTMLElement>) =>
+                        onClickCard(e, index)
+                      }
+                    />
+                  )
+                )}
+                {isLoading ? (
+                  <>
+                    <CardIssueSkeletonRWD />
+                    <CardIssueSkeletonRWD />
+                    <CardIssueSkeletonRWD />
+                    <CardIssueSkeletonRWD />
+                  </>
+                ) : null}
+                <TabletAndAbove>
+                  <StyledSidebarIssue
+                    $show={showSidebar && selectedType === Option.Issue}
+                    {...sidebarTopic}
+                    onClose={closeSidebar}
+                    ref={(el: HTMLDivElement) => {
+                      sidebarRefs.current[Option.Issue] = el
+                    }}
+                  />
+                </TabletAndAbove>
+              </CardIssueBox>
+              <CardHumanBox
+                $active={selectedType === Option.Human}
+                $showBottomPadding={legislators.length === 1}
+              >
+                {legislators.map((props: Legislator, index: number) => (
+                  <CardHumanRWD
+                    key={`human-card-${index}`}
+                    {...props}
                     selected={activeCardIndex === index}
                     onClick={(e: React.MouseEvent<HTMLElement>) =>
                       onClickCard(e, index)
                     }
                   />
-                )
-              )}
-              {isLoading ? (
-                <>
-                  <CardIssueSkeletonRWD />
-                  <CardIssueSkeletonRWD />
-                  <CardIssueSkeletonRWD />
-                  <CardIssueSkeletonRWD />
-                </>
-              ) : null}
-              <TabletAndAbove>
-                <StyledSidebarIssue
-                  $show={showSidebar && selectedType === Option.Issue}
-                  {...sidebarTopic}
-                  onClose={closeSidebar}
-                  ref={(el: HTMLDivElement) => {
-                    sidebarRefs.current[Option.Issue] = el
-                  }}
-                />
-              </TabletAndAbove>
-            </CardIssueBox>
-            <CardHumanBox $active={selectedType === Option.Human}>
-              {legislators.map((props: Legislator, index: number) => (
-                <CardHumanRWD
-                  key={`human-card-${index}`}
-                  {...props}
-                  selected={activeCardIndex === index}
-                  onClick={(e: React.MouseEvent<HTMLElement>) =>
-                    onClickCard(e, index)
-                  }
-                />
-              ))}
-              {isLoading ? (
-                <>
-                  <CardHumanSkeletonRWD />
-                  <CardHumanSkeletonRWD />
-                  <CardHumanSkeletonRWD />
-                  <CardHumanSkeletonRWD />
-                </>
-              ) : null}
-              <TabletAndAbove>
-                <StyledSidebarLegislator
-                  $show={showSidebar && selectedType === Option.Human}
-                  {...sidebarHuman}
-                  onClose={closeSidebar}
-                  ref={(el: HTMLDivElement) => {
-                    sidebarRefs.current[Option.Human] = el
-                  }}
-                />
-              </TabletAndAbove>
-            </CardHumanBox>
-            <LoadMore
-              text={'載入更多'}
-              theme={PillButton.THEME.normal}
-              style={PillButton.Style.DARK}
-              type={PillButton.Type.PRIMARY}
-              size={PillButton.Size.L}
-              onClick={loadMore}
-            />
-          </CardBox>
-          <Gap $gap={sidebarGap} />
-        </CardSection>
+                ))}
+                {isLoading ? (
+                  <>
+                    <CardHumanSkeletonRWD />
+                    <CardHumanSkeletonRWD />
+                    <CardHumanSkeletonRWD />
+                    <CardHumanSkeletonRWD />
+                  </>
+                ) : null}
+                <TabletAndAbove>
+                  <StyledSidebarLegislator
+                    $show={showSidebar && selectedType === Option.Human}
+                    {...sidebarHuman}
+                    onClose={closeSidebar}
+                    ref={(el: HTMLDivElement) => {
+                      sidebarRefs.current[Option.Human] = el
+                    }}
+                  />
+                </TabletAndAbove>
+              </CardHumanBox>
+              <LoadMore
+                $hidden={!isShowLoadMore}
+                text={'載入更多'}
+                theme={PillButton.THEME.normal}
+                style={PillButton.Style.DARK}
+                type={PillButton.Type.PRIMARY}
+                size={PillButton.Size.L}
+                onClick={loadMore}
+              />
+            </CardBox>
+            <Gap $gap={sidebarGap} />
+          </CardSection>
+        )}
       </Box>
     </DashboardContext.Provider>
   )

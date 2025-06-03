@@ -1,5 +1,46 @@
 # Changelog
 
+## 1.0.0-rc.21, 2025-06-03
+
+### Notable Changes
+
+- fix
+  - address defects of feedback
+
+### Commits
+
+- [[`2d60237502`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d60237502)] - **fix(frontend)**: replace magic number as var (Aylie Chou)
+- [[`e5ea3c45d6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e5ea3c45d6)] - **fix(frontend)**: address defects of feedback (Aylie Chou)
+
+## 1.0.0-rc.20, 2025-06-03
+
+### Notable Changes
+
+- fix
+  - update style of circle avatar
+  - address defects of home page
+
+### Commits
+
+- [[`082e61400e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/082e61400e)] - **fix(frontend)**: remove console log (Aylie Chou)
+- [[`48f9fc6c08`](https://github.com/twreporter/congress-dashboard-monorepo/commit/48f9fc6c08)] - **fix(frontend)**: address defects of home page (Aylie Chou)
+- [[`b6fc01e1dd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b6fc01e1dd)] - **fix(frontend)**: update style of circle avatar (Aylie Chou)
+
+## 1.0.0-rc.19, 2025-06-02
+
+### Notable Changes
+
+- fix
+  - improve topic and legislator page sidebar filter
+  - speech page donation box
+  - fix about page margin and donation box issue
+
+### Commits
+
+- [[`10823632cf`](https://github.com/twreporter/congress-dashboard-monorepo/commit/10823632cf)] - **fix(frontend)**: improve topic and legislator page sidebar filter (Lucien)
+- [[`9ec553ad21`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9ec553ad21)] - **fix(frontend)**: speech page donation box (Lucien)
+- [[`81f24e4e60`](https://github.com/twreporter/congress-dashboard-monorepo/commit/81f24e4e60)] - **fix(frontend)**: fix about page margin and donation box issue (Lucien)
+
 ## 1.0.0-rc.18, 2025-05-19
 
 ### Notable Changes

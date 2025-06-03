@@ -252,7 +252,6 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
             content={content}
             fontSizeOffset={FontSizeOffset[fontSize]}
           />
-          <DonationBox />
         </ContentBlock>
         <TabletAndBelowWithFlex>
           <SpeechAsideInfo {...asideInfoProps} />
@@ -266,6 +265,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
           </Feedback>
         </DesktopAndAboveWithFlex>
       </BodyContainer>
+      <DonationBox />
       <TabletAndBelow className="hidden-print">
         <SpeechMobileToolbar
           onFontSizeChange={cycleFontSize}

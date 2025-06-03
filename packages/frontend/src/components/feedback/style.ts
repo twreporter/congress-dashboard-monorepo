@@ -8,6 +8,9 @@ import {
 import { PillButton, IconButton } from '@twreporter/react-components/lib/button'
 import mq from '@twreporter/core/lib/utils/media-query'
 
+const mobileHeaderHeight = 60
+const mobileFooterHeight = 92
+
 export const Box = styled.div`
   width: 100%;
 
@@ -25,7 +28,12 @@ export const TitleBlock = styled.div`
   top: 0;
   background-color: white;
   z-index: 1;
-  position: relative;
+
+  ${mq.mobileOnly`
+    border-bottom: 1px solid ${colorGrayscale.gray300};
+    position: fixed;
+    width: 100%;
+  `}
 `
 
 export const OptionBlock = styled.div`
@@ -37,7 +45,7 @@ export const OptionBlock = styled.div`
   gap: 24px;
 
   ${mq.mobileOnly`
-    padding: 24px;
+    padding: ${mobileHeaderHeight + 24}px 24px 24px 24px;
     gap: 20px;
   `}
 `
@@ -54,7 +62,8 @@ export const ActionBlock = styled.div`
   ${mq.mobileOnly`
     padding: 24px;
     gap: 10px;
-    top: calc(100vh - 90px);
+    top: calc(100% - ${mobileFooterHeight}px);
+    border-top: 1px solid ${colorGrayscale.gray300};
   `}
 `
 
