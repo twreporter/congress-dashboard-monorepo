@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.0-rc.21, 2025-06-03
+
+### Notable Changes
+
+- fix
+  - address defects of feedback
+
+### Commits
+
+- [[`2d60237502`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d60237502)] - **fix(frontend)**: replace magic number as var (Aylie Chou)
+- [[`e5ea3c45d6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e5ea3c45d6)] - **fix(frontend)**: address defects of feedback (Aylie Chou)
+
 ## 1.0.0-rc.20, 2025-06-03
 
 ### Notable Changes
