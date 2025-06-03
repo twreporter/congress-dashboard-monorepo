@@ -83,12 +83,16 @@ const Feedback: FC = () => {
     setStep((step) => step - 1)
   }
 
+  const resetAndCloseFeedback = () => {
+    setStep(1)
+    closeFeedback()
+  }
+
   const submit = async (data: ContentDetail | ProductDetail) => {
     const userAgent = window.navigator.userAgent
     const url = window.location.href
     await feedback({ userAgent, fromUrl: url, ...data })
-    setStep(1)
-    closeFeedback()
+    resetAndCloseFeedback()
   }
 
   const contextJSX =
@@ -101,7 +105,7 @@ const Feedback: FC = () => {
     )
 
   const contextValue = {
-    closeFeedback,
+    closeFeedback: resetAndCloseFeedback,
     nextStep,
     prevStep,
   }

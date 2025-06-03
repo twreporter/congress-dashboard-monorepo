@@ -136,7 +136,7 @@ const ProductInfo: FC<ProductInfoProps> = ({ submit }) => {
   return (
     <Box>
       <TitleBlock>
-        <Title text={'選擇回報類型'} />
+        <Title text={'填寫回報資訊'} />
         <CloseButton
           iconComponent={<Cross releaseBranch={releaseBranch} />}
           onClick={closeFeedback}
