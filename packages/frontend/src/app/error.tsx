@@ -1,38 +1,65 @@
 'use client'
-import React, { useEffect } from 'react'
+import Head from 'next/head'
 import styled from 'styled-components'
+import { MouseEvent } from 'react'
 // @twreporter
-import { H3 } from '@twreporter/react-components/lib/text/headline'
-import { P1 } from '@twreporter/react-components/lib/text/paragraph'
+import EmptyState from '@twreporter/react-components/lib/empty-state'
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import { P2 } from '@twreporter/react-components/lib/text/paragraph'
+// utils
+import { openFeedback } from '@/utils/feedback'
 
-const Box = styled.div`
+const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 24px;
+  width: 100%;
+  height: 100%;
+  background-color: ${colorGrayscale.gray100};
+  padding-top: 72px;
+  padding-bottom: 120px;
+  justify-content: center;
+  align-items: center;
 `
 
-type ErrorType = Error | { digest?: string }
+const GuideContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
-type ErrorProps = {
-  error: ErrorType
-  reset: () => void
-}
-const ErrorBoundary: React.FC<ErrorProps> = ({ error, reset }) => {
-  useEffect(() => {
-    console.error(error)
-  }, [error])
+const P2Gray600 = styled(P2)`
+  color: ${colorGrayscale.gray600};
+`
 
-  const errorMsg =
-    error instanceof Error ? error.message : error.digest || 'Unknown reason'
-
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+const errorTitle = '資料載入失敗'
+const guideTextJsx = (
+  <GuideContainer>
+    <P2Gray600 text="我們正在努力解決中，請稍後再試一次。" />
+    <P2Gray600 text="若持續發生錯誤，歡迎回報給我們！" />
+  </GuideContainer>
+)
+const buttonText = '問題回報'
+const Error: React.FC = () => {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    openFeedback()
+  }
   return (
-    <Box>
-      <H3 text={'Failed to fetch home page data'} />
-      <P1 text={errorMsg} />
-      <button onClick={() => reset()}>Try again</button>
-    </Box>
+    <Container>
+      <Head>
+        <title>資料載入失敗</title>
+      </Head>
+      <EmptyState
+        releaseBranch={releaseBranch}
+        style={EmptyState.Style.PENCIL}
+        title={errorTitle}
+        showGuide={true}
+        showButton={true}
+        guide={guideTextJsx}
+        buttonText={buttonText}
+        buttonOnclick={handleClick}
+      />
+    </Container>
   )
 }
-
-export default ErrorBoundary
+export default Error
