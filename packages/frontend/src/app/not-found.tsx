@@ -20,7 +20,7 @@ const notFoundTitle = '找不到這個頁面'
 const guideText = '請返回首頁，試著搜尋其他內容'
 const buttonText = '回首頁'
 const buttonUrl = '/'
-export default function NotFound() {
+const NotFound: React.FC = () => {
   return (
     <Container>
       <EmptyState
@@ -36,3 +36,4 @@ export default function NotFound() {
     </Container>
   )
 }
+export default NotFound

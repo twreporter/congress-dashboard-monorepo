@@ -32,14 +32,14 @@ const P2Gray600 = styled(P2)`
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 const errorTitle = '資料載入失敗'
-const guideText = (
+const guideTextJsx = (
   <GuideContainer>
     <P2Gray600 text="我們正在努力解決中，請稍後再試一次。" />
     <P2Gray600 text="若持續發生錯誤，歡迎回報給我們！" />
   </GuideContainer>
 )
 const buttonText = '問題回報'
-export default function Error() {
+const Error: React.FC = () => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     openFeedback()
@@ -55,10 +55,11 @@ export default function Error() {
         title={errorTitle}
         showGuide={true}
         showButton={true}
-        guide={guideText}
+        guide={guideTextJsx}
         buttonText={buttonText}
         buttonOnclick={handleClick}
       />
     </Container>
   )
 }
+export default Error

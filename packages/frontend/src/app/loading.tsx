@@ -18,7 +18,7 @@ const Container = styled.div`
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 const loadingTitle = '資料處理中，請稍候⋯⋯'
 const guideText = '我們正在載入最新內容，很快就好！'
-const Loading = () => {
+const Loading: React.FC = () => {
   return (
     <Container>
       <EmptyState
