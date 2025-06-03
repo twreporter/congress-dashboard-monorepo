@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.0.0-rc.22, 2025-06-03
+
+### Notable Changes
+
+- feat
+  - add not found page
+  - add error page
+  - add ssr loading page
+- fix
+  - event type and next hea
+  - add type and naming
+
+### Commits
+
+- [[`4d41f6d299`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4d41f6d299)] - Merge remote-tracking branch 'upstream/master' into feature/not-found-page (Lucien)
+- [[`373935b024`](https://github.com/twreporter/congress-dashboard-monorepo/commit/373935b024)] - **fix(frontend)**: add type and naming (Lucien)
+- [[`dc70e5d1ee`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc70e5d1ee)] - **fix(frontend)**: event type and next head (Lucien)
+- [[`f4dcf617b5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f4dcf617b5)] - **feat(frontend)**: add ssr loading page (Lucien)
+- [[`dce70d3a89`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dce70d3a89)] - **feat(frontend)**: add error page (Lucien)
+- [[`403dedaf15`](https://github.com/twreporter/congress-dashboard-monorepo/commit/403dedaf15)] - **feat(frontend)**: add not found page (Lucien)
+
 ## 1.0.0-rc.21, 2025-06-03
 
 ### Notable Changes
