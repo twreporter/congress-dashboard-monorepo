@@ -7,7 +7,7 @@ import { title, description } from '@/components/open/config'
 // utils
 import { notoSerif } from '@/utils/font'
 // components
-import SeachBar from '@/components/open/search'
+import { AlgoliaInstantSearch } from '@/components/search/instant-search'
 import Selected from '@/components/open/selected'
 // type
 import {
@@ -83,6 +83,21 @@ const StyledSelected = styled(Selected)`
   `}
 `
 
+const InstantSearchContainer = styled.div`
+  ${mq.desktopAndAbove`
+    width: 560px;
+  `}
+
+  ${mq.tabletOnly`
+    width: 480px;
+  `}
+
+  ${mq.mobileOnly`
+    width: 100%;
+    max-width: 480px;
+  `}
+`
+
 type OpenProps = {
   selecteds: EditorSelect[]
 }
@@ -108,7 +123,9 @@ const Open: React.FC<OpenProps> = ({ selecteds }) => {
       <MobileDescription>
         <SerifH4 text={description} />
       </MobileDescription>
-      <SeachBar />
+      <InstantSearchContainer>
+        <AlgoliaInstantSearch />
+      </InstantSearchContainer>
       <StyledSelected selecteds={selectedsWithPath} />
     </Box>
   )
