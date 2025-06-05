@@ -38,13 +38,16 @@ import {
   SidebarLegislator,
   type SidebarLegislatorProps,
 } from '@/components/sidebar'
-import { GapHorizontal } from '@/components/skeleton'
+import { GapHorizontal, Gap } from '@/components/skeleton'
 import EmptyContent from '@/components/dashboard/empty-state'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { PillButton } from '@twreporter/react-components/lib/button'
-import { TabletAndAbove } from '@twreporter/react-components/lib/rwd'
+import {
+  TabletAndAbove,
+  MobileOnly,
+} from '@twreporter/react-components/lib/rwd'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // lodash
@@ -129,12 +132,12 @@ const CardHumanBox = styled.div<{
   `}
 `
 const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
-  margin: 64px 0 120px 0;
+  margin-top: 64px;
   justify-content: center;
   width: 300px !important;
 
   ${mq.mobileOnly`
-    margin: 32px 0 64px 0;
+    margin-top: 32px;
     width: calc(100% - 32px) !important;
   `}
 
@@ -164,7 +167,7 @@ const StyledSidebarLegislator = styled(
 )<{ $show: boolean }>`
   ${sidebarCss}
 `
-const Gap = styled(GapHorizontal)`
+const GapHorizontalWithStyle = styled(GapHorizontal)`
   transition: width 0.3s ease-in-out;
 `
 const CardSection = styled.div<{
@@ -213,7 +216,7 @@ const CardSection = styled.div<{
     padding: 0 24px;
   `}
 
-  ${CardBox}, ${Gap} {
+  ${CardBox}, ${GapHorizontalWithStyle} {
     flex: none;
   }
 `
@@ -257,13 +260,16 @@ const Dashboard: React.FC<DashboardProps> = ({
   const isShowLoadMore = useMemo(() => {
     const currentListLength =
       selectedType === Option.Issue ? topics.length : legislators.length
-    return currentListLength > 10 ? currentListLength % 10 === 0 : false
-  }, [selectedType, topics, legislators])
+    return (
+      !isLoading &&
+      (currentListLength >= 10 ? currentListLength % 10 === 0 : false)
+    )
+  }, [selectedType, topics, legislators, isLoading])
   const isShowEmpty = useMemo(() => {
     const currentListLength =
       selectedType === Option.Issue ? topics.length : legislators.length
-    return currentListLength === 0
-  }, [selectedType, topics, legislators])
+    return !isLoading && currentListLength === 0
+  }, [selectedType, topics, legislators, isLoading])
 
   const { filterValues, setFilterValues, formatter, formattedFilterValues } =
     useFilter(meetings)
@@ -580,8 +586,14 @@ const Dashboard: React.FC<DashboardProps> = ({
                 size={PillButton.Size.L}
                 onClick={loadMore}
               />
+              <TabletAndAbove>
+                <Gap $gap={120} />
+              </TabletAndAbove>
+              <MobileOnly>
+                <Gap $gap={64} />
+              </MobileOnly>
             </CardBox>
-            <Gap $gap={sidebarGap} />
+            <GapHorizontalWithStyle $gap={sidebarGap} />
           </CardSection>
         )}
       </Box>

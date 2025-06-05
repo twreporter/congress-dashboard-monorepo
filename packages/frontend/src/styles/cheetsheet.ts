@@ -12,7 +12,7 @@ export const FlexColumn = styled.div`
   flex-direction: column;
 `
 
-export const AvatarCircleCss = styled.div`
+export const AvatarCircleCss = css`
   border: 1px solid ${colorOpacity['black_0.05']};
   object-fit: cover;
 `
