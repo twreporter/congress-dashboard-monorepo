@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0-rc.23, 2025-06-05
+
+### Notable Changes
+
+### Commits
+
+- [[`5964403034`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5964403034)] - **fix(frontend)**: remove console.log (Aylie Chou)
+- [[`0931031f49`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0931031f49)] - **fix(frontend)**: sidebar & dashboard styles (Aylie Chou)
+- [[`37771a5100`](https://github.com/twreporter/congress-dashboard-monorepo/commit/37771a5100)] - **fix(frontend)**: address defects of circle avatar (Aylie Chou)
+
 ## 1.0.0-rc.22, 2025-06-03
 
 ### Notable Changes
