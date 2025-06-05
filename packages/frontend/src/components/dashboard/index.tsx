@@ -132,7 +132,7 @@ const CardHumanBox = styled.div<{
   `}
 `
 const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
-  margin-top: 64px;
+  margin-top: ${64 - 24}px;
   justify-content: center;
   width: 300px !important;
 
