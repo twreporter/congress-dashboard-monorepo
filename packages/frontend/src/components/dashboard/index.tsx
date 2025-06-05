@@ -265,7 +265,6 @@ const Dashboard: React.FC<DashboardProps> = ({
       (currentListLength >= 10 ? currentListLength % 10 === 0 : false)
     )
   }, [selectedType, topics, legislators, isLoading])
-  console.log('isShowLoadMore', isShowLoadMore)
   const isShowEmpty = useMemo(() => {
     const currentListLength =
       selectedType === Option.Issue ? topics.length : legislators.length
