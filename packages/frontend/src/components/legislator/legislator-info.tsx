@@ -64,7 +64,6 @@ const LegislatorImageContainer = styled.div`
 `
 
 const LegislatorImage = styled.img`
-  ${AvatarCircleCss}
   width: 300px;
   aspect-ratio: 3.5 / 4.5;
   border-radius: 8px 8px 0 0;
@@ -73,11 +72,13 @@ const LegislatorImage = styled.img`
     width: 272px;
   `}
   ${mq.tabletOnly`
+    ${AvatarCircleCss}
     width: 164px;
     aspect-ratio: 1/1;
     border-radius: 50%;
   `}
   ${mq.mobileOnly`
+    ${AvatarCircleCss}
     width: 144px;
     aspect-ratio: 1/1;
     border-radius: 50%;
