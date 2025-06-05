@@ -107,18 +107,20 @@ const TopBox = styled(FlexColumn)<{ $show: boolean }>`
 const TitleBox = styled(FlexRow)`
   align-items: center;
 `
+const bottomHeight = 92 // confirm box height
 const ContentBox = styled.div<{
   $topBoxHeight: number
   $isSearchMode: boolean
 }>`
   overflow-y: scroll;
   height: 100%;
-  max-height: calc(100% - 90px);
-  transition: transform 0.4s ease-in-out;
+  max-height: calc(100% - ${(props) => props.$topBoxHeight + bottomHeight}px);
+  transition: all 0.4s ease-in-out;
   ${(props) =>
     props.$isSearchMode
       ? `
     transform: translateY(-${props.$topBoxHeight}px);
+    max-height: calc(100% - ${bottomHeight}px);
   `
       : `
     transform: translateY(0);  
