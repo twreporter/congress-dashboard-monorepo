@@ -131,8 +131,12 @@ const CardHumanBox = styled.div<{
     }
   `}
 `
+/*
+ * grid card would have redundant column gap when number of cards is even
+ * thus load more margin top would be 64px (the expected gap) - 24px (redundant column gap)
+ */
 const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
-  margin-top: ${64 - 24}px;
+  margin-top: 40px;
   justify-content: center;
   width: 300px !important;
 
