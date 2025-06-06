@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.0-rc.24, 2025-06-06
+
+### Notable Changes
+
+- fix
+  - address dashboard & speech defects
+
+### Commits
+
+- [[`35c78d307b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/35c78d307b)] - **fix(frontend)**: add comment for magic number (Aylie Chou)
+- [[`d7f77db641`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d7f77db641)] - **fix(frontend)**: address dashboard & speech defects (Aylie Chou)
+
 ## 1.0.0-rc.23, 2025-06-05
 
 ### Notable Changes
