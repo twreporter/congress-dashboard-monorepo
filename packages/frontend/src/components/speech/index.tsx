@@ -100,6 +100,10 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
   const scrollStage = useScrollStage()
 
   useEffect(() => {
+    window.scrollTo({ top: 0 })
+  }, [])
+
+  useEffect(() => {
     if (leadingRef.current) {
       setTabElement(leadingRef.current)
     }
