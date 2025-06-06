@@ -274,10 +274,6 @@ const FilterModal: React.FC<FilterModalProps> = ({
     () => (isSearchMode ? filterByKeyword(options, keyword) : options),
     [options, keyword, isSearchMode]
   )
-  const topBoxHeight = useMemo(
-    () => (topBoxRef.current ? topBoxRef.current.offsetHeight : 0),
-    [topBoxRef]
-  )
 
   const { toastr, showSnackBar, snackBarText } = useSnackBar()
   // If no fetcher is provided, use initialSelectedOption as options
@@ -425,7 +421,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
       ) : isShowError ? (
         <Error />
       ) : (
-        <ContentBox $topBoxHeight={topBoxHeight} $isSearchMode={isSearchMode}>
+        <ContentBox
+          $topBoxHeight={topBoxRef.current?.offsetHeight || 0}
+          $isSearchMode={isSearchMode}
+        >
           <SearchBox $isSearchMode={isSearchMode}>
             <Button
               iconComponent={
