@@ -57,7 +57,7 @@ const Error: React.FC = () => {
         showButton={true}
         guide={guideTextJsx}
         buttonText={buttonText}
-        buttonOnclick={handleClick}
+        buttonOnClick={handleClick}
       />
     </Container>
   )

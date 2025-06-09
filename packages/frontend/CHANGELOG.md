@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0-rc.25, 2025-06-09
+
+### Notable Changes
+
+- fix
+  - buttonOnclick typo
+- chore
+  - update @twreporter packages
+
+### Commits
+
+- [[`bfce6c82f4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bfce6c82f4)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`fc0f5fa6cd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fc0f5fa6cd)] - **fix**: buttonOnclick typo (Lucien)
+
 ## 1.0.0-rc.24, 2025-06-06
 
 ### Notable Changes
