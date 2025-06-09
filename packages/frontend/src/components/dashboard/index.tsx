@@ -142,7 +142,7 @@ const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
 
   ${mq.mobileOnly`
     margin-top: 32px;
-    width: calc(100% - 32px) !important;
+    width: 100% !important;
   `}
 
   ${(props) => (props.$hidden ? 'display: none;' : '')}
@@ -261,14 +261,19 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [sidebarGap, setSidebarGap] = useState(0)
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
   const cardRef = useRef<HTMLDivElement>(null)
+  const [hasMoreLegislator, setHasMoreLegislator] = useState(false)
   const isShowLoadMore = useMemo(() => {
-    const currentListLength =
-      selectedType === Option.Issue ? topics.length : legislators.length
-    return (
-      !isLoading &&
-      (currentListLength >= 10 ? currentListLength % 10 === 0 : false)
-    )
-  }, [selectedType, topics, legislators, isLoading])
+    if (isLoading) {
+      return false
+    }
+
+    if (selectedType === Option.Human) {
+      return hasMoreLegislator
+    }
+
+    // detemine has more topics
+    return topics.length >= 10 ? topics.length % 10 === 0 : false
+  }, [selectedType, topics, hasMoreLegislator, isLoading])
   const isShowEmpty = useMemo(() => {
     const currentListLength =
       selectedType === Option.Issue ? topics.length : legislators.length
@@ -283,10 +288,11 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   useEffect(() => {
     const initializeLegislator = async () => {
-      const legislators = await fetchLegislatorAndTopTopics({
+      const { data, hasMore } = await fetchLegislatorAndTopTopics({
         legislativeMeetingId: Number(latestMeetingId),
       })
-      setLegislators(legislators)
+      setLegislators(data)
+      setHasMoreLegislator(hasMore)
     }
     initializeLegislator()
   }, [])
@@ -333,13 +339,14 @@ const Dashboard: React.FC<DashboardProps> = ({
   const loadMoreHuman = async () => {
     const skip = legislators.length
     const { meetingId, sessionIds } = formatter(filterValues)
-    const moreLegislators = await loadMoreLegislatorAndTopTopics({
+    const { data, hasMore } = await loadMoreLegislatorAndTopTopics({
       skip,
       take: 10,
       legislativeMeetingId: meetingId,
       legislativeMeetingSessionIds: sessionIds,
     })
-    setLegislators((legislators) => legislators.concat(moreLegislators))
+    setLegislators((legislators) => legislators.concat(data))
+    setHasMoreLegislator(hasMore)
   }
 
   const updateSidebarTopic = (index: number) => {
@@ -471,15 +478,16 @@ const Dashboard: React.FC<DashboardProps> = ({
     setLegislators([])
     const { meetingId, sessionIds, partyIds, constituency, committeeSlugs } =
       formatter(filterModalValue)
-    const legislators = await fetchLegislatorAndTopTopics({
+    const { data, hasMore } = await fetchLegislatorAndTopTopics({
       legislativeMeetingId: meetingId,
       legislativeMeetingSessionIds: sessionIds,
       partyIds,
       constituencies: constituency,
       committeeSlugs,
     })
-    setLegislators(legislators)
-    if (legislators.length > 0) {
+    setLegislators(data)
+    setHasMoreLegislator(hasMore)
+    if (data.length > 0) {
       setShouldToastrOnHuman(true)
     }
   }
