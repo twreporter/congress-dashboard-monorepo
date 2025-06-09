@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.0-rc.26, 2025-06-09
+
+### Notable Changes
+
+- fix
+  - loadmore button style on mobile
+  - calculate hasMore in hook
+
+### Commits
+
+- [[`1672523e5b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1672523e5b)] - **fix(frontend)**: calculate load more (Aylie Chou)
+
 ## 1.0.0-rc.25, 2025-06-09
 
 ### Notable Changes
