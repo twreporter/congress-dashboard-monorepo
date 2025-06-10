@@ -69,7 +69,7 @@ const useLegislator = () => {
       take: 10,
       skip: 0,
     })
-    return { data, hasMore: hasMore }
+    return { data, hasMore }
   }
 
   const loadMoreLegislatorAndTopTopics = async ({
@@ -97,7 +97,7 @@ const useLegislator = () => {
 
     return {
       data: moreLegislators,
-      hasMore: moreLegislators.length < pool.length,
+      hasMore: skip + take < pool.length,
     }
   }
 
