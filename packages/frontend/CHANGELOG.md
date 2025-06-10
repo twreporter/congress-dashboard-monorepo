@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0-rc.27, 2025-06-10
+
+### Notable Changes
+
+- fix
+  - fix `hasMore` logic in useLegislator hook
+
+### Commits
+
+- [[`785003a54d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/785003a54d)] - **fix(frontend)**: hasMore logic (Aylie Chou)
+
 ## 1.0.0-rc.26, 2025-06-09
 
 ### Notable Changes
