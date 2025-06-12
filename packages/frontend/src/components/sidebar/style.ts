@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import Link from 'next/link'
 // fonts
 import { notoSerif } from '@/utils/font'
 // @twreporter
@@ -49,10 +50,10 @@ export const Title = styled.span`
   `}
 `
 
-export const TitleLink = styled.span`
+export const TitleLink = styled(Link)`
+  text-decoration: none;
   color: ${colorSupportive.heavy};
   font-family: ${notoSerif.style.fontFamily} !important;
-  cursor: pointer;
 `
 
 export const TitleText = styled.span`

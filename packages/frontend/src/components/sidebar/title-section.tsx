@@ -112,11 +112,6 @@ const TitleSection: React.FC<TitleSectionProps> = ({
       tabElement.scrollIntoView({ behavior: 'smooth', inline: 'start' })
     }
   }
-  const gotoPage = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    window.open(link, '_self')
-  }
   const closePage = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     e.stopPropagation()
@@ -136,7 +131,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
     <Section>
       <TitleGroup>
         <Title>
-          <TitleLink onClick={gotoPage}>{title}</TitleLink>
+          <TitleLink href={link}>{title}</TitleLink>
           <TitleText>{` 的相關發言摘要${count ? `(${count})` : ''}`}</TitleText>
         </Title>
         <ButtonGroup>
