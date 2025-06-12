@@ -13,12 +13,14 @@ import {
   TitleGroup,
   ButtonGroup,
   Title,
+  TitleLink,
+  TitleText,
   Button,
 } from '@/components/sidebar/style'
 // @twreporter
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import { IconButton } from '@twreporter/react-components/lib/button'
-import { Fullscreen, Back, More } from '@twreporter/react-components/lib/icon'
+import { Back, More } from '@twreporter/react-components/lib/icon'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 
@@ -133,14 +135,11 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   return (
     <Section>
       <TitleGroup>
-        <Title text={`${title} 的相關發言摘要${count ? `(${count})` : ''}`} />
+        <Title>
+          <TitleLink onClick={gotoPage}>{title}</TitleLink>
+          <TitleText>{` 的相關發言摘要${count ? `(${count})` : ''}`}</TitleText>
+        </Title>
         <ButtonGroup>
-          <Button
-            iconComponent={<Fullscreen releaseBranch={releaseBranch} />}
-            theme={IconButton.THEME.normal}
-            type={IconButton.Type.PRIMARY}
-            onClick={gotoPage}
-          />
           <Button
             iconComponent={<Back releaseBranch={releaseBranch} />}
             theme={IconButton.THEME.normal}
