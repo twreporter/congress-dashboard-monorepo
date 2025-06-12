@@ -265,7 +265,8 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
       {showFilter ? (
         <FilterBox $show={showFilter}>
           <FilterModal
-            title={`${title} 的相關發言篩選`}
+            title={title}
+            link={`${InternalRoutes.Topic}/${slug}`}
             slug={slug}
             placeholder={'篩選立委'}
             initialSelectedOption={tabList}
@@ -470,7 +471,8 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
       {showFilter ? (
         <FilterBox $show={showFilter}>
           <FilterModal
-            title={`${title} 的相關發言篩選`}
+            title={title}
+            link={`${InternalRoutes.Legislator}/${slug}`}
             subtitle={subtitle}
             slug={slug}
             placeholder={'篩選議題'}
