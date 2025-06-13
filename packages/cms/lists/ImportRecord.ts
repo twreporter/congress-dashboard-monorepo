@@ -15,6 +15,8 @@ import {
   expectedHeaders,
   requiredFields,
 } from './fields/uploader'
+import { getTwreporterArticle } from './views/related-article/util'
+import env from '../environment-variables'
 
 /**
  * Validate CSV structure against expected headers and required fields
@@ -334,6 +336,34 @@ const validateListSpecificData: Record<
             }
           }
         )
+    )
+    return validationErrors
+  },
+  [ListName.relatedArticles]: async (csvData, context) => {
+    const validationErrors: string[] = []
+    await Promise.all(
+      csvData
+        .slice(1) // exclude header row
+        .map(async ([_title, slug, related_article_slug], index) => {
+          const rowNum = index + 1 // Add 1 for header row
+          const topic = await context.prisma.topic.findFirst({
+            where: { slug },
+          })
+          if (!topic) {
+            validationErrors.push(
+              `第 ${rowNum} 行: 議題 "${slug}" 不存在，請先匯入議題資料`
+            )
+          }
+          const relatedArticle = await getTwreporterArticle(
+            related_article_slug,
+            env.twreporterApiUrl
+          )
+          if (!relatedArticle) {
+            validationErrors.push(
+              `第 ${rowNum} 行: 相關文章 "${related_article_slug}" 不存在，請確認 slug 是否正確`
+            )
+          }
+        })
     )
     return validationErrors
   },
@@ -747,6 +777,41 @@ const importHandlers: Record<
         )
       } else {
         console.error(`Related topic not found for slug: ${related_topic_slug}`)
+      }
+    }
+
+    return queries
+  },
+  [ListName.relatedArticles]: async (csvData, context) => {
+    const queries: Promise<any>[] = []
+
+    for (const [_title, slug, related_article_slug] of csvData.slice(1)) {
+      const targetTopic = await context.prisma.Topic.findFirst({
+        where: { slug },
+        select: { relatedTwreporterArticles: true },
+      })
+
+      if (targetTopic) {
+        if (
+          targetTopic.relatedTwreporterArticles.includes(related_article_slug)
+        ) {
+          console.error(
+            `Duplicate related article for topic ${slug}, article slug: ${related_article_slug}`
+          )
+        } else {
+          const newRelatedArticles =
+            targetTopic.relatedTwreporterArticles.concat([related_article_slug])
+          queries.push(
+            context.prisma.Topic.update({
+              where: { slug },
+              data: {
+                relatedTwreporterArticles: newRelatedArticles,
+              },
+            })
+          )
+        }
+      } else {
+        console.error(`target topic not found for slug: ${slug}`)
       }
     }
 
