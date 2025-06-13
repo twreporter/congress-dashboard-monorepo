@@ -2,10 +2,19 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 // hook
 import useOutsideClick from '@/hooks/use-outside-click'
-// @twreporter
-import type { MultipleSelectProps, Option, ValueType } from './types'
-import { DropdownMenu } from './dropdown-menu'
-import { isOptionGroup } from './utils'
+// type
+import type {
+  MultipleSelectProps,
+  Option,
+  ValueType,
+} from '@/components/selector/types'
+// component
+import { DropdownMenu } from '@/components/selector/dropdown-menu'
+import ReportIcon from '@/components/selector/report-icon'
+import ErrorState from '@/components/selector/error-state'
+// util
+import { isOptionGroup } from '@/components/selector/utils'
+// style
 import {
   SelectContainer,
   SelectBox,
@@ -19,7 +28,7 @@ import {
   Tag,
   TagLabel,
   TagCloseIcon,
-} from './styles'
+} from '@/components/selector/styles'
 // lodash
 import { throttle, isEqual } from 'lodash'
 
@@ -36,6 +45,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
   disabled = false,
   maxDisplay = 'responsive',
   loading = false,
+  showError = false,
   searchable = false,
   searchPlaceholder = '搜尋...',
   enableAllOptionLogic = true, // 新增：控制是否啟用全部選項邏輯
@@ -184,7 +194,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
 
   // Handlers
   const handleToggle = useCallback(() => {
-    if (!disabled && !isSearchFocused) {
+    if (!disabled && !isSearchFocused && !showError) {
       setOpen((prevOpen) => {
         if (!prevOpen) {
           setSearchTerm('')
@@ -192,7 +202,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
         return !prevOpen
       })
     }
-  }, [disabled, isSearchFocused])
+  }, [disabled, isSearchFocused, showError])
 
   const handleSelect = useCallback(
     (option: Option) => {
@@ -329,6 +339,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
         onBlur={() => setFocused(false)}
         $disabled={disabled}
         $focused={focused}
+        $error={showError}
       >
         {loading ? (
           <LoadingIndicator />
@@ -414,7 +425,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
                 <Placeholder text={placeholder} />
               )}
             </SelectBoxContent>
-            <ArrowIcon $isDropdownOpen={open} />
+            {showError ? <ReportIcon /> : <ArrowIcon $isDropdownOpen={open} />}
           </>
         )}
       </SelectBox>
@@ -429,6 +440,8 @@ export const MultipleSelect = React.memo(function MultipleSelect({
           selectCotainerRef={selectContainerRef}
         />
       )}
+
+      {showError ? <ErrorState /> : null}
     </SelectContainer>
   )
 })
