@@ -29,6 +29,7 @@ import CardsOfTheYear, {
 import { Issue, type IssueProps } from '@/components/sidebar/follow-more'
 import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
+import { FollowMoreErrorState } from '@/components/sidebar/error-state'
 // types
 import type { TabProps } from '@/components/sidebar/type'
 // constants
@@ -252,6 +253,7 @@ const TopicList: React.FC<TopicListProps> = ({
         </SummarySection>
         <FollowMoreItems title={followMoreTitle}>
           {isLoadingTopTopics && <Loader useAbsolute={false} />}
+          {!isLoadingTopTopics && topTopicsError && <FollowMoreErrorState />}
           {issueList.length > 0 && (
             <TopicContainer>
               {issueList.map((props, index) => (

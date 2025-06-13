@@ -28,6 +28,7 @@ import CardsOfTheYear, {
 import { Legislator } from '@/components/sidebar/follow-more'
 import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
+import { FollowMoreErrorState } from '@/components/sidebar/error-state'
 // type
 import type { TabProps } from '@/components/sidebar/type'
 // utils
@@ -230,6 +231,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
         </SummarySection>
         <FollowMoreItems title={followMoreTitle}>
           {isLoadingTopLegislators && <Loader useAbsolute={false} />}
+          {!isLoadingTopLegislators && swrError && <FollowMoreErrorState />}
           {legislatorList.length > 0 ? (
             <LegislatorContainer>
               {legislatorList.map((props, index: number) => (
