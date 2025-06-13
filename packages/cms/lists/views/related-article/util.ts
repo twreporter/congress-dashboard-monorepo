@@ -20,7 +20,7 @@ const getReleaseBranch = (): Branch => {
   return Branch.Release
 }
 
-export const getTwreporterApiUrl = (): string => {
+const getTwreporterApiUrl = (): string => {
   const branch = getReleaseBranch()
   switch (branch) {
     case Branch.Release:
@@ -32,4 +32,22 @@ export const getTwreporterApiUrl = (): string => {
     default:
       return 'http://localhost:8080'
   }
+}
+
+export const getTwreporterArticle = async (slug: string, hostname?: string) => {
+  const twreporterApiUrl = hostname ?? getTwreporterApiUrl()
+  const url = `${twreporterApiUrl}/v2/posts/${slug}?full=false`
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`article not found, slug: ${slug}`)
+  }
+
+  const data = await res.json()
+  return data?.data
 }
