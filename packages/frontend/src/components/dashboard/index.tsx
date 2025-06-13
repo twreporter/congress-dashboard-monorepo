@@ -39,7 +39,8 @@ import {
   type SidebarLegislatorProps,
 } from '@/components/sidebar'
 import { GapHorizontal, Gap } from '@/components/skeleton'
-import EmptyContent from '@/components/dashboard/empty-state'
+import EmptyState from '@/components/dashboard/empty-state'
+import ErrorState from '@/components/dashboard/error-state'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -279,6 +280,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       selectedType === Option.Issue ? topics.length : legislators.length
     return !isLoading && currentListLength === 0
   }, [selectedType, topics, legislators, isLoading])
+  const [isShowError, setIsShowError] = useState(false)
 
   const { filterValues, setFilterValues, formatter, formattedFilterValues } =
     useFilter(meetings)
@@ -294,7 +296,12 @@ const Dashboard: React.FC<DashboardProps> = ({
       setLegislators(data)
       setHasMoreLegislator(hasMore)
     }
-    initializeLegislator()
+    try {
+      initializeLegislator()
+    } catch (err) {
+      console.error(`initialize legislator failed. err: ${err}`)
+      setIsShowError(true)
+    }
   }, [])
 
   useEffect(() => {
@@ -320,9 +327,15 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   const loadMore = async () => {
     setIsLoading(true)
-    const loadMoreFunc =
-      selectedType === Option.Issue ? loadMoreTopics : loadMoreHuman
-    await loadMoreFunc()
+    try {
+      const loadMoreFunc =
+        selectedType === Option.Issue ? loadMoreTopics : loadMoreHuman
+      throw 'test failed'
+      await loadMoreFunc()
+    } catch (err) {
+      console.error(`load more failed. err: ${err}`)
+      setIsShowError(true)
+    }
     setIsLoading(false)
   }
   const loadMoreTopics = async () => {
@@ -510,9 +523,9 @@ const Dashboard: React.FC<DashboardProps> = ({
           meetings={meetings}
           onChangeFilter={onChangeFilter}
         />
-        {isShowEmpty ? (
-          <EmptyContent />
-        ) : (
+        {isShowError ? <ErrorState /> : null}
+        {isShowEmpty ? <EmptyState /> : null}
+        {!isShowEmpty && !isShowError ? (
           <CardSection
             $isScroll={showSidebar}
             $isSidebarOpened={showSidebar}
@@ -607,7 +620,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             </CardBox>
             <GapHorizontalWithStyle $gap={sidebarGap} />
           </CardSection>
-        )}
+        ) : null}
       </Box>
     </DashboardContext.Provider>
   )
