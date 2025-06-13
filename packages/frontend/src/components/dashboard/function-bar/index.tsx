@@ -223,6 +223,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         label: '會期',
         key: 'meetingSession',
         isLoading: sessionState.isLoading,
+        showError: !!sessionState.error,
         options: [
           { label: '全部會期', value: 'all', isDeletable: false },
         ].concat(
@@ -287,6 +288,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         label: '委員會',
         key: 'committee',
         isLoading: committeeState.isLoading,
+        showError: !!committeeState.error,
         options: Object.values(
           committeeState.committees.reduce(
             (acc: CommitteeOptionGroup, committee): CommitteeOptionGroup => {

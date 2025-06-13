@@ -17,6 +17,7 @@ export type FilterOption = {
   options: Option[] | OptionGroup[]
   defaultValue?: string | string[]
   isLoading?: boolean
+  showError?: boolean
 }
 
 export type FilterModalValueType = {

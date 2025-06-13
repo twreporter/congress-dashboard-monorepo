@@ -19,6 +19,7 @@ export type SingleSelectProps = {
   value: ValueType
   disabled?: boolean
   loading?: boolean
+  showError?: boolean
   searchable?: boolean
   searchPlaceholder?: string
   onChange: (value: ValueType) => void
@@ -31,6 +32,7 @@ export type MultipleSelectProps = {
   value: ValueType[]
   disabled?: boolean
   loading?: boolean
+  showError?: boolean
   searchable?: boolean
   searchPlaceholder?: string
   onChange: (value: ValueType[]) => void

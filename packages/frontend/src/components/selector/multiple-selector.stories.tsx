@@ -132,3 +132,11 @@ export const DefaultAllOptions: Story = {
     loading: false,
   },
 }
+
+export const ShowError: Story = {
+  args: {
+    value: [],
+    options: [],
+    showError: true,
+  },
+}

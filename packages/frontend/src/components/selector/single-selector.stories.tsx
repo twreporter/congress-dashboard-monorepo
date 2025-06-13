@@ -113,3 +113,10 @@ export const WithIconsOptions: Story = {
     loading: false,
   },
 }
+
+export const ShowError: Story = {
+  args: {
+    showError: true,
+    options: [],
+  },
+}
