@@ -4,15 +4,11 @@ import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 // next
 import Link from 'next/link'
+import Image from 'next/image'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import { LogoHeader } from '@twreporter/react-components/lib/logo'
-import {
-  PillButton,
-  TextButton,
-  IconButton,
-} from '@twreporter/react-components/lib/button'
+import { PillButton, IconButton } from '@twreporter/react-components/lib/button'
 import {
   TabletAndAbove,
   MobileOnly,
@@ -29,10 +25,7 @@ import useOutsideClick from '@/hooks/use-outside-click'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
-import {
-  COMMON_MENU_LINKS,
-  COMPACT_PILL_BUTTON_LINKS,
-} from '@/constants/navigation-link'
+import { COMPACT_PILL_BUTTON_LINKS } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
@@ -79,16 +72,15 @@ const HeaderSection = styled.div`
   `}
 `
 const LogoContainer = styled.div`
-  width: 172px;
-  height: 24px;
-
   a,
   img {
     display: flex;
-    width: 172px;
     height: 24px;
     justify-content: center;
     align-items: center;
+    ${mq.mobileOnly`
+      height: 20px;
+    `}
   }
 `
 const ButtonContainer = styled.div`
@@ -134,9 +126,9 @@ const SearchContainer = styled.div<{
 `
 
 // Constants
-const menuLinks = COMMON_MENU_LINKS
 const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+const logoSrcPrefix = 'https://www.twreporter.org/images/lawmaker'
 
 const Header: React.FC = () => {
   const { isHeaderHidden, tabTop } = useScrollContext()
@@ -199,27 +191,29 @@ const Header: React.FC = () => {
       >
         <HeaderSection>
           <LogoContainer>
-            <Link href={'https://www.twreporter.org/'} target={'_blank'}>
-              <LogoHeader releaseBranch={releaseBranch} />
+            <Link href={'/'} target={'_self'}>
+              <TabletAndAbove>
+                <Image
+                  src={`${logoSrcPrefix}/logo_L.svg`}
+                  alt="Twreporter Lawmaker Logo"
+                  priority
+                  width={180}
+                  height={20}
+                />
+              </TabletAndAbove>
+              <MobileOnly>
+                <Image
+                  src={`${logoSrcPrefix}/logo_S.svg`}
+                  alt="Twreporter Lawmaker Logo"
+                  priority
+                  width={180}
+                  height={20}
+                />
+              </MobileOnly>
             </Link>
           </LogoContainer>
           <TabletAndAbove>
             <ButtonContainer>
-              {menuLinks.map(({ href, text, target }, idx) => (
-                <React.Fragment key={`link-btn-${idx}`}>
-                  <Button $isHide={isSearchOpen}>
-                    <Link href={href} target={target}>
-                      <TextButton
-                        text={text}
-                        size={TextButton.Size.L}
-                        style={TextButton.Style.DARK}
-                      />
-                    </Link>
-                  </Button>
-                  <Spacing $width={24} />
-                </React.Fragment>
-              ))}
-
               {pillButtonLinks.map(({ href, text, target, type }, idx) => (
                 <React.Fragment key={`pill-btn-${idx}`}>
                   <Button $isHide={isSearchOpen}>
