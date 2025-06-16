@@ -19,8 +19,6 @@ import { Search as SearchIcon } from '@twreporter/react-components/lib/icon'
 import { SearchBar } from '@twreporter/react-components/lib/input'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
-import logoLarge from '@/components/header/Logo_L.svg'
-import logoSmall from '@/components/header/Logo_S.svg'
 // hooks
 import useWindowWidth from '@/hooks/use-window-width'
 import useOutsideClick from '@/hooks/use-outside-click'
@@ -130,6 +128,7 @@ const SearchContainer = styled.div<{
 // Constants
 const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+const logoSrcPrefix = 'https://www.twreporter.org/images/lawmaker'
 
 const Header: React.FC = () => {
   const { isHeaderHidden, tabTop } = useScrollContext()
@@ -194,10 +193,22 @@ const Header: React.FC = () => {
           <LogoContainer>
             <Link href={'/'} target={'_self'}>
               <TabletAndAbove>
-                <Image src={logoLarge} alt="Lawmaker Logo" priority />
+                <Image
+                  src={`${logoSrcPrefix}/logo_L.svg`}
+                  alt="Twreporter Lawmaker Logo"
+                  priority
+                  width={180}
+                  height={20}
+                />
               </TabletAndAbove>
               <MobileOnly>
-                <Image src={logoSmall} alt="Lawmaker Logo" priority />
+                <Image
+                  src={`${logoSrcPrefix}/logo_S.svg`}
+                  alt="Twreporter Lawmaker Logo"
+                  priority
+                  width={180}
+                  height={20}
+                />
               </MobileOnly>
             </Link>
           </LogoContainer>
