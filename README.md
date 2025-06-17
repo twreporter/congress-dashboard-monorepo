@@ -50,6 +50,7 @@ This will:
 2. Ask whether the change is a major, minor, or patch
 3. Ask for a summary of the change
 4. Generate a changeset file in `.changeset/`
+5. Automatically commit the changeset file
 
 ##### Changeset Guidelines
 
@@ -67,11 +68,11 @@ We use [Conventional Commits](https://www.conventionalcommits.org/) enforced by 
 # Make your changes
 $ git checkout -b feature/my-feature
 
-# Create a changeset
+# Create a changeset (this will auto-commit the changeset file)
 $ yarn changeset
 # Follow the prompts to describe your changes
 
-# Commit both your changes and the changeset
+# Commit your changes
 $ git add .
 $ git commit -m "feat: add new feature"
 $ git push origin feature/my-feature
@@ -178,50 +179,6 @@ For the automated workflows to work, make sure these secrets are configured in G
 
 - `NPM_TOKEN`: Token for publishing to npm registry
 - `GITHUB_TOKEN`: Automatically provided by GitHub Actions
-
-### Release Process
-
-#### Standard Release Process
-
-1. **Development**: 
-   ```shell
-   # Create feature branch
-   git checkout -b feature/my-feature
-   
-   # Make changes and create changeset
-   yarn changeset
-   
-   # Commit and push
-   git commit -m "feat: my new feature"
-   git push origin feature/my-feature
-   ```
-
-2. **Beta Release**: Merge PR to `dev` → Auto-publishes beta version
-
-3. **RC Release**: Merge `dev` to `master` → Auto-publishes RC version
-
-4. **Staging**: Merge `master` to `staging` → Deploys RC to staging
-
-5. **Production**: Merge `staging` to `release` → Publishes final version
-
-#### Hotfix Process
-
-For urgent fixes:
-
-```shell
-# Create hotfix branch from master
-git checkout master
-git checkout -b hotfix/urgent-fix
-
-# Make changes and create changeset
-yarn changeset
-
-# Commit and push
-git commit -m "fix: urgent security fix"
-git push origin hotfix/urgent-fix
-
-# Create PR to master for RC, then to release for production
-```
 
 ## Troubleshooting
 
