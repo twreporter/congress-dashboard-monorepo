@@ -411,7 +411,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
           {link ? (
             <Title>
               <TitleLink href={link}>{title}</TitleLink>
-              <TitleText>{' 的相關發言摘要'}</TitleText>
+              <TitleText>{' 的相關發言篩選'}</TitleText>
             </Title>
           ) : (
             <Title>

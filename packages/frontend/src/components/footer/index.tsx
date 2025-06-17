@@ -211,6 +211,9 @@ const Footer: React.FC = () => {
     if (meetingsError || sessionsError) {
       return '資料載入失敗'
     }
+    if (!latestLegislativeMeetingTerm || !latestLegislativeMeetingSessionTerm) {
+      return '資料更新資訊不可用'
+    }
     return `本網站資料更新至第${latestLegislativeMeetingTerm}屆第${latestLegislativeMeetingSessionTerm}會期`
   }, [
     meetingsLoading,
