@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.0.0-rc.28, 2025-06-17
+
+### Notable Changes
+
+- feat
+  - enhance sidebar and footer components with new styles and logic
+- fix
+  - add link support to FilterModal and update title rendering
+  - update logo sources in Header component to use external URLs
+  - improve footer error handling and update filter modal title text
+
+### Commits
+
+- [[`49bb03f3cd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/49bb03f3cd)] - **fix(frontend)**: improve footer error handling and update filter modal title text (Lucien)
+- [[`5f7128030f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f7128030f)] - **fix(frontend)**: update logo sources in Header component to use external URLs (Lucien)
+- [[`fe4000e41b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fe4000e41b)] - **fix(frontend)**: add link support to FilterModal and update title rendering (Lucien)
+- [[`916c7df59e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/916c7df59e)] - **feat(frontend)**: enhance sidebar and footer components with new styles and logic (Lucien)
+
 ## 1.0.0-rc.27, 2025-06-10
 
 ### Notable Changes
