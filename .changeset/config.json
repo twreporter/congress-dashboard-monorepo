@@ -1,5 +1,6 @@
 {
-  "changelog": "@changesets/changelog-github",
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "twreporter/congress-dashboard-monorepo" }],
   "commit": false,
   "fixed": [],
   "linked": [],
@@ -10,8 +11,5 @@
   "snapshot": {
     "useCalculatedVersion": true,
     "prereleaseTemplate": "{tag}-{datetime}"
-  },
-  "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
-    "onlyUpdatePeerDependentsWhenOutOfRange": true
   }
 }

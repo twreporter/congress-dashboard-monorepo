@@ -2253,7 +2253,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/changelog-github@npm:^0.5.0":
+"@changesets/changelog-github@npm:^0.5.1":
   version: 0.5.1
   resolution: "@changesets/changelog-github@npm:0.5.1"
   dependencies:
@@ -2264,7 +2264,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/cli@npm:^2.27.9":
+"@changesets/cli@npm:^2.29.4":
   version: 2.29.4
   resolution: "@changesets/cli@npm:2.29.4"
   dependencies:
@@ -22011,8 +22011,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "twreporter-congress-dashboard@workspace:."
   dependencies:
-    "@changesets/changelog-github": "npm:^0.5.0"
-    "@changesets/cli": "npm:^2.27.9"
+    "@changesets/changelog-github": "npm:^0.5.1"
+    "@changesets/cli": "npm:^2.29.4"
     "@commitlint/cli": "npm:^18.4.3"
     "@commitlint/config-conventional": "npm:^18.4.3"
     "@typescript-eslint/eslint-plugin": "npm:^5.30.0"
