@@ -1,0 +1,67 @@
+name: Production Release
+
+on:
+  push:
+    branches:
+      - release
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Production Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable corepack for yarn
+        run: corepack enable
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build Shared Package
+        run: yarn build:shared
+
+      - name: Create Production Release and Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: yarn changeset:version
+          publish: yarn changeset:publish
+          title: "chore: production release"
+          commit: "chore: production release"
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Sync master and staging with release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          # Get current version from shared package
+          RELEASE_VERSION=$(node -p "require('./packages/shared/package.json').version")
+          
+          # Update master branch
+          git checkout master
+          git pull origin master
+          git merge release --no-ff -m "chore: sync master with release v${RELEASE_VERSION}"
+          git push origin master
+          
+          # Update staging branch
+          git checkout staging
+          git pull origin staging
+          git merge release --no-ff -m "chore: sync staging with release v${RELEASE_VERSION}"
+          git push origin staging
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

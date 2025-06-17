@@ -1,0 +1,38 @@
+name: Changeset Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  changeset-check:
+    name: Check for Changeset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable corepack for yarn
+        run: corepack enable
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Check for changeset
+        run: |
+          if [ -z "$(ls .changeset/*.md 2>/dev/null | grep -v README)" ]; then
+            echo "::warning::No changeset found. Please run 'yarn changeset' to document your changes."
+          else
+            echo "✅ Changeset found!"
+          fi
+
+      - name: Changeset Status
+        run: yarn changeset:status

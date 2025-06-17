@@ -12,9 +12,17 @@
     "prepare": "husky install",
     "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown",
     "build:shared": "yarn workspace @twreporter/congress-dashboard-shared build",
-    "postinstall": "yarn build:shared"
+    "postinstall": "yarn build:shared",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "changeset:status": "changeset status"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.9",
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "changelog-maker": "^4.3.3",
     "eslint": "^7.7.0",
