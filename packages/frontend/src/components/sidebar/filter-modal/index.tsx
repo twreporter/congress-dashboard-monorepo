@@ -16,6 +16,8 @@ import {
   FlexRow,
   ButtonGroup,
   Title,
+  TitleLink,
+  TitleText,
   Button,
 } from '@/components/sidebar/style'
 // @twreporter
@@ -216,6 +218,7 @@ const SnackBarContainer = styled.div<{ $showSnackBar?: boolean }>`
 type FilterModalProps = {
   slug: string
   title: string
+  link?: string
   subtitle?: string
   initialOption?: FilterOption[]
   placeholder?: string
@@ -236,6 +239,7 @@ const filterByKeyword = (
 }
 const FilterModal: React.FC<FilterModalProps> = ({
   title,
+  link,
   slug,
   subtitle,
   initialOption = [],
@@ -404,7 +408,16 @@ const FilterModal: React.FC<FilterModalProps> = ({
     <>
       <TopBox $show={!isSearchMode} ref={topBoxRef}>
         <TitleBox>
-          <Title text={title} />
+          {link ? (
+            <Title>
+              <TitleLink href={link}>{title}</TitleLink>
+              <TitleText>{' 的相關發言篩選'}</TitleText>
+            </Title>
+          ) : (
+            <Title>
+              <TitleText>{title}</TitleText>
+            </Title>
+          )}
           <ButtonGroup>
             <Button
               iconComponent={<Cross releaseBranch={releaseBranch} />}
