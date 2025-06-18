@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.1, 2025-06-18 (Current)
+
+### Notable Changes
+
+- fix
+  - remove quotes from ABOUT\_PAGE\_SLUG and update type in fetchMoreTopics
+
+### Commits
+
+- [[`2583f2acae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2583f2acae)] - **fix(frontend)**: remove quotes from ABOUT\_PAGE\_SLUG and update type in fetchMoreTopics (Lucien)
+
 ## 1.0.0, 2025-06-18
 
 ### Notable Changes
