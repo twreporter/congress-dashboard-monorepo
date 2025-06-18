@@ -33,7 +33,7 @@ const fetchMoreTopics = async ({
   excluideTopicSlug,
   legislativeMeetingId,
   legislativeMeetingSessionIds,
-}: FetchMoreTopicsParams) => {
+}: FetchMoreTopicsParams): Promise<TopNTopicFromRes['topics']> => {
   const legislatorWithTopics: TopNTopicFromRes[] =
     await fetchTopNTopicsOfLegislators({
       legislatorIds: [legislatorId],
@@ -50,15 +50,16 @@ const fetchMoreTopics = async ({
   _.remove(topics, (topic) => topic.slug === excluideTopicSlug)
   return topics.slice(0, 5)
 }
+
 export const useMoreTopics = (
   params?: FetchMoreTopicsParams
 ): TopicStateType<TopNTopicFromRes['topics']> => {
-  const { data, isLoading, error } = useSWR(
+  const { data, isLoading, error } = useSWR<TopNTopicFromRes['topics']>(
     params ? params : null,
     fetchMoreTopics
   )
   return {
-    topics: data,
+    topics: data || [],
     isLoading,
     error,
   }
