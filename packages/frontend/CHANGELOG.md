@@ -1,467 +1,28 @@
 # Changelog
 
-## 1.0.0-rc.28, 2025-06-17
+## 1.0.0, 2025-06-18
 
 ### Notable Changes
 
 - feat
   - enhance sidebar and footer components with new styles and logic
-- fix
-  - add link support to FilterModal and update title rendering
-  - update logo sources in Header component to use external URLs
-  - improve footer error handling and update filter modal title text
-
-### Commits
-
-- [[`49bb03f3cd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/49bb03f3cd)] - **fix(frontend)**: improve footer error handling and update filter modal title text (Lucien)
-- [[`5f7128030f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f7128030f)] - **fix(frontend)**: update logo sources in Header component to use external URLs (Lucien)
-- [[`fe4000e41b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fe4000e41b)] - **fix(frontend)**: add link support to FilterModal and update title rendering (Lucien)
-- [[`916c7df59e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/916c7df59e)] - **feat(frontend)**: enhance sidebar and footer components with new styles and logic (Lucien)
-
-## 1.0.0-rc.27, 2025-06-10
-
-### Notable Changes
-
-- fix
-  - fix `hasMore` logic in useLegislator hook
-
-### Commits
-
-- [[`785003a54d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/785003a54d)] - **fix(frontend)**: hasMore logic (Aylie Chou)
-
-## 1.0.0-rc.26, 2025-06-09
-
-### Notable Changes
-
-- fix
-  - loadmore button style on mobile
-  - calculate hasMore in hook
-
-### Commits
-
-- [[`1672523e5b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1672523e5b)] - **fix(frontend)**: calculate load more (Aylie Chou)
-
-## 1.0.0-rc.25, 2025-06-09
-
-### Notable Changes
-
-- fix
-  - buttonOnclick typo
-- chore
-  - update @twreporter packages
-
-### Commits
-
-- [[`bfce6c82f4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bfce6c82f4)] - **chore(frontend)**: update @twreporter packages (Lucien)
-- [[`fc0f5fa6cd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fc0f5fa6cd)] - **fix**: buttonOnclick typo (Lucien)
-
-## 1.0.0-rc.24, 2025-06-06
-
-### Notable Changes
-
-- fix
-  - address dashboard & speech defects
-
-### Commits
-
-- [[`35c78d307b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/35c78d307b)] - **fix(frontend)**: add comment for magic number (Aylie Chou)
-- [[`d7f77db641`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d7f77db641)] - **fix(frontend)**: address dashboard & speech defects (Aylie Chou)
-
-## 1.0.0-rc.23, 2025-06-05
-
-### Notable Changes
-
-### Commits
-
-- [[`5964403034`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5964403034)] - **fix(frontend)**: remove console.log (Aylie Chou)
-- [[`0931031f49`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0931031f49)] - **fix(frontend)**: sidebar & dashboard styles (Aylie Chou)
-- [[`37771a5100`](https://github.com/twreporter/congress-dashboard-monorepo/commit/37771a5100)] - **fix(frontend)**: address defects of circle avatar (Aylie Chou)
-
-## 1.0.0-rc.22, 2025-06-03
-
-### Notable Changes
-
-- feat
   - add not found page
   - add error page
   - add ssr loading page
-- fix
-  - event type and next hea
-  - add type and naming
-
-### Commits
-
-- [[`4d41f6d299`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4d41f6d299)] - Merge remote-tracking branch 'upstream/master' into feature/not-found-page (Lucien)
-- [[`373935b024`](https://github.com/twreporter/congress-dashboard-monorepo/commit/373935b024)] - **fix(frontend)**: add type and naming (Lucien)
-- [[`dc70e5d1ee`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc70e5d1ee)] - **fix(frontend)**: event type and next head (Lucien)
-- [[`f4dcf617b5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f4dcf617b5)] - **feat(frontend)**: add ssr loading page (Lucien)
-- [[`dce70d3a89`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dce70d3a89)] - **feat(frontend)**: add error page (Lucien)
-- [[`403dedaf15`](https://github.com/twreporter/congress-dashboard-monorepo/commit/403dedaf15)] - **feat(frontend)**: add not found page (Lucien)
-
-## 1.0.0-rc.21, 2025-06-03
-
-### Notable Changes
-
-- fix
-  - address defects of feedback
-
-### Commits
-
-- [[`2d60237502`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d60237502)] - **fix(frontend)**: replace magic number as var (Aylie Chou)
-- [[`e5ea3c45d6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e5ea3c45d6)] - **fix(frontend)**: address defects of feedback (Aylie Chou)
-
-## 1.0.0-rc.20, 2025-06-03
-
-### Notable Changes
-
-- fix
-  - update style of circle avatar
-  - address defects of home page
-
-### Commits
-
-- [[`082e61400e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/082e61400e)] - **fix(frontend)**: remove console log (Aylie Chou)
-- [[`48f9fc6c08`](https://github.com/twreporter/congress-dashboard-monorepo/commit/48f9fc6c08)] - **fix(frontend)**: address defects of home page (Aylie Chou)
-- [[`b6fc01e1dd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b6fc01e1dd)] - **fix(frontend)**: update style of circle avatar (Aylie Chou)
-
-## 1.0.0-rc.19, 2025-06-02
-
-### Notable Changes
-
-- fix
-  - improve topic and legislator page sidebar filter
-  - speech page donation box
-  - fix about page margin and donation box issue
-
-### Commits
-
-- [[`10823632cf`](https://github.com/twreporter/congress-dashboard-monorepo/commit/10823632cf)] - **fix(frontend)**: improve topic and legislator page sidebar filter (Lucien)
-- [[`9ec553ad21`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9ec553ad21)] - **fix(frontend)**: speech page donation box (Lucien)
-- [[`81f24e4e60`](https://github.com/twreporter/congress-dashboard-monorepo/commit/81f24e4e60)] - **fix(frontend)**: fix about page margin and donation box issue (Lucien)
-
-## 1.0.0-rc.18, 2025-05-19
-
-### Notable Changes
-
-- feat
-  - support multi-select feedback
-
-### Commits
-
-- [[`86dcddfb74`](https://github.com/twreporter/congress-dashboard-monorepo/commit/86dcddfb74)] - **fix(frontend)**: fix review comments (Aylie Chou)
-- [[`9b1a1cc331`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9b1a1cc331)] - **feat(frontend)**: support multi-select feedback (Aylie Chou)
-
-## 1.0.0-rc.17, 2025-05-19
-
-### Notable Changes
-
-- fix
-  - address defects of feedback
-
-### Commits
-
-- [[`14d4af0f0c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/14d4af0f0c)] - **fix(frontend)**: address defects of Feedback (Aylie Chou)
-
-## 1.0.0-rc.16, 2025-05-19
-
-### Notable Changes
-
-- feat
   - add donation box for speech page
-- fix
-  - use id instead of index for key
-
-### Commits
-
-- [[`56564f7068`](https://github.com/twreporter/congress-dashboard-monorepo/commit/56564f7068)] - **fix(frontend)**: use id instead of index for key (Lucien)
-- [[`69b66bcf23`](https://github.com/twreporter/congress-dashboard-monorepo/commit/69b66bcf23)] - **feat(frontend)**: add donation box for speech page (Lucien)
-
-## 1.0.0-rc.15, 2025-05-16
-
-### Notable Changes
-
-- feat
+  - support multi-select feedback
   - use cache function for getAboutPage
-  - use openFeedback
   - get about page data from go-api
   - add about page & donation box
-  - add react-article-components packages
-- fix
-  - force dynamic to about page
-  - use flatMap address comment from copilot
-- chore
-  - sync master
-
-### Commits
-
-- [[`3d8e07ec62`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3d8e07ec62)] - Merge remote-tracking branch 'upstream/master' into feature/frontend-about-page (Lucien)
-- [[`229f1ee56f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/229f1ee56f)] - **feat(frontend)**: use cache function for getAboutPage (Lucien)
-- [[`c95646c6ef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c95646c6ef)] - **feat(frontend)**: use openFeedback (Lucien)
-- [[`ff144a9e81`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff144a9e81)] - **fix(frontend)**: force dynamic to about page (Lucien)
-- [[`d439f9ff8b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d439f9ff8b)] - **feat(frontend)**: add env page slug for staging (Lucien)
-- [[`a90bc775e9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a90bc775e9)] - **chore(frontend)**: sync master (Lucien)
-- [[`c6256762d9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c6256762d9)] - **fix(frontend)**: use flatMap address comment from copilot (Lucien)
-- [[`adaec9dd50`](https://github.com/twreporter/congress-dashboard-monorepo/commit/adaec9dd50)] - **feat(frontend)**: get about page data from go-api (Lucien)
-- [[`2fb1f5bc63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2fb1f5bc63)] - **feat(frontend)**: add about page & donation box (Lucien)
-- [[`39157d5939`](https://github.com/twreporter/congress-dashboard-monorepo/commit/39157d5939)] - **feat(frontend)**: add react-article-components packages (Lucien)
-
-## 1.0.0-rc.14, 2025-05-16
-
-### Notable Changes
-
-- fix
-  - defects in function bar filter modal
-
-### Commits
-
-- [[`6b8148d33a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b8148d33a)] - **fix(frontend)**: fix functionBar filter modal defect (Aylie Chou)
-
-## 1.0.0-rc.13, 2025-05-16
-
-### Notable Changes
-
-- fix
-  - legislator page follow more scroll no padding
-
-### Commits
-
-- [[`b6808eda51`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b6808eda51)] - **fix(frontend)**: legislator page follow more scroll no padding (Lucien)
-
-
-## 1.0.0-rc.12, 2025-05-16
-
-### Notable Changes
-
-- fix
-  - topic and legislator page sidebar filter
-  - use sort from fetcher utils
-- chore
-  - sync master
-
-### Commits
-
-- [[`3e1fc5884d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3e1fc5884d)] - **chore(frontend)**: sync master (Lucien)
-- [[`dae8ebf305`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dae8ebf305)] - **fix(frontend)**: use sort from fetcher utils (Lucien)
-- [[`df9a53a7a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/df9a53a7a9)] - **fix(frontend)**: topic and legislator page sidebar filter (Lucien)
-
-## 1.0.0-rc.11, 2025-05-15
-
-### Notable Changes
-
-- fix
-  - address defects in home page
-
-### Commits
-
-- [[`e8e4e36c63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8e4e36c63)] - **fix(frontend)**: typo (Aylie Chou)
-- [[`38761bef95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/38761bef95)] - **fix(frontend)**: add placeholder for filter modal (Aylie Chou)
-- [[`ea95712647`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ea95712647)] - **fix(frontend)**: address defects in home page (Aylie Chou)
-
-## 1.0.0-rc.10, 2025-05-15
-
-### Notable Changes
-
-- feat
   - add feedback components & api
-
-### Commits
-
-- [[`50ceae3e2b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/50ceae3e2b)] - **fix(frontend)**: typo (Aylie Chou)
-- [[`245f699043`](https://github.com/twreporter/congress-dashboard-monorepo/commit/245f699043)] - **fix(frontend)**: add mobile style (Aylie Chou)
-- [[`ad9c45d8b5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ad9c45d8b5)] - **feat(frontend)**: add `/api/feedback` endpoint (Aylie Chou)
-- [[`051fdd9b9f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/051fdd9b9f)] - **feat(frontend)**: add feedback utils & valid email (Aylie Chou)
-- [[`6976888509`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6976888509)] - **feat(frontend)**: add components for feedback (Aylie Chou)
-- [[`52a02c8c91`](https://github.com/twreporter/congress-dashboard-monorepo/commit/52a02c8c91)] - **feat(frontend)**: add `Feedback` & step 1 component (Aylie Chou)
-- [[`0a54fe46a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0a54fe46a9)] - **feat(frontend)**: add comoponents for feedback (Aylie Chou)
-
-## 1.0.0-rc.9, 2025-05-09
-
-### Notable Changes
-
-- fix
-  - hide attendee & topic if empty
-
-### Commits
-
-- [[`9d5db23aff`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9d5db23aff)] - **fix(frontend)**: hide attendee & topic if empty (Lucien)
-
-## 1.0.0-rc.8, 2025-05-09
-
-### Notable Changes
-
-- fix
-  - add overflow hidden for title
-
-### Commits
-
-- [[`11b5c30734`](https://github.com/twreporter/congress-dashboard-monorepo/commit/11b5c30734)] - **fix(frontend)**: add overflow hidden for title (Lucien)
-
-## 1.0.0-rc.7, 2025-05-09
-
-### Notable Changes
-
-- feat
-  - add more fetcher for home page
-
-### Commits
-
-- [[`3dc98714ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3dc98714ed)] - **fix(frontend)**: apply useOutsideClick in `@/hook` (Aylie Chou)
-- [[`20517860ec`](https://github.com/twreporter/congress-dashboard-monorepo/commit/20517860ec)] - **fix(frontend)**: address review comments (Aylie Chou)
-- [[`af61f17421`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af61f17421)] - **fix(frontend)**: resolve yarn build fail (Aylie Chou)
-- [[`54d7db8517`](https://github.com/twreporter/congress-dashboard-monorepo/commit/54d7db8517)] - **feat(frontend)**: add more fetcher for home page (Aylie Chou)
-
-## 1.0.0-rc.6, 2025-05-09
-
-### Notable Changes
-
-- chore
-  - change image & api host to new url
-
-### Commits
-
-- [[`7c83255781`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c83255781)] - Merge remote-tracking branch 'upstream/master' into chore/image-host (Lucien)
-- [[`3928ca6553`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3928ca6553)] - **chore(frontend)**: change image & api host to new url (Lucien)
-- [[`5bf26a6d19`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5bf26a6d19)] - **chore(frontend)**: change image & api host (Lucien)
-
-## 1.0.0-rc.5, 2025-05-09
-
-### Notable Changes
-
-- feat
   - add favicon and change site title
   - add metadata for dynamic page
-- fix
-  - use internal route constant
-  - separate links and routes
-
-### Commits
-
-- [[`8add5dbc12`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8add5dbc12)] - Merge remote-tracking branch 'upstream/master' into feature/frontend-title-metadata (Lucien)
-- [[`7b31b58161`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b31b58161)] - **fix(frontend)**: separate links and routes (Lucien)
-- [[`fb83467970`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fb83467970)] - **fix(frontend)**: use internal route constant (Lucien)
-- [[`4a5b8f1ba8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4a5b8f1ba8)] - **feat(frontend)**: add metadata for dynamic page (Lucien)
-- [[`2dfff8c096`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2dfff8c096)] - **feat(frontend)**: add favicon and change site title (Lucien)
-
-## 1.0.0-rc.4, 2025-05-08
-
-### Notable Changes
-
-- chore
-  - update @twreporter packages
-
-### Commits
-
-- [[`eb0bf7b7f0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/eb0bf7b7f0)] - **chore(frontend)**: update @twreporter packages (Lucien)
-
-## 1.0.0-rc.3, 2025-05-07
-
-### Notable Changes
-
-- fix
-  - typo and speech page title 
-- chore
-  - update @twreporter packages
-
-### Commits
-
-- [[`4780890cf3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4780890cf3)] - **chore(frontend)**: update @twreporter packages (Lucien)
-- [[`e21051e087`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e21051e087)] - Merge remote-tracking branch 'upstream/master' into fix/frontend-typo (Lucien)
-- [[`58f4d40178`](https://github.com/twreporter/congress-dashboard-monorepo/commit/58f4d40178)] - **fix(frontend)**: typo and speech page title (Lucien)
-
-## 1.0.0-rc.2, 2025-05-05
-
-### Notable Changes
-
-- feat
   - add fetchers for home page
-  - filter graphql null to undefined
   - add related twreporter articles
   - use data from api for speech page
   - parse HTML summaries and consolidate date formatter logic
   - add snackbar for sidebar filter
   - implement filter modals and sidebar z-index management
-- fix
-  - use app router way error handling
-  - add `showAvatar` props to Tab & `showTabAvatar` to TitleSection
-  - fix loading & filter for topic & legislator page
-  - use logger instead of console.error to catch home page SSR error
-  - legislator image & scrollbar width
-  - pass querystring for legislator route
-  - add empty state to topic speech summary list and fix filter count
-  - add empty state for legislator page
-  - check if legislator slug exist
-  - fix use-filters
-  - add loader component and add loading for topic & legislator page
-  - use common loader component
-  - parse summary for speech card
-  - implement universal date formatter with enhanced flexibility
-- chore
-  - sync dev
-
-### Commits
-
-- [[`b13a7282dc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b13a7282dc)] - **fix(frontend)**: typo & fix type check (Aylie Chou)
-- [[`6c6fcf1733`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6c6fcf1733)] - **fix(frontend)**: prevent static-generation on Home (Aylie Chou)
-- [[`5f1c966d01`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f1c966d01)] - **fix(frontend)**: use app router way error handling (Aylie Chou)
-- [[`6b5fb2bb39`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b5fb2bb39)] - **fix(frontend)**: add more log for home page SSR (Aylie Chou)
-- [[`64cc12a0bd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/64cc12a0bd)] - **fix(frontend)**: add Error for SSR error (Aylie Chou)
-- [[`431fe879c1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/431fe879c1)] - **fix(frontend)**: add `showAvatar` props to Tab (Aylie Chou)
-- [[`8096d146ae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8096d146ae)] - Merge remote-tracking branch 'upstream/dev' into fix/legislator-page-1 (Lucien)
-- [[`fdead25a95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fdead25a95)] - **fix(frontend)**: add note to legislator data (Lucien)
-- [[`d1db23403d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d1db23403d)] - **fix(frontend)**: enhance LegislatorInfo component layout and update title styles (Lucien)
-- [[`f06a3eaee5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f06a3eaee5)] - **fix(frontend)**: update Loader component to accept useAbsolute prop and wrap in EmptyState (Lucien)
-- [[`0feb390cf2`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0feb390cf2)] - **fix(frontend)**: rename legislativeMeeting to legislativeMeetings and update related hooks (Lucien)
-- [[`cbcb445228`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cbcb445228)] - **fix(frontend)**: rename note to toolitp, use legislativeMeetings hook (Lucien)
-- [[`b7bfbb61f9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7bfbb61f9)] - **fix(frontend)**: use logger instead of console.error (Aylie Chou)
-- [[`c623b13259`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c623b13259)] - **feat(frontend)**: filter graphql null to undefined (Lucien)
-- [[`7512273198`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7512273198)] - **fix(frontend)**: fix comments (Lucien)
-- [[`5e1005ada5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e1005ada5)] - **fix(frontend)**: adress yarn build failed problem (Aylie Chou)
-- [[`0109245990`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0109245990)] - **fix(frontend)**: address merge conflicts (Aylie Chou)
-- [[`0e71d04802`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0e71d04802)] - **fix(frontend)**: typo (Aylie Chou)
-- [[`0daf8aa387`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0daf8aa387)] - **feat(frontend)**: add fetcher for speeches (Aylie Chou)
-- [[`b84d9ab33a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b84d9ab33a)] - **feat(frontend)**: add fetcher for legislator at home (Aylie Chou)
-- [[`7876a5a37f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7876a5a37f)] - **feat(frontend)**: add fetchers for topics & filter (Aylie Chou)
-- [[`587a768d59`](https://github.com/twreporter/congress-dashboard-monorepo/commit/587a768d59)] - **fix(frontend)**: add try catch to `getCDNUrl` (Aylie Chou)
-- [[`cfac3f2562`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cfac3f2562)] - **fix(frontend)**: use general `formatDate` method (Aylie Chou)
-- [[`bbdcacfdbe`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bbdcacfdbe)] - **fix(frontend)**: resolve review comment (Aylie Chou)
-- [[`1bc3eb857d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1bc3eb857d)] - **fix(frontend)**: typo & hide block if fetch error (Aylie Chou)
-- [[`3c25f1867c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3c25f1867c)] - **fix(frontend)**: add skeleton loading for articles (Aylie Chou)
-- [[`c7c54a16f4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c7c54a16f4)] - **feat(frontend)**: add related twreporter articles (Aylie Chou)
-- [[`b27a6879ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b27a6879ed)] - **chore(frontend)**: sync dev (Lucien)
-- [[`9a895b8204`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9a895b8204)] - **fix(frontend)**: parse summary for speech card (Lucien)
-- [[`c98b5b81ba`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c98b5b81ba)] - **fix(frontend)**: use common loader component (Lucien)
-- [[`6d7fa67fa0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6d7fa67fa0)] - **fix(frontend)**: add loader component and add loading for topic & legislator page (Lucien)
-- [[`61211b17d5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/61211b17d5)] - **fix(frontend)**: fix use-filters (Lucien)
-- [[`894416739b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/894416739b)] - **fix(frontend)**: use legislative meeting term filter by legislator (Lucien)
-- [[`87e7e04588`](https://github.com/twreporter/congress-dashboard-monorepo/commit/87e7e04588)] - **fix(frontend)**: check if legislator slug exist (Lucien)
-- [[`a4978d8c16`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4978d8c16)] - **fix(frontend)**: add empty state for legislator page (Lucien)
-- [[`74fa26cb54`](https://github.com/twreporter/congress-dashboard-monorepo/commit/74fa26cb54)] - **fix(frontend)**: add empty state to topic speech summary list and fix filter count (Lucien)
-- [[`de6f7d38ef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/de6f7d38ef)] - **fix(frontend)**: pass querystring for legislator route (Lucien)
-- [[`6e4a33d507`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6e4a33d507)] - **fix(frontend)**: legislator image & scrollbar width (Lucien)
-- [[`02507e93ca`](https://github.com/twreporter/congress-dashboard-monorepo/commit/02507e93ca)] - **fix(frontend)**: fix comments (Lucien)
-- [[`3a07eafe0f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3a07eafe0f)] - **feat(frontend)**: parse HTML summaries and consolidate date formatter logic (Lucien)
-- [[`bc1a862e6a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bc1a862e6a)] - **fix(frontend)**: implement universal date formatter with enhanced flexibility (Lucien)
-- [[`4bc42ce9b6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4bc42ce9b6)] - **feat(frontend)**: use data from api for speech page (Lucien)
-- [[`dc6d7b2a73`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc6d7b2a73)] - **feat(frontend)**: add snackbar for sidebar filter (Lucien)
-- [[`b7d94ac4ae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7d94ac4ae)] - **chore(frontend)**: sync dev (Lucien)
-- [[`bffb6d2e94`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bffb6d2e94)] - **feat(frontend)**: implement filter modals and sidebar z-index management (Lucien)
-
-## 1.0.0-rc.1, 2025-04-22
-
-### Notable Changes
-
-- chore
-  - add staging env file
-
-### Commits
-
-- [[`bd10d1866a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bd10d1866a)] - **chore(frontend)**: add staging env file (Lucien)
-
-## 1.0.0-rc.0, 2025-04-22
-
-### Notable Changes
-
-- feat
   - add filter modal for sidebar
   - add abort signal for server fetch
   - improve tooltip positioning and behavior
@@ -507,6 +68,44 @@
   - add responsive tag display
   - add index page
 - fix
+  - improve footer error handling and update filter modal title text
+  - update logo sources in Header component to use external URLs
+  - add link support to FilterModal and update title rendering
+  - fix `hasMore` logic in useLegislator hook
+  - loadmore button style on mobile
+  - calculate hasMore in hook
+  - buttonOnclick typo
+  - address dashboard & speech defects
+  - sidebar & dashboard styles
+  - address defects of feedback
+  - update style of circle avatar
+  - address defects of home page
+  - improve topic and legislator page sidebar filter
+  - speech page donation box
+  - fix about page margin and donation box issue
+  - use id instead of index for key
+  - force dynamic to about page
+  - use flatMap address comment from copilot
+  - defects in function bar filter modal
+  - legislator page follow more scroll no padding
+  - topic and legislator page sidebar filter
+  - use sort from fetcher utils
+  - address defects in home page
+  - typo and speech page title
+  - use app router way error handling
+  - add `showAvatar` props to Tab & `showTabAvatar` to TitleSection
+  - fix loading & filter for topic & legislator page
+  - use logger instead of console.error to catch home page SSR error
+  - legislator image & scrollbar width
+  - pass querystring for legislator route
+  - add empty state to topic speech summary list and fix filter count
+  - add empty state for legislator page
+  - check if legislator slug exist
+  - fix use-filters
+  - add loader component and add loading for topic & legislator page
+  - use common loader component
+  - parse summary for speech card
+  - implement universal date formatter with enhanced flexibility
   - apply rwd style for sidebar gap
   - fix type import
   - change legislator route to lawmaker
@@ -552,6 +151,127 @@
 
 ### Commits
 
+- [[`49bb03f3cd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/49bb03f3cd)] - **fix(frontend)**: improve footer error handling and update filter modal title text (Lucien)
+- [[`5f7128030f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f7128030f)] - **fix(frontend)**: update logo sources in Header component to use external URLs (Lucien)
+- [[`fe4000e41b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fe4000e41b)] - **fix(frontend)**: add link support to FilterModal and update title rendering (Lucien)
+- [[`916c7df59e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/916c7df59e)] - **feat(frontend)**: enhance sidebar and footer components with new styles and logic (Lucien)
+- [[`785003a54d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/785003a54d)] - **fix(frontend)**: hasMore logic (Aylie Chou)
+- [[`1672523e5b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1672523e5b)] - **fix(frontend)**: calculate load more (Aylie Chou)
+- [[`bfce6c82f4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bfce6c82f4)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`fc0f5fa6cd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fc0f5fa6cd)] - **fix**: buttonOnclick typo (Lucien)
+- [[`35c78d307b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/35c78d307b)] - **fix(frontend)**: add comment for magic number (Aylie Chou)
+- [[`d7f77db641`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d7f77db641)] - **fix(frontend)**: address dashboard & speech defects (Aylie Chou)
+- [[`5964403034`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5964403034)] - **fix(frontend)**: remove console.log (Aylie Chou)
+- [[`0931031f49`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0931031f49)] - **fix(frontend)**: sidebar & dashboard styles (Aylie Chou)
+- [[`37771a5100`](https://github.com/twreporter/congress-dashboard-monorepo/commit/37771a5100)] - **fix(frontend)**: address defects of circle avatar (Aylie Chou)
+- [[`4d41f6d299`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4d41f6d299)] - Merge remote-tracking branch 'upstream/master' into feature/not-found-page (Lucien)
+- [[`373935b024`](https://github.com/twreporter/congress-dashboard-monorepo/commit/373935b024)] - **fix(frontend)**: add type and naming (Lucien)
+- [[`dc70e5d1ee`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc70e5d1ee)] - **fix(frontend)**: event type and next head (Lucien)
+- [[`f4dcf617b5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f4dcf617b5)] - **feat(frontend)**: add ssr loading page (Lucien)
+- [[`dce70d3a89`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dce70d3a89)] - **feat(frontend)**: add error page (Lucien)
+- [[`403dedaf15`](https://github.com/twreporter/congress-dashboard-monorepo/commit/403dedaf15)] - **feat(frontend)**: add not found page (Lucien)
+- [[`2d60237502`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d60237502)] - **fix(frontend)**: replace magic number as var (Aylie Chou)
+- [[`e5ea3c45d6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e5ea3c45d6)] - **fix(frontend)**: address defects of feedback (Aylie Chou)
+- [[`082e61400e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/082e61400e)] - **fix(frontend)**: remove console log (Aylie Chou)
+- [[`48f9fc6c08`](https://github.com/twreporter/congress-dashboard-monorepo/commit/48f9fc6c08)] - **fix(frontend)**: address defects of home page (Aylie Chou)
+- [[`b6fc01e1dd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b6fc01e1dd)] - **fix(frontend)**: update style of circle avatar (Aylie Chou)
+- [[`10823632cf`](https://github.com/twreporter/congress-dashboard-monorepo/commit/10823632cf)] - **fix(frontend)**: improve topic and legislator page sidebar filter (Lucien)
+- [[`9ec553ad21`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9ec553ad21)] - **fix(frontend)**: speech page donation box (Lucien)
+- [[`81f24e4e60`](https://github.com/twreporter/congress-dashboard-monorepo/commit/81f24e4e60)] - **fix(frontend)**: fix about page margin and donation box issue (Lucien)
+- [[`86dcddfb74`](https://github.com/twreporter/congress-dashboard-monorepo/commit/86dcddfb74)] - **fix(frontend)**: fix review comments (Aylie Chou)
+- [[`9b1a1cc331`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9b1a1cc331)] - **feat(frontend)**: support multi-select feedback (Aylie Chou)
+- [[`14d4af0f0c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/14d4af0f0c)] - **fix(frontend)**: address defects of Feedback (Aylie Chou)
+- [[`56564f7068`](https://github.com/twreporter/congress-dashboard-monorepo/commit/56564f7068)] - **fix(frontend)**: use id instead of index for key (Lucien)
+- [[`69b66bcf23`](https://github.com/twreporter/congress-dashboard-monorepo/commit/69b66bcf23)] - **feat(frontend)**: add donation box for speech page (Lucien)
+- [[`3d8e07ec62`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3d8e07ec62)] - Merge remote-tracking branch 'upstream/master' into feature/frontend-about-page (Lucien)
+- [[`229f1ee56f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/229f1ee56f)] - **feat(frontend)**: use cache function for getAboutPage (Lucien)
+- [[`c95646c6ef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c95646c6ef)] - **feat(frontend)**: use openFeedback (Lucien)
+- [[`ff144a9e81`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff144a9e81)] - **fix(frontend)**: force dynamic to about page (Lucien)
+- [[`d439f9ff8b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d439f9ff8b)] - **feat(frontend)**: add env page slug for staging (Lucien)
+- [[`a90bc775e9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a90bc775e9)] - **chore(frontend)**: sync master (Lucien)
+- [[`c6256762d9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c6256762d9)] - **fix(frontend)**: use flatMap address comment from copilot (Lucien)
+- [[`adaec9dd50`](https://github.com/twreporter/congress-dashboard-monorepo/commit/adaec9dd50)] - **feat(frontend)**: get about page data from go-api (Lucien)
+- [[`2fb1f5bc63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2fb1f5bc63)] - **feat(frontend)**: add about page & donation box (Lucien)
+- [[`39157d5939`](https://github.com/twreporter/congress-dashboard-monorepo/commit/39157d5939)] - **feat(frontend)**: add react-article-components packages (Lucien)
+- [[`6b8148d33a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b8148d33a)] - **fix(frontend)**: fix functionBar filter modal defect (Aylie Chou)
+- [[`b6808eda51`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b6808eda51)] - **fix(frontend)**: legislator page follow more scroll no padding (Lucien)
+- [[`3e1fc5884d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3e1fc5884d)] - **chore(frontend)**: sync master (Lucien)
+- [[`dae8ebf305`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dae8ebf305)] - **fix(frontend)**: use sort from fetcher utils (Lucien)
+- [[`df9a53a7a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/df9a53a7a9)] - **fix(frontend)**: topic and legislator page sidebar filter (Lucien)
+- [[`e8e4e36c63`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8e4e36c63)] - **fix(frontend)**: typo (Aylie Chou)
+- [[`38761bef95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/38761bef95)] - **fix(frontend)**: add placeholder for filter modal (Aylie Chou)
+- [[`ea95712647`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ea95712647)] - **fix(frontend)**: address defects in home page (Aylie Chou)
+- [[`50ceae3e2b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/50ceae3e2b)] - **fix(frontend)**: typo (Aylie Chou)
+- [[`245f699043`](https://github.com/twreporter/congress-dashboard-monorepo/commit/245f699043)] - **fix(frontend)**: add mobile style (Aylie Chou)
+- [[`ad9c45d8b5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ad9c45d8b5)] - **feat(frontend)**: add `/api/feedback` endpoint (Aylie Chou)
+- [[`051fdd9b9f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/051fdd9b9f)] - **feat(frontend)**: add feedback utils & valid email (Aylie Chou)
+- [[`6976888509`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6976888509)] - **feat(frontend)**: add components for feedback (Aylie Chou)
+- [[`52a02c8c91`](https://github.com/twreporter/congress-dashboard-monorepo/commit/52a02c8c91)] - **feat(frontend)**: add `Feedback` & step 1 component (Aylie Chou)
+- [[`0a54fe46a9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0a54fe46a9)] - **feat(frontend)**: add comoponents for feedback (Aylie Chou)
+- [[`9d5db23aff`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9d5db23aff)] - **fix(frontend)**: hide attendee & topic if empty (Lucien)
+- [[`11b5c30734`](https://github.com/twreporter/congress-dashboard-monorepo/commit/11b5c30734)] - **fix(frontend)**: add overflow hidden for title (Lucien)
+- [[`3dc98714ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3dc98714ed)] - **fix(frontend)**: apply useOutsideClick in `@/hook` (Aylie Chou)
+- [[`20517860ec`](https://github.com/twreporter/congress-dashboard-monorepo/commit/20517860ec)] - **fix(frontend)**: address review comments (Aylie Chou)
+- [[`af61f17421`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af61f17421)] - **fix(frontend)**: resolve yarn build fail (Aylie Chou)
+- [[`54d7db8517`](https://github.com/twreporter/congress-dashboard-monorepo/commit/54d7db8517)] - **feat(frontend)**: add more fetcher for home page (Aylie Chou)
+- [[`7c83255781`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c83255781)] - Merge remote-tracking branch 'upstream/master' into chore/image-host (Lucien)
+- [[`3928ca6553`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3928ca6553)] - **chore(frontend)**: change image & api host to new url (Lucien)
+- [[`5bf26a6d19`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5bf26a6d19)] - **chore(frontend)**: change image & api host (Lucien)
+- [[`8add5dbc12`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8add5dbc12)] - Merge remote-tracking branch 'upstream/master' into feature/frontend-title-metadata (Lucien)
+- [[`7b31b58161`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b31b58161)] - **fix(frontend)**: separate links and routes (Lucien)
+- [[`fb83467970`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fb83467970)] - **fix(frontend)**: use internal route constant (Lucien)
+- [[`4a5b8f1ba8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4a5b8f1ba8)] - **feat(frontend)**: add metadata for dynamic page (Lucien)
+- [[`2dfff8c096`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2dfff8c096)] - **feat(frontend)**: add favicon and change site title (Lucien)
+- [[`eb0bf7b7f0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/eb0bf7b7f0)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`4780890cf3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4780890cf3)] - **chore(frontend)**: update @twreporter packages (Lucien)
+- [[`e21051e087`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e21051e087)] - Merge remote-tracking branch 'upstream/master' into fix/frontend-typo (Lucien)
+- [[`58f4d40178`](https://github.com/twreporter/congress-dashboard-monorepo/commit/58f4d40178)] - **fix(frontend)**: typo and speech page title (Lucien)
+- [[`b13a7282dc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b13a7282dc)] - **fix(frontend)**: typo & fix type check (Aylie Chou)
+- [[`6c6fcf1733`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6c6fcf1733)] - **fix(frontend)**: prevent static-generation on Home (Aylie Chou)
+- [[`5f1c966d01`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f1c966d01)] - **fix(frontend)**: use app router way error handling (Aylie Chou)
+- [[`6b5fb2bb39`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b5fb2bb39)] - **fix(frontend)**: add more log for home page SSR (Aylie Chou)
+- [[`64cc12a0bd`](https://github.com/twreporter/congress-dashboard-monorepo/commit/64cc12a0bd)] - **fix(frontend)**: add Error for SSR error (Aylie Chou)
+- [[`431fe879c1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/431fe879c1)] - **fix(frontend)**: add `showAvatar` props to Tab (Aylie Chou)
+- [[`8096d146ae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8096d146ae)] - Merge remote-tracking branch 'upstream/dev' into fix/legislator-page-1 (Lucien)
+- [[`fdead25a95`](https://github.com/twreporter/congress-dashboard-monorepo/commit/fdead25a95)] - **fix(frontend)**: add note to legislator data (Lucien)
+- [[`d1db23403d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/d1db23403d)] - **fix(frontend)**: enhance LegislatorInfo component layout and update title styles (Lucien)
+- [[`f06a3eaee5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f06a3eaee5)] - **fix(frontend)**: update Loader component to accept useAbsolute prop and wrap in EmptyState (Lucien)
+- [[`0feb390cf2`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0feb390cf2)] - **fix(frontend)**: rename legislativeMeeting to legislativeMeetings and update related hooks (Lucien)
+- [[`cbcb445228`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cbcb445228)] - **fix(frontend)**: rename note to toolitp, use legislativeMeetings hook (Lucien)
+- [[`b7bfbb61f9`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7bfbb61f9)] - **fix(frontend)**: use logger instead of console.error (Aylie Chou)
+- [[`c623b13259`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c623b13259)] - **feat(frontend)**: filter graphql null to undefined (Lucien)
+- [[`7512273198`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7512273198)] - **fix(frontend)**: fix comments (Lucien)
+- [[`5e1005ada5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e1005ada5)] - **fix(frontend)**: adress yarn build failed problem (Aylie Chou)
+- [[`0109245990`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0109245990)] - **fix(frontend)**: address merge conflicts (Aylie Chou)
+- [[`0e71d04802`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0e71d04802)] - **fix(frontend)**: typo (Aylie Chou)
+- [[`0daf8aa387`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0daf8aa387)] - **feat(frontend)**: add fetcher for speeches (Aylie Chou)
+- [[`b84d9ab33a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b84d9ab33a)] - **feat(frontend)**: add fetcher for legislator at home (Aylie Chou)
+- [[`7876a5a37f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7876a5a37f)] - **feat(frontend)**: add fetchers for topics & filter (Aylie Chou)
+- [[`587a768d59`](https://github.com/twreporter/congress-dashboard-monorepo/commit/587a768d59)] - **fix(frontend)**: add try catch to `getCDNUrl` (Aylie Chou)
+- [[`cfac3f2562`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cfac3f2562)] - **fix(frontend)**: use general `formatDate` method (Aylie Chou)
+- [[`bbdcacfdbe`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bbdcacfdbe)] - **fix(frontend)**: resolve review comment (Aylie Chou)
+- [[`1bc3eb857d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1bc3eb857d)] - **fix(frontend)**: typo & hide block if fetch error (Aylie Chou)
+- [[`3c25f1867c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3c25f1867c)] - **fix(frontend)**: add skeleton loading for articles (Aylie Chou)
+- [[`c7c54a16f4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c7c54a16f4)] - **feat(frontend)**: add related twreporter articles (Aylie Chou)
+- [[`b27a6879ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b27a6879ed)] - **chore(frontend)**: sync dev (Lucien)
+- [[`9a895b8204`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9a895b8204)] - **fix(frontend)**: parse summary for speech card (Lucien)
+- [[`c98b5b81ba`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c98b5b81ba)] - **fix(frontend)**: use common loader component (Lucien)
+- [[`6d7fa67fa0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6d7fa67fa0)] - **fix(frontend)**: add loader component and add loading for topic & legislator page (Lucien)
+- [[`61211b17d5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/61211b17d5)] - **fix(frontend)**: fix use-filters (Lucien)
+- [[`894416739b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/894416739b)] - **fix(frontend)**: use legislative meeting term filter by legislator (Lucien)
+- [[`87e7e04588`](https://github.com/twreporter/congress-dashboard-monorepo/commit/87e7e04588)] - **fix(frontend)**: check if legislator slug exist (Lucien)
+- [[`a4978d8c16`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4978d8c16)] - **fix(frontend)**: add empty state for legislator page (Lucien)
+- [[`74fa26cb54`](https://github.com/twreporter/congress-dashboard-monorepo/commit/74fa26cb54)] - **fix(frontend)**: add empty state to topic speech summary list and fix filter count (Lucien)
+- [[`de6f7d38ef`](https://github.com/twreporter/congress-dashboard-monorepo/commit/de6f7d38ef)] - **fix(frontend)**: pass querystring for legislator route (Lucien)
+- [[`6e4a33d507`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6e4a33d507)] - **fix(frontend)**: legislator image & scrollbar width (Lucien)
+- [[`02507e93ca`](https://github.com/twreporter/congress-dashboard-monorepo/commit/02507e93ca)] - **fix(frontend)**: fix comments (Lucien)
+- [[`3a07eafe0f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3a07eafe0f)] - **feat(frontend)**: parse HTML summaries and consolidate date formatter logic (Lucien)
+- [[`bc1a862e6a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bc1a862e6a)] - **fix(frontend)**: implement universal date formatter with enhanced flexibility (Lucien)
+- [[`4bc42ce9b6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4bc42ce9b6)] - **feat(frontend)**: use data from api for speech page (Lucien)
+- [[`dc6d7b2a73`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc6d7b2a73)] - **feat(frontend)**: add snackbar for sidebar filter (Lucien)
+- [[`b7d94ac4ae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7d94ac4ae)] - **chore(frontend)**: sync dev (Lucien)
+- [[`bffb6d2e94`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bffb6d2e94)] - **feat(frontend)**: implement filter modals and sidebar z-index management (Lucien)
+- [[`bd10d1866a`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bd10d1866a)] - **chore(frontend)**: add staging env file (Lucien)
 - [[`1fb227e184`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1fb227e184)] - **chore(frontend)**: update @twreporter packages (Lucien)
 - [[`0339513a82`](https://github.com/twreporter/congress-dashboard-monorepo/commit/0339513a82)] - **chore(frontend)**: update @twreporter packages (Lucien)
 - [[`229723bf76`](https://github.com/twreporter/congress-dashboard-monorepo/commit/229723bf76)] - **fix(frontend)**: sidebar gap rwd (Aylie Chou)
