@@ -176,7 +176,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
     formattedFilterValues && selectedLegislator && selectedLegislator.id
       ? {
           legislatorId: selectedLegislator.id,
-          excluideTopicSlug: slug,
+          excludeTopicSlug: slug,
           legislativeMeetingId: formattedFilterValues?.meetingId,
           legislativeMeetingSessionIds: formattedFilterValues?.sessionIds,
         }
