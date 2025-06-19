@@ -13,6 +13,7 @@ import LegislatorPage from '@/components/legislator'
 import { validateMeetingParams } from '@/utils/validate-meeting-params'
 // constants
 import { InternalRoutes } from '@/constants/routes'
+import { OG_IMAGE_URL } from '@/constants'
 
 export const dynamicParams = true
 
@@ -43,14 +44,16 @@ export async function generateMetadata({
 
   return {
     title: `立委｜${data?.legislator.name} - 報導者觀測站`,
-    description: '報導者議會透視版',
+    description: `立委${data?.legislator.name}關心哪些議題、質詢哪些部會官員？《報導者》用人工智慧技術分析立法院公報，帶你快速掌握${data?.legislator.name}不同時段的問政重點與發言紀錄。`,
     alternates: {
       canonical: `https://lawmaker.twreporter.org${InternalRoutes.Legislator}/${slug}`,
     },
     openGraph: {
       title: `立委｜${data?.legislator.name} - 報導者觀測站`,
+      description: `立委${data?.legislator.name}關心哪些議題、質詢哪些部會官員？《報導者》用人工智慧技術分析立法院公報，帶你快速掌握${data?.legislator.name}不同時段的問政重點與發言紀錄。`,
       url: `https://lawmaker.twreporter.org${InternalRoutes.Legislator}/${slug}`,
       type: 'profile',
+      images: OG_IMAGE_URL,
     },
   }
 }
