@@ -1,0 +1,53 @@
+name: Master RC Release
+
+on:
+  push:
+    branches:
+      - master
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: RC Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable corepack for yarn
+        run: corepack enable
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build Shared Package
+        run: yarn build:shared
+
+      - name: Create RC Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: yarn changeset:version
+          publish: yarn changeset:publish --tag rc
+          title: "chore: rc release"
+          commit: "chore: rc release"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Auto-merge Changeset PR
+        if: steps.changesets.outputs.pullRequestNumber != ''
+        run: |
+          gh pr merge ${{ steps.changesets.outputs.pullRequestNumber }} --auto --squash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
