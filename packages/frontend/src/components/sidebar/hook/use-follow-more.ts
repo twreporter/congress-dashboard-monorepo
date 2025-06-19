@@ -9,11 +9,6 @@ import type {
   TopNTopicFromRes,
   LegislatorWithSpeechCount,
 } from '@/fetchers/legislator'
-// lodash
-import { remove } from 'lodash'
-const _ = {
-  remove,
-}
 
 // useMoreTopics
 type TopicStateType<T> = {
@@ -24,16 +19,16 @@ type TopicStateType<T> = {
 
 type FetchMoreTopicsParams = {
   legislatorId: number
-  excluideTopicSlug: string
+  excludeTopicSlug: string
   legislativeMeetingId: number
   legislativeMeetingSessionIds?: number[]
 }
 const fetchMoreTopics = async ({
   legislatorId,
-  excluideTopicSlug,
+  excludeTopicSlug,
   legislativeMeetingId,
   legislativeMeetingSessionIds,
-}: FetchMoreTopicsParams) => {
+}: FetchMoreTopicsParams): Promise<TopNTopicFromRes['topics']> => {
   const legislatorWithTopics: TopNTopicFromRes[] =
     await fetchTopNTopicsOfLegislators({
       legislatorIds: [legislatorId],
@@ -47,18 +42,18 @@ const fetchMoreTopics = async ({
     return []
   }
 
-  _.remove(topics, (topic) => topic.slug === excluideTopicSlug)
-  return topics.slice(0, 5)
+  return topics.filter((topic) => topic.slug !== excludeTopicSlug).slice(0, 5)
 }
+
 export const useMoreTopics = (
   params?: FetchMoreTopicsParams
 ): TopicStateType<TopNTopicFromRes['topics']> => {
-  const { data, isLoading, error } = useSWR(
+  const { data, isLoading, error } = useSWR<TopNTopicFromRes['topics']>(
     params ? params : null,
     fetchMoreTopics
   )
   return {
-    topics: data,
+    topics: data || [],
     isLoading,
     error,
   }
@@ -99,11 +94,9 @@ const fetchMoreLegislators = async ({
     take: 6,
   })
 
-  _.remove(
-    legislators,
-    (legislator) => legislator.slug === excluideLegislatorSlug
-  )
-  return legislators.slice(0, 5)
+  return legislators
+    .filter((legislator) => legislator.slug !== excluideLegislatorSlug)
+    .slice(0, 5)
 }
 
 export const useMoreLegislators = (

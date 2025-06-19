@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState,
   useContext,
+  useRef,
   RefAttributes,
 } from 'react'
 import styled from 'styled-components'
@@ -59,7 +60,7 @@ const Box = styled.div`
   width: 520px;
   height: 100vh;
   background-color: ${colorGrayscale.white};
-  overflow-x: hidden;
+  overflow: hidden;
   box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
 
   ${mq.tabletOnly`
@@ -74,13 +75,17 @@ const FilterBox = styled.div<{ $show: boolean }>`
   ${(props) => (props.$show ? '' : 'display: none;')}
   height: 100%;
   position: relative;
+  overflow-y: hidden;
 `
-const Body = styled.div`
+const Body = styled.div<{ $topBoxHeight: number }>`
   display: flex;
   padding: 24px 24px 40px 24px;
   flex-direction: column;
   align-items: flex-start;
   gap: 40px;
+  overflow-y: scroll;
+  height: 100%;
+  max-height: calc(100vh - ${(props) => props.$topBoxHeight}px);
 `
 const SummarySection = styled.div`
   gap: 32px;
@@ -135,6 +140,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   className,
   ref,
 }: SidebarIssueProps) => {
+  const topRef = useRef<HTMLDivElement>(null)
   const [tabList, setTabList] = useState(legislatorList)
   const [isLoading, setIsLoading] = useState(true)
   const [selectedTab, setSelectedTab] = useState(0)
@@ -170,7 +176,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
     formattedFilterValues && selectedLegislator && selectedLegislator.id
       ? {
           legislatorId: selectedLegislator.id,
-          excluideTopicSlug: slug,
+          excludeTopicSlug: slug,
           legislativeMeetingId: formattedFilterValues?.meetingId,
           legislativeMeetingSessionIds: formattedFilterValues?.sessionIds,
         }
@@ -195,6 +201,10 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   }
 
   useEffect(() => {
+    setIsLoading(true)
+  }, [slug, selectedTab])
+
+  useEffect(() => {
     if (speechState.speeches != undefined) {
       setIsLoading(speechState.isLoading || followMoreState.isLoading)
     }
@@ -213,20 +223,22 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   return (
     <Box className={className} ref={ref}>
       <ContentBox $show={!showFilter}>
-        <TitleSection
-          title={title}
-          count={count}
-          tabs={tabList}
-          showTabAvatar={true}
-          link={`${InternalRoutes.Topic}/${slug}`}
-          onSelectTab={setSelectedTab}
-          onOpenFilterModal={() => setShowFilter(true)}
-          onClose={onClose}
-        />
+        <div ref={topRef}>
+          <TitleSection
+            title={title}
+            count={count}
+            tabs={tabList}
+            showTabAvatar={true}
+            link={`${InternalRoutes.Topic}/${slug}`}
+            onSelectTab={setSelectedTab}
+            onOpenFilterModal={() => setShowFilter(true)}
+            onClose={onClose}
+          />
+        </div>
         {isLoading ? (
           <Loader />
         ) : (
-          <Body>
+          <Body $topBoxHeight={topRef?.current?.offsetHeight || 0}>
             <SummarySection>
               {summaryGroupByYear.map(
                 (props: CardsOfTheYearProps, index: number) => (
@@ -253,7 +265,8 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
       {showFilter ? (
         <FilterBox $show={showFilter}>
           <FilterModal
-            title={`${title} 的相關發言篩選`}
+            title={title}
+            link={`${InternalRoutes.Topic}/${slug}`}
             slug={slug}
             placeholder={'篩選立委'}
             initialSelectedOption={tabList}
@@ -296,6 +309,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   className,
   ref,
 }: SidebarLegislatorProps) => {
+  const topRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [tabList, setTabList] = useState(issueList)
   const [selectedTab, setSelectedTab] = useState(0)
@@ -384,6 +398,10 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   }
 
   useEffect(() => {
+    setIsLoading(true)
+  }, [slug, selectedTab])
+
+  useEffect(() => {
     if (issueList) {
       setTabList(issueList)
     }
@@ -391,9 +409,9 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
 
   useEffect(() => {
     if (speechState.speeches != undefined) {
-      setIsLoading(speechState.isLoading)
+      setIsLoading(speechState.isLoading || followMoreState.isLoading)
     }
-  }, [speechState.speeches, speechState.isLoading])
+  }, [speechState.speeches, speechState.isLoading, followMoreState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
@@ -402,24 +420,26 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   return (
     <Box className={className} ref={ref}>
       <ContentBox $show={!showFilter}>
-        <TitleSection
-          title={title}
-          subtitle={subtitle}
-          tabs={tabList}
-          showTabAvatar={false}
-          link={`${InternalRoutes.Legislator}/${slug}`}
-          onSelectTab={setSelectedTab}
-          onClose={onClose}
-          onOpenFilterModal={() => setShowFilter(true)}
-        />
+        <div ref={topRef}>
+          <TitleSection
+            title={title}
+            subtitle={subtitle}
+            tabs={tabList}
+            showTabAvatar={false}
+            link={`${InternalRoutes.Legislator}/${slug}`}
+            onSelectTab={setSelectedTab}
+            onClose={onClose}
+            onOpenFilterModal={() => setShowFilter(true)}
+          />
+        </div>
         {showNote ? (
-          <Body>
+          <Body $topBoxHeight={topRef.current?.offsetHeight || 0}>
             <Note text={note} />
           </Body>
         ) : isLoading ? (
           <Loader />
         ) : (
-          <Body>
+          <Body $topBoxHeight={topRef.current?.offsetHeight || 0}>
             <SummarySection>
               {summaryGroupByYear.map(
                 (props: CardsOfTheYearProps, index: number) => (
@@ -451,7 +471,8 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
       {showFilter ? (
         <FilterBox $show={showFilter}>
           <FilterModal
-            title={`${title} 的相關發言篩選`}
+            title={title}
+            link={`${InternalRoutes.Legislator}/${slug}`}
             subtitle={subtitle}
             slug={slug}
             placeholder={'篩選議題'}

@@ -16,6 +16,10 @@ const _ = {
   find,
 }
 
+type ResponseWithHasMore = {
+  data: Legislator[]
+  hasMore: boolean
+}
 type LoadMoreLegislatorAndTopTopics = {
   customLegislatorPool?: Legislator[]
   legislativeMeetingId: number
@@ -28,6 +32,7 @@ type FetchLegislatorAndTopTopicsParams = LoadMoreLegislatorAndTopTopics & {
   constituencies?: string[]
   committeeSlugs?: string[]
 }
+
 const useLegislator = () => {
   const [legislatorPool, setLegislatorPool] = useState<Legislator[]>([])
 
@@ -37,7 +42,7 @@ const useLegislator = () => {
     partyIds,
     constituencies,
     committeeSlugs,
-  }: FetchLegislatorAndTopTopicsParams) => {
+  }: FetchLegislatorAndTopTopicsParams): Promise<ResponseWithHasMore> => {
     const legislatorYuanMembers = await fetchLegislators({
       legislativeMeetingId,
       legislativeMeetingSessionIds,
@@ -56,14 +61,15 @@ const useLegislator = () => {
     )
     setLegislatorPool(legislators)
 
-    const legislatorsWithTop5Topics = await loadMoreLegislatorAndTopTopics({
+    // load legislator data with top 5 topics meta
+    const { data, hasMore } = await loadMoreLegislatorAndTopTopics({
       customLegislatorPool: legislators,
       legislativeMeetingId,
       legislativeMeetingSessionIds,
       take: 10,
       skip: 0,
     })
-    return legislatorsWithTop5Topics
+    return { data, hasMore }
   }
 
   const loadMoreLegislatorAndTopTopics = async ({
@@ -72,7 +78,7 @@ const useLegislator = () => {
     legislativeMeetingSessionIds,
     take = 10,
     skip = 0,
-  }: LoadMoreLegislatorAndTopTopics): Promise<Legislator[]> => {
+  }: LoadMoreLegislatorAndTopTopics): Promise<ResponseWithHasMore> => {
     const pool = customLegislatorPool || legislatorPool
     const legislators = pool.slice(skip, skip + take)
     const top5Topics = await fetchTopNTopicsOfLegislators({
@@ -81,13 +87,18 @@ const useLegislator = () => {
       legislativeMeetingSessionIds,
       take: 5,
     })
-    return legislators.map((legislator) => {
+    const moreLegislators = legislators.map((legislator) => {
       const top5Topic = _.find(top5Topics, ({ id }) => id === legislator.id)
       return {
         ...legislator,
         tags: top5Topic?.topics || [],
       }
     })
+
+    return {
+      data: moreLegislators,
+      hasMore: skip + take < pool.length,
+    }
   }
 
   return { fetchLegislatorAndTopTopics, loadMoreLegislatorAndTopTopics }

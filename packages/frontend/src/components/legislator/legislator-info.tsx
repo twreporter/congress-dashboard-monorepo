@@ -16,6 +16,7 @@ import { IconButton } from '@twreporter/react-components/lib/button'
 import { OpenInNew } from '@twreporter/react-components/lib/icon'
 // styles
 import { H3Gray900, P1Gray800 } from '@/components/legislator/styles'
+import { AvatarCircleCss } from '@/styles/cheetsheet'
 // components
 import PartyTag from '@/components/dashboard/card/party-tag'
 // enums
@@ -71,11 +72,13 @@ const LegislatorImage = styled.img`
     width: 272px;
   `}
   ${mq.tabletOnly`
+    ${AvatarCircleCss}
     width: 164px;
     aspect-ratio: 1/1;
     border-radius: 50%;
   `}
   ${mq.mobileOnly`
+    ${AvatarCircleCss}
     width: 144px;
     aspect-ratio: 1/1;
     border-radius: 50%;

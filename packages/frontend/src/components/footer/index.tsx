@@ -1,12 +1,11 @@
 'use client'
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
 import Divider from '@twreporter/react-components/lib/divider'
-import fundraisingId from '@twreporter/core/lib/constants/fundraising'
 import {
   TabletAndBelow,
   DesktopAndAbove,
@@ -20,6 +19,11 @@ import FooterLink, { TextSize } from '@/components/footer/link'
 import { InternalRoutes, ExternalRoutes } from '@/constants/routes'
 // utils
 import { openFeedback } from '@/utils/feedback'
+// fetchers
+import {
+  useLegislativeMeeting,
+  useLegislativeMeetingSession,
+} from '@/fetchers/legislative-meeting'
 
 const StyledFooter = styled.footer`
   width: 100%;
@@ -177,6 +181,49 @@ const Footer: React.FC = () => {
       </React.Fragment>
     )
   }
+
+  const {
+    legislativeMeetings,
+    isLoading: meetingsLoading,
+    error: meetingsError,
+  } = useLegislativeMeeting()
+
+  const latestLegislativeMeetingTerm = useMemo(() => {
+    return legislativeMeetings?.[0]?.term
+  }, [legislativeMeetings])
+
+  const {
+    legislativeMeetingSessions,
+    isLoading: sessionsLoading,
+    error: sessionsError,
+  } = useLegislativeMeetingSession(String(latestLegislativeMeetingTerm))
+
+  const latestLegislativeMeetingSessionTerm = useMemo(() => {
+    if (!legislativeMeetingSessions?.length) return null
+    return legislativeMeetingSessions[legislativeMeetingSessions.length - 1]
+      ?.term
+  }, [legislativeMeetingSessions])
+
+  const displayText = useMemo(() => {
+    if (meetingsLoading || sessionsLoading) {
+      return '資料載入中...'
+    }
+    if (meetingsError || sessionsError) {
+      return '資料載入失敗'
+    }
+    if (!latestLegislativeMeetingTerm || !latestLegislativeMeetingSessionTerm) {
+      return '資料更新資訊不可用'
+    }
+    return `本網站資料更新至第${latestLegislativeMeetingTerm}屆第${latestLegislativeMeetingSessionTerm}會期`
+  }, [
+    meetingsLoading,
+    sessionsLoading,
+    meetingsError,
+    sessionsError,
+    latestLegislativeMeetingTerm,
+    latestLegislativeMeetingSessionTerm,
+  ])
+
   return (
     <StyledFooter className="hidden-print">
       <FooterSection>
@@ -213,7 +260,7 @@ const Footer: React.FC = () => {
         </DividerWrapper>
         <BottomContainer>
           <BottomSection>
-            <P3Gray600 text={fundraisingId} />
+            <P3Gray600 text={displayText} />
             <DesktopAndAboveWithFlex>
               <P3Gray600 text="｜" />
               <BottomLinks releaseBranch={releaseBranch} />

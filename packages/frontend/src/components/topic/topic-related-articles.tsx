@@ -5,7 +5,8 @@ import styled from 'styled-components'
 // fetcher
 import useTwreporterArticle from '@/fetchers/twreporter-article'
 // component
-import { Triangle, Gap, ImageWithSkeleton } from '@/components/skeleton'
+import { Triangle, Gap } from '@/components/skeleton'
+import ImageWithSkeleton from '@/components/image-with-skeleton'
 import { H4Title, P3Gray600, H6Gray800Title } from '@/components/topic/styles'
 // util
 import { formatDate } from '@/utils/date-formatters'
