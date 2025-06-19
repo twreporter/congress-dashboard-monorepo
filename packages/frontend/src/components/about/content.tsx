@@ -11,8 +11,7 @@ import { FontSize, FontSizeOffset } from '@/components/speech'
 import { Content } from '@/components/about'
 
 const Container = styled.section<{ $fontSizeOffset: number }>`
-  display: flex;
-  flex-direction: column;
+  display: block;
   color: ${colorGrayscale.gray800};
   text-align: justify;
   font-size: ${(props) => props.$fontSizeOffset + 18}px;

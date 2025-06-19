@@ -1,10 +1,14 @@
 import styled from 'styled-components'
+import Link from 'next/link'
 // fonts
 import { notoSerif } from '@/utils/font'
 // @twreporter
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import { H3 } from '@twreporter/react-components/lib/text/headline'
+import {
+  colorGrayscale,
+  colorSupportive,
+} from '@twreporter/core/lib/constants/color'
 import { IconButton } from '@twreporter/react-components/lib/button'
+import mq from '@twreporter/core/lib/utils/media-query'
 
 export const FlexColumn = styled.div`
   display: flex;
@@ -37,7 +41,22 @@ export const Button = styled(IconButton)`
   flex-shrink: 0;
 `
 
-export const Title = styled(H3)`
+export const Title = styled.span`
+  line-height: 150%;
+  font-size: 28px;
+  font-weight: 700;
+  ${mq.tabletAndBelow`
+    font-size: 22px;
+  `}
+`
+
+export const TitleLink = styled(Link)`
+  text-decoration: none;
+  color: ${colorSupportive.heavy};
+  font-family: ${notoSerif.style.fontFamily} !important;
+`
+
+export const TitleText = styled.span`
   color: ${colorGrayscale.gray900};
   font-family: ${notoSerif.style.fontFamily} !important;
 `

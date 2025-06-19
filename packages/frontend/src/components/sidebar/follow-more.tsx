@@ -5,6 +5,7 @@ import { InternalRoutes } from '@/constants/routes'
 // component
 import PartyTag from '@/components/dashboard/card/party-tag'
 import { CircleRaw } from '@/components/skeleton'
+import ImageWithSkeleton from '@/components/image-with-skeleton'
 // style
 import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
 // @twreporter
@@ -25,12 +26,6 @@ const LegislatorItem = styled.div`
 `
 const AvatarContainer = styled.div`
   position: relative;
-`
-const Avatar = styled.img`
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  object-fit: cover;
 `
 const Party = styled(PartyTag)`
   &,
@@ -72,7 +67,12 @@ export const Legislator: React.FC<LegislatorProps> = ({
     <LegislatorItem onClick={gotoLegislator}>
       <AvatarContainer>
         {avatar ? (
-          <Avatar src={avatar} />
+          <ImageWithSkeleton
+            src={avatar}
+            width={56}
+            height={56}
+            alt={`legislator-avatar-${slug}`}
+          />
         ) : (
           <CircleRaw width={56} height={56} />
         )}

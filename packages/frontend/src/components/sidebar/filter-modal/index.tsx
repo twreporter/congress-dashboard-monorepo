@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useMemo, useRef } from 'react'
+import React, { useEffect, useState, useMemo, useRef, MouseEvent } from 'react'
 import styled from 'styled-components'
 import useSWR from 'swr'
 // util
@@ -16,6 +16,8 @@ import {
   FlexRow,
   ButtonGroup,
   Title,
+  TitleLink,
+  TitleText,
   Button,
 } from '@/components/sidebar/style'
 // @twreporter
@@ -107,15 +109,20 @@ const TopBox = styled(FlexColumn)<{ $show: boolean }>`
 const TitleBox = styled(FlexRow)`
   align-items: center;
 `
+const bottomHeight = 92 // confirm box height
 const ContentBox = styled.div<{
   $topBoxHeight: number
   $isSearchMode: boolean
 }>`
-  transition: transform 0.4s ease-in-out;
+  overflow-y: scroll;
+  height: 100%;
+  max-height: calc(100% - ${(props) => props.$topBoxHeight + bottomHeight}px);
+  transition: all 0.4s ease-in-out;
   ${(props) =>
     props.$isSearchMode
       ? `
     transform: translateY(-${props.$topBoxHeight}px);
+    max-height: calc(100% - ${bottomHeight}px);
   `
       : `
     transform: translateY(0);  
@@ -127,6 +134,7 @@ const HorizontalLine = styled.div<{ $show: boolean }>`
 `
 const SearchBox = styled(FlexRow)<{ $isSearchMode: boolean }>`
   padding: 24px 24px 0 24px;
+  background-color: ${colorGrayscale.white};
 
   ${(props) =>
     props.$isSearchMode
@@ -146,7 +154,6 @@ const SearchBox = styled(FlexRow)<{ $isSearchMode: boolean }>`
 `
 const SelectBox = styled(FlexColumn)`
   padding: 24px;
-  overflow-y: scroll;
 
   ${HorizontalLine} {
     margin: 24px 0;
@@ -166,8 +173,8 @@ const TagBox = styled.div`
 const Text = styled(P2)`
   color: ${colorGrayscale.gray800};
 `
-const ConfirmBox = styled.div`
-  position: sticky;
+const ConfirmBox = styled.div<{ $isLoading: boolean }>`
+  position: ${(props) => (props.$isLoading ? 'fixed' : 'sticky')};
   bottom: 0;
   z-index: 1;
   width: 100%;
@@ -211,6 +218,7 @@ const SnackBarContainer = styled.div<{ $showSnackBar?: boolean }>`
 type FilterModalProps = {
   slug: string
   title: string
+  link?: string
   subtitle?: string
   initialOption?: FilterOption[]
   placeholder?: string
@@ -231,6 +239,7 @@ const filterByKeyword = (
 }
 const FilterModal: React.FC<FilterModalProps> = ({
   title,
+  link,
   slug,
   subtitle,
   initialOption = [],
@@ -268,10 +277,6 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const optionsForShow = useMemo<FilterOption[]>(
     () => (isSearchMode ? filterByKeyword(options, keyword) : options),
     [options, keyword, isSearchMode]
-  )
-  const topBoxHeight = useMemo(
-    () => (topBoxRef.current ? topBoxRef.current.offsetHeight : 0),
-    [topBoxRef.current]
   )
 
   const { toastr, showSnackBar, snackBarText } = useSnackBar()
@@ -391,7 +396,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
       setOptions(updatedOptions)
     }
   }
-  const confirmSelect = () => {
+  const confirmSelect = (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
     onConfirmSelection(selectedOptions)
     onClose()
   }
@@ -400,7 +408,16 @@ const FilterModal: React.FC<FilterModalProps> = ({
     <>
       <TopBox $show={!isSearchMode} ref={topBoxRef}>
         <TitleBox>
-          <Title text={title} />
+          {link ? (
+            <Title>
+              <TitleLink href={link}>{title}</TitleLink>
+              <TitleText>{' 的相關發言篩選'}</TitleText>
+            </Title>
+          ) : (
+            <Title>
+              <TitleText>{title}</TitleText>
+            </Title>
+          )}
           <ButtonGroup>
             <Button
               iconComponent={<Cross releaseBranch={releaseBranch} />}
@@ -417,7 +434,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
       ) : isShowError ? (
         <Error />
       ) : (
-        <ContentBox $topBoxHeight={topBoxHeight} $isSearchMode={isSearchMode}>
+        <ContentBox
+          $topBoxHeight={topBoxRef.current?.offsetHeight || 0}
+          $isSearchMode={isSearchMode}
+        >
           <SearchBox $isSearchMode={isSearchMode}>
             <Button
               iconComponent={
@@ -479,7 +499,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
           </SelectBox>
         </ContentBox>
       )}
-      <ConfirmBox>
+      <ConfirmBox $isLoading={isShowLoading}>
         <ConfirmBoxRelative>
           <SnackBarContainer $showSnackBar={showSnackBar}>
             <SnackBar text={snackBarText} />
