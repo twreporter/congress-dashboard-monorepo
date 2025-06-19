@@ -1094,6 +1094,7 @@ enum ListNameOutputEnum {
   Speech
   CommitteeMember
   RelatedTopics
+  RelatedArticles
 }
 
 input ImportRecordWhereUniqueInput {
@@ -1128,6 +1129,7 @@ enum ListNameEnum {
   Speech
   CommitteeMember
   RelatedTopics
+  RelatedArticles
 }
 
 input ImportRecordOrderByInput {
