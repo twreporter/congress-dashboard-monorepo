@@ -632,6 +632,8 @@ type LegislativeYuanMember {
   labelForCMS: String
   party: Party
   legislativeMeeting: LegislativeMeeting
+  speeches(where: SpeechWhereInput! = {}, orderBy: [SpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SpeechWhereUniqueInput): [Speech!]
+  speechesCount(where: SpeechWhereInput! = {}): Int
   sessionAndCommittee(where: CommitteeMemberWhereInput! = {}, orderBy: [CommitteeMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeMemberWhereUniqueInput): [CommitteeMember!]
   sessionAndCommitteeCount(where: CommitteeMemberWhereInput! = {}): Int
   type: String
@@ -657,6 +659,7 @@ input LegislativeYuanMemberWhereInput {
   labelForCMS: StringFilter
   party: PartyWhereInput
   legislativeMeeting: LegislativeMeetingWhereInput
+  speeches: SpeechManyRelationFilter
   sessionAndCommittee: CommitteeMemberManyRelationFilter
   type: StringFilter
   constituency: StringNullableFilter
@@ -706,6 +709,7 @@ input LegislativeYuanMemberUpdateInput {
   labelForCMS: String
   party: PartyRelateToOneForUpdateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  speeches: SpeechRelateToManyForUpdateInput
   sessionAndCommittee: CommitteeMemberRelateToManyForUpdateInput
   type: String
   constituency: String
@@ -740,6 +744,7 @@ input LegislativeYuanMemberCreateInput {
   labelForCMS: String
   party: PartyRelateToOneForCreateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  speeches: SpeechRelateToManyForCreateInput
   sessionAndCommittee: CommitteeMemberRelateToManyForCreateInput
   type: String
   constituency: String
