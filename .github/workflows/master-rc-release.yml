@@ -33,14 +33,20 @@ jobs:
       - name: Build Shared Package
         run: yarn build:shared
 
+      - name: Extract version
+        id: extract_version
+        run: |
+          VERSION=$(node -p "require('./packages/frontend/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
       - name: Create RC Release Pull Request or Publish
         id: changesets
         uses: changesets/action@v1
         with:
           version: yarn changeset:version
           publish: yarn changeset:publish --tag rc
-          title: "chore: rc release"
-          commit: "chore: rc release"
+          title: "chore: rc release v${{ steps.extract_version.outputs.version }}"
+          commit: node scripts/generate-commit-message.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
