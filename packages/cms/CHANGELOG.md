@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.1.0-beta.0, 2025-06-24
+
+### Notable Changes
+
+- feat
+  - cms: custom GQL schema and resovler for querying what Algolai search needs
+
+### Commits
+- [[`752473ee0b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/752473ee0b)] - **refactor(cms)**: update extend-graphql-schemas/recent-speech-topic-stats.ts. Add orderBy (nickhsine)
+- [[`921bb0a106`](https://github.com/twreporter/congress-dashboard-monorepo/commit/921bb0a106)] - **chore(cms)**: add prisma migration script (nickhsine)
+- [[`f1a4c0cb7e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f1a4c0cb7e)] - **chore(cms)**: update schema.prisma (nickhsine)
+- [[`c8b0917ab4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c8b0917ab4)] - **refactor(cms)**: update Speech list. Index updatedAt field (nickhsine)
+- [[`7dc299687e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7dc299687e)] - **chore(cms)**: update schema.graphql (nickhsine)
+- [[`5fdb3f3f01`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5fdb3f3f01)] - **refactor(cms)**: update types/context.ts (nickhsine)
+- [[`9725a9ec97`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9725a9ec97)] - **refactor(cms)**: address code review comment. Filter speeches by `updatedAt`, rather than `date` (nickhsine)
+- [[`867153e2a7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/867153e2a7)] - **refactor(cms)**: address code comments (nickhsine)
+- [[`4e9b98805b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4e9b98805b)] - **chore(cms)**: update schema.graphql (nickhsine)
+- [[`f251791337`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f251791337)] - **refactor(cms)**: update recent-speech-topic-stats.ts. Adjust query comment (nickhsine)
+- [[`b74f72486d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b74f72486d)] - **refactor(cms)**: replace type `Context` by type `TypedKeystoneContext` (nickhsine)
+- [[`48fa3a46d0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/48fa3a46d0)] - **refactor(cms)**: move `topNTopicsOfLegislators` typedefs and resolver (nickhsine)
+- [[`281bf18c9b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/281bf18c9b)] - **refactor(cms)**: move `topicsOrderBySpeechCount` typedefs and resolver (nickhsine)
+
 ## 1.0.0, 2025-06-18
 
 ### Notable Changes
