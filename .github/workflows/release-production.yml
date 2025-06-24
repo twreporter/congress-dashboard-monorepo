@@ -33,12 +33,18 @@ jobs:
       - name: Build Shared Package
         run: yarn build:shared
 
-      - name: Exit pre-release mode
+      - name: Check and Exit pre-release mode
         run: |
-          yarn changeset pre exit
-          git add .
-          git commit -m "chore: exit pre-release mode" || echo "No changes to commit"
-          git push origin release
+          # Check if in pre-release mode
+          if [ -f ".changeset/pre.json" ]; then
+            echo "Exiting pre-release mode..."
+            yarn changeset pre exit
+            git add .
+            git commit -m "chore: exit pre-release mode" || echo "No changes to commit"
+            git push origin release
+          else
+            echo "Not in pre-release mode, skipping..."
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -51,6 +57,24 @@ jobs:
           title: "chore: production release"
           commit: "chore: production release"
           createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update yarn.lock after version changes
+        if: steps.changesets.outputs.hasChangesets == 'true'
+        run: |
+          # Update yarn.lock
+          yarn install --mode=update-lockfile
+          
+          # Check if yarn.lock was updated
+          if ! git diff --quiet yarn.lock; then
+            echo "yarn.lock updated, committing changes..."
+            git add yarn.lock
+            git commit -m "chore: update yarn.lock after version bump"
+            git push origin release
+          else
+            echo "No yarn.lock changes detected"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
