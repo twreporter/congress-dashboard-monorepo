@@ -632,6 +632,8 @@ type LegislativeYuanMember {
   labelForCMS: String
   party: Party
   legislativeMeeting: LegislativeMeeting
+  speeches(where: SpeechWhereInput! = {}, orderBy: [SpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SpeechWhereUniqueInput): [Speech!]
+  speechesCount(where: SpeechWhereInput! = {}): Int
   sessionAndCommittee(where: CommitteeMemberWhereInput! = {}, orderBy: [CommitteeMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeMemberWhereUniqueInput): [CommitteeMember!]
   sessionAndCommitteeCount(where: CommitteeMemberWhereInput! = {}): Int
   type: String
@@ -657,6 +659,7 @@ input LegislativeYuanMemberWhereInput {
   labelForCMS: StringFilter
   party: PartyWhereInput
   legislativeMeeting: LegislativeMeetingWhereInput
+  speeches: SpeechManyRelationFilter
   sessionAndCommittee: CommitteeMemberManyRelationFilter
   type: StringFilter
   constituency: StringNullableFilter
@@ -706,6 +709,7 @@ input LegislativeYuanMemberUpdateInput {
   labelForCMS: String
   party: PartyRelateToOneForUpdateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  speeches: SpeechRelateToManyForUpdateInput
   sessionAndCommittee: CommitteeMemberRelateToManyForUpdateInput
   type: String
   constituency: String
@@ -740,6 +744,7 @@ input LegislativeYuanMemberCreateInput {
   labelForCMS: String
   party: PartyRelateToOneForCreateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  speeches: SpeechRelateToManyForCreateInput
   sessionAndCommittee: CommitteeMemberRelateToManyForCreateInput
   type: String
   constituency: String
@@ -1316,11 +1321,24 @@ type Query {
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 
-  """ Get topics order by speech count desc """
-  topicsOrderBySpeechCount(meetingId: Int!, sessionIds: [Int] = [], partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [TopicWithSpeechCountAndLegislators]
+  """
+  Goal:
+  Retrieve topics with speeches updated after the specified `updatedAfter` date,
+  and count the number of member speeches per topic.
+  
+  Returns:
+  - member speech counts grouped by topic
+  - a flat list of speeches whose `updatedAt` is after the `updatedAfter` date
+  
+  Speeches are derived from topics.
+  """
+  recentSpeechTopicStats(take: Int = 50, skip: Int = 0, cursor: ID, updatedAfter: CalendarDay, debug: Boolean = false): RecentSpeechTopicStatsResult!
 
-  """ Get top N topic of a legislator order by speech cound desc """
+  """Get top N topic of a legislator order by speech cound desc"""
   topNTopicsOfLegislators(legislatorIds: [Int!]!, meetingId: Int!, sessionIds: [Int] = [], take: Int = 10): [LegislatorWIthTopTopics]
+
+  """Get topics order by speech count desc"""
+  topicsOrderBySpeechCount(meetingId: Int!, sessionIds: [Int] = [], partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [TopicWithSpeechCountAndLegislators]
 }
 
 union AuthenticatedItem = SystemUser
@@ -1460,7 +1478,56 @@ enum KeystoneAdminUISortDirection {
   DESC
 }
 
-""" custom type for topicsOrderBySpeechCount """
+type MemberSpeechCount {
+  memberId: ID!
+  name: String!
+  count: Int!
+}
+
+type TopicInfo {
+  id: ID!
+  title: String!
+  slug: String!
+  lastSpeechAt: String!
+  meetingTerm: Int
+  sessionTerm: Int
+}
+
+type MemberSpeechCountByTopic {
+  topicInfo: TopicInfo!
+  distinctMemberCount: Int!
+  members: [MemberSpeechCount!]!
+}
+
+type SpeechSummary {
+  id: ID!
+  title: String!
+  meetingTerm: Int
+  sessionTerm: Int
+  date: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type RecentSpeechTopicStatsResult {
+  topics: [MemberSpeechCountByTopic!]!
+  speeches: [SpeechSummary!]!
+}
+
+"""custom type for topNTopicsOfLegislators"""
+type TopicWithSpeechCount {
+  title: String!
+  slug: String!
+  name: String!
+  count: Int!
+}
+
+type LegislatorWIthTopTopics {
+  id: Int!
+  topics: [TopicWithSpeechCount]
+}
+
+"""custom type for topicsOrderBySpeechCount"""
 type ImageFileWithUrlOnly {
   url: String!
 }
@@ -1485,17 +1552,4 @@ type TopicWithSpeechCountAndLegislators {
   speechCount: Int!
   legislatorCount: Int!
   legislators: [LegislatorForTopic]
-}
-
-""" custom type for topNTopicsOfLegislators """
-type TopicWithSpeechCount {
-  title: String!
-  slug: String!
-  name: String!
-  count: Int!
-}
-
-type LegislatorWIthTopTopics {
-  id: Int!
-  topics: [TopicWithSpeechCount]
 }
