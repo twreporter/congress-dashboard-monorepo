@@ -1,16 +1,24 @@
 # Changelog
 
+## 1.1.0-rc.1
+
+### Patch Changes
+
+- [#186](https://github.com/twreporter/congress-dashboard-monorepo/pull/186) [`af9c552`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af9c552afc249fc288dd879a3945f8bd18e23d93) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add import twreporter related articles feature
+
 ## 1.1.0-rc.0
 
 ### Notable Changes
 
 - feat
+
   - cms: custom GQL schema and resovler for querying what Algolai search needs
 
 - refactor
   - two-sided relationship between speech and legislativeYuanMember
 
 ### Commits
+
 - [[`752473ee0b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/752473ee0b)] - **refactor(cms)**: update extend-graphql-schemas/recent-speech-topic-stats.ts. Add orderBy (nickhsine)
 - [[`921bb0a106`](https://github.com/twreporter/congress-dashboard-monorepo/commit/921bb0a106)] - **chore(cms)**: add prisma migration script (nickhsine)
 - [[`f1a4c0cb7e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f1a4c0cb7e)] - **chore(cms)**: update schema.prisma (nickhsine)
