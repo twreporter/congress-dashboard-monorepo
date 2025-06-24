@@ -44,7 +44,7 @@ export const BodyErrorState: FC = memo(() => (
     </BodyErrorTextBox>
   </BodyErrorBox>
 ))
-BodyErrorState.displayName = 'sidabar-body-error-state'
+BodyErrorState.displayName = 'sidebar-body-error-state'
 
 // follow more error component
 const FollowMoreErrorBox = styled.div`

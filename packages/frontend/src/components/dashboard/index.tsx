@@ -330,7 +330,6 @@ const Dashboard: React.FC<DashboardProps> = ({
     try {
       const loadMoreFunc =
         selectedType === Option.Issue ? loadMoreTopics : loadMoreHuman
-      throw 'test failed'
       await loadMoreFunc()
     } catch (err) {
       console.error(`load more failed. err: ${err}`)
