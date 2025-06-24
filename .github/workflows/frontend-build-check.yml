@@ -39,7 +39,7 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-latest
-    needs: [filter. changeset]
+    needs: [filter, changeset]
     if: needs.filter.outputs.frontend == 'true' && needs.changeset.outputs.is_changeset == 'false'
 
     steps:
