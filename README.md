@@ -84,12 +84,12 @@ $ git push origin feature/my-feature
 
 Our CI/CD pipeline automatically handles versioning and publishing based on the target branch:
 
-| Branch | Action | Version Format | NPM Tag | Description |
-|--------|--------|----------------|---------|-------------|
-| `dev` | Auto-publish | `1.2.3-beta.0` | `beta` | Development releases |
-| `master` | Auto-publish | `1.2.3-rc.0` | `rc` | Release candidate |
-| `staging` | Sync & publish | `1.2.3-rc.0` | `rc` | Staging deployment (no version bump) |
-| `release` | Auto-publish | `1.2.3` | `latest` | Production release |
+| Branch      | Action          | Version Format     | NPM Tag | Description                  |
+|-------------|-----------------|--------------------|---------|------------------------------|
+| `dev`       | Auto-publish    | `1.2.3-beta.0`     | `beta`  | Development releases         |
+| `master`    | Auto-publish    | `1.2.3-rc.0`       | `rc`    | Release candidate            |
+| `staging`   | Sync & publish  | `1.2.3-rc.0`       | `rc`    | Staging deployment (no bump) |
+| `release`   | Auto-publish    | `1.2.3`            | `latest`| Production release           |
 
 ##### Changeset Commands
 
@@ -161,37 +161,37 @@ We use a combination of GCP `cloud run` for hosting and GitHub Actions for autom
 
 ### GCP Cloud Run Deployment
 
-To add new service in this project, please add following configuration:
+To add new service in this project, please add the following configuration:
 
-1. add `Dockerfile` under your sub-package folder
-  a. `cloudbuild.yaml` would execute the `docker build` command for target package 
-2. configure your service on `cloud run`
-3. add trigger to `cloud build`
-  a. please use `congress-dashboard-cloud-build` service account
-  b. don't forget to add `substitutions`
-  c. don't forget to add `packages/<sub-package name>/**` to included files filter
-4. add your service in the `load-balancer`
-5. configure DNS setting on `cloudflare`
+1. Add `Dockerfile` under your sub-package folder.
+   - `cloudbuild.yaml` will execute the `docker build` command for the target package.
+2. Configure your service on `cloud run`.
+3. Add a trigger to `cloud build`.
+   - Use the `congress-dashboard-cloud-build` service account.
+   - Add `substitutions`.
+   - Include `packages/<sub-package name>/**` in the files filter.
+4. Add your service to the `load-balancer`.
+5. Configure DNS settings on `cloudflare`.
 
 ### Environment Variables Required
 
 For the automated workflows to work, make sure these secrets are configured in GitHub:
 
-- `NPM_TOKEN`: Token for publishing to npm registry
-- `GITHUB_TOKEN`: Automatically provided by GitHub Actions
+- `NPM_TOKEN`: Token for publishing to npm registry.
+- `GITHUB_TOKEN`: Automatically provided by GitHub Actions.
 
 ## Troubleshooting
 
 ### Common Changeset Issues
 
-1. **No changeset found warning**: Create a changeset with `yarn changeset`
-2. **Version conflicts**: Check `yarn changeset:status` and resolve manually
-3. **Publishing fails**: Verify `NPM_TOKEN` is set correctly in GitHub secrets
-4. **Workflow not triggering**: Check branch names match exactly (`dev`, `master`, `staging`, `release`)
+1. **No changeset found warning**: Create a changeset with `yarn changeset`.
+2. **Version conflicts**: Check `yarn changeset:status` and resolve manually.
+3. **Publishing fails**: Verify `NPM_TOKEN` is set correctly in GitHub secrets.
+4. **Workflow not triggering**: Check branch names match exactly (`dev`, `master`, `staging`, `release`).
 
 ### Debugging Workflows
 
-- Check workflow runs in GitHub Actions tab
-- Verify secrets are configured
-- Ensure changesets are committed with your changes
-- Check package.json `publishConfig` settings
+- Check workflow runs in the GitHub Actions tab.
+- Verify secrets are configured.
+- Ensure changesets are committed with your changes.
+- Check `package.json` `publishConfig` settings.

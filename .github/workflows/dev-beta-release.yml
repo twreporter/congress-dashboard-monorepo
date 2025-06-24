@@ -33,11 +33,16 @@ jobs:
       - name: Build Shared Package
         run: yarn build:shared
 
+      - name: Enter Pre-Release Mode
+        run: yarn changeset:pre beta
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Beta Release Pull Request
         id: changesets
         uses: changesets/action@v1
         with:
-          version: yarn changeset:pre beta
+          version: yarn changeset:version
           publish: yarn changeset:publish
           title: "chore: beta release"
           commit: "chore: beta release"
@@ -48,6 +53,11 @@ jobs:
         run: yarn publish:shared
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Wait for required status checks
+        run: gh pr checks ${{ steps.changesets.outputs.pullRequestNumber }} --watch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Auto-merge Changeset PR
         if: steps.changesets.outputs.pullRequestNumber != ''

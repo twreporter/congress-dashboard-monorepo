@@ -54,6 +54,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Wait for required status checks
+        run: gh pr checks ${{ steps.changesets.outputs.pullRequestNumber }} --watch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto-merge Changeset PR
+        if: steps.changesets.outputs.pullRequestNumber != ''
+        run: |
+          gh pr merge ${{ steps.changesets.outputs.pullRequestNumber }} --squash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish Shared package to npm
         run: yarn publish:shared
         env:
@@ -62,19 +74,22 @@ jobs:
       - name: Sync master and staging with release
         if: steps.changesets.outputs.published == 'true'
         run: |
-          # Get current version from shared package
-          RELEASE_VERSION=$(node -p "require('./packages/shared/package.json').version")
-          
           # Update master branch
           git checkout master
           git pull origin master
-          git merge release --no-ff -m "chore: sync master with release v${RELEASE_VERSION}"
+          git merge release --no-ff -m "chore: sync release"
           git push origin master
           
           # Update staging branch
           git checkout staging
           git pull origin staging
-          git merge release --no-ff -m "chore: sync staging with release v${RELEASE_VERSION}"
+          git merge release --no-ff -m "chore: sync release"
           git push origin staging
+
+          # Update dev branch
+          git checkout dev
+          git pull origin dev
+          git merge release --no-ff -m "chore: sync release"
+          git push origin dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
