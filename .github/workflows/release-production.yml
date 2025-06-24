@@ -33,6 +33,15 @@ jobs:
       - name: Build Shared Package
         run: yarn build:shared
 
+      - name: Exit pre-release mode
+        run: |
+          yarn changeset pre exit
+          git add .
+          git commit -m "chore: exit pre-release mode" || echo "No changes to commit"
+          git push origin release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Production Release
         id: changesets
         uses: changesets/action@v1
