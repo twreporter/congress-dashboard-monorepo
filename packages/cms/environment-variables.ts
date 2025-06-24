@@ -5,6 +5,7 @@ const {
   IMAGES_BASE_URL,
   IMAGES_STORAGE_PATH,
   RELEASE_BRANCH,
+  TWREPORTER_API_URL,
 } = process.env
 
 const environmentVariables = {
@@ -21,6 +22,7 @@ const environmentVariables = {
     storagePath: IMAGES_STORAGE_PATH || 'public/images',
   },
   releaseBranch: RELEASE_BRANCH || 'master',
+  twreporterApiUrl: TWREPORTER_API_URL || 'http://localhost:8080',
 }
 
 export default environmentVariables
