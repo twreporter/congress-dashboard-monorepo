@@ -33,14 +33,24 @@ jobs:
       - name: Build Shared Package
         run: yarn build:shared
 
+      - name: Enter Pre-Release Mode
+        run: yarn changeset:pre rc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create RC Release Pull Request
         id: changesets
         uses: changesets/action@v1
         with:
-          version: yarn changeset:pre rc
+          version: yarn changeset:version
           publish: yarn changeset:publish
           title: "chore: rc release"
           commit: "chore: rc release"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Wait for required status checks
+        run: gh pr checks ${{ steps.changesets.outputs.pullRequestNumber }} --watch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
