@@ -1,12 +1,20 @@
 # Changelog
 
+## 1.1.0-rc.1
+
+### Patch Changes
+
+- [#185](https://github.com/twreporter/congress-dashboard-monorepo/pull/185) [`7dae6b1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7dae6b138cfa3ab0d7d031bd6fa3361142c5077d) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - This PR adds error state for all swr fetching
+
 ## 1.1.0-rc.0
 
 ### Notable Changes
+
 - feat
   - Algolia Instant Search
 
 ### Commits
+
 - [[`8137c511df`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8137c511df)] - **refactor(frontend)**: refactor type convention. Add @/types/index.ts (nickhsine)
 - [[`5b226a3f05`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5b226a3f05)] - **fix(frontend)**: fix body scroll lock failure (nickhsine)
 - [[`203e67cddb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/203e67cddb)] - **refactor(frontend)**: use \<AlgoliaInstantSearch> in \<HamburgerMenu> (nickhsine)
@@ -21,7 +29,7 @@
 - [[`b7914d39e3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7914d39e3)] - **refactor(frontend)**: clear the search query by `clear` API (nickhsine)
 - [[`ccfb771e79`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ccfb771e79)] - **refactor(frontend)**: layoutVariants -> LayoutVariants. Address code review (nickhsine)
 - [[`3edfaa9ac8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3edfaa9ac8)] - **refactor(frontend)**: update search. Reset query if click outside (nickhsine)
-- [[`91ebcbc996`](https://github.com/twreporter/congress-dashboard-monorepo/commit/91ebcbc996)] - **refactor(frontend)**: update header search. Auto focus  when search bar is open (nickhsine)
+- [[`91ebcbc996`](https://github.com/twreporter/congress-dashboard-monorepo/commit/91ebcbc996)] - **refactor(frontend)**: update header search. Auto focus when search bar is open (nickhsine)
 - [[`cf476a62aa`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cf476a62aa)] - **refactor(frontend)**: update header. Replace SearchBar by AlgoliaInstantSearch (nickhsine)
 - [[`680969469d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/680969469d)] - **style(frontend)**: update width of search bar (nickhsine)
 - [[`87fa14ddc0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/87fa14ddc0)] - **refactor(frontend)**: update search icons (nickhsine)
