@@ -7,6 +7,9 @@
 - feat
   - cms: custom GQL schema and resovler for querying what Algolai search needs
 
+- refactor
+  - two-sided relationship between speech and legislativeYuanMember
+
 ### Commits
 - [[`752473ee0b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/752473ee0b)] - **refactor(cms)**: update extend-graphql-schemas/recent-speech-topic-stats.ts. Add orderBy (nickhsine)
 - [[`921bb0a106`](https://github.com/twreporter/congress-dashboard-monorepo/commit/921bb0a106)] - **chore(cms)**: add prisma migration script (nickhsine)
@@ -21,6 +24,12 @@
 - [[`b74f72486d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b74f72486d)] - **refactor(cms)**: replace type `Context` by type `TypedKeystoneContext` (nickhsine)
 - [[`48fa3a46d0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/48fa3a46d0)] - **refactor(cms)**: move `topNTopicsOfLegislators` typedefs and resolver (nickhsine)
 - [[`281bf18c9b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/281bf18c9b)] - **refactor(cms)**: move `topicsOrderBySpeechCount` typedefs and resolver (nickhsine)
+- [[`8ffea6ebb6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8ffea6ebb6)] - **feat(cms)**: add custom GQL typedef and resolver for query `recentSpeechTopicStats` (nickhsine)
+- [[`5bdf7a2d47`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5bdf7a2d47)] - **chore(root)**: update yarn.lock (nickhsine)
+- [[`f0aac824c0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f0aac824c0)] - **chore(cms)**: add dep @twreporter/errors (nickhsine)
+- [[`dcbfb5397c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dcbfb5397c)] - **refactor(cms)**: renamed: extend-graphql-schema.ts -> extend-graphql-schemas/index.ts (nickhsine)
+- [[`c53601e031`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c53601e031)] - **chore(cms)**: update schema.(graphql,prisma) (nickhsine)
+- [[`c1b7ccf432`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c1b7ccf432)] - **refactor(cms)**: two-sided relationship between speech and legislativeYuanMember (nickhsine)
 
 ## 1.0.0, 2025-06-18
 
