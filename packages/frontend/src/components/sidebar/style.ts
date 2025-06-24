@@ -6,7 +6,7 @@ import { notoSerif } from '@/utils/font'
 import {
   colorGrayscale,
   colorSupportive,
-} from '@twreporter/core/lib/constants/color'\
+} from '@twreporter/core/lib/constants/color'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import { IconButton } from '@twreporter/react-components/lib/button'
 import mq from '@twreporter/core/lib/utils/media-query'
