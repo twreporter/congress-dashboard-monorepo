@@ -354,13 +354,22 @@ const validateListSpecificData: Record<
               `第 ${rowNum} 行: 議題 "${slug}" 不存在，請先匯入議題資料`
             )
           }
-          const relatedArticle = await getTwreporterArticle(
-            related_article_slug,
-            env.twreporterApiUrl
-          )
-          if (!relatedArticle) {
+          try {
+            const relatedArticle = await getTwreporterArticle(
+              related_article_slug,
+              env.twreporterApiUrl
+            )
+            if (!relatedArticle) {
+              validationErrors.push(
+                `第 ${rowNum} 行: 相關文章 "${related_article_slug}" 不存在，請確認 slug 是否正確`
+              )
+            }
+          } catch (err) {
+            console.error(
+              `Failed to get twreporter article. slug: ${related_article_slug}, err: ${err}`
+            )
             validationErrors.push(
-              `第 ${rowNum} 行: 相關文章 "${related_article_slug}" 不存在，請確認 slug 是否正確`
+              `第 ${rowNum} 行: 無法 retrieve 相關文章 "${related_article_slug}" ，請確認 slug 是否正確`
             )
           }
         })
@@ -786,7 +795,7 @@ const importHandlers: Record<
     const queries: Promise<any>[] = []
 
     for (const [_title, slug, related_article_slug] of csvData.slice(1)) {
-      const targetTopic = await context.prisma.Topic.findFirst({
+      const targetTopic = await context.prisma.topic.findFirst({
         where: { slug },
         select: { relatedTwreporterArticles: true },
       })
@@ -802,7 +811,7 @@ const importHandlers: Record<
           const newRelatedArticles =
             targetTopic.relatedTwreporterArticles.concat([related_article_slug])
           queries.push(
-            context.prisma.Topic.update({
+            context.prisma.topic.update({
               where: { slug },
               data: {
                 relatedTwreporterArticles: newRelatedArticles,
