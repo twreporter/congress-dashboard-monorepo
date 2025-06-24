@@ -7,7 +7,11 @@
     "@twreporter/congress-dashboard-shared": "0.0.6"
   },
   "changesets": [
+    "all-ears-tell",
+    "clever-cougars-punch",
     "cruel-walls-speak",
+    "fair-clubs-join",
+    "large-apes-cough",
     "legal-news-sort",
     "rich-gifts-help"
   ]
