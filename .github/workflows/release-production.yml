@@ -33,7 +33,7 @@ jobs:
       - name: Build Shared Package
         run: yarn build:shared
 
-      - name: Create Production Release and Publish
+      - name: Create Production Release
         id: changesets
         uses: changesets/action@v1
         with:
@@ -44,6 +44,10 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Shared package to npm
+        run: yarn publish:shared
+        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Sync master and staging with release

@@ -33,21 +33,25 @@ jobs:
       - name: Build Shared Package
         run: yarn build:shared
 
-      - name: Create Beta Release Pull Request or Publish
+      - name: Create Beta Release Pull Request
         id: changesets
         uses: changesets/action@v1
         with:
-          version: yarn changeset:version
-          publish: yarn changeset:publish --tag beta
+          version: yarn changeset:pre beta
+          publish: yarn changeset:publish
           title: "chore: beta release"
           commit: "chore: beta release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish beta Shared package to npm
+        run: yarn publish:shared
+        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Auto-merge Changeset PR
         if: steps.changesets.outputs.pullRequestNumber != ''
         run: |
-          gh pr merge ${{ steps.changesets.outputs.pullRequestNumber }} --auto --squash
+          gh pr merge ${{ steps.changesets.outputs.pullRequestNumber }} --squash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
