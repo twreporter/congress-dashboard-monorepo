@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0-beta.0, 2025-06-24
+## 1.1.0-rc.0
 
 ### Notable Changes
 - feat
@@ -32,16 +32,25 @@
 - [[`5779d322ba`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5779d322ba)] - **feat(frontend)**: (desktop) instant search (nickhsine)
 - [[`4c8f708c37`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4c8f708c37)] - **chore(frontend)**: update package.json. Add search deps (nickhsine)
 
+## 1.0.2-rc.0
+
+### Patch Changes
+
+- [#188](https://github.com/twreporter/congress-dashboard-monorepo/pull/188) [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207) Thanks [@liruchen32](https://github.com/liruchen32)! - test changeset
+
+- Updated dependencies [[`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207)]:
+  - @twreporter/congress-dashboard-shared@0.0.7-rc.0
+
 ## 1.0.1, 2025-06-18 (Current)
 
 ### Notable Changes
 
 - fix
-  - remove quotes from ABOUT\_PAGE\_SLUG and update type in fetchMoreTopics
+  - remove quotes from ABOUT_PAGE_SLUG and update type in fetchMoreTopics
 
 ### Commits
 
-- [[`2583f2acae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2583f2acae)] - **fix(frontend)**: remove quotes from ABOUT\_PAGE\_SLUG and update type in fetchMoreTopics (Lucien)
+- [[`2583f2acae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2583f2acae)] - **fix(frontend)**: remove quotes from ABOUT_PAGE_SLUG and update type in fetchMoreTopics (Lucien)
 
 ## 1.0.0, 2025-06-18
 
