@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.1-rc.0
+
+### Patch Changes
+
+- [#188](https://github.com/twreporter/congress-dashboard-monorepo/pull/188) [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207) Thanks [@liruchen32](https://github.com/liruchen32)! - test changeset
+
+- Updated dependencies [[`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207)]:
+  - @twreporter/congress-dashboard-shared@0.0.7-rc.0
+
 ## 1.0.0, 2025-06-18
 
 ### Notable Changes
@@ -71,6 +80,7 @@
     - access-control
     - system user access
   - README & add dockerfile for cms
+
 ### Commits
 
 - [[`e2d4e9a8b6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e2d4e9a8b6)] - **fix(cms)**: read public config in runtime (Aylie Chou)
@@ -145,7 +155,7 @@
 - [[`8a28aa3e82`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8a28aa3e82)] - **chore**: change to monorepo (Lucien)
 - [[`35aa65d927`](https://github.com/twreporter/congress-dashboard-monorepo/commit/35aa65d927)] - **feat**: create legislative yuan member list (Lucien)
 - [[`be34c54a59`](https://github.com/twreporter/congress-dashboard-monorepo/commit/be34c54a59)] - **feat**: create legislator list (Lucien)
-- [[`5c7f17169d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5c7f17169d)] - **fix**:  change legislative meeting term to unique (Lucien)
+- [[`5c7f17169d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5c7f17169d)] - **fix**: change legislative meeting term to unique (Lucien)
 - [[`9094eecf72`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9094eecf72)] - **feat**: creat legislative meeting session list (Lucien)
 - [[`af67aca658`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af67aca658)] - **feat**: creat legislative meeting list (Lucien)
 - [[`6c6bd0a42d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6c6bd0a42d)] - **feat**: create init migration file (Lucien)
