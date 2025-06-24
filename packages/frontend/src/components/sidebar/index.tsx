@@ -39,6 +39,10 @@ import {
 } from '@/components/sidebar/follow-more'
 import FilterModal from '@/components/sidebar/filter-modal'
 import { Loader } from '@/components/loader'
+import {
+  BodyErrorState,
+  FollowMoreErrorState,
+} from '@/components/sidebar/error-state'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
@@ -235,9 +239,9 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
             onClose={onClose}
           />
         </div>
-        {isLoading ? (
-          <Loader />
-        ) : (
+        {isLoading ? <Loader /> : null}
+        {speechState.error ? <BodyErrorState /> : null}
+        {!isLoading && !speechState.error ? (
           <Body $topBoxHeight={topRef?.current?.offsetHeight || 0}>
             <SummarySection>
               {summaryGroupByYear.map(
@@ -251,7 +255,9 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
             </SummarySection>
             <FollowMoreSection>
               <FollowMoreTitle text={followMoreTitle} />
-              {issueList.length > 0 ? (
+              {followMoreState.error ? (
+                <FollowMoreErrorState />
+              ) : issueList.length > 0 ? (
                 <FollowMoreTags>
                   {issueList.map((props: IssueProps, index: number) => (
                     <Issue {...props} key={`follow-more-issue-${index}`} />
@@ -260,7 +266,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
               ) : null}
             </FollowMoreSection>
           </Body>
-        )}
+        ) : null}
       </ContentBox>
       {showFilter ? (
         <FilterBox $show={showFilter}>
@@ -452,7 +458,9 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
             </SummarySection>
             <FollowMoreSection>
               <FollowMoreTitle text={followMoreTitle} />
-              {legislatorList.length > 0 ? (
+              {followMoreState.error ? (
+                <FollowMoreErrorState />
+              ) : legislatorList.length > 0 ? (
                 <FollowMoreLegislator>
                   {legislatorList.map(
                     (props: LegislatorProps, index: number) => (
