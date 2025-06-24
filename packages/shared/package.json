@@ -8,12 +8,17 @@
   },
   "scripts": {
     "clean": "rm -rf lib",
-    "build": "yarn clean && tsup src/*"
+    "build": "yarn clean && tsup src/*",
+    "prepublishOnly": "yarn build",
+    "publish": "npm publish"
   },
   "type": "commonjs",
   "main": "lib/index.js",
   "module": "lib/index.mjs",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "lib"
   ],
