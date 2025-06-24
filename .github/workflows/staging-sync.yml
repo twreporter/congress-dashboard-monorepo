@@ -33,6 +33,11 @@ jobs:
       - name: Build Shared Package
         run: yarn build:shared
 
+      - name: Configure npm auth for Yarn
+        run: yarn config set npmAuthToken $NPM_TOKEN
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish RC Shared package to npm
         run: yarn publish:shared
         env:
