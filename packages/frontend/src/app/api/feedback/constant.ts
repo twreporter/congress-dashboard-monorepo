@@ -1,5 +1,5 @@
 // type
-import { ValueOf } from '@/types'
+import { ValuesOf } from '@/types/index'
 
 export const HttpStatus = {
   OK: 200,
@@ -7,4 +7,4 @@ export const HttpStatus = {
   INTERNAL_SERVER_ERROR: 500,
 } as const
 
-export type HttpStatus = ValueOf<typeof HttpStatus>
+export type HttpStatus = ValuesOf<typeof HttpStatus>

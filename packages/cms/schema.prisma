@@ -78,6 +78,7 @@ model Speech {
   @@index([legislativeYuanMemberId])
   @@index([date])
   @@index([title])
+  @@index([updatedAt])
 }
 
 model Topic {
@@ -114,24 +115,24 @@ model Legislator {
 }
 
 model LegislativeYuanMember {
-  id                                Int                 @id @default(autoincrement())
-  legislator                        Legislator?         @relation("LegislativeYuanMember_legislator", fields: [legislatorId], references: [id])
-  legislatorId                      Int?                @map("legislator")
-  labelForCMS                       String              @default("")
-  party                             Party?              @relation("LegislativeYuanMember_party", fields: [partyId], references: [id])
-  partyId                           Int?                @map("party")
-  legislativeMeeting                LegislativeMeeting? @relation("LegislativeYuanMember_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
-  legislativeMeetingId              Int?                @map("legislativeMeeting")
-  sessionAndCommittee               CommitteeMember[]   @relation("CommitteeMember_legislativeYuanMember")
-  type                              String
-  constituency                      String?
-  city                              String?
-  tooltip                           String              @default("")
-  note                              String              @default("")
-  proposalSuccessCount              Int?
-  createdAt                         DateTime?           @default(now())
-  updatedAt                         DateTime?           @updatedAt
-  from_Speech_legislativeYuanMember Speech[]            @relation("Speech_legislativeYuanMember")
+  id                   Int                 @id @default(autoincrement())
+  legislator           Legislator?         @relation("LegislativeYuanMember_legislator", fields: [legislatorId], references: [id])
+  legislatorId         Int?                @map("legislator")
+  labelForCMS          String              @default("")
+  party                Party?              @relation("LegislativeYuanMember_party", fields: [partyId], references: [id])
+  partyId              Int?                @map("party")
+  legislativeMeeting   LegislativeMeeting? @relation("LegislativeYuanMember_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
+  legislativeMeetingId Int?                @map("legislativeMeeting")
+  speeches             Speech[]            @relation("Speech_legislativeYuanMember")
+  sessionAndCommittee  CommitteeMember[]   @relation("CommitteeMember_legislativeYuanMember")
+  type                 String
+  constituency         String?
+  city                 String?
+  tooltip              String              @default("")
+  note                 String              @default("")
+  proposalSuccessCount Int?
+  createdAt            DateTime?           @default(now())
+  updatedAt            DateTime?           @updatedAt
 
   @@index([legislatorId])
   @@index([partyId])

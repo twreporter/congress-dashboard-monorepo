@@ -1,0 +1,119 @@
+name: Production Release
+
+on:
+  push:
+    branches:
+      - release
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Production Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable corepack for yarn
+        run: corepack enable
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build Shared Package
+        run: yarn build:shared
+
+      - name: Check and Exit pre-release mode
+        run: |
+          # Check if in pre-release mode
+          if [ -f ".changeset/pre.json" ]; then
+            echo "Exiting pre-release mode..."
+            yarn changeset pre exit
+            git add .
+            git commit -m "chore: exit pre-release mode" || echo "No changes to commit"
+            git push origin release
+          else
+            echo "Not in pre-release mode, skipping..."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Production Release
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: yarn changeset:version
+          publish: yarn changeset:publish
+          title: "chore: production release"
+          commit: "chore: production release"
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update yarn.lock after version changes
+        if: steps.changesets.outputs.hasChangesets == 'true'
+        run: |
+          # Update yarn.lock
+          yarn install --mode=update-lockfile
+          
+          # Check if yarn.lock was updated
+          if ! git diff --quiet yarn.lock; then
+            echo "yarn.lock updated, committing changes..."
+            git add yarn.lock
+            git commit -m "chore: update yarn.lock after version bump"
+            git push origin release
+          else
+            echo "No yarn.lock changes detected"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Wait for required status checks
+        run: gh pr checks ${{ steps.changesets.outputs.pullRequestNumber }} --watch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto-merge Changeset PR
+        if: steps.changesets.outputs.pullRequestNumber != ''
+        run: |
+          gh pr merge ${{ steps.changesets.outputs.pullRequestNumber }} --squash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Shared package to npm
+        run: yarn publish:shared
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Sync master and staging with release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          # Update master branch
+          git checkout master
+          git pull origin master
+          git merge release --no-ff -m "chore: sync release"
+          git push origin master
+          
+          # Update staging branch
+          git checkout staging
+          git pull origin staging
+          git merge release --no-ff -m "chore: sync release"
+          git push origin staging
+
+          # Update dev branch
+          git checkout dev
+          git pull origin dev
+          git merge release --no-ff -m "chore: sync release"
+          git push origin dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

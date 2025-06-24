@@ -1,0 +1,14 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "@twreporter/congress-dashboard-cms": "1.0.0",
+    "@twreporter/congress-dashboard-frontend": "1.0.1",
+    "@twreporter/congress-dashboard-shared": "0.0.6"
+  },
+  "changesets": [
+    "cruel-walls-speak",
+    "legal-news-sort",
+    "rich-gifts-help"
+  ]
+}

@@ -25,8 +25,9 @@ const listConfigurations = list({
       },
     }),
     legislativeYuanMember: relationship({
-      ref: 'LegislativeYuanMember',
+      ref: 'LegislativeYuanMember.speeches',
       label: '立委屆資',
+      many: false,
       ui: {
         labelField: 'labelForCMS',
       },
@@ -72,7 +73,9 @@ const listConfigurations = list({
       },
     }),
     createdAt: CREATED_AT(),
-    updatedAt: UPDATED_AT(),
+    updatedAt: UPDATED_AT({
+      isIndexed: true,
+    }),
   },
   ui: {
     label: '逐字稿',
