@@ -9,22 +9,10 @@ jobs:
     name: Check for Changeset
     runs-on: ubuntu-latest
     steps:
-      - name: Enable corepack for yarn
-        run: corepack enable
-
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22.13.0'
-          cache: 'yarn'
-
-      - name: Install Dependencies
-        run: yarn install --immutable
 
       - name: Check for changeset
         run: |
@@ -33,6 +21,3 @@ jobs:
           else
             echo "✅ Changeset found!"
           fi
-
-      - name: Changeset Status
-        run: yarn changeset:status --since=origin/${{ github.base_ref }}
