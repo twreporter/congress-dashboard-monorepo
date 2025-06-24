@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 // @twreporter
 import {
+  COLOR_SEMANTIC,
   colorGrayscale,
   colorOpacity,
 } from '@twreporter/core/lib/constants/color'
-import { P1, P2 } from '@twreporter/react-components/lib/text/paragraph'
+import { P1, P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
 import { Arrow, Cross } from '@twreporter/react-components/lib/icon'
 
 export const SelectContainer = styled.div`
@@ -12,7 +13,11 @@ export const SelectContainer = styled.div`
   width: 100%;
 `
 
-export const SelectBox = styled.div<{ $disabled: boolean; $focused: boolean }>`
+export const SelectBox = styled.div<{
+  $disabled: boolean
+  $focused: boolean
+  $error?: boolean
+}>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -20,6 +25,8 @@ export const SelectBox = styled.div<{ $disabled: boolean; $focused: boolean }>`
     ${(props) =>
       props.$disabled
         ? colorGrayscale.gray300
+        : props.$error
+        ? COLOR_SEMANTIC.danger
         : props.$focused
         ? colorGrayscale.gray600
         : colorGrayscale.gray300};
@@ -35,7 +42,10 @@ export const SelectBox = styled.div<{ $disabled: boolean; $focused: boolean }>`
 
   &:hover {
     border-color: ${(props) =>
-      !props.$disabled && !props.$focused && colorGrayscale.gray600};
+      !props.$disabled &&
+      !props.$focused &&
+      !props.$error &&
+      colorGrayscale.gray600};
   }
 `
 
@@ -218,4 +228,22 @@ export const NoResults = styled.div`
   padding: 12px 16px;
   color: ${colorGrayscale.gray800};
   text-align: center;
+`
+
+export const ErrorMsgBox = styled.div`
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-contents: center;
+  aliign-items: center;
+`
+
+export const ErrorMsg = styled(P3)`
+  color: ${COLOR_SEMANTIC.danger};
+`
+
+export const SpanWithUnderline = styled.span`
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
 `

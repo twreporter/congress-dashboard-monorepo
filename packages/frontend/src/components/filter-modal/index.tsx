@@ -250,6 +250,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                 options: selectOptions,
                 isLoading,
                 defaultValue,
+                showError,
               },
               idx
             ) => {
@@ -269,6 +270,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                           handleValueChange(optionKey, selectedValue)
                         }
                         loading={isLoading}
+                        showError={showError}
                       />
                     </SelectorContainer>
                   </SelectContainer>
@@ -287,6 +289,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                           handleValueChange(optionKey, selectedValue)
                         }
                         loading={isLoading}
+                        showError={showError}
                       />
                     </SelectorContainer>
                   </SelectContainer>
