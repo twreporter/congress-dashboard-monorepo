@@ -4,15 +4,11 @@ import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 // next
 import Link from 'next/link'
+import Image from 'next/image'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import { LogoHeader } from '@twreporter/react-components/lib/logo'
-import {
-  PillButton,
-  TextButton,
-  IconButton,
-} from '@twreporter/react-components/lib/button'
+import { PillButton, IconButton } from '@twreporter/react-components/lib/button'
 import {
   TabletAndAbove,
   MobileOnly,
@@ -20,19 +16,19 @@ import {
 import { Hamburger, Cross } from '@twreporter/react-components/lib/icon'
 import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import { Search as SearchIcon } from '@twreporter/react-components/lib/icon'
-import { SearchBar } from '@twreporter/react-components/lib/input'
+import {
+  AlgoliaInstantSearch,
+  LayoutVariants,
+} from '@/components/search/instant-search'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
 // hooks
 import useWindowWidth from '@/hooks/use-window-width'
-import useOutsideClick from '@/hooks/use-outside-click'
+import { useBodyScrollLock } from '@/hooks/use-scroll-lock'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
-import {
-  COMMON_MENU_LINKS,
-  COMPACT_PILL_BUTTON_LINKS,
-} from '@/constants/navigation-link'
+import { COMPACT_PILL_BUTTON_LINKS } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
@@ -79,16 +75,15 @@ const HeaderSection = styled.div`
   `}
 `
 const LogoContainer = styled.div`
-  width: 172px;
-  height: 24px;
-
   a,
   img {
     display: flex;
-    width: 172px;
     height: 24px;
     justify-content: center;
     align-items: center;
+    ${mq.mobileOnly`
+      height: 20px;
+    `}
   }
 `
 const ButtonContainer = styled.div`
@@ -125,18 +120,22 @@ const BtnContainer = styled.div<{
 const SearchContainer = styled.div<{
   $isOpen: boolean
 }>`
+  width: 360px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
   opacity: ${(props) => (props.$isOpen ? '1' : '0')};
   transition: opacity 300ms ease;
   position: absolute;
   right: 0;
   top: -8px;
-  z-index: ${(props) => (props.$isOpen ? 999 : -1)};
 `
 
 // Constants
-const menuLinks = COMMON_MENU_LINKS
 const pillButtonLinks = COMPACT_PILL_BUTTON_LINKS
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+const logoSrcPrefix = 'https://www.twreporter.org/images/lawmaker'
 
 const Header: React.FC = () => {
   const { isHeaderHidden, tabTop } = useScrollContext()
@@ -148,23 +147,17 @@ const Header: React.FC = () => {
     setIsHamburgerOpen((prev) => !prev)
   }, [])
 
+  // Handle body scroll lock
+  useBodyScrollLock({
+    toLock: isHamburgerOpen,
+    lockID: 'hambuger',
+  })
+
   useEffect(() => {
     if (windowWidth >= DEFAULT_SCREEN.tablet.minWidth) {
       setIsHamburgerOpen(false)
     }
   }, [windowWidth])
-
-  // Handle body scroll lock
-  useEffect(() => {
-    if (isHamburgerOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isHamburgerOpen])
 
   // search functions
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -174,21 +167,7 @@ const Header: React.FC = () => {
   const handleClickSearch = (e: React.MouseEvent) => {
     e.preventDefault()
     setIsSearchOpen(true)
-    if (!ref.current) {
-      return
-    }
-    const input = ref.current.getElementsByTagName(
-      'INPUT'
-    )[0] as HTMLInputElement
-    if (input) {
-      input.focus()
-    }
   }
-  const onSearch = (keywords: string) => {
-    setIsSearchOpen(false)
-    alert(`search: ${keywords}`)
-  }
-  const ref = useOutsideClick(closeSearchBox)
 
   return (
     <React.Fragment>
@@ -199,27 +178,29 @@ const Header: React.FC = () => {
       >
         <HeaderSection>
           <LogoContainer>
-            <Link href={'https://www.twreporter.org/'} target={'_blank'}>
-              <LogoHeader releaseBranch={releaseBranch} />
+            <Link href={'/'} target={'_self'}>
+              <TabletAndAbove>
+                <Image
+                  src={`${logoSrcPrefix}/logo_L.svg`}
+                  alt="Twreporter Lawmaker Logo"
+                  priority
+                  width={180}
+                  height={20}
+                />
+              </TabletAndAbove>
+              <MobileOnly>
+                <Image
+                  src={`${logoSrcPrefix}/logo_S.svg`}
+                  alt="Twreporter Lawmaker Logo"
+                  priority
+                  width={180}
+                  height={20}
+                />
+              </MobileOnly>
             </Link>
           </LogoContainer>
           <TabletAndAbove>
             <ButtonContainer>
-              {menuLinks.map(({ href, text, target }, idx) => (
-                <React.Fragment key={`link-btn-${idx}`}>
-                  <Button $isHide={isSearchOpen}>
-                    <Link href={href} target={target}>
-                      <TextButton
-                        text={text}
-                        size={TextButton.Size.L}
-                        style={TextButton.Style.DARK}
-                      />
-                    </Link>
-                  </Button>
-                  <Spacing $width={24} />
-                </React.Fragment>
-              ))}
-
               {pillButtonLinks.map(({ href, text, target, type }, idx) => (
                 <React.Fragment key={`pill-btn-${idx}`}>
                   <Button $isHide={isSearchOpen}>
@@ -236,7 +217,7 @@ const Header: React.FC = () => {
                   ) : null}
                 </React.Fragment>
               ))}
-              <SearchBox ref={ref} key="search">
+              <SearchBox key="search">
                 <BtnContainer
                   onClick={handleClickSearch}
                   $isOpen={isSearchOpen}
@@ -247,12 +228,18 @@ const Header: React.FC = () => {
                   />
                 </BtnContainer>
                 <SearchContainer $isOpen={isSearchOpen}>
-                  <SearchBar
-                    placeholder="關鍵字搜尋"
-                    theme={SearchBar.THEME.normal}
-                    onClose={closeSearchBox}
-                    onSearch={onSearch}
-                  />
+                  {isSearchOpen && (
+                    <>
+                      <AlgoliaInstantSearch
+                        variant={LayoutVariants.Header}
+                        autoFocus={isSearchOpen}
+                      />
+                      <IconButton
+                        iconComponent={crossIcon}
+                        onClick={closeSearchBox}
+                      />
+                    </>
+                  )}
                 </SearchContainer>
               </SearchBox>
             </ButtonContainer>

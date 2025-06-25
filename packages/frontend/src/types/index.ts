@@ -1,1 +1,3 @@
-export type ValueOf<T> = T[keyof T]
+export * from '@/types/navigation-link'
+
+export type ValuesOf<T> = T[keyof T]
