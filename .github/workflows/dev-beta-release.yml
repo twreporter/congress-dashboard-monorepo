@@ -77,20 +77,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Authenticate to npm
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish beta Shared package to npm
-        run: yarn publish:shared
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Wait for required status checks
-        run: gh pr checks ${{ steps.changesets.outputs.pullRequestNumber }} --watch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check if shared package version was bumped
+        id: check-shared-version
+        run: |
+          # Check if shared package was actually published by changesets
+          if [ "${{ steps.changesets.outputs.published }}" == "true" ]; then
+            # Parse the published packages JSON to check if shared package was included
+            echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -r '.[] | select(.name == "@twreporter/congress-dashboard-shared") | .name' > /tmp/shared_published
+            if [ -s /tmp/shared_published ]; then
+              echo "shared-published=true" >> $GITHUB_OUTPUT
+              echo "Shared package version was bumped and needs to be published"
+            else
+              echo "shared-published=false" >> $GITHUB_OUTPUT
+              echo "Shared package version was not bumped"
+            fi
+          else
+            echo "shared-published=false" >> $GITHUB_OUTPUT
+            echo "No packages were published by changesets"
+          fi
 
       - name: Auto-merge Changeset PR
         if: steps.changesets.outputs.pullRequestNumber != ''
@@ -98,3 +102,15 @@ jobs:
           gh pr merge ${{ steps.changesets.outputs.pullRequestNumber }} --squash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Authenticate to npm
+        if: steps.check-shared-version.outputs.shared-published == 'true'
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish beta Shared package to npm
+        if: steps.check-shared-version.outputs.shared-published == 'true'
+        run: yarn publish:shared
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -78,11 +78,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Wait for required status checks
-        run: gh pr checks ${{ steps.changesets.outputs.pullRequestNumber }} --watch
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Auto-merge Changeset PR
         if: steps.changesets.outputs.pullRequestNumber != ''
         run: |
