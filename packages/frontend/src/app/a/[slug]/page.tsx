@@ -6,6 +6,7 @@ import SpeechPage from '@/components/speech'
 import { fetchSpeech, fetchSpeechGroup } from '@/fetchers/server/speech'
 // constants
 import { InternalRoutes } from '@/constants/routes'
+import { OG_IMAGE_URL } from '@/constants'
 
 export const dynamicParams = true
 
@@ -19,21 +20,26 @@ export async function generateMetadata({
   if (!speech) {
     notFound()
   }
-  const { title, legislativeYuanMember } = speech
+  const { title, legislativeYuanMember, summary } = speech
   const { legislator } = legislativeYuanMember
   const { name } = legislator
   const titleForMetaData =
     title.length > 15 ? `${title.slice(0, 15)}...` : title
+  const descriptionForMetaData = summary
+    ? summary.replace(/<\/?(?:ul|li)>/g, '')
+    : '報導者觀測站 | 逐字稿'
   return {
     title: `逐字稿｜${name}：${titleForMetaData} - 報導者觀測站`,
-    description: '報導者議會透視版',
+    description: descriptionForMetaData,
     alternates: {
       canonical: `https://lawmaker.twreporter.org${InternalRoutes.Speech}/${slug}`,
     },
     openGraph: {
       title: `逐字稿｜${name}：${titleForMetaData} - 報導者觀測站`,
+      description: descriptionForMetaData,
       url: `https://lawmaker.twreporter.org${InternalRoutes.Speech}/${slug}`,
       type: 'article',
+      images: OG_IMAGE_URL,
     },
   }
 }
