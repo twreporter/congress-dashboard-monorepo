@@ -27,7 +27,7 @@ const getAboutPageFromGo = cache(async () => {
 export async function generateMetadata(): Promise<Metadata> {
   const { og_title, og_description, og_image } = await getAboutPageFromGo()
   const title = og_title || '關於觀測站 - 報導者觀測站'
-  const description = og_description || '報導者議會透視版'
+  const description = og_description || '報導者觀測站'
   const image = og_image?.resized_targets?.tablet?.url || OG_IMAGE_URL
   return {
     title,
