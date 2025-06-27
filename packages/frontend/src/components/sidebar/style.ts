@@ -8,6 +8,7 @@ import {
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
+import { H5 } from '@twreporter/react-components/lib/text/headline'
 import { IconButton } from '@twreporter/react-components/lib/button'
 import mq from '@twreporter/core/lib/utils/media-query'
 
@@ -75,4 +76,8 @@ export const SpanWithUnderline = styled.span`
   text-decoration: underline;
   text-underline-offset: 2px;
   cursor: pointer;
+`
+
+export const H5Gray800 = styled(H5)`
+  color: ${colorGrayscale.gray800};
 `

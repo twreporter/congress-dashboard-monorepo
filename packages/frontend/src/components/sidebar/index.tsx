@@ -210,9 +210,9 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 
   useEffect(() => {
     if (speechState.speeches != undefined) {
-      setIsLoading(speechState.isLoading || followMoreState.isLoading)
+      setIsLoading(speechState.isLoading)
     }
-  }, [speechState.speeches, speechState.isLoading, followMoreState.isLoading])
+  }, [speechState.speeches, speechState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
@@ -253,18 +253,20 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
                 )
               )}
             </SummarySection>
-            <FollowMoreSection>
-              <FollowMoreTitle text={followMoreTitle} />
-              {followMoreState.error ? (
-                <FollowMoreErrorState />
-              ) : issueList.length > 0 ? (
-                <FollowMoreTags>
-                  {issueList.map((props: IssueProps, index: number) => (
-                    <Issue {...props} key={`follow-more-issue-${index}`} />
-                  ))}
-                </FollowMoreTags>
-              ) : null}
-            </FollowMoreSection>
+            {followMoreState.isLoading ? null : (
+              <FollowMoreSection>
+                <FollowMoreTitle text={followMoreTitle} />
+                {followMoreState.error ? (
+                  <FollowMoreErrorState />
+                ) : issueList.length > 0 ? (
+                  <FollowMoreTags>
+                    {issueList.map((props: IssueProps, index: number) => (
+                      <Issue {...props} key={`follow-more-issue-${index}`} />
+                    ))}
+                  </FollowMoreTags>
+                ) : null}
+              </FollowMoreSection>
+            )}
           </Body>
         ) : null}
       </ContentBox>
@@ -415,9 +417,9 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
 
   useEffect(() => {
     if (speechState.speeches != undefined) {
-      setIsLoading(speechState.isLoading || followMoreState.isLoading)
+      setIsLoading(speechState.isLoading)
     }
-  }, [speechState.speeches, speechState.isLoading, followMoreState.isLoading])
+  }, [speechState.speeches, speechState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
@@ -456,23 +458,25 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
                 )
               )}
             </SummarySection>
-            <FollowMoreSection>
-              <FollowMoreTitle text={followMoreTitle} />
-              {followMoreState.error ? (
-                <FollowMoreErrorState />
-              ) : legislatorList.length > 0 ? (
-                <FollowMoreLegislator>
-                  {legislatorList.map(
-                    (props: LegislatorProps, index: number) => (
-                      <Legislator
-                        {...props}
-                        key={`follow-more-legislator-${index}`}
-                      />
-                    )
-                  )}
-                </FollowMoreLegislator>
-              ) : null}
-            </FollowMoreSection>
+            {followMoreState.isLoading ? null : (
+              <FollowMoreSection>
+                <FollowMoreTitle text={followMoreTitle} />
+                {followMoreState.error ? (
+                  <FollowMoreErrorState />
+                ) : legislatorList.length > 0 ? (
+                  <FollowMoreLegislator>
+                    {legislatorList.map(
+                      (props: LegislatorProps, index: number) => (
+                        <Legislator
+                          {...props}
+                          key={`follow-more-legislator-${index}`}
+                        />
+                      )
+                    )}
+                  </FollowMoreLegislator>
+                ) : null}
+              </FollowMoreSection>
+            )}
           </Body>
         )}
       </ContentBox>

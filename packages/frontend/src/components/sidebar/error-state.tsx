@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import { openFeedback } from '@/utils/feedback'
 // style
 import {
-  P1Gray800Bold,
   P1Gray700,
   SpanWithUnderline,
+  H5Gray800,
 } from '@/components/sidebar/style'
 
 // body error component
@@ -22,7 +22,8 @@ const BodyErrorBox = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
 `
-const BodyErrorTitle = styled(P1Gray800Bold)`
+const BodyErrorTitle = styled(H5Gray800)`
+  display: flex;
   justify-content: center;
 `
 const BodyErrorTextBox = styled.div`
@@ -58,7 +59,7 @@ const FollowMoreErrorText = styled(P1Gray700)`
 
 export const FollowMoreErrorState: FC = memo(() => (
   <FollowMoreErrorBox>
-    <P1Gray800Bold text={'資料載入失敗'} />
+    <H5Gray800 text={'資料載入失敗'} />
     <FollowMoreErrorText>
       <span>請嘗試重新整理頁面。若仍無法正常顯示，歡迎點此</span>
       <SpanWithUnderline onClick={openFeedback}>回報問題</SpanWithUnderline>

@@ -396,6 +396,7 @@ export const fetchTopNTopicsOfLegislators = async ({
  *   fetch legislators of given topic and sort by speeches count desc
  */
 export type LegislatorForFilter = {
+  id: number
   slug: string
   name: string
   imageLink?: string
@@ -419,6 +420,7 @@ export const fetchLegislatorsOfATopic = async ({
     query GetLegislatorsWithSpeechCount($where: SpeechWhereInput!) {
       speeches(where: $where) {
         legislativeYuanMember {
+          id
           legislator {
             slug
             name
@@ -475,12 +477,15 @@ export const fetchLegislatorsOfATopic = async ({
   const legislatorCounts: { [key: string]: LegislatorForFilter } =
     speeches.reduce((acc, speech) => {
       const legislator = speech.legislativeYuanMember?.legislator
+      const id = speech.legislativeYuanMember?.id
       if (!legislator) return acc
 
-      const slug = legislator.slug
+      const { slug, ...rest } = legislator
       if (!acc[slug]) {
         acc[slug] = {
-          ...legislator,
+          ...rest,
+          id: Number(id),
+          slug,
           avatar: getImageLink(legislator),
           count: 0,
         }
