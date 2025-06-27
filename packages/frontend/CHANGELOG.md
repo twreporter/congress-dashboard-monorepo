@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.0-rc.3
+
+### Patch Changes
+
+- chore
+  - update local, development, staging and prod environment variables
+
+### Commits
+
+- [[`e5ef22b4ee`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e5ef22b4ee)] - **chore(frontend)**: update environment variables (nickhsine)
+
 ## 1.1.0-rc.2
 
 ### Patch Changes
