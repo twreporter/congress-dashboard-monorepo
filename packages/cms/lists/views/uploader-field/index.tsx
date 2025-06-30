@@ -63,13 +63,9 @@ const CHECK_SPEECH_SLUGS = gql`
 export const Cell: CellComponent = ({ item, field }) => {
   const { listOptions } = field
   const { uploadData } = item
-  const { listName, csvData } = uploadData
+  const { listName } = uploadData
   const listOption = listOptions.find((option) => option.value === listName)
-  return (
-    <CellContainer>{`${listOption.label}, 共 ${
-      csvData.length - 1 // Exclude header row
-    } 筆`}</CellContainer>
-  )
+  return <CellContainer>{listOption.label}</CellContainer>
 }
 Cell.supportsLinkTo = true
 

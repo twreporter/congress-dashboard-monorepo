@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql'
 import { list } from '@keystone-6/core'
 import type { KeystoneContext } from '@keystone-6/core/types'
-import { text, relationship } from '@keystone-6/core/fields'
+import { text, relationship, integer } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -887,6 +887,13 @@ const listConfigurations = list({
       label: '上傳資料',
       validation: { isRequired: true },
     }),
+    recordCount: integer({
+      label: '筆數',
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'read' },
+      },
+    }),
     importer: relationship({
       ref: 'SystemUser',
       label: '匯入者',
@@ -903,9 +910,14 @@ const listConfigurations = list({
     label: '資料匯入',
     labelField: 'recordName',
     listView: {
-      initialColumns: ['recordName', 'uploadData', 'createdAt', 'updatedAt'],
+      initialColumns: [
+        'recordName',
+        'uploadData',
+        'recordCount',
+        'createdAt',
+        'updatedAt',
+      ],
       initialSort: { field: 'id', direction: 'DESC' },
-      pageSize: 5, // Set the limit to 5 to prevent long loading times.
     },
     hideDelete: ({ session }) => {
       const role = session?.data?.role
@@ -930,8 +942,16 @@ const listConfigurations = list({
   hooks: {
     resolveInput: {
       create: ({ resolvedData, context }) => {
+        // importer
         const { session } = context
         resolvedData.importer = { connect: { id: Number(session.itemId) } }
+
+        // record count
+        const { csvData } = resolvedData.uploadData
+        if (csvData && csvData.length > 0) {
+          resolvedData.recordCount = csvData.length - 1 // Exclude header row
+        }
+
         return resolvedData
       },
     },
