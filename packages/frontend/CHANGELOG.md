@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- [#215](https://github.com/twreporter/congress-dashboard-monorepo/pull/215) [`ff59a82`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff59a8232b3dd12af702f0a7f280f2c9fb3aeb6f) Thanks [@liruchen32](https://github.com/liruchen32)! - fix speech page og description
+
+## 1.1.0-rc.3
+
+### Patch Changes
+
 - chore
   - update local, development, staging and prod environment variables
 
