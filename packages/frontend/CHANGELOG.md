@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.5
+
+### Patch Changes
+
+- [#224](https://github.com/twreporter/congress-dashboard-monorepo/pull/224) [`f44efe7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f44efe79a3e78ee638312622330077dfda830aac) Thanks [@liruchen32](https://github.com/liruchen32)! - fix header logo and side bar link hover style
+
 ## 1.1.0-rc.4
 
 ### Patch Changes
