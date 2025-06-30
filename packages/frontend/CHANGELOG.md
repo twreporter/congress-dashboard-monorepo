@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.4
+
+### Patch Changes
+
+- [#218](https://github.com/twreporter/congress-dashboard-monorepo/pull/218) [`f0f2139`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f0f21399cf0ab9d9e466f049aca69c2e7eac6b13) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix defects of swr error state & sidebar filtered legislator could not get top 5 topic problem
+
 ## 1.1.0-rc.3
 
 ### Patch Changes
