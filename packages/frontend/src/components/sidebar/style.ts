@@ -56,6 +56,9 @@ export const TitleLink = styled(Link)`
   text-decoration: none;
   color: ${colorSupportive.heavy};
   font-family: ${notoSerif.style.fontFamily} !important;
+  &:hover {
+    color: ${colorSupportive.main};
+  }
 `
 
 export const TitleText = styled.span`
