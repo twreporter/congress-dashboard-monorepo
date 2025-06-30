@@ -794,34 +794,50 @@ const importHandlers: Record<
   [ListName.relatedArticles]: async (csvData, context) => {
     const queries: Promise<any>[] = []
 
-    for (const [_title, slug, related_article_slug] of csvData.slice(1)) {
-      const targetTopic = await context.prisma.topic.findFirst({
-        where: { slug },
-        select: { relatedTwreporterArticles: true },
-      })
+    // { [topicSlug]: [<related article slug 1>, <related article slug 2>] }
+    type TopicToUpdate = {
+      [topicSlug: string]: string[]
+    }
+    const topicToUpdate: TopicToUpdate = {}
 
-      if (targetTopic) {
-        if (
-          targetTopic.relatedTwreporterArticles.includes(related_article_slug)
-        ) {
-          console.error(
-            `Duplicate related article for topic ${slug}, article slug: ${related_article_slug}`
-          )
-        } else {
-          const newRelatedArticles =
-            targetTopic.relatedTwreporterArticles.concat([related_article_slug])
-          queries.push(
-            context.prisma.topic.update({
-              where: { slug },
-              data: {
-                relatedTwreporterArticles: newRelatedArticles,
-              },
-            })
-          )
-        }
+    for (const [_title, slug, related_article_slug] of csvData.slice(1)) {
+      if (slug in topicToUpdate) {
+        topicToUpdate[slug] = topicToUpdate[slug].filter(
+          (articleSlug) => articleSlug !== related_article_slug
+        )
+        topicToUpdate[slug].unshift(related_article_slug)
       } else {
-        console.error(`target topic not found for slug: ${slug}`)
+        const targetTopic = await context.prisma.topic.findFirst({
+          where: { slug },
+          select: { relatedTwreporterArticles: true },
+        })
+
+        if (targetTopic) {
+          if (!targetTopic.relatedTwreporterArticles) {
+            topicToUpdate[slug] = []
+          } else {
+            topicToUpdate[slug] = targetTopic.relatedTwreporterArticles.filter(
+              (articleSlug: string) => articleSlug !== related_article_slug
+            )
+          }
+          topicToUpdate[slug].unshift(related_article_slug)
+        } else {
+          console.error(`target topic not found for slug: ${slug}`)
+        }
       }
+    }
+
+    for (const [topicSlug, relatedArticleSlugs] of Object.entries(
+      topicToUpdate
+    )) {
+      queries.push(
+        context.prisma.topic.update({
+          where: { slug: topicSlug },
+          data: {
+            relatedTwreporterArticles: relatedArticleSlugs,
+          },
+        })
+      )
     }
 
     return queries
