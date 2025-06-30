@@ -97,7 +97,7 @@ const useLegislator = () => {
 
     return {
       data: moreLegislators,
-      hasMore: skip + take < pool.length,
+      hasMore: moreLegislators.length === take && skip + take < pool.length,
     }
   }
 

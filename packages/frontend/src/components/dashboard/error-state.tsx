@@ -14,7 +14,7 @@ const Box = styled.div`
   justify-content: center;
 `
 const Text = styled(P2)`
-  color: ${colorGrayscale.gray800};
+  color: ${colorGrayscale.gray600};
   text-align: center;
   display: flex;
   flex-direction: column;
