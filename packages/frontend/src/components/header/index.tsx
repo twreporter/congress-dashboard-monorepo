@@ -193,7 +193,7 @@ const Header: React.FC = () => {
                   src={`${logoSrcPrefix}/logo_S.svg`}
                   alt="Twreporter Lawmaker Logo"
                   priority
-                  width={180}
+                  width={147}
                   height={20}
                 />
               </MobileOnly>
