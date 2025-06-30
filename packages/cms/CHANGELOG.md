@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.2
+
+### Patch Changes
+
+- [#219](https://github.com/twreporter/congress-dashboard-monorepo/pull/219) [`bbda58b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bbda58bcd7bc99bc4025859fdc271a94a512b738) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix import twreporter related articles logic
+
 ## 1.1.0-rc.1
 
 ### Patch Changes
