@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0-rc.4
+
+### Patch Changes
+
+- Updated dependencies [[`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979)]:
+  - @twreporter/congress-dashboard-shared@0.0.7-rc.1
+
 ## 1.1.0-rc.3
 
 ### Patch Changes
