@@ -918,6 +918,7 @@ const listConfigurations = list({
         'updatedAt',
       ],
       initialSort: { field: 'id', direction: 'DESC' },
+      pageSize: 10,
     },
     hideDelete: ({ session }) => {
       const role = session?.data?.role
