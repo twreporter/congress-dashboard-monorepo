@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.3
+
+### Patch Changes
+
+- [#230](https://github.com/twreporter/congress-dashboard-monorepo/pull/230) [`c1f7b6b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c1f7b6b093f4cf0381a61e9e9192dca128a5b777) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `recordCount` for `ImportRecord` list
+
 ## 1.1.0-rc.2
 
 ### Patch Changes
