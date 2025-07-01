@@ -1082,6 +1082,7 @@ type ImportRecord {
   id: ID!
   recordName: String
   uploadData: UploaderOutput
+  recordCount: Int
   importer: SystemUser
   createdAt: DateTime
   updatedAt: DateTime
@@ -1113,6 +1114,7 @@ input ImportRecordWhereInput {
   id: IDFilter
   recordName: StringFilter
   uploadData: UploaderFilter
+  recordCount: IntNullableFilter
   importer: SystemUserWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -1139,11 +1141,13 @@ enum ListNameEnum {
 
 input ImportRecordOrderByInput {
   id: OrderDirection
+  recordCount: OrderDirection
 }
 
 input ImportRecordUpdateInput {
   recordName: String
   uploadData: UploaderInput
+  recordCount: Int
   importer: SystemUserRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -1163,6 +1167,7 @@ input ImportRecordUpdateArgs {
 input ImportRecordCreateInput {
   recordName: String
   uploadData: UploaderInput
+  recordCount: Int
   importer: SystemUserRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime

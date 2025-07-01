@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { openFeedback } from '@/utils/feedback'
 // style
 import {
+  P1Gray800Bold,
   P1Gray700,
   SpanWithUnderline,
   H5Gray800,
@@ -59,7 +60,7 @@ const FollowMoreErrorText = styled(P1Gray700)`
 
 export const FollowMoreErrorState: FC = memo(() => (
   <FollowMoreErrorBox>
-    <H5Gray800 text={'資料載入失敗'} />
+    <P1Gray800Bold text={'資料載入失敗'} />
     <FollowMoreErrorText>
       <span>請嘗試重新整理頁面。若仍無法正常顯示，歡迎點此</span>
       <SpanWithUnderline onClick={openFeedback}>回報問題</SpanWithUnderline>
