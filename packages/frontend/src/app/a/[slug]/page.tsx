@@ -26,7 +26,7 @@ export async function generateMetadata({
   const titleForMetaData =
     title.length > 15 ? `${title.slice(0, 15)}...` : title
   const descriptionForMetaData = summary
-    ? `本場會議中，${summary.replace(/<\/?(?:ul|li)>/g, '')}`
+    ? `本場會議中，${summary.replace(/<\/?(?:ul|li)>/g, '').replace(/\n/g, '')}`
     : '報導者觀測站 | 逐字稿'
   return {
     title: `逐字稿｜${name}：${titleForMetaData} - 報導者觀測站`,
