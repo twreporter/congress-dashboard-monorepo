@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.6
+
+### Patch Changes
+
+- [#231](https://github.com/twreporter/congress-dashboard-monorepo/pull/231) [`9da1e67`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9da1e67f0e2d0de6f23df599cff0b61ac837a445) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix follow more error state title style
+
 ## 1.1.0-rc.5
 
 ### Patch Changes
