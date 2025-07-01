@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.7-rc.1
+
+### Patch Changes
+
+- [#236](https://github.com/twreporter/congress-dashboard-monorepo/pull/236) [`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979) Thanks [@liruchen32](https://github.com/liruchen32)! - fix og description for frontend and remove constant for shared package
+
 ## 0.0.7-rc.0
 
 ### Patch Changes
