@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.5
+
+### Patch Changes
+
+- [#240](https://github.com/twreporter/congress-dashboard-monorepo/pull/240) [`3adbb61`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3adbb61ce632df3c3c797e2b70220ce930632549) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add migration file for `recordCount`
+
 ## 1.1.0-rc.4
 
 ### Patch Changes
