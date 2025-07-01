@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.8
+
+### Patch Changes
+
+- [#232](https://github.com/twreporter/congress-dashboard-monorepo/pull/232) [`4d313dc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4d313dcc1be8e3e4ceef56190b43378335194018) Thanks [@nickhsine](https://github.com/nickhsine)! - Add link for instant hits
+
 ## 1.1.0-rc.7
 
 ### Patch Changes
