@@ -91,6 +91,10 @@ const InstantHitContainer = styled.div`
 
   &:hover {
     background-color: ${colorGrayscale.gray100};
+
+    ${Avatar} {
+      background-color: ${colorGrayscale.white};
+    }
   }
 
   /* overwrite InstantSearch Highlight and Snippet styles */
