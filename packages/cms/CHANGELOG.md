@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.6
+
+### Patch Changes
+
+- [#243](https://github.com/twreporter/congress-dashboard-monorepo/pull/243) [`5e4a479`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e4a479a218f3801c28853b2cb9a1a7023e5f5ab) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `pageSize` for ImportRecord list
+
 ## 1.1.0-rc.5
 
 ### Patch Changes
