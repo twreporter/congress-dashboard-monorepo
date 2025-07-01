@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 // @twerporter
 import {
@@ -25,6 +26,7 @@ import type {
   FilterOption,
   FilterModalValueType,
 } from '@/components/dashboard/type'
+import { useBodyScrollLock } from '@/hooks/use-scroll-lock'
 
 const ModalContainer = styled.div<{ $isOpen: boolean }>`
   display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
@@ -198,6 +200,12 @@ const FilterModal: React.FC<FilterModelProps> = ({
     }
   }, [value])
 
+  // Lock body scroll
+  useBodyScrollLock({
+    toLock: isOpen,
+    lockID: 'filter-modal',
+  })
+
   // Handle internal state changes
   const handleValueChange = (key: string, newValue: string | string[]) => {
     const updatedValue = {
@@ -229,7 +237,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
     setIsOpen(false)
   }
 
-  return (
+  return ReactDOM.createPortal(
     <ModalContainer $isOpen={isOpen}>
       <Filter>
         <Header>
@@ -312,7 +320,9 @@ const FilterModal: React.FC<FilterModelProps> = ({
           />
         </Footer>
       </Filter>
-    </ModalContainer>
+    </ModalContainer>,
+    // Append the modal to <body> to avoid z-index issues caused by parent stacking contexts
+    document.body
   )
 }
 
