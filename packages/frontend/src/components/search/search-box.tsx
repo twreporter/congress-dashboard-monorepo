@@ -21,8 +21,11 @@ const Input = styled.input`
   border: 0;
   outline: none;
 
-  color: ${colorGrayscale.gray500};
   background-color: transparent;
+
+  &&::placeholder {
+    color: ${colorGrayscale.gray500};
+  }
 `
 
 const Container = styled.div<{ $variant: LayoutVariant; $isFocused: boolean }>`
@@ -37,6 +40,10 @@ const Container = styled.div<{ $variant: LayoutVariant; $isFocused: boolean }>`
   ${({ $variant, $isFocused }) => {
     let variantCss = ''
     switch ($variant) {
+      case LayoutVariants.Menu: {
+        variantCss = `padding:0 24px; height: 48px; background-color: ${colorOpacity['gray100_0.8']};`
+        break
+      }
       case LayoutVariants.Modal:
       case LayoutVariants.Header: {
         variantCss = 'padding: 0 20px; height: 40px;'

@@ -15,6 +15,7 @@ export type LegislatorRawHit = Hit<{
   slug: string
   name: string
   desc: string
+  shortDesc: string
   imgSrc?: string
   term: number
   lastSpeechAt?: string
@@ -91,6 +92,10 @@ const InstantHitContainer = styled.div`
 
   &:hover {
     background-color: ${colorGrayscale.gray100};
+
+    ${Avatar} {
+      background-color: ${colorGrayscale.white};
+    }
   }
 
   /* overwrite InstantSearch Highlight and Snippet styles */
@@ -128,7 +133,7 @@ export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
         </Avatar>
         <Text>
           <Highlight highlightedTagName="span" attribute="name" hit={hit} />
-          <p>{hit.desc}</p>
+          <p>{hit.shortDesc}</p>
         </Text>
       </InstantHitContainer>
     </Link>
@@ -147,7 +152,6 @@ export function InstantTopicHit({ hit }: { hit: TopicRawHit }) {
         <Text>
           <Highlight highlightedTagName="span" attribute="name" hit={hit} />
           <p>
-            <span>共{hit.relatedMessageCount}筆相關留言，</span>
             <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
           </p>
         </Text>
