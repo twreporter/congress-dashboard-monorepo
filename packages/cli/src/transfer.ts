@@ -26,19 +26,20 @@ export function transferLegislatorModelToRecord(
     const speechDate = l.speeches?.[0]?.date
     let lastSpeechAt = ''
     let desc = ''
+    let shortDesc = ''
     if (l?.party?.name) {
-      desc = l.party.name.endsWith('籍')
+      shortDesc = l.party.name.endsWith('籍')
         ? `${l.party.name}。`
         : `${l.party.name}籍。`
     }
     if (l?.legislativeMeeting?.term) {
-      desc = desc + `第${l.legislativeMeeting.term}屆立法委員`
+      shortDesc = shortDesc + `第${l.legislativeMeeting.term}屆立法委員`
       // ts-ignore
       const constituency = CONSTITUENCY_LABEL[l.constituency as Constituency]
       if (constituency) {
-        desc = desc + `（${constituency}）。`
+        shortDesc = shortDesc + `（${constituency}）。`
       } else {
-        desc = desc + '。'
+        shortDesc = shortDesc + '。'
       }
     }
 
@@ -46,7 +47,7 @@ export function transferLegislatorModelToRecord(
       Array.isArray(l.sessionAndCommittee) &&
       l.sessionAndCommittee.length > 0
     ) {
-      desc = desc + `加入：`
+      desc = shortDesc + `加入：`
       const committeeDesc: string[] = []
       l.sessionAndCommittee.forEach((c) => {
         const name = c.committee?.[0]?.name
@@ -75,6 +76,7 @@ export function transferLegislatorModelToRecord(
       term: l.legislativeMeeting.term,
       lastSpeechAt,
       desc,
+      shortDesc,
       imgSrc: l.legislator.imageLink || '',
       partyImgSrc: l.party?.image?.imageFile?.url || '',
       objectID: `${l.legislator.slug}_${l.legislativeMeeting.term}`,
@@ -87,7 +89,11 @@ export function transferTopicModelToRecord(
 ): TopicRecord[] {
   return topicModels.map((t) => {
     const countSum = t.members.reduce((sum: number, m: any) => sum + m.count, 0)
-    const desc = t.members.map((m: any) => `${m.name}(${m.count})`).join('、')
+    const desc =
+      t.members.length > 0
+        ? '發言：' +
+          t.members.map((m: any) => `${m.name}(${m.count})`).join('、')
+        : ''
     let lastSpeechAt = ''
     if (t.topicInfo.lastSpeechAt) {
       const date = new Date(t.topicInfo.lastSpeechAt)
