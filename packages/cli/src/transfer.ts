@@ -2,6 +2,7 @@ import type { LegislatorModel, TopicModel, SpeechModel } from './graphql'
 import type { LegislatorRecord, TopicRecord, SpeechRecord } from './algolia'
 import type { Constituency } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 import { CONSTITUENCY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import { getUrlOrigin } from './utils'
 
 export function transferSpeechModelToRecord(
   speechModels: SpeechModel[]
@@ -70,6 +71,11 @@ export function transferLegislatorModelToRecord(
       lastSpeechAt = date.toISOString().split('T')[0].replace(/-/g, '/')
     }
 
+    const urlOrigin = getUrlOrigin()
+    const _partyImgSrc = l.party?.image?.imageFile?.url
+      ? `${urlOrigin}${l.party?.image?.imageFile?.url}`
+      : ''
+
     return {
       name: l.legislator.name,
       slug: l.legislator.slug,
@@ -78,7 +84,7 @@ export function transferLegislatorModelToRecord(
       desc,
       shortDesc,
       imgSrc: l.legislator.imageLink || '',
-      partyImgSrc: l.party?.image?.imageFile?.url || '',
+      partyImgSrc: l.party?.imageLink || _partyImgSrc || '',
       objectID: `${l.legislator.slug}_${l.legislativeMeeting.term}`,
     }
   })

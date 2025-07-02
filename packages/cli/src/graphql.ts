@@ -51,6 +51,7 @@ export type LegislatorModel = {
   }
   party?: {
     name: string
+    imageLink?: string
     image?: {
       imageFile: {
         url: string
@@ -392,6 +393,7 @@ export async function* legislatorIterator(
                   note
                   party {
                     name
+                    imageLink
                     image {
                       imageFile {
                         url
