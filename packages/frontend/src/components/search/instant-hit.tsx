@@ -1,6 +1,8 @@
+import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
+import { InternalRoutes } from '@/constants/routes'
 import { Highlight, Snippet } from 'react-instantsearch'
 import { Issue as IconIssue } from '@/components/search/icons'
 import {
@@ -10,15 +12,14 @@ import {
 
 export type LegislatorRawHit = Hit<{
   objectID: string
-  legislatorID: string
+  slug: string
   name: string
   desc: string
   shortDesc: string
   imgSrc?: string
   term: number
-  session: number
-  latestSpeechAt?: string
-  href: string
+  lastSpeechAt?: string
+  partyImgSrc?: string
 }>
 
 export type SpeechRawHit = Hit<{
@@ -37,10 +38,11 @@ export type SpeechRawHit = Hit<{
 export type TopicRawHit = Hit<{
   objectID: string
   name: string
+  slug: string
   desc: string
-  shortDesc: string
-  latestSpeechAt?: string
-  href: string
+  term: number
+  session: number
+  lastSpeechAt?: string
   relatedMessageCount: number
 }>
 
@@ -88,10 +90,12 @@ const InstantHitContainer = styled.div`
   gap: 12px;
   align-items: center;
 
-  cursor: pointer;
-
   &:hover {
     background-color: ${colorGrayscale.gray100};
+
+    ${Avatar} {
+      background-color: ${colorGrayscale.white};
+    }
   }
 
   /* overwrite InstantSearch Highlight and Snippet styles */
@@ -119,32 +123,39 @@ const InstantHitContainer = styled.div`
 
 export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
   return (
-    <InstantHitContainer>
-      <Avatar>
-        {/* TODO: replace img by using `<Image />` from `next/image` */}
-        <img src={hit.imgSrc} />
-      </Avatar>
-      <Text>
-        <Highlight highlightedTagName="span" attribute="name" hit={hit} />
-        <p>{hit.desc}</p>
-      </Text>
-    </InstantHitContainer>
+    <Link
+      href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.term}`}
+    >
+      <InstantHitContainer>
+        <Avatar>
+          {/* TODO: replace img by using `<Image />` from `next/image` */}
+          <img src={hit.imgSrc} />
+        </Avatar>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>{hit.shortDesc}</p>
+        </Text>
+      </InstantHitContainer>
+    </Link>
   )
 }
 
 export function InstantTopicHit({ hit }: { hit: TopicRawHit }) {
   return (
-    <InstantHitContainer>
-      <Avatar>
-        <IconIssue />
-      </Avatar>
-      <Text>
-        <Highlight highlightedTagName="span" attribute="name" hit={hit} />
-        <p>
-          <span>共{hit.relatedMessageCount}筆相關留言，</span>
-          <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
-        </p>
-      </Text>
-    </InstantHitContainer>
+    <Link
+      href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
+    >
+      <InstantHitContainer>
+        <Avatar>
+          <IconIssue />
+        </Avatar>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>
+            <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
+          </p>
+        </Text>
+      </InstantHitContainer>
+    </Link>
   )
 }

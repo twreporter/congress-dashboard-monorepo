@@ -63,16 +63,19 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
 `
 
 const FirstRow = styled.div`
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 8px 16px;
   margin: 4px 0;
 
+  /**
+    * @TODO: add back when search page is ready
+    *
   &:hover {
     background-color: ${colorGrayscale.gray100};
   }
+  */
 `
 
 const SearchIconContainer = styled.div`
@@ -153,15 +156,13 @@ export const InstantHits = ({
 
   return (
     <Container ref={containerRef} className={className} $variant={variant}>
-      {/* TODO: change to `next/link` when search page is ready */}
-      <a href="" target="_self">
-        <FirstRow>
-          <SearchIconContainer>
-            <IconSearch />
-          </SearchIconContainer>
-          <SearchText>{query}</SearchText>
-        </FirstRow>
-      </a>
+      {/* TODO: add `next/link` Link when search page is ready */}
+      <FirstRow>
+        <SearchIconContainer>
+          <IconSearch />
+        </SearchIconContainer>
+        <SearchText>{query}</SearchText>
+      </FirstRow>
       <Rows>
         <Index indexName={defaultIndexName}>
           <Configure hitsPerPage={10} />

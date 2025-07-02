@@ -25,7 +25,7 @@ const Overlay = styled.div`
 const SearchBoxContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 16px;
 
   border-bottom: 1px solid ${colorGrayscale.gray300};
 

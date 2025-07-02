@@ -398,14 +398,16 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
               />
             </Filter>
           </Bar>
-          <FilterModal
-            isOpen={isFilterOpen}
-            setIsOpen={setIsFilterOpen}
-            onSubmit={handleSubmit}
-            onChange={handleChange}
-            options={getFilterOptions()}
-            value={currentFilterValue}
-          />
+          {isFilterOpen && (
+            <FilterModal
+              isOpen={isFilterOpen}
+              setIsOpen={setIsFilterOpen}
+              onSubmit={handleSubmit}
+              onChange={handleChange}
+              options={getFilterOptions()}
+              value={currentFilterValue}
+            />
+          )}
         </Box>
         <HorizaontalLine
           $isHeaderAboveTab={isHeaderAboveTab}
