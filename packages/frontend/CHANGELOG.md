@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.9
+
+### Patch Changes
+
+- [#247](https://github.com/twreporter/congress-dashboard-monorepo/pull/247) [`bdc09b8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bdc09b8b8db6f9cc10c326f75bf67bae89d92967) Thanks [@nickhsine](https://github.com/nickhsine)! - fix(frontend): instant search defects
+
 ## 1.1.0-rc.8
 
 ### Patch Changes
