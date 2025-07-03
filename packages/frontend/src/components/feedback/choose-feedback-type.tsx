@@ -63,7 +63,7 @@ const ChooseFeedbackType: FC<ChooseFeedbackTypeProps> = ({
           checked={selectedType === FeedbackType.Product}
           onChange={() => setSelectedType(FeedbackType.Product)}
           title={'產品問題'}
-          description={'發現錯字、資訊錯誤或內容異常？請回報給我們！'}
+          description={'遇到功能異常或有改進建議？歡迎提供您的回饋！'}
         />
       </OptionBlock>
       <ActionBlock>
