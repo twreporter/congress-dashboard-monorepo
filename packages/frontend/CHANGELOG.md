@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.10
+
+### Patch Changes
+
+- [#250](https://github.com/twreporter/congress-dashboard-monorepo/pull/250) [`694bbb8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/694bbb8f3aa009c0eb354674950c3615de2bf18c) Thanks [@nickhsine](https://github.com/nickhsine)! - refactor(frontend): update instant search hit
+
 ## 1.1.0-rc.9
 
 ### Patch Changes
