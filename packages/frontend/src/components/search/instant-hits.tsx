@@ -171,7 +171,7 @@ export const InstantHits = ({
         {stage === SearchStageEnum.Topic && (
           <Index indexName={IndexNameEnum.Topic}>
             <Configure hitsPerPage={10} />
-            <InstantTopicHits />
+            <InstantTopicHits variant={variant} />
           </Index>
         )}
       </Rows>
@@ -314,11 +314,11 @@ const InstantLegislatorHits = () => {
   return <>{hitsJsx}</>
 }
 
-const InstantTopicHits = () => {
+const InstantTopicHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: TopicRawHit[] } = useInfiniteHits()
 
   const hitsJsx = items.map((hit, idx) => {
-    return <InstantTopicHit key={idx} hit={hit} />
+    return <InstantTopicHit key={idx} hit={hit} variant={variant} />
   })
 
   return <>{hitsJsx}</>

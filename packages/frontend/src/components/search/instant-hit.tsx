@@ -2,9 +2,11 @@ import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
+import type { LayoutVariant } from '@/components/search/constants'
 import { InternalRoutes } from '@/constants/routes'
 import { Highlight, Snippet } from 'react-instantsearch'
 import { Issue as IconIssue } from '@/components/search/icons'
+import { LayoutVariants } from '@/components/search/constants'
 import {
   colorGrayscale,
   colorSupportive,
@@ -133,7 +135,7 @@ const InstantHitContainer = styled.div`
     color: ${colorSupportive.heavy};
   }
 
-  ${Avatar} {
+  ${Avatar}, ${TopicCircle} {
     flex-shrink: 0;
   }
 
@@ -160,7 +162,13 @@ export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
   )
 }
 
-export function InstantTopicHit({ hit }: { hit: TopicRawHit }) {
+export function InstantTopicHit({
+  hit,
+  variant,
+}: {
+  hit: TopicRawHit
+  variant: LayoutVariant
+}) {
   return (
     <Link
       href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
@@ -172,6 +180,11 @@ export function InstantTopicHit({ hit }: { hit: TopicRawHit }) {
         <Text>
           <Highlight highlightedTagName="span" attribute="name" hit={hit} />
           <p>
+            {variant === LayoutVariants.Default ? (
+              <span>共{hit.relatedMessageCount}筆發言：</span>
+            ) : (
+              <span>發言：</span>
+            )}
             <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
           </p>
         </Text>
