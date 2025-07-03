@@ -43,6 +43,7 @@ export type TopicModel = {
 export type LegislatorModel = {
   id: string
   note: string
+  type?: string
   constituency?: string
   legislator: {
     name: string
@@ -389,6 +390,7 @@ export async function* legislatorIterator(
               query LegislativeYuanMember($where: LegislativeYuanMemberWhereUniqueInput!, $speechWhere: SpeechWhereInput!) {
                 legislativeYuanMember(where: $where) {
                   id
+                  type
                   constituency
                   note
                   party {

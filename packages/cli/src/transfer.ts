@@ -1,7 +1,11 @@
 import type { LegislatorModel, TopicModel, SpeechModel } from './graphql'
 import type { LegislatorRecord, TopicRecord, SpeechRecord } from './algolia'
 import type { Constituency } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
-import { CONSTITUENCY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import {
+  CONSTITUENCY_LABEL,
+  MEMBER_TYPE_LABEL,
+  MemberType,
+} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 import { getUrlOrigin } from './utils'
 
 export function transferSpeechModelToRecord(
@@ -30,17 +34,21 @@ export function transferLegislatorModelToRecord(
     let shortDesc = ''
     if (l?.party?.name) {
       shortDesc = l.party.name.endsWith('籍')
-        ? `${l.party.name}。`
-        : `${l.party.name}籍。`
+        ? `${l.party.name}，`
+        : `${l.party.name}籍，`
     }
     if (l?.legislativeMeeting?.term) {
       shortDesc = shortDesc + `第${l.legislativeMeeting.term}屆立法委員`
-      // ts-ignore
-      const constituency = CONSTITUENCY_LABEL[l.constituency as Constituency]
-      if (constituency) {
-        shortDesc = shortDesc + `（${constituency}）。`
+      if (l.type !== MemberType.Constituency) {
+        const memberType = MEMBER_TYPE_LABEL[l.type as MemberType]
+        if (memberType) {
+          shortDesc = shortDesc + `（${memberType}）`
+        }
       } else {
-        shortDesc = shortDesc + '。'
+        const constituency = CONSTITUENCY_LABEL[l.constituency as Constituency]
+        if (constituency) {
+          shortDesc = shortDesc + `（${constituency}）`
+        }
       }
     }
 
@@ -48,7 +56,7 @@ export function transferLegislatorModelToRecord(
       Array.isArray(l.sessionAndCommittee) &&
       l.sessionAndCommittee.length > 0
     ) {
-      desc = shortDesc + `加入：`
+      desc = shortDesc + `。加入：`
       const committeeDesc: string[] = []
       l.sessionAndCommittee.forEach((c) => {
         const name = c.committee?.[0]?.name
@@ -59,11 +67,11 @@ export function transferLegislatorModelToRecord(
           committeeDesc.push(`${name}`)
         }
       })
-      desc = desc + committeeDesc.join('、') + '。'
+      desc = desc + committeeDesc.join('、')
     }
 
     if (l.note) {
-      desc = desc + l.note
+      desc = desc + '。' + l.note
     }
 
     if (speechDate) {
@@ -97,8 +105,7 @@ export function transferTopicModelToRecord(
     const countSum = t.members.reduce((sum: number, m: any) => sum + m.count, 0)
     const desc =
       t.members.length > 0
-        ? '發言：' +
-          t.members.map((m: any) => `${m.name}(${m.count})`).join('、')
+        ? t.members.map((m: any) => `${m.name}(${m.count})`).join('、')
         : ''
     let lastSpeechAt = ''
     if (t.topicInfo.lastSpeechAt) {
