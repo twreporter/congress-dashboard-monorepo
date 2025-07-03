@@ -16,10 +16,10 @@ export type LegislatorRawHit = Hit<{
   name: string
   desc: string
   shortDesc: string
-  imgSrc?: string
+  imgSrc: string
   term: number
   lastSpeechAt?: string
-  partyImgSrc?: string
+  partyImgSrc: string
 }>
 
 export type SpeechRawHit = Hit<{
@@ -46,22 +46,47 @@ export type TopicRawHit = Hit<{
   relatedMessageCount: number
 }>
 
-const Avatar = styled.div`
+const Circle = styled.div`
   width: 48px;
   height: 48px;
   border-radius: 50%;
   border: 1px solid ${colorGrayscale.gray200};
+  background-color: ${colorGrayscale.white};
+`
 
+const TopicCircle = styled(Circle)`
   display: flex;
   justify-content: center;
   align-items: center;
 
   overflow: hidden;
+`
 
-  & > img {
-    object-fit: cover;
-    width: 100%;
-  }
+const Avatar = styled(Circle)<{ $imgSrc: string }>`
+  ${({ $imgSrc }) => {
+    return `background-image: url(${$imgSrc});`
+  }}
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  position: relative;
+`
+
+const Party = styled(Circle)<{ $imgSrc: string }>`
+  ${({ $imgSrc }) => {
+    return `background-image: url(${$imgSrc});`
+  }}
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  width: 16px;
+  height: 16px;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
 `
 
 const Text = styled.div`
@@ -92,10 +117,6 @@ const InstantHitContainer = styled.div`
 
   &:hover {
     background-color: ${colorGrayscale.gray100};
-
-    ${Avatar} {
-      background-color: ${colorGrayscale.white};
-    }
   }
 
   /* overwrite InstantSearch Highlight and Snippet styles */
@@ -127,9 +148,8 @@ export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
       href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.term}`}
     >
       <InstantHitContainer>
-        <Avatar>
-          {/* TODO: replace img by using `<Image />` from `next/image` */}
-          <img src={hit.imgSrc} />
+        <Avatar $imgSrc={hit.imgSrc}>
+          <Party $imgSrc={hit.partyImgSrc} />
         </Avatar>
         <Text>
           <Highlight highlightedTagName="span" attribute="name" hit={hit} />
@@ -146,9 +166,9 @@ export function InstantTopicHit({ hit }: { hit: TopicRawHit }) {
       href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
     >
       <InstantHitContainer>
-        <Avatar>
+        <TopicCircle>
           <IconIssue />
-        </Avatar>
+        </TopicCircle>
         <Text>
           <Highlight highlightedTagName="span" attribute="name" hit={hit} />
           <p>
