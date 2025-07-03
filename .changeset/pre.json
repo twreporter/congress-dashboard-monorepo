@@ -7,6 +7,7 @@
     "@twreporter/congress-dashboard-shared": "0.0.6"
   },
   "changesets": [
+    "afraid-cities-reply",
     "all-ears-tell",
     "blue-laws-dress",
     "bumpy-games-sleep",
