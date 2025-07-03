@@ -108,10 +108,23 @@ const Text = styled.div`
   }
 `
 
-const InstantHitContainer = styled.div`
+const InstantHitContainer = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
   margin: 4px 0;
-  padding: 8px 16px;
+  ${({ $variant }) => {
+    switch ($variant) {
+      case LayoutVariants.Modal: {
+        return `
+          padding: 8px 24px;
+        `
+      }
+      default: {
+        return `
+          padding: 8px 16px;
+        `
+      }
+    }
+  }}
 
   display: flex;
   gap: 12px;
@@ -144,12 +157,18 @@ const InstantHitContainer = styled.div`
   }
 `
 
-export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
+export function InstantLegislatorHit({
+  hit,
+  variant,
+}: {
+  hit: LegislatorRawHit
+  variant: LayoutVariant
+}) {
   return (
     <Link
       href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.term}`}
     >
-      <InstantHitContainer>
+      <InstantHitContainer $variant={variant}>
         <Avatar $imgSrc={hit.imgSrc}>
           <Party $imgSrc={hit.partyImgSrc} />
         </Avatar>
@@ -173,7 +192,7 @@ export function InstantTopicHit({
     <Link
       href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
     >
-      <InstantHitContainer>
+      <InstantHitContainer $variant={variant}>
         <TopicCircle>
           <IconIssue />
         </TopicCircle>

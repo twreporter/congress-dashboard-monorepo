@@ -62,11 +62,24 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
   }
 `
 
-const FirstRow = styled.div`
+const FirstRow = styled.div<{ $variant: LayoutVariant }>`
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 16px;
+  ${({ $variant }) => {
+    switch ($variant) {
+      case LayoutVariants.Modal: {
+        return `
+          padding: 8px 24px;
+        `
+      }
+      default: {
+        return `
+          padding: 8px 16px;
+        `
+      }
+    }
+  }}
   margin: 4px 0;
 
   /**
@@ -157,7 +170,7 @@ export const InstantHits = ({
   return (
     <Container ref={containerRef} className={className} $variant={variant}>
       {/* TODO: add `next/link` Link when search page is ready */}
-      <FirstRow>
+      <FirstRow $variant={variant}>
         <SearchIconContainer>
           <IconSearch />
         </SearchIconContainer>
@@ -166,7 +179,7 @@ export const InstantHits = ({
       <Rows>
         <Index indexName={defaultIndexName}>
           <Configure hitsPerPage={10} />
-          <InstantLegislatorHits />
+          <InstantLegislatorHits variant={variant} />
         </Index>
         {stage === SearchStageEnum.Topic && (
           <Index indexName={IndexNameEnum.Topic}>
@@ -304,11 +317,11 @@ const LoadMore = ({
   )
 }
 
-const InstantLegislatorHits = () => {
+const InstantLegislatorHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: LegislatorRawHit[] } = useInfiniteHits()
 
   const hitsJsx = items.map((hit, idx) => {
-    return <InstantLegislatorHit key={idx} hit={hit} />
+    return <InstantLegislatorHit key={idx} hit={hit} variant={variant} />
   })
 
   return <>{hitsJsx}</>
