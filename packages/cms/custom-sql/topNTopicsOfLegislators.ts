@@ -50,7 +50,7 @@ export const getLegislatorsSql = ({
           ROW_NUMBER() OVER (
             PARTITION BY s.legislativeYuanMember
             ORDER BY COUNT(*) DESC
-          ) AS rank
+          ) AS rn
         FROM _Speech_topics st
         JOIN Speech s ON s.id = st.A
         JOIN Topic  t ON t.id = st.B
@@ -58,8 +58,8 @@ export const getLegislatorsSql = ({
               s.legislativeYuanMember IN (${Prisma.join(legislatorIds)}) AND
               s.legislativeMeetingSession IN (${Prisma.join(sessionIds)})
         GROUP BY s.legislativeYuanMember, t.id
-      ) AS rn
-      WHERE rank <= ${take}
+      ) AS ranked
+      WHERE rn <= ${take}
       ORDER BY legislatorId, count DESC;
     `
   }
