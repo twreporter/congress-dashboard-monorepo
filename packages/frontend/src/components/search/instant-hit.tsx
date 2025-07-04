@@ -2,9 +2,11 @@ import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
+import type { LayoutVariant } from '@/components/search/constants'
 import { InternalRoutes } from '@/constants/routes'
 import { Highlight, Snippet } from 'react-instantsearch'
 import { Issue as IconIssue } from '@/components/search/icons'
+import { LayoutVariants } from '@/components/search/constants'
 import {
   colorGrayscale,
   colorSupportive,
@@ -106,10 +108,23 @@ const Text = styled.div`
   }
 `
 
-const InstantHitContainer = styled.div`
+const InstantHitContainer = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
   margin: 4px 0;
-  padding: 8px 16px;
+  ${({ $variant }) => {
+    switch ($variant) {
+      case LayoutVariants.Modal: {
+        return `
+          padding: 8px 24px;
+        `
+      }
+      default: {
+        return `
+          padding: 8px 16px;
+        `
+      }
+    }
+  }}
 
   display: flex;
   gap: 12px;
@@ -133,7 +148,7 @@ const InstantHitContainer = styled.div`
     color: ${colorSupportive.heavy};
   }
 
-  ${Avatar} {
+  ${Avatar}, ${TopicCircle} {
     flex-shrink: 0;
   }
 
@@ -142,12 +157,18 @@ const InstantHitContainer = styled.div`
   }
 `
 
-export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
+export function InstantLegislatorHit({
+  hit,
+  variant,
+}: {
+  hit: LegislatorRawHit
+  variant: LayoutVariant
+}) {
   return (
     <Link
       href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.term}`}
     >
-      <InstantHitContainer>
+      <InstantHitContainer $variant={variant}>
         <Avatar $imgSrc={hit.imgSrc}>
           <Party $imgSrc={hit.partyImgSrc} />
         </Avatar>
@@ -160,18 +181,29 @@ export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
   )
 }
 
-export function InstantTopicHit({ hit }: { hit: TopicRawHit }) {
+export function InstantTopicHit({
+  hit,
+  variant,
+}: {
+  hit: TopicRawHit
+  variant: LayoutVariant
+}) {
   return (
     <Link
       href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
     >
-      <InstantHitContainer>
+      <InstantHitContainer $variant={variant}>
         <TopicCircle>
           <IconIssue />
         </TopicCircle>
         <Text>
           <Highlight highlightedTagName="span" attribute="name" hit={hit} />
           <p>
+            {variant === LayoutVariants.Default ? (
+              <span>共{hit.relatedMessageCount}筆發言：</span>
+            ) : (
+              <span>發言：</span>
+            )}
             <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
           </p>
         </Text>

@@ -138,7 +138,7 @@ export const AlgoliaInstantSearch = ({
             }
           }}
         />
-        <InstantHits $hide={!focused} />
+        <InstantHits $hide={!focused} variant={variant} />
         <ClickOutsideWidget
           containerRef={containerRef}
           onClickOutside={() => {
