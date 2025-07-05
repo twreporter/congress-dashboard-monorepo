@@ -15,8 +15,8 @@ const BodyErrorBox = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-contents: center;
-  aliign-items: center;
+  justify-content: center;
+  align-items: center;
   gap: 8px;
   position: absolute;
   top: 50%;

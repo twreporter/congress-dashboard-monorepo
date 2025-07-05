@@ -7,7 +7,7 @@ const log = logging.log(`${releaseBranch}-congress-dashboard-frontend`)
 const isProduction = process.env.NODE_ENV === 'production'
 
 const logger = pino({
-  level: 'debug',
+  level: 'info',
   formatters: {
     level: (label) => ({ severity: label.toUpperCase() }),
   },
