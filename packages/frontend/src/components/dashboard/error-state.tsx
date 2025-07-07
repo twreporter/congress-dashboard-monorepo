@@ -32,7 +32,9 @@ const ErrorState: FC = () => {
       <span>請嘗試重新整理頁面。若仍無法正常顯示，</span>
       <span>
         歡迎點此
-        <TextWithUnderline onClick={openFeedback}>回報問題</TextWithUnderline>
+        <TextWithUnderline onClick={() => openFeedback('dashboard')}>
+          回報問題
+        </TextWithUnderline>
         以協助我們改善。
       </span>
     </Text>

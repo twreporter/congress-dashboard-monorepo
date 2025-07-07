@@ -37,7 +37,9 @@ const TopicFeedback: React.FC = () => {
     <Container>
       <span>
         發現什麼問題嗎？透過
-        <Feedback onClick={openFeedback}>問題回報</Feedback>
+        <Feedback onClick={() => openFeedback('topic/legislator')}>
+          問題回報
+        </Feedback>
         告訴我們，一起讓這裡變得更好！
       </span>
     </Container>

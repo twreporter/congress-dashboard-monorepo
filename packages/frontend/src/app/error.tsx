@@ -42,7 +42,7 @@ const buttonText = '問題回報'
 const Error: React.FC = () => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    openFeedback()
+    openFeedback('SSR error')
   }
   return (
     <Container>

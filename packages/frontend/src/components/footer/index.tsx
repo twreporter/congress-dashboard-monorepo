@@ -239,7 +239,10 @@ const Footer: React.FC = () => {
                 text="關於觀測站"
                 target="_self"
               />
-              <Feedback text="意見回饋" onClick={openFeedback} />
+              <Feedback
+                text="意見回饋"
+                onClick={() => openFeedback('footer')}
+              />
             </LinkGroup>
             <LinkGroup>
               <FooterLink
