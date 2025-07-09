@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import type { LayoutVariant } from '@/components/search/constants'
-import { LayoutVariants } from '@/components/search/constants'
+import { layoutVariants } from '@/components/search/constants'
 import { useInView } from 'react-intersection-observer'
 import type {
   LegislatorRawHit,
@@ -38,13 +38,13 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
 
   ${({ $variant }) => {
     switch ($variant) {
-      case LayoutVariants.Modal: {
+      case layoutVariants.Modal: {
         return `
           height: 100%;
         `
       }
-      case LayoutVariants.Header:
-      case LayoutVariants.Default:
+      case layoutVariants.Header:
+      case layoutVariants.Default:
       default: {
         return `
           border-radius: 8px;
@@ -68,7 +68,7 @@ const FirstRow = styled.div<{ $variant: LayoutVariant }>`
   gap: 12px;
   ${({ $variant }) => {
     switch ($variant) {
-      case LayoutVariants.Modal: {
+      case layoutVariants.Modal: {
         return `
           padding: 8px 24px;
         `
@@ -154,7 +154,7 @@ export const defaultIndexName = IndexNameEnum.Legislator
 
 export const InstantHits = ({
   className,
-  variant = LayoutVariants.Default,
+  variant = layoutVariants.Default,
 }: {
   className?: string
   variant?: LayoutVariant

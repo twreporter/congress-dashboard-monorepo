@@ -6,7 +6,7 @@ import type { LayoutVariant } from '@/components/search/constants'
 import { InternalRoutes } from '@/constants/routes'
 import { Highlight, Snippet } from 'react-instantsearch'
 import { Issue as IconIssue } from '@/components/search/icons'
-import { LayoutVariants } from '@/components/search/constants'
+import { layoutVariants } from '@/components/search/constants'
 import {
   colorGrayscale,
   colorSupportive,
@@ -113,7 +113,7 @@ const InstantHitContainer = styled.div<{ $variant: LayoutVariant }>`
   margin: 4px 0;
   ${({ $variant }) => {
     switch ($variant) {
-      case LayoutVariants.Modal: {
+      case layoutVariants.Modal: {
         return `
           padding: 8px 24px;
         `
@@ -199,7 +199,7 @@ export function InstantTopicHit({
         <Text>
           <Highlight highlightedTagName="span" attribute="name" hit={hit} />
           <p>
-            {variant === LayoutVariants.Default ? (
+            {variant === layoutVariants.Default ? (
               <span>共{hit.relatedMessageCount}筆發言：</span>
             ) : (
               <span>發言：</span>

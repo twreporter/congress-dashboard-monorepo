@@ -8,13 +8,13 @@ import {
   defaultIndexName,
 } from '@/components/search/instant-hits'
 import { InstantSearch, useSearchBox } from 'react-instantsearch'
-import { LayoutVariants } from '@/components/search/constants'
 import { SearchBox } from '@/components/search/search-box'
 import { SearchModal } from '@/components/search/modal'
 import { ZIndex } from '@/styles/z-index'
+import { layoutVariants } from '@/components/search/constants'
 import { liteClient as algoliasearch } from 'algoliasearch/lite'
 
-export { LayoutVariants }
+export { layoutVariants }
 
 const Container = styled.div<{ $variant: LayoutVariant }>`
   /* TODO: remove box-sizing if global already defined */
@@ -26,7 +26,7 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
 
   ${({ $variant }) => {
     // Set the z-index to avoid covering the header and being covered by the sticky bar.
-    if ($variant === LayoutVariants.Default) {
+    if ($variant === layoutVariants.Default) {
       return `z-index: ${ZIndex.SearchBarInBody};`
     }
   }}
@@ -80,7 +80,7 @@ const ClickOutsideWidget = ({
 
 export const AlgoliaInstantSearch = ({
   className,
-  variant = LayoutVariants.Default,
+  variant = layoutVariants.Default,
   autoFocus = false,
 }: {
   className?: string
