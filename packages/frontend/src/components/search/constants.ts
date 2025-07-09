@@ -8,3 +8,19 @@ export const layoutVariants = {
 } as const
 
 export type LayoutVariant = ValuesOf<typeof layoutVariants>
+
+export const searchStages = {
+  Legislator: 'legislator',
+  Topic: 'topic',
+  Speech: 'speech',
+} as const
+
+export type SearchStage = ValuesOf<typeof searchStages>
+
+export const indexNames = {
+  Legislator: 'legislator',
+  Topic: 'topic',
+  Speech: 'speech',
+} as const
+
+export type IndexName = ValuesOf<typeof indexNames>

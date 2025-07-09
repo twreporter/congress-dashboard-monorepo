@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import type { LayoutVariant } from '@/components/search/constants'
-import { layoutVariants } from '@/components/search/constants'
+import type { LayoutVariant, SearchStage } from '@/components/search/constants'
+import {
+  layoutVariants,
+  indexNames,
+  searchStages,
+} from '@/components/search/constants'
 import { useInView } from 'react-intersection-observer'
 import type {
   LegislatorRawHit,
@@ -140,17 +144,7 @@ const LoadingSpinner = styled.div`
   }
 `
 
-enum SearchStageEnum {
-  Legislator = 'legislator',
-  Topic = 'topic',
-}
-
-enum IndexNameEnum {
-  Legislator = 'legislator',
-  Topic = 'topic',
-}
-
-export const defaultIndexName = IndexNameEnum.Legislator
+export const defaultIndexName = indexNames.Legislator
 
 export const InstantHits = ({
   className,
@@ -161,7 +155,7 @@ export const InstantHits = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { query } = useSearchBox()
-  const [stage, setStage] = useState(SearchStageEnum.Legislator)
+  const [stage, setStage] = useState<SearchStage>(searchStages.Legislator)
 
   if (typeof query !== 'string' || query === '') {
     return null
@@ -181,8 +175,8 @@ export const InstantHits = ({
           <Configure hitsPerPage={10} />
           <InstantLegislatorHits variant={variant} />
         </Index>
-        {stage === SearchStageEnum.Topic && (
-          <Index indexName={IndexNameEnum.Topic}>
+        {stage === searchStages.Topic && (
+          <Index indexName={indexNames.Topic}>
             <Configure hitsPerPage={10} />
             <InstantTopicHits variant={variant} />
           </Index>
@@ -198,8 +192,8 @@ const LoadMore = ({
   setStage,
   containerRef,
 }: {
-  stage: SearchStageEnum
-  setStage: React.Dispatch<React.SetStateAction<SearchStageEnum>>
+  stage: SearchStage
+  setStage: React.Dispatch<React.SetStateAction<SearchStage>>
   containerRef: React.RefObject<HTMLDivElement | null>
 }) => {
   // `renderState` structure from multiple <Index> components:
@@ -243,7 +237,7 @@ const LoadMore = ({
 
   // Reset when query changes
   useEffect(() => {
-    setStage(SearchStageEnum.Legislator)
+    setStage(searchStages.Legislator)
     setNoMoreHits(false)
   }, [query, setStage])
 
@@ -259,9 +253,8 @@ const LoadMore = ({
     // and then load Topic items after all Legislator items loaded.
     const load = () => {
       // In Legislator stage
-      if (stage === SearchStageEnum.Legislator) {
-        const legislatorState =
-          renderState[IndexNameEnum.Legislator]?.infiniteHits
+      if (stage === searchStages.Legislator) {
+        const legislatorState = renderState[indexNames.Legislator]?.infiniteHits
         // Legislator infiniteHits is not ready
         if (!legislatorState || !legislatorState.results) {
           // Do nothing
@@ -279,12 +272,12 @@ const LoadMore = ({
         } else {
           // All Legislator items have been loaded.
           // Start to load Topic items.
-          setStage(SearchStageEnum.Topic)
+          setStage(searchStages.Topic)
         }
       }
       // In Topic stage
-      else if (stage === SearchStageEnum.Topic) {
-        const topicState = renderState[IndexNameEnum.Topic]?.infiniteHits
+      else if (stage === searchStages.Topic) {
+        const topicState = renderState[indexNames.Topic]?.infiniteHits
         // Topic infiniteHits is not ready
         if (!topicState || !topicState.results) {
           // Do nothing
