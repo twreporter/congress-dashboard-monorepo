@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import type { LayoutVariant, SearchStage } from '@/components/search/constants'
@@ -27,6 +28,7 @@ import {
   colorGrayscale,
   colorOpacity,
 } from '@twreporter/core/lib/constants/color'
+import { InternalRoutes } from '@/constants/routes'
 
 const InstantSearchStatus = {
   Idle: 'idle',
@@ -163,13 +165,16 @@ export const InstantHits = ({
 
   return (
     <Container ref={containerRef} className={className} $variant={variant}>
-      {/* TODO: add `next/link` Link when search page is ready */}
-      <FirstRow $variant={variant}>
-        <SearchIconContainer>
-          <IconSearch />
-        </SearchIconContainer>
-        <SearchText>{query}</SearchText>
-      </FirstRow>
+      <Link
+        href={`${InternalRoutes.Search}?query=${query.split(' ').join('+')}`}
+      >
+        <FirstRow $variant={variant}>
+          <SearchIconContainer>
+            <IconSearch />
+          </SearchIconContainer>
+          <SearchText>{query}</SearchText>
+        </FirstRow>
+      </Link>
       <Rows>
         <Index indexName={defaultIndexName}>
           <Configure hitsPerPage={10} />

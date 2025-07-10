@@ -1,0 +1,217 @@
+'use client'
+
+import Link from 'next/link'
+import React from 'react'
+import styled from 'styled-components'
+import type { Hit } from 'instantsearch.js'
+import { InternalRoutes } from '@/constants/routes'
+import { Highlight, Snippet } from 'react-instantsearch'
+import {
+  colorOpacity,
+  colorGrayscale,
+  colorSupportive,
+} from '@twreporter/core/lib/constants/color'
+
+export type LegislatorRawHit = Hit<{
+  objectID: string
+  slug: string
+  name: string
+  desc: string
+  shortDesc: string
+  imgSrc: string
+  term: number
+  lastSpeechAt?: string
+  partyImgSrc: string
+}>
+
+export type SpeechRawHit = Hit<{
+  objectID: string
+  slug: string
+  title: string
+  summary: string
+  term: number
+  session: number
+  date: string
+  legislatorName: string
+}>
+
+export type TopicRawHit = Hit<{
+  objectID: string
+  name: string
+  slug: string
+  desc: string
+  term: number
+  session: number
+  lastSpeechAt?: string
+  relatedMessageCount: number
+}>
+
+const Avatar = styled.div<{ $imgSrc: string }>`
+  ${({ $imgSrc }) => {
+    return `background-image: url(${$imgSrc});`
+  }}
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  width: 114px;
+  height: 147px;
+  border: 1px solid ${colorOpacity['black_0.05']};
+  border-radius: 4px;
+
+  position: relative;
+`
+
+const Party = styled.div<{ $imgSrc: string }>`
+  ${({ $imgSrc }) => {
+    return `background-image: url(${$imgSrc});`
+  }}
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid ${colorGrayscale.gray200};
+  background-color: ${colorGrayscale.white};
+  box-shadow: 0px 0px 4px 0px ${colorOpacity['black_0.2']};
+
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+`
+
+const Text = styled.div`
+  p {
+    color: ${colorGrayscale.gray800};
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 150%;
+
+    /* reset default margin */
+    margin: 0 0 8px 0;
+  }
+
+  p:first-child {
+    font-size: 14px;
+    font-weight: 700;
+    color: ${colorGrayscale.gray900};
+  }
+
+  p:last-child {
+    font-size: 14px;
+  }
+
+  /* overwrite InstantSearch Highlight and Snippet styles */
+  .ais-Highlight.title {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 150%;
+    color: ${colorGrayscale.gray900};
+  }
+
+  /* overwrite InstantSearch Highlight and Snippet styles */
+  .ais-Highlight-highlighted,
+  .ais-Snippet-highlighted {
+    color: ${colorSupportive.heavy};
+  }
+`
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+
+  padding-top: 32px;
+  padding-bottom: 32px;
+
+  border-bottom: 1px solid ${colorGrayscale.gray300};
+
+  ${Avatar} {
+    flex-shrink: 0;
+  }
+`
+
+export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
+  return (
+    <Link
+      href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.term}`}
+    >
+      <Container>
+        <Text>
+          <p>立委</p>
+          <p>
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="name"
+              hit={hit}
+            />
+          </p>
+          <p>{hit.desc}</p>
+          <p>最新一筆發言於{hit.lastSpeechAt}</p>
+        </Text>
+        <Avatar $imgSrc={hit.imgSrc}>
+          <Party $imgSrc={hit.partyImgSrc} />
+        </Avatar>
+      </Container>
+    </Link>
+  )
+}
+
+export function TopicHit({ hit }: { hit: TopicRawHit }) {
+  return (
+    <Link
+      href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
+    >
+      <Container>
+        <Text>
+          <p>議題</p>
+          <p>
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="name"
+              hit={hit}
+            />
+          </p>
+          <p>
+            <span>共{hit.relatedMessageCount}筆發言：</span>
+            <Highlight highlightedTagName="span" attribute="desc" hit={hit} />
+          </p>
+          <p>最新一筆發言於{hit.lastSpeechAt}</p>
+        </Text>
+      </Container>
+    </Link>
+  )
+}
+
+export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
+  return (
+    <Link
+      href={`${InternalRoutes.Speech}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
+    >
+      <Container>
+        <Text>
+          <p>發言全文</p>
+          <p>
+            <Highlight highlightedTagName="span" attribute="title" hit={hit} />
+          </p>
+          <p>
+            <Snippet highlightedTagName="span" attribute="summary" hit={hit} />
+          </p>
+          <p>
+            質詢立委／{hit.legislatorName}．發言於 {hit.date}
+          </p>
+        </Text>
+      </Container>
+    </Link>
+  )
+}

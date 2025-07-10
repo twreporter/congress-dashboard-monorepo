@@ -13,6 +13,7 @@ export const searchStages = {
   Legislator: 'legislator',
   Topic: 'topic',
   Speech: 'speech',
+  All: 'all',
 } as const
 
 export type SearchStage = ValuesOf<typeof searchStages>
