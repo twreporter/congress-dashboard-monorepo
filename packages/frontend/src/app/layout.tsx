@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 }
 
 const getGtmInfo = () => {
-  const gtmId = process.env.NEX_PUBLIC_GTM_ID
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID
   const gtmAuth = process.env.NEXT_PUBLIC_GTM_AUTH
   const gtmPreview = process.env.NEXT_PUBLIC_GTM_PREVIEW
   const gtmEnv = process.env.NEXT_PUBLIC_GTM_ENV || ''
