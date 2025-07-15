@@ -5,7 +5,8 @@
 
 - frontend
   - add `NoIssueState` for SidebarLegislator component
-  - adjust loig level from `debug` to `info`
+  - adjust log level from `debug` to `info`
   - fix product feedback wording
+  - add `console.log` for debugging temporary
 - cms
   - fix topNTopicsOfLegislator sql syntax
