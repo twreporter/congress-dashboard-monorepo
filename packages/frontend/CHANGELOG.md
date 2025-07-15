@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0-rc.12
+
+### Patch Changes
+
+- [#251](https://github.com/twreporter/congress-dashboard-monorepo/pull/251) [`73acf3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/73acf3c0cbec00f4f137be1fc6ae24a7170c4a1e) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - - frontend
+  - add `NoIssueState` for SidebarLegislator component
+  - adjust log level from `debug` to `info`
+  - fix product feedback wording
+  - add `console.log` for debugging temporary
+  - cms
+    - fix topNTopicsOfLegislator sql syntax
+
 ## 1.1.0-rc.11
 
 ### Patch Changes
