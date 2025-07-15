@@ -94,7 +94,7 @@ const MobileToolbarContext = createContext<{
 const FeedbackButton: React.FC = () => {
   const { hideText } = useContext(MobileToolbarContext)
   return (
-    <ButtonContainer onClick={openFeedback}>
+    <ButtonContainer onClick={() => openFeedback('speech mobile toolbar')}>
       <IconWithTextButton
         text="問題回報"
         iconComponent={<Report releaseBranch={releaseBranch} />}

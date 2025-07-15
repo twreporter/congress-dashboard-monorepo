@@ -13,7 +13,9 @@ const ErrorState: FC = memo(() => (
     <ErrorMsg>資料載入失敗，請嘗試重新整理頁面。若仍無法正常顯示，</ErrorMsg>
     <ErrorMsg>
       <span>歡迎點此</span>
-      <SpanWithUnderline onClick={openFeedback}>回報問題</SpanWithUnderline>
+      <SpanWithUnderline onClick={() => openFeedback('selector')}>
+        回報問題
+      </SpanWithUnderline>
       <span>以協助我們改善。</span>
     </ErrorMsg>
   </ErrorMsgBox>
