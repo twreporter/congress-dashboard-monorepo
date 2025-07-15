@@ -15,8 +15,8 @@ const BodyErrorBox = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-contents: center;
-  aliign-items: center;
+  justify-content: center;
+  align-items: center;
   gap: 8px;
   position: absolute;
   top: 50%;
@@ -40,7 +40,9 @@ export const BodyErrorState: FC = memo(() => (
       <BodyErrorText>請嘗試重新整理頁面。若仍無法正常顯示，</BodyErrorText>
       <BodyErrorText>
         <span>歡迎點此</span>
-        <SpanWithUnderline onClick={openFeedback}>回報問題</SpanWithUnderline>
+        <SpanWithUnderline onClick={() => openFeedback('sidebar summary')}>
+          回報問題
+        </SpanWithUnderline>
         <span>以協助我們改善。</span>
       </BodyErrorText>
     </BodyErrorTextBox>
@@ -63,7 +65,9 @@ export const FollowMoreErrorState: FC = memo(() => (
     <P1Gray800Bold text={'資料載入失敗'} />
     <FollowMoreErrorText>
       <span>請嘗試重新整理頁面。若仍無法正常顯示，歡迎點此</span>
-      <SpanWithUnderline onClick={openFeedback}>回報問題</SpanWithUnderline>
+      <SpanWithUnderline onClick={() => openFeedback('follow more')}>
+        回報問題
+      </SpanWithUnderline>
       <span>以協助我們改善。</span>
     </FollowMoreErrorText>
   </FollowMoreErrorBox>

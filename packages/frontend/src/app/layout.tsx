@@ -1,5 +1,6 @@
 import React from 'react'
 import type { Metadata } from 'next'
+import { GoogleTagManager } from '@next/third-parties/google'
 // utils
 import StyledComponentsRegistry from '@/utils/style-registry'
 import { notoSans } from '@/utils/font'
@@ -32,13 +33,32 @@ export const metadata: Metadata = {
   },
 }
 
+const getGtmInfo = () => {
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID
+  const gtmAuth = process.env.NEXT_PUBLIC_GTM_AUTH
+  const gtmPreview = process.env.NEXT_PUBLIC_GTM_PREVIEW
+  const gtmEnv = process.env.NEXT_PUBLIC_GTM_ENV || ''
+
+  return { gtmId, gtmAuth, gtmPreview, gtmDataLayer: { environment: gtmEnv } }
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const { gtmId, gtmAuth, gtmPreview, gtmDataLayer } = getGtmInfo()
+
   return (
     <html lang="zh-tw" className={notoSans.className}>
+      {gtmId && (
+        <GoogleTagManager
+          gtmId={gtmId}
+          auth={gtmAuth}
+          preview={gtmPreview}
+          dataLayer={gtmDataLayer}
+        />
+      )}
       <body>
         <StyledComponentsRegistry>
           <ScrollProvider>

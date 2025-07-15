@@ -132,7 +132,7 @@ const AboutPage: React.FC<AboutPageProps> = ({
         <DesktopAndAboveWithFlex>
           <Feedback>
             <CustomPillButton
-              onClick={openFeedback}
+              onClick={() => openFeedback('about')}
               leftIconComponent={<Report releaseBranch={releaseBranch} />}
               text={'問題回報'}
             />
