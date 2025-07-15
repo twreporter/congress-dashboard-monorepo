@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.13
+
+### Patch Changes
+
+- [#258](https://github.com/twreporter/congress-dashboard-monorepo/pull/258) [`66b6ef0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/66b6ef03ea374615eb6d3ce5783a5146230c0425) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add integration with GTM
+
 ## 1.1.0-rc.12
 
 ### Patch Changes
