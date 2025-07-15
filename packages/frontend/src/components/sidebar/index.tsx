@@ -43,9 +43,9 @@ import {
   BodyErrorState,
   FollowMoreErrorState,
 } from '@/components/sidebar/error-state'
+import NoIssueState from '@/components/sidebar/no-issue-state'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
-import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import {
   colorGrayscale,
   colorOpacity,
@@ -296,9 +296,6 @@ const FollowMoreLegislator = styled.div`
   display: flex;
   overflow-x: scroll;
 `
-const Note = styled(P1)`
-  color: ${colorGrayscale.gray800};
-`
 
 export interface SidebarLegislatorProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
@@ -322,10 +319,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   const [tabList, setTabList] = useState(issueList)
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
-  const showNote = useMemo(
-    () => note && issueList.length === 0,
-    [note, issueList]
-  )
+  const showNoIssue = useMemo(() => issueList.length === 0, [issueList])
   const selectedIssue = useMemo(
     () => _.get(tabList, selectedTab),
     [tabList, selectedTab]
@@ -440,9 +434,9 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
             onOpenFilterModal={() => setShowFilter(true)}
           />
         </div>
-        {showNote ? (
+        {showNoIssue ? (
           <Body $topBoxHeight={topRef.current?.offsetHeight || 0}>
-            <Note text={note} />
+            <NoIssueState note={note} />
           </Body>
         ) : isLoading ? (
           <Loader />
