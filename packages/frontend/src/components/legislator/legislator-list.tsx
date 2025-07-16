@@ -16,6 +16,8 @@ import {
   Body,
   SummarySection,
   EmptyState,
+  EmptyStateColumn,
+  EmptyStateTitle,
   EmptyStateText,
 } from '@/components/layout/speech-summary-list/layout'
 import TabNavigation from '@/components/layout/speech-summary-list/tab-navigation'
@@ -90,6 +92,7 @@ type LegislatorListProps = {
   isLoading?: boolean
   legislatorSlug: string
   legislatorName: string
+  legislatorNote?: string
   topics: { name: string; slug: string; count: number }[]
   speechesByTopic: Record<
     string,
@@ -103,6 +106,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   isLoading = true,
   legislatorSlug,
   legislatorName,
+  legislatorNote,
   topics,
   speechesByTopic,
   currentMeetingTerm,
@@ -204,9 +208,10 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
       <Container>
         <Title $isEmpty={true} text="發言摘要" />
         <Body>
-          <EmptyState>
-            <EmptyStateText text="所選會期無發言資訊" />
-          </EmptyState>
+          <EmptyStateColumn>
+            <EmptyStateTitle text="所選會期無發言資訊" />
+            {legislatorNote ? <EmptyStateText text={legislatorNote} /> : null}
+          </EmptyStateColumn>
         </Body>
       </Container>
     )
