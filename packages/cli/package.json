@@ -1,0 +1,26 @@
+{
+  "name": "lawmaker-cli",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf lib && tsc && chmod +x lib/index.js",
+    "dev": "ts-node src/index.ts",
+    "lawmaker": "node lib/index.js"
+  },
+  "dependencies": {
+    "@twreporter/errors": "^1.1.2",
+    "algoliasearch": "^5.25.0",
+    "axios": "^1.9.0",
+    "commander": "^11.0.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@algolia/cli": "^4.0.8",
+    "ts-node": "^10.9.2",
+    "tsc": "^2.0.4",
+    "typescript": "^5.8.3"
+  },
+  "bin": {
+    "lawmaker": "./lib/index.js"
+  }
+}
