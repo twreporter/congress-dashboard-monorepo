@@ -18,6 +18,7 @@ export function transferSpeechModelToRecord(
       // remove line break
       ?.replace(/\r?\n/g, '')
     return {
+      objectID: s.slug,
       slug: s.slug,
       title: s.title,
       date: s.date,
