@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import useWindowWidth from '@/hooks/use-window-width'
 import styled from 'styled-components'
@@ -78,15 +80,17 @@ const ClickOutsideWidget = ({
   return null
 }
 
+export type AlgoliaInstantSearchProps = {
+  className?: string
+  variant?: LayoutVariant
+  autoFocus?: boolean
+}
+
 export const AlgoliaInstantSearch = ({
   className,
   variant = layoutVariants.Default,
   autoFocus = false,
-}: {
-  className?: string
-  variant?: LayoutVariant
-  autoFocus?: boolean
-}) => {
+}: AlgoliaInstantSearchProps) => {
   const containerRef = useRef(null)
   const [focused, setFocused] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -124,7 +128,13 @@ export const AlgoliaInstantSearch = ({
   }
 
   return (
-    <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
+    <InstantSearch
+      indexName={defaultIndexName}
+      searchClient={searchClient}
+      future={{
+        preserveSharedStateOnUnmount: true,
+      }}
+    >
       <Container ref={containerRef} className={className} $variant={variant}>
         <SearchBox
           variant={variant}
