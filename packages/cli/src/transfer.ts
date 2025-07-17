@@ -12,6 +12,11 @@ export function transferSpeechModelToRecord(
   speechModels: SpeechModel[]
 ): SpeechRecord[] {
   return speechModels.map((s) => {
+    const summary = s.summary
+      // remove html tags
+      ?.replace(/<\/?[a-z][\s\S]*?>/gi, '')
+      // remove line break
+      ?.replace(/\r?\n/g, '')
     return {
       slug: s.slug,
       title: s.title,
@@ -19,7 +24,7 @@ export function transferSpeechModelToRecord(
       term: s.legislativeMeeting?.term,
       session: s.legislativeMeetingSession?.term,
       legislatorName: s.legislativeYuanMember?.legislator?.name,
-      summary: s.summary,
+      summary,
     }
   })
 }
