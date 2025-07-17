@@ -158,6 +158,7 @@ export async function* speechIterator(
               slug
               title
               summary
+              date
               createdAt
               updatedAt
               legislativeMeeting {
