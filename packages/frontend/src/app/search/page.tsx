@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { Metadata } from 'next'
 // components
-import { SearchResults } from '@/components/search/index'
+import { SearchPage } from '@/components/search/index'
 // constants
 import { InternalRoutes } from '@/constants/routes'
 import { OG_IMAGE_URL } from '@/constants'
@@ -33,8 +33,5 @@ export default async function Page({
   searchParams: Promise<{ query?: string }>
 }) {
   const { query } = await searchParams
-  console.log({
-    query,
-  })
-  return <SearchResults query={query} />
+  return <SearchPage query={query} />
 }

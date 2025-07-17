@@ -2,10 +2,12 @@
 
 import React, { useState } from 'react'
 import type { SearchStage } from '@/components/search/constants'
+import mq from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
 import { MultiStageHits, Hits } from '@/components/search/result-page/hits'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { indexNames, searchStages } from '@/components/search/constants'
+import { AlgoliaInstantSearch } from '@/components/search/instant-search'
 // import { SearchFilter } from '@/components/search/result-page/filter'
 
 const Container = styled.div`
@@ -88,12 +90,12 @@ const Bar = styled.div`
   border-bottom: 1px solid ${colorGrayscale.gray300};
 `
 
-export type SearchResultsProps = {
+type SearchResultsProps = {
   className?: string
   query: string
 }
 
-export const SearchResults = ({ className, query }: SearchResultsProps) => {
+const SearchResults = ({ className, query }: SearchResultsProps) => {
   const [activeTab, setActiveTab] = useState<SearchStage>(searchStages.All)
   return (
     <Container className={className}>
@@ -121,5 +123,49 @@ export const SearchResults = ({ className, query }: SearchResultsProps) => {
         <Hits indexName={indexNames.Speech} query={query} />
       </HitsContainer>
     </Container>
+  )
+}
+
+const InsantSearchContainer = styled.div`
+  background-color: ${colorGrayscale.gray200};
+  height: 192px;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${mq.desktopAndAbove`
+    .search-box {
+      width: 560px;
+    }
+  `}
+
+  ${mq.tabletOnly`
+    .search-box {
+      width: 480px;
+    }
+  `}
+
+  ${mq.mobileOnly`
+    .search-box {
+      width: 100%;
+      max-width: 480px;
+    }
+  `}
+`
+
+export type SearchPageProps = {
+  query: string
+}
+
+export function SearchPage({ query }: SearchResultsProps) {
+  return (
+    <div key={query}>
+      <InsantSearchContainer>
+        <AlgoliaInstantSearch className="search-box" />
+      </InsantSearchContainer>
+      <SearchResults query={query} />
+    </div>
   )
 }

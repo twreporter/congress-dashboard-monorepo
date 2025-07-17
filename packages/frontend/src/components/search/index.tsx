@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 
 import type { AlgoliaInstantSearchProps } from '@/components/search/instant-search'
-import type { SearchResultsProps } from '@/components/search/result-page/index'
+import type { SearchPageProps } from '@/components/search/result-page/index'
 
 const AlgoliaInstantSearch = dynamic<AlgoliaInstantSearchProps>(
   () =>
@@ -13,10 +13,10 @@ const AlgoliaInstantSearch = dynamic<AlgoliaInstantSearchProps>(
   { ssr: false }
 )
 
-const SearchResults = dynamic<SearchResultsProps>(
+const SearchPage = dynamic<SearchPageProps>(
   () =>
     import('@/components/search/result-page/index').then(
-      (mod) => mod.SearchResults
+      (mod) => mod.SearchPage
     ),
   { ssr: false }
 )
@@ -25,11 +25,11 @@ function AlgoliaInstantSearchWrapper(props: AlgoliaInstantSearchProps) {
   return <AlgoliaInstantSearch {...props} />
 }
 
-function SearchResultsWrapper(props: SearchResultsProps) {
-  return <SearchResults {...props} />
+function SearchPageWrapper(props: SearchPageProps) {
+  return <SearchPage {...props} />
 }
 
 export {
   AlgoliaInstantSearchWrapper as AlgoliaInstantSearch,
-  SearchResultsWrapper as SearchResults,
+  SearchPageWrapper as SearchPage,
 }
