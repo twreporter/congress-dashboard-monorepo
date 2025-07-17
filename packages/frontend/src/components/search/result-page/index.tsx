@@ -92,7 +92,7 @@ const Bar = styled.div`
 
 type SearchResultsProps = {
   className?: string
-  query: string
+  query?: string
 }
 
 const SearchResults = ({ className, query }: SearchResultsProps) => {
@@ -156,10 +156,10 @@ const InsantSearchContainer = styled.div`
 `
 
 export type SearchPageProps = {
-  query: string
+  query?: string
 }
 
-export function SearchPage({ query }: SearchResultsProps) {
+export function SearchPage({ query }: SearchPageProps) {
   return (
     <div key={query}>
       <InsantSearchContainer>
