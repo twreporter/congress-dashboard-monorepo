@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import React from 'react'
+import mq from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
 import { InternalRoutes } from '@/constants/routes'
@@ -54,12 +55,20 @@ const Avatar = styled.div<{ $imgSrc: string }>`
   background-repeat: no-repeat;
   background-size: cover;
 
-  width: 114px;
-  height: 147px;
   border: 1px solid ${colorOpacity['black_0.05']};
   border-radius: 4px;
 
   position: relative;
+
+  ${mq.desktopAndAbove`
+    width: 114px;
+    height: 147px;
+  `}
+
+  ${mq.tabletAndBelow`
+    width: 109px;
+    height: 141px;
+  `}
 `
 
 const Party = styled.div<{ $imgSrc: string }>`
@@ -82,6 +91,16 @@ const Party = styled.div<{ $imgSrc: string }>`
   bottom: 8px;
 `
 
+const LegislatorDesc = styled.p`
+  /* truncate text to two lines and show ellipsis (…) when text is truncated */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  height: 48px;
+`
 const Text = styled.div`
   p {
     color: ${colorGrayscale.gray800};
@@ -101,6 +120,7 @@ const Text = styled.div`
 
   p:last-child {
     font-size: 14px;
+    margin: 0;
   }
 
   /* overwrite InstantSearch Highlight and Snippet styles */
@@ -110,6 +130,13 @@ const Text = styled.div`
     line-height: 150%;
     color: ${colorGrayscale.gray900};
   }
+
+  ${mq.tabletAndBelow`
+    /* overwrite InstantSearch Highlight and Snippet styles */
+    .ais-Highlight.title {
+      font-size: 18px;
+    }
+  `}
 
   /* overwrite InstantSearch Highlight and Snippet styles */
   .ais-Highlight-highlighted,
@@ -125,14 +152,21 @@ const Container = styled.div`
   justify-content: space-between;
   gap: 24px;
 
-  padding-top: 32px;
-  padding-bottom: 32px;
-
   border-bottom: 1px solid ${colorGrayscale.gray300};
 
   ${Avatar} {
     flex-shrink: 0;
   }
+
+  ${mq.desktopAndAbove`
+    padding-top: 32px;
+    padding-bottom: 32px;
+  `}
+
+  ${mq.tabletAndBelow`
+    padding-top: 24px;
+    padding-bottom: 24px;
+  `}
 `
 
 export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
@@ -153,7 +187,7 @@ export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
               hit={hit}
             />
           </p>
-          <p>{hit.desc}</p>
+          <LegislatorDesc>{hit.desc}</LegislatorDesc>
           <p>最新一筆發言於{hit.lastSpeechAt}</p>
         </Text>
         <Avatar $imgSrc={hit.imgSrc}>

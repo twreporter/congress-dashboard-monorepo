@@ -19,14 +19,38 @@ const Container = styled.div`
 
   background-color: ${colorGrayscale.gray100};
 
-  padding-top: 40px;
+  ${mq.desktopAndAbove`
+    padding-top: 40px;
+  `}
+
+  ${mq.tabletOnly`
+    padding-top: 32px;
+  `}
+
+  ${mq.mobileOnly`
+    padding-top: 20px;
+  `}
+`
+
+const BarAndResults = styled.div`
+  ${mq.desktopAndAbove`
+    width: 720px;
+  `}
+
+  ${mq.tabletOnly`
+    width: 704px;
+  `}
+
+  ${mq.mobileOnly`
+    width: calc(327 / 375 * 100%);
+  `}
+
+  margin-left: auto;
+  margin-right: auto;
 `
 
 const HitsContainer = styled.div<{ $hidden: boolean }>`
   width: 100%;
-  max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
 
   ${({ $hidden }) => {
     if ($hidden) {
@@ -81,11 +105,6 @@ const Bar = styled.div`
   justify-content: space-between;
 
   width: 100%;
-  max-width: 720px;
-
-  margin-left: auto;
-  margin-right: auto;
-  margin: 0px auto 56px auto;
 
   border-bottom: 1px solid ${colorGrayscale.gray300};
 `
@@ -99,36 +118,37 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
   const [activeTab, setActiveTab] = useState<SearchStage>(searchStages.All)
   return (
     <Container className={className}>
-      <Bar>
-        <Tabs>
-          {searchTabs.map((searchTab) => {
-            return (
-              <Tab
-                key={searchTab.value}
-                className={searchTab.value === activeTab ? 'active' : ''}
-                onClick={() => {
-                  setActiveTab(searchTab.value)
-                }}
-              >
-                {searchTab.label}
-              </Tab>
-            )
-          })}
-        </Tabs>
-      </Bar>
-      <HitsContainer $hidden={activeTab !== searchStages.All}>
-        <MultiStageHits query={query} />
-      </HitsContainer>
-      <HitsContainer $hidden={activeTab !== searchStages.Speech}>
-        <Hits indexName={indexNames.Speech} query={query} />
-      </HitsContainer>
+      <BarAndResults>
+        <Bar>
+          <Tabs>
+            {searchTabs.map((searchTab) => {
+              return (
+                <Tab
+                  key={searchTab.value}
+                  className={searchTab.value === activeTab ? 'active' : ''}
+                  onClick={() => {
+                    setActiveTab(searchTab.value)
+                  }}
+                >
+                  {searchTab.label}
+                </Tab>
+              )
+            })}
+          </Tabs>
+        </Bar>
+        <HitsContainer $hidden={activeTab !== searchStages.All}>
+          <MultiStageHits query={query} />
+        </HitsContainer>
+        <HitsContainer $hidden={activeTab !== searchStages.Speech}>
+          <Hits indexName={indexNames.Speech} query={query} />
+        </HitsContainer>
+      </BarAndResults>
     </Container>
   )
 }
 
 const InsantSearchContainer = styled.div`
   background-color: ${colorGrayscale.gray200};
-  height: 192px;
   width: 100%;
 
   display: flex;
@@ -136,21 +156,26 @@ const InsantSearchContainer = styled.div`
   align-items: center;
 
   ${mq.desktopAndAbove`
+    height: 192px;
+
     .search-box {
       width: 560px;
     }
   `}
 
   ${mq.tabletOnly`
+    height: 160px;
+
     .search-box {
       width: 480px;
     }
   `}
 
   ${mq.mobileOnly`
+    height: 128px;
+
     .search-box {
-      width: 100%;
-      max-width: 480px;
+      width: calc(327 / 375 * 100%);
     }
   `}
 `
