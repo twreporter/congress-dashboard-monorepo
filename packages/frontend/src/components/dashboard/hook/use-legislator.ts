@@ -95,15 +95,6 @@ const useLegislator = () => {
       }
     })
 
-    // log for debug
-    console.log(
-      `#data: ${moreLegislators.length}, #pool: ${pool.length}, skip: ${skip}, take: ${take}`
-    )
-    console.log(
-      'hasMore',
-      moreLegislators.length === take && skip + take < pool.length
-    )
-
     return {
       data: moreLegislators,
       hasMore: moreLegislators.length === take && skip + take < pool.length,

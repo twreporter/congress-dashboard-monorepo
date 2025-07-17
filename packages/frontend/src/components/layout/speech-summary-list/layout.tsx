@@ -70,6 +70,18 @@ export const EmptyState = styled.div`
   `}
 `
 
+export const EmptyStateColumn = styled(EmptyState)`
+  align-self: center;
+  flex-direction: column;
+  gap: 8px;
+  width: 320px;
+`
+
+export const EmptyStateTitle = styled(H5)`
+  color: ${colorGrayscale.gray800};
+`
+
 export const EmptyStateText = styled(P1)`
   color: ${colorGrayscale.gray700};
+  text-align: center;
 `
