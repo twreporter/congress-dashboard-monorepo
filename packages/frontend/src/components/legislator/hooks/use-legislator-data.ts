@@ -38,6 +38,7 @@ export type Legislator = {
     image: string
   }
   tooltip?: string
+  note?: string
   meetingTerm: number
   committees: {
     name: string
@@ -58,6 +59,7 @@ export const useLegislatorData = (
       const {
         party,
         tooltip,
+        note,
         legislativeMeeting: meeting,
         constituency,
         type,
@@ -93,6 +95,7 @@ export const useLegislatorData = (
         avatar: legislatorAvatar,
         party: legislatorParty,
         tooltip,
+        note,
         meetingTerm,
         committees,
         proposalSuccessCount: proposalSuccessCount || 0,

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-rc.14
+
+### Patch Changes
+
+- [#262](https://github.com/twreporter/congress-dashboard-monorepo/pull/262) [`c575381`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c575381f7a237223c6a9f93fe62a3419fb93c7d8) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add note on legislator page empty state & fix load more buttom not hidden
+
 ## 1.1.0-rc.13
 
 ### Patch Changes

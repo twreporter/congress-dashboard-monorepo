@@ -146,7 +146,7 @@ const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
     width: 100% !important;
   `}
 
-  ${(props) => (props.$hidden ? 'display: none;' : '')}
+  ${(props) => (props.$hidden ? 'display: none !important;' : '')}
 `
 const sidebarCss = css<{ $show: boolean }>`
   transform: translateX(${(props) => (props.$show ? 0 : 520)}px);
