@@ -5,13 +5,17 @@ import React from 'react'
 import mq from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
+import type { HitAttributeSnippetResult } from 'instantsearch.js'
+import useWindowWidth from '@/hooks/use-window-width'
+import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import { InternalRoutes } from '@/constants/routes'
-import { Highlight, Snippet } from 'react-instantsearch'
+import { Highlight, Snippet, useSearchBox } from 'react-instantsearch'
 import {
   colorOpacity,
   colorGrayscale,
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
+import { generateSnippet } from '@/components/search/result-page/utils'
 
 export type LegislatorRawHit = Hit<{
   objectID: string
@@ -228,6 +232,39 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
 }
 
 export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
+  const { query } = useSearchBox()
+  const windowWidth = useWindowWidth()
+
+  const matchedTextArr = query.split(' ')
+  let maxLength = 88 // for desktop above
+
+  switch (true) {
+    case windowWidth === DEFAULT_SCREEN.tablet.minWidth: {
+      maxLength = 86 // for table only
+      break
+    }
+    case windowWidth < DEFAULT_SCREEN.tablet.minWidth: {
+      maxLength = 38 // for table below
+      break
+    }
+  }
+  const snippet = generateSnippet(hit.summary, matchedTextArr, maxLength)
+
+  const customizedHit = {
+    ...hit,
+    // Algolia allows only one global snippet length setting via attributesToSnippet.
+    // However, our UI requires different truncation lengths for different viewports.
+    // Therefore, we manually override _snippetResult.summary.value to use a custom snippet.
+    _snippetResult: {
+      ...(hit._snippetResult ?? {}),
+      summary: {
+        value: snippet,
+        matchLevel: (hit._snippetResult?.summary as HitAttributeSnippetResult)
+          ?.matchLevel,
+      } as HitAttributeSnippetResult,
+    },
+  }
+
   return (
     <Link
       href={`${InternalRoutes.Speech}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
@@ -239,10 +276,20 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
             <Highlight highlightedTagName="span" attribute="title" hit={hit} />
           </p>
           <p>
-            <Snippet highlightedTagName="span" attribute="summary" hit={hit} />
+            <Snippet
+              highlightedTagName="span"
+              attribute="summary"
+              hit={customizedHit}
+            />
           </p>
           <p>
-            質詢立委／{hit.legislatorName}．發言於 {hit.date}
+            質詢立委／
+            <Highlight
+              highlightedTagName="span"
+              attribute="legislatorName"
+              hit={hit}
+            />
+            ．發言於 {hit.date}
           </p>
         </Text>
       </Container>
