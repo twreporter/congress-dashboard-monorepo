@@ -8,7 +8,7 @@ import { MultiStageHits, Hits } from '@/components/search/result-page/hits'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { indexNames, searchStages } from '@/components/search/constants'
 import { AlgoliaInstantSearch } from '@/components/search/instant-search'
-// import { SearchFilter } from '@/components/search/result-page/filter'
+import { SearchFilter } from '@/components/search/result-page/filter'
 
 const Container = styled.div`
   /* TODO: remove box-sizing if global already defined */
@@ -116,6 +116,35 @@ type SearchResultsProps = {
 
 const SearchResults = ({ className, query }: SearchResultsProps) => {
   const [activeTab, setActiveTab] = useState<SearchStage>(searchStages.All)
+  const [filters, setFilters] = useState('')
+
+  function renderSearchFilter() {
+    if (activeTab !== searchStages.Speech) {
+      return null
+    }
+
+    return (
+      <SearchFilter
+        onChange={(filterValue) => {
+          const meeting = filterValue.meeting
+          const meetingSession = filterValue.meetingSession
+
+          if (meeting === 'all') {
+            setFilters('')
+            return
+          }
+
+          const meetingFilter = `term: ${meeting}`
+          const meetingSessionFilter = meetingSession
+            .map((s) => `session: ${s}`)
+            .join(' OR ')
+
+          setFilters(`(${meetingFilter}) AND (${meetingSessionFilter})`)
+        }}
+      />
+    )
+  }
+
   return (
     <Container className={className}>
       <BarAndResults>
@@ -135,12 +164,13 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
               )
             })}
           </Tabs>
+          {renderSearchFilter()}
         </Bar>
         <HitsContainer $hidden={activeTab !== searchStages.All}>
           <MultiStageHits query={query} />
         </HitsContainer>
         <HitsContainer $hidden={activeTab !== searchStages.Speech}>
-          <Hits indexName={indexNames.Speech} query={query} />
+          <Hits indexName={indexNames.Speech} query={query} filters={filters} />
         </HitsContainer>
       </BarAndResults>
     </Container>

@@ -259,10 +259,12 @@ export const Hits = ({
   className,
   indexName,
   query,
+  filters,
 }: {
   className?: string
   indexName: IndexName
   query?: string
+  filters?: string
 }) => {
   const searchClient = useMemo(createAlgoliaSearchClient, [])
   const containerRef = useRef<HTMLDivElement>(null)
@@ -298,7 +300,7 @@ export const Hits = ({
         }}
       >
         <PrefillQuery query={query} />
-        <Configure hitsPerPage={10} />
+        <Configure hitsPerPage={10} filters={filters} />
         <ListComponent />
         <LoadMoreBlock>
           <LoadMore indexName={indexName} />
