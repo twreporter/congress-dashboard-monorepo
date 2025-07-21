@@ -234,8 +234,8 @@ export const ErrorMsgBox = styled.div`
   margin-top: 8px;
   display: flex;
   flex-direction: column;
-  justify-contents: center;
-  aliign-items: center;
+  justify-content: center;
+  align-items: center;
 `
 
 export const ErrorMsg = styled(P3)`

@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.1.0
+
+### Patch Changes
+
+- [#250](https://github.com/twreporter/congress-dashboard-monorepo/pull/250) [`694bbb8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/694bbb8f3aa009c0eb354674950c3615de2bf18c) Thanks [@nickhsine](https://github.com/nickhsine)! - refactor(frontend): update instant search hit
+
+- [#224](https://github.com/twreporter/congress-dashboard-monorepo/pull/224) [`f44efe7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f44efe79a3e78ee638312622330077dfda830aac) Thanks [@liruchen32](https://github.com/liruchen32)! - fix header logo and side bar link hover style
+
+- [#218](https://github.com/twreporter/congress-dashboard-monorepo/pull/218) [`f0f2139`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f0f21399cf0ab9d9e466f049aca69c2e7eac6b13) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix defects of swr error state & sidebar filtered legislator could not get top 5 topic problem
+
+- [#236](https://github.com/twreporter/congress-dashboard-monorepo/pull/236) [`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979) Thanks [@liruchen32](https://github.com/liruchen32)! - fix og description for frontend and remove constant for shared package
+
+- [#215](https://github.com/twreporter/congress-dashboard-monorepo/pull/215) [`ff59a82`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff59a8232b3dd12af702f0a7f280f2c9fb3aeb6f) Thanks [@liruchen32](https://github.com/liruchen32)! - fix speech page og description
+
+- [#251](https://github.com/twreporter/congress-dashboard-monorepo/pull/251) [`73acf3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/73acf3c0cbec00f4f137be1fc6ae24a7170c4a1e) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - - frontend
+
+  - add `NoIssueState` for SidebarLegislator component
+  - adjust log level from `debug` to `info`
+  - fix product feedback wording
+  - add `console.log` for debugging temporary
+  - cms
+    - fix topNTopicsOfLegislator sql syntax
+
+- [#185](https://github.com/twreporter/congress-dashboard-monorepo/pull/185) [`7dae6b1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7dae6b138cfa3ab0d7d031bd6fa3361142c5077d) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - This PR adds error state for all swr fetching
+
+- [#232](https://github.com/twreporter/congress-dashboard-monorepo/pull/232) [`4d313dc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4d313dcc1be8e3e4ceef56190b43378335194018) Thanks [@nickhsine](https://github.com/nickhsine)! - Add link for instant hits
+
+- [#258](https://github.com/twreporter/congress-dashboard-monorepo/pull/258) [`66b6ef0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/66b6ef03ea374615eb6d3ce5783a5146230c0425) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add integration with GTM
+
+- [#262](https://github.com/twreporter/congress-dashboard-monorepo/pull/262) [`c575381`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c575381f7a237223c6a9f93fe62a3419fb93c7d8) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add note on legislator page empty state & fix load more buttom not hidden
+
+- [#247](https://github.com/twreporter/congress-dashboard-monorepo/pull/247) [`bdc09b8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bdc09b8b8db6f9cc10c326f75bf67bae89d92967) Thanks [@nickhsine](https://github.com/nickhsine)! - fix(frontend): instant search defects
+
+- [#188](https://github.com/twreporter/congress-dashboard-monorepo/pull/188) [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207) Thanks [@liruchen32](https://github.com/liruchen32)! - test changeset
+
+- [#255](https://github.com/twreporter/congress-dashboard-monorepo/pull/255) [`1c4b62d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1c4b62d8ab1311bb6bbbbc934656fb504249957d) Thanks [@nickhsine](https://github.com/nickhsine)! - fix(frontend): defects of instant search
+
+- [#187](https://github.com/twreporter/congress-dashboard-monorepo/pull/187) [`25947e8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/25947e8335ae5b681942c09ae6924931eb71e916) Thanks [@liruchen32](https://github.com/liruchen32)! - add og image and description
+
+- [#231](https://github.com/twreporter/congress-dashboard-monorepo/pull/231) [`9da1e67`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9da1e67f0e2d0de6f23df599cff0b61ac837a445) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix follow more error state title style
+
+- Updated dependencies [[`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979), [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207)]:
+  - @twreporter/congress-dashboard-shared@0.0.7
+
 ## 1.1.0-rc.14
 
 ### Patch Changes

@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.1.0
+
+### Patch Changes
+
+- [#186](https://github.com/twreporter/congress-dashboard-monorepo/pull/186) [`af9c552`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af9c552afc249fc288dd879a3945f8bd18e23d93) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add import twreporter related articles feature
+
+- [#219](https://github.com/twreporter/congress-dashboard-monorepo/pull/219) [`bbda58b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bbda58bcd7bc99bc4025859fdc271a94a512b738) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix import twreporter related articles logic
+
+- [#251](https://github.com/twreporter/congress-dashboard-monorepo/pull/251) [`73acf3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/73acf3c0cbec00f4f137be1fc6ae24a7170c4a1e) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - - frontend
+
+  - add `NoIssueState` for SidebarLegislator component
+  - adjust log level from `debug` to `info`
+  - fix product feedback wording
+  - add `console.log` for debugging temporary
+  - cms
+    - fix topNTopicsOfLegislator sql syntax
+
+- [#240](https://github.com/twreporter/congress-dashboard-monorepo/pull/240) [`3adbb61`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3adbb61ce632df3c3c797e2b70220ce930632549) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add migration file for `recordCount`
+
+- [#230](https://github.com/twreporter/congress-dashboard-monorepo/pull/230) [`c1f7b6b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c1f7b6b093f4cf0381a61e9e9192dca128a5b777) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `recordCount` for `ImportRecord` list
+
+- [#188](https://github.com/twreporter/congress-dashboard-monorepo/pull/188) [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207) Thanks [@liruchen32](https://github.com/liruchen32)! - test changeset
+
+- [#243](https://github.com/twreporter/congress-dashboard-monorepo/pull/243) [`5e4a479`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e4a479a218f3801c28853b2cb9a1a7023e5f5ab) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `pageSize` for ImportRecord list
+
+- Updated dependencies [[`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979), [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207)]:
+  - @twreporter/congress-dashboard-shared@0.0.7
+
 ## 1.1.0-rc.7
 
 ### Patch Changes
