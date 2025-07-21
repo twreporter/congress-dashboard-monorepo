@@ -6927,7 +6927,7 @@ __metadata:
     "@keystone-6/auth": "npm:^8.0.0"
     "@keystone-6/core": "npm:^6.0.0"
     "@keystone-6/fields-document": "npm:^9.0.0"
-    "@twreporter/congress-dashboard-shared": "npm:0.0.7-rc.1"
+    "@twreporter/congress-dashboard-shared": "npm:0.0.7"
     "@twreporter/errors": "npm:^1.1.2"
     "@types/papaparse": "npm:^5"
     changelog-maker: "npm:^4.1.1"
@@ -6954,7 +6954,7 @@ __metadata:
     "@storybook/nextjs": "npm:^8.5.1"
     "@storybook/react": "npm:^8.5.1"
     "@storybook/test": "npm:^8.5.1"
-    "@twreporter/congress-dashboard-shared": "npm:0.0.7-rc.1"
+    "@twreporter/congress-dashboard-shared": "npm:0.0.7"
     "@twreporter/core": "npm:^1.24.4"
     "@twreporter/react-article-components": "npm:^2.5.11"
     "@twreporter/react-components": "npm:^9.7.0"
@@ -6981,7 +6981,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@twreporter/congress-dashboard-shared@npm:0.0.7-rc.1, @twreporter/congress-dashboard-shared@workspace:packages/shared":
+"@twreporter/congress-dashboard-shared@npm:0.0.7, @twreporter/congress-dashboard-shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@twreporter/congress-dashboard-shared@workspace:packages/shared"
   dependencies:
