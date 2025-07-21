@@ -15,18 +15,10 @@ import {
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
 import { generateSnippetForDevices } from '@/components/search/result-page/utils'
-
-export type LegislatorRawHit = Hit<{
-  objectID: string
-  slug: string
-  name: string
-  desc: string
-  shortDesc: string
-  imgSrc: string
-  term: number
-  lastSpeechAt?: string
-  partyImgSrc: string
-}>
+import type {
+  LegislatorRawHit,
+  TopicRawHit,
+} from '@/components/search/instant-hit'
 
 export type SpeechRawHit = Hit<{
   objectID: string
@@ -37,17 +29,6 @@ export type SpeechRawHit = Hit<{
   session: number
   date: string
   legislatorName: string
-}>
-
-export type TopicRawHit = Hit<{
-  objectID: string
-  name: string
-  slug: string
-  desc: string
-  term: number
-  session: number
-  lastSpeechAt?: string
-  relatedMessageCount: number
 }>
 
 const Avatar = styled.div<{ $imgSrc: string }>`

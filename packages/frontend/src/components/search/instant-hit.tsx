@@ -24,19 +24,6 @@ export type LegislatorRawHit = Hit<{
   partyImgSrc: string
 }>
 
-export type SpeechRawHit = Hit<{
-  objectID: string
-  name: string
-  legislatorNames: string[]
-  legislatorIDs: string[]
-  topic: string
-  desc: string
-  term: number
-  session: number
-  date: string
-  href: string
-}>
-
 export type TopicRawHit = Hit<{
   objectID: string
   name: string

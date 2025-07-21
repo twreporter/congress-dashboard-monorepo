@@ -8,8 +8,8 @@ import { searchStages, indexNames } from '@/components/search/constants'
 import type {
   LegislatorRawHit,
   TopicRawHit,
-  SpeechRawHit,
-} from '@/components/search/result-page/hit'
+} from '@/components/search/instant-hit'
+import type { SpeechRawHit } from '@/components/search/result-page/hit'
 import {
   LegislatorHit,
   TopicHit,
