@@ -7,6 +7,8 @@ import {
   colorGrayscale,
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
+import { P1 } from '@twreporter/react-components/lib/text/paragraph'
+import { H5 } from '@twreporter/react-components/lib/text/headline'
 import { IconButton } from '@twreporter/react-components/lib/button'
 import mq from '@twreporter/core/lib/utils/media-query'
 
@@ -54,9 +56,31 @@ export const TitleLink = styled(Link)`
   text-decoration: none;
   color: ${colorSupportive.heavy};
   font-family: ${notoSerif.style.fontFamily} !important;
+  &:hover {
+    color: ${colorSupportive.main};
+  }
 `
 
 export const TitleText = styled.span`
   color: ${colorGrayscale.gray900};
   font-family: ${notoSerif.style.fontFamily} !important;
+`
+
+export const P1Gray700 = styled(P1)`
+  color: ${colorGrayscale.gray700};
+`
+
+export const P1Gray800Bold = styled(P1)`
+  color: ${colorGrayscale.gray800};
+  font-weight: 700;
+`
+
+export const SpanWithUnderline = styled.span`
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+`
+
+export const H5Gray800 = styled(H5)`
+  color: ${colorGrayscale.gray800};
 `

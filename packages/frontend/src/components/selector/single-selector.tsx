@@ -2,10 +2,15 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 // hook
 import useOutsideClick from '@/hooks/use-outside-click'
-// @twreporter
-import type { SingleSelectProps, Option } from './types'
-import { DropdownMenu } from './dropdown-menu'
-import { isOptionGroup } from './utils'
+// @type
+import type { SingleSelectProps, Option } from '@/components/selector/types'
+// component
+import { DropdownMenu } from '@/components/selector/dropdown-menu'
+import ReportIcon from '@/components/selector/report-icon'
+import ErrorState from '@/components/selector/error-state'
+// util
+import { isOptionGroup } from '@/components/selector/utils'
+// style
 import {
   SelectContainer,
   SelectBox,
@@ -16,7 +21,7 @@ import {
   SelectedLabel,
   ArrowIcon,
   LoadingIndicator,
-} from './styles'
+} from '@/components/selector/styles'
 
 export const SingleSelect = React.memo(function SingleSelect({
   placeholder = '請選擇',
@@ -26,6 +31,7 @@ export const SingleSelect = React.memo(function SingleSelect({
   loading = false,
   searchable = true,
   searchPlaceholder = '搜尋...',
+  showError = false,
   onChange,
 }: SingleSelectProps) {
   // State management
@@ -68,7 +74,7 @@ export const SingleSelect = React.memo(function SingleSelect({
 
   // Handlers
   const handleToggle = useCallback(() => {
-    if (!disabled && !loading) {
+    if (!disabled && !loading && !showError) {
       setOpen((prevOpen) => {
         if (!prevOpen) {
           setSearchTerm('')
@@ -76,7 +82,7 @@ export const SingleSelect = React.memo(function SingleSelect({
         return !prevOpen
       })
     }
-  }, [disabled, loading])
+  }, [disabled, loading, showError])
 
   const handleSelect = useCallback(
     (option: Option) => {
@@ -126,6 +132,7 @@ export const SingleSelect = React.memo(function SingleSelect({
         onBlur={() => setFocused(false)}
         $disabled={disabled}
         $focused={focused}
+        $error={showError}
       >
         {loading ? (
           <LoadingIndicator />
@@ -149,7 +156,7 @@ export const SingleSelect = React.memo(function SingleSelect({
                 <Placeholder text={placeholder} />
               )}
             </SelectBoxContent>
-            <ArrowIcon $isDropdownOpen={open} />
+            {showError ? <ReportIcon /> : <ArrowIcon $isDropdownOpen={open} />}
           </>
         )}
       </SelectBox>
@@ -164,6 +171,8 @@ export const SingleSelect = React.memo(function SingleSelect({
           selectCotainerRef={selectorContainerRef}
         />
       )}
+
+      {showError ? <ErrorState /> : null}
     </SelectContainer>
   )
 })

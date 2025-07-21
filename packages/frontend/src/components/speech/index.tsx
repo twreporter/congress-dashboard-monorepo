@@ -261,7 +261,7 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
           <SpeechAsideInfo {...asideInfoProps} />
         </TabletAndBelowWithFlex>
         <DesktopAndAboveWithFlex>
-          <Feedback onClick={openFeedback}>
+          <Feedback onClick={() => openFeedback('speech')}>
             <CustomPillButton
               leftIconComponent={<Report releaseBranch={releaseBranch} />}
               text={'問題回報'}

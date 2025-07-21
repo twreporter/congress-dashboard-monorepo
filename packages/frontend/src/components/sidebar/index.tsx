@@ -39,9 +39,13 @@ import {
 } from '@/components/sidebar/follow-more'
 import FilterModal from '@/components/sidebar/filter-modal'
 import { Loader } from '@/components/loader'
+import {
+  BodyErrorState,
+  FollowMoreErrorState,
+} from '@/components/sidebar/error-state'
+import NoIssueState from '@/components/sidebar/no-issue-state'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
-import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import {
   colorGrayscale,
   colorOpacity,
@@ -206,9 +210,9 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 
   useEffect(() => {
     if (speechState.speeches != undefined) {
-      setIsLoading(speechState.isLoading || followMoreState.isLoading)
+      setIsLoading(speechState.isLoading)
     }
-  }, [speechState.speeches, speechState.isLoading, followMoreState.isLoading])
+  }, [speechState.speeches, speechState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
@@ -235,9 +239,9 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
             onClose={onClose}
           />
         </div>
-        {isLoading ? (
-          <Loader />
-        ) : (
+        {isLoading ? <Loader /> : null}
+        {speechState.error ? <BodyErrorState /> : null}
+        {!isLoading && !speechState.error ? (
           <Body $topBoxHeight={topRef?.current?.offsetHeight || 0}>
             <SummarySection>
               {summaryGroupByYear.map(
@@ -249,18 +253,22 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
                 )
               )}
             </SummarySection>
-            <FollowMoreSection>
-              <FollowMoreTitle text={followMoreTitle} />
-              {issueList.length > 0 ? (
-                <FollowMoreTags>
-                  {issueList.map((props: IssueProps, index: number) => (
-                    <Issue {...props} key={`follow-more-issue-${index}`} />
-                  ))}
-                </FollowMoreTags>
-              ) : null}
-            </FollowMoreSection>
+            {followMoreState.isLoading ? null : (
+              <FollowMoreSection>
+                <FollowMoreTitle text={followMoreTitle} />
+                {followMoreState.error ? (
+                  <FollowMoreErrorState />
+                ) : issueList.length > 0 ? (
+                  <FollowMoreTags>
+                    {issueList.map((props: IssueProps, index: number) => (
+                      <Issue {...props} key={`follow-more-issue-${index}`} />
+                    ))}
+                  </FollowMoreTags>
+                ) : null}
+              </FollowMoreSection>
+            )}
           </Body>
-        )}
+        ) : null}
       </ContentBox>
       {showFilter ? (
         <FilterBox $show={showFilter}>
@@ -288,9 +296,6 @@ const FollowMoreLegislator = styled.div`
   display: flex;
   overflow-x: scroll;
 `
-const Note = styled(P1)`
-  color: ${colorGrayscale.gray800};
-`
 
 export interface SidebarLegislatorProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
@@ -314,10 +319,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
   const [tabList, setTabList] = useState(issueList)
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
-  const showNote = useMemo(
-    () => note && issueList.length === 0,
-    [note, issueList]
-  )
+  const showNoIssue = useMemo(() => issueList.length === 0, [issueList])
   const selectedIssue = useMemo(
     () => _.get(tabList, selectedTab),
     [tabList, selectedTab]
@@ -409,9 +411,9 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
 
   useEffect(() => {
     if (speechState.speeches != undefined) {
-      setIsLoading(speechState.isLoading || followMoreState.isLoading)
+      setIsLoading(speechState.isLoading)
     }
-  }, [speechState.speeches, speechState.isLoading, followMoreState.isLoading])
+  }, [speechState.speeches, speechState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
@@ -432,9 +434,9 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
             onOpenFilterModal={() => setShowFilter(true)}
           />
         </div>
-        {showNote ? (
+        {showNoIssue ? (
           <Body $topBoxHeight={topRef.current?.offsetHeight || 0}>
-            <Note text={note} />
+            <NoIssueState note={note} />
           </Body>
         ) : isLoading ? (
           <Loader />
@@ -450,21 +452,25 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
                 )
               )}
             </SummarySection>
-            <FollowMoreSection>
-              <FollowMoreTitle text={followMoreTitle} />
-              {legislatorList.length > 0 ? (
-                <FollowMoreLegislator>
-                  {legislatorList.map(
-                    (props: LegislatorProps, index: number) => (
-                      <Legislator
-                        {...props}
-                        key={`follow-more-legislator-${index}`}
-                      />
-                    )
-                  )}
-                </FollowMoreLegislator>
-              ) : null}
-            </FollowMoreSection>
+            {followMoreState.isLoading ? null : (
+              <FollowMoreSection>
+                <FollowMoreTitle text={followMoreTitle} />
+                {followMoreState.error ? (
+                  <FollowMoreErrorState />
+                ) : legislatorList.length > 0 ? (
+                  <FollowMoreLegislator>
+                    {legislatorList.map(
+                      (props: LegislatorProps, index: number) => (
+                        <Legislator
+                          {...props}
+                          key={`follow-more-legislator-${index}`}
+                        />
+                      )
+                    )}
+                  </FollowMoreLegislator>
+                ) : null}
+              </FollowMoreSection>
+            )}
           </Body>
         )}
       </ContentBox>

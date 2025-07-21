@@ -1,5 +1,96 @@
 # Changelog
 
+## 1.1.0-rc.7
+
+### Patch Changes
+
+- [#251](https://github.com/twreporter/congress-dashboard-monorepo/pull/251) [`73acf3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/73acf3c0cbec00f4f137be1fc6ae24a7170c4a1e) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - - frontend
+  - add `NoIssueState` for SidebarLegislator component
+  - adjust log level from `debug` to `info`
+  - fix product feedback wording
+  - add `console.log` for debugging temporary
+  - cms
+    - fix topNTopicsOfLegislator sql syntax
+
+## 1.1.0-rc.6
+
+### Patch Changes
+
+- [#243](https://github.com/twreporter/congress-dashboard-monorepo/pull/243) [`5e4a479`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e4a479a218f3801c28853b2cb9a1a7023e5f5ab) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `pageSize` for ImportRecord list
+
+## 1.1.0-rc.5
+
+### Patch Changes
+
+- [#240](https://github.com/twreporter/congress-dashboard-monorepo/pull/240) [`3adbb61`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3adbb61ce632df3c3c797e2b70220ce930632549) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add migration file for `recordCount`
+
+## 1.1.0-rc.4
+
+### Patch Changes
+
+- Updated dependencies [[`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979)]:
+  - @twreporter/congress-dashboard-shared@0.0.7-rc.1
+
+## 1.1.0-rc.3
+
+### Patch Changes
+
+- [#230](https://github.com/twreporter/congress-dashboard-monorepo/pull/230) [`c1f7b6b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c1f7b6b093f4cf0381a61e9e9192dca128a5b777) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `recordCount` for `ImportRecord` list
+
+## 1.1.0-rc.2
+
+### Patch Changes
+
+- [#219](https://github.com/twreporter/congress-dashboard-monorepo/pull/219) [`bbda58b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bbda58bcd7bc99bc4025859fdc271a94a512b738) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix import twreporter related articles logic
+
+## 1.1.0-rc.1
+
+### Patch Changes
+
+- [#186](https://github.com/twreporter/congress-dashboard-monorepo/pull/186) [`af9c552`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af9c552afc249fc288dd879a3945f8bd18e23d93) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add import twreporter related articles feature
+
+## 1.1.0-rc.0
+
+### Notable Changes
+
+- feat
+
+  - cms: custom GQL schema and resovler for querying what Algolai search needs
+
+- refactor
+  - two-sided relationship between speech and legislativeYuanMember
+
+### Commits
+
+- [[`752473ee0b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/752473ee0b)] - **refactor(cms)**: update extend-graphql-schemas/recent-speech-topic-stats.ts. Add orderBy (nickhsine)
+- [[`921bb0a106`](https://github.com/twreporter/congress-dashboard-monorepo/commit/921bb0a106)] - **chore(cms)**: add prisma migration script (nickhsine)
+- [[`f1a4c0cb7e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f1a4c0cb7e)] - **chore(cms)**: update schema.prisma (nickhsine)
+- [[`c8b0917ab4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c8b0917ab4)] - **refactor(cms)**: update Speech list. Index updatedAt field (nickhsine)
+- [[`7dc299687e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7dc299687e)] - **chore(cms)**: update schema.graphql (nickhsine)
+- [[`5fdb3f3f01`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5fdb3f3f01)] - **refactor(cms)**: update types/context.ts (nickhsine)
+- [[`9725a9ec97`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9725a9ec97)] - **refactor(cms)**: address code review comment. Filter speeches by `updatedAt`, rather than `date` (nickhsine)
+- [[`867153e2a7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/867153e2a7)] - **refactor(cms)**: address code comments (nickhsine)
+- [[`4e9b98805b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4e9b98805b)] - **chore(cms)**: update schema.graphql (nickhsine)
+- [[`f251791337`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f251791337)] - **refactor(cms)**: update recent-speech-topic-stats.ts. Adjust query comment (nickhsine)
+- [[`b74f72486d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b74f72486d)] - **refactor(cms)**: replace type `Context` by type `TypedKeystoneContext` (nickhsine)
+- [[`48fa3a46d0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/48fa3a46d0)] - **refactor(cms)**: move `topNTopicsOfLegislators` typedefs and resolver (nickhsine)
+- [[`281bf18c9b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/281bf18c9b)] - **refactor(cms)**: move `topicsOrderBySpeechCount` typedefs and resolver (nickhsine)
+- [[`8ffea6ebb6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8ffea6ebb6)] - **feat(cms)**: add custom GQL typedef and resolver for query `recentSpeechTopicStats` (nickhsine)
+- [[`5bdf7a2d47`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5bdf7a2d47)] - **chore(root)**: update yarn.lock (nickhsine)
+- [[`f0aac824c0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f0aac824c0)] - **chore(cms)**: add dep @twreporter/errors (nickhsine)
+- [[`dcbfb5397c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dcbfb5397c)] - **refactor(cms)**: renamed: extend-graphql-schema.ts -> extend-graphql-schemas/index.ts (nickhsine)
+- [[`c53601e031`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c53601e031)] - **chore(cms)**: update schema.(graphql,prisma) (nickhsine)
+- [[`c1b7ccf432`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c1b7ccf432)] - **refactor(cms)**: two-sided relationship between speech and legislativeYuanMember (nickhsine)
+
+## 1.0.1-rc.0
+
+### Patch Changes
+
+- [#188](https://github.com/twreporter/congress-dashboard-monorepo/pull/188) [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207) Thanks [@liruchen32](https://github.com/liruchen32)! - test changeset
+
+- Updated dependencies [[`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207)]:
+  - @twreporter/congress-dashboard-shared@0.0.7-rc.0
+
 ## 1.0.0, 2025-06-18
 
 ### Notable Changes
@@ -71,6 +162,7 @@
     - access-control
     - system user access
   - README & add dockerfile for cms
+
 ### Commits
 
 - [[`e2d4e9a8b6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e2d4e9a8b6)] - **fix(cms)**: read public config in runtime (Aylie Chou)
@@ -145,7 +237,7 @@
 - [[`8a28aa3e82`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8a28aa3e82)] - **chore**: change to monorepo (Lucien)
 - [[`35aa65d927`](https://github.com/twreporter/congress-dashboard-monorepo/commit/35aa65d927)] - **feat**: create legislative yuan member list (Lucien)
 - [[`be34c54a59`](https://github.com/twreporter/congress-dashboard-monorepo/commit/be34c54a59)] - **feat**: create legislator list (Lucien)
-- [[`5c7f17169d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5c7f17169d)] - **fix**:  change legislative meeting term to unique (Lucien)
+- [[`5c7f17169d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5c7f17169d)] - **fix**: change legislative meeting term to unique (Lucien)
 - [[`9094eecf72`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9094eecf72)] - **feat**: creat legislative meeting session list (Lucien)
 - [[`af67aca658`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af67aca658)] - **feat**: creat legislative meeting list (Lucien)
 - [[`6c6bd0a42d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6c6bd0a42d)] - **feat**: create init migration file (Lucien)

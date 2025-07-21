@@ -1,0 +1,37 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "@twreporter/congress-dashboard-cms": "1.0.0",
+    "@twreporter/congress-dashboard-frontend": "1.0.1",
+    "@twreporter/congress-dashboard-shared": "0.0.6"
+  },
+  "changesets": [
+    "afraid-cities-reply",
+    "all-ears-tell",
+    "blue-laws-dress",
+    "bumpy-games-sleep",
+    "busy-taxis-hug",
+    "clear-baboons-taste",
+    "clever-cougars-punch",
+    "cruel-walls-speak",
+    "cyan-lands-do",
+    "dark-taxes-kick",
+    "easy-parts-occur",
+    "fair-clubs-join",
+    "great-spoons-trade",
+    "large-apes-cough",
+    "legal-news-sort",
+    "many-impalas-sin",
+    "moody-lions-learn",
+    "open-owls-remain",
+    "orange-jokes-rest",
+    "quick-jokes-rhyme",
+    "quiet-beers-hang",
+    "rich-gifts-help",
+    "slow-nails-wear",
+    "smooth-mails-doubt",
+    "twelve-ends-open",
+    "young-rings-change"
+  ]
+}

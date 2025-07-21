@@ -16,6 +16,8 @@ import {
   Body,
   SummarySection,
   EmptyState,
+  EmptyStateColumn,
+  EmptyStateTitle,
   EmptyStateText,
 } from '@/components/layout/speech-summary-list/layout'
 import TabNavigation from '@/components/layout/speech-summary-list/tab-navigation'
@@ -28,6 +30,7 @@ import CardsOfTheYear, {
 import { Legislator } from '@/components/sidebar/follow-more'
 import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
+import { FollowMoreErrorState } from '@/components/sidebar/error-state'
 // type
 import type { TabProps } from '@/components/sidebar/type'
 // utils
@@ -89,6 +92,7 @@ type LegislatorListProps = {
   isLoading?: boolean
   legislatorSlug: string
   legislatorName: string
+  legislatorNote?: string
   topics: { name: string; slug: string; count: number }[]
   speechesByTopic: Record<
     string,
@@ -102,6 +106,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   isLoading = true,
   legislatorSlug,
   legislatorName,
+  legislatorNote,
   topics,
   speechesByTopic,
   currentMeetingTerm,
@@ -203,9 +208,10 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
       <Container>
         <Title $isEmpty={true} text="發言摘要" />
         <Body>
-          <EmptyState>
-            <EmptyStateText text="所選會期無發言資訊" />
-          </EmptyState>
+          <EmptyStateColumn>
+            <EmptyStateTitle text="所選會期無發言資訊" />
+            {legislatorNote ? <EmptyStateText text={legislatorNote} /> : null}
+          </EmptyStateColumn>
         </Body>
       </Container>
     )
@@ -230,6 +236,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
         </SummarySection>
         <FollowMoreItems title={followMoreTitle}>
           {isLoadingTopLegislators && <Loader useAbsolute={false} />}
+          {!isLoadingTopLegislators && swrError && <FollowMoreErrorState />}
           {legislatorList.length > 0 ? (
             <LegislatorContainer>
               {legislatorList.map((props, index: number) => (

@@ -8,7 +8,8 @@ import { MenuButton, PillButton } from '@twreporter/react-components/lib/button'
 import Divider from '@twreporter/react-components/lib/divider'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import { SearchBar } from '@twreporter/react-components/lib/input'
+import { AlgoliaInstantSearch } from '@/components/search/instant-search'
+import { LayoutVariants } from '@/components/search/constants'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
@@ -64,9 +65,6 @@ const StyledPillButton = styled(PillButton)`
 `
 
 const SearchSection = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 16px 0;
 `
 
@@ -78,19 +76,10 @@ type HamburgerMenuProps = {
   isOpen: boolean
 }
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
-  const onSearch = (keywords: string) => {
-    alert(`serch: ${keywords}`)
-  }
-
   return (
     <Container $isOpen={isOpen}>
       <SearchSection>
-        <SearchBar
-          onSearch={onSearch}
-          autofocus={false}
-          widthType="stretch"
-          placeholder="關鍵字搜尋"
-        />
+        <AlgoliaInstantSearch variant={LayoutVariants.Menu} />
       </SearchSection>
       {menuLinks.map(({ text, href, target }, idx) => (
         <MenuButton

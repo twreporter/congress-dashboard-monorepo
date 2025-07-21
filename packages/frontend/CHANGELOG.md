@@ -1,15 +1,162 @@
 # Changelog
 
+## 1.1.0-rc.14
+
+### Patch Changes
+
+- [#262](https://github.com/twreporter/congress-dashboard-monorepo/pull/262) [`c575381`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c575381f7a237223c6a9f93fe62a3419fb93c7d8) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add note on legislator page empty state & fix load more buttom not hidden
+
+## 1.1.0-rc.13
+
+### Patch Changes
+
+- [#258](https://github.com/twreporter/congress-dashboard-monorepo/pull/258) [`66b6ef0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/66b6ef03ea374615eb6d3ce5783a5146230c0425) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add integration with GTM
+
+## 1.1.0-rc.12
+
+### Patch Changes
+
+- [#251](https://github.com/twreporter/congress-dashboard-monorepo/pull/251) [`73acf3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/73acf3c0cbec00f4f137be1fc6ae24a7170c4a1e) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - - frontend
+  - add `NoIssueState` for SidebarLegislator component
+  - adjust log level from `debug` to `info`
+  - fix product feedback wording
+  - add `console.log` for debugging temporary
+  - cms
+    - fix topNTopicsOfLegislator sql syntax
+
+## 1.1.0-rc.11
+
+### Patch Changes
+
+- [#255](https://github.com/twreporter/congress-dashboard-monorepo/pull/255) [`1c4b62d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1c4b62d8ab1311bb6bbbbc934656fb504249957d) Thanks [@nickhsine](https://github.com/nickhsine)! - fix(frontend): defects of instant search
+
+## 1.1.0-rc.10
+
+### Patch Changes
+
+- [#250](https://github.com/twreporter/congress-dashboard-monorepo/pull/250) [`694bbb8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/694bbb8f3aa009c0eb354674950c3615de2bf18c) Thanks [@nickhsine](https://github.com/nickhsine)! - refactor(frontend): update instant search hit
+
+## 1.1.0-rc.9
+
+### Patch Changes
+
+- [#247](https://github.com/twreporter/congress-dashboard-monorepo/pull/247) [`bdc09b8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bdc09b8b8db6f9cc10c326f75bf67bae89d92967) Thanks [@nickhsine](https://github.com/nickhsine)! - fix(frontend): instant search defects
+
+## 1.1.0-rc.8
+
+### Patch Changes
+
+- [#232](https://github.com/twreporter/congress-dashboard-monorepo/pull/232) [`4d313dc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4d313dcc1be8e3e4ceef56190b43378335194018) Thanks [@nickhsine](https://github.com/nickhsine)! - Add link for instant hits
+
+## 1.1.0-rc.7
+
+### Patch Changes
+
+- [#236](https://github.com/twreporter/congress-dashboard-monorepo/pull/236) [`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979) Thanks [@liruchen32](https://github.com/liruchen32)! - fix og description for frontend and remove constant for shared package
+
+- Updated dependencies [[`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979)]:
+  - @twreporter/congress-dashboard-shared@0.0.7-rc.1
+
+## 1.1.0-rc.6
+
+### Patch Changes
+
+- [#231](https://github.com/twreporter/congress-dashboard-monorepo/pull/231) [`9da1e67`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9da1e67f0e2d0de6f23df599cff0b61ac837a445) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix follow more error state title style
+
+## 1.1.0-rc.5
+
+### Patch Changes
+
+- [#224](https://github.com/twreporter/congress-dashboard-monorepo/pull/224) [`f44efe7`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f44efe79a3e78ee638312622330077dfda830aac) Thanks [@liruchen32](https://github.com/liruchen32)! - fix header logo and side bar link hover style
+
+## 1.1.0-rc.4
+
+### Patch Changes
+
+- [#218](https://github.com/twreporter/congress-dashboard-monorepo/pull/218) [`f0f2139`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f0f21399cf0ab9d9e466f049aca69c2e7eac6b13) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix defects of swr error state & sidebar filtered legislator could not get top 5 topic problem
+
+## 1.1.0-rc.3
+
+### Patch Changes
+
+- [#215](https://github.com/twreporter/congress-dashboard-monorepo/pull/215) [`ff59a82`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff59a8232b3dd12af702f0a7f280f2c9fb3aeb6f) Thanks [@liruchen32](https://github.com/liruchen32)! - fix speech page og description
+
+## 1.1.0-rc.3
+
+### Patch Changes
+
+- chore
+  - update local, development, staging and prod environment variables
+
+### Commits
+
+- [[`e5ef22b4ee`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e5ef22b4ee)] - **chore(frontend)**: update environment variables (nickhsine)
+
+## 1.1.0-rc.2
+
+### Patch Changes
+
+- [#187](https://github.com/twreporter/congress-dashboard-monorepo/pull/187) [`25947e8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/25947e8335ae5b681942c09ae6924931eb71e916) Thanks [@liruchen32](https://github.com/liruchen32)! - add og image and description
+
+## 1.1.0-rc.1
+
+### Patch Changes
+
+- [#185](https://github.com/twreporter/congress-dashboard-monorepo/pull/185) [`7dae6b1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7dae6b138cfa3ab0d7d031bd6fa3361142c5077d) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - This PR adds error state for all swr fetching
+
+## 1.1.0-rc.0
+
+### Notable Changes
+
+- feat
+  - Algolia Instant Search
+
+### Commits
+
+- [[`8137c511df`](https://github.com/twreporter/congress-dashboard-monorepo/commit/8137c511df)] - **refactor(frontend)**: refactor type convention. Add @/types/index.ts (nickhsine)
+- [[`5b226a3f05`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5b226a3f05)] - **fix(frontend)**: fix body scroll lock failure (nickhsine)
+- [[`203e67cddb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/203e67cddb)] - **refactor(frontend)**: use \<AlgoliaInstantSearch> in \<HamburgerMenu> (nickhsine)
+- [[`1f812305f1`](https://github.com/twreporter/congress-dashboard-monorepo/commit/1f812305f1)] - **fix(frontend)**: fix GitHub Action build failures. Initialize algolia search client only on client (nickhsine)
+- [[`6671910971`](https://github.com/twreporter/congress-dashboard-monorepo/commit/6671910971)] - **refactor(frontend)**: get algolia app id and search key from env vars (nickhsine)
+- [[`326cfe97e6`](https://github.com/twreporter/congress-dashboard-monorepo/commit/326cfe97e6)] - **refactor(frontend)**: snippet for search hit description (nickhsine)
+- [[`14b410fbec`](https://github.com/twreporter/congress-dashboard-monorepo/commit/14b410fbec)] - **style(frontend)**: fine tune search bar styles (nickhsine)
+- [[`f2dbc1f314`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f2dbc1f314)] - **refactor(frontend)**: update src/components/header/index.tsx (nickhsine)
+- [[`e97499f6fb`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e97499f6fb)] - **refactor(frontend)**: search modal for mobile (nickhsine)
+- [[`dcd76b99c3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dcd76b99c3)] - **refactor(frontend)**: hide instant search results if click outside (nickhsine)
+- [[`b22f0deef4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b22f0deef4)] - **refactor(frontend)**: update search-box.tsx. Use `autofocus` attribute instead (nickhsine)
+- [[`b7914d39e3`](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7914d39e3)] - **refactor(frontend)**: clear the search query by `clear` API (nickhsine)
+- [[`ccfb771e79`](https://github.com/twreporter/congress-dashboard-monorepo/commit/ccfb771e79)] - **refactor(frontend)**: layoutVariants -> LayoutVariants. Address code review (nickhsine)
+- [[`3edfaa9ac8`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3edfaa9ac8)] - **refactor(frontend)**: update search. Reset query if click outside (nickhsine)
+- [[`91ebcbc996`](https://github.com/twreporter/congress-dashboard-monorepo/commit/91ebcbc996)] - **refactor(frontend)**: update header search. Auto focus when search bar is open (nickhsine)
+- [[`cf476a62aa`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cf476a62aa)] - **refactor(frontend)**: update header. Replace SearchBar by AlgoliaInstantSearch (nickhsine)
+- [[`680969469d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/680969469d)] - **style(frontend)**: update width of search bar (nickhsine)
+- [[`87fa14ddc0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/87fa14ddc0)] - **refactor(frontend)**: update search icons (nickhsine)
+- [[`dd28c9cb62`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dd28c9cb62)] - **style(frontend)**: update instant-hit.tsx. Handle text overflow (nickhsine)
+- [[`66c0989cc0`](https://github.com/twreporter/congress-dashboard-monorepo/commit/66c0989cc0)] - **refactor(frontend)**: address code review comments (nickhsine)
+- [[`a97d1f4cf4`](https://github.com/twreporter/congress-dashboard-monorepo/commit/a97d1f4cf4)] - **chore(root)**: update yarn.lock (nickhsine)
+- [[`dfd84cbc7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/dfd84cbc7f)] - **refactor(frontend)**: change SearchBar to AlgoliaInstantSearch (nickhsine)
+- [[`5779d322ba`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5779d322ba)] - **feat(frontend)**: (desktop) instant search (nickhsine)
+- [[`4c8f708c37`](https://github.com/twreporter/congress-dashboard-monorepo/commit/4c8f708c37)] - **chore(frontend)**: update package.json. Add search deps (nickhsine)
+
+## 1.0.2-rc.0
+
+### Patch Changes
+
+- [#188](https://github.com/twreporter/congress-dashboard-monorepo/pull/188) [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207) Thanks [@liruchen32](https://github.com/liruchen32)! - test changeset
+
+- Updated dependencies [[`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207)]:
+  - @twreporter/congress-dashboard-shared@0.0.7-rc.0
+
 ## 1.0.1, 2025-06-18 (Current)
 
 ### Notable Changes
 
 - fix
-  - remove quotes from ABOUT\_PAGE\_SLUG and update type in fetchMoreTopics
+  - remove quotes from ABOUT_PAGE_SLUG and update type in fetchMoreTopics
 
 ### Commits
 
-- [[`2583f2acae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2583f2acae)] - **fix(frontend)**: remove quotes from ABOUT\_PAGE\_SLUG and update type in fetchMoreTopics (Lucien)
+- [[`2583f2acae`](https://github.com/twreporter/congress-dashboard-monorepo/commit/2583f2acae)] - **fix(frontend)**: remove quotes from ABOUT_PAGE_SLUG and update type in fetchMoreTopics (Lucien)
 
 ## 1.0.0, 2025-06-18
 

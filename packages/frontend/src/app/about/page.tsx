@@ -6,6 +6,7 @@ import { Metadata } from 'next'
 import AboutPage from '@/components/about'
 // constants
 import { InternalRoutes } from '@/constants/routes'
+import { OG_IMAGE_URL } from '@/constants'
 
 const getAboutPageFromGo = cache(async () => {
   const url = process.env.NEXT_PUBLIC_TWREPORTER_API_URL as string
@@ -24,9 +25,10 @@ const getAboutPageFromGo = cache(async () => {
 })
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { og_title, og_description } = await getAboutPageFromGo()
+  const { og_title, og_description, og_image } = await getAboutPageFromGo()
   const title = og_title || '關於觀測站 - 報導者觀測站'
-  const description = og_description || '報導者議會透視版'
+  const description = og_description || '報導者觀測站'
+  const image = og_image?.resized_targets?.tablet?.url || OG_IMAGE_URL
   return {
     title,
     description,
@@ -38,6 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url: `https://lawmaker.twreporter.org${InternalRoutes.About}`,
       type: 'article',
+      images: image,
     },
   }
 }

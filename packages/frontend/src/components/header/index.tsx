@@ -16,12 +16,15 @@ import {
 import { Hamburger, Cross } from '@twreporter/react-components/lib/icon'
 import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import { Search as SearchIcon } from '@twreporter/react-components/lib/icon'
-import { SearchBar } from '@twreporter/react-components/lib/input'
+import {
+  AlgoliaInstantSearch,
+  LayoutVariants,
+} from '@/components/search/instant-search'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
 // hooks
 import useWindowWidth from '@/hooks/use-window-width'
-import useOutsideClick from '@/hooks/use-outside-click'
+import { useBodyScrollLock } from '@/hooks/use-scroll-lock'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
@@ -117,12 +120,16 @@ const BtnContainer = styled.div<{
 const SearchContainer = styled.div<{
   $isOpen: boolean
 }>`
+  width: 360px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
   opacity: ${(props) => (props.$isOpen ? '1' : '0')};
   transition: opacity 300ms ease;
   position: absolute;
   right: 0;
   top: -8px;
-  z-index: ${(props) => (props.$isOpen ? 999 : -1)};
 `
 
 // Constants
@@ -140,23 +147,17 @@ const Header: React.FC = () => {
     setIsHamburgerOpen((prev) => !prev)
   }, [])
 
+  // Handle body scroll lock
+  useBodyScrollLock({
+    toLock: isHamburgerOpen,
+    lockID: 'hambuger',
+  })
+
   useEffect(() => {
     if (windowWidth >= DEFAULT_SCREEN.tablet.minWidth) {
       setIsHamburgerOpen(false)
     }
   }, [windowWidth])
-
-  // Handle body scroll lock
-  useEffect(() => {
-    if (isHamburgerOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isHamburgerOpen])
 
   // search functions
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -166,21 +167,7 @@ const Header: React.FC = () => {
   const handleClickSearch = (e: React.MouseEvent) => {
     e.preventDefault()
     setIsSearchOpen(true)
-    if (!ref.current) {
-      return
-    }
-    const input = ref.current.getElementsByTagName(
-      'INPUT'
-    )[0] as HTMLInputElement
-    if (input) {
-      input.focus()
-    }
   }
-  const onSearch = (keywords: string) => {
-    setIsSearchOpen(false)
-    alert(`search: ${keywords}`)
-  }
-  const ref = useOutsideClick(closeSearchBox)
 
   return (
     <React.Fragment>
@@ -206,7 +193,7 @@ const Header: React.FC = () => {
                   src={`${logoSrcPrefix}/logo_S.svg`}
                   alt="Twreporter Lawmaker Logo"
                   priority
-                  width={180}
+                  width={147}
                   height={20}
                 />
               </MobileOnly>
@@ -230,7 +217,7 @@ const Header: React.FC = () => {
                   ) : null}
                 </React.Fragment>
               ))}
-              <SearchBox ref={ref} key="search">
+              <SearchBox key="search">
                 <BtnContainer
                   onClick={handleClickSearch}
                   $isOpen={isSearchOpen}
@@ -241,12 +228,18 @@ const Header: React.FC = () => {
                   />
                 </BtnContainer>
                 <SearchContainer $isOpen={isSearchOpen}>
-                  <SearchBar
-                    placeholder="關鍵字搜尋"
-                    theme={SearchBar.THEME.normal}
-                    onClose={closeSearchBox}
-                    onSearch={onSearch}
-                  />
+                  {isSearchOpen && (
+                    <>
+                      <AlgoliaInstantSearch
+                        variant={LayoutVariants.Header}
+                        autoFocus={isSearchOpen}
+                      />
+                      <IconButton
+                        iconComponent={crossIcon}
+                        onClick={closeSearchBox}
+                      />
+                    </>
+                  )}
                 </SearchContainer>
               </SearchBox>
             </ButtonContainer>

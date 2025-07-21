@@ -88,7 +88,9 @@ const Error: React.FC = () => (
       <ErrorDesc text={'請嘗試重新整理頁面。若仍無法正常顯示，'} />
       <ErrorDesc>
         歡迎點此
-        <TextButtonInP onClick={openFeedback}>回報問題</TextButtonInP>
+        <TextButtonInP onClick={() => openFeedback('sidebar filter')}>
+          回報問題
+        </TextButtonInP>
         以協助我們改善。
       </ErrorDesc>
     </Desc>

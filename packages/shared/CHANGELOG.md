@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.0.7-rc.1
+
+### Patch Changes
+
+- [#236](https://github.com/twreporter/congress-dashboard-monorepo/pull/236) [`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979) Thanks [@liruchen32](https://github.com/liruchen32)! - fix og description for frontend and remove constant for shared package
+
+## 0.0.7-rc.0
+
+### Patch Changes
+
+- [#188](https://github.com/twreporter/congress-dashboard-monorepo/pull/188) [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207) Thanks [@liruchen32](https://github.com/liruchen32)! - test changeset
+
 ## 0.0.6, 2025-05-08 (Current)
 
 ### Notable Changes
@@ -8,7 +20,6 @@
   - publish build file to npm
 
 ### Commits
-
 
 ## 0.0.5, 2025-05-07
 

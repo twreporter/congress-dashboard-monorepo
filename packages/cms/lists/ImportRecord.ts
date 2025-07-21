@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql'
 import { list } from '@keystone-6/core'
 import type { KeystoneContext } from '@keystone-6/core/types'
-import { text, relationship } from '@keystone-6/core/fields'
+import { text, relationship, integer } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -15,6 +15,8 @@ import {
   expectedHeaders,
   requiredFields,
 } from './fields/uploader'
+import { getTwreporterArticle } from './views/related-article/util'
+import env from '../environment-variables'
 
 /**
  * Validate CSV structure against expected headers and required fields
@@ -334,6 +336,43 @@ const validateListSpecificData: Record<
             }
           }
         )
+    )
+    return validationErrors
+  },
+  [ListName.relatedArticles]: async (csvData, context) => {
+    const validationErrors: string[] = []
+    await Promise.all(
+      csvData
+        .slice(1) // exclude header row
+        .map(async ([_title, slug, related_article_slug], index) => {
+          const rowNum = index + 1 // Add 1 for header row
+          const topic = await context.prisma.topic.findFirst({
+            where: { slug },
+          })
+          if (!topic) {
+            validationErrors.push(
+              `第 ${rowNum} 行: 議題 "${slug}" 不存在，請先匯入議題資料`
+            )
+          }
+          try {
+            const relatedArticle = await getTwreporterArticle(
+              related_article_slug,
+              env.twreporterApiUrl
+            )
+            if (!relatedArticle) {
+              validationErrors.push(
+                `第 ${rowNum} 行: 相關文章 "${related_article_slug}" 不存在，請確認 slug 是否正確`
+              )
+            }
+          } catch (err) {
+            console.error(
+              `Failed to get twreporter article. slug: ${related_article_slug}, err: ${err}`
+            )
+            validationErrors.push(
+              `第 ${rowNum} 行: 無法 retrieve 相關文章 "${related_article_slug}" ，請確認 slug 是否正確`
+            )
+          }
+        })
     )
     return validationErrors
   },
@@ -752,6 +791,57 @@ const importHandlers: Record<
 
     return queries
   },
+  [ListName.relatedArticles]: async (csvData, context) => {
+    const queries: Promise<any>[] = []
+
+    // { [topicSlug]: [<related article slug 1>, <related article slug 2>] }
+    type TopicToUpdate = {
+      [topicSlug: string]: string[]
+    }
+    const topicToUpdate: TopicToUpdate = {}
+
+    for (const [_title, slug, related_article_slug] of csvData.slice(1)) {
+      if (slug in topicToUpdate) {
+        topicToUpdate[slug] = topicToUpdate[slug].filter(
+          (articleSlug) => articleSlug !== related_article_slug
+        )
+        topicToUpdate[slug].unshift(related_article_slug)
+      } else {
+        const targetTopic = await context.prisma.topic.findFirst({
+          where: { slug },
+          select: { relatedTwreporterArticles: true },
+        })
+
+        if (targetTopic) {
+          if (!targetTopic.relatedTwreporterArticles) {
+            topicToUpdate[slug] = []
+          } else {
+            topicToUpdate[slug] = targetTopic.relatedTwreporterArticles.filter(
+              (articleSlug: string) => articleSlug !== related_article_slug
+            )
+          }
+          topicToUpdate[slug].unshift(related_article_slug)
+        } else {
+          console.error(`target topic not found for slug: ${slug}`)
+        }
+      }
+    }
+
+    for (const [topicSlug, relatedArticleSlugs] of Object.entries(
+      topicToUpdate
+    )) {
+      queries.push(
+        context.prisma.topic.update({
+          where: { slug: topicSlug },
+          data: {
+            relatedTwreporterArticles: relatedArticleSlugs,
+          },
+        })
+      )
+    }
+
+    return queries
+  },
 }
 
 async function executeImportQueries(
@@ -797,6 +887,13 @@ const listConfigurations = list({
       label: '上傳資料',
       validation: { isRequired: true },
     }),
+    recordCount: integer({
+      label: '筆數',
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'read' },
+      },
+    }),
     importer: relationship({
       ref: 'SystemUser',
       label: '匯入者',
@@ -813,9 +910,15 @@ const listConfigurations = list({
     label: '資料匯入',
     labelField: 'recordName',
     listView: {
-      initialColumns: ['recordName', 'uploadData', 'createdAt', 'updatedAt'],
+      initialColumns: [
+        'recordName',
+        'uploadData',
+        'recordCount',
+        'createdAt',
+        'updatedAt',
+      ],
       initialSort: { field: 'id', direction: 'DESC' },
-      pageSize: 5, // Set the limit to 5 to prevent long loading times.
+      pageSize: 10,
     },
     hideDelete: ({ session }) => {
       const role = session?.data?.role
@@ -840,8 +943,16 @@ const listConfigurations = list({
   hooks: {
     resolveInput: {
       create: ({ resolvedData, context }) => {
+        // importer
         const { session } = context
         resolvedData.importer = { connect: { id: Number(session.itemId) } }
+
+        // record count
+        const { csvData } = resolvedData.uploadData
+        if (csvData && csvData.length > 0) {
+          resolvedData.recordCount = csvData.length - 1 // Exclude header row
+        }
+
         return resolvedData
       },
     },
