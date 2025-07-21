@@ -1,3 +1,5 @@
+import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
+
 /**
  * Generates a snippet of the input text centered around the first matched keyword.
  * Adds <mark> tags around all matched words, and truncates to maxLength with ellipses if needed.
@@ -99,6 +101,22 @@ export function generateSnippet(
   return snippet
 }
 
-console.log(
-  generateSnippet('這隻敏捷的棕色狐狸跳過了一隻懶惰的狗。', ['狐狸', '狗'], 15)
-)
+export function generateSnippetForDevices(
+  text: string,
+  matchedTextArr: string[],
+  windowWidth: number
+) {
+  let maxLength = 88 // for desktop above
+
+  switch (true) {
+    case windowWidth === DEFAULT_SCREEN.tablet.minWidth: {
+      maxLength = 86 // for table only
+      break
+    }
+    case windowWidth < DEFAULT_SCREEN.tablet.minWidth: {
+      maxLength = 38 // for table below
+      break
+    }
+  }
+  return generateSnippet(text, matchedTextArr, maxLength)
+}

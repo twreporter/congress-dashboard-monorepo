@@ -7,7 +7,6 @@ import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
 import type { HitAttributeSnippetResult } from 'instantsearch.js'
 import useWindowWidth from '@/hooks/use-window-width'
-import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import { InternalRoutes } from '@/constants/routes'
 import { Highlight, Snippet, useSearchBox } from 'react-instantsearch'
 import {
@@ -15,7 +14,7 @@ import {
   colorGrayscale,
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
-import { generateSnippet } from '@/components/search/result-page/utils'
+import { generateSnippetForDevices } from '@/components/search/result-page/utils'
 
 export type LegislatorRawHit = Hit<{
   objectID: string
@@ -203,6 +202,29 @@ export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
 }
 
 export function TopicHit({ hit }: { hit: TopicRawHit }) {
+  const { query } = useSearchBox()
+  const windowWidth = useWindowWidth()
+  const matchedTextArr = query.split(' ')
+  const snippet = generateSnippetForDevices(
+    hit.desc,
+    matchedTextArr,
+    windowWidth
+  )
+
+  const customizedHit = {
+    ...hit,
+    // Algolia allows only one global snippet length setting via attributesToSnippet.
+    // However, our UI requires different truncation lengths for different viewports.
+    // Therefore, we manually override _snippetResult.desc.value to use a custom snippet.
+    _snippetResult: {
+      ...(hit._snippetResult ?? {}),
+      desc: {
+        value: snippet,
+        matchLevel: (hit._snippetResult?.summary as HitAttributeSnippetResult)
+          ?.matchLevel,
+      } as HitAttributeSnippetResult,
+    },
+  }
   return (
     <Link
       href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
@@ -222,7 +244,11 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
           </p>
           <p>
             <span>共{hit.relatedMessageCount}筆發言：</span>
-            <Highlight highlightedTagName="span" attribute="desc" hit={hit} />
+            <Snippet
+              highlightedTagName="span"
+              attribute="desc"
+              hit={customizedHit}
+            />
           </p>
           <p>最新一筆發言於{hit.lastSpeechAt}</p>
         </Text>
@@ -234,21 +260,12 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
 export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
   const { query } = useSearchBox()
   const windowWidth = useWindowWidth()
-
   const matchedTextArr = query.split(' ')
-  let maxLength = 88 // for desktop above
-
-  switch (true) {
-    case windowWidth === DEFAULT_SCREEN.tablet.minWidth: {
-      maxLength = 86 // for table only
-      break
-    }
-    case windowWidth < DEFAULT_SCREEN.tablet.minWidth: {
-      maxLength = 38 // for table below
-      break
-    }
-  }
-  const snippet = generateSnippet(hit.summary, matchedTextArr, maxLength)
+  const snippet = generateSnippetForDevices(
+    hit.summary,
+    matchedTextArr,
+    windowWidth
+  )
 
   const customizedHit = {
     ...hit,
@@ -273,7 +290,14 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
         <Text>
           <p>發言全文</p>
           <p>
-            <Highlight highlightedTagName="span" attribute="title" hit={hit} />
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="title"
+              hit={hit}
+            />
           </p>
           <p>
             <Snippet
