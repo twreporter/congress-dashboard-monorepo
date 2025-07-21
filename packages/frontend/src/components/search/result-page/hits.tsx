@@ -1,5 +1,6 @@
 'use client'
 
+import EmptyState from '@twreporter/react-components/lib/empty-state'
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import type { IndexName, SearchStage } from '@/components/search/constants'
 import styled from 'styled-components'
@@ -26,6 +27,7 @@ import { PillButton as _PillButton } from '@twreporter/react-components/lib/butt
 import { liteClient as algoliasearch } from 'algoliasearch/lite'
 
 const hitsPerPage = 10
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 const InstantSearchStatus = {
   Idle: 'idle',
@@ -36,6 +38,7 @@ const InstantSearchStatus = {
 
 const Container = styled.div`
   width: 100%;
+  min-height: 400px;
 
   a {
     text-decoration: none;
@@ -52,6 +55,11 @@ const LoadMoreBlock = styled.div`
 
 const PillButton = styled(_PillButton)`
   padding: 8px 114px;
+`
+
+const EmptyStateContainer = styled.div`
+  padding-top: 72px;
+  padding-bottom: 120px;
 `
 
 function createAlgoliaSearchClient() {
@@ -78,6 +86,42 @@ function PrefillQuery({ query }: { query?: string }) {
   }, [refine, query])
 
   return null
+}
+
+function EmptyResultChecker({ indexNames }: { indexNames: IndexName[] }) {
+  const { renderState, status } = useInstantSearch()
+
+  if (
+    status === InstantSearchStatus.Stalled ||
+    status === InstantSearchStatus.Loading
+  ) {
+    return null
+  }
+
+  for (const indexName of indexNames) {
+    const hitsState = renderState[indexName]?.infiniteHits
+    // infiniteHits is not ready
+    if (!hitsState?.results) {
+      return null
+    }
+
+    if (hitsState?.items?.length > 0) {
+      return null
+    }
+  }
+
+  return (
+    <EmptyStateContainer>
+      <EmptyState
+        releaseBranch={releaseBranch}
+        title={'查無資料'}
+        showGuide={true}
+        guide={'請重新設定篩選項目'}
+        showButton={false}
+        style={EmptyState.Style.DEFAULT}
+      />
+    </EmptyStateContainer>
+  )
 }
 
 /**
@@ -109,6 +153,13 @@ export const MultiStageHits = ({
           preserveSharedStateOnUnmount: true,
         }}
       >
+        <EmptyResultChecker
+          indexNames={[
+            indexNames.Legislator,
+            indexNames.Topic,
+            indexNames.Speech,
+          ]}
+        />
         <Index indexName={indexNames.Legislator}>
           <PrefillQuery query={query} />
           <Configure hitsPerPage={hitsPerPage} />
@@ -128,9 +179,7 @@ export const MultiStageHits = ({
             <SpeechHitsList />
           </Index>
         )}
-        <LoadMoreBlock>
-          <LoadMoreForStages stage={stage} setStage={setStage} />
-        </LoadMoreBlock>
+        <LoadMoreForStages stage={stage} setStage={setStage} />
       </InstantSearch>
     </Container>
   )
@@ -242,16 +291,17 @@ const LoadMoreForStages = ({
     !hitsState.isLastPage
   ) {
     return (
-      <PillButton
-        onClick={showLoadingIcon ? voidFunction : load}
-        text="載入更多"
-        style="dark"
-        loading={showLoadingIcon}
-      />
+      <LoadMoreBlock>
+        <PillButton
+          onClick={showLoadingIcon ? voidFunction : load}
+          text="載入更多"
+          style="dark"
+          loading={showLoadingIcon}
+        />
+      </LoadMoreBlock>
     )
   }
 
-  // No more items to load
   return null
 }
 
@@ -300,11 +350,10 @@ export const Hits = ({
         }}
       >
         <PrefillQuery query={query} />
+        <EmptyResultChecker indexNames={[indexName]} />
         <Configure hitsPerPage={10} filters={filters} />
         <ListComponent />
-        <LoadMoreBlock>
-          <LoadMore indexName={indexName} />
-        </LoadMoreBlock>
+        <LoadMore indexName={indexName} />
       </InstantSearch>
     </Container>
   )
@@ -333,12 +382,14 @@ const LoadMore = ({ indexName }: { indexName: IndexName }) => {
   // There are more items to load
   if (hitsState?.results && !hitsState.isLastPage) {
     return (
-      <PillButton
-        onClick={showLoadingIcon ? voidFunction : load}
-        text="載入更多"
-        style="dark"
-        loading={showLoadingIcon}
-      />
+      <LoadMoreBlock>
+        <PillButton
+          onClick={showLoadingIcon ? voidFunction : load}
+          text="載入更多"
+          style="dark"
+          loading={showLoadingIcon}
+        />
+      </LoadMoreBlock>
     )
   }
 
