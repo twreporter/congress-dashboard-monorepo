@@ -25,3 +25,10 @@ export const indexNames = {
 } as const
 
 export type IndexName = ValuesOf<typeof indexNames>
+
+export const instantSearchStatus = {
+  Idle: 'idle',
+  Loading: 'loading',
+  Stalled: 'stalled',
+  Error: 'error',
+} as const

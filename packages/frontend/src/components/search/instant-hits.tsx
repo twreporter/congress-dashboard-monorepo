@@ -29,13 +29,7 @@ import {
   colorOpacity,
 } from '@twreporter/core/lib/constants/color'
 import { InternalRoutes } from '@/constants/routes'
-
-const InstantSearchStatus = {
-  Idle: 'idle',
-  Loading: 'loading',
-  Stalled: 'stalled',
-  Error: 'error',
-} as const
+import { instantSearchStatus } from '@/components/search/constants'
 
 const Container = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
@@ -233,12 +227,12 @@ const LoadMore = ({
   })
   const [noMoreHits, setNoMoreHits] = useState(false)
   const isLoading =
-    status === InstantSearchStatus.Loading ||
-    status === InstantSearchStatus.Stalled
+    status === instantSearchStatus.Loading ||
+    status === instantSearchStatus.Stalled
 
   // Per [react-instantsearch docs](https://www.algolia.com/doc/api-reference/widgets/use-instantsearch/react/#widget-param-status):
   // show loading indicator only when status === 'stalled'
-  const showLoadingIcon = status === InstantSearchStatus.Stalled
+  const showLoadingIcon = status === instantSearchStatus.Stalled
 
   // Reset when query changes
   useEffect(() => {

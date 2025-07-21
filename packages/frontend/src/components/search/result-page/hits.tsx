@@ -4,7 +4,11 @@ import EmptyState from '@twreporter/react-components/lib/empty-state'
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import type { IndexName, SearchStage } from '@/components/search/constants'
 import styled from 'styled-components'
-import { searchStages, indexNames } from '@/components/search/constants'
+import {
+  searchStages,
+  indexNames,
+  instantSearchStatus,
+} from '@/components/search/constants'
 import type {
   LegislatorRawHit,
   TopicRawHit,
@@ -28,13 +32,6 @@ import { liteClient as algoliasearch } from 'algoliasearch/lite'
 
 const hitsPerPage = 10
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-
-const InstantSearchStatus = {
-  Idle: 'idle',
-  Loading: 'loading',
-  Stalled: 'stalled',
-  Error: 'error',
-} as const
 
 const Container = styled.div`
   width: 100%;
@@ -92,8 +89,8 @@ function EmptyResultChecker({ indexNames }: { indexNames: IndexName[] }) {
   const { renderState, status } = useInstantSearch()
 
   if (
-    status === InstantSearchStatus.Stalled ||
-    status === InstantSearchStatus.Loading
+    status === instantSearchStatus.Stalled ||
+    status === instantSearchStatus.Loading
   ) {
     return null
   }
@@ -249,7 +246,7 @@ const LoadMoreForStages = ({
 
   // Per [react-instantsearch docs](https://www.algolia.com/doc/api-reference/widgets/use-instantsearch/react/#widget-param-status):
   // show loading indicator only when status === 'stalled'
-  const showLoadingIcon = status === InstantSearchStatus.Stalled
+  const showLoadingIcon = status === instantSearchStatus.Stalled
 
   const { indexName, nextStage } = stageConfig[stage]
   const hitsState = renderState[indexName]?.infiniteHits
@@ -365,7 +362,7 @@ const LoadMore = ({ indexName }: { indexName: IndexName }) => {
 
   // Per [react-instantsearch docs](https://www.algolia.com/doc/api-reference/widgets/use-instantsearch/react/#widget-param-status):
   // show loading indicator only when status === 'stalled'
-  const showLoadingIcon = status === InstantSearchStatus.Stalled
+  const showLoadingIcon = status === instantSearchStatus.Stalled
 
   const load = () => {
     // infiniteHits is not ready
