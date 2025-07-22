@@ -2,7 +2,6 @@
 
 import FilterButton from '@/components/button/filter-button'
 import FilterModal from '@/components/filter-modal'
-import mq from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
 import type { FilterOption } from '@/components/dashboard/type'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
@@ -28,16 +27,13 @@ const FilterString = styled.div`
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
-  margin-right: 20px;
-
-  ${mq.mobileOnly`
-    font-size: 14px;  
-  `}
 `
 
 export const SearchFilter = ({
+  className,
   onChange,
 }: {
+  className?: string
   onChange: (FilterValueType) => void
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -143,7 +139,7 @@ export const SearchFilter = ({
         options={getFilterOptions()}
         value={filterValue}
       />
-      <Container onClick={() => setIsOpen(true)}>
+      <Container className={className} onClick={() => setIsOpen(true)}>
         <FilterString>{filterString}</FilterString>
         <FilterButton filterCount={0} />
       </Container>

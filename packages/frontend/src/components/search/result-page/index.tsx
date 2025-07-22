@@ -8,7 +8,7 @@ import { MultiStageHits, Hits } from '@/components/search/result-page/hits'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { indexNames, searchStages } from '@/components/search/constants'
 import { AlgoliaInstantSearch } from '@/components/search/instant-search'
-import { SearchFilter } from '@/components/search/result-page/filter'
+import { SearchFilter as _SearchFilter } from '@/components/search/result-page/filter'
 
 const Container = styled.div`
   /* TODO: remove box-sizing if global already defined */
@@ -103,10 +103,23 @@ const Tabs = styled.div`
 const Bar = styled.div`
   display: flex;
   justify-content: space-between;
+  ${mq.mobileOnly`
+    flex-wrap: wrap;
+  `}
 
   width: 100%;
 
   border-bottom: 1px solid ${colorGrayscale.gray300};
+`
+
+const SearchFilter = styled(_SearchFilter)`
+  ${mq.mobileOnly`
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+  `}
 `
 
 type SearchResultsProps = {
