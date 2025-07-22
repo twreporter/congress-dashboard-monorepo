@@ -201,7 +201,7 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
       ...(hit._snippetResult ?? {}),
       desc: {
         value: snippet,
-        matchLevel: (hit._snippetResult?.summary as HitAttributeSnippetResult)
+        matchLevel: (hit._snippetResult?.desc as HitAttributeSnippetResult)
           ?.matchLevel,
       } as HitAttributeSnippetResult,
     },
