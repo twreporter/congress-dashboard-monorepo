@@ -130,11 +130,14 @@ export const useLegislativeMeeting = () => {
 }
 
 export const useLegislativeMeetingSession = (
-  legislativeMeetingTerm: string
+  legislativeMeetingTerm?: string
 ) => {
+  const shouldFetch =
+    typeof legislativeMeetingTerm === 'string' && legislativeMeetingTerm !== ''
+
   const { data, isLoading, error } = useSWR(
-    ['legislativeMeetingSessions', legislativeMeetingTerm],
-    () => fetchLegislativeMeetingSession(legislativeMeetingTerm)
+    shouldFetch ? ['legislativeMeetingSessions', legislativeMeetingTerm] : null,
+    () => fetchLegislativeMeetingSession(legislativeMeetingTerm!)
   )
   return {
     legislativeMeetingSessions: data || [],
