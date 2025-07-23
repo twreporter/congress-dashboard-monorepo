@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import type { FilterValueType } from '@/components/search/result-page/filter'
 import type { SearchStage } from '@/components/search/constants'
 import mq from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
@@ -8,7 +9,10 @@ import { MultiStageHits, Hits } from '@/components/search/result-page/hits'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { indexNames, searchStages } from '@/components/search/constants'
 import { AlgoliaInstantSearch } from '@/components/search/instant-search'
-import { SearchFilter as _SearchFilter } from '@/components/search/result-page/filter'
+import {
+  SearchFilter as _SearchFilter,
+  defaultFilterValue,
+} from '@/components/search/result-page/filter'
 
 const Container = styled.div`
   /* TODO: remove box-sizing if global already defined */
@@ -129,33 +133,30 @@ type SearchResultsProps = {
 
 const SearchResults = ({ className, query }: SearchResultsProps) => {
   const [activeTab, setActiveTab] = useState<SearchStage>(searchStages.All)
-  const [filters, setFilters] = useState('')
+  const [filterValue, setFilterValue] =
+    useState<FilterValueType>(defaultFilterValue)
+
+  let filters = ''
+  const meeting = filterValue.meeting
+  const meetingSession = filterValue.meetingSession
+
+  if (meeting !== 'all') {
+    const meetingFilter = `term: ${meeting}`
+    const meetingSessionFilter =
+      meetingSession.indexOf('all') > -1
+        ? ''
+        : meetingSession.map((s) => `session: ${s}`).join(' OR ')
+    filters = meetingSessionFilter
+      ? `(${meetingFilter}) AND (${meetingSessionFilter})`
+      : meetingFilter
+  }
 
   function renderSearchFilter() {
     if (activeTab !== searchStages.Speech) {
       return null
     }
 
-    return (
-      <SearchFilter
-        onChange={(filterValue) => {
-          const meeting = filterValue.meeting
-          const meetingSession = filterValue.meetingSession
-
-          if (meeting === 'all') {
-            setFilters('')
-            return
-          }
-
-          const meetingFilter = `term: ${meeting}`
-          const meetingSessionFilter = meetingSession
-            .map((s) => `session: ${s}`)
-            .join(' OR ')
-
-          setFilters(`(${meetingFilter}) AND (${meetingSessionFilter})`)
-        }}
-      />
-    )
+    return <SearchFilter filterValue={filterValue} onChange={setFilterValue} />
   }
 
   return (
