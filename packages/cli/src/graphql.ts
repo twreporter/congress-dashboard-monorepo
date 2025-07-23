@@ -3,8 +3,12 @@ import axios from 'axios'
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-// Ensure the GraphQL endpoint is set in environment variables
-if (!process.env.GRAPHQL_ENDPOINT) {
+// Ensure the GraphQL endpoint and headless account are set in environment variables
+if (
+  !process.env.GRAPHQL_ENDPOINT ||
+  !process.env.HEADLESS_ACCOUNT_EMAIL ||
+  !process.env.HEADLESS_ACCOUNT_PASSWORD
+) {
   throw new Error('GRAPHQL_ENDPOINT is not set in .env')
 }
 
