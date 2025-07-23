@@ -5,6 +5,7 @@ export enum InternalRoutes {
   Legislator = '/lawmaker',
   Topic = '/topics',
   Speech = '/a',
+  Search = '/search',
 }
 
 export enum ExternalRoutes {

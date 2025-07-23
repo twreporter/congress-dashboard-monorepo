@@ -6967,6 +6967,7 @@ __metadata:
     eslint: "npm:^9"
     eslint-config-next: "npm:15.1.5"
     eslint-plugin-storybook: "npm:^0.11.2"
+    instantsearch.js: "npm:4.78.1"
     lodash: "npm:^4.17.21"
     next: "npm:15.1.5"
     pino: "npm:^9.6.0"

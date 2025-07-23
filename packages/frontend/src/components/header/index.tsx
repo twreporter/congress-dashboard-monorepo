@@ -18,7 +18,7 @@ import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import { Search as SearchIcon } from '@twreporter/react-components/lib/icon'
 import {
   AlgoliaInstantSearch,
-  LayoutVariants,
+  layoutVariants,
 } from '@/components/search/instant-search'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
@@ -231,7 +231,7 @@ const Header: React.FC = () => {
                   {isSearchOpen && (
                     <>
                       <AlgoliaInstantSearch
-                        variant={LayoutVariants.Header}
+                        variant={layoutVariants.Header}
                         autoFocus={isSearchOpen}
                       />
                       <IconButton
