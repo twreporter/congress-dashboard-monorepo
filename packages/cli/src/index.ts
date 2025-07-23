@@ -10,6 +10,7 @@ import {
   transferSpeechModelToRecord,
 } from './transfer'
 import { uploadTopics, uploadLegislators, uploadSpeeches } from './algolia'
+import { dryrunState } from './state/dryrun'
 
 const programName = 'lawmaker'
 const commandName = 'feed-algolia'
@@ -49,7 +50,11 @@ program
         return
       }
 
-      const dryrun = options.dryrun
+      if (options.dryrun) {
+        dryrunState.enable()
+      } else {
+        dryrunState.disable()
+      }
 
       const executeAll =
         !options.topics && !options.legislators && !options.speeches
@@ -62,7 +67,7 @@ program
           if (topicModels.length > 0) {
             const topicRecords = transferTopicModelToRecord(topicModels)
             console.log('Upload topic records to Algolia.')
-            await uploadTopics(topicRecords, dryrun)
+            await uploadTopics(topicRecords)
           }
         }
       }
@@ -76,7 +81,7 @@ program
             const legislatorRecords =
               transferLegislatorModelToRecord(legislatorModels)
             console.log('Upload legislator records to Algolia.')
-            await uploadLegislators(legislatorRecords, dryrun)
+            await uploadLegislators(legislatorRecords)
           }
         }
       }
@@ -87,7 +92,7 @@ program
           if (speechModels.length > 0) {
             const speechRecords = transferSpeechModelToRecord(speechModels)
             console.log('Upload speech records to Algolia.')
-            await uploadSpeeches(speechRecords, dryrun)
+            await uploadSpeeches(speechRecords)
           }
         }
       }

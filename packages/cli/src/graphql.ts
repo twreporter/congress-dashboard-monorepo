@@ -1,6 +1,8 @@
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import * as dotenv from 'dotenv'
+import { dryrunState } from './state/dryrun'
+
 dotenv.config()
 
 // Ensure the GraphQL endpoint and headless account are set in environment variables
@@ -268,7 +270,13 @@ export async function* topicIterator(
             }
           }
         `,
-        variables: { updatedAfter, take, skip, cursor, debug: false },
+        variables: {
+          updatedAfter,
+          take,
+          skip,
+          cursor,
+          debug: dryrunState.isEnabled(),
+        },
       },
       {
         headers: {

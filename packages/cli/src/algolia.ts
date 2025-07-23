@@ -1,4 +1,5 @@
 import { algoliasearch } from 'algoliasearch'
+import { dryrunState } from './state/dryrun'
 import * as dotenv from 'dotenv'
 dotenv.config()
 
@@ -43,13 +44,25 @@ export type LegislatorRecord = {
   partyImgSrc: string
 }
 
-export async function uploadSpeeches(records: SpeechRecord[], dryrun = false) {
-  if (dryrun) {
+export async function uploadSpeeches(records: SpeechRecord[]) {
+  if (dryrunState.isEnabled()) {
     console.log(
       '[dryrun] speech records to upload: ',
       JSON.stringify(records, null, 2)
     )
   } else {
+    console.log(
+      'Try to upload the following speech records: ',
+      JSON.stringify(
+        records.map((r) => {
+          return {
+            slug: r.slug,
+            term: r.term,
+            session: r.session,
+          }
+        })
+      )
+    )
     const result = await client.saveObjects({
       indexName: 'speech',
       objects: records,
@@ -59,13 +72,25 @@ export async function uploadSpeeches(records: SpeechRecord[], dryrun = false) {
   }
 }
 
-export async function uploadTopics(records: TopicRecord[], dryrun = false) {
-  if (dryrun) {
+export async function uploadTopics(records: TopicRecord[]) {
+  if (dryrunState.isEnabled()) {
     console.log(
       '[dryrun] topic records to upload: ',
       JSON.stringify(records, null, 2)
     )
   } else {
+    console.log(
+      'Try to upload the following topic records: ',
+      JSON.stringify(
+        records.map((r) => {
+          return {
+            slug: r.slug,
+            term: r.term,
+            session: r.session,
+          }
+        })
+      )
+    )
     const result = await client.saveObjects({
       indexName: 'topic',
       objects: records,
@@ -75,16 +100,24 @@ export async function uploadTopics(records: TopicRecord[], dryrun = false) {
   }
 }
 
-export async function uploadLegislators(
-  records: LegislatorRecord[],
-  dryrun = false
-) {
-  if (dryrun) {
+export async function uploadLegislators(records: LegislatorRecord[]) {
+  if (dryrunState.isEnabled()) {
     console.log(
       '[dryrun] legislator records to upload: ',
       JSON.stringify(records, null, 2)
     )
   } else {
+    console.log(
+      'Try to upload the following legislator records: ',
+      JSON.stringify(
+        records.map((r) => {
+          return {
+            slug: r.slug,
+            term: r.term,
+          }
+        })
+      )
+    )
     const result = await client.saveObjects({
       indexName: 'legislator',
       objects: records,
