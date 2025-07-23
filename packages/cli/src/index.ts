@@ -25,13 +25,13 @@ program
 program
   .command(`${commandName} [updatedAfter]`)
   .description(
-    'Feed Algolia search by topics, speeches and lesgislators records after a given date'
+    'Feed Algolia search by topics, speeches and legislators records after a given date'
   )
   .option('--yesterday', "Use yesterday's date as updatedAfter if not provided")
   .option('--topics', 'Only update topic records')
   .option('--legislators', 'Only update legislator records')
   .option('--speeches', 'Only update speech records')
-  .option('--dryrun', 'Enable dry-run mode (do not write to Algolia)')
+  .option('--dryrun', 'Enable dry-run mode (do not write to Algolia)', true)
   .option('--no-dryrun', 'Disable dry-run mode (actually write to Algolia)')
   .action(async (_updatedAfter, options) => {
     try {
@@ -49,7 +49,7 @@ program
         return
       }
 
-      const dryrun = options.dryrun ?? true
+      const dryrun = options.dryrun
 
       const executeAll =
         !options.topics && !options.legislators && !options.speeches
