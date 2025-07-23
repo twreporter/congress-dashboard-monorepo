@@ -1,7 +1,7 @@
 {
   "name": "lawmaker-cli",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "rm -rf lib && tsc && chmod +x lib/index.js",
     "dev": "ts-node src/index.ts",
