@@ -31,6 +31,25 @@ export type SpeechRawHit = Hit<{
   legislatorName: string
 }>
 
+/**
+ * `AvatarBorder` is a workaround to address rendering issues when applying a semi-transparent border directly on `Avatar`.
+ *
+ * While it's possible to use `border-radius` and `border` on `Avatar` itself,
+ * the semi-transparent border color overlays the background image,
+ * making the border appear not cleanly rounded.
+ *
+ * To solve this, we wrap the `Avatar` with an outer container `AvatarBorder`,
+ * which simulates the border using padding and a background color.
+ */
+const AvatarBorder = styled.div`
+  width: fit-content;
+  height: fit-content;
+
+  background-color: ${colorOpacity['black_0.05']};
+  border-radius: 4px;
+  padding: 1px;
+`
+
 const Avatar = styled.div<{ $imgSrc: string }>`
   ${({ $imgSrc }) => {
     return `background-image: url(${$imgSrc});`
@@ -39,7 +58,6 @@ const Avatar = styled.div<{ $imgSrc: string }>`
   background-repeat: no-repeat;
   background-size: cover;
 
-  border: 1px solid ${colorOpacity['black_0.05']};
   border-radius: 4px;
 
   position: relative;
@@ -174,9 +192,11 @@ export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
           <LegislatorDesc>{hit.desc}</LegislatorDesc>
           <p>最新一筆發言於{hit.lastSpeechAt}</p>
         </Text>
-        <Avatar $imgSrc={hit.imgSrc}>
-          <Party $imgSrc={hit.partyImgSrc} />
-        </Avatar>
+        <AvatarBorder>
+          <Avatar $imgSrc={hit.imgSrc}>
+            <Party $imgSrc={hit.partyImgSrc} />
+          </Avatar>
+        </AvatarBorder>
       </Container>
     </Link>
   )
