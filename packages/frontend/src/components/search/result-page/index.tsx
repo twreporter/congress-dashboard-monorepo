@@ -232,7 +232,7 @@ export function SearchPage({ query }: SearchPageProps) {
   return (
     <div key={query}>
       <InsantSearchContainer>
-        <AlgoliaInstantSearch className="search-box" />
+        <AlgoliaInstantSearch className="search-box" query={query} />
       </InsantSearchContainer>
       <SearchResults query={query} />
     </div>
