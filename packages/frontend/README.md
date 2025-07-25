@@ -41,6 +41,10 @@ npm install -g pino-pretty
 yarn dev | pino-pretty -c
 ```
 
+## Search
+Our search functionality is powered by [Algolia](https://www.algolia.com/), a third-party service that provides fast and relevant search experiences.
+For implementation details, please refer to the [Search README](./src/components/search/README.md).
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
