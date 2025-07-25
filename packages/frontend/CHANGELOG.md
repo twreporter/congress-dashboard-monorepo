@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0-rc.1
+
+### Patch Changes
+
+- [#275](https://github.com/twreporter/congress-dashboard-monorepo/pull/275) [`cec6caf`](https://github.com/twreporter/congress-dashboard-monorepo/commit/cec6caf35ae323a9b95c0376ce55c7d918ee4c84) Thanks [@nickhsine](https://github.com/nickhsine)! - fix search page defects
+
 ## 1.2.0-rc.0
 
 ### Minor Changes
