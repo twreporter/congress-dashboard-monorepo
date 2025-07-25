@@ -11,9 +11,14 @@ import { formatDate } from '@/utils/date-formatters'
 import { useLegislativeMeeting } from '@/fetchers/legislative-meeting'
 import { useLegislativeMeetingSession } from '@/fetchers/legislative-meeting'
 
-type FilterValueType = {
+export type FilterValueType = {
   meeting: string
   meetingSession: string[]
+}
+
+export const defaultFilterValue = {
+  meeting: 'all',
+  meetingSession: ['all'],
 }
 
 const Container = styled.div`
@@ -31,18 +36,15 @@ const FilterString = styled.div`
 
 export const SearchFilter = ({
   className,
+  filterValue: _filterValue,
   onChange,
 }: {
   className?: string
+  filterValue: FilterValueType
   onChange: (FilterValueType) => void
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const defaultFilterValue = {
-    meeting: 'all',
-    meetingSession: ['all'],
-  }
-  const [filterValue, setFilterValue] =
-    useState<FilterValueType>(defaultFilterValue)
+  const [filterValue, setFilterValue] = useState<FilterValueType>(_filterValue)
   const {
     legislativeMeetings: meetings,
     isLoading: isLoadingMeeting,
@@ -118,17 +120,7 @@ export const SearchFilter = ({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         initialValues={defaultFilterValue}
-        onSubmit={(value) => {
-          if (value.meetingSession.indexOf('all') > -1) {
-            const meetingSession = sessions.map(({ id }) => id.toString())
-            onChange({
-              meeting: value.meeting as string,
-              meetingSession,
-            })
-            return
-          }
-          onChange(value)
-        }}
+        onSubmit={onChange}
         onChange={(value) => {
           if (value.meeting === 'all') {
             setFilterValue(defaultFilterValue)

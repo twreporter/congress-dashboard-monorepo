@@ -80,19 +80,33 @@ const ClickOutsideWidget = ({
   return null
 }
 
+function PrefillQuery({ query }: { query?: string }) {
+  const { refine } = useSearchBox()
+
+  useEffect(() => {
+    if (query) {
+      refine(query)
+    }
+  }, [refine, query])
+
+  return null
+}
+
 export type AlgoliaInstantSearchProps = {
   className?: string
   variant?: LayoutVariant
   autoFocus?: boolean
+  query?: string
 }
 
 export const AlgoliaInstantSearch = ({
   className,
   variant = layoutVariants.Default,
   autoFocus = false,
+  query = '',
 }: AlgoliaInstantSearchProps) => {
   const containerRef = useRef(null)
-  const [focused, setFocused] = useState(true)
+  const [focused, setFocused] = useState(autoFocus)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const windowWidth = useWindowWidth()
 
@@ -117,9 +131,14 @@ export const AlgoliaInstantSearch = ({
 
   if (isModalOpen) {
     return (
-      <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
+      <InstantSearch
+        indexName={defaultIndexName}
+        searchClient={searchClient}
+        future={{ preserveSharedStateOnUnmount: true }}
+      >
         <SearchModal
           onClose={() => {
+            setFocused(false)
             setIsModalOpen(false)
           }}
         />
@@ -136,15 +155,16 @@ export const AlgoliaInstantSearch = ({
       }}
     >
       <Container ref={containerRef} className={className} $variant={variant}>
+        <PrefillQuery query={query} />
         <SearchBox
           variant={variant}
           autoFocus={autoFocus}
           onFocus={() => {
-            setFocused(true)
-
             // For mobile, open the search modal
             if (windowWidth < DEFAULT_SCREEN.tablet.minWidth) {
               setIsModalOpen(true)
+            } else {
+              setFocused(true)
             }
           }}
         />
