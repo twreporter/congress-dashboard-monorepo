@@ -8,8 +8,10 @@ import { MenuButton, PillButton } from '@twreporter/react-components/lib/button'
 import Divider from '@twreporter/react-components/lib/divider'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import { AlgoliaInstantSearch } from '@/components/search/instant-search'
-import { LayoutVariants } from '@/components/search/constants'
+import {
+  AlgoliaInstantSearch,
+  layoutVariants,
+} from '@/components/search/instant-search'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
@@ -79,7 +81,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
   return (
     <Container $isOpen={isOpen}>
       <SearchSection>
-        <AlgoliaInstantSearch variant={LayoutVariants.Menu} />
+        <AlgoliaInstantSearch variant={layoutVariants.Menu} />
       </SearchSection>
       {menuLinks.map(({ text, href, target }, idx) => (
         <MenuButton
