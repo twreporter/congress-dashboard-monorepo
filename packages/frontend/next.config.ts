@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     domains: [
       'dev-lawmaker.twreporter.org',
       'staging-lawmaker.twreporter.org',
+      'lawmaker.twreporter.org',
       'dev.twreporter.org',
       'staging.twreporter.org',
       'twreporter.org',

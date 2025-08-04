@@ -7,7 +7,6 @@
     "@twreporter/congress-dashboard-shared": "0.0.6"
   },
   "changesets": [
-    "fancy-feet-sip",
-    "stupid-aliens-shout"
+    "ripe-plants-rescue"
   ]
 }
