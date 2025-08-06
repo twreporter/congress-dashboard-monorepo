@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1-rc.1
+
+### Patch Changes
+
+- [#291](https://github.com/twreporter/congress-dashboard-monorepo/pull/291) [`7eaf3e5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7eaf3e598bc296476627eb34adcdb918e2393779) Thanks [@liruchen32](https://github.com/liruchen32)! - add sitemap and robots
+
 ## 1.2.1-rc.0
 
 ### Patch Changes
