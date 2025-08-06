@@ -197,15 +197,15 @@ export const fetchAllTopicsSlug = async () => {
     query Topics {
       topics {
         slug
+        updatedAt
       }
     }
   `
 
   try {
-    const data = await keystoneFetch<{ topics: { slug: string }[] }>(
-      JSON.stringify({ query }),
-      false
-    )
+    const data = await keystoneFetch<{
+      topics: { slug: string; updatedAt: string }[]
+    }>(JSON.stringify({ query }), false)
     return data?.data?.topics
   } catch (err) {
     throw new Error(`Failed to fetch all topics slug, err: ${err}`)

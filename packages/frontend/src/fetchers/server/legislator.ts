@@ -301,16 +301,16 @@ export const fetchAllLegislatorsSlug = async () => {
     query GetAllLegislatorsSlug {
       legislators {
         slug
+        updatedAt
       }
     }
   `
   try {
-    const data = await keystoneFetch<{ legislators: { slug: string }[] }>(
-      JSON.stringify({ query }),
-      false
-    )
+    const data = await keystoneFetch<{
+      legislators: { slug: string; updatedAt: string }[]
+    }>(JSON.stringify({ query }), false)
     return data?.data?.legislators
   } catch (err) {
-    throw new Error(`Failed to fetch all parties, err: ${err}`)
+    throw new Error(`Failed to fetch all legislators, err: ${err}`)
   }
 }

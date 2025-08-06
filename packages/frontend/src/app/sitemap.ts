@@ -22,19 +22,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     ]
     const legislators = await fetchAllLegislatorsSlug()
-    const legislatorSitemap = legislators?.map(({ slug }) => ({
+    const legislatorSitemap = legislators?.map(({ slug, updatedAt }) => ({
       url: `${baseUrl}${InternalRoutes.Legislator}/${slug}`,
-      lastModified: new Date(),
+      lastModified: new Date(updatedAt),
     }))
     const speeches = await fetchAllSpeechesSlug()
-    const speechSitemap = speeches?.map(({ slug }) => ({
+    const speechSitemap = speeches?.map(({ slug, updatedAt }) => ({
       url: `${baseUrl}${InternalRoutes.Speech}/${slug}`,
-      lastModified: new Date(),
+      lastModified: new Date(updatedAt),
     }))
     const topics = await fetchAllTopicsSlug()
-    const topicSitemap = topics?.map(({ slug }) => ({
+    const topicSitemap = topics?.map(({ slug, updatedAt }) => ({
       url: `${baseUrl}${InternalRoutes.Topic}/${slug}`,
-      lastModified: new Date(),
+      lastModified: new Date(updatedAt),
     }))
     return baseSitemap.concat(
       legislatorSitemap ?? [],

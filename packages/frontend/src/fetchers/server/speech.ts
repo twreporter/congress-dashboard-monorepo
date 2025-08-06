@@ -124,23 +124,23 @@ export const fetchAllSpeechesSlug = async () => {
     query GetAllSpeechesSlug($take: Int, $skip: Int) {
       speeches(take: $take, skip: $skip) {
         slug
+        updatedAt
       }
     }
   `
   const batchSize = 500
-  let allSlugs: { slug: string }[] = []
+  let allSpeeches: { slug: string; updatedAt: string }[] = []
   let skip = 0
   let fetched = 0
 
   while (true) {
     const variables = { take: batchSize, skip }
     try {
-      const data = await keystoneFetch<{ speeches: { slug: string }[] }>(
-        JSON.stringify({ query, variables }),
-        false
-      )
+      const data = await keystoneFetch<{
+        speeches: { slug: string; updatedAt: string }[]
+      }>(JSON.stringify({ query, variables }), false)
       const batch = data?.data?.speeches ?? []
-      allSlugs = allSlugs.concat(batch)
+      allSpeeches = allSpeeches.concat(batch)
       fetched = batch.length
       if (fetched < batchSize) break
       skip += batchSize
@@ -150,5 +150,5 @@ export const fetchAllSpeechesSlug = async () => {
       )
     }
   }
-  return allSlugs
+  return allSpeeches
 }
