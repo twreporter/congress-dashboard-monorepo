@@ -1,0 +1,14 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "@twreporter/congress-dashboard-cms": "1.0.0",
+    "@twreporter/congress-dashboard-frontend": "1.0.1",
+    "@twreporter/congress-dashboard-shared": "0.0.6",
+    "lawmaker-cli": "1.0.0"
+  },
+  "changesets": [
+    "lazy-houses-shake",
+    "ripe-plants-rescue"
+  ]
+}

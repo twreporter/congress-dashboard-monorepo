@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1-rc.0
+
+### Patch Changes
+
+- [#285](https://github.com/twreporter/congress-dashboard-monorepo/pull/285) [`be5e24d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/be5e24d392cdfe41171b98a6b6eb3306fbef21d2) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add prod host to next image domain white list
+
 ## 1.2.0
 
 ### Minor Changes

@@ -5,7 +5,8 @@
     "packages": [
       "packages/cms",
       "packages/frontend",
-      "packages/shared"
+      "packages/shared",
+      "packages/cli"
     ]
   },
   "scripts": {

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1-rc.0
+
+### Patch Changes
+
+- [#279](https://github.com/twreporter/congress-dashboard-monorepo/pull/279) [`e4f25fc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e4f25fc04b3fa51b58d7d0682c3bbd983a810cf9) Thanks [@nickhsine](https://github.com/nickhsine)! - fix(cms): /import-records list page hangs, and can not show any data
+
 ## 1.1.0
 
 ### Patch Changes
