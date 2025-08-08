@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1-rc.2
+
+### Patch Changes
+
+- [#293](https://github.com/twreporter/congress-dashboard-monorepo/pull/293) [`c52006c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c52006c219fcea93d57ece3fd60ab4ebfce5ee2d) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix style defects
+
 ## 1.2.1-rc.1
 
 ### Patch Changes
