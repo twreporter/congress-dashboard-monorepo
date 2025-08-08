@@ -912,7 +912,7 @@ const listConfigurations = list({
     listView: {
       initialColumns: [
         'recordName',
-        'uploadData',
+        // 'uploadData',
         'recordCount',
         'createdAt',
         'updatedAt',

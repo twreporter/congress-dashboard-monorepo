@@ -4,9 +4,13 @@
   "initialVersions": {
     "@twreporter/congress-dashboard-cms": "1.0.0",
     "@twreporter/congress-dashboard-frontend": "1.0.1",
-    "@twreporter/congress-dashboard-shared": "0.0.6"
+    "@twreporter/congress-dashboard-shared": "0.0.6",
+    "lawmaker-cli": "1.0.0"
   },
   "changesets": [
-    "ripe-plants-rescue"
+    "lazy-houses-shake",
+    "legal-coats-punch",
+    "ripe-plants-rescue",
+    "tame-coats-lie"
   ]
 }
