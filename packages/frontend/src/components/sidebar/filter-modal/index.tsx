@@ -109,7 +109,7 @@ const TopBox = styled(FlexColumn)<{ $show: boolean }>`
   transition: transform 0.4s ease-in-out;
 `
 const TitleBox = styled(FlexRow)`
-  align-items: center;
+  align-items: flex-start;
 `
 const bottomHeight = 92 // confirm box height
 const ContentBox = styled.div<{

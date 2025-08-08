@@ -48,7 +48,7 @@ const Subtitle = styled(P2)`
 const TabItem = styled.div``
 const TabGroup = styled(FlexRow)`
   margin-top: 12px;
-  align-items: center;
+  align-items: center !important;
   border-bottom: 1px solid ${colorGrayscale.gray300};
 
   ${FlexRow} {
