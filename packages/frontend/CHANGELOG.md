@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1-rc.3
+
+### Patch Changes
+
+- [`13782ff`](https://github.com/twreporter/congress-dashboard-monorepo/commit/13782fff3661360dcb5151443515d411b9553fc6) Thanks [@liruchen32](https://github.com/liruchen32)! - pino gcp logging
+
 ## 1.2.1-rc.2
 
 ### Patch Changes

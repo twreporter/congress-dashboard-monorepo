@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       'lawmaker-storage.twreporter.org',
     ],
   },
+  serverExternalPackages: ['pino', 'pino-pretty'],
 }
 
 export default nextConfig
