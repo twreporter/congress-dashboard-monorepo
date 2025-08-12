@@ -27,6 +27,11 @@ jobs:
       
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
       
       - name: Commit any uncommitted changes
         run: |
@@ -68,7 +73,7 @@ jobs:
       - name: Publish cli if version bumped
         id: publish_cli
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if git diff --name-only HEAD^ HEAD | grep -q "packages/cli/package.json"; then
             cd packages/cli
