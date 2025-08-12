@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.1
+
+### Patch Changes
+
+- [#291](https://github.com/twreporter/congress-dashboard-monorepo/pull/291) [`7eaf3e5`](https://github.com/twreporter/congress-dashboard-monorepo/commit/7eaf3e598bc296476627eb34adcdb918e2393779) Thanks [@liruchen32](https://github.com/liruchen32)! - add sitemap and robots
+
+- [#285](https://github.com/twreporter/congress-dashboard-monorepo/pull/285) [`be5e24d`](https://github.com/twreporter/congress-dashboard-monorepo/commit/be5e24d392cdfe41171b98a6b6eb3306fbef21d2) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add prod host to next image domain white list
+
+- [#296](https://github.com/twreporter/congress-dashboard-monorepo/pull/296) [`13782ff`](https://github.com/twreporter/congress-dashboard-monorepo/commit/13782fff3661360dcb5151443515d411b9553fc6) Thanks [@liruchen32](https://github.com/liruchen32)! - pino gcp logging
+
+- [#293](https://github.com/twreporter/congress-dashboard-monorepo/pull/293) [`c52006c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c52006c219fcea93d57ece3fd60ab4ebfce5ee2d) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix style defects
+
 ## 1.2.1-rc.3
 
 ### Patch Changes
