@@ -27,6 +27,11 @@ jobs:
       
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
       
       - name: Commit any uncommitted changes
         run: |
@@ -35,11 +40,11 @@ jobs:
             git add .
             git commit -m "chore: commit changes before version bump" || true
           fi
-      
+
       - name: Get branch name
         id: branch
         run: echo "name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
-
+      
       - name: Bump version for all packages
         run: |
           yarn lerna version \
@@ -48,7 +53,7 @@ jobs:
             --conventional-prerelease \
             --include-merged-tags \
             --tag-version-prefix="${{ steps.branch.outputs.name }}/" \
-            --message "chore(release): publish prerelease" \
+            --message "chore(release): publish beta version" \
             --yes
 
       - name: Authenticate to npm
