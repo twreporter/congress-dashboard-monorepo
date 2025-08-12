@@ -1,9 +1,9 @@
-name: Master Version Bump
+name: Dev Version Bump
 
 on:
   push:
     branches:
-      - master
+      - dev
 
 jobs:
   version-bump:
@@ -99,6 +99,6 @@ jobs:
             git commit -m "chore: update yarn.lock and package.json files after version bump"
           fi
 
-      - name: Push changes back to master
+      - name: Push changes back to dev
         run: |
-          git push origin master --follow-tags
+          git push origin dev --follow-tags
