@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-cms",
-  "version": "1.1.1",
+  "version": "1.2.0-rc.0",
   "private": true,
   "scripts": {
     "dev": "keystone dev",
@@ -19,7 +19,7 @@
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
-    "@twreporter/congress-dashboard-shared": "0.0.7",
+    "@twreporter/congress-dashboard-shared": "^0.1.0-rc.0",
     "@twreporter/errors": "^1.1.2",
     "lodash": "^4.17.21",
     "papaparse": "^5.5.2",
