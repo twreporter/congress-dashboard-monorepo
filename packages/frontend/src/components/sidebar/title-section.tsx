@@ -100,13 +100,19 @@ const TitleSection: React.FC<TitleSectionProps> = ({
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
   const tabRef = useRef<HTMLDivElement>(null)
+  const prevLinkRef = useRef<TitleSectionProps['link']>('')
 
   useEffect(() => {
     setSelectedTab(0)
+
+    const linkChnaged = prevLinkRef.current && prevLinkRef.current !== link
+    prevLinkRef.current = link
+
     if (tabRef.current) {
-      tabRef.current.scrollTo({ left: 0, behavior: 'smooth' })
+      const behavior = linkChnaged ? 'instant' : 'smooth'
+      tabRef.current.scrollTo({ left: 0, behavior })
     }
-  }, [tabs, tabRef.current, setSelectedTab])
+  }, [link, tabs, setSelectedTab])
 
   const selectTab = (e: React.MouseEvent<HTMLElement>, index: number) => {
     e.preventDefault()
