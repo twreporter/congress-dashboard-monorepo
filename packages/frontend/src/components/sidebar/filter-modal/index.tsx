@@ -406,6 +406,12 @@ const FilterModal: React.FC<FilterModalProps> = ({
     onClose()
   }
 
+  const close = (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onClose()
+  }
+
   return (
     <>
       <TopBox $show={!isSearchMode} ref={topBoxRef}>
@@ -425,7 +431,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
               iconComponent={<Cross releaseBranch={releaseBranch} />}
               theme={IconButton.THEME.normal}
               type={IconButton.Type.PRIMARY}
-              onClick={onClose}
+              onClick={close}
             />
           </ButtonGroup>
         </TitleBox>
