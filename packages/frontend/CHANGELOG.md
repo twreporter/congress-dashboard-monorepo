@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.3.0-rc.0...@twreporter/congress-dashboard-frontend@1.3.0-rc.1) (2025-08-13)
+
+### Bug Fixes
+
+- **frontend:** reset sidebar tab when tabs change ([b4b08dc](https://github.com/twreporter/congress-dashboard-monorepo/commit/b4b08dcdac784093a4564484f92bc297a356bc25))
+- **frontend:** sidebar filter close unexpected ([c21069d](https://github.com/twreporter/congress-dashboard-monorepo/commit/c21069d1de2e6f18ad2c49b107836b0cb01e6ca9))
+- **frontend:** use instant scroll when card change ([6dce662](https://github.com/twreporter/congress-dashboard-monorepo/commit/6dce6622dee6c4a340eb08d249b01035df6636ea))
+
 # 1.3.0-rc.0 (2025-08-12)
 
 ### Bug Fixes
