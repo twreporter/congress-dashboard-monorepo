@@ -9,6 +9,8 @@ import { InternalRoutes } from '@/constants/routes'
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 const baseUrl = 'https://lawmaker.twreporter.org'
 
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (releaseBranch === 'release') {
     const baseSitemap = [
