@@ -292,3 +292,25 @@ export const fetchLegislatorTopics = async ({
     )
   }
 }
+
+/**
+ * fetch all legislators slug for sitemap
+ */
+export const fetchAllLegislatorsSlug = async () => {
+  const query = `
+    query GetAllLegislatorsSlug {
+      legislators {
+        slug
+        updatedAt
+      }
+    }
+  `
+  try {
+    const data = await keystoneFetch<{
+      legislators: { slug: string; updatedAt: string }[]
+    }>(JSON.stringify({ query }), false)
+    return data?.data?.legislators
+  } catch (err) {
+    throw new Error(`Failed to fetch all legislators, err: ${err}`)
+  }
+}

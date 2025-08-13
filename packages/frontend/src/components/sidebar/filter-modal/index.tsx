@@ -109,7 +109,7 @@ const TopBox = styled(FlexColumn)<{ $show: boolean }>`
   transition: transform 0.4s ease-in-out;
 `
 const TitleBox = styled(FlexRow)`
-  align-items: center;
+  align-items: flex-start;
 `
 const bottomHeight = 92 // confirm box height
 const ContentBox = styled.div<{
@@ -406,6 +406,12 @@ const FilterModal: React.FC<FilterModalProps> = ({
     onClose()
   }
 
+  const close = (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onClose()
+  }
+
   return (
     <>
       <TopBox $show={!isSearchMode} ref={topBoxRef}>
@@ -425,7 +431,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
               iconComponent={<Cross releaseBranch={releaseBranch} />}
               theme={IconButton.THEME.normal}
               type={IconButton.Type.PRIMARY}
-              onClick={onClose}
+              onClick={close}
             />
           </ButtonGroup>
         </TitleBox>

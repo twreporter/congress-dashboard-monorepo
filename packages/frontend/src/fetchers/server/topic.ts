@@ -188,3 +188,26 @@ export const fetchTopNTopics = async ({
     )
   }
 }
+
+/**
+ * fetch all topics slug for sitemap
+ */
+export const fetchAllTopicsSlug = async () => {
+  const query = `
+    query Topics {
+      topics {
+        slug
+        updatedAt
+      }
+    }
+  `
+
+  try {
+    const data = await keystoneFetch<{
+      topics: { slug: string; updatedAt: string }[]
+    }>(JSON.stringify({ query }), false)
+    return data?.data?.topics
+  } catch (err) {
+    throw new Error(`Failed to fetch all topics slug, err: ${err}`)
+  }
+}
