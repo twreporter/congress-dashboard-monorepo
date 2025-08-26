@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.3.1...@twreporter/congress-dashboard-frontend@1.4.0-rc.0) (2025-08-26)
+
+### Features
+
+- use ISR on production & SSR on other envs ([f8b182a](https://github.com/twreporter/congress-dashboard-monorepo/commit/f8b182a549364269db18ec17838bc71176a8eb88))
+
 ## [1.3.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.3.1-rc.0...@twreporter/congress-dashboard-frontend@1.3.1) (2025-08-13)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
