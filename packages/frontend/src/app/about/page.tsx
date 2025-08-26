@@ -1,4 +1,8 @@
-export const dynamic = 'force-dynamic'
+const isRelease = process.env.NEXT_PUBLIC_RELEASE_BRANCH === 'release'
+// use ISR in production & SSR in other envs (disabled cache)
+export const dynamic = isRelease ? 'auto' : 'force-dynamic'
+// cache html & data for 2hr in release
+export const revalidate = isRelease ? 7200 : undefined
 
 import { cache } from 'react'
 import { Metadata } from 'next'

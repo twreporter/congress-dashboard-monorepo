@@ -1,3 +1,9 @@
+const isRelease = process.env.NEXT_PUBLIC_RELEASE_BRANCH === 'release'
+// use ISR in production & SSR in other envs (disabled cache)
+export const dynamic = isRelease ? 'auto' : 'force-dynamic'
+// cache html & data for 2hr in release
+export const revalidate = isRelease ? 7200 : undefined
+
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 // components
@@ -7,8 +13,6 @@ import { fetchSpeech, fetchSpeechGroup } from '@/fetchers/server/speech'
 // constants
 import { InternalRoutes } from '@/constants/routes'
 import { OG_IMAGE_URL } from '@/constants'
-
-export const dynamicParams = true
 
 export async function generateMetadata({
   params,
