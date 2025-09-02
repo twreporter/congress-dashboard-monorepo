@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.1...@twreporter/congress-dashboard-frontend@1.4.0-rc.2) (2025-09-02)
+
+### Bug Fixes
+
+- **frontend:** use ISR cache for 2hr ([88159b2](https://github.com/twreporter/congress-dashboard-monorepo/commit/88159b23fcbb2d51668247ed33179c98ec936d40))
+
 # [1.4.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.0...@twreporter/congress-dashboard-frontend@1.4.0-rc.1) (2025-08-26)
 
 ### Features
