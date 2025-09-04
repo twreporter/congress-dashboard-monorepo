@@ -1,6 +1,5 @@
-// use ISR cache 2hr
-export const dynamic = 'auto'
-export const revalidate = 7200
+// home page cache is on cloudflare
+export const dynamic = 'force-dynamic'
 
 // fetcher
 import fetchEditorSelecteds from '@/fetchers/server/editor-pickor'

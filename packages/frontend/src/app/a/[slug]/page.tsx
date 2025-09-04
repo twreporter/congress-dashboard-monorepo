@@ -1,6 +1,6 @@
 // use ISR cache 2hr
-export const dynamic = 'auto'
 export const revalidate = 7200
+export const dynamicParams = true
 
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
