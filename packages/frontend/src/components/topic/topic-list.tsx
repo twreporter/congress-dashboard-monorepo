@@ -176,9 +176,7 @@ const TopicList: React.FC<TopicListProps> = ({
 
   const followMoreTitle = useMemo(
     () =>
-      selectedLegislator
-        ? `${selectedLegislator.name} 近期關注的五大議題：`
-        : '',
+      selectedLegislator ? `${selectedLegislator.name} 最關注的五大議題：` : '',
     [selectedLegislator]
   )
 

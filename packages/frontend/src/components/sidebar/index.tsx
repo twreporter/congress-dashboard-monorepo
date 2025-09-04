@@ -154,7 +154,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
     [tabList, selectedTab]
   )
   const followMoreTitle: string = useMemo(
-    () => `${_.get(selectedLegislator, ['name'], '')} 近期關注的五大議題：`,
+    () => `${_.get(selectedLegislator, ['name'], '')} 最關注的五大議題：`,
     [selectedLegislator]
   )
   const { formattedFilterValues } = useContext(DashboardContext)
