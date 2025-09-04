@@ -145,6 +145,7 @@ const TabletAndBelowWithFlex = styled(TabletAndBelow)`
   ${mq.tabletAndBelow`
     display: flex !important;
     align-items: center;
+    flex-direction: column;
   `}
 `
 const Feedback = styled(P2Gray600)`
