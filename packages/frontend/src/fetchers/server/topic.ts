@@ -63,7 +63,7 @@ export const fetchTopic = async ({
   const query = `
     query Topic($where: TopicWhereUniqueInput!, $speechesWhere: SpeechWhereInput!) {
       topic(where: $where) {
-        speeches(where: $speechesWhere) {
+        speeches(where: $speechesWhere, orderBy: { date: desc }) {
           slug
           summary
           title

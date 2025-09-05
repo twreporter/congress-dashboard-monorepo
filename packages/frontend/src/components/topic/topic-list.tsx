@@ -117,6 +117,7 @@ const TopicList: React.FC<TopicListProps> = ({
 
   useEffect(() => {
     setTabList(mapToTabItems(legislatorsData).slice(0, maxTabs))
+    setSelectedTab(0)
   }, [legislatorsData])
 
   const selectedLegislator = useMemo(() => {
@@ -176,9 +177,7 @@ const TopicList: React.FC<TopicListProps> = ({
 
   const followMoreTitle = useMemo(
     () =>
-      selectedLegislator
-        ? `${selectedLegislator.name} 近期關注的五大議題：`
-        : '',
+      selectedLegislator ? `${selectedLegislator.name} 最關注的五大議題：` : '',
     [selectedLegislator]
   )
 

@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import type { LayoutVariant, SearchStage } from '@/components/search/constants'
@@ -159,16 +158,15 @@ export const InstantHits = ({
 
   return (
     <Container ref={containerRef} className={className} $variant={variant}>
-      <Link
-        href={`${InternalRoutes.Search}?query=${query.split(' ').join('+')}`}
-      >
+      {/*  use <a> to force full reload */}
+      <a href={`${InternalRoutes.Search}?query=${query.split(' ').join('+')}`}>
         <FirstRow $variant={variant}>
           <SearchIconContainer>
             <IconSearch />
           </SearchIconContainer>
           <SearchText>{query}</SearchText>
         </FirstRow>
-      </Link>
+      </a>
       <Rows>
         <Index indexName={defaultIndexName}>
           <Configure hitsPerPage={10} />
