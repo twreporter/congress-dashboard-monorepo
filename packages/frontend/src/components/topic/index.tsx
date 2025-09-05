@@ -40,10 +40,6 @@ const Topic: React.FC<TopicPageProps> = ({
   const [filterCount, setFilterCount] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  useEffect(() => {
-    setIsLoading(false)
-  }, [searchParams])
-
   // Custom hooks
   const {
     isFilterOpen,
@@ -88,19 +84,46 @@ const Topic: React.FC<TopicPageProps> = ({
         // Fallback to current session if nothing is selected
         console.warn('No meeting sessions selected, using current session')
       }
-
       const newUrl = `/topics/${topic.slug}?meetingTerm=${
         filterValues.meeting
       }&sessionTerm=${JSON.stringify(sessionTermValue)}`
-      router.push(newUrl)
       setIsLoading(true)
       setIsFilterOpen(false)
+      router.push(newUrl)
     } catch (error) {
       console.error('Error processing filter values:', error)
     }
   }
 
   const pageTitle = `#${topic?.title} 的相關發言摘要`
+
+  useEffect(() => {
+    const sessionTermParam = searchParams.get('sessionTerm')
+    if (sessionTermParam) {
+      try {
+        const sessionTermArray = JSON.parse(sessionTermParam)
+        if (Array.isArray(sessionTermArray)) {
+          if (
+            sessionTermArray.length >=
+            legislativeMeetingSessionState.legislativeMeetingSessions.length
+          ) {
+            setFilterCount(0)
+          } else {
+            setFilterCount(sessionTermArray.length)
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing sessionTerm from URL:', error)
+        setFilterCount(0)
+      }
+    } else {
+      setFilterCount(0)
+    }
+  }, [searchParams, legislativeMeetingSessionState])
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [legislatorCount, legislatorsData, speechesByLegislator])
 
   return (
     <>
