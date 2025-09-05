@@ -158,6 +158,7 @@ export const InstantHits = ({
 
   return (
     <Container ref={containerRef} className={className} $variant={variant}>
+      {/*  use <a> to force full reload */}
       <a href={`${InternalRoutes.Search}?query=${query.split(' ').join('+')}`}>
         <FirstRow $variant={variant}>
           <SearchIconContainer>

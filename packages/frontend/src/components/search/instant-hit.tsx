@@ -151,7 +151,7 @@ export function InstantLegislatorHit({
   variant: LayoutVariant
 }) {
   return (
-    <a
+    <a // use <a> to force full reload
       href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.term}`}
     >
       <InstantHitContainer $variant={variant}>
@@ -175,7 +175,7 @@ export function InstantTopicHit({
   variant: LayoutVariant
 }) {
   return (
-    <a
+    <a // use <a> to force full reload
       href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
     >
       <InstantHitContainer $variant={variant}>
