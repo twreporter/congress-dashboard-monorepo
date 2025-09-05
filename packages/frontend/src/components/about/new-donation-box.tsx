@@ -95,7 +95,8 @@ const DonationBox: React.FC = () => {
   const onDonationButtonClick = () => {
     window.open(
       `${ExternalRoutes.Support}#${DONATION_LINK_ANCHOR.impact}`,
-      '_blank'
+      '_blank',
+      'noopener,noreferrer'
     )
   }
   return (
