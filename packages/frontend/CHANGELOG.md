@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0-rc.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.6...@twreporter/congress-dashboard-frontend@1.4.0-rc.7) (2025-09-08)
+
+### Bug Fixes
+
+- **frontend:** legislator speech order ([e459d77](https://github.com/twreporter/congress-dashboard-monorepo/commit/e459d77732c2cd86c8773bb5d7db8469b2415bc6))
+
 # [1.4.0-rc.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.5...@twreporter/congress-dashboard-frontend@1.4.0-rc.6) (2025-09-08)
 
 ### Bug Fixes
