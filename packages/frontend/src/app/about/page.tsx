@@ -1,6 +1,5 @@
-// use ISR cache 2hr
-export const dynamic = 'auto'
-export const revalidate = 7200
+// about page cache is on cloudflare
+export const dynamic = 'force-dynamic'
 
 import { cache } from 'react'
 import { Metadata } from 'next'
