@@ -266,7 +266,7 @@ export const fetchLegislatorTopics = async ({
         title
         slug
         speechesCount(where: $speechCondition)
-        speeches(where: $speechCondition) {
+        speeches(where: $speechCondition, orderBy: { date: desc }) {
           slug
           date
           title
