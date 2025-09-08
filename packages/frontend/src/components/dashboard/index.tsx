@@ -79,8 +79,6 @@ const Box = styled.div`
   `}
 `
 const StyledFunctionBar = styled(FunctionBar)`
-  padding: 0 256px 0px 256px;
-
   ${mq.tabletOnly`
     padding: 0 32px 0px 32px;
   `}
