@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0-rc.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.5...@twreporter/congress-dashboard-frontend@1.4.0-rc.6) (2025-09-08)
+
+### Bug Fixes
+
+- **frontend:** style defects in firefox ([e0f7148](https://github.com/twreporter/congress-dashboard-monorepo/commit/e0f7148fb7e39496c87ba47537c3e58f0fba6876))
+
 # [1.4.0-rc.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.4...@twreporter/congress-dashboard-frontend@1.4.0-rc.5) (2025-09-08)
 
 ### Bug Fixes
