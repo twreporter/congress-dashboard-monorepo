@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import React from 'react'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
@@ -152,7 +151,7 @@ export function InstantLegislatorHit({
   variant: LayoutVariant
 }) {
   return (
-    <Link
+    <a // use <a> to force full reload
       href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.term}`}
     >
       <InstantHitContainer $variant={variant}>
@@ -164,7 +163,7 @@ export function InstantLegislatorHit({
           <p>{hit.shortDesc}</p>
         </Text>
       </InstantHitContainer>
-    </Link>
+    </a>
   )
 }
 
@@ -176,7 +175,7 @@ export function InstantTopicHit({
   variant: LayoutVariant
 }) {
   return (
-    <Link
+    <a // use <a> to force full reload
       href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
     >
       <InstantHitContainer $variant={variant}>
@@ -195,6 +194,6 @@ export function InstantTopicHit({
           </p>
         </Text>
       </InstantHitContainer>
-    </Link>
+    </a>
   )
 }

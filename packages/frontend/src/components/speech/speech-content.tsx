@@ -33,7 +33,7 @@ const SpeechContent: React.FC<SpeechContentProps> = ({
       {contentParts.map((part, index) => (
         <React.Fragment key={index}>
           {part}
-          {index < contentParts.length - 2 ? ( // No need to add <br /> at the end
+          {index < contentParts.length - 1 ? ( // No need to add <br /> at the end
             <>
               <br />
               <br />

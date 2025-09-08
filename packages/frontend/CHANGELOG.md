@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.3...@twreporter/congress-dashboard-frontend@1.4.0-rc.4) (2025-09-08)
+
+### Bug Fixes
+
+- **frontend:** prerender failed on next build ([81680ee](https://github.com/twreporter/congress-dashboard-monorepo/commit/81680eee4b9ad6b7ec1ee1360bb768cfe6f24aa7))
+
+# [1.4.0-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.2...@twreporter/congress-dashboard-frontend@1.4.0-rc.3) (2025-09-05)
+
+### Bug Fixes
+
+- **frontend:** add comment for a tag ([b49f0dd](https://github.com/twreporter/congress-dashboard-monorepo/commit/b49f0dd553f7f64af1d034c8043d2bb33c12e7df))
+- **frontend:** address copilot comment ([4ad2e9d](https://github.com/twreporter/congress-dashboard-monorepo/commit/4ad2e9d23144363b418b97df5e1d50cb025fcbdb))
+- **frontend:** change text ([2ecb405](https://github.com/twreporter/congress-dashboard-monorepo/commit/2ecb405408eef254dc0de29b9eed070500d1b750))
+- **frontend:** footer flex direction ([047dd9a](https://github.com/twreporter/congress-dashboard-monorepo/commit/047dd9ab218af2df52ee0b10c14e1dd6a5148da3))
+- **frontend:** speech page line break ([614806d](https://github.com/twreporter/congress-dashboard-monorepo/commit/614806d9bdd2ea662e882b0c3a90f3d39a9a11ab))
+- **frontend:** topic and legislator page param search count ([388de13](https://github.com/twreporter/congress-dashboard-monorepo/commit/388de13bd297c9751883be3d20a81117588ad15b))
+- **frontend:** topics page speech order ([21c7565](https://github.com/twreporter/congress-dashboard-monorepo/commit/21c756521f9f5dacbc9bbd25e1498be45ae510aa))
+- **frontend:** use a tag at instant search for rerender ([0adeec5](https://github.com/twreporter/congress-dashboard-monorepo/commit/0adeec5285be6cb7ac1be62a4f954bfd02eb3224))
+
+### Features
+
+- **frontend:** anniversary donation box ([2d80236](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d80236f123ce166f371816944becc3a73a0e8a3))
+
 # [1.4.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.1...@twreporter/congress-dashboard-frontend@1.4.0-rc.2) (2025-09-02)
 
 ### Bug Fixes
