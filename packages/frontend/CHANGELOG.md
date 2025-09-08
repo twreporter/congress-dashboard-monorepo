@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.3...@twreporter/congress-dashboard-frontend@1.4.0-rc.4) (2025-09-08)
+
+### Bug Fixes
+
+- **frontend:** prerender failed on next build ([81680ee](https://github.com/twreporter/congress-dashboard-monorepo/commit/81680eee4b9ad6b7ec1ee1360bb768cfe6f24aa7))
+
 # [1.4.0-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.2...@twreporter/congress-dashboard-frontend@1.4.0-rc.3) (2025-09-05)
 
 ### Bug Fixes
