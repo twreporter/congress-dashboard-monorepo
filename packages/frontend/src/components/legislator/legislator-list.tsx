@@ -120,6 +120,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   )
   useEffect(() => {
     setTabList(mapToTabItems(topics).slice(0, maxTabs))
+    setSelectedTab(0)
   }, [topics])
 
   const selectedTopic = useMemo(() => {

@@ -45,6 +45,7 @@ const Container = styled.header.attrs<{
 }))`
   display: flex;
   width: -webkit-fill-available;
+  width: -moz-available;
   height: ${HEADER_HEIGHT}px;
   background-color: ${colorGrayscale.gray100};
   position: fixed;

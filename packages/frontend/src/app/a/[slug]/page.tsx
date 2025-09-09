@@ -1,3 +1,7 @@
+// use ISR cache 2hr
+export const revalidate = 7200
+export const dynamicParams = true
+
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 // components
@@ -7,8 +11,6 @@ import { fetchSpeech, fetchSpeechGroup } from '@/fetchers/server/speech'
 // constants
 import { InternalRoutes } from '@/constants/routes'
 import { OG_IMAGE_URL } from '@/constants'
-
-export const dynamicParams = true
 
 export async function generateMetadata({
   params,

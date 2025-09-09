@@ -1,3 +1,7 @@
+// use ISR cache 2hr
+export const dynamic = 'auto'
+export const dynamicParams = true
+
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 // components
@@ -10,8 +14,6 @@ import { validateMeetingParams } from '@/utils/validate-meeting-params'
 import { InternalRoutes } from '@/constants/routes'
 // constants
 import { OG_IMAGE_URL } from '@/constants'
-
-export const dynamicParams = true
 
 export async function generateMetadata({
   params,

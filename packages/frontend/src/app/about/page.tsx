@@ -1,3 +1,4 @@
+// about page cache is on cloudflare
 export const dynamic = 'force-dynamic'
 
 import { cache } from 'react'

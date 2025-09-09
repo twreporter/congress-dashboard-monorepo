@@ -85,7 +85,7 @@ const StickyBar = styled.div<{
   z-index: ${ZIndex.Bar};
   width: 928px;
 
-  ${mq.desktopAndBelow`
+  ${mq.tabletAndBelow`
     width: 100%;
   `}
 

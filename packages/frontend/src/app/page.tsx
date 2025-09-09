@@ -1,3 +1,4 @@
+// home page cache is on cloudflare
 export const dynamic = 'force-dynamic'
 
 // fetcher

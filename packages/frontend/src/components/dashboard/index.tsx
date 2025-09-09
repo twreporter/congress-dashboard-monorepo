@@ -79,13 +79,11 @@ const Box = styled.div`
   `}
 `
 const StyledFunctionBar = styled(FunctionBar)`
-  padding: 0 256px 0px 256px;
-
   ${mq.tabletOnly`
-    padding: 0 32px 0px 32px;
+    padding: 0 32px;
   `}
   ${mq.mobileOnly`
-    padding: 0 24px 0px 24px;
+    padding: 0 24px;
   `}
 `
 const cardCss = css`

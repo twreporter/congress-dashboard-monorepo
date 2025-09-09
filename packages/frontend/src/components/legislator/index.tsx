@@ -50,10 +50,6 @@ const Legislator: React.FC<LegislatorProps> = ({
   const [isLegislatorActive, setIsLegislatorActive] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  useEffect(() => {
-    setIsLoading(false)
-  }, [searchParams])
-
   const { legislator, topics, speechesByTopic } = useLegislatorData(
     legislatorData,
     topicsData
@@ -104,9 +100,9 @@ const Legislator: React.FC<LegislatorProps> = ({
       }?meetingTerm=${filterValues.meeting}&sessionTerm=${JSON.stringify(
         sessionTermValue
       )}`
-      router.push(newUrl)
       setIsLoading(true)
       setIsFilterOpen(false)
+      router.push(newUrl)
     } catch (error) {
       console.error('Error processing filter values:', error)
     }
@@ -115,23 +111,32 @@ const Legislator: React.FC<LegislatorProps> = ({
   const pageTitle = `${legislator.name} 的相關發言摘要`
 
   useEffect(() => {
-    if (legislativeMeetingSessionState.legislativeMeetingSessions?.length > 0) {
-      const allAvailableSessions =
-        legislativeMeetingSessionState.legislativeMeetingSessions.map(
-          ({ term }) => term
-        )
-      const hasAllSessions =
-        allAvailableSessions.length === currentMeetingSession.length &&
-        allAvailableSessions.every((session) =>
-          currentMeetingSession.includes(session)
-        )
-      if (hasAllSessions) {
+    const sessionTermParam = searchParams.get('sessionTerm')
+    if (sessionTermParam) {
+      try {
+        const sessionTermArray = JSON.parse(sessionTermParam)
+        if (Array.isArray(sessionTermArray)) {
+          if (
+            sessionTermArray.length >=
+            legislativeMeetingSessionState.legislativeMeetingSessions.length
+          ) {
+            setFilterCount(0)
+          } else {
+            setFilterCount(sessionTermArray.length)
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing sessionTerm from URL:', error)
         setFilterCount(0)
-      } else {
-        setFilterCount(currentMeetingSession.length)
       }
+    } else {
+      setFilterCount(0)
     }
-  }, [currentMeetingTerm, currentMeetingSession])
+  }, [searchParams, legislativeMeetingSessionState])
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [legislator, topics, speechesByTopic])
 
   const { legislativeMeetings } = useLegislativeMeeting()
   useEffect(() => {
