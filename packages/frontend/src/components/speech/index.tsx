@@ -10,7 +10,7 @@ import {
 import { Report, Video } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
-// no yet open to public
+// not yet open to public
 // import { TEN_YEAR_ANNIVERSARY } from '@twreporter/core/lib/constants/feature-flag'
 // styles
 import {
@@ -44,7 +44,7 @@ import SpeechMobileToolbar from '@/components/speech/speech-mobile-toolbar'
 import IconButton from '@/components/button/icon-button'
 import CustomPillButton from '@/components/button/pill-button'
 import DonationBox from '@/components/about/donation-box'
-// no yet open to public
+// not yet open to public
 // import NewDonatonBox from '@/components/about/new-donation-box'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
@@ -90,7 +90,7 @@ export enum Direction {
 // constants
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 const intersectionThreshold = 0.5
-// no yet open to public
+// not yet open to public
 // const Donation = TEN_YEAR_ANNIVERSARY ? NewDonatonBox : DonationBox
 const Donation = DonationBox
 
