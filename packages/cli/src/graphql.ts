@@ -35,7 +35,6 @@ type TopicInfo = {
   title: string
   lastSpeechAt: string // ISO 8601 formatted date string
   meetingTerm: number
-  sessionTerm: number
 }
 
 // Composite model for topic statistics

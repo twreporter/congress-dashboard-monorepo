@@ -22,8 +22,8 @@ export function transferSpeechModelToRecord(
       slug: s.slug,
       title: s.title,
       date: s.date,
-      term: s.legislativeMeeting?.term,
-      session: s.legislativeMeetingSession?.term,
+      meetingTerm: s.legislativeMeeting?.term,
+      sessionTerm: s.legislativeMeetingSession?.term,
       legislatorName: s.legislativeYuanMember?.legislator?.name,
       summary,
     }
@@ -43,8 +43,11 @@ export function transferLegislatorModelToRecord(
         ? `${l.party.name}，`
         : `${l.party.name}籍，`
     }
-    if (l?.legislativeMeeting?.term) {
-      shortDesc = shortDesc + `第${l.legislativeMeeting.term}屆立法委員`
+
+    const meetingTerm = l?.legislativeMeeting?.term
+
+    if (meetingTerm) {
+      shortDesc = shortDesc + `第${meetingTerm}屆立法委員`
       if (l.type !== MemberType.Constituency) {
         const memberType = MEMBER_TYPE_LABEL[l.type as MemberType]
         if (memberType) {
@@ -66,9 +69,9 @@ export function transferLegislatorModelToRecord(
       const committeeDesc: string[] = []
       l.sessionAndCommittee.forEach((c) => {
         const name = c.committee?.[0]?.name
-        const term = c.legislativeMeetingSession?.term
-        if (name && term) {
-          committeeDesc.push(`${name}（${term}會期）`)
+        const sessionTerm = c.legislativeMeetingSession?.term
+        if (name && sessionTerm) {
+          committeeDesc.push(`${name}（${sessionTerm}會期）`)
         } else if (name) {
           committeeDesc.push(`${name}`)
         }
@@ -93,13 +96,13 @@ export function transferLegislatorModelToRecord(
     return {
       name: l.legislator.name,
       slug: l.legislator.slug,
-      term: l.legislativeMeeting.term,
+      meetingTerm,
       lastSpeechAt,
       desc,
       shortDesc,
       imgSrc: l.legislator.imageLink || '',
       partyImgSrc: l.party?.imageLink || _partyImgSrc || '',
-      objectID: `${l.legislator.slug}_${l.legislativeMeeting.term}`,
+      objectID: `${l.legislator.slug}_${meetingTerm}`,
     }
   })
 }
@@ -122,12 +125,11 @@ export function transferTopicModelToRecord(
     return {
       name: t.topicInfo.title,
       slug: t.topicInfo.slug,
-      term: t.topicInfo.meetingTerm,
-      session: t.topicInfo.sessionTerm,
+      meetingTerm: t.topicInfo.meetingTerm,
       desc,
       lastSpeechAt,
       relatedMessageCount: countSum,
-      objectID: `${t.topicInfo.slug}_${t.topicInfo.meetingTerm}_${t.topicInfo.sessionTerm}`,
+      objectID: `${t.topicInfo.slug}_${t.topicInfo.meetingTerm}`,
     }
   })
 }
