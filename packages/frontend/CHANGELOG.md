@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0...@twreporter/congress-dashboard-frontend@1.4.1-rc.0) (2025-09-09)
+
+### Bug Fixes
+
+- **frontend:** close new donation box ([6b455f6](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b455f6347f62909492c2008a80b4b43cb6149e7))
+- **frontend:** typo ([55d7960](https://github.com/twreporter/congress-dashboard-monorepo/commit/55d7960fcae8fd59f99b056d2f55fe210497644a))
+
+# [1.4.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.7...@twreporter/congress-dashboard-frontend@1.4.0) (2025-09-09)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.4.0-rc.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.0-rc.6...@twreporter/congress-dashboard-frontend@1.4.0-rc.7) (2025-09-08)
 
 ### Bug Fixes
