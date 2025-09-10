@@ -3,6 +3,9 @@ import axios from 'axios'
 import * as dotenv from 'dotenv'
 import { dryrunState } from './state/dryrun'
 
+// @ts-ignore @twreporter/errors lacks of type definition
+import errors from '@twreporter/errors'
+
 dotenv.config()
 
 // Ensure the GraphQL endpoint and headless account are set in environment variables
@@ -137,10 +140,11 @@ async function fetchKeystoneToken() {
   return sessionToken
 }
 
-// Async generator for iterating over speeches with recent updates
+// Async generator for iterating over speeches in the specific meeting and session term
 export async function* speechIterator(
-  updatedAfter: string,
-  take = 10
+  meetingTerm: number,
+  take = 10,
+  sessionTerm?: number
 ): AsyncGenerator<SpeechModel[], void, unknown> {
   const keystoneToken = await fetchKeystoneToken()
   let cursor: { slug: string } | null = null
@@ -148,17 +152,32 @@ export async function* speechIterator(
   let hasMore = true
 
   while (hasMore) {
-    // Fetch a page of recent speeches
-    const res: AxiosResponse<{
+    let res: AxiosResponse<{
+      errors: any
       data: {
         speeches: SpeechModel[]
       }
-    }> = await axios.post(
-      apiEndpoint,
-      {
-        query: `
-          query Speeches($orderBy: [SpeechOrderByInput!]!, $take: Int, $skip: Int!, $cursor: SpeechWhereUniqueInput, $where: SpeechWhereInput!) {
-            speeches(orderBy: $orderBy, take: $take, skip: $skip, cursor: $cursor, where: $where) {
+    }>
+    try {
+      // Fetch a page of speeches in the specific meeting and session term
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query Speeches(
+            $orderBy: [SpeechOrderByInput!]!
+            $take: Int
+            $skip: Int!
+            $cursor: SpeechWhereUniqueInput
+            $where: SpeechWhereInput!
+          ) {
+            speeches(
+              orderBy: $orderBy
+              take: $take
+              skip: $skip
+              cursor: $cursor
+              where: $where
+            ) {
               id
               slug
               title
@@ -179,26 +198,47 @@ export async function* speechIterator(
               }
             }
           }
-        `,
-        variables: {
-          take,
-          skip,
-          cursor,
-          orderBy: [{ slug: 'asc' }],
-          where: {
-            updatedAt: {
-              gte: new Date(updatedAfter),
+          `,
+          variables: {
+            take,
+            skip,
+            cursor,
+            orderBy: [{ slug: 'asc' }],
+            where: {
+              legislativeMeeting: {
+                term: {
+                  equals: meetingTerm,
+                },
+              },
+              ...(sessionTerm
+                ? {
+                    legislativeMeetingSession: {
+                      term: {
+                        equals: sessionTerm,
+                      },
+                    },
+                  }
+                : {}),
             },
           },
         },
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${keystoneToken}`,
-        },
-      }
-    )
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
+
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `Speeches` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
 
     const speeches = res.data.data.speeches
 
