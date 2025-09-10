@@ -35,7 +35,6 @@ export function transferLegislatorModelToRecord(
 ): LegislatorRecord[] {
   return legislatorModels.map((l) => {
     const speechDate = l.speeches?.[0]?.date
-    let lastSpeechAt = ''
     let desc = ''
     let shortDesc = ''
     if (l?.party?.name) {
@@ -83,9 +82,13 @@ export function transferLegislatorModelToRecord(
       desc = desc + '。' + l.note
     }
 
+    let lastSpeechAt = ''
+    let lastSpeechAtTs
+
     if (speechDate) {
       const date = new Date(speechDate)
       lastSpeechAt = date.toISOString().split('T')[0].replace(/-/g, '/')
+      lastSpeechAtTs = date.getTime()
     }
 
     const urlOrigin = getUrlOrigin()
@@ -98,6 +101,7 @@ export function transferLegislatorModelToRecord(
       slug: l.legislator.slug,
       meetingTerm,
       lastSpeechAt,
+      lastSpeechAtTs,
       desc,
       shortDesc,
       imgSrc: l.legislator.imageLink || '',
@@ -107,29 +111,114 @@ export function transferLegislatorModelToRecord(
   })
 }
 
+type MemberInfoMap = Map<
+  string,
+  {
+    memberId: string
+    name: string
+    count: number
+  }
+>
+
+type TopicInfoMap = Map<
+  string,
+  {
+    id: string
+    slug: string
+    title: string
+    lastSpeechAt: string
+    meetingTerm: number
+    memberMap: MemberInfoMap
+  }
+>
+
 export function transferTopicModelToRecord(
   topicModels: TopicModel[]
 ): TopicRecord[] {
-  return topicModels.map((t) => {
-    const countSum = t.members.reduce((sum: number, m: any) => sum + m.count, 0)
-    const desc =
-      t.members.length > 0
-        ? t.members.map((m: any) => `${m.name}(${m.count})`).join('、')
-        : ''
-    let lastSpeechAt = ''
-    if (t.topicInfo.lastSpeechAt) {
-      const date = new Date(t.topicInfo.lastSpeechAt)
-      lastSpeechAt = date.toISOString().split('T')[0].replace(/-/g, '/')
-    }
+  // Use a map to group topics uniquely by slug + meeting term
+  const topicMap: TopicInfoMap = new Map()
 
-    return {
-      name: t.topicInfo.title,
-      slug: t.topicInfo.slug,
-      meetingTerm: t.topicInfo.meetingTerm,
-      desc,
-      lastSpeechAt,
-      relatedMessageCount: countSum,
-      objectID: `${t.topicInfo.slug}_${t.topicInfo.meetingTerm}`,
+  for (const topic of topicModels) {
+    const speeches = topic.speeches
+    for (const speech of speeches) {
+      // Composite key to separate topics by meeting term
+      const topicMapKey = `${topic.slug}_${speech.legislativeMeeting?.term}`
+
+      // Initialize topic info in map if not yet present
+      if (!topicMap.has(topicMapKey)) {
+        topicMap.set(topicMapKey, {
+          id: topic.id.toString(),
+          slug: topic.slug,
+          title: topic.title,
+          lastSpeechAt: speech.date,
+          meetingTerm: speech.legislativeMeeting?.term,
+          // Initialize member info in map
+          memberMap: new Map(),
+        })
+      } else {
+        // Update latest speech date for this topic instance
+        const mapValue = topicMap.get(topicMapKey)
+        if (
+          mapValue &&
+          (!mapValue.lastSpeechAt ||
+            new Date(mapValue.lastSpeechAt) < new Date(speech.date))
+        ) {
+          mapValue.lastSpeechAt = speech.date
+        }
+      }
+
+      const member = speech.legislativeYuanMember!
+      const memberMap = topicMap.get(topicMapKey)?.memberMap
+      const memberId = member.id.toString()
+      const existing = memberMap?.get(memberId)
+
+      if (existing) {
+        // If already counted, increment speech count
+        existing.count += 1
+      } else {
+        // Otherwise, add a new member speech record
+        memberMap?.set(memberId, {
+          memberId,
+          name: member.legislator?.name ?? '',
+          count: 1,
+        })
+      }
     }
-  })
+  }
+
+  return Array.from(topicMap.entries()).map(
+    ([
+      ,
+      { title, slug, lastSpeechAt: _lastSpeechAt, meetingTerm, memberMap },
+    ]) => {
+      const members = Array.from(memberMap.values()).sort(
+        (a, b) => b.count - a.count
+      )
+      const countSum = members.reduce((sum: number, m: any) => sum + m.count, 0)
+      const desc =
+        members.length > 0
+          ? members.map((m: any) => `${m.name}(${m.count})`).join('、')
+          : ''
+
+      let lastSpeechAt = ''
+      let lastSpeechAtTs
+
+      if (_lastSpeechAt) {
+        const date = new Date(_lastSpeechAt)
+        lastSpeechAt = date.toISOString().split('T')[0].replace(/-/g, '/')
+        lastSpeechAtTs = date.getTime()
+      }
+
+      return {
+        name: title,
+        slug: slug,
+        meetingTerm: meetingTerm,
+        desc,
+        lastSpeechAt,
+        lastSpeechAtTs,
+        relatedMessageCount: countSum,
+        objectID: `${slug}_${meetingTerm}`,
+      }
+    }
+  )
 }

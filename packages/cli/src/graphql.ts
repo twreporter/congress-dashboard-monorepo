@@ -1,7 +1,6 @@
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import * as dotenv from 'dotenv'
-import { dryrunState } from './state/dryrun'
 
 // @ts-ignore @twreporter/errors lacks of type definition
 import errors from '@twreporter/errors'
@@ -24,27 +23,24 @@ const headlessAccount = {
 }
 const apiEndpoint = process.env.GRAPHQL_ENDPOINT
 
-// Type definitions for topic-related speech counts
-type MemberSpeechCount = {
-  memberId: string
-  name: string
-  count: number
-}
-
-// Type for basic topic information
-type TopicInfo = {
+// Topic data structure
+export type TopicModel = {
   id: string
   slug: string
   title: string
-  lastSpeechAt: string // ISO 8601 formatted date string
-  meetingTerm: number
-}
-
-// Composite model for topic statistics
-export type TopicModel = {
-  topicInfo: TopicInfo
-  distinctMemberCount: number
-  members: MemberSpeechCount[]
+  speeches: {
+    id: number
+    date: string
+    legislativeMeeting: {
+      term: number
+    }
+    legislativeYuanMember: {
+      id: number
+      legislator: {
+        name: string
+      } | null
+    } | null
+  }[]
 }
 
 // Legislator data structure
@@ -266,83 +262,123 @@ export async function* speechIterator(
 
 // Async generator for iterating over topic statistics from recently updated speeches
 export async function* topicIterator(
-  updatedAfter: string,
+  meetingTerm: number,
   take = 10
 ): AsyncGenerator<TopicModel[], void, unknown> {
   const keystoneToken = await fetchKeystoneToken()
-  let cursor: string | null = null
+  let cursor: { slug: string } | null = null
   let skip = 0
   let hasMore = true
 
   while (hasMore) {
-    // Fetch a page of recent speeches
-    const res: AxiosResponse<{
+    let res: AxiosResponse<{
+      errors: any
       data: {
-        recentSpeechTopicStats: {
-          topics: TopicModel[]
-          speeches: { id: string }[]
-        }
+        topics: TopicModel[]
       }
-    }> = await axios.post(
-      apiEndpoint,
-      {
-        query: `
-          query RecentSpeechTopicStats($take: Int, $skip: Int, $updatedAfter: CalendarDay, $debug: Boolean, $cursor: ID) {
-            recentSpeechTopicStats(take: $take, skip: $skip, updatedAfter: $updatedAfter, debug: $debug, cursor: $cursor) {
-              topics {
-                topicInfo {
+    }>
+
+    try {
+      // Page topics (ordered by slug) and include each topic’s speeches filtered by meetingTerm.
+      // Cursor-based pagination applies to topics, not speeches.
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query Topics(
+            $where: TopicWhereInput!
+            $speechesWhere: SpeechWhereInput!
+            $orderBy: [TopicOrderByInput!]!
+            $cursor: TopicWhereUniqueInput
+            $skip: Int!
+            $take: Int
+          ) {
+            topics(
+              where: $where
+              orderBy: $orderBy
+              cursor: $cursor
+              skip: $skip
+              take: $take
+            ) {
+              id
+              title
+              slug
+              speeches(where: $speechesWhere) {
+                date
+                legislativeMeeting {
+                  term
+                }
+                legislativeYuanMember {
                   id
-                  title
-                  slug
-                  lastSpeechAt
-                  meetingTerm
-                  sessionTerm
+                  legislator {
+                    name
+                    id
+                  }
                 }
-                distinctMemberCount
-                members {
-                  memberId
-                  name
-                  count
-                }
-              }
-              speeches {
-                id
               }
             }
           }
-        `,
-        variables: {
-          updatedAfter,
-          take,
-          skip,
-          cursor,
-          debug: dryrunState.isEnabled(),
+          `,
+          variables: {
+            where: {
+              speeches: {
+                some: {
+                  legislativeMeeting: {
+                    term: {
+                      equals: meetingTerm,
+                    },
+                  },
+                },
+              },
+            },
+            speechesWhere: {
+              legislativeMeeting: {
+                term: {
+                  equals: meetingTerm,
+                },
+              },
+            },
+            take,
+            skip,
+            cursor,
+            orderBy: [{ slug: 'asc' }],
+          },
         },
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${keystoneToken}`,
-        },
-      }
-    )
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
 
-    const stats = res.data.data.recentSpeechTopicStats
-    const speeches = stats.speeches
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `Topics` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
+
+    const topics = res.data.data.topics
 
     // End iteration if no more speeches
-    if (speeches.length === 0) {
+    if (topics.length === 0) {
       hasMore = false
     }
 
-    yield stats.topics
+    yield topics
 
     // Determine whether to fetch the next page
-    if (speeches.length < take) {
+    if (topics.length < take) {
       hasMore = false
     } else {
       // Use the last speech ID as the cursor for the next fetch
-      cursor = speeches?.[speeches.length - 1]?.id
+      cursor = {
+        slug: topics?.[topics.length - 1]?.slug,
+      }
       skip = 1 // Skip cursor record
     }
   }
