@@ -18,7 +18,7 @@ export type LegislatorRawHit = Hit<{
   desc: string
   shortDesc: string
   imgSrc: string
-  term: number
+  meetingTerm: number
   lastSpeechAt?: string
   partyImgSrc: string
 }>
@@ -28,8 +28,7 @@ export type TopicRawHit = Hit<{
   name: string
   slug: string
   desc: string
-  term: number
-  session: number
+  meetingTerm: number
   lastSpeechAt?: string
   relatedMessageCount: number
 }>
@@ -152,7 +151,7 @@ export function InstantLegislatorHit({
 }) {
   return (
     <a // use <a> to force full reload
-      href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.term}`}
+      href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
     >
       <InstantHitContainer $variant={variant}>
         <Avatar $imgSrc={hit.imgSrc}>
@@ -176,7 +175,7 @@ export function InstantTopicHit({
 }) {
   return (
     <a // use <a> to force full reload
-      href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
+      href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
     >
       <InstantHitContainer $variant={variant}>
         <TopicCircle>
