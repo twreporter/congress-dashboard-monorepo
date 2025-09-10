@@ -23,7 +23,7 @@ export function transferSpeechModelToRecord(
       title: s.title,
       date: s.date,
       dateTs: s.date ? new Date(s.date).getTime() : undefined,
-      meetingTerm: s.legislativeMeeting?.term,
+      meetingTerm: s.legislativeMeeting?.term as number,
       sessionTerm: s.legislativeMeetingSession?.term,
       legislatorName: s.legislativeYuanMember?.legislator?.name,
       summary,
