@@ -16,7 +16,7 @@ export type SpeechRecord = {
   slug: string
   title: string
   date: string
-  meetingTerm?: number
+  meetingTerm: number
   sessionTerm?: number
   summary?: string
   legislatorName?: string
