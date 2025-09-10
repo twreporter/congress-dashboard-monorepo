@@ -141,11 +141,11 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
   const meetingSession = filterValue.meetingSession
 
   if (meeting !== 'all') {
-    const meetingFilter = `term: ${meeting}`
+    const meetingFilter = `meetingTerm: ${meeting}`
     const meetingSessionFilter =
       meetingSession.indexOf('all') > -1
         ? ''
-        : meetingSession.map((s) => `session: ${s}`).join(' OR ')
+        : meetingSession.map((s) => `sessionTerm: ${s}`).join(' OR ')
     filters = meetingSessionFilter
       ? `(${meetingFilter}) AND (${meetingSessionFilter})`
       : meetingFilter
