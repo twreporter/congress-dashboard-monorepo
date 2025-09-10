@@ -159,7 +159,9 @@ export async function* speechIterator(
       }
     }>
     try {
-      // Fetch a page of speeches in the specific meeting and session term
+      // Page speeches by meeting term (and optional session term),
+      // ordered by slug asc, with cursor pagination.
+      // Returns core fields + meeting/session term + legislator name.
       res = await axios.post(
         apiEndpoint,
         {
@@ -346,186 +348,127 @@ export async function* topicIterator(
   }
 }
 
-// Async generator for iterating over legislators with recent updates or speeches
+// Async generator for iterating over legislators in the specific meeting term
 export async function* legislatorIterator(
-  _updatedAfter: string,
+  meetingTerm: number,
   take = 10
 ): AsyncGenerator<LegislatorModel[]> {
   const keystoneToken = await fetchKeystoneToken()
   let skip = 0
   let hasMore = true
-  const updatedAfter = new Date(_updatedAfter)
 
   while (hasMore) {
-    // Query legislators who have been updated or have speeches after the given date
-    const res: AxiosResponse<{
+    let res: AxiosResponse<{
+      errors: any
       data: {
         legislativeYuanMembers: LegislatorModel[]
       }
-    }> = await axios.post(
-      apiEndpoint,
-      {
-        query: `
-          query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!, $take: Int, $skip: Int, $orderBy: [LegislativeYuanMemberOrderByInput!]!) {
-            legislativeYuanMembers(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
+    }>
+
+    try {
+      // Query a paginated list of Legislative Yuan members (offset-based via take/skip),
+      // filtered by a specific legislative meeting term (`meetingTerm`).
+      // The result includes:
+      //   - Member metadata (id, type, constituency, note)
+      //   - Legislator info (slug, name, imageLink)
+      //   - Party info (name, images)
+      //   - Legislative meeting term
+      //   - The latest speech (speeches ordered by date desc, limited to 1)
+      //   - Committees the legislator joins
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query LegislativeYuanMembers(
+            $orderBy: [LegislativeYuanMemberOrderByInput!]!
+            $take: Int
+            $skip: Int!
+            $where: LegislativeYuanMemberWhereInput!
+          ) {
+            legislativeYuanMembers(
+              orderBy: $orderBy
+              take: $take
+              skip: $skip
+              where: $where
+            ) {
               id
-              legislator { 
-                name 
-              } 
-              legislativeMeeting {
-                term
-              }
-            }
-          }
-        `,
-        variables: {
-          where: {
-            OR: [
-              {
-                speeches: {
-                  some: {
-                    updatedAt: {
-                      gte: updatedAfter,
-                    },
-                  },
-                },
-              },
-              {
-                updatedAt: {
-                  gte: updatedAfter,
-                },
-              },
-            ],
-            legislativeMeeting: {
-              term: {
-                gte: 0,
-              },
-            },
-          },
-          take,
-          skip,
-          orderBy: [{ updatedAt: 'asc' }],
-        },
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${keystoneToken}`,
-        },
-      }
-    )
-
-    const membersToUpdate = res.data.data.legislativeYuanMembers
-
-    if (membersToUpdate.length === 0) {
-      hasMore = false
-    }
-
-    // Collect unique legislator IDs and build detailed queries
-    const ids: string[] = []
-    const memberWithSpeechQueryTasks = membersToUpdate.reduce((tasks, m) => {
-      const id = m.id
-      if (ids.includes(id)) return tasks
-
-      ids.push(id)
-
-      tasks.push(async () => {
-        // Collect legislator data in the specified meeting term
-        const _res: AxiosResponse<{
-          data: {
-            legislativeYuanMember: LegislatorModel
-          }
-        }> = await axios.post(
-          apiEndpoint,
-          {
-            query: `
-              query LegislativeYuanMember($where: LegislativeYuanMemberWhereUniqueInput!, $speechWhere: SpeechWhereInput!) {
-                legislativeYuanMember(where: $where) {
-                  id
-                  type
-                  constituency
-                  note
-                  party {
-                    name
-                    imageLink
-                    image {
-                      imageFile {
-                        url
-                      }
-                    }
-                  }
-                  legislator {
-                    slug
-                    name
-                    imageLink
-                  }
-                  legislativeMeeting {
-                    term
-                  }
-                  speeches(where: $speechWhere, take: 1, orderBy: [{ date: desc }]) {
-                    date
-                  }
-                  sessionAndCommittee {
-                    legislativeMeetingSession {
-                      term
-                    }
-                    committee {
-                      name
-                    }
+              type
+              constituency
+              note
+              party {
+                name
+                imageLink
+                image {
+                  imageFile {
+                    url
                   }
                 }
               }
-            `,
-            variables: {
-              where: { id: m.id },
-              speechWhere: {
-                legislativeMeeting: {
-                  term: { equals: m.legislativeMeeting?.term },
+              legislator {
+                slug
+                name
+                imageLink
+              }
+              legislativeMeeting {
+                term
+              }
+              speeches(take: 1, orderBy: [{ date: desc }]) {
+                date
+              }
+              sessionAndCommittee {
+                legislativeMeetingSession {
+                  term
+                }
+                committee {
+                  name
+                }
+              }
+            }
+          }
+          `,
+          variables: {
+            where: {
+              legislativeMeeting: {
+                term: {
+                  equals: meetingTerm,
                 },
               },
             },
+            take,
+            skip,
+            orderBy: [{ id: 'asc' }],
           },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${keystoneToken}`,
-            },
-          }
-        )
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
 
-        return _res.data.data.legislativeYuanMember
-      })
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `LegislativeYuanMembers` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
 
-      return tasks
-    }, [] as (() => Promise<LegislatorModel>)[])
+    const members: LegislatorModel[] = res.data.data.legislativeYuanMembers
+    if (members.length === 0) {
+      hasMore = false
+    }
 
-    // Execute all detailed queries in controlled concurrent batches
-    const queryResults = await runInBatches(memberWithSpeechQueryTasks, 10)
-    const memberRecords: LegislatorModel[] = queryResults.flat()
-
-    yield memberRecords
+    yield members
 
     // Check if more data remains to be fetched
-    if (membersToUpdate.length < take) {
+    if (members.length < take) {
       hasMore = false
     } else {
       skip = skip + take
     }
   }
-}
-
-// Run an array of async tasks in batches to control concurrency
-async function runInBatches<T>(
-  tasks: (() => Promise<T>)[],
-  batchSize: number
-): Promise<T[]> {
-  const results: T[] = []
-
-  for (let i = 0; i < tasks.length; i += batchSize) {
-    const batch = tasks.slice(i, i + batchSize)
-    const batchResults = await Promise.all(batch.map((task) => task()))
-    results.push(...batchResults)
-  }
-
-  return results
 }
