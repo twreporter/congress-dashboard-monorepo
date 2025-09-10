@@ -25,8 +25,8 @@ export type SpeechRawHit = Hit<{
   slug: string
   title: string
   summary: string
-  term: number
-  session: number
+  meetingTerm: number
+  sessionTerm: number
   date: string
   legislatorName: string
 }>
@@ -174,7 +174,7 @@ const Container = styled.div`
 export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
   return (
     <Link
-      href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.term}`}
+      href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
     >
       <Container>
         <Text>
@@ -228,7 +228,7 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
   }
   return (
     <Link
-      href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
+      href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
     >
       <Container>
         <Text>
@@ -285,7 +285,7 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
 
   return (
     <Link
-      href={`${InternalRoutes.Speech}/${hit.slug}?meetingTerm=${hit.term}&sessionTerm=[${hit.session}]`}
+      href={`${InternalRoutes.Speech}/${hit.slug}?meetingTerm=${hit.meetingTerm}&sessionTerm=[${hit.sessionTerm}]`}
     >
       <Container>
         <Text>
