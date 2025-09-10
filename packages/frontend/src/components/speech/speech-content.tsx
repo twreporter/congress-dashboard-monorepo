@@ -26,7 +26,8 @@ const SpeechContent: React.FC<SpeechContentProps> = ({
   content,
   fontSizeOffset = FontSizeOffset[FontSize.SMALL],
 }) => {
-  const contentParts = content.split('\n')
+  // use \\n to work around the issue of content from CSV having real newlines
+  const contentParts = content.split('\\n')
 
   return (
     <Container $fontSizeOffset={fontSizeOffset}>

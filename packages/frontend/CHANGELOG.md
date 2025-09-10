@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.4-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.3...@twreporter/congress-dashboard-frontend@1.4.4-rc.0) (2025-09-10)
+
+### Bug Fixes
+
+- **frontend:** update newline handling in SpeechContent component ([823ea44](https://github.com/twreporter/congress-dashboard-monorepo/commit/823ea4437301c82d659457777be866f68cbb575d))
+
+## [1.4.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.3-rc.0...@twreporter/congress-dashboard-frontend@1.4.3) (2025-09-10)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 ## [1.4.3-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.2...@twreporter/congress-dashboard-frontend@1.4.3-rc.0) (2025-09-10)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
