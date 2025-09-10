@@ -1,10 +1,5 @@
 import type { GraphQLSchema } from 'graphql'
 import { mergeSchemas } from '@graphql-tools/schema'
-// custom sql
-import {
-  recentSpeechTopicStatsTypeDefs,
-  recentSpeechTopicStatsResolvers,
-} from './recent-speech-topic-stats'
 import {
   topNTopicsOfLegislatorsTypeDefs,
   topNTopicsOfLegislatorsResolver,
@@ -18,12 +13,10 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
     schemas: [baseSchema],
     typeDefs: [
-      recentSpeechTopicStatsTypeDefs,
       topNTopicsOfLegislatorsTypeDefs,
       topicsOrderBySpeechCountTypeDefs,
     ],
     resolvers: [
-      recentSpeechTopicStatsResolvers,
       topNTopicsOfLegislatorsResolver,
       topicsOrderBySpeechCountResolver,
     ],
