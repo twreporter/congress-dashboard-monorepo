@@ -43,7 +43,7 @@ import SpeechMobileToolbar from '@/components/speech/speech-mobile-toolbar'
 import IconButton from '@/components/button/icon-button'
 import CustomPillButton from '@/components/button/pill-button'
 import DonationBox from '@/components/about/donation-box'
-import NewDonatonBox from '@/components/about/new-donation-box'
+import NewDonationBox from '@/components/about/new-donation-box'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 // type
@@ -88,7 +88,7 @@ export enum Direction {
 // constants
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 const intersectionThreshold = 0.5
-const Donation = TEN_YEAR_ANNIVERSARY ? NewDonatonBox : DonationBox
+const Donation = TEN_YEAR_ANNIVERSARY ? NewDonationBox : DonationBox
 
 type SpeechPageProps = {
   speech: SpeechFromRes
