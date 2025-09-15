@@ -9,8 +9,7 @@ import {
 } from '@twreporter/react-components/lib/rwd'
 import { Report } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
-// not yet open to public
-// import { TEN_YEAR_ANNIVERSARY } from '@twreporter/core/lib/constants/feature-flag'
+import { TEN_YEAR_ANNIVERSARY } from '@twreporter/core/lib/constants/feature-flag'
 // styles
 import {
   SpeechContainer,
@@ -30,8 +29,7 @@ import { AboutPageMobileToolbar } from '@/components/speech/speech-mobile-toolba
 import CustomPillButton from '@/components/button/pill-button'
 import AboutPageContent from '@/components/about/content'
 import DonationBox from '@/components/about/donation-box'
-// not yet open to public
-// import NewDonationBox from '@/components/about/new-donation-box'
+import NewDonationBox from '@/components/about/new-donation-box'
 // constants
 import { FontSize, FontSizeOffset } from '@/components/speech'
 // context
@@ -57,9 +55,7 @@ const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
     padding-bottom: 50px;
   `}
 `
-// not yet open to public
-// const Donation = TEN_YEAR_ANNIVERSARY ? NewDonationBox : DonationBox
-const Donation = DonationBox
+const Donation = TEN_YEAR_ANNIVERSARY ? NewDonationBox : DonationBox
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 export type Content = {
