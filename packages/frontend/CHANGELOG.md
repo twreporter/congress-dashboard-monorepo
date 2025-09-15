@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.5.0-rc.0...@twreporter/congress-dashboard-frontend@1.5.0) (2025-09-15)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.5.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.4...@twreporter/congress-dashboard-frontend@1.5.0-rc.0) (2025-09-15)
 
 ### Bug Fixes
