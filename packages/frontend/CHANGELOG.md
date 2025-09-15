@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.4...@twreporter/congress-dashboard-frontend@1.5.0-rc.0) (2025-09-15)
+
+### Bug Fixes
+
+- **frontend:** typo ([3cc8647](https://github.com/twreporter/congress-dashboard-monorepo/commit/3cc8647aa16f7ab31331262b16ddefd20003317a))
+
+### Features
+
+- **frontend:** open anniversay feature flag ([f837023](https://github.com/twreporter/congress-dashboard-monorepo/commit/f837023f973fa606f12f3f95ba2bea3b9303ba11))
+
 ## [1.4.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.4-rc.0...@twreporter/congress-dashboard-frontend@1.4.4) (2025-09-10)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
