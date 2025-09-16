@@ -22,12 +22,20 @@ const fetchSpeechesOfALegislatorInATopic = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds,
 }: FetchSpeechesParams): Promise<speechData[]> => {
+  if (!legislatorSlug || !topicSlug) {
+    return []
+  }
+
   const apiBase = process.env.NEXT_PUBLIC_API_URL as string
-  const url = `${apiBase}/legislator/${encodeURIComponent(
+  let url = `${apiBase}/legislator/${encodeURIComponent(
     legislatorSlug
   )}/topic/${encodeURIComponent(topicSlug)}/speech?mid=${encodeURIComponent(
     legislativeMeetingId
-  )}&sids=${legislativeMeetingSessionIds}`
+  )}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
+  }
+
   const res = await fetch(url, {
     method: 'GET',
     headers: {

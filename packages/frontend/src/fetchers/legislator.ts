@@ -38,13 +38,20 @@ export const fetchTopLegislatorsBySpeechCount = async ({
   legislativeMeetingSessionTerms: number[]
   legislatorSlug: string
 }): Promise<LegislatorWithSpeechCount[]> => {
-  const url = `${apiBase}/topic/${encodeURIComponent(
+  if (!topicSlug) {
+    return []
+  }
+
+  let url = `${apiBase}/topic/${encodeURIComponent(
     topicSlug
-  )}/legislator?key=term&mt=${encodeURIComponent(
-    legislativeMeetingTerm
-  )}&sts=${legislativeMeetingSessionTerms}&exclude=${encodeURIComponent(
-    legislatorSlug
-  )}&top=5`
+  )}/legislator?key=term&mt=${encodeURIComponent(legislativeMeetingTerm)}&top=5`
+  if (legislativeMeetingSessionTerms) {
+    url = url.concat(`&sts=${legislativeMeetingSessionTerms}`)
+  }
+  if (legislatorSlug) {
+    url = url.concat(`&exclude=${encodeURIComponent(legislatorSlug)}`)
+  }
+
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -98,9 +105,22 @@ export const fetchLegislators = async ({
   constituencies,
   committeeSlugs,
 }: FetchLegislatorsParams): Promise<LegislatorFromRes> => {
-  const url = `${apiBase}/legislator?mid=${encodeURIComponent(
+  let url = `${apiBase}/legislator?mid=${encodeURIComponent(
     legislativeMeetingId
-  )}&sids=${legislativeMeetingSessionIds}&pids=${partyIds}&cvs=${constituencies}&css=${committeeSlugs}`
+  )}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
+  }
+  if (partyIds) {
+    url = url.concat(`&pids=${partyIds}`)
+  }
+  if (constituencies) {
+    url = url.concat(`&cvs=${constituencies}`)
+  }
+  if (committeeSlugs) {
+    url = url.concat(`&css=${committeeSlugs}`)
+  }
+
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -144,9 +164,16 @@ export const fetchTopNTopicsOfLegislators = async ({
     return []
   }
 
-  const url = `${apiBase}/index/legislator/${legislatorIds}/topic?mid=${encodeURIComponent(
+  let url = `${apiBase}/index/legislator/${legislatorIds}/topic?mid=${encodeURIComponent(
     legislativeMeetingId
-  )}&sids=${legislativeMeetingSessionIds}&top=${encodeURIComponent(take)}`
+  )}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
+  }
+  if (take) {
+    url = url.concat(`&top=${encodeURIComponent(take)}`)
+  }
+
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -185,11 +212,16 @@ export const fetchLegislatorsOfATopic = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds,
 }: FetchLegislatorsOfATopicParams) => {
-  const url = `${apiBase}/topic/${encodeURIComponent(
+  if (!slug) {
+    return []
+  }
+
+  let url = `${apiBase}/topic/${encodeURIComponent(
     slug
-  )}/legislator?key=id&mid=${encodeURIComponent(
-    legislativeMeetingId
-  )}&sids=${legislativeMeetingSessionIds}`
+  )}/legislator?key=id&mid=${encodeURIComponent(legislativeMeetingId)}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
+  }
 
   const res = await fetch(url, {
     method: 'GET',
@@ -228,13 +260,28 @@ export const fetchTopNLegislatorsOfATopic = async ({
 }: FetchTopNLegislatorsOfATopicParams): Promise<
   LegislatorWithSpeechCount[]
 > => {
-  const url = `${apiBase}/topic/${encodeURIComponent(
+  if (!topicSlug) {
+    return []
+  }
+
+  let url = `${apiBase}/topic/${encodeURIComponent(
     topicSlug
-  )}/legislator?key=id&mid=${encodeURIComponent(
-    legislativeMeetingId
-  )}&sids=${legislativeMeetingSessionIds}&pids=${partyIds}&cids=${constituencies}&css=${committeeSlugs}&top=${encodeURIComponent(
-    take
-  )}`
+  )}/legislator?key=id&mid=${encodeURIComponent(legislativeMeetingId)}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
+  }
+  if (partyIds) {
+    url = url.concat(`&pids=${partyIds}`)
+  }
+  if (constituencies) {
+    url = url.concat(`&cids=${constituencies}`)
+  }
+  if (committeeSlugs) {
+    url = url.concat(`&css=${committeeSlugs}`)
+  }
+  if (take) {
+    url = url.concat(`&top=${encodeURIComponent(take)}`)
+  }
 
   const res = await fetch(url, {
     method: 'GET',

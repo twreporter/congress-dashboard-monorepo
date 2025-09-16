@@ -27,11 +27,17 @@ export const fetchTopTopicsForLegislator = async ({
   legislativeMeeting: number
   legislativeMeetingSession: number[]
 }): Promise<Topic[]> => {
-  const url = `${apiBase}/legislator/${encodeURIComponent(
+  if (!legislatorSlug) {
+    return []
+  }
+
+  let url = `${apiBase}/legislator/${encodeURIComponent(
     legislatorSlug
-  )}/topic?key=term&mt=${encodeURIComponent(
-    legislativeMeeting
-  )}&sts=${legislativeMeetingSession}&top=5`
+  )}/topic?key=term&mt=${encodeURIComponent(legislativeMeeting)}&top=5`
+  if (legislativeMeetingSession) {
+    url = url.concat(`&sts=${legislativeMeetingSession}`)
+  }
+
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -60,11 +66,16 @@ export const fetchTopNTopics = async ({
   legislativeMeetingSessionIds = [],
   partyIds = [],
 }: FetchTopNTopicsParams): Promise<TopNTopicData> => {
-  const url = `${apiBase}/topic?mid=${encodeURIComponent(
+  let url = `${apiBase}/topic?mid=${encodeURIComponent(
     legislativeMeetingId
-  )}&sids=${legislativeMeetingSessionIds}&pids=${partyIds}&take=${encodeURIComponent(
-    take
-  )}&skip=${encodeURIComponent(skip)}`
+  )}&take=${encodeURIComponent(take)}&skip=${encodeURIComponent(skip)}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
+  }
+  if (partyIds) {
+    url = url.concat(`&pids=${partyIds}`)
+  }
+
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -101,11 +112,17 @@ export const fetchTopicOfALegislator = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds,
 }: FetchTopicOfALegislatorParams) => {
-  const url = `${apiBase}/legislator/${encodeURIComponent(
+  if (!slug) {
+    return []
+  }
+
+  let url = `${apiBase}/legislator/${encodeURIComponent(
     slug
-  )}/topic?key=id&mid=${encodeURIComponent(
-    legislativeMeetingId
-  )}&sids=${legislativeMeetingSessionIds}`
+  )}/topic?key=id&mid=${encodeURIComponent(legislativeMeetingId)}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
+  }
+
   const res = await fetch(url, {
     method: 'GET',
     headers: {

@@ -13,7 +13,7 @@ const fetchLegislativeMeetingByLegislator = async (
   if (!slug) {
     return []
   }
-  const url = `${apiBase}legislator/${encodeURIComponent(slug)}/meeting`
+  const url = `${apiBase}/legislator/${encodeURIComponent(slug)}/meeting`
   const res = await fetch(url, {
     method: 'GET',
     headers: {
