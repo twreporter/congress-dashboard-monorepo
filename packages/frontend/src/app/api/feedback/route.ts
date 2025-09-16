@@ -5,7 +5,7 @@ import logger from '@/utils/logger'
 import { isFeedback } from '@/app/api/feedback/utils'
 import slack from '@/app/api/feedback/slack'
 // constant
-import { HttpStatus } from '@/app/api/feedback/constant'
+import { HttpStatus } from '@/app/api/_core/constants'
 
 export async function POST(req: NextRequest) {
   const requestId = uuidV4()

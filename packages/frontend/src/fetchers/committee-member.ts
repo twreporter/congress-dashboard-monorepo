@@ -1,17 +1,9 @@
+'use client'
 import useSWR from 'swr'
-// util
-import { sortByCountDesc } from '@/fetchers/utils'
 
 type CommitteeForReturn = {
   count: number
   name: string
-}
-type CommitteeData = {
-  committee: {
-    name: string
-    slug: string
-  }[]
-  committeeCount: number
 }
 type StateType<T> = {
   committees: T[]
@@ -27,42 +19,19 @@ const fetchCommitteeMember = async ({
   slug,
   legislativeMeetingId,
 }: FetchCommitteeMemberParams) => {
-  const url = process.env.NEXT_PUBLIC_API_URL as string
-  const query = `
-    query CommitteeMembers($where: CommitteeMemberWhereInput!) {
-      committeeMembers(where: $where) {
-        committeeCount
-        committee {
-          name
-          slug
-        }
-      }
-    }
-  `
-  const variables = {
-    where: {
-      legislativeMeetingSession: {
-        legislativeMeeting: {
-          id: {
-            equals: legislativeMeetingId,
-          },
-        },
-      },
-      legislativeYuanMember: {
-        legislator: {
-          slug: {
-            equals: slug,
-          },
-        },
-      },
-    },
+  if (!slug || !legislativeMeetingId) {
+    return
   }
+
+  const apiBase = process.env.NEXT_PUBLIC_API_URL as string
+  const url = `${apiBase}/committee-member/${encodeURIComponent(
+    slug
+  )}?mid=${encodeURIComponent(legislativeMeetingId)}`
   const res = await fetch(url, {
-    method: 'POST',
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query, variables }),
   })
 
   if (!res.ok) {
@@ -71,31 +40,7 @@ const fetchCommitteeMember = async ({
     )
   }
   const data = await res.json()
-  const committee = data?.data?.committeeMembers
-  if (!committee) {
-    return []
-  }
-
-  type GroupedData = Record<string, CommitteeForReturn>
-  const committeeGrouped: GroupedData = committee.reduce(
-    (acc, { committee }: CommitteeData) => {
-      if (!committee || committee.length === 0) {
-        return acc
-      }
-      committee.forEach(({ name, slug }) => {
-        if (!acc[slug]) {
-          acc[slug] = {
-            name,
-            count: 0,
-          }
-        }
-        acc[slug].count += 1
-      })
-      return acc
-    },
-    {}
-  )
-  return Object.values(committeeGrouped).sort(sortByCountDesc)
+  return data
 }
 const useCommitteeMember = (
   params?: FetchCommitteeMemberParams
@@ -105,7 +50,7 @@ const useCommitteeMember = (
     fetchCommitteeMember
   )
   return {
-    committees: data || [],
+    committees: data?.data || [],
     isLoading,
     error,
   }
