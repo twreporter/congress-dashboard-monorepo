@@ -28,7 +28,7 @@ import {
   useInstantSearch,
 } from 'react-instantsearch'
 import { PillButton as _PillButton } from '@twreporter/react-components/lib/button'
-import { liteClient as algoliasearch } from 'algoliasearch/lite'
+import { createAlgoliaSearchClient } from '@/components/search/algolia-client'
 
 const hitsPerPage = 10
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
@@ -58,22 +58,6 @@ const EmptyStateContainer = styled.div`
   padding-top: 72px;
   padding-bottom: 120px;
 `
-
-function createAlgoliaSearchClient() {
-  if (typeof window === 'undefined') {
-    return null // Don't init on server
-  }
-
-  const appID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID
-  const searchKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY
-
-  if (!appID || !searchKey) {
-    console.warn('Missing Algolia credentials')
-    return null
-  }
-
-  return algoliasearch(appID, searchKey)
-}
 
 function PrefillQuery({ query }: { query?: string }) {
   const { refine } = useSearchBox()
