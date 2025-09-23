@@ -58,6 +58,14 @@ program
         !options.topics && !options.legislators && !options.speeches
 
       const meetingTerm = Number(options.meetingTerm)
+
+      if (isNaN(meetingTerm)) {
+        console.log(
+          `\n🔎 Program exits due to --meeting-term ${options.meetingTerm} is not a number`
+        )
+        return
+      }
+
       const sessionTerm =
         options.sessionTerm !== 'all' ? Number(options.sessionTerm) : undefined
 
