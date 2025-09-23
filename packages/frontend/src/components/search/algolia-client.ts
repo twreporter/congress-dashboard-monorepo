@@ -1,4 +1,5 @@
 import { liteClient as algoliasearch } from 'algoliasearch/lite'
+import type { SearchMethodParams, LegacySearchMethodProps } from 'algoliasearch'
 
 export function createAlgoliaSearchClient() {
   if (typeof window === 'undefined') {
@@ -16,7 +17,7 @@ export function createAlgoliaSearchClient() {
   const client = algoliasearch(appID, searchKey)
   const originalSearch = client.search.bind(client)
 
-  client.search = (requests) => {
+  client.search = (requests: SearchMethodParams | LegacySearchMethodProps) => {
     const allEmpty =
       Array.isArray(requests) &&
       requests.length > 0 &&
@@ -25,7 +26,7 @@ export function createAlgoliaSearchClient() {
     if (allEmpty) {
       return Promise.resolve({
         results: requests.map(({ params }) => {
-          const query = (params?.query as string) ?? ''
+          const query = typeof params?.query === 'string' ? params.query : ''
           return {
             hits: [],
             nbHits: 0,
