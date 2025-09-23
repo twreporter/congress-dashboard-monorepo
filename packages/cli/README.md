@@ -80,11 +80,11 @@ Feed Algolia search indices with updated records.
 
 ### Options
 
-* `--meeting-term`
-  Legislative meeting term
+* `--meeting-term` (required)
+  Legislative meeting term. Required for all runs.
 
 * `--session-term`
-  Legislative meeting session term. Only for updating speeches
+  Legislative meeting session term. Only for updating speeches. Accepts numeric value or `all` to process every session in the specified meeting term.
 
 * `--topics`
   Only update topic records.
