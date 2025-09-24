@@ -4,6 +4,7 @@ import fetchTopNTopics from '@/app/api/topic/query'
 // util
 import logger from '@/utils/logger'
 import { getNumberParams, getNumberArrayParams } from '../_core/utils'
+import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -50,14 +51,9 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams
     parsedParams = getSearchParams(searchParams)
   } catch (err) {
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.BAD_REQUEST,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.BAD_REQUEST,
+    })
   }
 
   try {
@@ -75,23 +71,13 @@ export async function GET(req: NextRequest) {
       take,
       skip,
     })
-    return NextResponse.json(
-      {
-        data: topics,
-      },
-      {
-        status: HttpStatus.OK,
-      }
-    )
+    return NextResponse.json(responseHelper.success(topics), {
+      status: HttpStatus.OK,
+    })
   } catch (err) {
     logger.error({ errMsg: err }, `failed to fetch top N topics`)
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    })
   }
 }

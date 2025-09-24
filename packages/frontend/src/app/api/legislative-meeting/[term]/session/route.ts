@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import fetchLegislativeMeetingSessions from '@/app/api/legislative-meeting/[term]/session/query'
 // util
 import logger from '@/utils/logger'
+import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -14,9 +15,9 @@ export async function GET(
     const { term } = await params
     if (!term || isNaN(Number(term))) {
       return NextResponse.json(
-        {
-          error: `invalid parameters, term should not be empty or NaN`,
-        },
+        responseHelper.error(
+          new Error('invalid parameters, term should not be empty or NaN')
+        ),
         {
           status: HttpStatus.BAD_REQUEST,
         }
@@ -26,23 +27,13 @@ export async function GET(
     const sessions = await fetchLegislativeMeetingSessions({
       legislativeMeetingTerm: term,
     })
-    return NextResponse.json(
-      {
-        data: sessions,
-      },
-      {
-        status: HttpStatus.OK,
-      }
-    )
+    return NextResponse.json(responseHelper.success(sessions), {
+      status: HttpStatus.OK,
+    })
   } catch (err) {
     logger.error({ errMsg: err }, 'failed to fetch meeting sessions')
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    })
   }
 }

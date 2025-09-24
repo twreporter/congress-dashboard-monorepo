@@ -4,6 +4,7 @@ import fetchCommitteeMember from '@/app/api/committee-member/[slug]/query'
 // util
 import logger from '@/utils/logger'
 import { getNumberParams } from '@/app/api/_core/utils'
+import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -27,9 +28,9 @@ export async function GET(
   const { slug } = await params
   if (!slug) {
     return NextResponse.json(
-      {
-        error: `invalid parameters, slug should not be empty`,
-      },
+      responseHelper.error(
+        new Error('invalid parameters, slug should not be empty')
+      ),
       {
         status: HttpStatus.BAD_REQUEST,
       }
@@ -41,14 +42,9 @@ export async function GET(
     const searchParams = req.nextUrl.searchParams
     parsedParams = getSearchParams(searchParams)
   } catch (err) {
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.BAD_REQUEST,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.BAD_REQUEST,
+    })
   }
 
   try {
@@ -57,23 +53,13 @@ export async function GET(
       slug,
       legislativeMeetingId: legislativeMeeting,
     })
-    return NextResponse.json(
-      {
-        data: committeeMembers,
-      },
-      {
-        status: HttpStatus.OK,
-      }
-    )
+    return NextResponse.json(responseHelper.success(committeeMembers), {
+      status: HttpStatus.OK,
+    })
   } catch (err) {
     logger.error({ errMsg: err }, 'failed to fetch committeeMembers')
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    })
   }
 }

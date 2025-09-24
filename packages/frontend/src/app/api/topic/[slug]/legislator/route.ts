@@ -8,6 +8,7 @@ import {
   getNumberArrayParams,
   getStringArrayParams,
 } from '@/app/api/_core/utils'
+import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 // enum
@@ -84,9 +85,9 @@ export async function GET(
   const { slug } = await params
   if (!slug) {
     return NextResponse.json(
-      {
-        error: `invalid parameters, slug should not be empty`,
-      },
+      responseHelper.error(
+        new Error('invalid parameters, slug should not be empty')
+      ),
       {
         status: HttpStatus.BAD_REQUEST,
       }
@@ -98,14 +99,9 @@ export async function GET(
     const searchParams = req.nextUrl.searchParams
     parsedParams = getSearchParams(searchParams)
   } catch (err) {
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.BAD_REQUEST,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.BAD_REQUEST,
+    })
   }
 
   try {
@@ -119,7 +115,7 @@ export async function GET(
       top,
       key,
     } = parsedParams
-    const topics = await fetchTopNLegislatorsOfATopic({
+    const legislators = await fetchTopNLegislatorsOfATopic({
       filterKey: key,
       slug,
       legislativeMeeting,
@@ -130,26 +126,16 @@ export async function GET(
       excludeLegislatorSlug: excludeSlug,
       top,
     })
-    return NextResponse.json(
-      {
-        data: topics,
-      },
-      {
-        status: HttpStatus.OK,
-      }
-    )
+    return NextResponse.json(responseHelper.success(legislators), {
+      status: HttpStatus.OK,
+    })
   } catch (err) {
     logger.error(
       { errMsg: err },
       `failed to fetch top N legislator of topic ${slug}`
     )
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    })
   }
 }

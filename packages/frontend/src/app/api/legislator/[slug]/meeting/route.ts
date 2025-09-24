@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import fetchLegislatorMeetings from '@/app/api/legislator/[slug]/meeting/query'
 // util
 import logger from '@/utils/logger'
+import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -13,9 +14,9 @@ export async function GET(
   const { slug } = await params
   if (!slug) {
     return NextResponse.json(
-      {
-        error: `invalid parameters, slug should not be empty`,
-      },
+      responseHelper.error(
+        new Error('invalid parameters, slug should not be empty')
+      ),
       {
         status: HttpStatus.BAD_REQUEST,
       }
@@ -23,27 +24,17 @@ export async function GET(
   }
 
   try {
-    const mettings = await fetchLegislatorMeetings({ slug })
-    return NextResponse.json(
-      {
-        data: mettings,
-      },
-      {
-        status: HttpStatus.OK,
-      }
-    )
+    const meetings = await fetchLegislatorMeetings({ slug })
+    return NextResponse.json(responseHelper.success(meetings), {
+      status: HttpStatus.OK,
+    })
   } catch (err) {
     logger.error(
       { errMsg: err },
       `failed to fetch meetings of legislator ${slug}`
     )
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    })
   }
 }

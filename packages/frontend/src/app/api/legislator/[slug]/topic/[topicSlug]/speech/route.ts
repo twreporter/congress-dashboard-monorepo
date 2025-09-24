@@ -4,6 +4,7 @@ import fetchSpeechesOfALegislatorInATopic from '@/app/api/legislator/[slug]/topi
 // util
 import logger from '@/utils/logger'
 import { getNumberParams, getNumberArrayParams } from '@/app/api/_core/utils'
+import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -33,9 +34,9 @@ export async function GET(
   const { slug, topicSlug } = await params
   if (!slug || !topicSlug) {
     return NextResponse.json(
-      {
-        error: `invalid parameters, slug should not be empty`,
-      },
+      responseHelper.error(
+        new Error('invalid parameters, slug should not be empty')
+      ),
       {
         status: HttpStatus.BAD_REQUEST,
       }
@@ -47,44 +48,29 @@ export async function GET(
     const searchParams = req.nextUrl.searchParams
     parsedParams = getSearchParams(searchParams)
   } catch (err) {
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.BAD_REQUEST,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.BAD_REQUEST,
+    })
   }
 
   try {
     const { legislativeMeeting, legislativeMeetingSessions } = parsedParams
-    const mettings = await fetchSpeechesOfALegislatorInATopic({
+    const speeches = await fetchSpeechesOfALegislatorInATopic({
       slug,
       topicSlug,
       legislativeMeetingId: legislativeMeeting,
       legislativeMeetingSessionIds: legislativeMeetingSessions,
     })
-    return NextResponse.json(
-      {
-        data: mettings,
-      },
-      {
-        status: HttpStatus.OK,
-      }
-    )
+    return NextResponse.json(responseHelper.success(speeches), {
+      status: HttpStatus.OK,
+    })
   } catch (err) {
     logger.error(
       { errMsg: err },
-      `failed to fetch meetings of legislator ${slug}`
+      `failed to fetch speeches of legislator ${slug} in topic ${topicSlug}`
     )
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    })
   }
 }

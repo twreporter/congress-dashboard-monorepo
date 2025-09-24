@@ -4,6 +4,7 @@ import fetchTopicsOfALegislator from '@/app/api/legislator/[slug]/topic/query'
 // util
 import logger from '@/utils/logger'
 import { getNumberParams, getNumberArrayParams } from '@/app/api/_core/utils'
+import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 // enum
@@ -54,10 +55,14 @@ export async function GET(
 ) {
   const { slug } = await params
   if (!slug) {
-    return NextResponse.json({
-      error: `invalid parameters, slug should not be empty`,
-      status: HttpStatus.BAD_REQUEST,
-    })
+    return NextResponse.json(
+      responseHelper.error(
+        new Error('invalid parameters, slug should not be empty')
+      ),
+      {
+        status: HttpStatus.BAD_REQUEST,
+      }
+    )
   }
 
   let parsedParams: Params
@@ -65,14 +70,9 @@ export async function GET(
     const searchParams = req.nextUrl.searchParams
     parsedParams = getSearchParams(searchParams)
   } catch (err) {
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.BAD_REQUEST,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.BAD_REQUEST,
+    })
   }
 
   try {
@@ -85,26 +85,16 @@ export async function GET(
       legislativeMeetingSessions,
       top,
     })
-    return NextResponse.json(
-      {
-        data: topics,
-      },
-      {
-        status: HttpStatus.OK,
-      }
-    )
+    return NextResponse.json(responseHelper.success(topics), {
+      status: HttpStatus.OK,
+    })
   } catch (err) {
     logger.error(
       { errMsg: err },
       `failed to fetch topics of legislator ${slug}`
     )
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      {
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-      }
-    )
+    return NextResponse.json(responseHelper.error(err as Error), {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    })
   }
 }

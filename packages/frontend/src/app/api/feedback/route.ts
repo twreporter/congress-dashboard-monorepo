@@ -4,6 +4,7 @@ import { v4 as uuidV4 } from 'uuid'
 import logger from '@/utils/logger'
 import { isFeedback } from '@/app/api/feedback/utils'
 import slack from '@/app/api/feedback/slack'
+import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -19,7 +20,9 @@ export async function POST(req: NextRequest) {
     }
     logger.error({ requestId, errMsg }, 'slack api error')
     return NextResponse.json(
-      { error: 'Invalid JSON in request body: cannot get body object.' },
+      responseHelper.error(
+        new Error('Invalid JSON in request body: cannot get body object.')
+      ),
       { status: HttpStatus.BAD_REQUEST }
     )
   }
@@ -32,7 +35,9 @@ export async function POST(req: NextRequest) {
       'slack api error'
     )
     return NextResponse.json(
-      { error: 'Invalid JSON in request body: not valid feedback.' },
+      responseHelper.error(
+        new Error('Invalid JSON in request body: not valid feedback.')
+      ),
       { status: HttpStatus.BAD_REQUEST }
     )
   }
@@ -41,15 +46,17 @@ export async function POST(req: NextRequest) {
     const slackRes = await slack(body)
     if (slackRes.ok) {
       logger.debug(
-        { requestId, response: { success: true } },
+        { requestId, response: { status: 'success' } },
         'slack api response'
       )
-      return NextResponse.json({ success: true })
+      return NextResponse.json(responseHelper.success({ success: true }))
     }
 
     logger.error({ requestId, errMsg: slackRes.error }, 'slack api error')
     return NextResponse.json(
-      { error: slackRes.error || 'failed to call slack webhook' },
+      responseHelper.error(
+        slackRes.error || new Error('failed to call slack webhook')
+      ),
       { status: slackRes.status }
     )
   } catch (error) {
@@ -58,9 +65,8 @@ export async function POST(req: NextRequest) {
       errMsg = error.message
     }
     logger.error({ requestId, errMsg }, 'slack api error')
-    return NextResponse.json(
-      { error: errMsg },
-      { status: HttpStatus.INTERNAL_SERVER_ERROR }
-    )
+    return NextResponse.json(responseHelper.error(error as Error), {
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    })
   }
 }
