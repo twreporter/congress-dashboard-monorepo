@@ -1,3 +1,5 @@
+'use client'
+
 import useSWR from 'swr'
 
 export type speechData = {
@@ -20,56 +22,22 @@ const fetchSpeechesOfALegislatorInATopic = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds,
 }: FetchSpeechesParams): Promise<speechData[]> => {
-  const query = `
-    query Speeches($where: SpeechWhereInput!, $orderBy: [SpeechOrderByInput!]!) {
-      speeches(where: $where, orderBy: $orderBy) {
-        date
-        slug
-        summary
-        title
-      }
-    }
-  `
-  const variables = {
-    where: {
-      topics: {
-        some: {
-          slug: {
-            equals: topicSlug,
-          },
-        },
-      },
-      legislativeMeeting: {
-        id: {
-          equals: legislativeMeetingId,
-        },
-      },
-      legislativeYuanMember: {
-        legislator: {
-          slug: {
-            equals: legislatorSlug,
-          },
-        },
-      },
-    },
-    orderBy: {
-      date: 'desc',
-    },
+  if (!legislatorSlug || !topicSlug) {
+    return []
   }
-  if (legislativeMeetingSessionIds && legislativeMeetingSessionIds.length > 0) {
-    variables.where['legislativeMeetingSession'] = {
-      id: {
-        in: legislativeMeetingSessionIds,
-      },
-    }
+
+  const apiBase = process.env.NEXT_PUBLIC_API_URL as string
+  let url = `${apiBase}/legislator/${encodeURIComponent(
+    legislatorSlug
+  )}/topic/${encodeURIComponent(topicSlug)}/speech?mid=${encodeURIComponent(
+    legislativeMeetingId
+  )}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
   }
-  const url = process.env.NEXT_PUBLIC_API_URL as string
+
   const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables }),
+    method: 'GET',
   })
 
   if (!res.ok) {
@@ -78,7 +46,7 @@ const fetchSpeechesOfALegislatorInATopic = async ({
     )
   }
   const data = await res.json()
-  return data?.data?.speeches || []
+  return data?.data || []
 }
 const useSpeech = (params?: FetchSpeechesParams) => {
   const { data, isLoading, error } = useSWR(

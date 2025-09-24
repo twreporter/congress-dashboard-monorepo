@@ -1,4 +1,4 @@
-import { keystoneFetch } from '@/app/api/graphql/keystone'
+import { keystoneFetch } from '@/app/api/_graphql/keystone'
 
 /* fetchLegislativeMeeting
  *   fetch legislative meeing order by term desc

@@ -3,7 +3,7 @@ import type { Feedback } from '@/app/api/feedback/type'
 // util
 import { generatePayloadFromFeedback } from '@/app/api/feedback/utils'
 // constant
-import { HttpStatus } from '@/app/api/feedback/constant'
+import { HttpStatus } from '@/app/api/_core/constants'
 
 type ResponseData = {
   ok: boolean
