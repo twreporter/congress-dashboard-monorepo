@@ -85,7 +85,7 @@ const fetchTopicsOfALegislator = async ({
   if (!top) {
     return topicOrderBySpeechCount
   }
-  return topicFormmater(topics).slice(0, top)
+  return topicOrderBySpeechCount.slice(0, top)
 }
 
 export default fetchTopicsOfALegislator

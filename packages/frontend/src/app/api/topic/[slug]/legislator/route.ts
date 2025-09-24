@@ -11,7 +11,7 @@ import {
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 // enum
-import { FilterKey } from '@/app/api/topic/[slug]/legislator/enum'
+import { FilterKey } from '@/app/api/topic/[slug]/legislator/enum-constant'
 
 type Params = {
   legislativeMeeting: number

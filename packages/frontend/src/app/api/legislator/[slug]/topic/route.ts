@@ -85,10 +85,14 @@ export async function GET(
       legislativeMeetingSessions,
       top,
     })
-    return NextResponse.json({
-      data: topics,
-      status: HttpStatus.OK,
-    })
+    return NextResponse.json(
+      {
+        data: topics,
+      },
+      {
+        status: HttpStatus.OK,
+      }
+    )
   } catch (err) {
     logger.error(
       { errMsg: err },

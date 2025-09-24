@@ -26,10 +26,14 @@ export async function GET(
     const sessions = await fetchLegislativeMeetingSessions({
       legislativeMeetingTerm: term,
     })
-    return NextResponse.json({
-      data: sessions,
-      status: HttpStatus.OK,
-    })
+    return NextResponse.json(
+      {
+        data: sessions,
+      },
+      {
+        status: HttpStatus.OK,
+      }
+    )
   } catch (err) {
     logger.error({ errMsg: err }, 'failed to fetch meeting sessions')
     return NextResponse.json(

@@ -2,7 +2,7 @@ import keystoneFetch from '@/app/api/_graphql/keystone'
 // utils
 import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // enum
-import { FilterKey } from '@/app/api/topic/[slug]/legislator/enum'
+import { FilterKey } from '@/app/api/topic/[slug]/legislator/enum-constant'
 // lodash
 import { isEmpty } from 'lodash'
 const _ = {
