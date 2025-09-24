@@ -4,7 +4,9 @@ import fetchCommitteeMember from '@/app/api/committee-member/[slug]/query'
 // util
 import logger from '@/utils/logger'
 import { getNumberParams } from '@/app/api/_core/utils'
-import responseHelper from '@/app/api/_core/response-helper'
+import responseHelper, {
+  getCachedSuccessStatus,
+} from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -53,9 +55,10 @@ export async function GET(
       slug,
       legislativeMeetingId: legislativeMeeting,
     })
-    return NextResponse.json(responseHelper.success(committeeMembers), {
-      status: HttpStatus.OK,
-    })
+    return NextResponse.json(
+      responseHelper.success(committeeMembers),
+      getCachedSuccessStatus()
+    )
   } catch (err) {
     logger.error({ errMsg: err }, 'failed to fetch committeeMembers')
     return NextResponse.json(responseHelper.error(err as Error), {

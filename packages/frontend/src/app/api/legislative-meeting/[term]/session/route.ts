@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import fetchLegislativeMeetingSessions from '@/app/api/legislative-meeting/[term]/session/query'
 // util
 import logger from '@/utils/logger'
-import responseHelper from '@/app/api/_core/response-helper'
+import responseHelper, {
+  getCachedSuccessStatus,
+} from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -27,9 +29,10 @@ export async function GET(
     const sessions = await fetchLegislativeMeetingSessions({
       legislativeMeetingTerm: term,
     })
-    return NextResponse.json(responseHelper.success(sessions), {
-      status: HttpStatus.OK,
-    })
+    return NextResponse.json(
+      responseHelper.success(sessions),
+      getCachedSuccessStatus()
+    )
   } catch (err) {
     logger.error({ errMsg: err }, 'failed to fetch meeting sessions')
     return NextResponse.json(responseHelper.error(err as Error), {

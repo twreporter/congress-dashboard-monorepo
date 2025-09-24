@@ -4,7 +4,9 @@ import fetchTopNTopics from '@/app/api/index/legislator/[ids]/topic/query'
 // util
 import logger from '@/utils/logger'
 import { getNumberParams, getNumberArrayParams } from '@/app/api/_core/utils'
-import responseHelper from '@/app/api/_core/response-helper'
+import responseHelper, {
+  getCachedSuccessStatus,
+} from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -81,9 +83,10 @@ export async function GET(
       legislativeMeetingSessionIds: legislativeMeetingSessions,
       take: top,
     })
-    return NextResponse.json(responseHelper.success(topics), {
-      status: HttpStatus.OK,
-    })
+    return NextResponse.json(
+      responseHelper.success(topics),
+      getCachedSuccessStatus()
+    )
   } catch (err) {
     logger.error(
       { errMsg: err },

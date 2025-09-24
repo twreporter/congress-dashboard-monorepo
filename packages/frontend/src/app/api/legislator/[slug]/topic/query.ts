@@ -2,7 +2,7 @@ import keystoneFetch from '@/app/api/_graphql/keystone'
 // utils
 import { sortByCountDesc } from '@/fetchers/utils'
 // enum
-import { FilterKey } from '@/app/api/legislator/[slug]/topic/enum'
+import { FilterKey } from '@/app/api/legislator/[slug]/topic/enum-constant'
 
 type TopicFromRes = {
   slug: string

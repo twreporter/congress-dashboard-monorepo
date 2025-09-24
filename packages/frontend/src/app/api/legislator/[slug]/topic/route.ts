@@ -4,11 +4,13 @@ import fetchTopicsOfALegislator from '@/app/api/legislator/[slug]/topic/query'
 // util
 import logger from '@/utils/logger'
 import { getNumberParams, getNumberArrayParams } from '@/app/api/_core/utils'
-import responseHelper from '@/app/api/_core/response-helper'
+import responseHelper, {
+  getCachedSuccessStatus,
+} from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 // enum
-import { FilterKey } from '@/app/api/legislator/[slug]/topic/enum'
+import { FilterKey } from '@/app/api/legislator/[slug]/topic/enum-constant'
 
 type Params = {
   legislativeMeeting: number
@@ -85,9 +87,10 @@ export async function GET(
       legislativeMeetingSessions,
       top,
     })
-    return NextResponse.json(responseHelper.success(topics), {
-      status: HttpStatus.OK,
-    })
+    return NextResponse.json(
+      responseHelper.success(topics),
+      getCachedSuccessStatus()
+    )
   } catch (err) {
     logger.error(
       { errMsg: err },

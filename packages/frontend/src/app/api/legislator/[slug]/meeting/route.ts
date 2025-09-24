@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import fetchLegislatorMeetings from '@/app/api/legislator/[slug]/meeting/query'
 // util
 import logger from '@/utils/logger'
-import responseHelper from '@/app/api/_core/response-helper'
+import responseHelper, {
+  getCachedSuccessStatus,
+} from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -25,9 +27,10 @@ export async function GET(
 
   try {
     const meetings = await fetchLegislatorMeetings({ slug })
-    return NextResponse.json(responseHelper.success(meetings), {
-      status: HttpStatus.OK,
-    })
+    return NextResponse.json(
+      responseHelper.success(meetings),
+      getCachedSuccessStatus()
+    )
   } catch (err) {
     logger.error(
       { errMsg: err },

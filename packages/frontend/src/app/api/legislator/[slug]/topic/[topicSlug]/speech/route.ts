@@ -4,7 +4,9 @@ import fetchSpeechesOfALegislatorInATopic from '@/app/api/legislator/[slug]/topi
 // util
 import logger from '@/utils/logger'
 import { getNumberParams, getNumberArrayParams } from '@/app/api/_core/utils'
-import responseHelper from '@/app/api/_core/response-helper'
+import responseHelper, {
+  getCachedSuccessStatus,
+} from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -61,9 +63,10 @@ export async function GET(
       legislativeMeetingId: legislativeMeeting,
       legislativeMeetingSessionIds: legislativeMeetingSessions,
     })
-    return NextResponse.json(responseHelper.success(speeches), {
-      status: HttpStatus.OK,
-    })
+    return NextResponse.json(
+      responseHelper.success(speeches),
+      getCachedSuccessStatus()
+    )
   } catch (err) {
     logger.error(
       { errMsg: err },

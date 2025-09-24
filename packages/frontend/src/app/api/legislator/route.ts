@@ -8,7 +8,9 @@ import {
   getNumberArrayParams,
   getStringArrayParams,
 } from '@/app/api/_core/utils'
-import responseHelper from '@/app/api/_core/response-helper'
+import responseHelper, {
+  getCachedSuccessStatus,
+} from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
@@ -75,9 +77,10 @@ export async function GET(req: NextRequest) {
       constituencies,
       committeeSlugs,
     })
-    return NextResponse.json(responseHelper.success(legislators), {
-      status: HttpStatus.OK,
-    })
+    return NextResponse.json(
+      responseHelper.success(legislators),
+      getCachedSuccessStatus()
+    )
   } catch (err) {
     logger.error({ errMsg: err }, `failed to fetch legislators`)
     return NextResponse.json(responseHelper.error(err as Error), {
