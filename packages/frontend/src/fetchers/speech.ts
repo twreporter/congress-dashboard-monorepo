@@ -38,9 +38,6 @@ const fetchSpeechesOfALegislatorInATopic = async ({
 
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   if (!res.ok) {

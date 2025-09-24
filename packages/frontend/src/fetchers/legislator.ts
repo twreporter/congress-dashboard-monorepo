@@ -54,9 +54,6 @@ export const fetchTopLegislatorsBySpeechCount = async ({
 
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   if (!res.ok) {
@@ -123,9 +120,6 @@ export const fetchLegislators = async ({
 
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
   if (!res.ok) {
     throw new Error(
@@ -176,9 +170,6 @@ export const fetchTopNTopicsOfLegislators = async ({
 
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
   if (!res.ok) {
     throw new Error(
@@ -225,9 +216,6 @@ export const fetchLegislatorsOfATopic = async ({
 
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   if (!res.ok) {
@@ -285,9 +273,6 @@ export const fetchTopNLegislatorsOfATopic = async ({
 
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
   if (!res.ok) {
     throw new Error('Failed to fetch top legislators')

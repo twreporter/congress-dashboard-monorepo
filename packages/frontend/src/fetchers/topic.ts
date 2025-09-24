@@ -40,9 +40,6 @@ export const fetchTopTopicsForLegislator = async ({
 
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   if (!res.ok) {
@@ -78,9 +75,6 @@ export const fetchTopNTopics = async ({
 
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   if (!res.ok) {
@@ -125,9 +119,6 @@ export const fetchTopicOfALegislator = async ({
 
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   if (!res.ok) {

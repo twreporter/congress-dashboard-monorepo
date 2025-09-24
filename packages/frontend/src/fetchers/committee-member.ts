@@ -29,9 +29,6 @@ const fetchCommitteeMember = async ({
   )}?mid=${encodeURIComponent(legislativeMeetingId)}`
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
 
   if (!res.ok) {

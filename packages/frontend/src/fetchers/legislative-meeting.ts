@@ -16,9 +16,6 @@ const fetchLegislativeMeetingByLegislator = async (
   const url = `${apiBase}/legislator/${encodeURIComponent(slug)}/meeting`
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
   const data = await res.json()
   return data?.data || []
@@ -28,9 +25,6 @@ const fetchLegislativeMeeting = async (): Promise<LegislativeMeeting[]> => {
   const url = `${apiBase}/legislative-meeting`
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
   const data = await res.json()
   return data?.data
@@ -48,9 +42,6 @@ const fetchLegislativeMeetingSession = async (
   )}/session`
   const res = await fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   })
   const data = await res.json()
   return data?.data
