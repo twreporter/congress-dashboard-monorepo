@@ -167,12 +167,7 @@ const TopicList: React.FC<TopicListProps> = ({
 
   const issueList = useMemo<(IssueProps & { slug: string })[]>(() => {
     if (!selectedLegislator || topTopicsError || !topTopics) return []
-
-    return topTopics.map((topic) => ({
-      name: topic.title,
-      slug: topic.slug,
-      count: topic.speechesCount,
-    }))
+    return topTopics
   }, [selectedLegislator, topTopics, topTopicsError])
 
   const followMoreTitle = useMemo(

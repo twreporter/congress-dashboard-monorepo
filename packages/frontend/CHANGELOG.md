@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.5.1-rc.0...@twreporter/congress-dashboard-frontend@1.6.0-rc.0) (2025-09-24)
+
+### Bug Fixes
+
+- **frontend:** add Cache-Control header for GET ([99f8456](https://github.com/twreporter/congress-dashboard-monorepo/commit/99f8456c0497dc7259c99ae62fa14a0c87fd5901))
+- **frontend:** add url params check ([c2b9c38](https://github.com/twreporter/congress-dashboard-monorepo/commit/c2b9c389daf13d2bf033d2e0ced1cef2798cd19f))
+- **frontend:** address review comments ([6230a59](https://github.com/twreporter/congress-dashboard-monorepo/commit/6230a59ca46f59b9eedd8b6e56dec7363ce2f747))
+- **frontend:** remove redundant header ([80b1634](https://github.com/twreporter/congress-dashboard-monorepo/commit/80b163458a53429f704bae619ae482e5d407f638))
+
+### Features
+
+- **frontend:** add `response-helper` for rest api ([3f74300](https://github.com/twreporter/congress-dashboard-monorepo/commit/3f74300fb65be21688a9b09e28ea51504682f652))
+- **frontend:** add restful endpoints ([3c14044](https://github.com/twreporter/congress-dashboard-monorepo/commit/3c140441738e80f521e84fe5aa08b1bcb2f9929f))
+
+## [1.5.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.5.0...@twreporter/congress-dashboard-frontend@1.5.1-rc.0) (2025-09-23)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+# [1.5.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.5.0-rc.0...@twreporter/congress-dashboard-frontend@1.5.0) (2025-09-15)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.5.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.4.4...@twreporter/congress-dashboard-frontend@1.5.0-rc.0) (2025-09-15)
 
 ### Bug Fixes

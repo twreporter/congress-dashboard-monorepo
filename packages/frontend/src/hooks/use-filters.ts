@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 // enum
 import { SelectorType } from '@/components/selector'

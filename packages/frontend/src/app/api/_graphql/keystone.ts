@@ -1,4 +1,4 @@
-import { getCookie } from '@/app/api/graphql/token'
+import { getCookie } from '@/app/api/_graphql/token'
 
 export interface GraphQLResponse<T> {
   data?: T
