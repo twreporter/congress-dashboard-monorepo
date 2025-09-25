@@ -5,7 +5,17 @@ module.exports = {
     'scope-enum': [
       2,
       'always',
-      ['frontend', 'cms', 'shared', 'root', 'deps', 'ci', 'docs', 'changeset'],
+      [
+        'frontend',
+        'cms',
+        'shared',
+        'cli',
+        'root',
+        'deps',
+        'ci',
+        'docs',
+        'changeset',
+      ],
     ],
     'type-enum': [
       2,

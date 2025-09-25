@@ -19,37 +19,35 @@ const program = new Command()
 
 const isDevMode = process.argv[1]?.includes('src/index.ts')
 
+const defaultMeetingTerm = '11'
+const defaultSessionTerm = 'all'
+
 program
   .name(isDevMode ? 'dev' : programName)
   .description('CLI to feed data into Algolia indices')
 
 program
-  .command(`${commandName} [updatedAfter]`)
+  .command(commandName)
   .description(
-    'Feed Algolia search by topics, speeches and legislators records after a given date'
+    'Feed topics, speeches and legislators records by a given meeting term into Algolia search engine'
   )
-  .option('--yesterday', "Use yesterday's date as updatedAfter if not provided")
+  .option(
+    '--meeting-term <term>',
+    'Legislative meeting term',
+    defaultMeetingTerm
+  )
+  .option(
+    '--session-term <term>',
+    'Legislative meeting session term. Only for updating speeches',
+    defaultSessionTerm
+  )
   .option('--topics', 'Only update topic records')
   .option('--legislators', 'Only update legislator records')
   .option('--speeches', 'Only update speech records')
   .option('--dryrun', 'Enable dry-run mode (do not write to Algolia)', true)
   .option('--no-dryrun', 'Disable dry-run mode (actually write to Algolia)')
-  .action(async (_updatedAfter, options) => {
+  .action(async (options) => {
     try {
-      let updatedAfter = _updatedAfter
-      if (!updatedAfter && options.yesterday) {
-        const date = new Date()
-        date.setDate(date.getDate() - 1)
-        updatedAfter = date.toISOString().split('T')[0]
-      }
-
-      if (!updatedAfter) {
-        console.log(
-          `No arguments provided. Try 'yarn lawmaker ${commandName} --help' or 'yarn dev ${commandName} --help' (for development) for usage.`
-        )
-        return
-      }
-
       if (options.dryrun) {
         dryrunState.enable()
       } else {
@@ -59,11 +57,21 @@ program
       const executeAll =
         !options.topics && !options.legislators && !options.speeches
 
-      if (options.topics || executeAll) {
+      const meetingTerm = Number(options.meetingTerm)
+
+      if (isNaN(meetingTerm)) {
         console.log(
-          `\n🔎 Fetching topics with speeches updated after ${updatedAfter}`
+          `\n🔎 Program exits due to --meeting-term ${options.meetingTerm} is not a number`
         )
-        for await (const topicModels of topicIterator(updatedAfter)) {
+        return
+      }
+
+      const sessionTerm =
+        options.sessionTerm !== 'all' ? Number(options.sessionTerm) : undefined
+
+      if (options.topics || executeAll) {
+        console.log(`\n🔎 Fetching topics in the meeting term ${meetingTerm}`)
+        for await (const topicModels of topicIterator(meetingTerm)) {
           if (topicModels.length > 0) {
             const topicRecords = transferTopicModelToRecord(topicModels)
             console.log('Upload topic records to Algolia.')
@@ -74,9 +82,9 @@ program
 
       if (options.legislators || executeAll) {
         console.log(
-          `\n🔎 Fetching legislatorYuanMembers with speeches updated after ${updatedAfter}`
+          `\n🔎 Fetching legislatorYuanMembers in the meeting term ${meetingTerm}`
         )
-        for await (const legislatorModels of legislatorIterator(updatedAfter)) {
+        for await (const legislatorModels of legislatorIterator(meetingTerm)) {
           if (legislatorModels.length > 0) {
             const legislatorRecords =
               transferLegislatorModelToRecord(legislatorModels)
@@ -87,8 +95,14 @@ program
       }
 
       if (options.speeches || executeAll) {
-        console.log(`\n🔎 Fetching speeches updated after ${updatedAfter}`)
-        for await (const speechModels of speechIterator(updatedAfter)) {
+        console.log(
+          `\n🔎 Fetching speeches in the meeting term ${meetingTerm} and session term ${options.sessionTerm}`
+        )
+        for await (const speechModels of speechIterator(
+          meetingTerm,
+          10,
+          sessionTerm
+        )) {
           if (speechModels.length > 0) {
             const speechRecords = transferSpeechModelToRecord(speechModels)
             console.log('Upload speech records to Algolia.')
@@ -103,16 +117,20 @@ program
         'Error to execute feed-algolia command',
         {
           options,
-          updatedAfter: _updatedAfter,
         }
       )
       console.log(
         JSON.stringify({
           severity: 'ERROR',
-          message: errors.helpers.printAll(err, {
-            withStack: true,
-            withPayload: true,
-          }),
+          message: errors.helpers.printAll(
+            err,
+            {
+              withStack: true,
+              withPayload: true,
+            },
+            0,
+            0
+          ),
         })
       )
     }

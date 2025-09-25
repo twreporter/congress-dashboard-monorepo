@@ -14,7 +14,7 @@ import { SearchBox } from '@/components/search/search-box'
 import { SearchModal } from '@/components/search/modal'
 import { ZIndex } from '@/styles/z-index'
 import { layoutVariants } from '@/components/search/constants'
-import { liteClient as algoliasearch } from 'algoliasearch/lite'
+import { createAlgoliaSearchClient } from '@/components/search/algolia-client'
 
 export { layoutVariants }
 
@@ -110,20 +110,7 @@ export const AlgoliaInstantSearch = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const windowWidth = useWindowWidth()
 
-  const searchClient = useMemo(() => {
-    if (typeof window === 'undefined') {
-      return null // Don't init on server
-    }
-    const appID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID
-    const searchKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY
-
-    if (!appID || !searchKey) {
-      console.warn('Missing Algolia credentials')
-      return null
-    }
-
-    return algoliasearch(appID, searchKey)
-  }, [])
+  const searchClient = useMemo(createAlgoliaSearchClient, [])
 
   if (!searchClient) {
     return null // Avoid render if client not ready

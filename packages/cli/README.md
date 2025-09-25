@@ -57,7 +57,7 @@ yarn build
 Use the development entry point with `ts-node`:
 
 ```bash
-yarn dev feed-algolia [updatedAfter] [options]
+yarn dev feed-algolia [options]
 ```
 
 ### Production Mode
@@ -65,27 +65,26 @@ yarn dev feed-algolia [updatedAfter] [options]
 After building:
 
 ```bash
-yarn lawmaker feed-algolia [updatedAfter] [options]
+yarn lawmaker feed-algolia [options]
 ```
 
 You can also invoke it directly:
 
 ```bash
-./lib/index.js feed-algolia [updatedAfter] [options]
+./lib/index.js feed-algolia [options]
 ```
 
 ## Command: `feed-algolia`
 
 Feed Algolia search indices with updated records.
 
-### Parameters
-
-* `updatedAfter` (optional): An ISO date string (e.g. `2025-06-01`). Filters records updated after this date.
-
 ### Options
 
-* `--yesterday`
-  Use yesterday’s date as `updatedAfter` if not provided.
+* `--meeting-term` (required)
+  Legislative meeting term. Required for all runs.
+
+* `--session-term`
+  Legislative meeting session term. Only for updating speeches. Accepts numeric value or `all` to process every session in the specified meeting term.
 
 * `--topics`
   Only update topic records.
@@ -105,14 +104,14 @@ Feed Algolia search indices with updated records.
 ### Examples
 
 ```bash
-# Dry run all data types updated after 2025-06-01
-yarn lawmaker feed-algolia 2025-06-01
+# Dry run all data types in the meeting term 11
+yarn lawmaker feed-algolia --meeting-term 11
 
-# Dry run only topics from yesterday
-yarn lawmaker feed-algolia --yesterday --topics
+# Dry run only topics in the meeting-term 10
+yarn lawmaker feed-algolia --meeting-term 10 --topics
 
-# Actually upload speeches from June 1st
-yarn lawmaker feed-algolia 2025-06-01 --speeches --no-dryrun
+# Actually upload speeches in the meeting-term 11 and session-term 2
+yarn lawmaker feed-algolia --meeting-term 11 --session-term 2 --speeches --no-dryrun
 ```
 
 ## License
