@@ -1,4 +1,4 @@
-import keystoneFetch from '@/app/api/graphql/keystone'
+import keystoneFetch from '@/app/api/_graphql/keystone'
 // type
 import type { partyData } from '@/fetchers/party'
 

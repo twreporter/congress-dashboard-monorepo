@@ -1,4 +1,4 @@
-import { keystoneFetch } from '@/app/api/graphql/keystone'
+import { keystoneFetch } from '@/app/api/_graphql/keystone'
 
 export type LegislatorFromRes = {
   proposalSuccessCount?: number

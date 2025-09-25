@@ -1,17 +1,21 @@
-import { sortByCountDesc } from '@/fetchers/utils'
+'use client'
+
 // type
 import type {
   FetchTopNTopicsParams,
   TopNTopicData,
 } from '@/fetchers/server/topic'
 
+// global var
+const apiBase = process.env.NEXT_PUBLIC_API_URL as string
+
 /* fetchTopTopicsForLegislator
  *   fetch top 5 topic which given legislator has more speeches in given terms & session
  */
-export type TopTopic = {
+export type Topic = {
   slug: string
-  title: string
-  speechesCount: number
+  name: string
+  count: number
 }
 
 export const fetchTopTopicsForLegislator = async ({
@@ -22,46 +26,20 @@ export const fetchTopTopicsForLegislator = async ({
   legislatorSlug: string
   legislativeMeeting: number
   legislativeMeetingSession: number[]
-}): Promise<TopTopic[]> => {
-  const url = process.env.NEXT_PUBLIC_API_URL as string
-  const speechesWhere = {
-    legislativeMeeting: {
-      term: {
-        equals: legislativeMeeting,
-      },
-    },
-    legislativeMeetingSession: {
-      term: {
-        in: legislativeMeetingSession,
-      },
-    },
-    legislativeYuanMember: {
-      legislator: {
-        slug: {
-          equals: legislatorSlug,
-        },
-      },
-    },
+}): Promise<Topic[]> => {
+  if (!legislatorSlug) {
+    return []
   }
+
+  let url = `${apiBase}/legislator/${encodeURIComponent(
+    legislatorSlug
+  )}/topic?key=term&mt=${encodeURIComponent(legislativeMeeting)}&top=5`
+  if (legislativeMeetingSession) {
+    url = url.concat(`&sts=${legislativeMeetingSession}`)
+  }
+
   const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        query TopTopicsForLegislator($speechesWhere: SpeechWhereInput!) {
-          topics {
-            slug
-            title
-            speechesCount(where: $speechesWhere)
-          }
-        }
-      `,
-      variables: {
-        speechesWhere,
-      },
-    }),
+    method: 'GET',
   })
 
   if (!res.ok) {
@@ -71,14 +49,7 @@ export const fetchTopTopicsForLegislator = async ({
   }
 
   const data = await res.json()
-
-  // Sort topics by speech count because the GraphQL schema doesn't support ordering by speechesCount directly
-  const sortedTopics = data.data.topics
-    .filter((topic) => topic.speechesCount > 0)
-    .sort((a, b) => b.speechesCount - a.speechesCount)
-    .slice(0, 5)
-
-  return sortedTopics
+  return data?.data
 }
 
 /* fetchTopNTopics
@@ -92,44 +63,18 @@ export const fetchTopNTopics = async ({
   legislativeMeetingSessionIds = [],
   partyIds = [],
 }: FetchTopNTopicsParams): Promise<TopNTopicData> => {
-  const query = `
-    query TopicsOrderBySpeechCount($meetingId: Int!, $take: Int, $sessionIds: [Int], $partyIds: [Int], $skip: Int) {
-      topicsOrderBySpeechCount(meetingId: $meetingId, take: $take, sessionIds: $sessionIds, skip: $skip, partyIds: $partyIds) {
-        legislatorCount
-        slug
-        speechCount
-        title
-        legislators {
-          id
-          count
-          name
-          imageLink
-          slug
-          party
-          image {
-            imageFile {
-              url
-            }
-          }
-        }
-      }
-    }
-  `
-  const variables = {
-    take,
-    skip,
-    meetingId: Number(legislativeMeetingId),
-    sessionIds: legislativeMeetingSessionIds,
-    partyIds,
+  let url = `${apiBase}/topic?mid=${encodeURIComponent(
+    legislativeMeetingId
+  )}&take=${encodeURIComponent(take)}&skip=${encodeURIComponent(skip)}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
+  }
+  if (partyIds) {
+    url = url.concat(`&pids=${partyIds}`)
   }
 
-  const url = process.env.NEXT_PUBLIC_API_URL as string
   const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables }),
+    method: 'GET',
   })
 
   if (!res.ok) {
@@ -138,8 +83,7 @@ export const fetchTopNTopics = async ({
     )
   }
   const data = await res.json()
-  const topics = data?.data?.topicsOrderBySpeechCount || []
-  return topics
+  return data?.data || []
 }
 
 /* fetchTopicOfALegislator
@@ -162,61 +106,24 @@ export const fetchTopicOfALegislator = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds,
 }: FetchTopicOfALegislatorParams) => {
-  const url = process.env.NEXT_PUBLIC_API_URL as string
-  const query = `
-    query GetTopicOfALegislator($speechesWhere: SpeechWhereInput!) {
-      topics {
-        slug
-        title
-        speechesCount(where: $speechesWhere)
-      }
-    }
-  `
-  const variables = {
-    speechesWhere: {
-      legislativeYuanMember: {
-        legislator: {
-          slug: {
-            equals: slug,
-          },
-        },
-      },
-      legislativeMeeting: {
-        id: {
-          equals: legislativeMeetingId,
-        },
-      },
-    },
+  if (!slug) {
+    return []
   }
-  if (legislativeMeetingSessionIds && legislativeMeetingSessionIds.length > 0) {
-    variables.speechesWhere['legislativeMeetingSession'] = {
-      id: {
-        in: legislativeMeetingSessionIds,
-      },
-    }
+
+  let url = `${apiBase}/legislator/${encodeURIComponent(
+    slug
+  )}/topic?key=id&mid=${encodeURIComponent(legislativeMeetingId)}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
   }
+
   const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables }),
+    method: 'GET',
   })
 
   if (!res.ok) {
     throw new Error(`Failed to fetch topics of a legislator: ${slug}`)
   }
   const data = await res.json()
-
-  // map data & sort by speech counts
-  const topics = data?.data?.topics || []
-  const topicsWithCounts: TopicForFilter[] = topics.map((topicFromRes) => ({
-    count: topicFromRes.speechesCount,
-    name: topicFromRes.title,
-    ...topicFromRes,
-  }))
-  const topicOrderBySpeechCount = topicsWithCounts
-    .filter((topic) => topic.count > 0)
-    .sort(sortByCountDesc)
-  return topicOrderBySpeechCount
+  return data?.data
 }
