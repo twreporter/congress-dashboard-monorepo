@@ -5,6 +5,9 @@ import {
   excludeReadOnlyRoles,
   withReadOnlyRoleFieldMode,
   hideReadOnlyRoles,
+  allowRoles,
+  RoleEnum,
+  hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 
@@ -51,14 +54,35 @@ const listConfigurations = list({
       defaultFieldMode: withReadOnlyRoleFieldMode,
     },
     hideCreate: hideReadOnlyRoles,
-    hideDelete: hideReadOnlyRoles,
+    hideDelete: hideNotAllowDeleteRoles,
   },
   access: {
     operation: {
       query: allowAllRoles(),
       create: excludeReadOnlyRoles(),
       update: excludeReadOnlyRoles(),
-      delete: excludeReadOnlyRoles(),
+      delete: allowRoles([RoleEnum.Owner]),
+    },
+  },
+  hooks: {
+    afterOperation: {
+      delete: async ({ originalItem, context }) => {
+        const { session } = context
+        const { data } = session
+        const { id } = originalItem
+        console.log(
+          JSON.stringify({
+            severity: 'INFO',
+            message: `Committee Member Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+            context: {
+              listKey: 'Committee Member',
+              itemId: id,
+              userEmail: data.email,
+              userName: data.name,
+            },
+          })
+        )
+      },
     },
   },
 })

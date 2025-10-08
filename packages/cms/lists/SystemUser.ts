@@ -4,6 +4,7 @@ import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
+  hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 
@@ -69,13 +70,14 @@ const listConfigurations = list({
         }
       },
     },
+    hideDelete: hideNotAllowDeleteRoles,
   },
   access: {
     operation: {
       query: allowAllRoles(),
       create: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
       update: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
-      delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
+      delete: allowRoles([RoleEnum.Owner]),
     },
     item: {
       update: ({ session, inputData, item }) => {
@@ -106,7 +108,27 @@ const listConfigurations = list({
       },
     },
   },
-  hooks: {},
+  hooks: {
+    afterOperation: {
+      delete: async ({ originalItem, context }) => {
+        const { session } = context
+        const { data } = session
+        const { id } = originalItem
+        console.log(
+          JSON.stringify({
+            severity: 'INFO',
+            message: `System User Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+            context: {
+              listKey: 'System User',
+              itemId: id,
+              userEmail: data.email,
+              userName: data.name,
+            },
+          })
+        )
+      },
+    },
+  },
 })
 
 export default listConfigurations

@@ -7,6 +7,8 @@ import {
   excludeReadOnlyRoles,
   RoleEnum,
   hideReadOnlyRoles,
+  allowRoles,
+  hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import {
@@ -920,13 +922,7 @@ const listConfigurations = list({
       initialSort: { field: 'id', direction: 'DESC' },
       pageSize: 10,
     },
-    hideDelete: ({ session }) => {
-      const role = session?.data?.role
-      if ([RoleEnum.Owner].includes(role)) {
-        return true
-      }
-      return false
-    },
+    hideDelete: hideNotAllowDeleteRoles,
     itemView: { defaultFieldMode: 'read' },
     hideCreate: hideReadOnlyRoles,
   },
@@ -936,7 +932,7 @@ const listConfigurations = list({
       query: allowAllRoles(),
       create: excludeReadOnlyRoles(),
       update: excludeReadOnlyRoles(),
-      delete: excludeReadOnlyRoles(),
+      delete: allowRoles([RoleEnum.Owner]),
     },
   },
 
@@ -1005,6 +1001,25 @@ const listConfigurations = list({
         if (!importHandler) return
         const queries = await importHandler(csvData, context)
         await executeImportQueries(queries, context)
+      },
+    },
+    afterOperation: {
+      delete: async ({ originalItem, context }) => {
+        const { session } = context
+        const { data } = session
+        const { id } = originalItem
+        console.log(
+          JSON.stringify({
+            severity: 'INFO',
+            message: `Import Record Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+            context: {
+              listKey: 'Import Record',
+              itemId: id,
+              userEmail: data.email,
+              userName: data.name,
+            },
+          })
+        )
       },
     },
   },

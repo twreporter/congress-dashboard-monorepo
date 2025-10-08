@@ -114,6 +114,25 @@ const listConfigurations = list({
         }
       },
     },
+    afterOperation: {
+      delete: async ({ originalItem, context }) => {
+        const { session } = context
+        const { data } = session
+        const { id } = originalItem
+        console.log(
+          JSON.stringify({
+            severity: 'INFO',
+            message: `Selected Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+            context: {
+              listKey: 'Selected',
+              itemId: id,
+              userEmail: data.email,
+              userName: data.name,
+            },
+          })
+        )
+      },
+    },
   },
 })
 
