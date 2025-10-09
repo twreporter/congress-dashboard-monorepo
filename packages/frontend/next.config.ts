@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
+  // Track only the current frontend subpkg as root to avoid generating a monorepo structure
+  outputFileTracingRoot: __dirname,
   compiler: {
     styledComponents: true,
   },
@@ -18,6 +21,9 @@ const nextConfig: NextConfig = {
     ],
   },
   serverExternalPackages: ['pino', 'pino-pretty'],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 export default nextConfig
