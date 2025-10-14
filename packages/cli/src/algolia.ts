@@ -16,8 +16,8 @@ export type SpeechRecord = {
   slug: string
   title: string
   date: string
-  term?: number
-  session?: number
+  meetingTerm: number
+  sessionTerm?: number
   summary?: string
   legislatorName?: string
 }
@@ -25,8 +25,7 @@ export type SpeechRecord = {
 export type TopicRecord = {
   name: string
   slug: string
-  term: number
-  session: number
+  meetingTerm: number
   desc: string
   lastSpeechAt: string
   relatedMessageCount: number
@@ -36,7 +35,7 @@ export type TopicRecord = {
 export type LegislatorRecord = {
   slug: string
   name: string
-  term: number
+  meetingTerm: number
   lastSpeechAt: string
   desc: string
   objectID: string
@@ -57,8 +56,8 @@ export async function uploadSpeeches(records: SpeechRecord[]) {
         records.map((r) => {
           return {
             slug: r.slug,
-            term: r.term,
-            session: r.session,
+            meetingTerm: r.meetingTerm,
+            sessionTerm: r.sessionTerm,
           }
         })
       )
@@ -85,8 +84,7 @@ export async function uploadTopics(records: TopicRecord[]) {
         records.map((r) => {
           return {
             slug: r.slug,
-            term: r.term,
-            session: r.session,
+            meetingTerm: r.meetingTerm,
           }
         })
       )
@@ -113,7 +111,7 @@ export async function uploadLegislators(records: LegislatorRecord[]) {
         records.map((r) => {
           return {
             slug: r.slug,
-            term: r.term,
+            meetingTerm: r.meetingTerm,
           }
         })
       )
