@@ -34,7 +34,7 @@ const ModalContainer = styled.div<{ $isOpen: boolean }>`
   top: 0px;
   right: 0px;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   background-color: ${colorOpacity['black_0.2']};
   justify-content: center;
   align-items: center;
@@ -100,7 +100,7 @@ const Footer = styled.div`
     padding: 24px;
     gap: 10px;
     border-top: 1px solid ${colorGrayscale.gray300};
-    position:fixed;
+    position: fixed;
     width: 100%;
     bottom: 0;
   `}

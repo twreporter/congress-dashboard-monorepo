@@ -10,6 +10,7 @@ const _ = {
 }
 
 type LegislatorWithSpeechCount = {
+  id: number
   slug: string
   name: string
   avatar: string
@@ -27,6 +28,7 @@ type PartyData = {
 
 type SpeechFromRes = {
   legislativeYuanMember: {
+    id: number
     legislator: {
       name: string
       slug: string
@@ -68,6 +70,7 @@ const fetchTopNLegislatorsOfATopic = async ({
     query GetTopLegislatorsBySpeechCount($where: SpeechWhereInput!) {
       speeches(where: $where) {
         legislativeYuanMember {
+          id
           legislator {
             slug
             name
@@ -184,6 +187,7 @@ const fetchTopNLegislatorsOfATopic = async ({
       if (!acc[slug]) {
         acc[slug] = {
           ...legislator,
+          id: speech.legislativeYuanMember.id,
           slug,
           avatar: getImageLink(legislator),
           partyAvatar: getImageLink(speech.legislativeYuanMember.party),

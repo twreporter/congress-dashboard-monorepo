@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { GoogleTagManager } from '@next/third-parties/google'
 // utils
 import StyledComponentsRegistry from '@/utils/style-registry'
@@ -15,6 +15,12 @@ import Feedback from '@/components/feedback'
 import { ScrollProvider } from '@/contexts/scroll-context'
 // constants
 import { OG_IMAGE_URL } from '@/constants'
+
+export const viewport: Viewport = {
+  viewportFit: 'cover',
+  width: 'device-width',
+  initialScale: 1,
+}
 
 export const metadata: Metadata = {
   title: '報導者觀測站：一起監督立委議員問政',
