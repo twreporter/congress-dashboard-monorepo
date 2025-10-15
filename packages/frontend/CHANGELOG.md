@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.0...@twreporter/congress-dashboard-frontend@1.6.1-rc.0) (2025-10-15)
+
+### Bug Fixes
+
+- **frontend:** hamburger menu feedback ([47126c7](https://github.com/twreporter/congress-dashboard-monorepo/commit/47126c7c9eb42b8f240bbac30f4d93e4117a4c7d))
+
+# [1.6.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.0-rc.1...@twreporter/congress-dashboard-frontend@1.6.0) (2025-09-25)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.6.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.0-rc.0...@twreporter/congress-dashboard-frontend@1.6.0-rc.1) (2025-09-25)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend

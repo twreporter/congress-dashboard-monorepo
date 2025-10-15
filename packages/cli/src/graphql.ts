@@ -1,7 +1,9 @@
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 import * as dotenv from 'dotenv'
-import { dryrunState } from './state/dryrun'
+
+// @ts-ignore @twreporter/errors lacks of type definition
+import errors from '@twreporter/errors'
 
 dotenv.config()
 
@@ -21,28 +23,24 @@ const headlessAccount = {
 }
 const apiEndpoint = process.env.GRAPHQL_ENDPOINT
 
-// Type definitions for topic-related speech counts
-type MemberSpeechCount = {
-  memberId: string
-  name: string
-  count: number
-}
-
-// Type for basic topic information
-type TopicInfo = {
+// Topic data structure
+export type TopicModel = {
   id: string
   slug: string
   title: string
-  lastSpeechAt: string // ISO 8601 formatted date string
-  meetingTerm: number
-  sessionTerm: number
-}
-
-// Composite model for topic statistics
-export type TopicModel = {
-  topicInfo: TopicInfo
-  distinctMemberCount: number
-  members: MemberSpeechCount[]
+  speeches: {
+    id: number
+    date: string
+    legislativeMeeting: {
+      term: number
+    }
+    legislativeYuanMember: {
+      id: number
+      legislator: {
+        name: string
+      } | null
+    } | null
+  }[]
 }
 
 // Legislator data structure
@@ -138,10 +136,11 @@ async function fetchKeystoneToken() {
   return sessionToken
 }
 
-// Async generator for iterating over speeches with recent updates
+// Async generator for iterating over speeches in the specific meeting and session term
 export async function* speechIterator(
-  updatedAfter: string,
-  take = 10
+  meetingTerm: number,
+  take = 10,
+  sessionTerm?: number
 ): AsyncGenerator<SpeechModel[], void, unknown> {
   const keystoneToken = await fetchKeystoneToken()
   let cursor: { slug: string } | null = null
@@ -149,17 +148,34 @@ export async function* speechIterator(
   let hasMore = true
 
   while (hasMore) {
-    // Fetch a page of recent speeches
-    const res: AxiosResponse<{
+    let res: AxiosResponse<{
+      errors: any
       data: {
         speeches: SpeechModel[]
       }
-    }> = await axios.post(
-      apiEndpoint,
-      {
-        query: `
-          query Speeches($orderBy: [SpeechOrderByInput!]!, $take: Int, $skip: Int!, $cursor: SpeechWhereUniqueInput, $where: SpeechWhereInput!) {
-            speeches(orderBy: $orderBy, take: $take, skip: $skip, cursor: $cursor, where: $where) {
+    }>
+    try {
+      // Page speeches by meeting term (and optional session term),
+      // ordered by slug asc, with cursor pagination.
+      // Returns core fields + meeting/session term + legislator name.
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query Speeches(
+            $orderBy: [SpeechOrderByInput!]!
+            $take: Int
+            $skip: Int!
+            $cursor: SpeechWhereUniqueInput
+            $where: SpeechWhereInput!
+          ) {
+            speeches(
+              orderBy: $orderBy
+              take: $take
+              skip: $skip
+              cursor: $cursor
+              where: $where
+            ) {
               id
               slug
               title
@@ -180,26 +196,47 @@ export async function* speechIterator(
               }
             }
           }
-        `,
-        variables: {
-          take,
-          skip,
-          cursor,
-          orderBy: [{ slug: 'asc' }],
-          where: {
-            updatedAt: {
-              gte: new Date(updatedAfter),
+          `,
+          variables: {
+            take,
+            skip,
+            cursor,
+            orderBy: [{ slug: 'asc' }],
+            where: {
+              legislativeMeeting: {
+                term: {
+                  equals: meetingTerm,
+                },
+              },
+              ...(sessionTerm
+                ? {
+                    legislativeMeetingSession: {
+                      term: {
+                        equals: sessionTerm,
+                      },
+                    },
+                  }
+                : {}),
             },
           },
         },
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${keystoneToken}`,
-        },
-      }
-    )
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
+
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `Speeches` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
 
     const speeches = res.data.data.speeches
 
@@ -225,268 +262,249 @@ export async function* speechIterator(
 
 // Async generator for iterating over topic statistics from recently updated speeches
 export async function* topicIterator(
-  updatedAfter: string,
+  meetingTerm: number,
   take = 10
 ): AsyncGenerator<TopicModel[], void, unknown> {
   const keystoneToken = await fetchKeystoneToken()
-  let cursor: string | null = null
+  let cursor: { slug: string } | null = null
   let skip = 0
   let hasMore = true
 
   while (hasMore) {
-    // Fetch a page of recent speeches
-    const res: AxiosResponse<{
+    let res: AxiosResponse<{
+      errors: any
       data: {
-        recentSpeechTopicStats: {
-          topics: TopicModel[]
-          speeches: { id: string }[]
-        }
+        topics: TopicModel[]
       }
-    }> = await axios.post(
-      apiEndpoint,
-      {
-        query: `
-          query RecentSpeechTopicStats($take: Int, $skip: Int, $updatedAfter: CalendarDay, $debug: Boolean, $cursor: ID) {
-            recentSpeechTopicStats(take: $take, skip: $skip, updatedAfter: $updatedAfter, debug: $debug, cursor: $cursor) {
-              topics {
-                topicInfo {
+    }>
+
+    try {
+      // Page topics (ordered by slug) and include each topic’s speeches filtered by meetingTerm.
+      // Cursor-based pagination applies to topics, not speeches.
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query Topics(
+            $where: TopicWhereInput!
+            $speechesWhere: SpeechWhereInput!
+            $orderBy: [TopicOrderByInput!]!
+            $cursor: TopicWhereUniqueInput
+            $skip: Int!
+            $take: Int
+          ) {
+            topics(
+              where: $where
+              orderBy: $orderBy
+              cursor: $cursor
+              skip: $skip
+              take: $take
+            ) {
+              id
+              title
+              slug
+              speeches(where: $speechesWhere) {
+                date
+                legislativeMeeting {
+                  term
+                }
+                legislativeYuanMember {
                   id
-                  title
-                  slug
-                  lastSpeechAt
-                  meetingTerm
-                  sessionTerm
+                  legislator {
+                    name
+                    id
+                  }
                 }
-                distinctMemberCount
-                members {
-                  memberId
-                  name
-                  count
-                }
-              }
-              speeches {
-                id
               }
             }
           }
-        `,
-        variables: {
-          updatedAfter,
-          take,
-          skip,
-          cursor,
-          debug: dryrunState.isEnabled(),
+          `,
+          variables: {
+            where: {
+              speeches: {
+                some: {
+                  legislativeMeeting: {
+                    term: {
+                      equals: meetingTerm,
+                    },
+                  },
+                },
+              },
+            },
+            speechesWhere: {
+              legislativeMeeting: {
+                term: {
+                  equals: meetingTerm,
+                },
+              },
+            },
+            take,
+            skip,
+            cursor,
+            orderBy: [{ slug: 'asc' }],
+          },
         },
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${keystoneToken}`,
-        },
-      }
-    )
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
 
-    const stats = res.data.data.recentSpeechTopicStats
-    const speeches = stats.speeches
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `Topics` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
+
+    const topics = res.data.data.topics
 
     // End iteration if no more speeches
-    if (speeches.length === 0) {
+    if (topics.length === 0) {
       hasMore = false
     }
 
-    yield stats.topics
+    yield topics
 
     // Determine whether to fetch the next page
-    if (speeches.length < take) {
+    if (topics.length < take) {
       hasMore = false
     } else {
       // Use the last speech ID as the cursor for the next fetch
-      cursor = speeches?.[speeches.length - 1]?.id
+      cursor = {
+        slug: topics?.[topics.length - 1]?.slug,
+      }
       skip = 1 // Skip cursor record
     }
   }
 }
 
-// Async generator for iterating over legislators with recent updates or speeches
+// Async generator for iterating over legislators in the specific meeting term
 export async function* legislatorIterator(
-  _updatedAfter: string,
+  meetingTerm: number,
   take = 10
 ): AsyncGenerator<LegislatorModel[]> {
   const keystoneToken = await fetchKeystoneToken()
   let skip = 0
   let hasMore = true
-  const updatedAfter = new Date(_updatedAfter)
 
   while (hasMore) {
-    // Query legislators who have been updated or have speeches after the given date
-    const res: AxiosResponse<{
+    let res: AxiosResponse<{
+      errors: any
       data: {
         legislativeYuanMembers: LegislatorModel[]
       }
-    }> = await axios.post(
-      apiEndpoint,
-      {
-        query: `
-          query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!, $take: Int, $skip: Int, $orderBy: [LegislativeYuanMemberOrderByInput!]!) {
-            legislativeYuanMembers(where: $where, take: $take, skip: $skip, orderBy: $orderBy) {
+    }>
+
+    try {
+      // Query a paginated list of Legislative Yuan members (offset-based via take/skip),
+      // filtered by a specific legislative meeting term (`meetingTerm`).
+      // The result includes:
+      //   - Member metadata (id, type, constituency, note)
+      //   - Legislator info (slug, name, imageLink)
+      //   - Party info (name, images)
+      //   - Legislative meeting term
+      //   - The latest speech (speeches ordered by date desc, limited to 1)
+      //   - Committees the legislator joins
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query LegislativeYuanMembers(
+            $orderBy: [LegislativeYuanMemberOrderByInput!]!
+            $take: Int
+            $skip: Int!
+            $where: LegislativeYuanMemberWhereInput!
+          ) {
+            legislativeYuanMembers(
+              orderBy: $orderBy
+              take: $take
+              skip: $skip
+              where: $where
+            ) {
               id
-              legislator { 
-                name 
-              } 
-              legislativeMeeting {
-                term
-              }
-            }
-          }
-        `,
-        variables: {
-          where: {
-            OR: [
-              {
-                speeches: {
-                  some: {
-                    updatedAt: {
-                      gte: updatedAfter,
-                    },
-                  },
-                },
-              },
-              {
-                updatedAt: {
-                  gte: updatedAfter,
-                },
-              },
-            ],
-            legislativeMeeting: {
-              term: {
-                gte: 0,
-              },
-            },
-          },
-          take,
-          skip,
-          orderBy: [{ updatedAt: 'asc' }],
-        },
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${keystoneToken}`,
-        },
-      }
-    )
-
-    const membersToUpdate = res.data.data.legislativeYuanMembers
-
-    if (membersToUpdate.length === 0) {
-      hasMore = false
-    }
-
-    // Collect unique legislator IDs and build detailed queries
-    const ids: string[] = []
-    const memberWithSpeechQueryTasks = membersToUpdate.reduce((tasks, m) => {
-      const id = m.id
-      if (ids.includes(id)) return tasks
-
-      ids.push(id)
-
-      tasks.push(async () => {
-        // Collect legislator data in the specified meeting term
-        const _res: AxiosResponse<{
-          data: {
-            legislativeYuanMember: LegislatorModel
-          }
-        }> = await axios.post(
-          apiEndpoint,
-          {
-            query: `
-              query LegislativeYuanMember($where: LegislativeYuanMemberWhereUniqueInput!, $speechWhere: SpeechWhereInput!) {
-                legislativeYuanMember(where: $where) {
-                  id
-                  type
-                  constituency
-                  note
-                  party {
-                    name
-                    imageLink
-                    image {
-                      imageFile {
-                        url
-                      }
-                    }
-                  }
-                  legislator {
-                    slug
-                    name
-                    imageLink
-                  }
-                  legislativeMeeting {
-                    term
-                  }
-                  speeches(where: $speechWhere, take: 1, orderBy: [{ date: desc }]) {
-                    date
-                  }
-                  sessionAndCommittee {
-                    legislativeMeetingSession {
-                      term
-                    }
-                    committee {
-                      name
-                    }
+              type
+              constituency
+              note
+              party {
+                name
+                imageLink
+                image {
+                  imageFile {
+                    url
                   }
                 }
               }
-            `,
-            variables: {
-              where: { id: m.id },
-              speechWhere: {
-                legislativeMeeting: {
-                  term: { equals: m.legislativeMeeting?.term },
+              legislator {
+                slug
+                name
+                imageLink
+              }
+              legislativeMeeting {
+                term
+              }
+              speeches(take: 1, orderBy: [{ date: desc }]) {
+                date
+              }
+              sessionAndCommittee {
+                legislativeMeetingSession {
+                  term
+                }
+                committee {
+                  name
+                }
+              }
+            }
+          }
+          `,
+          variables: {
+            where: {
+              legislativeMeeting: {
+                term: {
+                  equals: meetingTerm,
                 },
               },
             },
+            take,
+            skip,
+            orderBy: [{ id: 'asc' }],
           },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${keystoneToken}`,
-            },
-          }
-        )
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
 
-        return _res.data.data.legislativeYuanMember
-      })
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `LegislativeYuanMembers` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
 
-      return tasks
-    }, [] as (() => Promise<LegislatorModel>)[])
+    const members: LegislatorModel[] = res.data.data.legislativeYuanMembers
+    if (members.length === 0) {
+      hasMore = false
+    }
 
-    // Execute all detailed queries in controlled concurrent batches
-    const queryResults = await runInBatches(memberWithSpeechQueryTasks, 10)
-    const memberRecords: LegislatorModel[] = queryResults.flat()
-
-    yield memberRecords
+    yield members
 
     // Check if more data remains to be fetched
-    if (membersToUpdate.length < take) {
+    if (members.length < take) {
       hasMore = false
     } else {
       skip = skip + take
     }
   }
-}
-
-// Run an array of async tasks in batches to control concurrency
-async function runInBatches<T>(
-  tasks: (() => Promise<T>)[],
-  batchSize: number
-): Promise<T[]> {
-  const results: T[] = []
-
-  for (let i = 0; i < tasks.length; i += batchSize) {
-    const batch = tasks.slice(i, i + batchSize)
-    const batchResults = await Promise.all(batch.map((task) => task()))
-    results.push(...batchResults)
-  }
-
-  return results
 }
