@@ -15,6 +15,7 @@ import {
   RoleEnum,
   hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
+import { logger } from '../utils/logger'
 
 const listConfigurations = list({
   fields: {
@@ -92,17 +93,16 @@ const listConfigurations = list({
         const { session } = context
         const { data } = session
         const { id } = originalItem
-        console.log(
-          JSON.stringify({
-            severity: 'INFO',
-            message: `Legislator Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+        logger.info(
+          `Legislator Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+          {
             context: {
               listKey: 'Legislator',
               itemId: id,
               userEmail: data.email,
               userName: data.name,
             },
-          })
+          }
         )
       },
     },

@@ -10,6 +10,7 @@ import {
   hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
+import { logger } from '../utils/logger'
 import {
   MemberType,
   MEMBER_TYPE_OPTIONS,
@@ -209,17 +210,16 @@ const listConfigurations = list({
         const { session } = context
         const { data } = session
         const { id } = originalItem
-        console.log(
-          JSON.stringify({
-            severity: 'INFO',
-            message: `Legislative Yuan Member Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+        logger.info(
+          `Legislative Yuan Member Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+          {
             context: {
               listKey: 'Legislative Yuan Member',
               itemId: id,
               userEmail: data.email,
               userName: data.name,
             },
-          })
+          }
         )
       },
     },

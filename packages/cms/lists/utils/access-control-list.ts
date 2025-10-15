@@ -19,12 +19,12 @@ export const RoleEnum = {
 
 type AccessOperation = 'query' | 'create' | 'update' | 'delete'
 
-const readonlyRoles: string[] = [RoleEnum.Headless]
-const allowDeleteRoles: string[] = [RoleEnum.Owner]
+const readonlyRoles: readonly string[] = [RoleEnum.Headless]
+const allowDeleteRoles: readonly string[] = [RoleEnum.Owner]
 
 export const allowRoles =
   <Operation extends AccessOperation>(
-    roles: string[]
+    roles: readonly string[]
   ): ListOperationAccessControl<Operation, BaseListTypeInfo> =>
   ({ session }) => {
     if (envVars.nodeEnv === 'test') {
@@ -49,7 +49,7 @@ export const allowAllRoles = () => {
 
 export const denyRoles =
   <Operation extends AccessOperation>(
-    roles: string[]
+    roles: readonly string[]
   ): ListOperationAccessControl<Operation, BaseListTypeInfo> =>
   ({ session }) => {
     if (!Array.isArray(roles)) {

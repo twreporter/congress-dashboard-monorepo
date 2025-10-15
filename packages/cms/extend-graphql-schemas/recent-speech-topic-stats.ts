@@ -2,6 +2,7 @@
 import errors from '@twreporter/errors'
 import type { TypedKeystoneContext } from '../types/context'
 import { gql } from 'graphql-tag'
+import { logger } from '../utils/logger'
 
 export const recentSpeechTopicStatsTypeDefs = gql`
   type MemberSpeechCount {
@@ -157,20 +158,12 @@ export const recentSpeechTopicStatsResolvers = {
       context: TypedKeystoneContext
     ): Promise<RecentSpeechTopicStatsResult> => {
       try {
-        console.time(
-          JSON.stringify({
-            severity: 'INFO',
-            message: 'recentSpeechTopicStats executing',
-            jsonPayload: {
-              args: {
-                take,
-                skip,
-                cursor,
-                updatedAfter,
-              },
-            },
-          })
-        )
+        const startTs = Date.now()
+        logger.info('recentSpeechTopicStats executing', {
+          jsonPayload: {
+            args: { take, skip, cursor, updatedAfter },
+          },
+        })
 
         const speechRecords: SpeechRecord[] =
           await context.prisma.speech.findMany({
@@ -304,15 +297,9 @@ export const recentSpeechTopicStatsResolvers = {
         const topicRecords: TopicRecord[] = topicQueryResults.flat()
 
         if (debug) {
-          console.log(
-            JSON.stringify({
-              severity: 'DEBUG',
-              message: 'Prisma returned records.',
-              jsonPayload: {
-                topicRecords,
-              },
-            })
-          )
+          logger.debug('Prisma returned records.', {
+            jsonPayload: { topicRecords },
+          })
         }
 
         // Use a map to group topics uniquely by slug + meeting/session term
@@ -354,7 +341,11 @@ export const recentSpeechTopicStatsResolvers = {
               }
             }
 
-            const member = speech.legislativeYuanMember!
+            const member = speech.legislativeYuanMember
+            if (!member) {
+              // Should not happen due to the Prisma where clause, but keep safe guard for types
+              continue
+            }
             const memberMap = topicMap.get(topicMapKey)?.memberMap
             const memberId = member.id.toString()
             const existing = memberMap?.get(memberId)
@@ -397,32 +388,17 @@ export const recentSpeechTopicStatsResolvers = {
         })
 
         if (debug) {
-          console.log(
-            JSON.stringify({
-              severity: 'DEBUG',
-              message: 'Query returned value: ',
-              jsonPayload: {
-                topics,
-                speeches,
-              },
-            })
-          )
+          logger.debug('Query returned value', {
+            jsonPayload: { topics, speeches },
+          })
         }
 
-        console.timeEnd(
-          JSON.stringify({
-            severity: 'INFO',
-            message: 'recentSpeechTopicStats executing',
-            jsonPayload: {
-              args: {
-                take,
-                skip,
-                cursor,
-                updatedAfter,
-              },
-            },
-          })
-        )
+        logger.info('recentSpeechTopicStats executed', {
+          jsonPayload: {
+            args: { take, skip, cursor, updatedAfter },
+            durationMs: Date.now() - startTs,
+          },
+        })
 
         return { topics, speeches }
       } catch (_err) {
@@ -440,15 +416,12 @@ export const recentSpeechTopicStatsResolvers = {
           }
         )
         // Trigger Error Reporting
-        console.log(
-          JSON.stringify({
-            severity: 'ERROR',
-            message: errors.helpers.printAll(err, {
-              withStack: true,
-              withPayload: true,
-            }),
-          })
-        )
+        logger.error('recentSpeechTopicStats failed', {
+          error: errors.helpers.printAll(err, {
+            withStack: true,
+            withPayload: true,
+          }),
+        })
         throw err
       }
     },
