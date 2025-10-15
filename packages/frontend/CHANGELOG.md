@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.1-rc.0...@twreporter/congress-dashboard-frontend@1.6.1-rc.1) (2025-10-15)
+
+### Bug Fixes
+
+- **frontend:** filterd legislator cannot get topic ([9e1e022](https://github.com/twreporter/congress-dashboard-monorepo/commit/9e1e0228e7a080f32080aa11494693fdcd6013e0))
+- **frontend:** fix ios dynamic viewport height css ([38c20f9](https://github.com/twreporter/congress-dashboard-monorepo/commit/38c20f92c7fcb2956feff4e76e89fb3b65b6f793))
+
 ## [1.6.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.0...@twreporter/congress-dashboard-frontend@1.6.1-rc.0) (2025-10-15)
 
 ### Bug Fixes
