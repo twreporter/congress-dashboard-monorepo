@@ -19,6 +19,7 @@ import {
 } from './fields/uploader'
 import { getTwreporterArticle } from './views/related-article/util'
 import env from '../environment-variables'
+import { logger } from '../utils/logger'
 
 /**
  * Validate CSV structure against expected headers and required fields
@@ -1008,17 +1009,16 @@ const listConfigurations = list({
         const { session } = context
         const { data } = session
         const { id } = originalItem
-        console.log(
-          JSON.stringify({
-            severity: 'INFO',
-            message: `Import Record Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+        logger.info(
+          `Import Record Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+          {
             context: {
               listKey: 'Import Record',
               itemId: id,
               userEmail: data.email,
               userName: data.name,
             },
-          })
+          }
         )
       },
     },
