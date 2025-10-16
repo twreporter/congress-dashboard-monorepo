@@ -5,8 +5,12 @@ import {
   excludeReadOnlyRoles,
   withReadOnlyRoleFieldMode,
   hideReadOnlyRoles,
+  allowRoles,
+  RoleEnum,
+  hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
 import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
+import { logger } from '../utils/logger'
 
 const listConfigurations = list({
   fields: {
@@ -44,14 +48,34 @@ const listConfigurations = list({
       defaultFieldMode: withReadOnlyRoleFieldMode,
     },
     hideCreate: hideReadOnlyRoles,
-    hideDelete: hideReadOnlyRoles,
+    hideDelete: hideNotAllowDeleteRoles,
   },
   access: {
     operation: {
       query: allowAllRoles(),
       create: excludeReadOnlyRoles(),
       update: excludeReadOnlyRoles(),
-      delete: excludeReadOnlyRoles(),
+      delete: allowRoles([RoleEnum.Owner]),
+    },
+  },
+  hooks: {
+    afterOperation: {
+      delete: async ({ originalItem, context }) => {
+        const { session } = context
+        const { data } = session
+        const { id } = originalItem
+        logger.info(
+          `Committee Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+          {
+            context: {
+              listKey: 'Committee',
+              itemId: id,
+              userEmail: data.email,
+              userName: data.name,
+            },
+          }
+        )
+      },
     },
   },
 })

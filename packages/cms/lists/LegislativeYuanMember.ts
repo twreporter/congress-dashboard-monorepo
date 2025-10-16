@@ -5,8 +5,12 @@ import {
   excludeReadOnlyRoles,
   withReadOnlyRoleFieldMode,
   hideReadOnlyRoles,
+  allowRoles,
+  RoleEnum,
+  hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
+import { logger } from '../utils/logger'
 import {
   MemberType,
   MEMBER_TYPE_OPTIONS,
@@ -155,14 +159,14 @@ const listConfigurations = list({
       defaultFieldMode: withReadOnlyRoleFieldMode,
     },
     hideCreate: hideReadOnlyRoles,
-    hideDelete: hideReadOnlyRoles,
+    hideDelete: hideNotAllowDeleteRoles,
   },
   access: {
     operation: {
       query: allowAllRoles(),
       create: excludeReadOnlyRoles(),
       update: excludeReadOnlyRoles(),
-      delete: excludeReadOnlyRoles(),
+      delete: allowRoles([RoleEnum.Owner]),
     },
   },
   hooks: {
@@ -199,6 +203,24 @@ const listConfigurations = list({
           constituency !== undefined ? constituency : constituencyFromItem
         if (effectiveType === MemberType.Constituency && !effectiveConstituency)
           addValidationError('類別為區域時選區為必填')
+      },
+    },
+    afterOperation: {
+      delete: async ({ originalItem, context }) => {
+        const { session } = context
+        const { data } = session
+        const { id } = originalItem
+        logger.info(
+          `Legislative Yuan Member Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+          {
+            context: {
+              listKey: 'Legislative Yuan Member',
+              itemId: id,
+              userEmail: data.email,
+              userName: data.name,
+            },
+          }
+        )
       },
     },
   },

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.2.1-rc.0...@twreporter/congress-dashboard-cms@1.3.0-rc.0) (2025-10-16)
+
+### Bug Fixes
+
+- **cms:** logger for import record ([d00a208](https://github.com/twreporter/congress-dashboard-monorepo/commit/d00a208f5ca2c32cf358c9014501d49843c8626a))
+
+### Features
+
+- **cms:** implement role-based delete access and logging for various list configurations ([af2bb33](https://github.com/twreporter/congress-dashboard-monorepo/commit/af2bb335d0c83b9ef2ee1452462866adbdafb0ec))
+- **cms:** implement structured logging ([571d8a0](https://github.com/twreporter/congress-dashboard-monorepo/commit/571d8a02f7fe0b8988a68bed4c50872d4b8854a8))
+
 ## [1.2.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.2.0...@twreporter/congress-dashboard-cms@1.2.1-rc.0) (2025-10-14)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms

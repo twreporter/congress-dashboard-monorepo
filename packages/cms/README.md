@@ -40,3 +40,25 @@ or
 ```bash
 npm run dev
 ```
+
+## Structured logging (Cloud Logging)
+
+We use a small, dependency-free structured logger that prints one JSON object per line to stdout. Logs are compatible with Google Cloud Logging (GCP) and include severity, timestamp, and basic runtime context.
+
+- Logger location: `packages/cms/utils/logger.ts`
+- Methods: `logger.debug/info/warn/error(message, fields?)`
+- Example:
+
+```ts
+import { logger } from './utils/logger'
+
+logger.info('topic deleted', {
+	context: { listKey: 'Topic', itemId: 123 },
+	jsonPayload: { reason: 'admin request' },
+})
+```
+
+Notes:
+- Top-level fields include `severity`, `message`, `timestamp`, and a `context` section with `service`, `env` and `releaseBranch`.
+- Prefer `jsonPayload` for larger objects to keep top-level flat fields readable in Cloud Logging.
+- For performance timing, record a start timestamp and log `durationMs` when finished.
