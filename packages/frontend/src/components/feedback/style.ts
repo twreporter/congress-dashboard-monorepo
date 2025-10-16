@@ -15,7 +15,7 @@ export const Box = styled.div`
   width: 100%;
 
   ${mq.mobileOnly`
-    height: 100%;  
+    height: 100dvh;  
   `}
 `
 
@@ -56,13 +56,13 @@ export const ActionBlock = styled.div`
   gap: 16px;
   padding: 16px 24px;
   position: sticky;
-  bottom: 0;
+  bottom: env(safe-area-inset-bottom, 0);
   background-color: white;
 
   ${mq.mobileOnly`
     padding: 24px;
     gap: 10px;
-    top: calc(100% - ${mobileFooterHeight}px);
+    top: calc(100dvh - ${mobileFooterHeight}px);
     border-top: 1px solid ${colorGrayscale.gray300};
   `}
 `

@@ -117,8 +117,8 @@ const ContentBox = styled.div<{
   $isSearchMode: boolean
 }>`
   overflow-y: scroll;
-  height: 100%;
-  max-height: calc(100% - ${(props) => props.$topBoxHeight + bottomHeight}px);
+  height: 100dvh;
+  max-height: calc(100dvh - ${(props) => props.$topBoxHeight + bottomHeight}px);
   transition: all 0.4s ease-in-out;
   ${(props) =>
     props.$isSearchMode
@@ -177,7 +177,7 @@ const Text = styled(P2)`
 `
 const ConfirmBox = styled.div<{ $isLoading: boolean }>`
   position: ${(props) => (props.$isLoading ? 'fixed' : 'sticky')};
-  bottom: 0;
+  bottom: env(safe-area-inset-bottom, 0);
   z-index: 1;
   width: 100%;
 `

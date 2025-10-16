@@ -1328,19 +1328,6 @@ type Query {
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 
-  """
-  Goal:
-  Retrieve topics with speeches updated after the specified `updatedAfter` date,
-  and count the number of member speeches per topic.
-  
-  Returns:
-  - member speech counts grouped by topic
-  - a flat list of speeches whose `updatedAt` is after the `updatedAfter` date
-  
-  Speeches are derived from topics.
-  """
-  recentSpeechTopicStats(take: Int = 50, skip: Int = 0, cursor: ID, updatedAfter: CalendarDay, debug: Boolean = false): RecentSpeechTopicStatsResult!
-
   """Get top N topic of a legislator order by speech cound desc"""
   topNTopicsOfLegislators(legislatorIds: [Int!]!, meetingId: Int!, sessionIds: [Int] = [], take: Int = 10): [LegislatorWIthTopTopics]
 
@@ -1483,42 +1470,6 @@ type KeystoneAdminUISort {
 enum KeystoneAdminUISortDirection {
   ASC
   DESC
-}
-
-type MemberSpeechCount {
-  memberId: ID!
-  name: String!
-  count: Int!
-}
-
-type TopicInfo {
-  id: ID!
-  title: String!
-  slug: String!
-  lastSpeechAt: String!
-  meetingTerm: Int
-  sessionTerm: Int
-}
-
-type MemberSpeechCountByTopic {
-  topicInfo: TopicInfo!
-  distinctMemberCount: Int!
-  members: [MemberSpeechCount!]!
-}
-
-type SpeechSummary {
-  id: ID!
-  title: String!
-  meetingTerm: Int
-  sessionTerm: Int
-  date: String!
-  createdAt: String!
-  updatedAt: String!
-}
-
-type RecentSpeechTopicStatsResult {
-  topics: [MemberSpeechCountByTopic!]!
-  speeches: [SpeechSummary!]!
 }
 
 """custom type for topNTopicsOfLegislators"""
