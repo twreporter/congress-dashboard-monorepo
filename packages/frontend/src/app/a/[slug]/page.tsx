@@ -1,5 +1,3 @@
-// use ISR cache 2hr
-export const revalidate = 7200
 export const dynamicParams = true
 
 import { Metadata } from 'next'
