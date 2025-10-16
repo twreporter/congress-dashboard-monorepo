@@ -1,5 +1,4 @@
-// use ISR cache 2hr
-export const dynamic = 'auto'
+export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
 import { Metadata } from 'next'

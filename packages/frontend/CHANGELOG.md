@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.1-rc.1...@twreporter/congress-dashboard-frontend@1.6.1-rc.2) (2025-10-16)
+
+### Bug Fixes
+
+- **frontend:** force dynamic ([30f9553](https://github.com/twreporter/congress-dashboard-monorepo/commit/30f9553ca7d06eea4c0c19d47e46342bb5bae962))
+- **frontend:** remove isr cache ([0ee42c6](https://github.com/twreporter/congress-dashboard-monorepo/commit/0ee42c6a5efa518592d2f6364cb09a55317db68a))
+
 ## [1.6.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.1-rc.0...@twreporter/congress-dashboard-frontend@1.6.1-rc.1) (2025-10-15)
 
 ### Bug Fixes
