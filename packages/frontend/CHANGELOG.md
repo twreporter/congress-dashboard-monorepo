@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.1-rc.2...@twreporter/congress-dashboard-frontend@1.6.1-rc.3) (2025-10-17)
+
+### Bug Fixes
+
+- **frontend:** update Next.js to version 15.5.6 and add sharp dependency ([5f1ddb5](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f1ddb5e76e14b2c41d6a9ec1293cd7e2613fd9f))
+
 ## [1.6.1-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.1-rc.1...@twreporter/congress-dashboard-frontend@1.6.1-rc.2) (2025-10-16)
 
 ### Bug Fixes
