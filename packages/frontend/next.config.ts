@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
     ],
   },
   serverExternalPackages: ['pino', 'pino-pretty'],
+  experimental: {
+    preloadEntriesOnStart: false,
+  },
 }
 
 export default nextConfig

@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@1.1.0...lawmaker-cli@2.0.0-rc.0) (2025-10-14)
+
+### Code Refactoring
+
+- **cli:** rename term->meetingTerm and session->sessionTerm ([d91d72d](https://github.com/twreporter/congress-dashboard-monorepo/commit/d91d72db77c72bad4fb6bb25ddaec2ec8778e519))
+
+- feat(cli)!: replace --yesterday/updatedAfter with --meeting-term and --session-term ([347106f](https://github.com/twreporter/congress-dashboard-monorepo/commit/347106f0c79aa68a631aecb856c493af6d9a1a07))
+
+### BREAKING CHANGES
+
+- feed-algolia CLI options were reworked.
+  Update your scripts to use --meeting-term/--session-term instead of the removed flags.
+- **cli:** Algolia record fields have been renamed and updated,
+  clients must update queries accordingly.
+
 # [1.1.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@1.1.0-rc.0...lawmaker-cli@1.1.0) (2025-08-13)
 
 **Note:** Version bump only for package lawmaker-cli

@@ -7,6 +7,7 @@ import {
   hideReadOnlyRoles,
 } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
+import { logger } from '../utils/logger'
 
 const listConfigurations = list({
   fields: {
@@ -112,6 +113,24 @@ const listConfigurations = list({
         } else if (hasLegislator && hasTopic) {
           addValidationError('不能同時選擇委員和議題') // Cannot select both legislator and topic
         }
+      },
+    },
+    afterOperation: {
+      delete: async ({ originalItem, context }) => {
+        const { session } = context
+        const { data } = session
+        const { id } = originalItem
+        logger.info(
+          `Selected Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+          {
+            context: {
+              listKey: 'Selected',
+              itemId: id,
+              userEmail: data.email,
+              userName: data.name,
+            },
+          }
+        )
       },
     },
   },
