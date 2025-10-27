@@ -39,6 +39,7 @@ export type LegislatorFromRes = {
     meetingTermCount?: number
     meetingTermCountInfo?: string
   }
+  isActive: boolean
 }
 
 /** checkLegislatorExist
@@ -178,6 +179,7 @@ export const fetchLegislator = async ({
             term
           }
         }
+        isActive
       }
     }
   `
