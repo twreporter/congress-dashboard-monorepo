@@ -642,6 +642,7 @@ type LegislativeYuanMember {
   tooltip: String
   note: String
   proposalSuccessCount: Int
+  isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -667,6 +668,7 @@ input LegislativeYuanMemberWhereInput {
   tooltip: StringFilter
   note: StringFilter
   proposalSuccessCount: IntNullableFilter
+  isActive: BooleanFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -691,6 +693,11 @@ input StringNullableFilter {
   not: StringNullableFilter
 }
 
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
 input LegislativeYuanMemberOrderByInput {
   id: OrderDirection
   labelForCMS: OrderDirection
@@ -700,6 +707,7 @@ input LegislativeYuanMemberOrderByInput {
   tooltip: OrderDirection
   note: OrderDirection
   proposalSuccessCount: OrderDirection
+  isActive: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -717,6 +725,7 @@ input LegislativeYuanMemberUpdateInput {
   tooltip: String
   note: String
   proposalSuccessCount: Int
+  isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -752,6 +761,7 @@ input LegislativeYuanMemberCreateInput {
   tooltip: String
   note: String
   proposalSuccessCount: Int
+  isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }

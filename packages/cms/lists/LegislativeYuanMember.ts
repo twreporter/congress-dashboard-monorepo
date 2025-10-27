@@ -1,5 +1,11 @@
 import { list } from '@keystone-6/core'
-import { text, relationship, select, integer } from '@keystone-6/core/fields'
+import {
+  text,
+  relationship,
+  select,
+  integer,
+  checkbox,
+} from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -143,6 +149,10 @@ const listConfigurations = list({
     }),
     proposalSuccessCount: integer({
       label: '提案通過數',
+    }),
+    isActive: checkbox({
+      label: '是否該屆期現任',
+      defaultValue: true,
     }),
     createdAt: CREATED_AT(),
     updatedAt: UPDATED_AT(),
