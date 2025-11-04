@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.1...@twreporter/congress-dashboard-frontend@1.7.0-rc.0) (2025-11-04)
+
+### Features
+
+- **frontend:** isActive for legislator ([7b49824](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b49824693314e81cb15d3456246df86cdbddba6))
+
+## [1.6.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.1-rc.3...@twreporter/congress-dashboard-frontend@1.6.1) (2025-10-20)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 ## [1.6.1-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.6.1-rc.2...@twreporter/congress-dashboard-frontend@1.6.1-rc.3) (2025-10-17)
 
 ### Bug Fixes
