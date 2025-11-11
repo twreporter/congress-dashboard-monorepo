@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.3.0...@twreporter/congress-dashboard-cms@1.4.0-rc.0) (2025-11-04)
+
+### Features
+
+- **cms:** add isActive for legislative yuan member ([ab320ab](https://github.com/twreporter/congress-dashboard-monorepo/commit/ab320ab754a4113b3dfda2d809159ee9a4f7573b))
+
 # [1.3.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.3.0-rc.0...@twreporter/congress-dashboard-cms@1.3.0) (2025-10-20)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms

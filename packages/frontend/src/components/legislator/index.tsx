@@ -140,9 +140,10 @@ const Legislator: React.FC<LegislatorProps> = ({
 
   const { legislativeMeetings } = useLegislativeMeeting()
   useEffect(() => {
-    // if the legislator's meeting term matches the latest meeting term, set isLegislatorActive to true
+    // if the legislator's meeting term matches the latest meeting term and isActive is true, set isLegislatorActive to true
     if (
-      legislatorData.legislativeMeeting.term === legislativeMeetings[0]?.term
+      legislatorData.legislativeMeeting.term === legislativeMeetings[0]?.term &&
+      legislatorData.isActive
     ) {
       setIsLegislatorActive(true)
     } else {
