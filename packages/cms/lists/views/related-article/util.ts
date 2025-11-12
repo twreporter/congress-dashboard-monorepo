@@ -51,3 +51,21 @@ export const getTwreporterArticle = async (slug: string, hostname?: string) => {
   const data = await res.json()
   return data?.data
 }
+
+export const getTwreporterTopic = async (slug: string, hostname?: string) => {
+  const twreporterApiUrl = hostname ?? getTwreporterApiUrl()
+  const url = `${twreporterApiUrl}/v2/topics/${slug}?full=false`
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`topic not found, slug: ${slug}`)
+  }
+
+  const data = await res.json()
+  return data?.data
+}

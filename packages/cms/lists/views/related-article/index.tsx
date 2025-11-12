@@ -3,13 +3,20 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import styled from '@emotion/styled'
 // util
-import { getTwreporterArticle } from './util'
+import { getTwreporterArticle, getTwreporterTopic } from './util'
 // type
 import type {
   FieldControllerConfig,
   FieldController,
   FieldProps,
 } from '@keystone-6/core/types'
+// constants
+import {
+  RELATED_TYPE,
+  RELATED_TYPE_LABEL,
+  RELATED_TYPE_OPTION,
+  type RelatedType,
+} from './constants'
 // components
 import { FieldLabel, FieldContainer, TextInput } from '@keystone-ui/fields'
 import { Button } from '@keystone-ui/button'
@@ -29,7 +36,7 @@ const InputBox = styled.div`
 const Item = styled.div`
   background-color: white;
   display: flex;
-  justify-content: space-between;
+  gap: 8px;
   align-items: center;
   padding: 4px 8px;
   border: 1px solid #cdcdcd;
@@ -39,78 +46,127 @@ const Item = styled.div`
     margin-top: 0;
   }
 `
+const DeleteButton = styled(Button)`
+  margin-left: auto;
+`
+const TypeSelector = styled(Button)`
+  font-size: 1rem;
+  height: 38px;
+`
+const TypeBadge = styled.div`
+  color: #6b7280;
+  background-color: #eff3f6;
+  padding: 1px 12px;
+`
 const boxStyle = {
   border: '1px solid #e2e2e2',
 }
 
-type Slugs = string[]
+type Relateds = {
+  type: RelatedType
+  slug: string
+}[]
 export const Field = ({
   value,
   field,
   onChange,
 }: FieldProps<typeof controller>) => {
+  const [selectedType, setSelectedType] = useState<RelatedType>(
+    RELATED_TYPE.wwwArticle
+  )
   const [inputSlug, setInputSlug] = useState('')
-  const [slugs, setSlugs] = useState<Slugs>(value || [])
+  const [relateds, setRelateds] = useState<Relateds>(value || [])
+
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputSlug(e.target.value)
   }
-  const addSlug = async () => {
+
+  const onSelectTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedType(e.target.value as RelatedType)
+  }
+
+  const addRelated = async () => {
+    const relatedTypeLabel =
+      selectedType === RELATED_TYPE.wwwTopic ? '專題' : '文章'
     try {
-      const article = await getTwreporterArticle(inputSlug)
+      const fetcher =
+        selectedType === RELATED_TYPE.wwwTopic
+          ? getTwreporterTopic
+          : getTwreporterArticle
+      const item = await fetcher(inputSlug)
       alert(`
-        新增報導者相關文章:
-          ${article.title}
+        新增報導者相關${relatedTypeLabel}:
+          ${item.title}
       `)
-      setSlugs([inputSlug].concat(slugs))
+      setRelateds((relateds) =>
+        [{ type: selectedType, slug: inputSlug }].concat(relateds)
+      )
       setInputSlug('')
     } catch (err) {
       console.error(
-        `Failed to add twreporter article. slug: ${inputSlug}, err: ${err}`
+        `Failed to add ${selectedType}. slug: ${inputSlug}, err: ${err}`
       )
       alert(`
-        查無此文章，請確認文章 slug 並再試一次。
-        如文章 slug 正確請截圖回報產品經理。
+        查無此${relatedTypeLabel}，請確認${relatedTypeLabel} slug 並再試一次。
+        如${relatedTypeLabel} slug 正確請截圖回報產品經理。
       `)
     }
   }
-  const removeSlug = (slug: string) => {
-    setSlugs(_.without(slugs, slug))
+
+  const removeRelatedItem = (type: RelatedType, slug: string) => {
+    setRelateds(_.without(relateds, { type, slug }))
   }
 
   useEffect(() => {
     if (typeof onChange === 'function') {
-      onChange(slugs)
+      onChange(relateds)
     }
-  }, [slugs])
+  }, [relateds, onChange])
 
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
       <InputBox>
+        <TypeSelector
+          isBlock={false}
+          tone={'passive'}
+          size={'small'}
+          weight={'light'}
+          as="select"
+          name="相關文章類別"
+          onChange={onSelectTypeChange}
+        >
+          {RELATED_TYPE_OPTION.map(({ value, label }) => (
+            <option value={value} key={`type-option-${value}`}>
+              {label}
+            </option>
+          ))}
+        </TypeSelector>
         <TextInput value={inputSlug} onChange={onInputChange} />
-        <Button onClick={addSlug}>
+        <Button onClick={addRelated}>
           <SearchIcon />
         </Button>
       </InputBox>
-      {slugs.length > 0 ? (
+      {relateds.length > 0 ? (
         <Box
           background={'neutral100'}
           rounding={'medium'}
           padding={'medium'}
           style={boxStyle}
         >
-          {slugs.map((slug) => (
-            <Item key={`slug-${slug}`}>
+          {relateds.map(({ type, slug }) => (
+            <Item key={`${type}-slug-${slug}`}>
+              <TypeBadge>{RELATED_TYPE_LABEL[type]}</TypeBadge>
               <Text textAlign={'left'}>{slug}</Text>
-              <Button
+              <DeleteButton
                 isBlock={false}
                 tone={'passive'}
                 size={'small'}
                 weight={'light'}
-                onClick={() => removeSlug(slug)}
+                onClick={() => removeRelatedItem(type, slug)}
               >
                 <TrashIcon />
-              </Button>
+              </DeleteButton>
             </Item>
           ))}
         </Box>
@@ -121,7 +177,7 @@ export const Field = ({
 
 export const controller = (
   config: FieldControllerConfig<any>
-): FieldController<Slugs> => {
+): FieldController<Relateds> => {
   return {
     path: config.path,
     label: config.label,
