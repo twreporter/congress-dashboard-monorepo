@@ -5,6 +5,7 @@ import {
   select,
   integer,
   checkbox,
+  json,
 } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
@@ -18,17 +19,19 @@ import {
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import { logger } from '../utils/logger'
 import {
-  MemberType,
+  MEMBER_TYPE,
   MEMBER_TYPE_OPTIONS,
-  CONSTITUENCY_OPTIONS,
-} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
-import { CITY_OPTIONS } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+} from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
+import {
+  CITY_OPTIONS,
+  CITY_LABEL,
+} from '@twreporter/congress-dashboard-shared/lib/constants/city'
 
 const listConfigurations = list({
   fields: {
-    legislator: relationship({
-      ref: 'Legislator',
-      label: '立法委員',
+    councilor: relationship({
+      ref: 'Councilor',
+      label: '地方議員',
       ui: {
         labelField: 'name',
       },
@@ -36,45 +39,44 @@ const listConfigurations = list({
     labelForCMS: text({
       hooks: {
         resolveInput: async ({ resolvedData, item, context }) => {
-          const { legislator, legislativeMeeting, labelForCMS } = resolvedData
+          const { councilor, councilMeeting, labelForCMS } = resolvedData
 
-          const fetchLegislatorName = async (id: NonNullable<unknown>) => {
-            const legislator = await context.query.Legislator.findOne({
+          const fetchCouncilorName = async (id: NonNullable<unknown>) => {
+            const councilor = await context.query.Councilor.findOne({
               where: { id: Number(id) },
               query: 'name',
             })
-            return legislator?.name
+            return councilor?.name
           }
-          let legislatorName
-          if (legislator?.connect?.id) {
-            legislatorName = await fetchLegislatorName(legislator.connect.id)
-          } else if (item?.legislatorId) {
-            legislatorName = await fetchLegislatorName(item.legislatorId)
+          let councilorName
+          if (councilor?.connect?.id) {
+            councilorName = await fetchCouncilorName(councilor.connect.id)
+          } else if (item?.councilorId) {
+            councilorName = await fetchCouncilorName(item.councilorId)
           }
 
-          const fetchLegislativeMeetingTerm = async (
-            id: NonNullable<unknown>
-          ) => {
-            const legislativeMeeting =
-              await context.query.LegislativeMeeting.findOne({
-                where: { id: Number(id) },
-                query: 'term',
-              })
-            return legislativeMeeting?.term
+          const fetchCouncilMeeting = async (id: NonNullable<unknown>) => {
+            const councilMeeting = await context.query.CouncilMeeting.findOne({
+              where: { id: Number(id) },
+              query: 'city term',
+            })
+            return councilMeeting
           }
-          let legislativeMeetingTerm
-          if (legislativeMeeting?.connect?.id) {
-            legislativeMeetingTerm = await fetchLegislativeMeetingTerm(
-              legislativeMeeting.connect.id
+          let councilMeetingData
+          if (councilMeeting?.connect?.id) {
+            councilMeetingData = await fetchCouncilMeeting(
+              councilMeeting.connect.id
             )
-          } else if (item?.legislativeMeetingId) {
-            legislativeMeetingTerm = await fetchLegislativeMeetingTerm(
-              item.legislativeMeetingId
+          } else if (item?.councilMeetingId) {
+            councilMeetingData = await fetchCouncilMeeting(
+              item.councilMeetingId
             )
           }
 
-          return legislatorName && legislativeMeetingTerm
-            ? `${legislatorName} | 第 ${legislativeMeetingTerm} 屆`
+          return councilorName && councilMeetingData
+            ? `${councilorName} | ${CITY_LABEL[councilMeetingData.city]} - 第 ${
+                councilMeetingData.term
+              } 屆`
             : labelForCMS
         },
       },
@@ -91,15 +93,15 @@ const listConfigurations = list({
         labelField: 'name',
       },
     }),
-    legislativeMeeting: relationship({
-      ref: 'LegislativeMeeting',
+    councilMeeting: relationship({
+      ref: 'CouncilMeeting',
       label: '所屬屆期',
       ui: {
-        labelField: 'term',
+        labelField: 'labelForCMS',
       },
     }),
-    speeches: relationship({
-      ref: 'Speech.legislativeYuanMember',
+    bill: relationship({
+      ref: 'CouncilBill.councilMember',
       label: '發言紀錄',
       many: true,
       ui: {
@@ -111,21 +113,6 @@ const listConfigurations = list({
         },
       },
     }),
-    sessionAndCommittee: relationship({
-      ref: 'CommitteeMember.legislativeYuanMember',
-      many: true,
-      ui: {
-        listView: {
-          fieldMode: 'hidden',
-        },
-        itemView: {
-          fieldMode: 'hidden',
-        },
-        createView: {
-          fieldMode: 'hidden',
-        },
-      },
-    }),
     type: select({
       label: '類別',
       options: MEMBER_TYPE_OPTIONS,
@@ -133,13 +120,15 @@ const listConfigurations = list({
         isRequired: true,
       },
     }),
-    constituency: select({
-      label: '選區',
-      options: CONSTITUENCY_OPTIONS,
-    }),
     city: select({
       label: '所屬城市',
       options: CITY_OPTIONS,
+    }),
+    constituency: integer({
+      label: '選區',
+    }),
+    administrativeDistrict: json({
+      label: '所屬行政區',
     }),
     tooltip: text({
       label: '人物備註',
@@ -150,6 +139,9 @@ const listConfigurations = list({
     proposalSuccessCount: integer({
       label: '提案通過數',
     }),
+    releatedLink: json({
+      label: '相關連結',
+    }),
     isActive: checkbox({
       label: '是否該屆期現任',
       defaultValue: true,
@@ -158,10 +150,10 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT(),
   },
   ui: {
-    label: '立委屆資',
+    label: '地方議員屆資',
     labelField: 'labelForCMS',
     listView: {
-      initialColumns: ['legislator', 'party', 'legislativeMeeting', 'type'],
+      initialColumns: ['councilor', 'party', 'councilMeeting', 'type'],
       initialSort: { field: 'labelForCMS', direction: 'DESC' },
       pageSize: 50,
     },
@@ -182,36 +174,36 @@ const listConfigurations = list({
   hooks: {
     validate: {
       create: ({ resolvedData, addValidationError }) => {
-        const { legislator, legislativeMeeting, type, constituency } =
-          resolvedData
-        if (!legislator) addValidationError('立法委員為必填')
-        if (!legislativeMeeting) addValidationError('所屬屆期為必填')
-        if (type === MemberType.Constituency && !constituency)
+        const { councilor, councilMeeting, type, constituency } = resolvedData
+        if (!councilor) addValidationError('議員為必填')
+        if (!councilMeeting) addValidationError('所屬屆期為必填')
+        if (type === MEMBER_TYPE.constituency && !constituency)
           addValidationError('類別為區域時選區為必填')
       },
       update: ({ resolvedData, item, addValidationError }) => {
-        const { legislator, legislativeMeeting, type, constituency } =
-          resolvedData
+        const { councilor, councilMeeting, type, constituency } = resolvedData
         const {
-          legislatorId,
-          legislativeMeetingId,
+          councilorId,
+          councilMeetingId,
           type: typeFromItem,
           constituency: constituencyFromItem,
         } = item
 
-        const hasLegislator =
-          !legislator?.disconnect && (legislator || legislatorId)
-        const hasLegislativeMeeting =
-          !legislativeMeeting?.disconnect &&
-          (legislativeMeeting || legislativeMeetingId)
+        const hasCouncilor =
+          !councilor?.disconnect && (councilor || councilorId)
+        const hasCouncilMeeting =
+          !councilMeeting?.disconnect && (councilMeeting || councilMeetingId)
 
-        if (!hasLegislator) addValidationError('立法委員為必填')
-        if (!hasLegislativeMeeting) addValidationError('所屬屆期為必填')
+        if (!hasCouncilor) addValidationError('議員為必填')
+        if (!hasCouncilMeeting) addValidationError('所屬屆期為必填')
 
         const effectiveType = type !== undefined ? type : typeFromItem
         const effectiveConstituency =
           constituency !== undefined ? constituency : constituencyFromItem
-        if (effectiveType === MemberType.Constituency && !effectiveConstituency)
+        if (
+          effectiveType === MEMBER_TYPE.constituency &&
+          !effectiveConstituency
+        )
           addValidationError('類別為區域時選區為必填')
       },
     },
@@ -221,10 +213,10 @@ const listConfigurations = list({
         const { data } = session
         const { id } = originalItem
         logger.info(
-          `Legislative Yuan Member Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+          `Council Member Item ID: ${id} Deleted by ${data.name}-${data.email}`,
           {
             context: {
-              listKey: 'Legislative Yuan Member',
+              listKey: 'Council Member',
               itemId: id,
               userEmail: data.email,
               userName: data.name,

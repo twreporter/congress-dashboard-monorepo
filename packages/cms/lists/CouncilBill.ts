@@ -1,5 +1,5 @@
 import { list } from '@keystone-6/core'
-import { relationship, text, json } from '@keystone-6/core/fields'
+import { text, relationship, calendarDay, json } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -14,55 +14,66 @@ import { logger } from '../utils/logger'
 
 const listConfigurations = list({
   fields: {
+    councilMeeting: relationship({
+      ref: 'CouncilMeeting',
+      label: '所屬屆期',
+      ui: {
+        labelField: 'labelForCMS',
+      },
+    }),
+    councilMember: relationship({
+      ref: 'CouncilMember.bill',
+      label: '所屬議員',
+      many: true,
+      ui: {
+        labelField: 'labelForCMS',
+      },
+    }),
+    date: calendarDay({
+      label: '日期',
+      isIndexed: true,
+      validation: {
+        isRequired: true,
+      },
+    }),
     title: text({
-      label: '議題名稱',
+      label: '標題',
       validation: { isRequired: true },
       isIndexed: true,
     }),
     slug: SLUG,
-    speeches: relationship({
-      ref: 'Speech.topics',
-      label: '逐字稿',
+    summary: json({
+      label: '摘要',
+    }),
+    // TODO: change to editor
+    content: json({
+      label: '內文',
+    }),
+    attendee: text({
+      label: '列席質詢對象',
+    }),
+    sourceLink: json({
+      label: '資料來源連結',
+    }),
+    topic: relationship({
+      ref: 'CouncilTopic.bill',
+      label: '所屬議題',
       many: true,
       ui: {
-        labelField: 'title',
-      },
-    }),
-    relatedTopics: relationship({
-      ref: 'Topic.referencedByTopics',
-      label: '相關議題',
-      many: true,
-      ui: {
-        labelField: 'title',
-      },
-    }),
-    referencedByTopics: relationship({
-      ref: 'Topic.relatedTopics',
-      label: '被關聯的議題',
-      many: true,
-      ui: {
-        labelField: 'title',
-        createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'read' },
-        listView: { fieldMode: 'hidden' },
-      },
-    }),
-    relatedTwreporterArticles: json({
-      label: '相關文章',
-      defaultValue: [],
-      ui: {
-        views: './lists/views/related-article',
+        labelField: 'labelForCMS',
       },
     }),
     createdAt: CREATED_AT(),
-    updatedAt: UPDATED_AT(),
+    updatedAt: UPDATED_AT({
+      isIndexed: true,
+    }),
   },
   ui: {
-    label: '立法院議題',
+    label: '地方議案',
     labelField: 'title',
     listView: {
-      initialColumns: ['title', 'slug'],
-      initialSort: { field: 'createdAt', direction: 'DESC' },
+      initialColumns: ['title', 'slug', 'councilMeeting', 'councilMember'],
+      initialSort: { field: 'date', direction: 'DESC' },
       pageSize: 50,
     },
     itemView: {
@@ -86,10 +97,10 @@ const listConfigurations = list({
         const { data } = session
         const { id } = originalItem
         logger.info(
-          `Topic Item ID: ${id} Deleted by ${data.name}-${data.email}`,
+          `Council Bill Item ID: ${id} Deleted by ${data.name}-${data.email}`,
           {
             context: {
-              listKey: 'Topic',
+              listKey: 'Council Bill',
               itemId: id,
               userEmail: data.email,
               userName: data.name,
