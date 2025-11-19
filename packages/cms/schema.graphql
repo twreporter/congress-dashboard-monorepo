@@ -642,6 +642,7 @@ type LegislativeYuanMember {
   tooltip: String
   note: String
   proposalSuccessCount: Int
+  isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -667,6 +668,7 @@ input LegislativeYuanMemberWhereInput {
   tooltip: StringFilter
   note: StringFilter
   proposalSuccessCount: IntNullableFilter
+  isActive: BooleanFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -691,6 +693,11 @@ input StringNullableFilter {
   not: StringNullableFilter
 }
 
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
 input LegislativeYuanMemberOrderByInput {
   id: OrderDirection
   labelForCMS: OrderDirection
@@ -700,6 +707,7 @@ input LegislativeYuanMemberOrderByInput {
   tooltip: OrderDirection
   note: OrderDirection
   proposalSuccessCount: OrderDirection
+  isActive: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -717,6 +725,7 @@ input LegislativeYuanMemberUpdateInput {
   tooltip: String
   note: String
   proposalSuccessCount: Int
+  isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -752,6 +761,7 @@ input LegislativeYuanMemberCreateInput {
   tooltip: String
   note: String
   proposalSuccessCount: Int
+  isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1082,6 +1092,7 @@ type ImportRecord {
   id: ID!
   recordName: String
   uploadData: UploaderOutput
+  recordCount: Int
   importer: SystemUser
   createdAt: DateTime
   updatedAt: DateTime
@@ -1099,6 +1110,7 @@ enum ListNameOutputEnum {
   Speech
   CommitteeMember
   RelatedTopics
+  RelatedArticles
 }
 
 input ImportRecordWhereUniqueInput {
@@ -1112,6 +1124,7 @@ input ImportRecordWhereInput {
   id: IDFilter
   recordName: StringFilter
   uploadData: UploaderFilter
+  recordCount: IntNullableFilter
   importer: SystemUserWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -1133,15 +1146,18 @@ enum ListNameEnum {
   Speech
   CommitteeMember
   RelatedTopics
+  RelatedArticles
 }
 
 input ImportRecordOrderByInput {
   id: OrderDirection
+  recordCount: OrderDirection
 }
 
 input ImportRecordUpdateInput {
   recordName: String
   uploadData: UploaderInput
+  recordCount: Int
   importer: SystemUserRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -1161,6 +1177,7 @@ input ImportRecordUpdateArgs {
 input ImportRecordCreateInput {
   recordName: String
   uploadData: UploaderInput
+  recordCount: Int
   importer: SystemUserRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -1321,19 +1338,6 @@ type Query {
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 
-  """
-  Goal:
-  Retrieve topics with speeches updated after the specified `updatedAfter` date,
-  and count the number of member speeches per topic.
-  
-  Returns:
-  - member speech counts grouped by topic
-  - a flat list of speeches whose `updatedAt` is after the `updatedAfter` date
-  
-  Speeches are derived from topics.
-  """
-  recentSpeechTopicStats(take: Int = 50, skip: Int = 0, cursor: ID, updatedAfter: CalendarDay, debug: Boolean = false): RecentSpeechTopicStatsResult!
-
   """Get top N topic of a legislator order by speech cound desc"""
   topNTopicsOfLegislators(legislatorIds: [Int!]!, meetingId: Int!, sessionIds: [Int] = [], take: Int = 10): [LegislatorWIthTopTopics]
 
@@ -1476,42 +1480,6 @@ type KeystoneAdminUISort {
 enum KeystoneAdminUISortDirection {
   ASC
   DESC
-}
-
-type MemberSpeechCount {
-  memberId: ID!
-  name: String!
-  count: Int!
-}
-
-type TopicInfo {
-  id: ID!
-  title: String!
-  slug: String!
-  lastSpeechAt: String!
-  meetingTerm: Int
-  sessionTerm: Int
-}
-
-type MemberSpeechCountByTopic {
-  topicInfo: TopicInfo!
-  distinctMemberCount: Int!
-  members: [MemberSpeechCount!]!
-}
-
-type SpeechSummary {
-  id: ID!
-  title: String!
-  meetingTerm: Int
-  sessionTerm: Int
-  date: String!
-  createdAt: String!
-  updatedAt: String!
-}
-
-type RecentSpeechTopicStatsResult {
-  topics: [MemberSpeechCountByTopic!]!
-  speeches: [SpeechSummary!]!
 }
 
 """custom type for topNTopicsOfLegislators"""

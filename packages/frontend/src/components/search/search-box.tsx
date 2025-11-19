@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react'
 import debounce from 'lodash/debounce'
 import styled from 'styled-components'
 import type { LayoutVariant } from '@/components/search/constants'
-import { LayoutVariants } from '@/components/search/constants'
+import { layoutVariants } from '@/components/search/constants'
 import { Search as IconSearch, X as IconX } from '@/components/search/icons'
 import {
   colorGrayscale,
@@ -21,8 +21,11 @@ const Input = styled.input`
   border: 0;
   outline: none;
 
-  color: ${colorGrayscale.gray500};
   background-color: transparent;
+
+  &&::placeholder {
+    color: ${colorGrayscale.gray500};
+  }
 `
 
 const Container = styled.div<{ $variant: LayoutVariant; $isFocused: boolean }>`
@@ -37,12 +40,16 @@ const Container = styled.div<{ $variant: LayoutVariant; $isFocused: boolean }>`
   ${({ $variant, $isFocused }) => {
     let variantCss = ''
     switch ($variant) {
-      case LayoutVariants.Modal:
-      case LayoutVariants.Header: {
+      case layoutVariants.Menu: {
+        variantCss = `padding:0 24px; height: 48px; background-color: ${colorOpacity['gray100_0.8']};`
+        break
+      }
+      case layoutVariants.Modal:
+      case layoutVariants.Header: {
         variantCss = 'padding: 0 20px; height: 40px;'
         break
       }
-      case LayoutVariants.Default:
+      case layoutVariants.Default:
       default: {
         variantCss = 'padding: 0 24px; height: 48px;'
       }

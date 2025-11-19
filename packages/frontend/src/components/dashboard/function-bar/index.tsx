@@ -85,7 +85,7 @@ const StickyBar = styled.div<{
   z-index: ${ZIndex.Bar};
   width: 928px;
 
-  ${mq.desktopAndBelow`
+  ${mq.tabletAndBelow`
     width: 100%;
   `}
 
@@ -223,6 +223,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         label: '會期',
         key: 'meetingSession',
         isLoading: sessionState.isLoading,
+        showError: !!sessionState.error,
         options: [
           { label: '全部會期', value: 'all', isDeletable: false },
         ].concat(
@@ -287,6 +288,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
         label: '委員會',
         key: 'committee',
         isLoading: committeeState.isLoading,
+        showError: !!committeeState.error,
         options: Object.values(
           committeeState.committees.reduce(
             (acc: CommitteeOptionGroup, committee): CommitteeOptionGroup => {
@@ -396,14 +398,16 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
               />
             </Filter>
           </Bar>
-          <FilterModal
-            isOpen={isFilterOpen}
-            setIsOpen={setIsFilterOpen}
-            onSubmit={handleSubmit}
-            onChange={handleChange}
-            options={getFilterOptions()}
-            value={currentFilterValue}
-          />
+          {isFilterOpen && (
+            <FilterModal
+              isOpen={isFilterOpen}
+              setIsOpen={setIsFilterOpen}
+              onSubmit={handleSubmit}
+              onChange={handleChange}
+              options={getFilterOptions()}
+              value={currentFilterValue}
+            />
+          )}
         </Box>
         <HorizaontalLine
           $isHeaderAboveTab={isHeaderAboveTab}

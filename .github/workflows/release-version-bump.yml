@@ -1,0 +1,83 @@
+name: Release Version Bump
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  version-bump:
+    if: github.repository == 'twreporter/congress-dashboard-monorepo'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.17.1'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+      
+      - name: Commit any uncommitted changes
+        run: |
+          # Check if there are any uncommitted changes
+          if ! git diff --quiet || ! git diff --cached --quiet; then
+            git add .
+            git commit -m "chore: commit changes before version bump" || true
+          fi
+
+      - name: Get branch name
+        id: branch
+        run: echo "name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+      
+      - name: Authenticate to npm
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Version and publish packages (shared and cli only)
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          yarn lerna publish \
+            --conventional-commits \
+            --conventional-graduate \
+            --include-merged-tags \
+            --message "chore(release): publish release version" \
+            --ignore-scripts \
+            --yes
+
+      - name: Update yarn.lock and commit specific files
+        run: |
+          yarn install --immutable-cache
+          git add yarn.lock
+          git add package.json
+          git add packages/*/package.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update yarn.lock and package.json files after version bump"
+          fi
+
+      - name: Push changes back to release
+        run: |
+          git push origin release --follow-tags
+
+      - name: Sync release branch to master
+        run: |
+          git checkout master
+          git merge release --no-ff -m "chore: sync release branch to master after version bump [skip ci]"
+          git push origin master

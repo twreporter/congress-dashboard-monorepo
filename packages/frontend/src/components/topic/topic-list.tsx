@@ -29,6 +29,7 @@ import CardsOfTheYear, {
 import { Issue, type IssueProps } from '@/components/sidebar/follow-more'
 import { Loader } from '@/components/loader'
 import FilterModal from '@/components/sidebar/filter-modal'
+import { FollowMoreErrorState } from '@/components/sidebar/error-state'
 // types
 import type { TabProps } from '@/components/sidebar/type'
 // constants
@@ -116,6 +117,7 @@ const TopicList: React.FC<TopicListProps> = ({
 
   useEffect(() => {
     setTabList(mapToTabItems(legislatorsData).slice(0, maxTabs))
+    setSelectedTab(0)
   }, [legislatorsData])
 
   const selectedLegislator = useMemo(() => {
@@ -165,19 +167,12 @@ const TopicList: React.FC<TopicListProps> = ({
 
   const issueList = useMemo<(IssueProps & { slug: string })[]>(() => {
     if (!selectedLegislator || topTopicsError || !topTopics) return []
-
-    return topTopics.map((topic) => ({
-      name: topic.title,
-      slug: topic.slug,
-      count: topic.speechesCount,
-    }))
+    return topTopics
   }, [selectedLegislator, topTopics, topTopicsError])
 
   const followMoreTitle = useMemo(
     () =>
-      selectedLegislator
-        ? `${selectedLegislator.name} 近期關注的五大議題：`
-        : '',
+      selectedLegislator ? `${selectedLegislator.name} 最關注的五大議題：` : '',
     [selectedLegislator]
   )
 
@@ -252,6 +247,7 @@ const TopicList: React.FC<TopicListProps> = ({
         </SummarySection>
         <FollowMoreItems title={followMoreTitle}>
           {isLoadingTopTopics && <Loader useAbsolute={false} />}
+          {!isLoadingTopTopics && topTopicsError && <FollowMoreErrorState />}
           {issueList.length > 0 && (
             <TopicContainer>
               {issueList.map((props, index) => (

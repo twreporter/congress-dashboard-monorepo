@@ -1,7 +1,5 @@
 'use client'
 
-// utils
-import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // @twreporter
 import {
   MemberType,
@@ -14,6 +12,9 @@ const _ = {
   filter,
   includes,
 }
+
+// global var
+const apiBase = process.env.NEXT_PUBLIC_API_URL as string
 
 /* fetchTopLegislatorsBySpeechCount
  *   fetch top 5 legislators with most speeches of given topic in given term & session
@@ -37,81 +38,22 @@ export const fetchTopLegislatorsBySpeechCount = async ({
   legislativeMeetingSessionTerms: number[]
   legislatorSlug: string
 }): Promise<LegislatorWithSpeechCount[]> => {
-  const url = process.env.NEXT_PUBLIC_API_URL as string
-  const speechesWhere = {
-    AND: [
-      {
-        topics: {
-          some: {
-            slug: {
-              equals: topicSlug,
-            },
-          },
-        },
-      },
-      {
-        legislativeMeeting: {
-          term: {
-            equals: legislativeMeetingTerm,
-          },
-        },
-      },
-      {
-        legislativeMeetingSession: {
-          term: {
-            in: legislativeMeetingSessionTerms,
-          },
-        },
-      },
-      {
-        legislativeYuanMember: {
-          legislator: {
-            slug: {
-              not: {
-                equals: legislatorSlug,
-              },
-            },
-          },
-        },
-      },
-    ],
+  if (!topicSlug) {
+    return []
   }
+
+  let url = `${apiBase}/topic/${encodeURIComponent(
+    topicSlug
+  )}/legislator?key=term&mt=${encodeURIComponent(legislativeMeetingTerm)}&top=5`
+  if (legislativeMeetingSessionTerms) {
+    url = url.concat(`&sts=${legislativeMeetingSessionTerms}`)
+  }
+  if (legislatorSlug) {
+    url = url.concat(`&exclude=${encodeURIComponent(legislatorSlug)}`)
+  }
+
   const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        query GetTopLegislatorsBySpeechCount($where: SpeechWhereInput!) {
-          speeches(where: $where) {
-            legislativeYuanMember {
-              legislator {
-                slug
-                name
-                image {
-                  imageFile {
-                    url
-                  }
-                }
-                imageLink
-              }
-              party {
-                image {
-                  imageFile {
-                    url
-                  }
-                }
-                imageLink
-              }
-            }
-          }
-        }
-      `,
-      variables: {
-        where: speechesWhere,
-      },
-    }),
+    method: 'GET',
   })
 
   if (!res.ok) {
@@ -119,35 +61,7 @@ export const fetchTopLegislatorsBySpeechCount = async ({
   }
 
   const data = await res.json()
-  const speeches = data?.data?.speeches || []
-
-  // Count speeches by legislator
-  const legislatorCounts: LegislatorWithSpeechCount[] = speeches.reduce(
-    (acc, speech) => {
-      const legislator = speech.legislativeYuanMember?.legislator
-      if (!legislator) return acc
-
-      const slug = legislator.slug
-      if (!acc[slug]) {
-        acc[slug] = {
-          ...legislator,
-          avatar: getImageLink(legislator),
-          partyAvatar: getImageLink(speech.legislativeYuanMember.party),
-          count: 0,
-        }
-      }
-      acc[slug].count++
-      return acc
-    },
-    {}
-  )
-
-  // Convert to array, sort by count, and take top 5
-  const topLegislators = Object.values(legislatorCounts)
-    .sort(sortByCountDesc)
-    .slice(0, 5)
-
-  return topLegislators
+  return data?.data || []
 }
 
 /* fetchLegislators
@@ -188,135 +102,24 @@ export const fetchLegislators = async ({
   constituencies,
   committeeSlugs,
 }: FetchLegislatorsParams): Promise<LegislatorFromRes> => {
-  const query = `
-    query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
-      legislativeYuanMembers(where: $where) {
-        id,
-        legislator {
-          slug
-          imageLink
-          image {
-            imageFile {
-              url
-            }
-          }
-          name
-        }
-        constituency
-        type
-        party {
-          image {
-            imageFile {
-              url
-            }
-          }
-          imageLink
-        }
-        tooltip
-        note
-      }
-    }
-  `
-  const where = {
-    AND: [
-      {
-        legislativeMeeting: {
-          id: {
-            equals: legislativeMeetingId,
-          },
-        },
-      },
-    ],
+  let url = `${apiBase}/legislator?mid=${encodeURIComponent(
+    legislativeMeetingId
+  )}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
   }
-  if (partyIds && partyIds.length > 0) {
-    where.AND[0]['party'] = {
-      id: {
-        in: partyIds,
-      },
-    }
+  if (partyIds) {
+    url = url.concat(`&pids=${partyIds}`)
   }
-  if (constituencies && constituencies.length > 0) {
-    const typeFilter = _.filter(constituencies, (value) => {
-      return _.includes(
-        [
-          MemberType.NationwideAndOverseas,
-          MemberType.HighlandAboriginal,
-          MemberType.LowlandAboriginal,
-        ],
-        value
-      )
-    })
-    const cityFilter = _.filter(constituencies, (value) => {
-      return !_.includes(
-        [
-          MemberType.NationwideAndOverseas,
-          MemberType.HighlandAboriginal,
-          MemberType.LowlandAboriginal,
-        ],
-        value
-      )
-    })
-    const hasTypeFilter = typeFilter && typeFilter.length > 0
-    const hasCityFilter = cityFilter && cityFilter.length > 0
-    const needOr = hasTypeFilter && hasCityFilter
-    if (needOr) {
-      where['OR'] = [
-        {
-          type: {
-            in: typeFilter,
-          },
-        },
-        {
-          city: {
-            in: cityFilter,
-          },
-        },
-      ]
-    } else {
-      if (hasTypeFilter) {
-        where.AND[0]['type'] = {
-          in: typeFilter,
-        }
-      }
-      if (hasCityFilter) {
-        where.AND[0]['city'] = {
-          in: cityFilter,
-        }
-      }
-    }
+  if (constituencies) {
+    url = url.concat(`&cvs=${constituencies}`)
   }
-  if (committeeSlugs && committeeSlugs.length > 0) {
-    const sessionAndCommitteeWhere = {
-      some: {
-        committee: {
-          some: {
-            slug: {
-              in: committeeSlugs,
-            },
-          },
-        },
-      },
-    }
-    if (
-      legislativeMeetingSessionIds &&
-      legislativeMeetingSessionIds.length > 0
-    ) {
-      sessionAndCommitteeWhere.some['legislativeMeetingSession'] = {
-        id: {
-          in: legislativeMeetingSessionIds,
-        },
-      }
-    }
-    where.AND[0]['sessionAndCommittee'] = sessionAndCommitteeWhere
+  if (committeeSlugs) {
+    url = url.concat(`&css=${committeeSlugs}`)
   }
 
-  const url = process.env.NEXT_PUBLIC_API_URL as string
   const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables: { where } }),
+    method: 'GET',
   })
   if (!res.ok) {
     throw new Error(
@@ -324,9 +127,7 @@ export const fetchLegislators = async ({
     )
   }
   const data = await res.json()
-  const legislators: LegislatorFromRes =
-    data?.data?.legislativeYuanMembers || []
-  return legislators
+  return data?.data || []
 }
 
 /* fetchTopNTopicsOfLegislators
@@ -357,31 +158,18 @@ export const fetchTopNTopicsOfLegislators = async ({
     return []
   }
 
-  const query = `
-    query TopNTopicsOfLegislators($legislatorIds: [Int!]!, $meetingId: Int!, $take: Int, $sessionIds: [Int]) {
-      topNTopicsOfLegislators(legislatorIds: $legislatorIds, meetingId: $meetingId, take: $take, sessionIds: $sessionIds) {
-        id
-        topics {
-          count
-          slug
-          name
-        }
-      }
-    }
-  `
-  const variables = {
-    legislatorIds,
-    meetingId: legislativeMeetingId,
-    sessionIds: legislativeMeetingSessionIds,
-    take,
+  let url = `${apiBase}/index/legislator/${legislatorIds}/topic?mid=${encodeURIComponent(
+    legislativeMeetingId
+  )}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
   }
-  const url = process.env.NEXT_PUBLIC_API_URL as string
+  if (take) {
+    url = url.concat(`&top=${encodeURIComponent(take)}`)
+  }
+
   const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables }),
+    method: 'GET',
   })
   if (!res.ok) {
     throw new Error(
@@ -389,13 +177,14 @@ export const fetchTopNTopicsOfLegislators = async ({
     )
   }
   const data = await res.json()
-  return data?.data?.topNTopicsOfLegislators || []
+  return data?.data || []
 }
 
 /* fetchLegislatorsOfATopic
  *   fetch legislators of given topic and sort by speeches count desc
  */
 export type LegislatorForFilter = {
+  id: number
   slug: string
   name: string
   imageLink?: string
@@ -414,84 +203,26 @@ export const fetchLegislatorsOfATopic = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds,
 }: FetchLegislatorsOfATopicParams) => {
-  const url = process.env.NEXT_PUBLIC_API_URL as string
-  const query = `
-    query GetLegislatorsWithSpeechCount($where: SpeechWhereInput!) {
-      speeches(where: $where) {
-        legislativeYuanMember {
-          legislator {
-            slug
-            name
-            imageLink
-            image {
-              imageFile {
-                url
-              }
-            }
-          }
-        }
-      }
-    }
-  `
-  const variables = {
-    where: {
-      topics: {
-        some: {
-          slug: {
-            equals: slug,
-          },
-        },
-      },
-      legislativeMeeting: {
-        id: {
-          equals: legislativeMeetingId,
-        },
-      },
-    },
+  if (!slug) {
+    return []
   }
-  if (legislativeMeetingSessionIds && legislativeMeetingSessionIds.length > 0) {
-    variables.where['legislativeMeetingSession'] = {
-      id: {
-        in: legislativeMeetingSessionIds,
-      },
-    }
+
+  let url = `${apiBase}/topic/${encodeURIComponent(
+    slug
+  )}/legislator?key=id&mid=${encodeURIComponent(legislativeMeetingId)}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
   }
 
   const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables }),
+    method: 'GET',
   })
 
   if (!res.ok) {
     throw new Error(`Failed to fetch legislators of a topic: ${slug}`)
   }
   const data = await res.json()
-
-  // group by legislator & sort with speech counts
-  const speeches = data?.data?.speeches || []
-  const legislatorCounts: { [key: string]: LegislatorForFilter } =
-    speeches.reduce((acc, speech) => {
-      const legislator = speech.legislativeYuanMember?.legislator
-      if (!legislator) return acc
-
-      const slug = legislator.slug
-      if (!acc[slug]) {
-        acc[slug] = {
-          ...legislator,
-          avatar: getImageLink(legislator),
-          count: 0,
-        }
-      }
-      acc[slug].count++
-      return acc
-    }, {})
-  const legislatorOrderBySpeechCount =
-    Object.values(legislatorCounts).sort(sortByCountDesc)
-
-  return legislatorOrderBySpeechCount
+  return data?.data || []
 }
 
 /* fetchLegislatorsOfATopic
@@ -517,126 +248,36 @@ export const fetchTopNLegislatorsOfATopic = async ({
 }: FetchTopNLegislatorsOfATopicParams): Promise<
   LegislatorWithSpeechCount[]
 > => {
-  const url = process.env.NEXT_PUBLIC_API_URL as string
-  const query = `
-    query GetTopLegislatorsBySpeechCount($where: SpeechWhereInput!) {
-      speeches(where: $where) {
-        legislativeYuanMember {
-          legislator {
-            slug
-            name
-            image {
-              imageFile {
-                url
-              }
-            }
-            imageLink
-          }
-          party {
-            image {
-              imageFile {
-                url
-              }
-            }
-            imageLink
-          }
-        }
-      }
-    }
-  `
-  const where = {
-    topics: {
-      some: {
-        slug: {
-          equals: topicSlug,
-        },
-      },
-    },
-    legislativeMeeting: {
-      id: {
-        equals: legislativeMeetingId,
-      },
-    },
+  if (!topicSlug) {
+    return []
   }
-  const legislativeMemberWhere = {}
-  if (partyIds && partyIds.length > 0) {
-    legislativeMemberWhere['party'] = {
-      id: {
-        in: partyIds,
-      },
-    }
+
+  let url = `${apiBase}/topic/${encodeURIComponent(
+    topicSlug
+  )}/legislator?key=id&mid=${encodeURIComponent(legislativeMeetingId)}`
+  if (legislativeMeetingSessionIds) {
+    url = url.concat(`&sids=${legislativeMeetingSessionIds}`)
   }
-  if (constituencies && constituencies.length > 0) {
-    legislativeMemberWhere['constituency'] = {
-      in: constituencies,
-    }
+  if (partyIds) {
+    url = url.concat(`&pids=${partyIds}`)
   }
-  if (committeeSlugs && committeeSlugs.length > 0) {
-    const sessionAndCommitteeWhere = {
-      some: {
-        committee: {
-          some: {
-            slug: {
-              in: committeeSlugs,
-            },
-          },
-        },
-      },
-    }
-    if (
-      legislativeMeetingSessionIds &&
-      legislativeMeetingSessionIds.length > 0
-    ) {
-      sessionAndCommitteeWhere.some['legislativeMeetingSession'] = {
-        id: {
-          in: legislativeMeetingSessionIds,
-        },
-      }
-    }
-    legislativeMemberWhere['sessionAndCommittee'] = sessionAndCommitteeWhere
+  if (constituencies) {
+    url = url.concat(`&cids=${constituencies}`)
   }
-  if (!_.isEmpty(legislativeMemberWhere)) {
-    where['legislativeYuanMember'] = legislativeMemberWhere
+  if (committeeSlugs) {
+    url = url.concat(`&css=${committeeSlugs}`)
+  }
+  if (take) {
+    url = url.concat(`&top=${encodeURIComponent(take)}`)
   }
 
   const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables: { where } }),
+    method: 'GET',
   })
   if (!res.ok) {
     throw new Error('Failed to fetch top legislators')
   }
 
   const data = await res.json()
-  const speeches = data?.data?.speeches || []
-
-  // Count speeches by legislator
-  const legislatorCounts: LegislatorWithSpeechCount[] = speeches.reduce(
-    (acc, speech) => {
-      const legislator = speech.legislativeYuanMember?.legislator
-      if (!legislator) return acc
-
-      const slug = legislator.slug
-      if (!acc[slug]) {
-        acc[slug] = {
-          ...legislator,
-          avatar: getImageLink(legislator),
-          partyAvatar: getImageLink(speech.legislativeYuanMember.party),
-          count: 0,
-        }
-      }
-      acc[slug].count++
-      return acc
-    },
-    {}
-  )
-
-  const topLegislators = Object.values(legislatorCounts)
-    .sort(sortByCountDesc)
-    .slice(0, take)
-
-  return topLegislators || []
+  return data?.data || []
 }

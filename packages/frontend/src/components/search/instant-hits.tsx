@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import type { LayoutVariant } from '@/components/search/constants'
-import { LayoutVariants } from '@/components/search/constants'
+import type { LayoutVariant, SearchStage } from '@/components/search/constants'
+import {
+  layoutVariants,
+  indexNames,
+  searchStages,
+} from '@/components/search/constants'
 import { useInView } from 'react-intersection-observer'
 import type {
   LegislatorRawHit,
@@ -23,13 +27,8 @@ import {
   colorGrayscale,
   colorOpacity,
 } from '@twreporter/core/lib/constants/color'
-
-const InstantSearchStatus = {
-  Idle: 'idle',
-  Loading: 'loading',
-  Stalled: 'stalled',
-  Error: 'error',
-} as const
+import { InternalRoutes } from '@/constants/routes'
+import { instantSearchStatus } from '@/components/search/constants'
 
 const Container = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
@@ -38,13 +37,13 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
 
   ${({ $variant }) => {
     switch ($variant) {
-      case LayoutVariants.Modal: {
+      case layoutVariants.Modal: {
         return `
           height: 100%;
         `
       }
-      case LayoutVariants.Header:
-      case LayoutVariants.Default:
+      case layoutVariants.Header:
+      case layoutVariants.Default:
       default: {
         return `
           border-radius: 8px;
@@ -62,17 +61,33 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
   }
 `
 
-const FirstRow = styled.div`
-  cursor: pointer;
+const FirstRow = styled.div<{ $variant: LayoutVariant }>`
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 16px;
+  ${({ $variant }) => {
+    switch ($variant) {
+      case layoutVariants.Modal: {
+        return `
+          padding: 8px 24px;
+        `
+      }
+      default: {
+        return `
+          padding: 8px 16px;
+        `
+      }
+    }
+  }}
   margin: 4px 0;
 
+  /**
+    * @TODO: add back when search page is ready
+    *
   &:hover {
     background-color: ${colorGrayscale.gray100};
   }
+  */
 `
 
 const SearchIconContainer = styled.div`
@@ -124,28 +139,18 @@ const LoadingSpinner = styled.div`
   }
 `
 
-enum SearchStageEnum {
-  Legislator = 'legislator',
-  Topic = 'topic',
-}
-
-enum IndexNameEnum {
-  Legislator = 'legislator',
-  Topic = 'topic',
-}
-
-export const defaultIndexName = IndexNameEnum.Legislator
+export const defaultIndexName = indexNames.Legislator
 
 export const InstantHits = ({
   className,
-  variant = LayoutVariants.Default,
+  variant = layoutVariants.Default,
 }: {
   className?: string
   variant?: LayoutVariant
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { query } = useSearchBox()
-  const [stage, setStage] = useState(SearchStageEnum.Legislator)
+  const [stage, setStage] = useState<SearchStage>(searchStages.Legislator)
 
   if (typeof query !== 'string' || query === '') {
     return null
@@ -153,9 +158,9 @@ export const InstantHits = ({
 
   return (
     <Container ref={containerRef} className={className} $variant={variant}>
-      {/* TODO: change to `next/link` when search page is ready */}
-      <a href="" target="_self">
-        <FirstRow>
+      {/*  use <a> to force full reload */}
+      <a href={`${InternalRoutes.Search}?query=${query.split(' ').join('+')}`}>
+        <FirstRow $variant={variant}>
           <SearchIconContainer>
             <IconSearch />
           </SearchIconContainer>
@@ -165,12 +170,12 @@ export const InstantHits = ({
       <Rows>
         <Index indexName={defaultIndexName}>
           <Configure hitsPerPage={10} />
-          <InstantLegislatorHits />
+          <InstantLegislatorHits variant={variant} />
         </Index>
-        {stage === SearchStageEnum.Topic && (
-          <Index indexName={IndexNameEnum.Topic}>
+        {stage === searchStages.Topic && (
+          <Index indexName={indexNames.Topic}>
             <Configure hitsPerPage={10} />
-            <InstantTopicHits />
+            <InstantTopicHits variant={variant} />
           </Index>
         )}
       </Rows>
@@ -184,8 +189,8 @@ const LoadMore = ({
   setStage,
   containerRef,
 }: {
-  stage: SearchStageEnum
-  setStage: React.Dispatch<React.SetStateAction<SearchStageEnum>>
+  stage: SearchStage
+  setStage: React.Dispatch<React.SetStateAction<SearchStage>>
   containerRef: React.RefObject<HTMLDivElement | null>
 }) => {
   // `renderState` structure from multiple <Index> components:
@@ -220,16 +225,16 @@ const LoadMore = ({
   })
   const [noMoreHits, setNoMoreHits] = useState(false)
   const isLoading =
-    status === InstantSearchStatus.Loading ||
-    status === InstantSearchStatus.Stalled
+    status === instantSearchStatus.Loading ||
+    status === instantSearchStatus.Stalled
 
   // Per [react-instantsearch docs](https://www.algolia.com/doc/api-reference/widgets/use-instantsearch/react/#widget-param-status):
   // show loading indicator only when status === 'stalled'
-  const showLoadingIcon = status === InstantSearchStatus.Stalled
+  const showLoadingIcon = status === instantSearchStatus.Stalled
 
   // Reset when query changes
   useEffect(() => {
-    setStage(SearchStageEnum.Legislator)
+    setStage(searchStages.Legislator)
     setNoMoreHits(false)
   }, [query, setStage])
 
@@ -245,9 +250,8 @@ const LoadMore = ({
     // and then load Topic items after all Legislator items loaded.
     const load = () => {
       // In Legislator stage
-      if (stage === SearchStageEnum.Legislator) {
-        const legislatorState =
-          renderState[IndexNameEnum.Legislator]?.infiniteHits
+      if (stage === searchStages.Legislator) {
+        const legislatorState = renderState[indexNames.Legislator]?.infiniteHits
         // Legislator infiniteHits is not ready
         if (!legislatorState || !legislatorState.results) {
           // Do nothing
@@ -265,12 +269,12 @@ const LoadMore = ({
         } else {
           // All Legislator items have been loaded.
           // Start to load Topic items.
-          setStage(SearchStageEnum.Topic)
+          setStage(searchStages.Topic)
         }
       }
       // In Topic stage
-      else if (stage === SearchStageEnum.Topic) {
-        const topicState = renderState[IndexNameEnum.Topic]?.infiniteHits
+      else if (stage === searchStages.Topic) {
+        const topicState = renderState[indexNames.Topic]?.infiniteHits
         // Topic infiniteHits is not ready
         if (!topicState || !topicState.results) {
           // Do nothing
@@ -303,21 +307,21 @@ const LoadMore = ({
   )
 }
 
-const InstantLegislatorHits = () => {
+const InstantLegislatorHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: LegislatorRawHit[] } = useInfiniteHits()
 
   const hitsJsx = items.map((hit, idx) => {
-    return <InstantLegislatorHit key={idx} hit={hit} />
+    return <InstantLegislatorHit key={idx} hit={hit} variant={variant} />
   })
 
   return <>{hitsJsx}</>
 }
 
-const InstantTopicHits = () => {
+const InstantTopicHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: TopicRawHit[] } = useInfiniteHits()
 
   const hitsJsx = items.map((hit, idx) => {
-    return <InstantTopicHit key={idx} hit={hit} />
+    return <InstantTopicHit key={idx} hit={hit} variant={variant} />
   })
 
   return <>{hitsJsx}</>

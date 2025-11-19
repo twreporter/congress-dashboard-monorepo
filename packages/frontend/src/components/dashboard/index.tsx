@@ -39,7 +39,8 @@ import {
   type SidebarLegislatorProps,
 } from '@/components/sidebar'
 import { GapHorizontal, Gap } from '@/components/skeleton'
-import EmptyContent from '@/components/dashboard/empty-state'
+import EmptyState from '@/components/dashboard/empty-state'
+import ErrorState from '@/components/dashboard/error-state'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -78,13 +79,11 @@ const Box = styled.div`
   `}
 `
 const StyledFunctionBar = styled(FunctionBar)`
-  padding: 0 256px 0px 256px;
-
   ${mq.tabletOnly`
-    padding: 0 32px 0px 32px;
+    padding: 0 32px;
   `}
   ${mq.mobileOnly`
-    padding: 0 24px 0px 24px;
+    padding: 0 24px;
   `}
 `
 const cardCss = css`
@@ -145,7 +144,7 @@ const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
     width: 100% !important;
   `}
 
-  ${(props) => (props.$hidden ? 'display: none;' : '')}
+  ${(props) => (props.$hidden ? 'display: none !important;' : '')}
 `
 const sidebarCss = css<{ $show: boolean }>`
   transform: translateX(${(props) => (props.$show ? 0 : 520)}px);
@@ -279,6 +278,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       selectedType === Option.Issue ? topics.length : legislators.length
     return !isLoading && currentListLength === 0
   }, [selectedType, topics, legislators, isLoading])
+  const [isShowError, setIsShowError] = useState(false)
 
   const { filterValues, setFilterValues, formatter, formattedFilterValues } =
     useFilter(meetings)
@@ -294,7 +294,12 @@ const Dashboard: React.FC<DashboardProps> = ({
       setLegislators(data)
       setHasMoreLegislator(hasMore)
     }
-    initializeLegislator()
+    try {
+      initializeLegislator()
+    } catch (err) {
+      console.error(`initialize legislator failed. err: ${err}`)
+      setIsShowError(true)
+    }
   }, [])
 
   useEffect(() => {
@@ -320,9 +325,14 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   const loadMore = async () => {
     setIsLoading(true)
-    const loadMoreFunc =
-      selectedType === Option.Issue ? loadMoreTopics : loadMoreHuman
-    await loadMoreFunc()
+    try {
+      const loadMoreFunc =
+        selectedType === Option.Issue ? loadMoreTopics : loadMoreHuman
+      await loadMoreFunc()
+    } catch (err) {
+      console.error(`load more failed. err: ${err}`)
+      setIsShowError(true)
+    }
     setIsLoading(false)
   }
   const loadMoreTopics = async () => {
@@ -510,9 +520,9 @@ const Dashboard: React.FC<DashboardProps> = ({
           meetings={meetings}
           onChangeFilter={onChangeFilter}
         />
-        {isShowEmpty ? (
-          <EmptyContent />
-        ) : (
+        {isShowError ? <ErrorState /> : null}
+        {isShowEmpty ? <EmptyState /> : null}
+        {!isShowEmpty && !isShowError ? (
           <CardSection
             $isScroll={showSidebar}
             $isSidebarOpened={showSidebar}
@@ -607,7 +617,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             </CardBox>
             <GapHorizontalWithStyle $gap={sidebarGap} />
           </CardSection>
-        )}
+        ) : null}
       </Box>
     </DashboardContext.Provider>
   )

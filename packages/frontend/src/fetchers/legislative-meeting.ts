@@ -6,104 +6,45 @@ import type {
   LegislativeMeetingSession,
 } from '@/fetchers/server/legislative-meeting'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL as string
+const apiBase = process.env.NEXT_PUBLIC_API_URL as string
 const fetchLegislativeMeetingByLegislator = async (
   slug: string
-): Promise<LegislativeMeeting> => {
-  const where = {
-    legislator: {
-      slug: {
-        equals: slug,
-      },
-    },
+): Promise<LegislativeMeeting[]> => {
+  if (!slug) {
+    return []
   }
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
-          legislativeYuanMembers(where: $where) {
-            legislativeMeeting {
-              id
-              term
-            }
-          }
-        }
-      `,
-      variables: {
-        where,
-      },
-    }),
+  const url = `${apiBase}/legislator/${encodeURIComponent(slug)}/meeting`
+  const res = await fetch(url, {
+    method: 'GET',
   })
   const data = await res.json()
-  return data?.data?.legislativeYuanMembers
-    .map((m) => ({
-      term: m.legislativeMeeting.term,
-      id: m.legislativeMeeting.id,
-    }))
-    .sort((a, b) => b.term - a.term)
+  return data?.data || []
 }
+
 const fetchLegislativeMeeting = async (): Promise<LegislativeMeeting[]> => {
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        query Query {
-          legislativeMeetings(orderBy: [{ term: desc }]) {
-            id
-            term
-          }
-        }
-      `,
-    }),
+  const url = `${apiBase}/legislative-meeting`
+  const res = await fetch(url, {
+    method: 'GET',
   })
   const data = await res.json()
-  return data?.data?.legislativeMeetings
+  return data?.data
 }
 
 const fetchLegislativeMeetingSession = async (
   legislativeMeetingTerm: string
 ): Promise<LegislativeMeetingSession[]> => {
-  const where = {
-    legislativeMeeting: {
-      term: {
-        equals: Number(legislativeMeetingTerm),
-      },
-    },
+  if (!legislativeMeetingTerm) {
+    return []
   }
 
-  const orderBy = [{ term: 'asc' }]
-
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        query LegislativeMeetingSessions($where: LegislativeMeetingSessionWhereInput!, $orderBy: [LegislativeMeetingSessionOrderByInput!]!) {
-          legislativeMeetingSessions(where: $where, orderBy: $orderBy) {
-            id
-            term
-            startTime
-            endTime
-          }
-        }
-      `,
-      variables: {
-        where,
-        orderBy,
-      },
-    }),
+  const url = `${apiBase}/legislative-meeting/${encodeURIComponent(
+    legislativeMeetingTerm
+  )}/session`
+  const res = await fetch(url, {
+    method: 'GET',
   })
   const data = await res.json()
-  return data?.data?.legislativeMeetingSessions
+  return data?.data
 }
 
 export const useLegislativeMeetingByLegislator = (slug: string) => {
@@ -130,11 +71,14 @@ export const useLegislativeMeeting = () => {
 }
 
 export const useLegislativeMeetingSession = (
-  legislativeMeetingTerm: string
+  legislativeMeetingTerm?: string
 ) => {
+  const shouldFetch =
+    typeof legislativeMeetingTerm === 'string' && legislativeMeetingTerm !== ''
+
   const { data, isLoading, error } = useSWR(
-    ['legislativeMeetingSessions', legislativeMeetingTerm],
-    () => fetchLegislativeMeetingSession(legislativeMeetingTerm)
+    shouldFetch ? ['legislativeMeetingSessions', legislativeMeetingTerm] : null,
+    () => fetchLegislativeMeetingSession(legislativeMeetingTerm!)
   )
   return {
     legislativeMeetingSessions: data || [],

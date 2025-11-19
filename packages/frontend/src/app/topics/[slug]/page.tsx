@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 // components
@@ -8,8 +11,8 @@ import { fetchTopic } from '@/fetchers/server/topic'
 import { validateMeetingParams } from '@/utils/validate-meeting-params'
 // constants
 import { InternalRoutes } from '@/constants/routes'
-
-export const dynamicParams = true
+// constants
+import { OG_IMAGE_URL } from '@/constants'
 
 export async function generateMetadata({
   params,
@@ -37,14 +40,16 @@ export async function generateMetadata({
   const { title } = topic
   return {
     title: `議題｜${title} - 報導者觀測站`,
-    description: '報導者議會透視版',
+    description: `關注${title}的立委有哪些人？哪位民代最積極發言？《報導者》用人工智慧技術分析立法院公報，和你一起追蹤${title}議題在國會的討論熱度與立委關注面向。`,
     alternates: {
       canonical: `https://lawmaker.twreporter.org${InternalRoutes.Topic}/${slug}`,
     },
     openGraph: {
       title: `議題｜${title} - 報導者觀測站`,
+      description: `關注${title}的立委有哪些人？哪位民代最積極發言？《報導者》用人工智慧技術分析立法院公報，和你一起追蹤${title}議題在國會的討論熱度與立委關注面向。`,
       url: `https://lawmaker.twreporter.org${InternalRoutes.Topic}/${slug}`,
       type: 'article',
+      images: OG_IMAGE_URL,
     },
   }
 }

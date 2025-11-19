@@ -1,4 +1,4 @@
-import { keystoneFetch } from '@/app/api/graphql/keystone'
+import { keystoneFetch } from '@/app/api/_graphql/keystone'
 
 export type SpeechFromRes = {
   slug: string
@@ -114,4 +114,41 @@ export const fetchSpeechGroup = async ({
       `Failed to fetch speech group for title: ${title}, date: ${date}, err: ${error}`
     )
   }
+}
+
+/**
+ * fetch all speeches slug for sitemap
+ */
+export const fetchAllSpeechesSlug = async () => {
+  const query = `
+    query GetAllSpeechesSlug($take: Int, $skip: Int) {
+      speeches(take: $take, skip: $skip) {
+        slug
+        updatedAt
+      }
+    }
+  `
+  const batchSize = 500
+  let allSpeeches: { slug: string; updatedAt: string }[] = []
+  let skip = 0
+  let fetched = 0
+
+  while (true) {
+    const variables = { take: batchSize, skip }
+    try {
+      const data = await keystoneFetch<{
+        speeches: { slug: string; updatedAt: string }[]
+      }>(JSON.stringify({ query, variables }), false)
+      const batch = data?.data?.speeches ?? []
+      allSpeeches = allSpeeches.concat(batch)
+      fetched = batch.length
+      if (fetched < batchSize) break
+      skip += batchSize
+    } catch (error) {
+      throw new Error(
+        `Failed to fetch speeches slug batch, skip: ${skip}, err: ${error}`
+      )
+    }
+  }
+  return allSpeeches
 }

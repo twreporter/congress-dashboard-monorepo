@@ -9,6 +9,7 @@ import {
 } from '@twreporter/react-components/lib/rwd'
 import { Report } from '@twreporter/react-components/lib/icon'
 import mq from '@twreporter/core/lib/utils/media-query'
+import { TEN_YEAR_ANNIVERSARY } from '@twreporter/core/lib/constants/feature-flag'
 // styles
 import {
   SpeechContainer,
@@ -28,6 +29,7 @@ import { AboutPageMobileToolbar } from '@/components/speech/speech-mobile-toolba
 import CustomPillButton from '@/components/button/pill-button'
 import AboutPageContent from '@/components/about/content'
 import DonationBox from '@/components/about/donation-box'
+import NewDonationBox from '@/components/about/new-donation-box'
 // constants
 import { FontSize, FontSizeOffset } from '@/components/speech'
 // context
@@ -53,6 +55,7 @@ const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
     padding-bottom: 50px;
   `}
 `
+const Donation = TEN_YEAR_ANNIVERSARY ? NewDonationBox : DonationBox
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 export type Content = {
@@ -132,14 +135,14 @@ const AboutPage: React.FC<AboutPageProps> = ({
         <DesktopAndAboveWithFlex>
           <Feedback>
             <CustomPillButton
-              onClick={openFeedback}
+              onClick={() => openFeedback('about')}
               leftIconComponent={<Report releaseBranch={releaseBranch} />}
               text={'問題回報'}
             />
           </Feedback>
         </DesktopAndAboveWithFlex>
       </BodyContainer>
-      <DonationBox />
+      <Donation />
       <TabletAndBelow className="hidden-print">
         <AboutPageMobileToolbar
           onFontSizeChange={cycleFontSize}

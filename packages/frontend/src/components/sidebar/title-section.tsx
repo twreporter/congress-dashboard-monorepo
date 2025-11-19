@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 // components
 import Tab from '@/components/sidebar/tab'
@@ -48,7 +48,7 @@ const Subtitle = styled(P2)`
 const TabItem = styled.div``
 const TabGroup = styled(FlexRow)`
   margin-top: 12px;
-  align-items: center;
+  align-items: center !important;
   border-bottom: 1px solid ${colorGrayscale.gray300};
 
   ${FlexRow} {
@@ -99,6 +99,21 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   onOpenFilterModal,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
+  const tabRef = useRef<HTMLDivElement>(null)
+  const prevLinkRef = useRef<TitleSectionProps['link']>('')
+
+  useEffect(() => {
+    setSelectedTab(0)
+
+    const linkChnaged = prevLinkRef.current && prevLinkRef.current !== link
+    prevLinkRef.current = link
+
+    if (tabRef.current) {
+      const behavior = linkChnaged ? 'instant' : 'smooth'
+      tabRef.current.scrollTo({ left: 0, behavior })
+    }
+  }, [link, tabs, setSelectedTab])
+
   const selectTab = (e: React.MouseEvent<HTMLElement>, index: number) => {
     e.preventDefault()
     e.stopPropagation()
@@ -146,7 +161,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
       {subtitle ? <Subtitle text={subtitle} /> : null}
       {tabs.length > 0 ? (
         <TabGroup>
-          <FlexRow>
+          <FlexRow ref={tabRef}>
             {tabs.map((tabProps: TabProps, index: number) => (
               <TabItem
                 key={`sidebar-tab-${index}`}

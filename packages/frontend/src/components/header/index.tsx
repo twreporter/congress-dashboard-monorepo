@@ -18,7 +18,7 @@ import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import { Search as SearchIcon } from '@twreporter/react-components/lib/icon'
 import {
   AlgoliaInstantSearch,
-  LayoutVariants,
+  layoutVariants,
 } from '@/components/search/instant-search'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
@@ -45,6 +45,7 @@ const Container = styled.header.attrs<{
 }))`
   display: flex;
   width: -webkit-fill-available;
+  width: -moz-available;
   height: ${HEADER_HEIGHT}px;
   background-color: ${colorGrayscale.gray100};
   position: fixed;
@@ -193,7 +194,7 @@ const Header: React.FC = () => {
                   src={`${logoSrcPrefix}/logo_S.svg`}
                   alt="Twreporter Lawmaker Logo"
                   priority
-                  width={180}
+                  width={147}
                   height={20}
                 />
               </MobileOnly>
@@ -231,7 +232,7 @@ const Header: React.FC = () => {
                   {isSearchOpen && (
                     <>
                       <AlgoliaInstantSearch
-                        variant={LayoutVariants.Header}
+                        variant={layoutVariants.Header}
                         autoFocus={isSearchOpen}
                       />
                       <IconButton

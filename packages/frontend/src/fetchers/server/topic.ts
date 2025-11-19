@@ -1,4 +1,4 @@
-import { keystoneFetch } from '@/app/api/graphql/keystone'
+import { keystoneFetch } from '@/app/api/_graphql/keystone'
 import type { partyData } from '@/fetchers/party'
 
 export type SpeechData = {
@@ -63,7 +63,7 @@ export const fetchTopic = async ({
   const query = `
     query Topic($where: TopicWhereUniqueInput!, $speechesWhere: SpeechWhereInput!) {
       topic(where: $where) {
-        speeches(where: $speechesWhere) {
+        speeches(where: $speechesWhere, orderBy: { date: desc }) {
           slug
           summary
           title
@@ -186,5 +186,28 @@ export const fetchTopNTopics = async ({
     throw new Error(
       `Failed to fetch top N topics data for term ${legislativeMeetingId}, err: ${err}`
     )
+  }
+}
+
+/**
+ * fetch all topics slug for sitemap
+ */
+export const fetchAllTopicsSlug = async () => {
+  const query = `
+    query Topics {
+      topics {
+        slug
+        updatedAt
+      }
+    }
+  `
+
+  try {
+    const data = await keystoneFetch<{
+      topics: { slug: string; updatedAt: string }[]
+    }>(JSON.stringify({ query }), false)
+    return data?.data?.topics
+  } catch (err) {
+    throw new Error(`Failed to fetch all topics slug, err: ${err}`)
   }
 }

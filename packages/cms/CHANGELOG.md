@@ -1,16 +1,218 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [1.4.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.4.0-rc.0...@twreporter/congress-dashboard-cms@1.4.0) (2025-11-11)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+# [1.4.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.3.0...@twreporter/congress-dashboard-cms@1.4.0-rc.0) (2025-11-04)
+
+### Features
+
+- **cms:** add isActive for legislative yuan member ([ab320ab](https://github.com/twreporter/congress-dashboard-monorepo/commit/ab320ab754a4113b3dfda2d809159ee9a4f7573b))
+
+# [1.3.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.3.0-rc.0...@twreporter/congress-dashboard-cms@1.3.0) (2025-10-20)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+# [1.3.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.2.1-rc.0...@twreporter/congress-dashboard-cms@1.3.0-rc.0) (2025-10-16)
+
+### Bug Fixes
+
+- **cms:** logger for import record ([d00a208](https://github.com/twreporter/congress-dashboard-monorepo/commit/d00a208f5ca2c32cf358c9014501d49843c8626a))
+
+### Features
+
+- **cms:** implement role-based delete access and logging for various list configurations ([af2bb33](https://github.com/twreporter/congress-dashboard-monorepo/commit/af2bb335d0c83b9ef2ee1452462866adbdafb0ec))
+- **cms:** implement structured logging ([571d8a0](https://github.com/twreporter/congress-dashboard-monorepo/commit/571d8a02f7fe0b8988a68bed4c50872d4b8854a8))
+
+## [1.2.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.2.0...@twreporter/congress-dashboard-cms@1.2.1-rc.0) (2025-10-14)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+# [1.2.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.2.0-rc.0...@twreporter/congress-dashboard-cms@1.2.0) (2025-08-13)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+# 1.2.0-rc.0 (2025-08-12)
+
+### Bug Fixes
+
+- add build config for `shared` ([99c9c7d](https://github.com/twreporter/congress-dashboard-monorepo/commit/99c9c7dd9df1f627c42ff47498fe757435e983dc))
+- build `shared` lib with `tsup` ([26a80b8](https://github.com/twreporter/congress-dashboard-monorepo/commit/26a80b8de81536fa6b7bb737b129ae6712bb3daf))
+- **cms:** `/import-records` list page hangs, and can not show any data ([e021338](https://github.com/twreporter/congress-dashboard-monorepo/commit/e021338803d1e9c34bdeee2c9d6c186e3f0474e5))
+- **cms:** add `id` for return data ([78102be](https://github.com/twreporter/congress-dashboard-monorepo/commit/78102bef7a8df6b73d04a12fafc89d6c9614cc32))
+- **cms:** add `NEXT_PUBLIC` for public env ([505d7e8](https://github.com/twreporter/congress-dashboard-monorepo/commit/505d7e8f9b38cb1655cb030861c2a989addda938))
+- **cms:** add `recordCount` for ImportData list ([c3fceeb](https://github.com/twreporter/congress-dashboard-monorepo/commit/c3fceeb5b3fa9d3eea890a82323d66bba0a462b9))
+- **cms:** add alert when add twreporter article ([c48310b](https://github.com/twreporter/congress-dashboard-monorepo/commit/c48310bfa3d872b2512c6274f0173c6f43b52584))
+- **cms:** add migration file ([8c2931e](https://github.com/twreporter/congress-dashboard-monorepo/commit/8c2931e5d66d22db9d6174ac55e3bf6db8c1c25d))
+- **cms:** add pageSize for ImportRecord list ([e58b4f7](https://github.com/twreporter/congress-dashboard-monorepo/commit/e58b4f740b4ea9aaf410742c69a604ab8c7c116a))
+- **cms:** add try catch for async func ([edb048d](https://github.com/twreporter/congress-dashboard-monorepo/commit/edb048dd6a531333722da23382ef710ff8656e93))
+- **cms:** add validation for selected ([cb700b8](https://github.com/twreporter/congress-dashboard-monorepo/commit/cb700b8c3d5196aab70e33027898907e878b090c))
+- **cms:** add validation for upload data ([ec36e50](https://github.com/twreporter/congress-dashboard-monorepo/commit/ec36e50e6375eb8a967806d0b8c11f6b3acb9d42))
+- **cms:** connect legislativeMeeting & fix legislativeYuanMember update logic ([e04dc0a](https://github.com/twreporter/congress-dashboard-monorepo/commit/e04dc0a5c90bfd50b7b5500dafbdd6d648cd1268))
+- **cms:** fix comments ([d6bc98d](https://github.com/twreporter/congress-dashboard-monorepo/commit/d6bc98d57233fd11044a25f6e6e131db4cefa6b7))
+- **cms:** fix topNTopicsOfLegislators sql syntax ([82b5e66](https://github.com/twreporter/congress-dashboard-monorepo/commit/82b5e66abd06cb76e7d5ec88905535202324f1c7))
+- **cms:** install all dependencies for docker image ([593e5bb](https://github.com/twreporter/congress-dashboard-monorepo/commit/593e5bb0a3ce093b0bf63e5905d5fb9bc8a6d713))
+- **cms:** list order and label name and dependency for cms ([efe8fbc](https://github.com/twreporter/congress-dashboard-monorepo/commit/efe8fbca376f6dfa481c57fc29727f204e5dae9a))
+- **cms:** more header & speech option ([a8c7ab9](https://github.com/twreporter/congress-dashboard-monorepo/commit/a8c7ab99ca2010877fc478ecc78ac95f770476e6))
+- **cms:** rename related topic column and add validation for link ([854c87a](https://github.com/twreporter/congress-dashboard-monorepo/commit/854c87aa00ef61fe5689bd81dbb8d6b214c262ea))
+- **cms:** reset Dockerfile ([51ae426](https://github.com/twreporter/congress-dashboard-monorepo/commit/51ae42663430476b09d9b4709143d85c68983bbf))
+- **cms:** set default sort to id for import record ([64c898c](https://github.com/twreporter/congress-dashboard-monorepo/commit/64c898ce724d5ad020ef5bf06e41e43b0379ffa3))
+- **cms:** set env to development for yarn install at Dockerfile ([4038947](https://github.com/twreporter/congress-dashboard-monorepo/commit/40389475bcc2392b49f974b6340cbd21d807eecf))
+- **cms:** typo ([0a034fb](https://github.com/twreporter/congress-dashboard-monorepo/commit/0a034fbd7988438e1567656ba406e805ea6482f7))
+- **cms:** update alert wording when failed ([f7556f5](https://github.com/twreporter/congress-dashboard-monorepo/commit/f7556f50a48502dc2d28eb10f5f945ab619272a5))
+- **cms:** update default value of twreporter url ([a6c380a](https://github.com/twreporter/congress-dashboard-monorepo/commit/a6c380ab295abe834eab9a48bc0ead40600dc2e4))
+- **cms:** update Dockerfile to use corepack ([70d9a0b](https://github.com/twreporter/congress-dashboard-monorepo/commit/70d9a0b738611488ecb7cfee7142be3746744b3a))
+- **cms:** update Dockerfile with multi stage ([e9c2bbe](https://github.com/twreporter/congress-dashboard-monorepo/commit/e9c2bbef3ce662df45be79b4b35768448420c2c5))
+- **cms:** update related article import logic ([82933f5](https://github.com/twreporter/congress-dashboard-monorepo/commit/82933f59a2a1f3c71141f5a13711a3661cc9179b))
+- **cms:** update type `TopicForLegislator` ([f8f83f5](https://github.com/twreporter/congress-dashboard-monorepo/commit/f8f83f529fb5d9cab1aaf8b431b246f85b9044ff))
+- **cms:** upsert topic with speech ([c0f508b](https://github.com/twreporter/congress-dashboard-monorepo/commit/c0f508ba2d76c0aa81d2ff8c15118afd3314e305))
+- **cms:** use `includes` instead of `indexOf` ([3fab837](https://github.com/twreporter/congress-dashboard-monorepo/commit/3fab8379b15080f18a5a75dcfa60402fea2bf567))
+- **cms:** use connect instead of set for create relationship ([cc7a8e3](https://github.com/twreporter/congress-dashboard-monorepo/commit/cc7a8e33359b05678addd70aaf43b4bf3b4ffc59))
+- **frontend:** read public config in runtime ([e2d4e9a](https://github.com/twreporter/congress-dashboard-monorepo/commit/e2d4e9a8b6ae37657587acf2c9cac919577aa980))
+- use correct shared package version ([f332f4d](https://github.com/twreporter/congress-dashboard-monorepo/commit/f332f4d9b0b3be0cb455543b6ed42ab359fd0306))
+
+### Features
+
+- add city constant ([94037d9](https://github.com/twreporter/congress-dashboard-monorepo/commit/94037d912910e49cf403cff783700f9e9da05682))
+- **cms:** add `developer_headless_account` role ([651f5ef](https://github.com/twreporter/congress-dashboard-monorepo/commit/651f5efb1ff95f41e5d3c519af3288673e090e33))
+- **cms:** add `topNTopicsOfLegislators` endpoint ([4e7c6aa](https://github.com/twreporter/congress-dashboard-monorepo/commit/4e7c6aafeba7c3afa9747dfa95ee56478d4f150f))
+- **cms:** add comment for graphql error ([c6a5387](https://github.com/twreporter/congress-dashboard-monorepo/commit/c6a53870cc56527f5348f31686c78c905b449cba))
+- **cms:** add csv uploader custom field ([e1ca584](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1ca584a0975cdeb14303c58a28cf4d4118b5d91))
+- **cms:** add custom GQL typedef and resolver for query `recentSpeechTopicStats` ([8ffea6e](https://github.com/twreporter/congress-dashboard-monorepo/commit/8ffea6ebb6ed715e5435dd2de1c7fd5da9141efd))
+- **cms:** add custom graphql endpoints ([661116d](https://github.com/twreporter/congress-dashboard-monorepo/commit/661116df76d78a7ec6d1e22adde09270e919cdf8))
+- **cms:** add emotion packages ([962e920](https://github.com/twreporter/congress-dashboard-monorepo/commit/962e920cb7d6bbd1c37f9fc08057ee289f450ba0))
+- **cms:** add favicon and change site title ([c806e3d](https://github.com/twreporter/congress-dashboard-monorepo/commit/c806e3dab3a74331300ac3f2d52c56528b00eacb))
+- **cms:** add field for related reporter articles ([b3997e7](https://github.com/twreporter/congress-dashboard-monorepo/commit/b3997e72c4b7e73dd3d0608b0c3f8dadf6a210e8))
+- **cms:** add imageLink for party and member ([bfdb83b](https://github.com/twreporter/congress-dashboard-monorepo/commit/bfdb83bbaa1535de98a3cdae244fec0150845050))
+- **cms:** add import record list ([43dc4d4](https://github.com/twreporter/congress-dashboard-monorepo/commit/43dc4d4b5135647f7ef314b5653db3c2288cc872))
+- **cms:** add import related articles ([3c193e2](https://github.com/twreporter/congress-dashboard-monorepo/commit/3c193e26ea207f78d09a53b88267da0bdda5fe3e))
+- **cms:** add legislative-yuan-member options constant ([ae9d6f7](https://github.com/twreporter/congress-dashboard-monorepo/commit/ae9d6f7d955026dbb679beef16eddbe13540b1ea))
+- **cms:** add papaparse to read csv file ([e8eb2c9](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8eb2c9b16476cfc7dd0d170b28af7159ce1e5ef))
+- **cms:** allow admin to delete import record ([a4814d8](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4814d8e566560c7287141e8ed4c56e4334d5ed1))
+- **cms:** check slug duplicated for some list ([e1b371a](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1b371a3b010a21e6926dea0edbdf7453ae1cd43))
+- **cms:** create committee list ([2c32fa5](https://github.com/twreporter/congress-dashboard-monorepo/commit/2c32fa5deb1b37b6c3e926fab244a7631dc3b6ad))
+- **cms:** create committeeMember list ([f6b6d62](https://github.com/twreporter/congress-dashboard-monorepo/commit/f6b6d624c065935f64437183c57c49e0da5b6f7a))
+- **cms:** create imageLink migration file ([030bcf1](https://github.com/twreporter/congress-dashboard-monorepo/commit/030bcf1769f1419bd645c0c8014960c4e85ea26b))
+- **cms:** create selected list ([7bc7183](https://github.com/twreporter/congress-dashboard-monorepo/commit/7bc71836bc30693fc4bceb5b8172b76ce4b60425))
+- **cms:** create topic and speech list ([e09da29](https://github.com/twreporter/congress-dashboard-monorepo/commit/e09da297bce60176753b0e218adb40dcee7bda51))
+- **cms:** migration file ([ddc0d50](https://github.com/twreporter/congress-dashboard-monorepo/commit/ddc0d509e13d42389ff9c3df713a02c183422c24))
+- **cms:** new columns for legislator & legislativeYuanMember ([785de95](https://github.com/twreporter/congress-dashboard-monorepo/commit/785de95947d033e8758df5735c927ceb7d69cb22))
+- **cms:** related topic upload ([fde8240](https://github.com/twreporter/congress-dashboard-monorepo/commit/fde82401ddc69079fe34cbbc97b9b8df61f6d8d7))
+- **cms:** required fields for upload csv ([e9a06a7](https://github.com/twreporter/congress-dashboard-monorepo/commit/e9a06a7d81b9f9b588f333a7adb64ec653ed3783))
+- **cms:** session secret ([2767337](https://github.com/twreporter/congress-dashboard-monorepo/commit/2767337dc8a7970390845f0c3c89ae063737ee56))
+- **cms:** set body limit to 50mb ([abb735d](https://github.com/twreporter/congress-dashboard-monorepo/commit/abb735d4291162394024da2fc3ef881c843a0af3))
+- **cms:** use custom field for import record and change speech content and summary type ([5008b0f](https://github.com/twreporter/congress-dashboard-monorepo/commit/5008b0fd9d834d397babc7ee4b5b1237b5176dc8))
+- **cms:** use legislative yuan member for relation ([7e72793](https://github.com/twreporter/congress-dashboard-monorepo/commit/7e72793c0925c70c2f09ae9ae0172ba8d0b0a35e))
+- use common eslint & prettier & husky ([481770f](https://github.com/twreporter/congress-dashboard-monorepo/commit/481770fba6acbca986ce7df1ff87fd4f4955029f))
+
 # Changelog
+
+## 1.1.1
+
+### Patch Changes
+
+- [#279](https://github.com/twreporter/congress-dashboard-monorepo/pull/279) [`e4f25fc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e4f25fc04b3fa51b58d7d0682c3bbd983a810cf9) Thanks [@nickhsine](https://github.com/nickhsine)! - fix(cms): /import-records list page hangs, and can not show any data
+
+## 1.1.1-rc.0
+
+### Patch Changes
+
+- [#279](https://github.com/twreporter/congress-dashboard-monorepo/pull/279) [`e4f25fc`](https://github.com/twreporter/congress-dashboard-monorepo/commit/e4f25fc04b3fa51b58d7d0682c3bbd983a810cf9) Thanks [@nickhsine](https://github.com/nickhsine)! - fix(cms): /import-records list page hangs, and can not show any data
+
+## 1.1.0
+
+### Patch Changes
+
+- [#186](https://github.com/twreporter/congress-dashboard-monorepo/pull/186) [`af9c552`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af9c552afc249fc288dd879a3945f8bd18e23d93) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add import twreporter related articles feature
+
+- [#219](https://github.com/twreporter/congress-dashboard-monorepo/pull/219) [`bbda58b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bbda58bcd7bc99bc4025859fdc271a94a512b738) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix import twreporter related articles logic
+
+- [#251](https://github.com/twreporter/congress-dashboard-monorepo/pull/251) [`73acf3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/73acf3c0cbec00f4f137be1fc6ae24a7170c4a1e) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - - frontend
+
+  - add `NoIssueState` for SidebarLegislator component
+  - adjust log level from `debug` to `info`
+  - fix product feedback wording
+  - add `console.log` for debugging temporary
+  - cms
+    - fix topNTopicsOfLegislator sql syntax
+
+- [#240](https://github.com/twreporter/congress-dashboard-monorepo/pull/240) [`3adbb61`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3adbb61ce632df3c3c797e2b70220ce930632549) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add migration file for `recordCount`
+
+- [#230](https://github.com/twreporter/congress-dashboard-monorepo/pull/230) [`c1f7b6b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c1f7b6b093f4cf0381a61e9e9192dca128a5b777) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `recordCount` for `ImportRecord` list
+
+- [#188](https://github.com/twreporter/congress-dashboard-monorepo/pull/188) [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207) Thanks [@liruchen32](https://github.com/liruchen32)! - test changeset
+
+- [#243](https://github.com/twreporter/congress-dashboard-monorepo/pull/243) [`5e4a479`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e4a479a218f3801c28853b2cb9a1a7023e5f5ab) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `pageSize` for ImportRecord list
+
+- Updated dependencies [[`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979), [`9421b7f`](https://github.com/twreporter/congress-dashboard-monorepo/commit/9421b7f52bd36771c782af45ef52a691e662a207)]:
+  - @twreporter/congress-dashboard-shared@0.0.7
+
+## 1.1.0-rc.7
+
+### Patch Changes
+
+- [#251](https://github.com/twreporter/congress-dashboard-monorepo/pull/251) [`73acf3c`](https://github.com/twreporter/congress-dashboard-monorepo/commit/73acf3c0cbec00f4f137be1fc6ae24a7170c4a1e) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - - frontend
+  - add `NoIssueState` for SidebarLegislator component
+  - adjust log level from `debug` to `info`
+  - fix product feedback wording
+  - add `console.log` for debugging temporary
+  - cms
+    - fix topNTopicsOfLegislator sql syntax
+
+## 1.1.0-rc.6
+
+### Patch Changes
+
+- [#243](https://github.com/twreporter/congress-dashboard-monorepo/pull/243) [`5e4a479`](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e4a479a218f3801c28853b2cb9a1a7023e5f5ab) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `pageSize` for ImportRecord list
+
+## 1.1.0-rc.5
+
+### Patch Changes
+
+- [#240](https://github.com/twreporter/congress-dashboard-monorepo/pull/240) [`3adbb61`](https://github.com/twreporter/congress-dashboard-monorepo/commit/3adbb61ce632df3c3c797e2b70220ce930632549) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add migration file for `recordCount`
+
+## 1.1.0-rc.4
+
+### Patch Changes
+
+- Updated dependencies [[`054b4ed`](https://github.com/twreporter/congress-dashboard-monorepo/commit/054b4ed96a06466b181259af128b3f05ebc13979)]:
+  - @twreporter/congress-dashboard-shared@0.0.7-rc.1
+
+## 1.1.0-rc.3
+
+### Patch Changes
+
+- [#230](https://github.com/twreporter/congress-dashboard-monorepo/pull/230) [`c1f7b6b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/c1f7b6b093f4cf0381a61e9e9192dca128a5b777) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add `recordCount` for `ImportRecord` list
+
+## 1.1.0-rc.2
+
+### Patch Changes
+
+- [#219](https://github.com/twreporter/congress-dashboard-monorepo/pull/219) [`bbda58b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/bbda58bcd7bc99bc4025859fdc271a94a512b738) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - fix import twreporter related articles logic
+
+## 1.1.0-rc.1
+
+### Patch Changes
+
+- [#186](https://github.com/twreporter/congress-dashboard-monorepo/pull/186) [`af9c552`](https://github.com/twreporter/congress-dashboard-monorepo/commit/af9c552afc249fc288dd879a3945f8bd18e23d93) Thanks [@Aylie-Chou](https://github.com/Aylie-Chou)! - add import twreporter related articles feature
 
 ## 1.1.0-rc.0
 
 ### Notable Changes
 
 - feat
+
   - cms: custom GQL schema and resovler for querying what Algolai search needs
 
 - refactor
   - two-sided relationship between speech and legislativeYuanMember
 
 ### Commits
+
 - [[`752473ee0b`](https://github.com/twreporter/congress-dashboard-monorepo/commit/752473ee0b)] - **refactor(cms)**: update extend-graphql-schemas/recent-speech-topic-stats.ts. Add orderBy (nickhsine)
 - [[`921bb0a106`](https://github.com/twreporter/congress-dashboard-monorepo/commit/921bb0a106)] - **chore(cms)**: add prisma migration script (nickhsine)
 - [[`f1a4c0cb7e`](https://github.com/twreporter/congress-dashboard-monorepo/commit/f1a4c0cb7e)] - **chore(cms)**: update schema.prisma (nickhsine)

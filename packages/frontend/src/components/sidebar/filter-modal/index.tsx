@@ -88,7 +88,9 @@ const Error: React.FC = () => (
       <ErrorDesc text={'請嘗試重新整理頁面。若仍無法正常顯示，'} />
       <ErrorDesc>
         歡迎點此
-        <TextButtonInP onClick={openFeedback}>回報問題</TextButtonInP>
+        <TextButtonInP onClick={() => openFeedback('sidebar filter')}>
+          回報問題
+        </TextButtonInP>
         以協助我們改善。
       </ErrorDesc>
     </Desc>
@@ -107,7 +109,7 @@ const TopBox = styled(FlexColumn)<{ $show: boolean }>`
   transition: transform 0.4s ease-in-out;
 `
 const TitleBox = styled(FlexRow)`
-  align-items: center;
+  align-items: flex-start;
 `
 const bottomHeight = 92 // confirm box height
 const ContentBox = styled.div<{
@@ -115,8 +117,8 @@ const ContentBox = styled.div<{
   $isSearchMode: boolean
 }>`
   overflow-y: scroll;
-  height: 100%;
-  max-height: calc(100% - ${(props) => props.$topBoxHeight + bottomHeight}px);
+  height: 100dvh;
+  max-height: calc(100dvh - ${(props) => props.$topBoxHeight + bottomHeight}px);
   transition: all 0.4s ease-in-out;
   ${(props) =>
     props.$isSearchMode
@@ -175,7 +177,7 @@ const Text = styled(P2)`
 `
 const ConfirmBox = styled.div<{ $isLoading: boolean }>`
   position: ${(props) => (props.$isLoading ? 'fixed' : 'sticky')};
-  bottom: 0;
+  bottom: env(safe-area-inset-bottom, 0);
   z-index: 1;
   width: 100%;
 `
@@ -404,6 +406,12 @@ const FilterModal: React.FC<FilterModalProps> = ({
     onClose()
   }
 
+  const close = (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onClose()
+  }
+
   return (
     <>
       <TopBox $show={!isSearchMode} ref={topBoxRef}>
@@ -423,7 +431,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
               iconComponent={<Cross releaseBranch={releaseBranch} />}
               theme={IconButton.THEME.normal}
               type={IconButton.Type.PRIMARY}
-              onClick={onClose}
+              onClick={close}
             />
           </ButtonGroup>
         </TitleBox>

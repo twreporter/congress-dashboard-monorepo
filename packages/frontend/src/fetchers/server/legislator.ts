@@ -1,4 +1,4 @@
-import { keystoneFetch } from '@/app/api/graphql/keystone'
+import { keystoneFetch } from '@/app/api/_graphql/keystone'
 
 export type LegislatorFromRes = {
   proposalSuccessCount?: number
@@ -39,6 +39,7 @@ export type LegislatorFromRes = {
     meetingTermCount?: number
     meetingTermCountInfo?: string
   }
+  isActive: boolean
 }
 
 /** checkLegislatorExist
@@ -178,6 +179,7 @@ export const fetchLegislator = async ({
             term
           }
         }
+        isActive
       }
     }
   `
@@ -266,7 +268,7 @@ export const fetchLegislatorTopics = async ({
         title
         slug
         speechesCount(where: $speechCondition)
-        speeches(where: $speechCondition) {
+        speeches(where: $speechCondition, orderBy: { date: desc }) {
           slug
           date
           title
@@ -290,5 +292,27 @@ export const fetchLegislatorTopics = async ({
     throw new Error(
       `Failed to fetch topics for legislator for slug: ${slug}, err: ${err}`
     )
+  }
+}
+
+/**
+ * fetch all legislators slug for sitemap
+ */
+export const fetchAllLegislatorsSlug = async () => {
+  const query = `
+    query GetAllLegislatorsSlug {
+      legislators {
+        slug
+        updatedAt
+      }
+    }
+  `
+  try {
+    const data = await keystoneFetch<{
+      legislators: { slug: string; updatedAt: string }[]
+    }>(JSON.stringify({ query }), false)
+    return data?.data?.legislators
+  } catch (err) {
+    throw new Error(`Failed to fetch all legislators, err: ${err}`)
   }
 }

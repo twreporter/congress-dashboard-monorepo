@@ -8,16 +8,21 @@ import { MenuButton, PillButton } from '@twreporter/react-components/lib/button'
 import Divider from '@twreporter/react-components/lib/divider'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import { AlgoliaInstantSearch } from '@/components/search/instant-search'
+import {
+  AlgoliaInstantSearch,
+  layoutVariants,
+} from '@/components/search/instant-search'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
 import {
   COMMON_MENU_LINKS,
-  SECONDARY_LINKS,
   PILL_BUTTON_LINKS,
 } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
+import { ExternalRoutes } from '@/constants/routes'
+// utils
+import { openFeedback } from '@/utils/feedback'
 
 const Container = styled.div<{ $isOpen: boolean }>`
   flex-direction: column;
@@ -41,6 +46,7 @@ const DividerContainer = styled.div`
 const Title2 = styled.div`
   padding-top: 8px;
   padding-bottom: 8px;
+  color: ${colorGrayscale.gray600};
   a {
     color: ${colorGrayscale.gray600};
     text-decoration: none;
@@ -68,7 +74,6 @@ const SearchSection = styled.div`
 `
 
 const menuLinks = COMMON_MENU_LINKS
-const secondaryLinks = SECONDARY_LINKS
 const pillButtonLinks = PILL_BUTTON_LINKS
 
 type HamburgerMenuProps = {
@@ -78,7 +83,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
   return (
     <Container $isOpen={isOpen}>
       <SearchSection>
-        <AlgoliaInstantSearch />
+        <AlgoliaInstantSearch variant={layoutVariants.Menu} />
       </SearchSection>
       {menuLinks.map(({ text, href, target }, idx) => (
         <MenuButton
@@ -93,13 +98,14 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
       <DividerContainer>
         <Divider />
       </DividerContainer>
-      {secondaryLinks.map(({ text, href, target }, idx) => (
-        <Title2 key={`title-2-${idx}`}>
-          <Link href={href} target={target}>
-            <P2 text={text} />
-          </Link>
-        </Title2>
-      ))}
+      <Title2 onClick={() => openFeedback('hamburger-menu')}>
+        <P2 text={'意見回饋'} />
+      </Title2>
+      <Title2>
+        <Link href={ExternalRoutes.Medium} target={'_blank'}>
+          <P2 text={'報導者開放實驗室'} />
+        </Link>
+      </Title2>
       <DividerContainer>
         <Divider />
       </DividerContainer>

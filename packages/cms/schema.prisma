@@ -131,6 +131,7 @@ model LegislativeYuanMember {
   tooltip              String              @default("")
   note                 String              @default("")
   proposalSuccessCount Int?
+  isActive             Boolean             @default(true)
   createdAt            DateTime?           @default(now())
   updatedAt            DateTime?           @updatedAt
 
@@ -215,6 +216,7 @@ model ImportRecord {
   recordName          String      @default("")
   uploadData_listName String
   uploadData_csvData  Json
+  recordCount         Int?
   importer            SystemUser? @relation("ImportRecord_importer", fields: [importerId], references: [id])
   importerId          Int?        @map("importer")
   createdAt           DateTime?   @default(now())

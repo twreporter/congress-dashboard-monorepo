@@ -5,27 +5,21 @@
     "packages": [
       "packages/cms",
       "packages/frontend",
-      "packages/shared"
+      "packages/shared",
+      "packages/cli"
     ]
   },
   "scripts": {
-    "prepare": "husky install",
-    "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown",
+    "prepare": "husky",
     "build:shared": "yarn workspace @twreporter/congress-dashboard-shared build",
     "postinstall": "yarn build:shared",
     "publish:shared": "yarn workspace @twreporter/congress-dashboard-shared publish",
-    "changeset": "changeset",
-    "changeset:version": "changeset version",
-    "changeset:pre": "changeset pre enter",
-    "changeset:pre-exit": "changeset pre exit",
-    "changeset:publish": "changeset publish",
-    "changeset:status": "changeset status"
+    "version:bump": "lerna version --conventional-commits --yes",
+    "postversion": "yarn install --immutable"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.4",
-    "@commitlint/cli": "^18.4.3",
-    "@commitlint/config-conventional": "^18.4.3",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "changelog-maker": "^4.3.3",
     "eslint": "^7.7.0",

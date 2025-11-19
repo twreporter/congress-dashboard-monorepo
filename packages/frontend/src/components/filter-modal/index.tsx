@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 // @twerporter
 import {
@@ -25,6 +26,7 @@ import type {
   FilterOption,
   FilterModalValueType,
 } from '@/components/dashboard/type'
+import { useBodyScrollLock } from '@/hooks/use-scroll-lock'
 
 const ModalContainer = styled.div<{ $isOpen: boolean }>`
   display: ${(props) => (props.$isOpen ? 'flex' : 'none')};
@@ -32,7 +34,7 @@ const ModalContainer = styled.div<{ $isOpen: boolean }>`
   top: 0px;
   right: 0px;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   background-color: ${colorOpacity['black_0.2']};
   justify-content: center;
   align-items: center;
@@ -98,7 +100,7 @@ const Footer = styled.div`
     padding: 24px;
     gap: 10px;
     border-top: 1px solid ${colorGrayscale.gray300};
-    position:fixed;
+    position: fixed;
     width: 100%;
     bottom: 0;
   `}
@@ -198,6 +200,12 @@ const FilterModal: React.FC<FilterModelProps> = ({
     }
   }, [value])
 
+  // Lock body scroll
+  useBodyScrollLock({
+    toLock: isOpen,
+    lockID: 'filter-modal',
+  })
+
   // Handle internal state changes
   const handleValueChange = (key: string, newValue: string | string[]) => {
     const updatedValue = {
@@ -229,7 +237,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
     setIsOpen(false)
   }
 
-  return (
+  return ReactDOM.createPortal(
     <ModalContainer $isOpen={isOpen}>
       <Filter>
         <Header>
@@ -250,6 +258,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                 options: selectOptions,
                 isLoading,
                 defaultValue,
+                showError,
               },
               idx
             ) => {
@@ -269,6 +278,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                           handleValueChange(optionKey, selectedValue)
                         }
                         loading={isLoading}
+                        showError={showError}
                       />
                     </SelectorContainer>
                   </SelectContainer>
@@ -287,6 +297,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                           handleValueChange(optionKey, selectedValue)
                         }
                         loading={isLoading}
+                        showError={showError}
                       />
                     </SelectorContainer>
                   </SelectContainer>
@@ -309,7 +320,9 @@ const FilterModal: React.FC<FilterModelProps> = ({
           />
         </Footer>
       </Filter>
-    </ModalContainer>
+    </ModalContainer>,
+    // Append the modal to <body> to avoid z-index issues caused by parent stacking contexts
+    document.body
   )
 }
 

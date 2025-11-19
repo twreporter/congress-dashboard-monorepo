@@ -3,7 +3,7 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import styled from '@emotion/styled'
 // util
-import { getTwreporterApiUrl } from './util'
+import { getTwreporterArticle } from './util'
 // type
 import type {
   FieldControllerConfig,
@@ -41,24 +41,6 @@ const Item = styled.div`
 `
 const boxStyle = {
   border: '1px solid #e2e2e2',
-}
-
-const getTwreporterArticle = async (slug: string) => {
-  const twreporterApiUrl = getTwreporterApiUrl()
-  const url = `${twreporterApiUrl}/v2/posts/${slug}?full=false`
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!res.ok) {
-    throw new Error(`article not found, slug: ${slug}`)
-  }
-
-  const data = await res.json()
-  return data?.data
 }
 
 type Slugs = string[]

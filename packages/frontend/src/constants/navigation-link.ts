@@ -7,15 +7,6 @@ export const COMMON_MENU_LINKS: NavigationLink[] = [
   { text: '關於觀測站', href: InternalRoutes.About, target: '_self' },
 ]
 
-export const SECONDARY_LINKS: NavigationLink[] = [
-  { text: '意見回饋', href: InternalRoutes.Feedback, target: '_self' },
-  {
-    text: '報導者開放實驗室',
-    href: ExternalRoutes.Medium,
-    target: '_blank',
-  },
-]
-
 export const PILL_BUTTON_LINKS: PillBtnNavigationLink[] = [
   {
     text: '訂閱電子報',

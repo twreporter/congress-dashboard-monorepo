@@ -1,8 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
+import type { LayoutVariant } from '@/components/search/constants'
+import { InternalRoutes } from '@/constants/routes'
 import { Highlight, Snippet } from 'react-instantsearch'
 import { Issue as IconIssue } from '@/components/search/icons'
+import { layoutVariants } from '@/components/search/constants'
 import {
   colorGrayscale,
   colorSupportive,
@@ -10,56 +13,67 @@ import {
 
 export type LegislatorRawHit = Hit<{
   objectID: string
-  legislatorID: string
+  slug: string
   name: string
   desc: string
   shortDesc: string
-  imgSrc?: string
-  term: number
-  session: number
-  latestSpeechAt?: string
-  href: string
-}>
-
-export type SpeechRawHit = Hit<{
-  objectID: string
-  name: string
-  legislatorNames: string[]
-  legislatorIDs: string[]
-  topic: string
-  desc: string
-  term: number
-  session: number
-  date: string
-  href: string
+  imgSrc: string
+  meetingTerm: number
+  lastSpeechAt?: string
+  partyImgSrc: string
 }>
 
 export type TopicRawHit = Hit<{
   objectID: string
   name: string
+  slug: string
   desc: string
-  shortDesc: string
-  latestSpeechAt?: string
-  href: string
+  meetingTerm: number
+  lastSpeechAt?: string
   relatedMessageCount: number
 }>
 
-const Avatar = styled.div`
+const Circle = styled.div`
   width: 48px;
   height: 48px;
   border-radius: 50%;
   border: 1px solid ${colorGrayscale.gray200};
+  background-color: ${colorGrayscale.white};
+`
 
+const TopicCircle = styled(Circle)`
   display: flex;
   justify-content: center;
   align-items: center;
 
   overflow: hidden;
+`
 
-  & > img {
-    object-fit: cover;
-    width: 100%;
-  }
+const Avatar = styled(Circle)<{ $imgSrc: string }>`
+  ${({ $imgSrc }) => {
+    return `background-image: url(${$imgSrc});`
+  }}
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  position: relative;
+`
+
+const Party = styled(Circle)<{ $imgSrc: string }>`
+  ${({ $imgSrc }) => {
+    return `background-image: url(${$imgSrc});`
+  }}
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  width: 16px;
+  height: 16px;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
 `
 
 const Text = styled.div`
@@ -79,16 +93,27 @@ const Text = styled.div`
   }
 `
 
-const InstantHitContainer = styled.div`
+const InstantHitContainer = styled.div<{ $variant: LayoutVariant }>`
   width: 100%;
   margin: 4px 0;
-  padding: 8px 16px;
+  ${({ $variant }) => {
+    switch ($variant) {
+      case layoutVariants.Modal: {
+        return `
+          padding: 8px 24px;
+        `
+      }
+      default: {
+        return `
+          padding: 8px 16px;
+        `
+      }
+    }
+  }}
 
   display: flex;
   gap: 12px;
   align-items: center;
-
-  cursor: pointer;
 
   &:hover {
     background-color: ${colorGrayscale.gray100};
@@ -108,7 +133,7 @@ const InstantHitContainer = styled.div`
     color: ${colorSupportive.heavy};
   }
 
-  ${Avatar} {
+  ${Avatar}, ${TopicCircle} {
     flex-shrink: 0;
   }
 
@@ -117,34 +142,57 @@ const InstantHitContainer = styled.div`
   }
 `
 
-export function InstantLegislatorHit({ hit }: { hit: LegislatorRawHit }) {
+export function InstantLegislatorHit({
+  hit,
+  variant,
+}: {
+  hit: LegislatorRawHit
+  variant: LayoutVariant
+}) {
   return (
-    <InstantHitContainer>
-      <Avatar>
-        {/* TODO: replace img by using `<Image />` from `next/image` */}
-        <img src={hit.imgSrc} />
-      </Avatar>
-      <Text>
-        <Highlight highlightedTagName="span" attribute="name" hit={hit} />
-        <p>{hit.desc}</p>
-      </Text>
-    </InstantHitContainer>
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <Avatar $imgSrc={hit.imgSrc}>
+          <Party $imgSrc={hit.partyImgSrc} />
+        </Avatar>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>{hit.shortDesc}</p>
+        </Text>
+      </InstantHitContainer>
+    </a>
   )
 }
 
-export function InstantTopicHit({ hit }: { hit: TopicRawHit }) {
+export function InstantTopicHit({
+  hit,
+  variant,
+}: {
+  hit: TopicRawHit
+  variant: LayoutVariant
+}) {
   return (
-    <InstantHitContainer>
-      <Avatar>
-        <IconIssue />
-      </Avatar>
-      <Text>
-        <Highlight highlightedTagName="span" attribute="name" hit={hit} />
-        <p>
-          <span>共{hit.relatedMessageCount}筆相關留言，</span>
-          <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
-        </p>
-      </Text>
-    </InstantHitContainer>
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <TopicCircle>
+          <IconIssue />
+        </TopicCircle>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>
+            {variant === layoutVariants.Default ? (
+              <span>共{hit.relatedMessageCount}筆發言：</span>
+            ) : (
+              <span>發言：</span>
+            )}
+            <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
+          </p>
+        </Text>
+      </InstantHitContainer>
+    </a>
   )
 }

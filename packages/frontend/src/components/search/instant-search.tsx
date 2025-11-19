@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import useWindowWidth from '@/hooks/use-window-width'
 import styled from 'styled-components'
@@ -8,13 +10,13 @@ import {
   defaultIndexName,
 } from '@/components/search/instant-hits'
 import { InstantSearch, useSearchBox } from 'react-instantsearch'
-import { LayoutVariants } from '@/components/search/constants'
 import { SearchBox } from '@/components/search/search-box'
 import { SearchModal } from '@/components/search/modal'
 import { ZIndex } from '@/styles/z-index'
-import { liteClient as algoliasearch } from 'algoliasearch/lite'
+import { layoutVariants } from '@/components/search/constants'
+import { createAlgoliaSearchClient } from '@/components/search/algolia-client'
 
-export { LayoutVariants }
+export { layoutVariants }
 
 const Container = styled.div<{ $variant: LayoutVariant }>`
   /* TODO: remove box-sizing if global already defined */
@@ -26,7 +28,7 @@ const Container = styled.div<{ $variant: LayoutVariant }>`
 
   ${({ $variant }) => {
     // Set the z-index to avoid covering the header and being covered by the sticky bar.
-    if ($variant === LayoutVariants.Default) {
+    if ($variant === layoutVariants.Default) {
       return `z-index: ${ZIndex.SearchBarInBody};`
     }
   }}
@@ -78,34 +80,37 @@ const ClickOutsideWidget = ({
   return null
 }
 
-export const AlgoliaInstantSearch = ({
-  className,
-  variant = LayoutVariants.Default,
-  autoFocus = false,
-}: {
+function PrefillQuery({ query }: { query?: string }) {
+  const { refine } = useSearchBox()
+
+  useEffect(() => {
+    if (query) {
+      refine(query)
+    }
+  }, [refine, query])
+
+  return null
+}
+
+export type AlgoliaInstantSearchProps = {
   className?: string
   variant?: LayoutVariant
   autoFocus?: boolean
-}) => {
+  query?: string
+}
+
+export const AlgoliaInstantSearch = ({
+  className,
+  variant = layoutVariants.Default,
+  autoFocus = false,
+  query = '',
+}: AlgoliaInstantSearchProps) => {
   const containerRef = useRef(null)
-  const [focused, setFocused] = useState(true)
+  const [focused, setFocused] = useState(autoFocus)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const windowWidth = useWindowWidth()
 
-  const searchClient = useMemo(() => {
-    if (typeof window === 'undefined') {
-      return null // Don't init on server
-    }
-    const appID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID
-    const searchKey = process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY
-
-    if (!appID || !searchKey) {
-      console.warn('Missing Algolia credentials')
-      return null
-    }
-
-    return algoliasearch(appID, searchKey)
-  }, [])
+  const searchClient = useMemo(createAlgoliaSearchClient, [])
 
   if (!searchClient) {
     return null // Avoid render if client not ready
@@ -113,9 +118,14 @@ export const AlgoliaInstantSearch = ({
 
   if (isModalOpen) {
     return (
-      <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
+      <InstantSearch
+        indexName={defaultIndexName}
+        searchClient={searchClient}
+        future={{ preserveSharedStateOnUnmount: true }}
+      >
         <SearchModal
           onClose={() => {
+            setFocused(false)
             setIsModalOpen(false)
           }}
         />
@@ -124,21 +134,28 @@ export const AlgoliaInstantSearch = ({
   }
 
   return (
-    <InstantSearch indexName={defaultIndexName} searchClient={searchClient}>
+    <InstantSearch
+      indexName={defaultIndexName}
+      searchClient={searchClient}
+      future={{
+        preserveSharedStateOnUnmount: true,
+      }}
+    >
       <Container ref={containerRef} className={className} $variant={variant}>
+        <PrefillQuery query={query} />
         <SearchBox
           variant={variant}
           autoFocus={autoFocus}
           onFocus={() => {
-            setFocused(true)
-
             // For mobile, open the search modal
             if (windowWidth < DEFAULT_SCREEN.tablet.minWidth) {
               setIsModalOpen(true)
+            } else {
+              setFocused(true)
             }
           }}
         />
-        <InstantHits $hide={!focused} />
+        <InstantHits $hide={!focused} variant={variant} />
         <ClickOutsideWidget
           containerRef={containerRef}
           onClickOutside={() => {

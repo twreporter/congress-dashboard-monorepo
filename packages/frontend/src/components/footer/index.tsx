@@ -12,6 +12,7 @@ import {
 } from '@twreporter/react-components/lib/rwd'
 import releaseBranchConsts from '@twreporter/core/lib/constants/release-branch'
 import origins from '@twreporter/core/lib/constants/request-origins'
+import { fundraisingId } from '@twreporter/core/lib/constants/fundraising'
 // component
 import Logo from '@/components/footer/logo'
 import FooterLink, { TextSize } from '@/components/footer/link'
@@ -129,11 +130,6 @@ const BottomContainer = styled.div`
 const BottomSection = styled.div`
   display: flex;
   flex-direction: row;
-
-  ${mq.tabletAndBelow`
-    flex-direction: column;
-    align-items: center;
-  `}
 `
 
 const P3Gray600 = styled(P3)`
@@ -148,6 +144,8 @@ const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
 const TabletAndBelowWithFlex = styled(TabletAndBelow)`
   ${mq.tabletAndBelow`
     display: flex !important;
+    align-items: center;
+    flex-direction: column;
   `}
 `
 const Feedback = styled(P2Gray600)`
@@ -158,13 +156,18 @@ const Feedback = styled(P2Gray600)`
   }
 `
 
+const BottomLinksContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 const Footer: React.FC = () => {
   const BottomLinks = ({ releaseBranch = releaseBranchConsts.release }) => {
     const mainOrigin = origins.forClientSideRendering[releaseBranch].main
     return (
-      <React.Fragment>
+      <BottomLinksContainer>
         <FooterLink
           href={`${mainOrigin}/a/license-footer`}
           text="許可協議"
@@ -178,7 +181,7 @@ const Footer: React.FC = () => {
           target="_blank"
           size={TextSize.S}
         />
-      </React.Fragment>
+      </BottomLinksContainer>
     )
   }
 
@@ -214,7 +217,7 @@ const Footer: React.FC = () => {
     if (!latestLegislativeMeetingTerm || !latestLegislativeMeetingSessionTerm) {
       return '資料更新資訊不可用'
     }
-    return `本網站資料更新至第${latestLegislativeMeetingTerm}屆第${latestLegislativeMeetingSessionTerm}會期`
+    return `本網站資料更新至立法院第${latestLegislativeMeetingTerm}屆第${latestLegislativeMeetingSessionTerm}會期`
   }, [
     meetingsLoading,
     sessionsLoading,
@@ -239,12 +242,25 @@ const Footer: React.FC = () => {
                 text="關於觀測站"
                 target="_self"
               />
-              <Feedback text="意見回饋" onClick={openFeedback} />
+              <FooterLink
+                href={ExternalRoutes.AboutTwreporter}
+                text="關於我們"
+                target="_blank"
+              />
+              <Feedback
+                text="意見回饋"
+                onClick={() => openFeedback('footer')}
+              />
             </LinkGroup>
             <LinkGroup>
               <FooterLink
                 href={ExternalRoutes.Medium}
                 text="報導者開放實驗室"
+                target="_blank"
+              />
+              <FooterLink
+                href={ExternalRoutes.TwReporter}
+                text="前往《報導者》"
                 target="_blank"
               />
               <FooterLink
@@ -260,12 +276,16 @@ const Footer: React.FC = () => {
         </DividerWrapper>
         <BottomContainer>
           <BottomSection>
-            <P3Gray600 text={displayText} />
             <DesktopAndAboveWithFlex>
+              <P3Gray600 text={fundraisingId} />
+              <P3Gray600 text="｜" />
+              <P3Gray600 text={displayText} />
               <P3Gray600 text="｜" />
               <BottomLinks releaseBranch={releaseBranch} />
             </DesktopAndAboveWithFlex>
             <TabletAndBelowWithFlex>
+              <P3Gray600 text={fundraisingId} />
+              <P3Gray600 text={displayText} />
               <BottomLinks releaseBranch={releaseBranch} />
             </TabletAndBelowWithFlex>
           </BottomSection>
