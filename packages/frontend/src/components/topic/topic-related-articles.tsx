@@ -17,6 +17,8 @@ import {
   MobileOnly,
 } from '@twreporter/react-components/lib/rwd'
 import mq from '@twreporter/core/lib/utils/media-query'
+// type
+import type { RelatedItem, RelatedType } from '@/types/related-twreporter-item'
 
 // horizontal line component
 const HorizontalLine = styled.div`
@@ -57,14 +59,16 @@ const imageStyle: CSSProperties = {
 }
 
 type TwreporterArticleProps = {
+  type: RelatedType
   slug: string
   onError?: () => void
 }
 const TwreporterArticle: React.FC<TwreporterArticleProps> = ({
+  type,
   slug,
   onError,
 }) => {
-  const { data, isLoading, error } = useTwreporterArticle(slug)
+  const { data, isLoading, error } = useTwreporterArticle(type, slug)
   const hasCalledOnError = useRef(false)
 
   useEffect(() => {
@@ -166,7 +170,7 @@ const RelatedArticleBlock = styled.div`
 `
 
 type TopicRelatedArticlesProps = {
-  relatedArticles?: string[]
+  relatedArticles?: RelatedItem[]
 }
 const TopicRelatedArticles: React.FC<TopicRelatedArticlesProps> = ({
   relatedArticles = [],
@@ -183,10 +187,11 @@ const TopicRelatedArticles: React.FC<TopicRelatedArticlesProps> = ({
   return (
     <RelatedArticleBlock>
       <H4Title text="相關文章" />
-      {relatedArticles.map((slug, index) => (
-        <div key={`twreporter-a-${slug}`}>
+      {relatedArticles.map(({ type, slug }: RelatedItem, index) => (
+        <div key={`related-${type}-${slug}`}>
           {index !== 0 ? <HorizontalLine /> : null}
           <TwreporterArticle
+            type={type}
             slug={slug}
             onError={() => setErrorCount((errorCount) => errorCount + 1)}
           />
