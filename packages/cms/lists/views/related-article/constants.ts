@@ -1,5 +1,3 @@
-type ValuesOf<T> = T[keyof T]
-
 export const RELATED_TYPE = {
   wwwArticle: 'www-article',
   wwwTopic: 'www-topic',
@@ -20,5 +18,3 @@ export const RELATED_TYPE_OPTION = [
     value: RELATED_TYPE.wwwTopic,
   },
 ] as const
-
-export type RelatedType = ValuesOf<typeof RELATED_TYPE>

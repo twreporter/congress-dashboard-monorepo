@@ -52,6 +52,32 @@ export const getTwreporterArticle = async (slug: string, hostname?: string) => {
   return data?.data
 }
 
+export const getTwreporterArticles = async (
+  slugs: string[],
+  hostname?: string
+) => {
+  if (slugs.length === 0) {
+    return []
+  }
+
+  const twreporterApiUrl = hostname ?? getTwreporterApiUrl()
+  const baseUrl = `${twreporterApiUrl}/v2/posts?full=false`
+  const url = baseUrl + slugs.reduce((acc, res) => res + `&slug=${acc}`, '')
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`cannot get articles, slugs: ${slugs}`)
+  }
+
+  const data = await res.json()
+  return data?.data
+}
+
 export const getTwreporterTopic = async (slug: string, hostname?: string) => {
   const twreporterApiUrl = hostname ?? getTwreporterApiUrl()
   const url = `${twreporterApiUrl}/v2/topics/${slug}?full=false`
@@ -64,6 +90,32 @@ export const getTwreporterTopic = async (slug: string, hostname?: string) => {
 
   if (!res.ok) {
     throw new Error(`topic not found, slug: ${slug}`)
+  }
+
+  const data = await res.json()
+  return data?.data
+}
+
+export const getTwreporterTopics = async (
+  slugs: string[],
+  hostname?: string
+) => {
+  if (slugs.length === 0) {
+    return []
+  }
+
+  const twreporterApiUrl = hostname ?? getTwreporterApiUrl()
+  const baseUrl = `${twreporterApiUrl}/v2/topics?full=false`
+  const url = baseUrl + slugs.reduce((acc, res) => res + `&slug=${acc}`, '')
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`cannot get topics, slugs: ${slugs}`)
   }
 
   const data = await res.json()

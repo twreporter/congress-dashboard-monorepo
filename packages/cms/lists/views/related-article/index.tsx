@@ -2,20 +2,20 @@
 
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import styled from '@emotion/styled'
-// util
+// utils
 import { getTwreporterArticle, getTwreporterTopic } from './util'
-// type
+// types
 import type {
   FieldControllerConfig,
   FieldController,
   FieldProps,
 } from '@keystone-6/core/types'
+import type { RelatedType } from './types'
 // constants
 import {
   RELATED_TYPE,
   RELATED_TYPE_LABEL,
   RELATED_TYPE_OPTION,
-  type RelatedType,
 } from './constants'
 // components
 import { FieldLabel, FieldContainer, TextInput } from '@keystone-ui/fields'
@@ -49,14 +49,17 @@ const Item = styled.div`
 const DeleteButton = styled(Button)`
   margin-left: auto;
 `
-const TypeSelector = styled(Button)`
+const TypeSelector = styled.select`
   font-size: 1rem;
   height: 38px;
+  background-color: inherit;
+  cursor: pointer;
 `
 const TypeBadge = styled.div`
   color: #6b7280;
   background-color: #eff3f6;
   padding: 1px 12px;
+  flex-shrink: 0;
 `
 const boxStyle = {
   border: '1px solid #e2e2e2',
@@ -127,21 +130,20 @@ export const Field = ({
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
       <InputBox>
-        <TypeSelector
+        <Button
           isBlock={false}
           tone={'passive'}
           size={'small'}
           weight={'light'}
-          as="select"
-          name="相關文章類別"
-          onChange={onSelectTypeChange}
         >
-          {RELATED_TYPE_OPTION.map(({ value, label }) => (
-            <option value={value} key={`type-option-${value}`}>
-              {label}
-            </option>
-          ))}
-        </TypeSelector>
+          <TypeSelector onChange={onSelectTypeChange} name="相關文章類別">
+            {RELATED_TYPE_OPTION.map(({ value, label }) => (
+              <option value={value} key={`type-option-${value}`}>
+                {label}
+              </option>
+            ))}
+          </TypeSelector>
+        </Button>
         <TextInput value={inputSlug} onChange={onInputChange} />
         <Button onClick={addRelated}>
           <SearchIcon />
