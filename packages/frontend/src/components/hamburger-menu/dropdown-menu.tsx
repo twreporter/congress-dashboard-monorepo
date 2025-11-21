@@ -10,7 +10,7 @@ import {
 } from '@twreporter/core/lib/constants/color'
 import { Arrow } from '@twreporter/react-components/lib/icon'
 
-const Container = styled.div<{ $isActive: boolean }>`
+const Container = styled.div<{ $isActive: boolean; $isDropdownOpen: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,7 +28,7 @@ const Container = styled.div<{ $isActive: boolean }>`
     }
     svg {
       background-color: ${colorBrand.heavy};
-      rotate: 180deg;
+      rotate: ${props.$isDropdownOpen ? '180deg' : '0deg'};
     }
   `
       : `
@@ -37,13 +37,9 @@ const Container = styled.div<{ $isActive: boolean }>`
     }
     svg {
       background-color: ${colorGrayscale.gray800};
-      rotate: 0deg;
+      rotate: ${props.$isDropdownOpen ? '180deg' : '0deg'};
     }
   `}
-`
-
-const P2Gray800 = styled(P2)`
-  color: ${colorGrayscale.gray800};
 `
 
 const ArrowIcon = styled(Arrow)`
@@ -59,8 +55,20 @@ const Menu = styled.div<{ $isActive: boolean }>`
   overflow: hidden;
 `
 
-const Item = styled.div`
+const Item = styled.div<{ $isActive: boolean }>`
   padding: 8px 0px;
+  ${(props) =>
+    props.$isActive
+      ? `
+    p {
+      color: ${colorBrand.heavy};
+    }
+  `
+      : `
+    p {
+      color: ${colorGrayscale.gray800};
+    }
+  `}
 `
 
 type DropdownMenuProps = {
@@ -71,19 +79,30 @@ type DropdownMenuProps = {
   }[]
   isActive?: boolean
   onClick?: () => void
+  currentValue?: string
 }
 const DropdownMenu: FC<DropdownMenuProps> = ({
   label,
   options,
   isActive = false,
   onClick = () => {},
+  currentValue = '',
 }) => {
   const handleItemClick = (value: string) => {
     redirect(value)
   }
+
+  const isDropdownActive = options.some(
+    (option) => option.value === currentValue
+  )
+
   return (
     <>
-      <Container $isActive={isActive} onClick={onClick}>
+      <Container
+        $isActive={isActive || isDropdownActive}
+        $isDropdownOpen={isActive}
+        onClick={onClick}
+      >
         <P1 text={label} weight={P1.Weight.BOLD} />
         <ArrowIcon direction={Arrow.Direction.DOWN} />
       </Container>
@@ -92,8 +111,9 @@ const DropdownMenu: FC<DropdownMenuProps> = ({
           <Item
             key={`dropdown-menu-item-${value}`}
             onClick={() => handleItemClick(value)}
+            $isActive={currentValue === value}
           >
-            <P2Gray800 text={label} weight={P2.Weight.BOLD} />
+            <P2 text={label} weight={P2.Weight.BOLD} />
           </Item>
         ))}
       </Menu>

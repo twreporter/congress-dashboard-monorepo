@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 // next
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 // @twreporter
 import { MenuButton, PillButton } from '@twreporter/react-components/lib/button'
 import Divider from '@twreporter/react-components/lib/divider'
@@ -79,6 +80,7 @@ type HamburgerMenuProps = {
   isOpen: boolean
 }
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
+  const pathname = usePathname()
   const [isDropdownActive, setIsDropdownActive] = useState(false)
   const handleDropdownClick = () => {
     setIsDropdownActive(!isDropdownActive)
@@ -100,6 +102,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
         options={options}
         onClick={handleDropdownClick}
         isActive={isDropdownActive}
+        currentValue={pathname || ''}
       />
       <MenuButton
         paddingLeft={0}
