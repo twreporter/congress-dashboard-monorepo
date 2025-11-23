@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.7.0...@twreporter/congress-dashboard-frontend@1.7.1-rc.0) (2025-11-23)
+
+### Bug Fixes
+
+- **frontend:** replace both \n & \\n to br ([c9473f3](https://github.com/twreporter/congress-dashboard-monorepo/commit/c9473f31294a273016dc803c5025dac990665293))
+
 # [1.7.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.7.0-rc.0...@twreporter/congress-dashboard-frontend@1.7.0) (2025-11-11)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
