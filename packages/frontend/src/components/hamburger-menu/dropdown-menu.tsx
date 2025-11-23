@@ -1,7 +1,7 @@
 'use client'
 import React, { type FC } from 'react'
 import styled from 'styled-components'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 // @twreporter
 import { P1, P2 } from '@twreporter/react-components/lib/text/paragraph'
 import {
@@ -88,8 +88,10 @@ const DropdownMenu: FC<DropdownMenuProps> = ({
   onClick = () => {},
   currentValue = '',
 }) => {
+  const router = useRouter()
+
   const handleItemClick = (value: string) => {
-    redirect(value)
+    router.push(value)
   }
 
   const isDropdownActive = options.some(

@@ -2,7 +2,7 @@
 
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import { redirect, usePathname } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 // components
 import Tab from '@/components/header/tab'
 // constants
@@ -14,16 +14,20 @@ const Container = styled.div`
 `
 
 const Tabs = () => {
+  const router = useRouter()
   const pathname = usePathname()
   const isCouncilRoute = pathname?.startsWith('/councils')
 
-  const handleDropdownItemClick = useCallback((option) => {
-    redirect(option.value)
-  }, [])
+  const handleDropdownItemClick = useCallback(
+    (option) => {
+      router.push(option.value)
+    },
+    [router]
+  )
 
   const handleMainTabClick = useCallback(() => {
-    redirect('/')
-  }, [])
+    router.push('/')
+  }, [router])
 
   return (
     <Container>
