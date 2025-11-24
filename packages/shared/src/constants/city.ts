@@ -1,4 +1,4 @@
-import { ValuesOf, createOptions } from 'src/utils'
+import { ValuesOf, createOptions } from '../utils'
 
 export const CITY = {
   taipei: 'taipei',

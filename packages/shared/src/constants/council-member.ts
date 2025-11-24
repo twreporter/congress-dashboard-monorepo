@@ -1,4 +1,4 @@
-import { ValuesOf, createOptions } from '../utils.js'
+import { ValuesOf, createOptions } from '../utils'
 
 export const MEMBER_TYPE = {
   constituency: 'constituency',
