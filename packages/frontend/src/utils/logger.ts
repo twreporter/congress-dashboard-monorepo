@@ -1,10 +1,10 @@
-import pino, { type Logger } from 'pino'
+import pino from 'pino'
 import { createGcpLoggingPinoConfig } from '@google-cloud/pino-logging-gcp-config'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 const isProduction = process.env.NODE_ENV === 'production'
 
-const logger: Logger = isProduction
+const logger = isProduction
   ? // Send logs to Google Cloud in production
     pino(
       createGcpLoggingPinoConfig(
