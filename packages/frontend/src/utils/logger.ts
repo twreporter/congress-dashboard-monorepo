@@ -6,22 +6,26 @@ const isProduction = process.env.NODE_ENV === 'production'
 
 const logger = isProduction
   ? // Send logs to Google Cloud in production
-    pino({
-      ...createGcpLoggingPinoConfig({
-        serviceContext: {
-          service: `${releaseBranch}-congress-dashboard-frontend`,
+    pino.pino(
+      createGcpLoggingPinoConfig(
+        {
+          serviceContext: {
+            service: `${releaseBranch}-congress-dashboard-frontend`,
+          },
         },
-      }),
-      level: 'debug',
-    })
-  : pino({
-      transport: {
+        {
+          level: 'debug',
+        }
+      )
+    )
+  : pino(
+      pino.transport({
         target: 'pino-pretty',
         options: {
           colorize: true,
         },
-      },
-      level: 'debug',
-    })
+        level: 'debug',
+      })
+    )
 
 export default logger
