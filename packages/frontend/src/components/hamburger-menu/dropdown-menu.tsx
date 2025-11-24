@@ -71,6 +71,8 @@ const Item = styled.div<{ $isActive: boolean }>`
   `}
 `
 
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+
 type DropdownMenuProps = {
   label: string
   options: {
@@ -106,7 +108,10 @@ const DropdownMenu: FC<DropdownMenuProps> = ({
         onClick={onClick}
       >
         <P1 text={label} weight={P1.Weight.BOLD} />
-        <ArrowIcon direction={Arrow.Direction.DOWN} />
+        <ArrowIcon
+          direction={Arrow.Direction.DOWN}
+          releaseBranch={releaseBranch}
+        />
       </Container>
       <Menu $isActive={isActive}>
         {options.map(({ label, value }) => (

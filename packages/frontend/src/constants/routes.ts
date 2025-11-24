@@ -5,6 +5,7 @@ export enum InternalRoutes {
   Topic = '/topics',
   Speech = '/a',
   Search = '/search',
+  Council = '/council',
 }
 
 export enum ExternalRoutes {

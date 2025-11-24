@@ -2,26 +2,26 @@
 export const options = [
   {
     label: '臺北市議會',
-    value: '/councils/taipei',
+    value: '/council/taipei',
   },
   {
     label: '新北市議會',
-    value: '/councils/new-taipei',
+    value: '/council/new-taipei',
   },
   {
     label: '桃園市議會',
-    value: '/councils/taoyuan',
+    value: '/council/taoyuan',
   },
   {
     label: '臺中市議會',
-    value: '/councils/taichung',
+    value: '/council/taichung',
   },
   {
     label: '臺南市議會',
-    value: '/councils/tainan',
+    value: '/council/tainan',
   },
   {
     label: '高雄市議會',
-    value: '/councils/kaohsiung',
+    value: '/council/kaohsiung',
   },
 ]

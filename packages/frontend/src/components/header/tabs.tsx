@@ -7,6 +7,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Tab from '@/components/header/tab'
 // constants
 import { options } from '@/components/header/constants'
+import { InternalRoutes } from '@/constants/routes'
 
 const Container = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ const Container = styled.div`
 const Tabs = () => {
   const router = useRouter()
   const pathname = usePathname()
-  const isCouncilRoute = pathname?.startsWith('/councils')
+  const isCouncilRoute = pathname?.startsWith(InternalRoutes.Council)
 
   const handleDropdownItemClick = useCallback(
     (option) => {
@@ -26,7 +27,7 @@ const Tabs = () => {
   )
 
   const handleMainTabClick = useCallback(() => {
-    router.push('/')
+    router.push(InternalRoutes.Home)
   }, [router])
 
   return (

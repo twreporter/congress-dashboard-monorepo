@@ -118,7 +118,10 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
         <P2 text={'意見回饋'} />
       </Title2>
       <Title2>
-        <Link href={InternalRoutes.About} target={'_blank'}>
+        <Link
+          href={`${InternalRoutes.About}#「報導者觀測站」涵蓋多少資料？更新頻率為何？會再加入其他資料？`}
+          target={'_blank'}
+        >
           <P2 text={'資料更新說明'} />
         </Link>
       </Title2>
