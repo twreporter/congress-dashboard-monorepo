@@ -57,12 +57,12 @@ export const getTwreporterArticles = async (
   hostname?: string
 ) => {
   if (slugs.length === 0) {
-    return []
+    return { records: [] }
   }
 
   const twreporterApiUrl = hostname ?? getTwreporterApiUrl()
   const baseUrl = `${twreporterApiUrl}/v2/posts?full=false`
-  const url = baseUrl + slugs.reduce((acc, res) => res + `&slug=${acc}`, '')
+  const url = slugs.reduce((acc, slug) => acc + `&slug=${slug}`, baseUrl)
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -101,12 +101,12 @@ export const getTwreporterTopics = async (
   hostname?: string
 ) => {
   if (slugs.length === 0) {
-    return []
+    return { records: [] }
   }
 
   const twreporterApiUrl = hostname ?? getTwreporterApiUrl()
   const baseUrl = `${twreporterApiUrl}/v2/topics?full=false`
-  const url = baseUrl + slugs.reduce((acc, res) => res + `&slug=${acc}`, '')
+  const url = slugs.reduce((acc, slug) => acc + `&slug=${slug}`, baseUrl)
   const res = await fetch(url, {
     method: 'GET',
     headers: {

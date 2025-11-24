@@ -101,6 +101,7 @@ export const Field = ({
         新增報導者相關${relatedTypeLabel}:
           ${item.title}
       `)
+      // todo: add check for duplicate items & only take top 5 recent item
       setRelateds((relateds) =>
         [{ type: selectedType, slug: inputSlug }].concat(relateds)
       )
@@ -117,14 +118,16 @@ export const Field = ({
   }
 
   const removeRelatedItem = (type: RelatedType, slug: string) => {
-    setRelateds(_.without(relateds, { type, slug }))
+    setRelateds(
+      relateds.filter((item) => !(item.type === type && item.slug === slug))
+    )
   }
 
   useEffect(() => {
     if (typeof onChange === 'function') {
       onChange(relateds)
     }
-  }, [relateds, onChange])
+  }, [relateds])
 
   return (
     <FieldContainer>
