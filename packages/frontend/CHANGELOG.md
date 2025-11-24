@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.7.0...@twreporter/congress-dashboard-frontend@1.8.0-beta.0) (2025-11-24)
+
+### Bug Fixes
+
+- **frontend:** add id for header-one ([670c7d4](https://github.com/twreporter/congress-dashboard-monorepo/commit/670c7d4bbfc5a6bd5fecac75d92ae05afc254211))
+- **frontend:** address comment ([2d8bc51](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d8bc517106be5322362a94d8f94b1d5b92e8e55))
+- **frontend:** replace redirect by useRouter ([d5a714f](https://github.com/twreporter/congress-dashboard-monorepo/commit/d5a714f9431ce3712b4a1a927e6731ecefd9ca07))
+- **frontend:** selectContainerRef typo ([7b2b05d](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b2b05d8cc631b4404970b86e6a9ab19c4f5d571))
+- **frontend:** type safety ([3ff9085](https://github.com/twreporter/congress-dashboard-monorepo/commit/3ff9085c0c40a52db3a252c3ea3a17986d0e78c4))
+
+### Features
+
+- **frontend:** hamburger menu active check ([e47b8f4](https://github.com/twreporter/congress-dashboard-monorepo/commit/e47b8f4b3e3718c9c64ba1eb3353c07487650a85))
+- **frontend:** new header links and hamburger menu ([54ec494](https://github.com/twreporter/congress-dashboard-monorepo/commit/54ec494f36db1a71a62d2271cab37a3ce07c126c))
+- **frontend:** use tab component ([e56a186](https://github.com/twreporter/congress-dashboard-monorepo/commit/e56a18629973ed28eee9ed8de901ae9fdd0d44f8))
+
 # [1.7.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.7.0-rc.0...@twreporter/congress-dashboard-frontend@1.7.0) (2025-11-11)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
