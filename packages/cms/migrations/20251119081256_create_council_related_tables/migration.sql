@@ -45,7 +45,7 @@ CREATE TABLE `CouncilMember` (
     `tooltip` VARCHAR(191) NOT NULL DEFAULT '',
     `note` VARCHAR(191) NOT NULL DEFAULT '',
     `proposalSuccessCount` INTEGER NULL,
-    `releatedLink` JSON NULL,
+    `relatedLink` JSON NULL,
     `isActive` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NULL,

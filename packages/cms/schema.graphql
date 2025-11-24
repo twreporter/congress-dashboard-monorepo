@@ -1244,7 +1244,7 @@ type CouncilMember {
   tooltip: String
   note: String
   proposalSuccessCount: Int
-  releatedLink: JSON
+  relatedLink: JSON
   isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
@@ -1308,7 +1308,7 @@ input CouncilMemberUpdateInput {
   tooltip: String
   note: String
   proposalSuccessCount: Int
-  releatedLink: JSON
+  relatedLink: JSON
   isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
@@ -1351,7 +1351,7 @@ input CouncilMemberCreateInput {
   tooltip: String
   note: String
   proposalSuccessCount: Int
-  releatedLink: JSON
+  relatedLink: JSON
   isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime

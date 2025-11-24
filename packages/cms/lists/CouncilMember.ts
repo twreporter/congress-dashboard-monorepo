@@ -139,7 +139,7 @@ const listConfigurations = list({
     proposalSuccessCount: integer({
       label: '提案通過數',
     }),
-    releatedLink: json({
+    relatedLink: json({
       label: '相關連結',
     }),
     isActive: checkbox({
