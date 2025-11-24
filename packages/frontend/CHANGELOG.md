@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-rc.0...@twreporter/congress-dashboard-frontend@1.8.0-rc.1) (2025-11-24)
+
+### Bug Fixes
+
+- **frontend:** upgrade pino to latest version ([a4e16b6](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4e16b6cdfe312a4c57131ef5496968349cb2670))
+
+# [1.8.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.7.1-rc.0...@twreporter/congress-dashboard-frontend@1.8.0-rc.0) (2025-11-24)
+
+### Features
+
+- **frontend:** add views for twreporter topic ([c58a22f](https://github.com/twreporter/congress-dashboard-monorepo/commit/c58a22fa8302a6d1b4b0826dcbf2b3186e53fb8d))
+
 ## [1.7.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.7.0...@twreporter/congress-dashboard-frontend@1.7.1-rc.0) (2025-11-23)
 
 ### Bug Fixes

@@ -1,5 +1,6 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
 import type { partyData } from '@/fetchers/party'
+import type { RelatedType } from '@/types/related-twreporter-item'
 
 export type SpeechData = {
   slug: string
@@ -29,7 +30,10 @@ export type TopicData = {
     slug: string
     title: string
   }[]
-  relatedTwreporterArticles?: string[]
+  relatedTwreporterArticles?: {
+    slug: string
+    type: RelatedType
+  }[]
 }
 /** fetchTopic
  *   fetch topics with give slug in given terms & session
