@@ -20,7 +20,7 @@ const Tabs = () => {
   const isCouncilRoute = pathname?.startsWith(InternalRoutes.Council)
 
   const handleDropdownItemClick = useCallback(
-    (option) => {
+    (option: { label: string; value: string }) => {
       router.push(option.value)
     },
     [router]
