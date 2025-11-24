@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.2...@twreporter/congress-dashboard-frontend@1.8.0-beta.3) (2025-11-24)
+
+### Bug Fixes
+
+- **frontend:** test original logger ([2dda580](https://github.com/twreporter/congress-dashboard-monorepo/commit/2dda580deb40f4c834f055eb9d96c0033653bb47))
+- **frontend:** update pino packages ([0fd076f](https://github.com/twreporter/congress-dashboard-monorepo/commit/0fd076faacba8a4d9a1cc71ae74b5bf441163869))
+- **frontend:** use pino.pino ([e0e84c6](https://github.com/twreporter/congress-dashboard-monorepo/commit/e0e84c676d2bc8348255d7c9812b826c0b2a833c))
+
 # [1.8.0-beta.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.1...@twreporter/congress-dashboard-frontend@1.8.0-beta.2) (2025-11-24)
 
 ### Bug Fixes
