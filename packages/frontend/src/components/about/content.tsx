@@ -86,7 +86,15 @@ const AboutPageContent: React.FC<AboutPageContentProps> = ({
             </InfoBoxContainer>
           )
         } else {
-          return <NoPaddingX key={item.id}>{renderElement(item)}</NoPaddingX>
+          if (item.type === 'header-one') {
+            return (
+              <NoPaddingX key={item.id} id={item.content[0]}>
+                {renderElement(item)}
+              </NoPaddingX>
+            )
+          } else {
+            return <NoPaddingX key={item.id}>{renderElement(item)}</NoPaddingX>
+          }
         }
       })}
     </Container>
