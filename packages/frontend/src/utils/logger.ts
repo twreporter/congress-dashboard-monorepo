@@ -1,12 +1,12 @@
-import pino, { type Logger } from 'pino'
+import pino from 'pino'
 import { createGcpLoggingPinoConfig } from '@google-cloud/pino-logging-gcp-config'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 const isProduction = process.env.NODE_ENV === 'production'
 
-const logger: Logger = isProduction
+const logger = isProduction
   ? // Send logs to Google Cloud in production
-    pino(
+    pino.pino(
       createGcpLoggingPinoConfig(
         {
           serviceContext: {
@@ -18,14 +18,14 @@ const logger: Logger = isProduction
         }
       )
     )
-  : pino({
-      transport: {
+  : pino(
+      pino.transport({
         target: 'pino-pretty',
         options: {
           colorize: true,
         },
-      },
-      level: 'debug',
-    })
+        level: 'debug',
+      })
+    )
 
 export default logger
