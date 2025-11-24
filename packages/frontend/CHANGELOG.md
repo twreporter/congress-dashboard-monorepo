@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.1...@twreporter/congress-dashboard-frontend@1.8.0-beta.2) (2025-11-24)
+
+### Bug Fixes
+
+- **frontend:** object spreading for logger type ([7648b35](https://github.com/twreporter/congress-dashboard-monorepo/commit/7648b35eec7a2100674c33563c80c03f495aaba4))
+
 # [1.8.0-beta.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.0...@twreporter/congress-dashboard-frontend@1.8.0-beta.1) (2025-11-24)
 
 ### Bug Fixes
