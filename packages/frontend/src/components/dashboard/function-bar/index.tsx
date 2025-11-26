@@ -41,8 +41,8 @@ import mq from '@twreporter/core/lib/utils/media-query'
 import {
   MemberType,
   MEMBER_TYPE_LABEL,
-  CITY_OPTIONS,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import { CITY_OPTIONS } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 // lodash
 import { isEqual, map } from 'lodash'
 const _ = {

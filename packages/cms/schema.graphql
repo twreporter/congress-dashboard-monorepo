@@ -1088,6 +1088,509 @@ input CommitteeMemberCreateInput {
   updatedAt: DateTime
 }
 
+type Councilor {
+  id: ID!
+  name: String
+  slug: String
+  image: Photo
+  imageLink: String
+  externalLink: String
+  meetingTermCount: Int
+  meetingTermCountInfo: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilorWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input CouncilorWhereInput {
+  AND: [CouncilorWhereInput!]
+  OR: [CouncilorWhereInput!]
+  NOT: [CouncilorWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  image: PhotoWhereInput
+  imageLink: StringFilter
+  externalLink: StringFilter
+  meetingTermCount: IntNullableFilter
+  meetingTermCountInfo: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CouncilorOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  imageLink: OrderDirection
+  externalLink: OrderDirection
+  meetingTermCount: OrderDirection
+  meetingTermCountInfo: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CouncilorUpdateInput {
+  name: String
+  slug: String
+  image: PhotoRelateToOneForUpdateInput
+  imageLink: String
+  externalLink: String
+  meetingTermCount: Int
+  meetingTermCountInfo: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilorUpdateArgs {
+  where: CouncilorWhereUniqueInput!
+  data: CouncilorUpdateInput!
+}
+
+input CouncilorCreateInput {
+  name: String
+  slug: String
+  image: PhotoRelateToOneForCreateInput
+  imageLink: String
+  externalLink: String
+  meetingTermCount: Int
+  meetingTermCountInfo: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type CouncilMeeting {
+  id: ID!
+  city: String
+  term: Int
+  startTime: CalendarDay
+  endTime: CalendarDay
+  labelForCMS: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilMeetingWhereUniqueInput {
+  id: ID
+  term: Int
+}
+
+input CouncilMeetingWhereInput {
+  AND: [CouncilMeetingWhereInput!]
+  OR: [CouncilMeetingWhereInput!]
+  NOT: [CouncilMeetingWhereInput!]
+  id: IDFilter
+  city: StringFilter
+  term: IntFilter
+  startTime: CalendarDayFilter
+  endTime: CalendarDayFilter
+  labelForCMS: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CouncilMeetingOrderByInput {
+  id: OrderDirection
+  city: OrderDirection
+  term: OrderDirection
+  startTime: OrderDirection
+  endTime: OrderDirection
+  labelForCMS: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CouncilMeetingUpdateInput {
+  city: String
+  term: Int
+  startTime: CalendarDay
+  endTime: CalendarDay
+  labelForCMS: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilMeetingUpdateArgs {
+  where: CouncilMeetingWhereUniqueInput!
+  data: CouncilMeetingUpdateInput!
+}
+
+input CouncilMeetingCreateInput {
+  city: String
+  term: Int
+  startTime: CalendarDay
+  endTime: CalendarDay
+  labelForCMS: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type CouncilMember {
+  id: ID!
+  councilor: Councilor
+  labelForCMS: String
+  party: Party
+  councilMeeting: CouncilMeeting
+  bill(where: CouncilBillWhereInput! = {}, orderBy: [CouncilBillOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilBillWhereUniqueInput): [CouncilBill!]
+  billCount(where: CouncilBillWhereInput! = {}): Int
+  type: String
+  city: String
+  constituency: Int
+  administrativeDistrict: JSON
+  tooltip: String
+  note: String
+  proposalSuccessCount: Int
+  relatedLink: JSON
+  isActive: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilMemberWhereUniqueInput {
+  id: ID
+}
+
+input CouncilMemberWhereInput {
+  AND: [CouncilMemberWhereInput!]
+  OR: [CouncilMemberWhereInput!]
+  NOT: [CouncilMemberWhereInput!]
+  id: IDFilter
+  councilor: CouncilorWhereInput
+  labelForCMS: StringFilter
+  party: PartyWhereInput
+  councilMeeting: CouncilMeetingWhereInput
+  bill: CouncilBillManyRelationFilter
+  type: StringFilter
+  city: StringNullableFilter
+  constituency: IntNullableFilter
+  tooltip: StringFilter
+  note: StringFilter
+  proposalSuccessCount: IntNullableFilter
+  isActive: BooleanFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CouncilBillManyRelationFilter {
+  every: CouncilBillWhereInput
+  some: CouncilBillWhereInput
+  none: CouncilBillWhereInput
+}
+
+input CouncilMemberOrderByInput {
+  id: OrderDirection
+  labelForCMS: OrderDirection
+  type: OrderDirection
+  city: OrderDirection
+  constituency: OrderDirection
+  tooltip: OrderDirection
+  note: OrderDirection
+  proposalSuccessCount: OrderDirection
+  isActive: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CouncilMemberUpdateInput {
+  councilor: CouncilorRelateToOneForUpdateInput
+  labelForCMS: String
+  party: PartyRelateToOneForUpdateInput
+  councilMeeting: CouncilMeetingRelateToOneForUpdateInput
+  bill: CouncilBillRelateToManyForUpdateInput
+  type: String
+  city: String
+  constituency: Int
+  administrativeDistrict: JSON
+  tooltip: String
+  note: String
+  proposalSuccessCount: Int
+  relatedLink: JSON
+  isActive: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilorRelateToOneForUpdateInput {
+  create: CouncilorCreateInput
+  connect: CouncilorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouncilMeetingRelateToOneForUpdateInput {
+  create: CouncilMeetingCreateInput
+  connect: CouncilMeetingWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouncilBillRelateToManyForUpdateInput {
+  disconnect: [CouncilBillWhereUniqueInput!]
+  set: [CouncilBillWhereUniqueInput!]
+  create: [CouncilBillCreateInput!]
+  connect: [CouncilBillWhereUniqueInput!]
+}
+
+input CouncilMemberUpdateArgs {
+  where: CouncilMemberWhereUniqueInput!
+  data: CouncilMemberUpdateInput!
+}
+
+input CouncilMemberCreateInput {
+  councilor: CouncilorRelateToOneForCreateInput
+  labelForCMS: String
+  party: PartyRelateToOneForCreateInput
+  councilMeeting: CouncilMeetingRelateToOneForCreateInput
+  bill: CouncilBillRelateToManyForCreateInput
+  type: String
+  city: String
+  constituency: Int
+  administrativeDistrict: JSON
+  tooltip: String
+  note: String
+  proposalSuccessCount: Int
+  relatedLink: JSON
+  isActive: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilorRelateToOneForCreateInput {
+  create: CouncilorCreateInput
+  connect: CouncilorWhereUniqueInput
+}
+
+input CouncilMeetingRelateToOneForCreateInput {
+  create: CouncilMeetingCreateInput
+  connect: CouncilMeetingWhereUniqueInput
+}
+
+input CouncilBillRelateToManyForCreateInput {
+  create: [CouncilBillCreateInput!]
+  connect: [CouncilBillWhereUniqueInput!]
+}
+
+type CouncilTopic {
+  id: ID!
+  title: String
+  slug: String
+  bill(where: CouncilBillWhereInput! = {}, orderBy: [CouncilBillOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilBillWhereUniqueInput): [CouncilBill!]
+  billCount(where: CouncilBillWhereInput! = {}): Int
+  city: String
+  type: String
+  relatedLegislativeTopic(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
+  relatedLegislativeTopicCount(where: TopicWhereInput! = {}): Int
+  relatedCouncilTopic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
+  relatedCouncilTopicCount(where: CouncilTopicWhereInput! = {}): Int
+  referencedByCouncilTopic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
+  referencedByCouncilTopicCount(where: CouncilTopicWhereInput! = {}): Int
+  relatedCityCouncilTopic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
+  relatedCityCouncilTopicCount(where: CouncilTopicWhereInput! = {}): Int
+  referencedByCityCouncilTopic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
+  referencedByCityCouncilTopicCount(where: CouncilTopicWhereInput! = {}): Int
+  relatedTwreporterArticle: JSON
+  labelForCMS: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilTopicWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input CouncilTopicWhereInput {
+  AND: [CouncilTopicWhereInput!]
+  OR: [CouncilTopicWhereInput!]
+  NOT: [CouncilTopicWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  bill: CouncilBillManyRelationFilter
+  city: StringFilter
+  type: StringFilter
+  relatedLegislativeTopic: TopicManyRelationFilter
+  relatedCouncilTopic: CouncilTopicManyRelationFilter
+  referencedByCouncilTopic: CouncilTopicManyRelationFilter
+  relatedCityCouncilTopic: CouncilTopicManyRelationFilter
+  referencedByCityCouncilTopic: CouncilTopicManyRelationFilter
+  labelForCMS: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CouncilTopicManyRelationFilter {
+  every: CouncilTopicWhereInput
+  some: CouncilTopicWhereInput
+  none: CouncilTopicWhereInput
+}
+
+input CouncilTopicOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  city: OrderDirection
+  type: OrderDirection
+  labelForCMS: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CouncilTopicUpdateInput {
+  title: String
+  slug: String
+  bill: CouncilBillRelateToManyForUpdateInput
+  city: String
+  type: String
+  relatedLegislativeTopic: TopicRelateToManyForUpdateInput
+  relatedCouncilTopic: CouncilTopicRelateToManyForUpdateInput
+  referencedByCouncilTopic: CouncilTopicRelateToManyForUpdateInput
+  relatedCityCouncilTopic: CouncilTopicRelateToManyForUpdateInput
+  referencedByCityCouncilTopic: CouncilTopicRelateToManyForUpdateInput
+  relatedTwreporterArticle: JSON
+  labelForCMS: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilTopicRelateToManyForUpdateInput {
+  disconnect: [CouncilTopicWhereUniqueInput!]
+  set: [CouncilTopicWhereUniqueInput!]
+  create: [CouncilTopicCreateInput!]
+  connect: [CouncilTopicWhereUniqueInput!]
+}
+
+input CouncilTopicUpdateArgs {
+  where: CouncilTopicWhereUniqueInput!
+  data: CouncilTopicUpdateInput!
+}
+
+input CouncilTopicCreateInput {
+  title: String
+  slug: String
+  bill: CouncilBillRelateToManyForCreateInput
+  city: String
+  type: String
+  relatedLegislativeTopic: TopicRelateToManyForCreateInput
+  relatedCouncilTopic: CouncilTopicRelateToManyForCreateInput
+  referencedByCouncilTopic: CouncilTopicRelateToManyForCreateInput
+  relatedCityCouncilTopic: CouncilTopicRelateToManyForCreateInput
+  referencedByCityCouncilTopic: CouncilTopicRelateToManyForCreateInput
+  relatedTwreporterArticle: JSON
+  labelForCMS: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilTopicRelateToManyForCreateInput {
+  create: [CouncilTopicCreateInput!]
+  connect: [CouncilTopicWhereUniqueInput!]
+}
+
+type CouncilBill {
+  id: ID!
+  councilMeeting: CouncilMeeting
+  councilMember(where: CouncilMemberWhereInput! = {}, orderBy: [CouncilMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilMemberWhereUniqueInput): [CouncilMember!]
+  councilMemberCount(where: CouncilMemberWhereInput! = {}): Int
+  date: CalendarDay
+  title: String
+  slug: String
+  summary: JSON
+  content: JSON
+  attendee: String
+  sourceLink: JSON
+  topic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
+  topicCount(where: CouncilTopicWhereInput! = {}): Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilBillWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input CouncilBillWhereInput {
+  AND: [CouncilBillWhereInput!]
+  OR: [CouncilBillWhereInput!]
+  NOT: [CouncilBillWhereInput!]
+  id: IDFilter
+  councilMeeting: CouncilMeetingWhereInput
+  councilMember: CouncilMemberManyRelationFilter
+  date: CalendarDayFilter
+  title: StringFilter
+  slug: StringFilter
+  attendee: StringFilter
+  topic: CouncilTopicManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CouncilMemberManyRelationFilter {
+  every: CouncilMemberWhereInput
+  some: CouncilMemberWhereInput
+  none: CouncilMemberWhereInput
+}
+
+input CouncilBillOrderByInput {
+  id: OrderDirection
+  date: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  attendee: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CouncilBillUpdateInput {
+  councilMeeting: CouncilMeetingRelateToOneForUpdateInput
+  councilMember: CouncilMemberRelateToManyForUpdateInput
+  date: CalendarDay
+  title: String
+  slug: String
+  summary: JSON
+  content: JSON
+  attendee: String
+  sourceLink: JSON
+  topic: CouncilTopicRelateToManyForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilMemberRelateToManyForUpdateInput {
+  disconnect: [CouncilMemberWhereUniqueInput!]
+  set: [CouncilMemberWhereUniqueInput!]
+  create: [CouncilMemberCreateInput!]
+  connect: [CouncilMemberWhereUniqueInput!]
+}
+
+input CouncilBillUpdateArgs {
+  where: CouncilBillWhereUniqueInput!
+  data: CouncilBillUpdateInput!
+}
+
+input CouncilBillCreateInput {
+  councilMeeting: CouncilMeetingRelateToOneForCreateInput
+  councilMember: CouncilMemberRelateToManyForCreateInput
+  date: CalendarDay
+  title: String
+  slug: String
+  summary: JSON
+  content: JSON
+  attendee: String
+  sourceLink: JSON
+  topic: CouncilTopicRelateToManyForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilMemberRelateToManyForCreateInput {
+  create: [CouncilMemberCreateInput!]
+  connect: [CouncilMemberWhereUniqueInput!]
+}
+
 type ImportRecord {
   id: ID!
   recordName: String
@@ -1266,6 +1769,36 @@ type Mutation {
   updateCommitteeMembers(data: [CommitteeMemberUpdateArgs!]!): [CommitteeMember]
   deleteCommitteeMember(where: CommitteeMemberWhereUniqueInput!): CommitteeMember
   deleteCommitteeMembers(where: [CommitteeMemberWhereUniqueInput!]!): [CommitteeMember]
+  createCouncilor(data: CouncilorCreateInput!): Councilor
+  createCouncilors(data: [CouncilorCreateInput!]!): [Councilor]
+  updateCouncilor(where: CouncilorWhereUniqueInput!, data: CouncilorUpdateInput!): Councilor
+  updateCouncilors(data: [CouncilorUpdateArgs!]!): [Councilor]
+  deleteCouncilor(where: CouncilorWhereUniqueInput!): Councilor
+  deleteCouncilors(where: [CouncilorWhereUniqueInput!]!): [Councilor]
+  createCouncilMeeting(data: CouncilMeetingCreateInput!): CouncilMeeting
+  createCouncilMeetings(data: [CouncilMeetingCreateInput!]!): [CouncilMeeting]
+  updateCouncilMeeting(where: CouncilMeetingWhereUniqueInput!, data: CouncilMeetingUpdateInput!): CouncilMeeting
+  updateCouncilMeetings(data: [CouncilMeetingUpdateArgs!]!): [CouncilMeeting]
+  deleteCouncilMeeting(where: CouncilMeetingWhereUniqueInput!): CouncilMeeting
+  deleteCouncilMeetings(where: [CouncilMeetingWhereUniqueInput!]!): [CouncilMeeting]
+  createCouncilMember(data: CouncilMemberCreateInput!): CouncilMember
+  createCouncilMembers(data: [CouncilMemberCreateInput!]!): [CouncilMember]
+  updateCouncilMember(where: CouncilMemberWhereUniqueInput!, data: CouncilMemberUpdateInput!): CouncilMember
+  updateCouncilMembers(data: [CouncilMemberUpdateArgs!]!): [CouncilMember]
+  deleteCouncilMember(where: CouncilMemberWhereUniqueInput!): CouncilMember
+  deleteCouncilMembers(where: [CouncilMemberWhereUniqueInput!]!): [CouncilMember]
+  createCouncilTopic(data: CouncilTopicCreateInput!): CouncilTopic
+  createCouncilTopics(data: [CouncilTopicCreateInput!]!): [CouncilTopic]
+  updateCouncilTopic(where: CouncilTopicWhereUniqueInput!, data: CouncilTopicUpdateInput!): CouncilTopic
+  updateCouncilTopics(data: [CouncilTopicUpdateArgs!]!): [CouncilTopic]
+  deleteCouncilTopic(where: CouncilTopicWhereUniqueInput!): CouncilTopic
+  deleteCouncilTopics(where: [CouncilTopicWhereUniqueInput!]!): [CouncilTopic]
+  createCouncilBill(data: CouncilBillCreateInput!): CouncilBill
+  createCouncilBills(data: [CouncilBillCreateInput!]!): [CouncilBill]
+  updateCouncilBill(where: CouncilBillWhereUniqueInput!, data: CouncilBillUpdateInput!): CouncilBill
+  updateCouncilBills(data: [CouncilBillUpdateArgs!]!): [CouncilBill]
+  deleteCouncilBill(where: CouncilBillWhereUniqueInput!): CouncilBill
+  deleteCouncilBills(where: [CouncilBillWhereUniqueInput!]!): [CouncilBill]
   createImportRecord(data: ImportRecordCreateInput!): ImportRecord
   createImportRecords(data: [ImportRecordCreateInput!]!): [ImportRecord]
   updateImportRecord(where: ImportRecordWhereUniqueInput!, data: ImportRecordUpdateInput!): ImportRecord
@@ -1332,6 +1865,21 @@ type Query {
   committeeMember(where: CommitteeMemberWhereUniqueInput!): CommitteeMember
   committeeMembers(where: CommitteeMemberWhereInput! = {}, orderBy: [CommitteeMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CommitteeMemberWhereUniqueInput): [CommitteeMember!]
   committeeMembersCount(where: CommitteeMemberWhereInput! = {}): Int
+  councilor(where: CouncilorWhereUniqueInput!): Councilor
+  councilors(where: CouncilorWhereInput! = {}, orderBy: [CouncilorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilorWhereUniqueInput): [Councilor!]
+  councilorsCount(where: CouncilorWhereInput! = {}): Int
+  councilMeeting(where: CouncilMeetingWhereUniqueInput!): CouncilMeeting
+  councilMeetings(where: CouncilMeetingWhereInput! = {}, orderBy: [CouncilMeetingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilMeetingWhereUniqueInput): [CouncilMeeting!]
+  councilMeetingsCount(where: CouncilMeetingWhereInput! = {}): Int
+  councilMember(where: CouncilMemberWhereUniqueInput!): CouncilMember
+  councilMembers(where: CouncilMemberWhereInput! = {}, orderBy: [CouncilMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilMemberWhereUniqueInput): [CouncilMember!]
+  councilMembersCount(where: CouncilMemberWhereInput! = {}): Int
+  councilTopic(where: CouncilTopicWhereUniqueInput!): CouncilTopic
+  councilTopics(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
+  councilTopicsCount(where: CouncilTopicWhereInput! = {}): Int
+  councilBill(where: CouncilBillWhereUniqueInput!): CouncilBill
+  councilBills(where: CouncilBillWhereInput! = {}, orderBy: [CouncilBillOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilBillWhereUniqueInput): [CouncilBill!]
+  councilBillsCount(where: CouncilBillWhereInput! = {}): Int
   importRecord(where: ImportRecordWhereUniqueInput!): ImportRecord
   importRecords(where: ImportRecordWhereInput! = {}, orderBy: [ImportRecordOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ImportRecordWhereUniqueInput): [ImportRecord!]
   importRecordsCount(where: ImportRecordWhereInput! = {}): Int
