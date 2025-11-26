@@ -31,7 +31,10 @@ import env from '../environment-variables'
 // types
 import { type RelatedType, isRelatedType } from './views/related-article/types'
 // constants
-import { RELATED_TYPE } from './views/related-article/constants'
+import {
+  MAX_RELATED_ITEM,
+  RELATED_TYPE,
+} from './views/related-article/constants'
 
 /**
  * Validate CSV structure against expected headers and required fields
@@ -934,7 +937,7 @@ const importHandlers: Record<
         .sort(
           (a: relatedMeta, b: relatedMeta) => b.publishedDate - a.publishedDate
         )
-        .slice(0, 5)
+        .slice(0, MAX_RELATED_ITEM)
         .map(({ slug, type }: { slug: string; type: RelatedType }) => ({
           slug,
           type,
