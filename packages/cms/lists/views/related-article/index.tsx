@@ -91,7 +91,7 @@ export const Field = ({
 
   const addRelated = async () => {
     if (relateds.length === MAX_RELATED_ITEM) {
-      alert(`上限為五個，請先刪除後再新增。`)
+      alert(`已達五筆相關文章上限，請先刪除後再新增。`)
       return
     }
     const relatedTypeLabel =
