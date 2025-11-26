@@ -111,8 +111,8 @@ export const Field = ({
         `Failed to add ${selectedType}. slug: ${inputSlug}, err: ${err}`
       )
       alert(`
-        查無此${relatedTypeLabel}，請確認${relatedTypeLabel} slug 並再試一次。
-        如${relatedTypeLabel} slug 正確請截圖回報產品經理。
+        查無此${relatedTypeLabel}，請檢查${relatedTypeLabel} slug 和類別並再試一次。
+        如資料正確請截圖回報產品經理。
       `)
     }
   }
