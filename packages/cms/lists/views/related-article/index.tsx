@@ -16,6 +16,7 @@ import {
   RELATED_TYPE,
   RELATED_TYPE_LABEL,
   RELATED_TYPE_OPTION,
+  MAX_RELATED_ITEM,
 } from './constants'
 // components
 import { FieldLabel, FieldContainer, TextInput } from '@keystone-ui/fields'
@@ -89,6 +90,10 @@ export const Field = ({
   }
 
   const addRelated = async () => {
+    if (relateds.length === MAX_RELATED_ITEM) {
+      alert(`上限為五個，請先刪除後再新增。`)
+      return
+    }
     const relatedTypeLabel =
       selectedType === RELATED_TYPE.wwwTopic ? '專題' : '文章'
     try {
