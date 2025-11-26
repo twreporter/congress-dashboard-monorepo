@@ -18,3 +18,5 @@ export const RELATED_TYPE_OPTION = [
     value: RELATED_TYPE.wwwTopic,
   },
 ] as const
+
+export const MAX_RELATED_ITEM = 5 as const

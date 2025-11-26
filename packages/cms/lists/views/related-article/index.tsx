@@ -16,6 +16,7 @@ import {
   RELATED_TYPE,
   RELATED_TYPE_LABEL,
   RELATED_TYPE_OPTION,
+  MAX_RELATED_ITEM,
 } from './constants'
 // components
 import { FieldLabel, FieldContainer, TextInput } from '@keystone-ui/fields'
@@ -89,6 +90,10 @@ export const Field = ({
   }
 
   const addRelated = async () => {
+    if (relateds.length === MAX_RELATED_ITEM) {
+      alert(`已達五筆相關文章上限，請先刪除後再新增。`)
+      return
+    }
     const relatedTypeLabel =
       selectedType === RELATED_TYPE.wwwTopic ? '專題' : '文章'
     try {
@@ -111,8 +116,8 @@ export const Field = ({
         `Failed to add ${selectedType}. slug: ${inputSlug}, err: ${err}`
       )
       alert(`
-        查無此${relatedTypeLabel}，請確認${relatedTypeLabel} slug 並再試一次。
-        如${relatedTypeLabel} slug 正確請截圖回報產品經理。
+        查無此${relatedTypeLabel}，請檢查${relatedTypeLabel} slug 和類別並再試一次。
+        如資料正確請截圖回報產品經理。
       `)
     }
   }

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.0-rc.0...@twreporter/congress-dashboard-cms@1.5.0-rc.1) (2025-11-26)
+
+### Bug Fixes
+
+- **cms:** add MAX_RELATED_ITEM check ([4c8f868](https://github.com/twreporter/congress-dashboard-monorepo/commit/4c8f8686d2ae4edb77d03738b621701187f502ce))
+- **cms:** update alert wording ([94ffec8](https://github.com/twreporter/congress-dashboard-monorepo/commit/94ffec85382426375eede69554c0afb4da494a5d))
+- **cms:** update alert wording ([0e804b6](https://github.com/twreporter/congress-dashboard-monorepo/commit/0e804b6b6f4dbdf75a4c2c11eb6e6063e9fdc859))
+
 # [1.5.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.4.0...@twreporter/congress-dashboard-cms@1.5.0-rc.0) (2025-11-24)
 
 ### Bug Fixes
