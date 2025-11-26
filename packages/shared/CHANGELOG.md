@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.1.0...@twreporter/congress-dashboard-shared@0.2.0-beta.0) (2025-11-26)
+
+### Bug Fixes
+
+- **shared:** import route ([709ee5f](https://github.com/twreporter/congress-dashboard-monorepo/commit/709ee5f8fb07dfa553b2a6163bd5cdf5bbb97f54))
+
+### Features
+
+- **shared:** council constants ([5fe7e50](https://github.com/twreporter/congress-dashboard-monorepo/commit/5fe7e50295d859525c02c704d4a09b6c77002a75))
+
 # [0.1.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.1.0-rc.0...@twreporter/congress-dashboard-shared@0.1.0) (2025-08-13)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-shared

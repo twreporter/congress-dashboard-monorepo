@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.4...@twreporter/congress-dashboard-frontend@1.8.0-beta.5) (2025-11-26)
+
+### Features
+
+- **frontend:** use new city options ([73679ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/73679ec6e7ddfb02e1e92d223052068af59c4738))
+
 # [1.8.0-beta.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.3...@twreporter/congress-dashboard-frontend@1.8.0-beta.4) (2025-11-25)
 
 ### Bug Fixes
