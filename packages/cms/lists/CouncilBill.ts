@@ -69,7 +69,7 @@ const listConfigurations = list({
     }),
   },
   ui: {
-    label: '地方議案',
+    label: '縣市議案',
     labelField: 'title',
     listView: {
       initialColumns: ['title', 'slug', 'councilMeeting', 'councilMember'],

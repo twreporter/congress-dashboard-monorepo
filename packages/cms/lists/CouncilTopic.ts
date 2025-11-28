@@ -19,14 +19,14 @@ import {
 const listConfigurations = list({
   fields: {
     title: text({
-      label: '主題名稱',
+      label: '議題名稱',
       validation: { isRequired: true },
       isIndexed: true,
     }),
     slug: SLUG,
     bill: relationship({
       ref: 'CouncilBill.topic',
-      label: '議會議案',
+      label: '縣市議案',
       many: true,
       ui: {
         labelField: 'title',
@@ -38,7 +38,7 @@ const listConfigurations = list({
       validation: { isRequired: true },
     }),
     type: select({
-      label: '主題類型',
+      label: '議題類型',
       options: [
         { label: '基本', value: 'general' },
         { label: '精選', value: 'twreporter' },
@@ -56,7 +56,7 @@ const listConfigurations = list({
     }),
     relatedCouncilTopic: relationship({
       ref: 'CouncilTopic.referencedByCouncilTopic',
-      label: '地方議會相關主題',
+      label: '縣市議會相關議題',
       many: true,
       ui: {
         labelField: 'labelForCMS',
@@ -64,7 +64,7 @@ const listConfigurations = list({
     }),
     referencedByCouncilTopic: relationship({
       ref: 'CouncilTopic.relatedCouncilTopic',
-      label: '被關聯的地方議會主題',
+      label: '被關聯的縣市議題',
       many: true,
       ui: {
         labelField: 'labelForCMS',
@@ -75,7 +75,7 @@ const listConfigurations = list({
     }),
     relatedCityCouncilTopic: relationship({
       ref: 'CouncilTopic.referencedByCityCouncilTopic',
-      label: '同縣市議會相關主題',
+      label: '同縣市議會相關議題',
       many: true,
       ui: {
         labelField: 'labelForCMS',
@@ -83,7 +83,7 @@ const listConfigurations = list({
     }),
     referencedByCityCouncilTopic: relationship({
       ref: 'CouncilTopic.relatedCityCouncilTopic',
-      label: '被關聯的同縣市議會相關主題',
+      label: '被關聯的同縣市議會相關議題',
       many: true,
       ui: {
         labelField: 'labelForCMS',
@@ -118,7 +118,7 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT(),
   },
   ui: {
-    label: '地方議會主題',
+    label: '縣市議題',
     labelField: 'title',
     listView: {
       initialColumns: ['title', 'slug', 'city'],

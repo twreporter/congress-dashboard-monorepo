@@ -64,7 +64,7 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT(),
   },
   ui: {
-    label: '地方議會屆期',
+    label: '議會屆期',
     labelField: 'labelForCMS',
     listView: {
       initialColumns: ['city', 'term', 'startTime', 'endTime'],

@@ -31,7 +31,7 @@ const listConfigurations = list({
   fields: {
     councilor: relationship({
       ref: 'Councilor',
-      label: '地方議員',
+      label: '縣市議員',
       ui: {
         labelField: 'name',
       },
@@ -150,7 +150,7 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT(),
   },
   ui: {
-    label: '地方議員屆資',
+    label: '議員屆資',
     labelField: 'labelForCMS',
     listView: {
       initialColumns: ['councilor', 'party', 'councilMeeting', 'type'],
