@@ -2,31 +2,13 @@ import { keystoneFetch } from '@/app/api/_graphql/keystone'
 // type
 import type { PartyData } from '@/types/party'
 import type { RelatedType } from '@/types/related-twreporter-item'
-
-export type SpeechData = {
-  slug: string
-  summary: string
-  title: string
-  date: Date
-  legislativeYuanMember: {
-    legislator: {
-      name: string
-      slug: string
-      imageLink?: string
-      image?: {
-        imageFile: {
-          url: string
-        }
-      }
-    }
-  }
-}
+import type { SpeechDataForTopic } from '@/types/speech'
 
 export type TopicData = {
   slug: string
   title: string
   speechesCount?: number
-  speeches?: SpeechData[]
+  speeches?: SpeechDataForTopic[]
   relatedTopics?: {
     slug: string
     title: string

@@ -1,26 +1,9 @@
 import { useMemo } from 'react'
 // type
-import { type SpeechFromRes } from '@/fetchers/server/speech'
+import type { SpeechFromRes, SpeechData } from '@/types/speech'
 // utils
 import { formatDate } from '@/utils/date-formatters'
 
-export type SpeechData = {
-  slug: string
-  date: string
-  title: string
-  legislator: {
-    name: string
-    slug: string
-  }
-  attendee: string
-  relatedTopics: {
-    title: string
-    slug: string
-  }[]
-  summary: string | string[]
-  content: string
-  iVODLink: string
-}
 // summary will be like this:
 // "<ul><li>this is a long sentence</li><li>this is a long sentence</li></ul>" or "this is a long sentence"
 const summaryParser = (summary: string): string | string[] => {

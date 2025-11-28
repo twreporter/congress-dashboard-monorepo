@@ -1,4 +1,6 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
+// type
+import type { SpeechDataForSidebar } from '@/types/speech'
 
 export type LegislatorFromRes = {
   proposalSuccessCount?: number
@@ -197,18 +199,11 @@ export const fetchLegislator = async ({
   }
 }
 
-export type SpeechData = {
-  slug: string
-  title: string
-  date: string
-  summary: string
-}
-
 export type TopicData = {
   title: string
   slug: string
   speechesCount: number
-  speeches: SpeechData[]
+  speeches: SpeechDataForSidebar[]
 }
 
 /** fetchLegislatorTopics

@@ -1,25 +1,6 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
-
-export type SpeechFromRes = {
-  slug: string
-  date: string
-  title: string
-  legislativeYuanMember: {
-    legislator: {
-      name: string
-      slug: string
-    }
-  }
-  attendee?: string
-  topics?: {
-    title: string
-    slug: string
-  }[]
-  summary?: string
-  content?: string
-  ivodLink?: string
-  ivodStartTime?: string
-}
+// type
+import type { SpeechFromRes } from '@/types/speech'
 
 /** fetchSpeech
  *  fetch speech with given slug
