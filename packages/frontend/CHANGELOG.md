@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0...@twreporter/congress-dashboard-frontend@1.8.0-beta.6) (2025-11-28)
+
+### Bug Fixes
+
+- **frontend:** add id for header-one ([670c7d4](https://github.com/twreporter/congress-dashboard-monorepo/commit/670c7d4bbfc5a6bd5fecac75d92ae05afc254211))
+- **frontend:** address comment ([2d8bc51](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d8bc517106be5322362a94d8f94b1d5b92e8e55))
+- **frontend:** adjust dropdown item height and update tab selection logic ([bcea7cd](https://github.com/twreporter/congress-dashboard-monorepo/commit/bcea7cd304b6479b32e99b794577f2f01ec4e49e))
+- **frontend:** object spreading for logger type ([7648b35](https://github.com/twreporter/congress-dashboard-monorepo/commit/7648b35eec7a2100674c33563c80c03f495aaba4))
+- **frontend:** remove unused package ([89834d3](https://github.com/twreporter/congress-dashboard-monorepo/commit/89834d3016b92e037b4fb849c6590c7eaee670cd))
+- **frontend:** replace redirect by useRouter ([d5a714f](https://github.com/twreporter/congress-dashboard-monorepo/commit/d5a714f9431ce3712b4a1a927e6731ecefd9ca07))
+- **frontend:** selectContainerRef typo ([7b2b05d](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b2b05d8cc631b4404970b86e6a9ab19c4f5d571))
+- **frontend:** test original logger ([2dda580](https://github.com/twreporter/congress-dashboard-monorepo/commit/2dda580deb40f4c834f055eb9d96c0033653bb47))
+- **frontend:** type safety ([3ff9085](https://github.com/twreporter/congress-dashboard-monorepo/commit/3ff9085c0c40a52db3a252c3ea3a17986d0e78c4))
+- **frontend:** update pino packages ([0fd076f](https://github.com/twreporter/congress-dashboard-monorepo/commit/0fd076faacba8a4d9a1cc71ae74b5bf441163869))
+- **frontend:** update routing ([c332efd](https://github.com/twreporter/congress-dashboard-monorepo/commit/c332efd437da2213475448b0de5880be53074daa))
+- **frontend:** use common logger interface ([4d20347](https://github.com/twreporter/congress-dashboard-monorepo/commit/4d203475d768e9a1cea2f0981d8881767a704742))
+- **frontend:** use pino.pino ([e0e84c6](https://github.com/twreporter/congress-dashboard-monorepo/commit/e0e84c676d2bc8348255d7c9812b826c0b2a833c))
+
+### Features
+
+- **frontend:** hamburger menu active check ([e47b8f4](https://github.com/twreporter/congress-dashboard-monorepo/commit/e47b8f4b3e3718c9c64ba1eb3353c07487650a85))
+- **frontend:** new header links and hamburger menu ([54ec494](https://github.com/twreporter/congress-dashboard-monorepo/commit/54ec494f36db1a71a62d2271cab37a3ce07c126c))
+- **frontend:** use new city options ([73679ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/73679ec6e7ddfb02e1e92d223052068af59c4738))
+- **frontend:** use tab component ([e56a186](https://github.com/twreporter/congress-dashboard-monorepo/commit/e56a18629973ed28eee9ed8de901ae9fdd0d44f8))
+
 # [1.8.0-beta.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.4...@twreporter/congress-dashboard-frontend@1.8.0-beta.5) (2025-11-26)
 
 ### Features
@@ -50,6 +75,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - **frontend:** hamburger menu active check ([e47b8f4](https://github.com/twreporter/congress-dashboard-monorepo/commit/e47b8f4b3e3718c9c64ba1eb3353c07487650a85))
 - **frontend:** new header links and hamburger menu ([54ec494](https://github.com/twreporter/congress-dashboard-monorepo/commit/54ec494f36db1a71a62d2271cab37a3ce07c126c))
 - **frontend:** use tab component ([e56a186](https://github.com/twreporter/congress-dashboard-monorepo/commit/e56a18629973ed28eee9ed8de901ae9fdd0d44f8))
+
 # [1.8.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-rc.1...@twreporter/congress-dashboard-frontend@1.8.0) (2025-11-27)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
