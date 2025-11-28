@@ -50,6 +50,27 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - **frontend:** hamburger menu active check ([e47b8f4](https://github.com/twreporter/congress-dashboard-monorepo/commit/e47b8f4b3e3718c9c64ba1eb3353c07487650a85))
 - **frontend:** new header links and hamburger menu ([54ec494](https://github.com/twreporter/congress-dashboard-monorepo/commit/54ec494f36db1a71a62d2271cab37a3ce07c126c))
 - **frontend:** use tab component ([e56a186](https://github.com/twreporter/congress-dashboard-monorepo/commit/e56a18629973ed28eee9ed8de901ae9fdd0d44f8))
+# [1.8.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-rc.1...@twreporter/congress-dashboard-frontend@1.8.0) (2025-11-27)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+# [1.8.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-rc.0...@twreporter/congress-dashboard-frontend@1.8.0-rc.1) (2025-11-24)
+
+### Bug Fixes
+
+- **frontend:** upgrade pino to latest version ([a4e16b6](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4e16b6cdfe312a4c57131ef5496968349cb2670))
+
+# [1.8.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.7.1-rc.0...@twreporter/congress-dashboard-frontend@1.8.0-rc.0) (2025-11-24)
+
+### Features
+
+- **frontend:** add views for twreporter topic ([c58a22f](https://github.com/twreporter/congress-dashboard-monorepo/commit/c58a22fa8302a6d1b4b0826dcbf2b3186e53fb8d))
+
+## [1.7.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.7.0...@twreporter/congress-dashboard-frontend@1.7.1-rc.0) (2025-11-23)
+
+### Bug Fixes
+
+- **frontend:** replace both \n & \\n to br ([c9473f3](https://github.com/twreporter/congress-dashboard-monorepo/commit/c9473f31294a273016dc803c5025dac990665293))
 
 # [1.7.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.7.0-rc.0...@twreporter/congress-dashboard-frontend@1.7.0) (2025-11-11)
 
