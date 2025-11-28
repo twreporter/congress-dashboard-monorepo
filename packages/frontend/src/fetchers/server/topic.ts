@@ -1,5 +1,6 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
-import type { partyData } from '@/fetchers/party'
+// type
+import type { PartyData } from '@/types/party'
 import type { RelatedType } from '@/types/related-twreporter-item'
 
 export type SpeechData = {
@@ -136,7 +137,7 @@ export type TopNTopicData = {
     count: number
     name?: string
     slug: string
-    party?: number | partyData
+    party?: number | PartyData
     imageLink?: string
     image?: {
       imageFile: {

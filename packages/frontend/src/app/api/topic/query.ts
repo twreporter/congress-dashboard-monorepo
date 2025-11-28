@@ -1,12 +1,6 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
-
-type PartyData = {
-  id: number
-  slug: string
-  name: string
-  imageLink?: string
-  image?: { imageFile: { url: string } }
-}
+// type
+import type { PartyData } from '@/types/party'
 
 type TopicFromRes = {
   title: string

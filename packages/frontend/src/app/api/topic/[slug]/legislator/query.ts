@@ -3,6 +3,8 @@ import keystoneFetch from '@/app/api/_graphql/keystone'
 import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // enum
 import { FilterKey } from '@/app/api/topic/[slug]/legislator/enum-constant'
+// type
+import type { PartyData } from '@/types/party'
 // lodash
 import { isEmpty } from 'lodash'
 const _ = {
@@ -16,14 +18,6 @@ type LegislatorWithSpeechCount = {
   avatar: string
   partyAvatar: string
   count: number
-}
-
-type PartyData = {
-  id: number
-  slug: string
-  name: string
-  imageLink?: string
-  image?: { imageFile: { url: string } }
 }
 
 type SpeechFromRes = {
