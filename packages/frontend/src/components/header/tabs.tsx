@@ -20,9 +20,14 @@ const Tabs = () => {
   // TODO: check why pathname startsWith is not working in prod
   console.log('pathname: ', pathname)
   console.log('InternalRoutes.Home: ', InternalRoutes.Home)
+  console.log('InternalRoutes.Council: ', InternalRoutes.Council)
   console.log(
     'pathname?.startsWith(InternalRoutes.Home): ',
     pathname?.startsWith(InternalRoutes.Home)
+  )
+  console.log(
+    'pathname?.startsWith(InternalRoutes.Council): ',
+    pathname?.startsWith(InternalRoutes.Council)
   )
   const isCongressRoute =
     pathname?.startsWith(InternalRoutes.Home) ||
