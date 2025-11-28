@@ -46,7 +46,7 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT(),
   },
   ui: {
-    label: '地方議員',
+    label: '縣市議員',
     labelField: 'name',
     listView: {
       initialColumns: ['name', 'slug'],
