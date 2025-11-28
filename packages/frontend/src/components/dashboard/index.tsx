@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 // type
 import type { TopNTopicData } from '@/fetchers/server/topic'
 import type { PartyData } from '@/types/party'
-import type { LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
+import type { LegislativeMeeting } from '@/types/legislative-meeting'
 import type { SidebarIssueProps } from '@/components/sidebar'
 import type { Legislator } from '@/components/dashboard/type'
 import type { FilterModalValueType } from '@/components/dashboard/type'
