@@ -37,6 +37,7 @@ const Container = styled.div<{ $isOpen: boolean }>`
   padding: 16px 32px 0px 32px;
   transition: transform 300ms ease-in-out;
   transform: translateX(${(props) => (props.$isOpen ? '100%' : '-100%')});
+  overflow: scroll;
 `
 
 const DividerContainer = styled.div`
