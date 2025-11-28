@@ -57,6 +57,7 @@ const Menu = styled.div<{ $isActive: boolean }>`
 
 const Item = styled.div<{ $isActive: boolean }>`
   padding: 8px 0px;
+  height: 40px;
   ${(props) =>
     props.$isActive
       ? `

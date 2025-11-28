@@ -17,7 +17,19 @@ const Container = styled.div`
 const Tabs = () => {
   const router = useRouter()
   const pathname = usePathname()
-  const isCouncilRoute = pathname?.startsWith(InternalRoutes.Council)
+  // TODO: check why pathname startsWith is not working in prod
+  console.log('pathname: ', pathname)
+  console.log('InternalRoutes.Home: ', InternalRoutes.Home)
+  console.log(
+    'pathname?.startsWith(InternalRoutes.Home): ',
+    pathname?.startsWith(InternalRoutes.Home)
+  )
+  const isCongressRoute =
+    pathname?.startsWith(InternalRoutes.Home) ||
+    pathname?.startsWith('/congress')
+  const isCouncilRoute =
+    pathname?.startsWith(InternalRoutes.Council) ||
+    pathname?.startsWith('/council')
 
   const handleDropdownItemClick = useCallback(
     (option: { label: string; value: string }) => {
@@ -34,7 +46,7 @@ const Tabs = () => {
     <Container>
       <Tab
         label="立法院"
-        isSelected={!isCouncilRoute}
+        isSelected={isCongressRoute}
         onClick={handleMainTabClick}
         type={Tab.Type.single}
       />
