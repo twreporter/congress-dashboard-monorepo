@@ -22,21 +22,13 @@ const TabWrapper = styled.div`
 const TabButton = styled.div<{ $selected: boolean }>`
   display: inline-flex;
   padding: 20px 0px;
+  padding-bottom: 18px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  ${(props) =>
-    props.$selected
-      ? `
-    padding-bottom: 18px;
-    border-bottom: 2px solid ${colorGrayscale.gray800};
-    &:hover {
-      border-bottom: 2px solid ${colorBrand.dark};
-    }
-  `
-      : `
-    border: none;
-  `}
+  border-bottom: 2px solid
+    ${(props) => (props.$selected ? colorGrayscale.gray800 : 'transparent')};
+
   p {
     color: ${colorGrayscale.gray800};
   }
@@ -44,6 +36,8 @@ const TabButton = styled.div<{ $selected: boolean }>`
     background-color: ${colorGrayscale.gray800};
   }
   &:hover {
+    border-bottom-color: ${(props) =>
+      props.$selected ? colorBrand.dark : 'transparent'};
     p {
       color: ${colorBrand.dark};
     }
