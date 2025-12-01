@@ -1,14 +1,8 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
+// type
+import type { TopNTopicForLegislators } from '@/types/topic'
 
-type TopicFromRes = {
-  id: number
-  topics?: {
-    id: number
-    slug: string
-    name: string
-    count: number
-  }[]
-}
+type TopicFromRes = TopNTopicForLegislators
 
 type FetchTopNTopicsOfLegislatorsParams = {
   legislatorIds?: number[]
@@ -28,9 +22,9 @@ const fetchTopNTopics = async ({
       topNTopicsOfLegislators(legislatorIds: $legislatorIds, meetingId: $meetingId, take: $take, sessionIds: $sessionIds) {
         id
         topics {
-          count
           slug
           name
+          count
         }
       }
     }

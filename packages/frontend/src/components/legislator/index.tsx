@@ -21,8 +21,8 @@ import {
 // type
 import {
   type LegislatorFromRes,
-  type TopicData,
 } from '@/fetchers/server/legislator'
+import type { TopicDataForLegislator } from '@/types/topic'
 // fetcher
 import { useLegislativeMeeting } from '@/fetchers/legislative-meeting'
 // hooks
@@ -34,7 +34,7 @@ import { InternalRoutes } from '@/constants/routes'
 
 type LegislatorProps = {
   legislatorData: LegislatorFromRes
-  topicsData: TopicData[]
+  topicsData: TopicDataForLegislator[]
   currentMeetingTerm: number
   currentMeetingSession: number[]
 }

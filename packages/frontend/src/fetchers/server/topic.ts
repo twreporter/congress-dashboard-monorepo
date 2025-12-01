@@ -1,23 +1,7 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
 // type
-import type { PartyData } from '@/types/party'
-import type { RelatedType } from '@/types/related-twreporter-item'
-import type { SpeechDataForTopic } from '@/types/speech'
+import type { TopicData, TopNTopicData, TopicForSitemap } from '@/types/topic'
 
-export type TopicData = {
-  slug: string
-  title: string
-  speechesCount?: number
-  speeches?: SpeechDataForTopic[]
-  relatedTopics?: {
-    slug: string
-    title: string
-  }[]
-  relatedTwreporterArticles?: {
-    slug: string
-    type: RelatedType
-  }[]
-}
 /** fetchTopic
  *   fetch topics with give slug in given terms & session
  */
@@ -109,32 +93,11 @@ export type FetchTopNTopicsParams = {
   legislativeMeetingSessionIds?: number[]
   partyIds?: number[]
 }
-export type TopNTopicData = {
-  title: string
-  slug: string
-  speechCount: number
-  legislatorCount: number
-  legislators: {
-    id: number
-    count: number
-    name?: string
-    slug: string
-    party?: number | PartyData
-    imageLink?: string
-    image?: {
-      imageFile: {
-        url: string
-      }
-    }
-    avatar?: string
-    partyAvatar?: string
-  }[]
-}[]
 export const fetchTopNTopics = async ({
   take = 10,
   skip = 0,
   legislativeMeetingId,
-}: FetchTopNTopicsParams): Promise<TopNTopicData | undefined> => {
+}: FetchTopNTopicsParams): Promise<TopNTopicData[] | undefined> => {
   const query = `
     query TopicsOrderBySpeechCount($meetingId: Int!, $take: Int, $skip: Int) {
       topicsOrderBySpeechCount(meetingId: $meetingId, take: $take, skip: $skip) {
@@ -166,7 +129,7 @@ export const fetchTopNTopics = async ({
 
   try {
     const data = await keystoneFetch<{
-      topicsOrderBySpeechCount: TopNTopicData
+      topicsOrderBySpeechCount: TopNTopicData[]
     }>(JSON.stringify({ query, variables }), false)
     return data?.data?.topicsOrderBySpeechCount
   } catch (err) {
@@ -191,7 +154,7 @@ export const fetchAllTopicsSlug = async () => {
 
   try {
     const data = await keystoneFetch<{
-      topics: { slug: string; updatedAt: string }[]
+      topics: TopicForSitemap[]
     }>(JSON.stringify({ query }), false)
     return data?.data?.topics
   } catch (err) {

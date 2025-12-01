@@ -3,6 +3,8 @@ import keystoneFetch from '@/app/api/_graphql/keystone'
 import { sortByCountDesc } from '@/fetchers/utils'
 // enum
 import { FilterKey } from '@/app/api/legislator/[slug]/topic/enum-constant'
+// type
+import type { Topic } from '@/types/topic'
 
 type TopicFromRes = {
   slug: string
@@ -10,11 +12,7 @@ type TopicFromRes = {
   speechesCount: number
 }
 
-type TopicToReturn = {
-  slug: string
-  name: string
-  count: number
-}
+type TopicToReturn = Topic
 
 const topicFormmater = (topics: TopicFromRes[]): TopicToReturn[] => {
   const topicsWithCounts = topics.map((topicFromRes) => ({

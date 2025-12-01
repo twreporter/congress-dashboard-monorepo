@@ -1,6 +1,6 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
 // type
-import type { SpeechDataForSidebar } from '@/types/speech'
+import type { TopicDataForLegislator } from '@/types/topic'
 
 export type LegislatorFromRes = {
   proposalSuccessCount?: number
@@ -199,13 +199,6 @@ export const fetchLegislator = async ({
   }
 }
 
-export type TopicData = {
-  title: string
-  slug: string
-  speechesCount: number
-  speeches: SpeechDataForSidebar[]
-}
-
 /** fetchLegislatorTopics
  *   fetch topics which given legislator has speech in given term & session
  */
@@ -217,7 +210,7 @@ export const fetchLegislatorTopics = async ({
   slug: string
   legislativeMeetingTerm: number
   legislativeMeetingSessionTerms: number[]
-}): Promise<TopicData[]> => {
+}): Promise<TopicDataForLegislator[]> => {
   // Create where conditions for topics
   const where = {
     speeches: {
@@ -278,7 +271,7 @@ export const fetchLegislatorTopics = async ({
   }
 
   try {
-    const data = await keystoneFetch<{ topics: TopicData[] }>(
+    const data = await keystoneFetch<{ topics: TopicDataForLegislator[] }>(
       JSON.stringify({ query, variables }),
       false
     )

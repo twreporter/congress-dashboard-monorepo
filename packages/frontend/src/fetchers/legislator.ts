@@ -1,5 +1,7 @@
 'use client'
 
+// type
+import type { TopNTopicForLegislators } from '@/types/topic'
 // @twreporter
 import {
   MemberType,
@@ -133,15 +135,6 @@ export const fetchLegislators = async ({
 /* fetchTopNTopicsOfLegislators
  *   fetch top N topics of given legislator ids in given meeting term & session
  */
-export type TopNTopicFromRes = {
-  id: number
-  topics?: {
-    id: number
-    slug: string
-    name: string
-    count: number
-  }[]
-}
 type FetchTopNTopicsOfLegislatorsParams = {
   legislatorIds?: number[]
   legislativeMeetingId: number
@@ -153,7 +146,7 @@ export const fetchTopNTopicsOfLegislators = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds = [],
   take = 5,
-}: FetchTopNTopicsOfLegislatorsParams): Promise<TopNTopicFromRes[]> => {
+}: FetchTopNTopicsOfLegislatorsParams): Promise<TopNTopicForLegislators[]> => {
   if (!legislatorIds || legislatorIds.length === 0) {
     return []
   }

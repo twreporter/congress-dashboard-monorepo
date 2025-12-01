@@ -1,28 +1,8 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
 // type
-import type { PartyData } from '@/types/party'
+import type { TopNTopicData } from '@/types/topic'
 
-type TopicFromRes = {
-  title: string
-  slug: string
-  speechCount: number
-  legislatorCount: number
-  legislators: {
-    id: number
-    count: number
-    name?: string
-    slug: string
-    party?: number | PartyData
-    imageLink?: string
-    image?: {
-      imageFile: {
-        url: string
-      }
-    }
-    avatar?: string
-    partyAvatar?: string
-  }[]
-}
+type TopicFromRes = TopNTopicData
 
 type FetchTopNTopicsParams = {
   take?: number

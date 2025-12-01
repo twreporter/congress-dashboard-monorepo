@@ -2,8 +2,9 @@ import { useMemo } from 'react'
 // fetcher
 import {
   type LegislatorFromRes,
-  type TopicData,
 } from '@/fetchers/server/legislator'
+// type
+import type { TopicDataForLegislator } from '@/types/topic'
 // utils
 import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // @twreporter
@@ -52,7 +53,7 @@ export type Legislator = {
 
 export const useLegislatorData = (
   legislatorData: LegislatorFromRes,
-  topicsData: TopicData[]
+  topicsData: TopicDataForLegislator[]
 ) => {
   return useMemo(() => {
     const legislator = () => {

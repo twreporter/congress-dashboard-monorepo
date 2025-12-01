@@ -3,8 +3,8 @@
 // type
 import type {
   FetchTopNTopicsParams,
-  TopNTopicData,
 } from '@/fetchers/server/topic'
+import type { Topic, TopNTopicData } from '@/types/topic'
 
 // global var
 const apiBase = process.env.NEXT_PUBLIC_API_URL as string
@@ -12,11 +12,6 @@ const apiBase = process.env.NEXT_PUBLIC_API_URL as string
 /* fetchTopTopicsForLegislator
  *   fetch top 5 topic which given legislator has more speeches in given terms & session
  */
-export type Topic = {
-  slug: string
-  name: string
-  count: number
-}
 
 export const fetchTopTopicsForLegislator = async ({
   legislatorSlug,
