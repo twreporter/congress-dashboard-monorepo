@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0-beta.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.0-beta.1...@twreporter/congress-dashboard-cms@1.5.0-beta.2) (2025-12-01)
+
+### Bug Fixes
+
+- **cms:** council list order and rename ([258faf1](https://github.com/twreporter/congress-dashboard-monorepo/commit/258faf17c445df788b9952530915c4388f86eaca))
+
 # [1.5.0-beta.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.0...@twreporter/congress-dashboard-cms@1.5.0-beta.1) (2025-11-28)
 
 ### Bug Fixes
