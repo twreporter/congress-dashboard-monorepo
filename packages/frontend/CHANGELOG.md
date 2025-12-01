@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.9](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.8...@twreporter/congress-dashboard-frontend@1.8.0-beta.9) (2025-12-01)
+
+### Bug Fixes
+
+- **frontend:** add council temporary page ([a49db9f](https://github.com/twreporter/congress-dashboard-monorepo/commit/a49db9f6971b9d814aa9d64c0a2a4a649d2157d0))
+
 # [1.8.0-beta.8](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.7...@twreporter/congress-dashboard-frontend@1.8.0-beta.8) (2025-12-01)
 
 ### Bug Fixes
