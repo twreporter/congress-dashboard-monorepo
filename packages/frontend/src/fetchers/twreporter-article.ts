@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 // type
-import type { RelatedType } from '@/types/related-twreporter-item'
+import type { RelatedType, RelatedItemData } from '@/types/related-twreporter-item'
 // lodash
 import { get, last } from 'lodash'
 const _ = {
@@ -31,21 +31,9 @@ const getArticleUrl = (slug: string, style: string) => {
   return `${process.env.NEXT_PUBLIC_TWREPORTER_URL}/${entry}/${slug}`
 }
 
-export type ItemData = {
-  category?: string
-  publishedDate?: string
-  title: string
-  image?: {
-    description?: string
-    url?: string
-  }
-  style?: string
-  url: string
-}
-
 const fetchTwreporterArticle = async (
   slug: string
-): Promise<ItemData | undefined> => {
+): Promise<RelatedItemData | undefined> => {
   const url = process.env.NEXT_PUBLIC_TWREPORTER_API_URL as string
   const endpoint = `/v2/posts/${slug}?full=false`
   const res = await fetch(`${url}${endpoint}`, {
@@ -82,7 +70,7 @@ const fetchTwreporterArticle = async (
 
 const fetchTwreporterTopic = async (
   slug: string
-): Promise<ItemData | undefined> => {
+): Promise<RelatedItemData | undefined> => {
   const url = process.env.NEXT_PUBLIC_TWREPORTER_API_URL as string
   const endpoint = `/v2/topics/${slug}?full=false`
   const res = await fetch(`${url}${endpoint}`, {
