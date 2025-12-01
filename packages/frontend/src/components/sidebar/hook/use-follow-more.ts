@@ -5,9 +5,7 @@ import {
   fetchTopNLegislatorsOfATopic,
 } from '@/fetchers/legislator'
 // type
-import type {
-  LegislatorWithSpeechCount,
-} from '@/fetchers/legislator'
+import type { LegislatorWithSpeechCount } from '@/types/legislator'
 import type { TopNTopicForLegislators } from '@/types/topic'
 
 // useMoreTopics

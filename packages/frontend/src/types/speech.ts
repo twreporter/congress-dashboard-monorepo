@@ -1,3 +1,5 @@
+import type { LegislatorBase } from '@/types/legislator'
+
 type SpeechBaseData = {
   slug: string
   title: string
@@ -44,15 +46,6 @@ export type SpeechDataForSidebar = SpeechBaseData & {
 export type SpeechDataForTopic = SpeechBaseData & {
   summary: string
   legislativeYuanMember: {
-    legislator: {
-      name: string
-      slug: string
-      imageLink?: string
-      image?: {
-        imageFile: {
-          url: string
-        }
-      }
-    }
+    legislator: LegislatorBase
   }
 }

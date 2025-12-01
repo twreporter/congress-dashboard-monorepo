@@ -57,7 +57,7 @@ export const fetchTopNTopics = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds = [],
   partyIds = [],
-}: FetchTopNTopicsParams): Promise<TopNTopicData> => {
+}: FetchTopNTopicsParams): Promise<TopNTopicData[]> => {
   let url = `${apiBase}/topic?mid=${encodeURIComponent(
     legislativeMeetingId
   )}&take=${encodeURIComponent(take)}&skip=${encodeURIComponent(skip)}`

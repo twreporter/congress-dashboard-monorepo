@@ -5,34 +5,17 @@ import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 import { FilterKey } from '@/app/api/topic/[slug]/legislator/enum-constant'
 // type
 import type { PartyData } from '@/types/party'
+import type { LegislatorWithSpeechCount, LegislatorBase } from '@/types/legislator'
 // lodash
 import { isEmpty } from 'lodash'
 const _ = {
   isEmpty,
 }
 
-type LegislatorWithSpeechCount = {
-  id: number
-  slug: string
-  name: string
-  avatar: string
-  partyAvatar: string
-  count: number
-}
-
 type SpeechFromRes = {
   legislativeYuanMember: {
     id: number
-    legislator: {
-      name: string
-      slug: string
-      image?: {
-        imageFile: {
-          url: string
-        }
-      }
-      imageLink?: string
-    }
+    legislator: LegislatorBase
     party: PartyData
   }
 }

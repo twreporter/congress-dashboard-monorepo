@@ -1,48 +1,7 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
 // type
 import type { TopicDataForLegislator } from '@/types/topic'
-
-export type LegislatorFromRes = {
-  proposalSuccessCount?: number
-  party: {
-    name: string
-    image?: {
-      imageFile: {
-        url: string
-      }
-    }
-    imageLink?: string
-  }
-  note?: string
-  tooltip?: string
-  legislativeMeeting: {
-    term: number
-  }
-  constituency: string
-  type: string
-  sessionAndCommittee: {
-    committee: {
-      name: string
-    }[]
-    legislativeMeetingSession: {
-      term: number
-    }
-  }[]
-  legislator: {
-    name: string
-    slug: string
-    image?: {
-      imageFile: {
-        url: string
-      }
-    }
-    imageLink?: string
-    externalLink?: string
-    meetingTermCount?: number
-    meetingTermCountInfo?: string
-  }
-  isActive: boolean
-}
+import type { Legislator, LegislatorForSitemap } from '@/types/legislator'
 
 /** checkLegislatorExist
  *  check if legislator exist with given slug
@@ -127,7 +86,7 @@ export const fetchLegislator = async ({
 }: {
   slug: string
   legislativeMeeting: number
-}): Promise<LegislatorFromRes | undefined> => {
+}): Promise<Legislator | undefined> => {
   const where = {
     legislator: {
       slug: {
@@ -189,7 +148,7 @@ export const fetchLegislator = async ({
 
   try {
     const data = await keystoneFetch<{
-      legislativeYuanMembers?: LegislatorFromRes[]
+      legislativeYuanMembers?: Legislator[]
     }>(JSON.stringify({ query, variables }), false)
     return data?.data?.legislativeYuanMembers?.[0]
   } catch (err) {
@@ -297,7 +256,7 @@ export const fetchAllLegislatorsSlug = async () => {
   `
   try {
     const data = await keystoneFetch<{
-      legislators: { slug: string; updatedAt: string }[]
+      legislators: LegislatorForSitemap[]
     }>(JSON.stringify({ query }), false)
     return data?.data?.legislators
   } catch (err) {

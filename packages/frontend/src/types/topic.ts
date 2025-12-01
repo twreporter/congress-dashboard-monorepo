@@ -2,6 +2,7 @@ import type { PartyData } from '@/types/party'
 import type { SpeechDataForTopic } from '@/types/speech'
 import type { RelatedType } from '@/types/related-twreporter-item'
 import type { SpeechDataForSidebar } from '@/types/speech'
+import type { KeystoneImage } from '@/types'
 
 export type Topic = {
   slug: string
@@ -36,11 +37,7 @@ export type TopNTopicData = {
     slug: string
     party?: number | PartyData
     imageLink?: string
-    image?: {
-      imageFile: {
-        url: string
-      }
-    }
+    image?: KeystoneImage
     avatar?: string
     partyAvatar?: string
   }[]

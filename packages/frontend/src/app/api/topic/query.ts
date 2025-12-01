@@ -2,8 +2,6 @@ import keystoneFetch from '@/app/api/_graphql/keystone'
 // type
 import type { TopNTopicData } from '@/types/topic'
 
-type TopicFromRes = TopNTopicData
-
 type FetchTopNTopicsParams = {
   take?: number
   skip?: number
@@ -18,7 +16,7 @@ const fetchTopNTopics = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds = [],
   partyIds = [],
-}: FetchTopNTopicsParams) => {
+}: FetchTopNTopicsParams): Promise<TopNTopicData[]> => {
   const query = `
     query TopicsOrderBySpeechCount($meetingId: Int!, $take: Int, $sessionIds: [Int], $partyIds: [Int], $skip: Int) {
       topicsOrderBySpeechCount(meetingId: $meetingId, take: $take, sessionIds: $sessionIds, skip: $skip, partyIds: $partyIds) {
@@ -50,7 +48,7 @@ const fetchTopNTopics = async ({
     partyIds,
   }
   const data = await keystoneFetch<{
-    topicsOrderBySpeechCount: TopicFromRes[]
+    topicsOrderBySpeechCount: TopNTopicData[]
   }>(JSON.stringify({ query, variables }), false)
 
   return data?.data?.topicsOrderBySpeechCount || []
