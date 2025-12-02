@@ -1691,6 +1691,60 @@ input SystemUserRelateToOneForCreateInput {
   connect: SystemUserWhereUniqueInput
 }
 
+type CouncilImportRecord {
+  id: ID!
+  recordName: String
+  importer: SystemUser
+  recordCount: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilImportRecordWhereUniqueInput {
+  id: ID
+}
+
+input CouncilImportRecordWhereInput {
+  AND: [CouncilImportRecordWhereInput!]
+  OR: [CouncilImportRecordWhereInput!]
+  NOT: [CouncilImportRecordWhereInput!]
+  id: IDFilter
+  recordName: StringFilter
+  importer: SystemUserWhereInput
+  recordCount: IntNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CouncilImportRecordOrderByInput {
+  id: OrderDirection
+  recordName: OrderDirection
+  recordCount: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CouncilImportRecordUpdateInput {
+  recordName: String
+  importer: SystemUserRelateToOneForUpdateInput
+  recordCount: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CouncilImportRecordUpdateArgs {
+  where: CouncilImportRecordWhereUniqueInput!
+  data: CouncilImportRecordUpdateInput!
+}
+
+input CouncilImportRecordCreateInput {
+  recordName: String
+  importer: SystemUserRelateToOneForCreateInput
+  recordCount: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -1805,6 +1859,12 @@ type Mutation {
   updateImportRecords(data: [ImportRecordUpdateArgs!]!): [ImportRecord]
   deleteImportRecord(where: ImportRecordWhereUniqueInput!): ImportRecord
   deleteImportRecords(where: [ImportRecordWhereUniqueInput!]!): [ImportRecord]
+  createCouncilImportRecord(data: CouncilImportRecordCreateInput!): CouncilImportRecord
+  createCouncilImportRecords(data: [CouncilImportRecordCreateInput!]!): [CouncilImportRecord]
+  updateCouncilImportRecord(where: CouncilImportRecordWhereUniqueInput!, data: CouncilImportRecordUpdateInput!): CouncilImportRecord
+  updateCouncilImportRecords(data: [CouncilImportRecordUpdateArgs!]!): [CouncilImportRecord]
+  deleteCouncilImportRecord(where: CouncilImportRecordWhereUniqueInput!): CouncilImportRecord
+  deleteCouncilImportRecords(where: [CouncilImportRecordWhereUniqueInput!]!): [CouncilImportRecord]
   endSession: Boolean!
   authenticateSystemUserWithPassword(email: String!, password: String!): SystemUserAuthenticationWithPasswordResult
   createInitialSystemUser(data: CreateInitialSystemUserInput!): SystemUserAuthenticationWithPasswordSuccess!
@@ -1883,6 +1943,9 @@ type Query {
   importRecord(where: ImportRecordWhereUniqueInput!): ImportRecord
   importRecords(where: ImportRecordWhereInput! = {}, orderBy: [ImportRecordOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ImportRecordWhereUniqueInput): [ImportRecord!]
   importRecordsCount(where: ImportRecordWhereInput! = {}): Int
+  councilImportRecord(where: CouncilImportRecordWhereUniqueInput!): CouncilImportRecord
+  councilImportRecords(where: CouncilImportRecordWhereInput! = {}, orderBy: [CouncilImportRecordOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilImportRecordWhereUniqueInput): [CouncilImportRecord!]
+  councilImportRecordsCount(where: CouncilImportRecordWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 
