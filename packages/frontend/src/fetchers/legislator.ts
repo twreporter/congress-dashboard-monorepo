@@ -1,10 +1,8 @@
 'use client'
 
-// @twreporter
-import {
-  MemberType,
-  Constituency,
-} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+// type
+import type { TopNTopicForLegislators } from '@/types/topic'
+import type { LegislatorWithSpeechCount, LegislatorForIndex } from '@/types/legislator'
 // lodash
 import { isEmpty, filter, includes } from 'lodash'
 const _ = {
@@ -19,13 +17,6 @@ const apiBase = process.env.NEXT_PUBLIC_API_URL as string
 /* fetchTopLegislatorsBySpeechCount
  *   fetch top 5 legislators with most speeches of given topic in given term & session
  */
-export type LegislatorWithSpeechCount = {
-  slug: string
-  name: string
-  avatar: string
-  partyAvatar: string
-  count: number
-}
 
 export const fetchTopLegislatorsBySpeechCount = async ({
   topicSlug,
@@ -67,27 +58,6 @@ export const fetchTopLegislatorsBySpeechCount = async ({
 /* fetchLegislators
  *   fetch legislator data of given meeting term & party & constituency
  */
-type keystoneImage = {
-  imageFile: {
-    url: string
-  }
-}
-type LegislatorFromRes = {
-  id: number
-  legislator: {
-    slug: string
-    name: string
-    imageLink?: string
-    image?: keystoneImage
-  }
-  party: {
-    image?: keystoneImage
-  }
-  type?: MemberType
-  constituency?: Constituency
-  tootip?: string
-  note?: string
-}[]
 type FetchLegislatorsParams = {
   legislativeMeetingId: number
   legislativeMeetingSessionIds?: number[]
@@ -101,7 +71,7 @@ export const fetchLegislators = async ({
   partyIds,
   constituencies,
   committeeSlugs,
-}: FetchLegislatorsParams): Promise<LegislatorFromRes> => {
+}: FetchLegislatorsParams): Promise<LegislatorForIndex[]> => {
   let url = `${apiBase}/legislator?mid=${encodeURIComponent(
     legislativeMeetingId
   )}`
@@ -133,15 +103,6 @@ export const fetchLegislators = async ({
 /* fetchTopNTopicsOfLegislators
  *   fetch top N topics of given legislator ids in given meeting term & session
  */
-export type TopNTopicFromRes = {
-  id: number
-  topics?: {
-    id: number
-    slug: string
-    name: string
-    count: number
-  }[]
-}
 type FetchTopNTopicsOfLegislatorsParams = {
   legislatorIds?: number[]
   legislativeMeetingId: number
@@ -153,7 +114,7 @@ export const fetchTopNTopicsOfLegislators = async ({
   legislativeMeetingId,
   legislativeMeetingSessionIds = [],
   take = 5,
-}: FetchTopNTopicsOfLegislatorsParams): Promise<TopNTopicFromRes[]> => {
+}: FetchTopNTopicsOfLegislatorsParams): Promise<TopNTopicForLegislators[]> => {
   if (!legislatorIds || legislatorIds.length === 0) {
     return []
   }
@@ -183,15 +144,6 @@ export const fetchTopNTopicsOfLegislators = async ({
 /* fetchLegislatorsOfATopic
  *   fetch legislators of given topic and sort by speeches count desc
  */
-export type LegislatorForFilter = {
-  id: number
-  slug: string
-  name: string
-  imageLink?: string
-  image?: { imageFile: { url: string } }
-  count: number
-}
-
 type FetchLegislatorsOfATopicParams = {
   slug: string
   legislativeMeetingId: number
@@ -202,7 +154,7 @@ export const fetchLegislatorsOfATopic = async ({
   slug,
   legislativeMeetingId,
   legislativeMeetingSessionIds,
-}: FetchLegislatorsOfATopicParams) => {
+}: FetchLegislatorsOfATopicParams): Promise<LegislatorWithSpeechCount[]> => {
   if (!slug) {
     return []
   }
@@ -226,7 +178,7 @@ export const fetchLegislatorsOfATopic = async ({
 }
 
 /* fetchLegislatorsOfATopic
- *   fetch legislators of given topic and sort by speeches count desc
+ *   fetch legislators of given topic and sort by speeches count desc with mutiple filters
  */
 type FetchTopNLegislatorsOfATopicParams = {
   topicSlug: string

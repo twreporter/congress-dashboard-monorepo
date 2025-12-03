@@ -24,8 +24,8 @@ import { formatDate } from '@/utils/date-formatters'
 import { useLegislativeMeetingSession } from '@/fetchers/legislative-meeting'
 import useCommittee from '@/fetchers/committee'
 // type
-import type { partyData } from '@/fetchers/party'
-import type { LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
+import type { PartyData } from '@/types/party'
+import type { LegislativeMeeting } from '@/types/legislative-meeting'
 import type { OptionGroup } from '@/components/selector/types'
 import type {
   FilterOption,
@@ -156,7 +156,7 @@ const MobileOnlyBox = styled(MobileOnly)`
 type FunctionBarProps = {
   setTab: (tab: Option) => void
   className?: string
-  parties: partyData[]
+  parties: PartyData[]
   meetings: LegislativeMeeting[]
   onChangeFilter?: (filterModalValue: FilterModalValueType) => void
 }

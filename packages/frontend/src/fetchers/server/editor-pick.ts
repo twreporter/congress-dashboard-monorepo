@@ -1,13 +1,13 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
+// constants
+import { EDITOR_SELECT_TYPE } from '@/constants/editor-pick'
+// type
+import type { EditorSelect } from '@/types/editor-pick'
 
 /* fetchEditorSelecteds
  *   fetch editor selecteds order by `order` asc
  */
 
-export enum EditorSelectType {
-  Legislator,
-  Topic,
-}
 type EditorSelectFromRes = {
   labelField: string
   order: number
@@ -17,12 +17,6 @@ type EditorSelectFromRes = {
   legislator?: {
     slug: string
   }
-}
-export type EditorSelect = {
-  label: string
-  order: number
-  slug: string
-  type: EditorSelectType
 }
 
 const fetchEditorSelecteds = async (): Promise<EditorSelect[]> => {
@@ -52,8 +46,8 @@ const fetchEditorSelecteds = async (): Promise<EditorSelect[]> => {
     const selecteds = data.data?.selecteds || []
     return selecteds.map((select) => {
       const type = select.legislator
-        ? EditorSelectType.Legislator
-        : EditorSelectType.Topic
+        ? EDITOR_SELECT_TYPE.legislator
+        : EDITOR_SELECT_TYPE.topic
       const slug = select.legislator?.slug || select.topic?.slug || ''
 
       return {

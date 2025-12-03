@@ -5,10 +5,8 @@ import {
   fetchTopNLegislatorsOfATopic,
 } from '@/fetchers/legislator'
 // type
-import type {
-  TopNTopicFromRes,
-  LegislatorWithSpeechCount,
-} from '@/fetchers/legislator'
+import type { LegislatorWithSpeechCount } from '@/types/legislator'
+import type { TopNTopicForLegislators } from '@/types/topic'
 
 // useMoreTopics
 type TopicStateType<T> = {
@@ -28,8 +26,8 @@ const fetchMoreTopics = async ({
   excludeTopicSlug,
   legislativeMeetingId,
   legislativeMeetingSessionIds,
-}: FetchMoreTopicsParams): Promise<TopNTopicFromRes['topics']> => {
-  const legislatorWithTopics: TopNTopicFromRes[] =
+}: FetchMoreTopicsParams): Promise<TopNTopicForLegislators['topics']> => {
+  const legislatorWithTopics: TopNTopicForLegislators[] =
     await fetchTopNTopicsOfLegislators({
       legislatorIds: [legislatorId],
       legislativeMeetingId,
@@ -47,8 +45,8 @@ const fetchMoreTopics = async ({
 
 export const useMoreTopics = (
   params?: FetchMoreTopicsParams
-): TopicStateType<TopNTopicFromRes['topics']> => {
-  const { data, isLoading, error } = useSWR<TopNTopicFromRes['topics']>(
+): TopicStateType<TopNTopicForLegislators['topics']> => {
+  const { data, isLoading, error } = useSWR<TopNTopicForLegislators['topics']>(
     params ? params : null,
     fetchMoreTopics
   )

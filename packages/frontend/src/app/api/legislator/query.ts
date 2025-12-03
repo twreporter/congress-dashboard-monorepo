@@ -1,37 +1,15 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
+// type
+import type { LegislatorForIndex } from '@/types/legislator'
 // @twreporter
 import {
   MemberType,
-  Constituency,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 // lodash
 import { filter, includes } from 'lodash'
 const _ = {
   filter,
   includes,
-}
-
-type keystoneImage = {
-  imageFile: {
-    url: string
-  }
-}
-
-type LegislatorFromRes = {
-  id: number
-  legislator: {
-    slug: string
-    name: string
-    imageLink?: string
-    image?: keystoneImage
-  }
-  party: {
-    image?: keystoneImage
-  }
-  type?: MemberType
-  constituency?: Constituency
-  tootip?: string
-  note?: string
 }
 
 type FetchLegislatorsParams = {
@@ -48,7 +26,7 @@ const fetchLegislators = async ({
   partyIds,
   constituencies,
   committeeSlugs,
-}: FetchLegislatorsParams): Promise<LegislatorFromRes[]> => {
+}: FetchLegislatorsParams): Promise<LegislatorForIndex[]> => {
   const query = `
     query LegislativeYuanMembers($where: LegislativeYuanMemberWhereInput!) {
       legislativeYuanMembers(where: $where) {
@@ -172,7 +150,7 @@ const fetchLegislators = async ({
   }
 
   const data = await keystoneFetch<{
-    legislativeYuanMembers: LegislatorFromRes[]
+    legislativeYuanMembers: LegislatorForIndex[]
   }>(JSON.stringify({ query, variables: { where } }), false)
 
   return data?.data?.legislativeYuanMembers || []

@@ -2,6 +2,7 @@
 import { SelectorType } from '@/components/selector'
 // type
 import type { OptionGroup, Option } from '@/components/selector/types'
+import type { LegislatorForDashboard } from '@/types/legislator'
 // @twreporter
 import {
   MemberType,
@@ -24,19 +25,7 @@ export type FilterModalValueType = {
   [key: string]: string | string[]
 }
 
-export type Legislator = {
-  id?: number
-  name?: string
-  avatar?: string
-  partyAvatar?: string
-  slug: string
-  tooltip?: string
-  note?: string
-  count?: number
-  tags?: Tag[]
-  type?: MemberType
-  constituency?: Constituency
-}
+export type Legislator = LegislatorForDashboard
 
 export type Tag = {
   name: string

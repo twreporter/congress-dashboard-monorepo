@@ -4,9 +4,9 @@
 import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 // type
-import type { TopNTopicData } from '@/fetchers/server/topic'
-import type { partyData } from '@/fetchers/party'
-import type { LegislativeMeeting } from '@/fetchers/server/legislative-meeting'
+import type { TopNTopicData } from '@/types/topic'
+import type { PartyData } from '@/types/party'
+import type { LegislativeMeeting } from '@/types/legislative-meeting'
 import type { SidebarIssueProps } from '@/components/sidebar'
 import type { Legislator } from '@/components/dashboard/type'
 import type { FilterModalValueType } from '@/components/dashboard/type'
@@ -226,10 +226,10 @@ const CardSection = styled.div<{
 
 const anchorId = 'anchor-id'
 type DashboardProps = {
-  initialTopics?: TopNTopicData & {
+  initialTopics?: TopNTopicData[] & {
     legislators?: Legislator[]
   }
-  parties?: partyData[]
+  parties?: PartyData[]
   meetings?: LegislativeMeeting[]
 }
 const Dashboard: React.FC<DashboardProps> = ({

@@ -47,7 +47,7 @@ import NewDonationBox from '@/components/about/new-donation-box'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 // type
-import { type SpeechFromRes } from '@/fetchers/server/speech'
+import type { SpeechFromRes } from '@/types/speech'
 // hooks
 import { useSpeechData } from '@/components/speech/hooks/use-speech-data'
 import { useScrollStage } from '@/components/speech/hooks/use-scroll-stage'

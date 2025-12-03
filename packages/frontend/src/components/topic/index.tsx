@@ -18,8 +18,8 @@ import {
   DesktopAside,
   TopicListContainer,
 } from '@/components/topic/styles'
-//  fetcher
-import { type TopicData } from '@/fetchers/server/topic'
+//  type
+import type { TopicData } from '@/types/topic'
 // custom hooks
 import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
 import { useTopicData } from '@/components/topic/hooks/use-topic-data'

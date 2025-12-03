@@ -1,10 +1,6 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
-
-type committeeDataFromRes = {
-  slug: string
-  name: string
-  type: 'standing' | 'ad-hoc'
-}
+// type
+import type { Committee } from '@/types/committee'
 
 const fetchCommittee = async () => {
   const query = `
@@ -16,7 +12,7 @@ const fetchCommittee = async () => {
       }
     }
   `
-  const data = await keystoneFetch<{ committees: committeeDataFromRes[] }>(
+  const data = await keystoneFetch<{ committees: Committee[] }>(
     JSON.stringify({ query }),
     false
   )

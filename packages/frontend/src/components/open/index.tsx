@@ -10,12 +10,10 @@ import { notoSerif } from '@/utils/font'
 import { AlgoliaInstantSearch } from '@/components/search/instant-search'
 import Selected from '@/components/open/selected'
 // type
-import {
-  type EditorSelect,
-  EditorSelectType,
-} from '@/fetchers/server/editor-pickor'
+import type { EditorSelect } from '@/types/editor-pick'
 // constants
 import { InternalRoutes } from '@/constants/routes'
+import { EDITOR_SELECT_TYPE } from '@/constants/editor-pick'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
@@ -107,7 +105,7 @@ const Open: React.FC<OpenProps> = ({ selecteds }) => {
   ))
   const selectedsWithPath = selecteds.map(({ label, order, type, slug }) => {
     const pathFrom =
-      type === EditorSelectType.Legislator
+      type === EDITOR_SELECT_TYPE.legislator
         ? InternalRoutes.Legislator
         : InternalRoutes.Topic
     return {

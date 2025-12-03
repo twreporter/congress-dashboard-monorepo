@@ -19,10 +19,8 @@ import {
   ListContainer,
 } from '@/components/legislator/styles'
 // type
-import {
-  type LegislatorFromRes,
-  type TopicData,
-} from '@/fetchers/server/legislator'
+import type { TopicDataForLegislator } from '@/types/topic'
+import type { Legislator } from '@/types/legislator'
 // fetcher
 import { useLegislativeMeeting } from '@/fetchers/legislative-meeting'
 // hooks
@@ -33,8 +31,8 @@ import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
 import { InternalRoutes } from '@/constants/routes'
 
 type LegislatorProps = {
-  legislatorData: LegislatorFromRes
-  topicsData: TopicData[]
+  legislatorData: Legislator
+  topicsData: TopicDataForLegislator[]
   currentMeetingTerm: number
   currentMeetingSession: number[]
 }

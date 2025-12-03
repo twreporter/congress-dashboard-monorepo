@@ -1,6 +1,6 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
 // type
-import type { partyData } from '@/fetchers/party'
+import type { PartyData } from '@/types/party'
 
 export const fetchParty = async () => {
   const query = `
@@ -19,7 +19,7 @@ export const fetchParty = async () => {
     }
   `
   try {
-    const data = await keystoneFetch<{ parties: partyData[] }>(
+    const data = await keystoneFetch<{ parties: PartyData[] }>(
       JSON.stringify({ query }),
       false
     )

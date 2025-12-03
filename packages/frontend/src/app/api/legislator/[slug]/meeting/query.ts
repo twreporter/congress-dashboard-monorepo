@@ -1,10 +1,9 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
+// type
+import type { LegislativeMeeting } from '@/types/legislative-meeting'
 
 type DataFromRes = {
-  legislativeMeeting: {
-    id: number
-    term: number
-  }
+  legislativeMeeting: LegislativeMeeting
 }
 
 type FetchLegislatorMeetingsParams = {

@@ -1,9 +1,8 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
+// type
+import type { LegislativeMeeting } from '@/types/legislative-meeting'
 
-type LegislativeMeetingFromRes = {
-  id: number
-  term: number
-}
+type LegislativeMeetingFromRes = LegislativeMeeting
 
 const fetchLegislativeMeetings = async () => {
   const query = `

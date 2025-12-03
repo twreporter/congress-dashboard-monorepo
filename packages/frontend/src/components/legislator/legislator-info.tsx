@@ -21,8 +21,8 @@ import { AvatarCircleCss } from '@/styles/cheetsheet'
 import PartyTag from '@/components/dashboard/card/party-tag'
 // enums
 import { TagSize } from '@/components/dashboard/enum'
-// fetcher
-import { type Legislator } from '@/components/legislator/hooks/use-legislator-data'
+// types
+import type { LegislatorForLawmaker } from '@/types/legislator'
 
 const LegislatorInfoDiv = styled.div`
   display: flex;
@@ -162,7 +162,7 @@ const ExternalLinkButton = styled(IconButton)`
 `
 
 type LegislatorInfoProps = {
-  legislator: Legislator
+  legislator: LegislatorForLawmaker
   isLegislatorActive?: boolean
 }
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH

@@ -1,15 +1,14 @@
 'use client'
 import useSWR from 'swr'
+// type
+import type { CommitteeMember } from '@/types/committee-member'
 
-type CommitteeForReturn = {
-  count: number
-  name: string
-}
 type StateType<T> = {
   committees: T[]
   isLoading: boolean
   error?: Error
 }
+
 type FetchCommitteeMemberParams = {
   slug: string
   legislativeMeetingId: number
@@ -41,7 +40,7 @@ const fetchCommitteeMember = async ({
 }
 const useCommitteeMember = (
   params?: FetchCommitteeMemberParams
-): StateType<CommitteeForReturn> => {
+): StateType<CommitteeMember> => {
   const { data, isLoading, error } = useSWR(
     params ? params : null,
     fetchCommitteeMember

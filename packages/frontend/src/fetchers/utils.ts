@@ -1,6 +1,8 @@
+import type { KeystoneImage } from '@/types'
+
 type InstanceWithImage = {
   imageLink?: string
-  image?: { imageFile: { url: string } }
+  image?: KeystoneImage
 }
 export function getImageLink(item: InstanceWithImage) {
   const selfHostImage = item?.image?.imageFile?.url

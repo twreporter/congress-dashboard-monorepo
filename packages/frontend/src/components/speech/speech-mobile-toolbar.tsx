@@ -28,7 +28,7 @@ import { Direction } from '@/components/speech'
 import { openFeedback } from '@/utils/feedback'
 
 // styles
-const MobileToolbarContainer = styled.div<{
+export const MobileToolbarContainer = styled.div<{
   $isHidden: boolean
   $hideText: boolean
 }>`
@@ -46,7 +46,7 @@ const MobileToolbarContainer = styled.div<{
   transition: height 200ms, transform 200ms ease-in-out;
 `
 
-const ToolBar = styled.div`
+export const ToolBar = styled.div`
   display: flex;
   width: 100%;
   padding: 4px 16px;
@@ -57,7 +57,7 @@ const ToolBar = styled.div`
   position: relative;
 `
 
-const OptionsContainer = styled.div<{ $isShow: boolean }>`
+export const OptionsContainer = styled.div<{ $isShow: boolean }>`
   visibility: ${(props) => (props.$isShow ? 'visible' : 'hidden')};
   transition: visibility 100ms;
   position: absolute;
@@ -70,7 +70,7 @@ const OptionsContainer = styled.div<{ $isShow: boolean }>`
   gap: 8px;
 `
 
-const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,21 +80,32 @@ const ButtonContainer = styled.div`
   }
 `
 
-type ButtonGroupType = 'share' | 'switch' | 'none'
 // global variables
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-const MobileToolbarContext = createContext<{
+
+type ButtonGroupType = 'share' | 'switch' | 'none'
+
+export type ToolbarContext = {
   hideText: boolean
   setButtonGroup: React.Dispatch<React.SetStateAction<ButtonGroupType>>
-}>({
+}
+const MobileToolbarContext = createContext<ToolbarContext>({
   hideText: false,
   setButtonGroup: () => {},
 })
 
-const FeedbackButton: React.FC = () => {
-  const { hideText } = useContext(MobileToolbarContext)
+type FeedbackButtonProps = {
+  eventName: string
+  context: React.Context<ToolbarContext>
+}
+
+export const FeedbackButton: React.FC<FeedbackButtonProps> = ({
+  eventName,
+  context,
+}) => {
+  const { hideText } = useContext(context)
   return (
-    <ButtonContainer onClick={() => openFeedback('speech mobile toolbar')}>
+    <ButtonContainer onClick={() => openFeedback(eventName)}>
       <IconWithTextButton
         text="問題回報"
         iconComponent={<Report releaseBranch={releaseBranch} />}
@@ -104,8 +115,12 @@ const FeedbackButton: React.FC = () => {
   )
 }
 
-const ShareButton: React.FC = () => {
-  const { hideText, setButtonGroup } = useContext(MobileToolbarContext)
+type ShareButtonProps = {
+  context: React.Context<ToolbarContext>
+}
+
+export const ShareButton: React.FC<ShareButtonProps> = ({ context }) => {
+  const { hideText, setButtonGroup } = useContext(context)
   const onClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     setButtonGroup((prev) => (prev === 'share' ? 'none' : 'share'))
@@ -144,10 +159,14 @@ const SwitchButton: React.FC = () => {
 
 type FontSizeButtonProps = {
   onClick: () => void
+  context: React.Context<ToolbarContext>
 }
 
-const FontSizeButton: React.FC<FontSizeButtonProps> = ({ onClick }) => {
-  const { hideText } = useContext(MobileToolbarContext)
+export const FontSizeButton: React.FC<FontSizeButtonProps> = ({
+  onClick,
+  context,
+}) => {
+  const { hideText } = useContext(context)
   return (
     <ButtonContainer onClick={onClick}>
       <IconWithTextButton
@@ -180,7 +199,9 @@ type ShareButtonGroupProps = {
   isShow: boolean
 }
 
-const ShareButtonGroup: React.FC<ShareButtonGroupProps> = ({ isShow }) => {
+export const ShareButtonGroup: React.FC<ShareButtonGroupProps> = ({
+  isShow,
+}) => {
   const handleCopyOnClick = async () => {
     try {
       const currentURL = window.location.href
@@ -319,10 +340,16 @@ const MobileToolbar: React.FC<MobileToolbarProps> = ({
     <MobileToolbarContext.Provider value={contextValue}>
       <MobileToolbarContainer $isHidden={isHidden} $hideText={hideText}>
         <ToolBar>
-          <FeedbackButton />
-          <ShareButton />
+          <FeedbackButton
+            eventName="speech mobile toolbar"
+            context={MobileToolbarContext}
+          />
+          <ShareButton context={MobileToolbarContext} />
           <SwitchButton />
-          <FontSizeButton onClick={onFontSizeChange} />
+          <FontSizeButton
+            onClick={onFontSizeChange}
+            context={MobileToolbarContext}
+          />
           <IVODButton link={iVODLink} />
           <ShareButtonGroup isShow={buttonGroup === 'share'} />
           <SwitchButtonGroup
@@ -358,9 +385,15 @@ export const AboutPageMobileToolbar: React.FC<AboutPageMobileToolbarProps> = ({
     <MobileToolbarContext.Provider value={contextValue}>
       <MobileToolbarContainer $isHidden={isHidden} $hideText={hideText}>
         <ToolBar>
-          <FeedbackButton />
-          <ShareButton />
-          <FontSizeButton onClick={onFontSizeChange} />
+          <FeedbackButton
+            eventName="about mobile toolbar"
+            context={MobileToolbarContext}
+          />
+          <ShareButton context={MobileToolbarContext} />
+          <FontSizeButton
+            onClick={onFontSizeChange}
+            context={MobileToolbarContext}
+          />
           <ShareButtonGroup isShow={buttonGroup === 'share'} />
         </ToolBar>
       </MobileToolbarContainer>

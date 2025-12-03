@@ -1,10 +1,8 @@
 'use client'
 import useSWR from 'swr'
-
-import type {
-  LegislativeMeeting,
-  LegislativeMeetingSession,
-} from '@/fetchers/server/legislative-meeting'
+// type
+import type { LegislativeMeeting } from '@/types/legislative-meeting'
+import type { LegislativeMeetingSession } from '@/types/legislative-meeting-session'
 
 const apiBase = process.env.NEXT_PUBLIC_API_URL as string
 const fetchLegislativeMeetingByLegislator = async (

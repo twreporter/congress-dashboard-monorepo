@@ -32,11 +32,11 @@ import FilterModal from '@/components/sidebar/filter-modal'
 import { FollowMoreErrorState } from '@/components/sidebar/error-state'
 // types
 import type { TabProps } from '@/components/sidebar/type'
+import type { SpeechDataForTopic } from '@/types/speech'
 // constants
 import { InternalRoutes } from '@/constants/routes'
 // fetcher
 import { fetchTopTopicsForLegislator } from '@/fetchers/topic'
-import { type SpeechData } from '@/fetchers/server/topic'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 
@@ -95,7 +95,7 @@ type TopicListProps = {
   topicTitle: string
   topicSlug: string
   legislatorsData: LegislatorData[]
-  speechesByLegislator: Record<string, SpeechData[]>
+  speechesByLegislator: Record<string, SpeechDataForTopic[]>
   currentMeetingTerm: number
   currentMeetingSession: number[]
 }
