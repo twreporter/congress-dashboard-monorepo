@@ -105,8 +105,3 @@ export type LegislatorForLawmaker = {
   meetingTermCountInfo?: string
   isActive: boolean
 }
-
-export type LegislatorForSitemap = {
-  slug: string
-  updatedAt: string
-}

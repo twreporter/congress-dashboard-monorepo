@@ -1,7 +1,8 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
 // type
 import type { TopicDataForLegislator } from '@/types/topic'
-import type { Legislator, LegislatorForSitemap } from '@/types/legislator'
+import type { Legislator } from '@/types/legislator'
+import type { SitemapItem } from '@/types'
 
 /** checkLegislatorExist
  *  check if legislator exist with given slug
@@ -245,7 +246,7 @@ export const fetchLegislatorTopics = async ({
 /**
  * fetch all legislators slug for sitemap
  */
-export const fetchAllLegislatorsSlug = async () => {
+export const fetchAllLegislatorsSlug = async (): Promise<SitemapItem[]> => {
   const query = `
     query GetAllLegislatorsSlug {
       legislators {
@@ -256,9 +257,9 @@ export const fetchAllLegislatorsSlug = async () => {
   `
   try {
     const data = await keystoneFetch<{
-      legislators: LegislatorForSitemap[]
+      legislators: SitemapItem[]
     }>(JSON.stringify({ query }), false)
-    return data?.data?.legislators
+    return data?.data?.legislators || []
   } catch (err) {
     throw new Error(`Failed to fetch all legislators, err: ${err}`)
   }

@@ -1,6 +1,7 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
 // type
-import type { TopicData, TopNTopicData, TopicForSitemap } from '@/types/topic'
+import type { TopicData, TopNTopicData } from '@/types/topic'
+import type { SitemapItem } from '@/types'
 
 /** fetchTopic
  *   fetch topics with give slug in given terms & session
@@ -142,7 +143,7 @@ export const fetchTopNTopics = async ({
 /**
  * fetch all topics slug for sitemap
  */
-export const fetchAllTopicsSlug = async () => {
+export const fetchAllTopicsSlug = async (): Promise<SitemapItem[]> => {
   const query = `
     query Topics {
       topics {
@@ -154,9 +155,9 @@ export const fetchAllTopicsSlug = async () => {
 
   try {
     const data = await keystoneFetch<{
-      topics: TopicForSitemap[]
+      topics: SitemapItem[]
     }>(JSON.stringify({ query }), false)
-    return data?.data?.topics
+    return data?.data?.topics || []
   } catch (err) {
     throw new Error(`Failed to fetch all topics slug, err: ${err}`)
   }

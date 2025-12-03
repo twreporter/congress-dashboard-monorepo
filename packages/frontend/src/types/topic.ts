@@ -59,8 +59,3 @@ export type TopicDataForLegislator = {
   speechesCount: number
   speeches: SpeechDataForSidebar[]
 }
-
-export type TopicForSitemap = {
-  slug: string
-  updatedAt: string
-}

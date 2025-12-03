@@ -1,6 +1,7 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
 // type
 import type { SpeechFromRes } from '@/types/speech'
+import type { SitemapItem } from '@/types'
 
 /** fetchSpeech
  *  fetch speech with given slug
@@ -100,7 +101,7 @@ export const fetchSpeechGroup = async ({
 /**
  * fetch all speeches slug for sitemap
  */
-export const fetchAllSpeechesSlug = async () => {
+export const fetchAllSpeechesSlug = async (): Promise<SitemapItem[]> => {
   const query = `
     query GetAllSpeechesSlug($take: Int, $skip: Int) {
       speeches(take: $take, skip: $skip) {
@@ -110,7 +111,7 @@ export const fetchAllSpeechesSlug = async () => {
     }
   `
   const batchSize = 500
-  let allSpeeches: { slug: string; updatedAt: string }[] = []
+  let allSpeeches: SitemapItem[] = []
   let skip = 0
   let fetched = 0
 
@@ -118,7 +119,7 @@ export const fetchAllSpeechesSlug = async () => {
     const variables = { take: batchSize, skip }
     try {
       const data = await keystoneFetch<{
-        speeches: { slug: string; updatedAt: string }[]
+        speeches: SitemapItem[]
       }>(JSON.stringify({ query, variables }), false)
       const batch = data?.data?.speeches ?? []
       allSpeeches = allSpeeches.concat(batch)

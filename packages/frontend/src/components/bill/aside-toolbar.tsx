@@ -11,30 +11,19 @@ import {
   Line,
 } from '@twreporter/react-components/lib/icon'
 // types
-import { FontSize } from '@/components/speech'
+import type { FontSize } from '@/components/speech'
+// utils
+import { changeFontSizeToPct } from '@/components/speech/speech-aside-toolbar'
+// style
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-export function changeFontSizeToPct(fontSize: FontSize): string {
-  switch (fontSize) {
-    case FontSize.MEDIUM: {
-      return '110%'
-    }
-    case FontSize.LARGE: {
-      return '120%'
-    }
-    case FontSize.SMALL:
-    default: {
-      return '100%'
-    }
-  }
-}
 
-export const Container = styled.div<{ $forAboutPage?: boolean }>`
+const Container = styled.div<{ $forAboutPage?: boolean }>`
   height: 100%;
   margin: ${(props) => (props.$forAboutPage ? '0' : '80px 0')};
 `
 
-export const ToolsContainer = styled.div`
+const ToolsContainer = styled.div`
   position: sticky;
   top: 40%;
   display: flex;
@@ -44,7 +33,7 @@ export const ToolsContainer = styled.div`
   align-items: center;
 `
 
-export const iconBlockCSS = css`
+const iconBlockCSS = css`
   position: relative;
   cursor: pointer;
   svg {
@@ -71,7 +60,7 @@ export const iconBlockCSS = css`
   }
 `
 
-export const TextIconBlock = styled.div<{ $currentFontSize: FontSize }>`
+const TextIconBlock = styled.div<{ $currentFontSize: FontSize }>`
   ${iconBlockCSS}
   &::after {
     content: '字級大小${(props) =>
@@ -79,14 +68,14 @@ export const TextIconBlock = styled.div<{ $currentFontSize: FontSize }>`
   }
 `
 
-export const PrintIconBlock = styled.div`
+const PrintIconBlock = styled.div`
   ${iconBlockCSS}
   &::after {
     content: '列印';
   }
 `
 
-export const ShareIconBlock = styled.div`
+const ShareIconBlock = styled.div`
   width: 30px;
   height: 30px;
   svg {
@@ -101,7 +90,7 @@ export const ShareIconBlock = styled.div`
   display: flex;
 `
 
-export const FBShareBT: React.FC = () => {
+const FBShareBT: React.FC = () => {
   const appID = '962589903815787'
   const handleClick = () => {
     const currentURL = window.location.href
@@ -122,7 +111,7 @@ export const FBShareBT: React.FC = () => {
   )
 }
 
-export const TwitterShareBT: React.FC = () => {
+const TwitterShareBT: React.FC = () => {
   const handleClick = () => {
     const currentURL = window.location.href
     const location =
@@ -141,7 +130,7 @@ export const TwitterShareBT: React.FC = () => {
   )
 }
 
-export const LineShareBT: React.FC = () => {
+const LineShareBT: React.FC = () => {
   const handleClick = () => {
     const currentURL = window.location.href
     const location = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(

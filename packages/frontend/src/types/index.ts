@@ -5,3 +5,8 @@ export type KeystoneImage = {
     url: string
   }
 }
+
+export type SitemapItem = {
+  slug: string
+  updatedAt: string
+}
