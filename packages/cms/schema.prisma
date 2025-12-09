@@ -284,6 +284,8 @@ model CouncilMember {
   @@index([councilorId])
   @@index([partyId])
   @@index([councilMeetingId])
+  @@index([type])
+  @@index([city])
 }
 
 model CouncilMeeting {

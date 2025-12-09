@@ -20,6 +20,7 @@ import {
   councilRequiredFields,
 } from './fields/json-uploader'
 import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+import { isRelatedType } from './views/related-article/types'
 
 /**
  * Validate JSON structure against expected headers and required fields
@@ -172,6 +173,125 @@ const validateListSpecificData: Record<
       })
     )
     return validationErrors
+  },
+  [CouncilListName.councilTopic]: async (jsonData) => {
+    const validationErrors: string[] = []
+    await Promise.all(
+      jsonData.map(async (item, index) => {
+        const rowNum = index + 1
+        const { relatedTwreporterArticle } = item
+
+        if (relatedTwreporterArticle) {
+          for (const relatedItem of relatedTwreporterArticle) {
+            if (!isRelatedType(relatedItem.type)) {
+              console.log('relatedItem: ', relatedItem)
+              validationErrors.push(
+                `第 ${rowNum} 筆資料: relatedTwreporterArticle 的 type 應為 www-article 或 www-topic`
+              )
+            }
+          }
+        }
+      })
+    )
+    return validationErrors
+  },
+  [CouncilListName.councilTopicRelatedLegislativeTopic]: async (
+    jsonData,
+    context
+  ) => {
+    const validateionErrors: string[] = []
+    await Promise.all(
+      jsonData.map(async (item, index) => {
+        const rowNum = index + 1
+        const { councilTopic_slug, legislativeTopic_slug } = item
+
+        for (const legislativeTopicSlug of legislativeTopic_slug) {
+          const legislativeTopic = await context.prisma.Topic.findFirst({
+            where: { slug: legislativeTopicSlug },
+          })
+          if (!legislativeTopic) {
+            validateionErrors.push(
+              `第 ${rowNum} 筆資料: 找不到 slug 為 "${legislativeTopicSlug}" 的立法院議題`
+            )
+          }
+        }
+
+        const councilTopic = await context.prisma.CouncilTopic.findFirst({
+          where: { slug: councilTopic_slug },
+        })
+        if (!councilTopic) {
+          validateionErrors.push(
+            `第 ${rowNum} 筆資料: 找不到 slug 為 "${councilTopic_slug}" 的縣市議題`
+          )
+        }
+      })
+    )
+    return validateionErrors
+  },
+  [CouncilListName.councilTopicRelatedCouncilTopic]: async (
+    jsonData,
+    context
+  ) => {
+    const validateionErrors: string[] = []
+    await Promise.all(
+      jsonData.map(async (item, index) => {
+        const rowNum = index + 1
+        const { councilTopic_slug, relatedCouncilTopic_slug } = item
+
+        for (const relatedCouncilTopicSlug of relatedCouncilTopic_slug) {
+          const relatedCouncilTopic =
+            await context.prisma.CouncilTopic.findFirst({
+              where: { slug: relatedCouncilTopicSlug },
+            })
+          if (!relatedCouncilTopic) {
+            validateionErrors.push(
+              `第 ${rowNum} 筆資料: 找不到 slug 為 "${relatedCouncilTopicSlug}" 的相關縣市議題`
+            )
+          }
+        }
+
+        const councilTopic = await context.prisma.CouncilTopic.findFirst({
+          where: { slug: councilTopic_slug },
+        })
+        if (!councilTopic) {
+          validateionErrors.push(
+            `第 ${rowNum} 筆資料: 找不到 slug 為 "${councilTopic_slug}" 的縣市議題`
+          )
+        }
+      })
+    )
+    return validateionErrors
+  },
+  [CouncilListName.councilTopicRelatedCityTopic]: async (jsonData, context) => {
+    const validateionErrors: string[] = []
+    await Promise.all(
+      jsonData.map(async (item, index) => {
+        const rowNum = index + 1
+        const { councilTopic_slug, relatedCityCouncilTopic_slug } = item
+
+        for (const relatedCityCouncilTopicSlug of relatedCityCouncilTopic_slug) {
+          const relatedCityCouncilTopic =
+            await context.prisma.CouncilTopic.findFirst({
+              where: { slug: relatedCityCouncilTopicSlug },
+            })
+          if (!relatedCityCouncilTopic) {
+            validateionErrors.push(
+              `第 ${rowNum} 筆資料: 找不到 slug 為 "${relatedCityCouncilTopicSlug}" 的相關同縣市議題`
+            )
+          }
+        }
+
+        const councilTopic = await context.prisma.CouncilTopic.findFirst({
+          where: { slug: councilTopic_slug },
+        })
+        if (!councilTopic) {
+          validateionErrors.push(
+            `第 ${rowNum} 筆資料: 找不到 slug 為 "${councilTopic_slug}" 的縣市議題`
+          )
+        }
+      })
+    )
+    return validateionErrors
   },
 }
 
@@ -352,6 +472,104 @@ const importHandlers: Record<
         )
       }
     }
+
+    return queries
+  },
+  [CouncilListName.councilTopic]: async (jsonData, context) => {
+    const queries: Promise<any>[] = []
+
+    jsonData.forEach((item) => {
+      const { title, slug, city, type, relatedTwreporterArticle } = item
+
+      const labelForCMS = `${CITY_LABEL[city]}-${title}`
+
+      queries.push(
+        context.prisma.CouncilTopic.upsert({
+          where: { slug },
+          update: {
+            title,
+            city,
+            type,
+            labelForCMS,
+            relatedTwreporterArticle,
+          },
+          create: {
+            title,
+            slug,
+            city,
+            type,
+            labelForCMS,
+            relatedTwreporterArticle,
+          },
+        })
+      )
+    })
+
+    return queries
+  },
+  [CouncilListName.councilTopicRelatedLegislativeTopic]: async (
+    jsonData,
+    context
+  ) => {
+    const queries: Promise<any>[] = []
+
+    jsonData.forEach((item) => {
+      const { councilTopic_slug, legislativeTopic_slug } = item
+
+      queries.push(
+        context.prisma.CouncilTopic.update({
+          where: { slug: councilTopic_slug },
+          data: {
+            relatedLegislativeTopic: {
+              connect: legislativeTopic_slug.map((slug) => ({ slug })),
+            },
+          },
+        })
+      )
+    })
+
+    return queries
+  },
+  [CouncilListName.councilTopicRelatedCouncilTopic]: async (
+    jsonData,
+    context
+  ) => {
+    const queries: Promise<any>[] = []
+
+    jsonData.forEach((item) => {
+      const { councilTopic_slug, relatedCouncilTopic_slug } = item
+
+      queries.push(
+        context.prisma.CouncilTopic.update({
+          where: { slug: councilTopic_slug },
+          data: {
+            relatedCouncilTopic: {
+              connect: relatedCouncilTopic_slug.map((slug) => ({ slug })),
+            },
+          },
+        })
+      )
+    })
+
+    return queries
+  },
+  [CouncilListName.councilTopicRelatedCityTopic]: async (jsonData, context) => {
+    const queries: Promise<any>[] = []
+
+    jsonData.forEach((item) => {
+      const { councilTopic_slug, relatedCityCouncilTopic_slug } = item
+
+      queries.push(
+        context.prisma.CouncilTopic.update({
+          where: { slug: councilTopic_slug },
+          data: {
+            relatedCityCouncilTopic: {
+              connect: relatedCityCouncilTopic_slug.map((slug) => ({ slug })),
+            },
+          },
+        })
+      )
+    })
 
     return queries
   },

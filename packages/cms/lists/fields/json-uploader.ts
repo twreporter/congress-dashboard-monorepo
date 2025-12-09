@@ -11,6 +11,10 @@ export enum CouncilListName {
   councilor = 'Councilor',
   councilMember = 'CouncilMember',
   councilBill = 'CouncilBill',
+  councilTopic = 'CouncilTopic',
+  councilTopicRelatedLegislativeTopic = 'CouncilTopicRelatedLegislativeTopic',
+  councilTopicRelatedCouncilTopic = 'CouncilTopicRelatedCouncilTopic',
+  councilTopicRelatedCityTopic = 'CouncilTopicRelatedCityTopic',
 }
 
 export type ListConfig = {
@@ -87,6 +91,49 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'title',
     ],
     description: '匯入議案資料',
+  },
+  [CouncilListName.councilTopic]: {
+    value: CouncilListName.councilTopic,
+    label: '縣市議題',
+    expectedHeaders: [
+      'title',
+      'slug',
+      'city',
+      'type',
+      'relatedTwreporterArticle',
+    ],
+    requiredFields: ['title', 'slug', 'city', 'type'],
+    description: '匯入縣市議題資料',
+  },
+  [CouncilListName.councilTopicRelatedLegislativeTopic]: {
+    value: CouncilListName.councilTopicRelatedLegislativeTopic,
+    label: '縣市議題－立法院相關議題關聯',
+    expectedHeaders: [
+      'councilTopic_title',
+      'councilTopic_slug',
+      'legislativeTopic_slug',
+    ],
+    requiredFields: ['councilTopic_slug', 'legislativeTopic_slug'],
+  },
+  [CouncilListName.councilTopicRelatedCouncilTopic]: {
+    value: CouncilListName.councilTopicRelatedCouncilTopic,
+    label: '縣市議題－縣市議會相關議題關聯',
+    expectedHeaders: [
+      'councilTopic_title',
+      'councilTopic_slug',
+      'relatedCouncilTopic_slug',
+    ],
+    requiredFields: ['councilTopic_slug', 'relatedCouncilTopic_slug'],
+  },
+  [CouncilListName.councilTopicRelatedCityTopic]: {
+    value: CouncilListName.councilTopicRelatedCityTopic,
+    label: '縣市議題－同縣市議會相關議題關聯',
+    expectedHeaders: [
+      'councilTopic_title',
+      'councilTopic_slug',
+      'relatedCityCouncilTopic_slug',
+    ],
+    requiredFields: ['councilTopic_slug', 'relatedCityCouncilTopic_slug'],
   },
 }
 

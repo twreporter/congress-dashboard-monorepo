@@ -119,6 +119,7 @@ const listConfigurations = list({
       validation: {
         isRequired: true,
       },
+      isIndexed: true,
     }),
     city: select({
       label: '所屬城市',
@@ -126,6 +127,7 @@ const listConfigurations = list({
       validation: {
         isRequired: true,
       },
+      isIndexed: true,
     }),
     constituency: integer({
       label: '選區',
