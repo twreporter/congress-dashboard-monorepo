@@ -1,5 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
+import styled from '@emotion/styled'
 import { jsx } from '@keystone-ui/core'
 import {
   FieldContainer,
@@ -14,6 +15,32 @@ import type {
   FieldProps,
 } from '@keystone-6/core/types'
 import type { CardValueComponent, CellComponent } from '@keystone-6/core/types'
+
+const DateInput = styled.input`
+  background-color: #fafbfc;
+  border-color: #e1e5e9;
+  border-radius: 6px;
+  border-style: solid;
+  border-width: 1px;
+  box-sizing: border-box;
+  color: #374151;
+  font-size: 1rem;
+  height: 38px;
+  line-height: initial;
+  outline: 0;
+  padding-bottom: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 0;
+  cursor: pointer;
+`
+
+const ValidationMessage = styled.div`
+  color: red;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.4;
+`
 
 type CalendarDayValue =
   | { kind: 'create'; value: string | null }
@@ -74,7 +101,7 @@ export function Field({
       </FieldDescription>
       {onChange ? (
         <div>
-          <input
+          <DateInput
             type="date"
             value={value.value ?? ''}
             onChange={(e) => {
@@ -84,27 +111,9 @@ export function Field({
               })
             }}
             onBlur={() => setTouchedInput(true)}
-            style={{
-              padding: '8px 12px',
-              fontSize: '14px',
-              borderRadius: '6px',
-              border: '1px solid #e1e5e9',
-              outline: 'none',
-              width: '100%',
-              maxWidth: '200px',
-            }}
           />
           {validationMessage && (
-            <span
-              style={{
-                color: 'red',
-                fontSize: '0.875rem',
-                display: 'block',
-                marginTop: '4px',
-              }}
-            >
-              {validationMessage}
-            </span>
+            <ValidationMessage>{validationMessage}</ValidationMessage>
           )}
         </div>
       ) : (
