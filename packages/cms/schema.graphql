@@ -1387,7 +1387,7 @@ input CouncilMemberWhereInput {
   councilMeeting: CouncilMeetingWhereInput
   bill: CouncilBillManyRelationFilter
   type: StringFilter
-  city: StringNullableFilter
+  city: StringFilter
   constituency: IntNullableFilter
   tooltip: StringFilter
   note: StringFilter
@@ -1694,8 +1694,9 @@ input SystemUserRelateToOneForCreateInput {
 type CouncilImportRecord {
   id: ID!
   recordName: String
-  importer: SystemUser
+  uploadData: JSON
   recordCount: Int
+  importer: SystemUser
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1710,8 +1711,8 @@ input CouncilImportRecordWhereInput {
   NOT: [CouncilImportRecordWhereInput!]
   id: IDFilter
   recordName: StringFilter
-  importer: SystemUserWhereInput
   recordCount: IntNullableFilter
+  importer: SystemUserWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1726,8 +1727,9 @@ input CouncilImportRecordOrderByInput {
 
 input CouncilImportRecordUpdateInput {
   recordName: String
-  importer: SystemUserRelateToOneForUpdateInput
+  uploadData: JSON
   recordCount: Int
+  importer: SystemUserRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1739,8 +1741,9 @@ input CouncilImportRecordUpdateArgs {
 
 input CouncilImportRecordCreateInput {
   recordName: String
-  importer: SystemUserRelateToOneForCreateInput
+  uploadData: JSON
   recordCount: Int
+  importer: SystemUserRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }

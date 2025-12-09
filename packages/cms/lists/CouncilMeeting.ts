@@ -36,11 +36,17 @@ const listConfigurations = list({
       validation: {
         isRequired: true,
       },
+      ui: {
+        views: './lists/views/custom-date-picker',
+      },
     }),
     endTime: calendarDay({
       label: '屆期結束時間',
       validation: {
         isRequired: true,
+      },
+      ui: {
+        views: './lists/views/custom-date-picker',
       },
     }),
     labelForCMS: text({

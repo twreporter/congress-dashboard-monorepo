@@ -270,7 +270,7 @@ model CouncilMember {
   councilMeetingId       Int?            @map("councilMeeting")
   bill                   CouncilBill[]   @relation("CouncilBill_councilMember")
   type                   String
-  city                   String?
+  city                   String
   constituency           Int?
   administrativeDistrict Json?
   tooltip                String          @default("")
@@ -329,13 +329,17 @@ model ImportRecord {
 }
 
 model CouncilImportRecord {
-  id          Int         @id @default(autoincrement())
-  recordName  String      @default("")
-  importer    SystemUser? @relation("CouncilImportRecord_importer", fields: [importerId], references: [id])
-  importerId  Int?        @map("importer")
-  recordCount Int?
-  createdAt   DateTime?   @default(now())
-  updatedAt   DateTime?   @updatedAt
+  id                  Int         @id @default(autoincrement())
+  recordName          String      @default("")
+  uploadData_listName String?
+  uploadData_filename String?
+  uploadData_filesize Int?
+  uploadData_url      String?
+  recordCount         Int?
+  importer            SystemUser? @relation("CouncilImportRecord_importer", fields: [importerId], references: [id])
+  importerId          Int?        @map("importer")
+  createdAt           DateTime?   @default(now())
+  updatedAt           DateTime?   @updatedAt
 
   @@index([importerId])
 }
