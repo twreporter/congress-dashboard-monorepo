@@ -1,7 +1,9 @@
 import { GraphQLError } from 'graphql'
+// @keystone
 import { list } from '@keystone-6/core'
 import type { KeystoneContext } from '@keystone-6/core/types'
 import { text, relationship, integer } from '@keystone-6/core/fields'
+// utils
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -12,14 +14,27 @@ import {
 } from './utils/access-control-list'
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import {
+  getTwreporterArticle,
+  getTwreporterArticles,
+  getTwreporterTopic,
+  getTwreporterTopics,
+} from './views/related-article/util'
+import { logger } from '../utils/logger'
+import {
   uploader,
   ListName,
   expectedHeaders,
   requiredFields,
 } from './fields/uploader'
-import { getTwreporterArticle } from './views/related-article/util'
+// env
 import env from '../environment-variables'
-import { logger } from '../utils/logger'
+// types
+import { type RelatedType, isRelatedType } from './views/related-article/types'
+// constants
+import {
+  MAX_RELATED_ITEM,
+  RELATED_TYPE,
+} from './views/related-article/constants'
 
 /**
  * Validate CSV structure against expected headers and required fields
@@ -347,35 +362,52 @@ const validateListSpecificData: Record<
     await Promise.all(
       csvData
         .slice(1) // exclude header row
-        .map(async ([_title, slug, related_article_slug], index) => {
-          const rowNum = index + 1 // Add 1 for header row
-          const topic = await context.prisma.topic.findFirst({
-            where: { slug },
-          })
-          if (!topic) {
-            validationErrors.push(
-              `第 ${rowNum} 行: 議題 "${slug}" 不存在，請先匯入議題資料`
-            )
-          }
-          try {
-            const relatedArticle = await getTwreporterArticle(
-              related_article_slug,
-              env.twreporterApiUrl
-            )
-            if (!relatedArticle) {
+        .map(
+          async ([_title, slug, related_article_slug, related_type], index) => {
+            const rowNum = index + 1 // Add 1 for header row
+            if (!isRelatedType(related_type)) {
               validationErrors.push(
-                `第 ${rowNum} 行: 相關文章 "${related_article_slug}" 不存在，請確認 slug 是否正確`
+                `第 ${rowNum} 行: related_type 應為 www-article 或 www-topic`
               )
             }
-          } catch (err) {
-            console.error(
-              `Failed to get twreporter article. slug: ${related_article_slug}, err: ${err}`
-            )
-            validationErrors.push(
-              `第 ${rowNum} 行: 無法 retrieve 相關文章 "${related_article_slug}" ，請確認 slug 是否正確`
-            )
+
+            const topic = await context.prisma.topic.findFirst({
+              where: { slug },
+            })
+            if (!topic) {
+              validationErrors.push(
+                `第 ${rowNum} 行: 議題 "${slug}" 不存在，請先匯入議題資料`
+              )
+            }
+
+            const relatedTypeLabel =
+              related_type === RELATED_TYPE.wwwTopic
+                ? '報導者專題'
+                : '報導者文章'
+            try {
+              const fetcher =
+                related_type === RELATED_TYPE.wwwTopic
+                  ? getTwreporterTopic
+                  : getTwreporterArticle
+              const relatedItem = await fetcher(
+                related_article_slug,
+                env.twreporterApiUrl
+              )
+              if (!relatedItem) {
+                validationErrors.push(
+                  `第 ${rowNum} 行: 相關${relatedTypeLabel} "${related_article_slug}" 不存在，請確認 slug 是否正確`
+                )
+              }
+            } catch (err) {
+              console.error(
+                `Failed to get twreporter article. slug: ${related_article_slug}, err: ${err}`
+              )
+              validationErrors.push(
+                `第 ${rowNum} 行: 無法 retrieve 相關${relatedTypeLabel} "${related_article_slug}" ，請確認 slug 是否正確`
+              )
+            }
           }
-        })
+        )
     )
     return validationErrors
   },
@@ -797,47 +829,125 @@ const importHandlers: Record<
   [ListName.relatedArticles]: async (csvData, context) => {
     const queries: Promise<any>[] = []
 
-    // { [topicSlug]: [<related article slug 1>, <related article slug 2>] }
+    /*
+     * {
+     *   [topicSlug]: {
+     *     <related type>: [ <related slug> ]
+     *   }
+     * }
+     */
+    type relatedMeta = {
+      type: RelatedType
+      slug: string
+      publishedDate: number
+    }
     type TopicToUpdate = {
-      [topicSlug: string]: string[]
+      [topicSlug: string]: Record<RelatedType, string[]>
     }
     const topicToUpdate: TopicToUpdate = {}
 
-    for (const [_title, slug, related_article_slug] of csvData.slice(1)) {
+    for (const [
+      _title,
+      slug,
+      related_article_slug,
+      related_type,
+    ] of csvData.slice(1)) {
+      const relatedType = related_type as RelatedType
       if (slug in topicToUpdate) {
-        topicToUpdate[slug] = topicToUpdate[slug].filter(
-          (articleSlug) => articleSlug !== related_article_slug
-        )
-        topicToUpdate[slug].unshift(related_article_slug)
+        if (!topicToUpdate[slug][relatedType]) {
+          topicToUpdate[slug][relatedType] = []
+        }
+        topicToUpdate[slug][relatedType].push(related_article_slug)
       } else {
         const targetTopic = await context.prisma.topic.findFirst({
           where: { slug },
           select: { relatedTwreporterArticles: true },
         })
 
-        if (targetTopic) {
-          if (!targetTopic.relatedTwreporterArticles) {
-            topicToUpdate[slug] = []
-          } else {
-            topicToUpdate[slug] = targetTopic.relatedTwreporterArticles.filter(
-              (articleSlug: string) => articleSlug !== related_article_slug
-            )
-          }
-          topicToUpdate[slug].unshift(related_article_slug)
-        } else {
+        if (!targetTopic) {
           console.error(`target topic not found for slug: ${slug}`)
+          continue
         }
+
+        topicToUpdate[slug] = {
+          [RELATED_TYPE.wwwArticle]: [],
+          [RELATED_TYPE.wwwTopic]: [],
+        }
+        if (
+          targetTopic.relatedTwreporterArticles &&
+          targetTopic.relatedTwreporterArticles.length > 0
+        ) {
+          targetTopic.relatedTwreporterArticles.forEach(
+            (item: { type: RelatedType; slug: string }) => {
+              if (
+                item.type === relatedType &&
+                item.slug === related_article_slug
+              ) {
+                return
+              }
+              if (!topicToUpdate[slug][item.type]) {
+                topicToUpdate[slug][item.type] = []
+              }
+              topicToUpdate[slug][item.type].push(item.slug)
+            }
+          )
+        }
+        topicToUpdate[slug][relatedType].push(related_article_slug)
       }
     }
 
-    for (const [topicSlug, relatedArticleSlugs] of Object.entries(
-      topicToUpdate
-    )) {
+    for (const [topicSlug, relatedItems] of Object.entries(topicToUpdate)) {
+      const relatedArticles = await getTwreporterArticles(
+        relatedItems[RELATED_TYPE.wwwArticle],
+        env.twreporterApiUrl
+      )
+      const relatedTopics = await getTwreporterTopics(
+        relatedItems[RELATED_TYPE.wwwTopic],
+        env.twreporterApiUrl
+      )
+      const recent5relateds = relatedArticles.records
+        .map(
+          ({
+            slug,
+            published_date,
+          }: {
+            slug: string
+            published_date: string
+          }): relatedMeta => ({
+            type: RELATED_TYPE.wwwArticle,
+            slug,
+            publishedDate: new Date(published_date).getTime(),
+          })
+        )
+        .concat(
+          relatedTopics.records.map(
+            ({
+              slug,
+              published_date,
+            }: {
+              slug: string
+              published_date: string
+            }): relatedMeta => ({
+              type: RELATED_TYPE.wwwTopic,
+              slug,
+              publishedDate: new Date(published_date).getTime(),
+            })
+          )
+        )
+        .sort(
+          (a: relatedMeta, b: relatedMeta) => b.publishedDate - a.publishedDate
+        )
+        .slice(0, MAX_RELATED_ITEM)
+        .map(({ slug, type }: { slug: string; type: RelatedType }) => ({
+          slug,
+          type,
+        }))
+
       queries.push(
         context.prisma.topic.update({
           where: { slug: topicSlug },
           data: {
-            relatedTwreporterArticles: relatedArticleSlugs,
+            relatedTwreporterArticles: recent5relateds,
           },
         })
       )

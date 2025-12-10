@@ -67,7 +67,12 @@ export const expectedHeaders: Record<string, string[]> = {
     'related_topic_title',
     'related_topic_slug',
   ],
-  [ListName.relatedArticles]: ['title', 'slug', 'related_article_slug'],
+  [ListName.relatedArticles]: [
+    'title',
+    'slug',
+    'related_article_slug',
+    'related_type',
+  ],
 }
 
 export const requiredFields: Record<string, string[]> = {
@@ -94,7 +99,7 @@ export const requiredFields: Record<string, string[]> = {
     'committee_slug',
   ],
   [ListName.relatedTopics]: ['slug', 'related_topic_slug'],
-  [ListName.relatedArticles]: ['slug', 'related_article_slug'],
+  [ListName.relatedArticles]: ['slug', 'related_article_slug', 'related_type'],
 }
 
 export type UploaderFieldConfig<ListTypeInfo extends BaseListTypeInfo> =
