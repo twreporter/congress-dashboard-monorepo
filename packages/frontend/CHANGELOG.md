@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.13](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.12...@twreporter/congress-dashboard-frontend@1.8.0-beta.13) (2025-12-11)
+
+### Bug Fixes
+
+- **frontend:** update type `LegislatorForLawmaker` ([a18e74b](https://github.com/twreporter/congress-dashboard-monorepo/commit/a18e74b273b2fc800f41d7ea8f20563d0454f5f6))
+
 # [1.8.0-beta.12](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.11...@twreporter/congress-dashboard-frontend@1.8.0-beta.12) (2025-12-11)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
