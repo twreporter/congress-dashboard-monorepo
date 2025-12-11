@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.10](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.9...@twreporter/congress-dashboard-frontend@1.8.0-beta.10) (2025-12-11)
+
+### Bug Fixes
+
+- address review comments ([0c24a38](https://github.com/twreporter/congress-dashboard-monorepo/commit/0c24a3849b3facc14c47bf1ed6b5d36e880333ae))
+- **frontend:** add committee & its member type ([f708647](https://github.com/twreporter/congress-dashboard-monorepo/commit/f708647c0b23682bc64594921966b1984d41c1fa))
+- **frontend:** add legislative-meeting types ([8ab97ae](https://github.com/twreporter/congress-dashboard-monorepo/commit/8ab97ae673a32b32eff3cf007985a4145115bf5f))
+- **frontend:** add legislator related types file ([fb4478e](https://github.com/twreporter/congress-dashboard-monorepo/commit/fb4478efd5f2c806f89d1d5dd473b8c43e4622e3))
+- **frontend:** add party type file ([307967f](https://github.com/twreporter/congress-dashboard-monorepo/commit/307967f2079c92a146474679bd261e33e567235f))
+- **frontend:** add speech types file ([451a68e](https://github.com/twreporter/congress-dashboard-monorepo/commit/451a68e8f533a5b3f93db9a4b4b9d06201b8a522))
+- **frontend:** add topic types file ([22e1db1](https://github.com/twreporter/congress-dashboard-monorepo/commit/22e1db140b5cb0c743fc6d046297f42b591d0685))
+- **frontend:** migrate enum to const & add types ([065fbd9](https://github.com/twreporter/congress-dashboard-monorepo/commit/065fbd9cdb615759d5a01caa1fde8d80c3c1f591))
+- **frontend:** move related item type to /types ([fc09d47](https://github.com/twreporter/congress-dashboard-monorepo/commit/fc09d47467f7edd1901b0d40991a2f15bd43a6c7))
+
+### Features
+
+- **frontend:** add coucil bill page ([d9dc9df](https://github.com/twreporter/congress-dashboard-monorepo/commit/d9dc9dfb8c525a5c90a5eb4fc2fe87e21a010099))
+
 # [1.8.0-beta.9](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.8...@twreporter/congress-dashboard-frontend@1.8.0-beta.9) (2025-12-01)
 
 ### Bug Fixes
