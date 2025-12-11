@@ -118,6 +118,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - **frontend:** new header links and hamburger menu ([54ec494](https://github.com/twreporter/congress-dashboard-monorepo/commit/54ec494f36db1a71a62d2271cab37a3ce07c126c))
 - **frontend:** use tab component ([e56a186](https://github.com/twreporter/congress-dashboard-monorepo/commit/e56a18629973ed28eee9ed8de901ae9fdd0d44f8))
 
+## [1.8.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.1-rc.0...@twreporter/congress-dashboard-frontend@1.8.1) (2025-12-10)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+## [1.8.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0...@twreporter/congress-dashboard-frontend@1.8.1-rc.0) (2025-12-10)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.8.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-rc.1...@twreporter/congress-dashboard-frontend@1.8.0) (2025-11-27)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
