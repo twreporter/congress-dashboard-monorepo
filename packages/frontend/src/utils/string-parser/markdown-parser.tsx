@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 
 type ListType = 'ul' | 'ol'
 
-const supportRegrex = {
+const supportRegex = {
   lineBreak: /\\n|\r?\n/, // support both `\n` & `\\n` & `\r\n` as line break
   bold: /\*\*(.+?)\*\*/g,
   h2: /^##\s+/,
@@ -18,7 +18,7 @@ const supportRegrex = {
 const parseInline = (text: string): ReactNode => {
   if (!text.includes('**')) return text
 
-  const parts = text.split(supportRegrex.bold)
+  const parts = text.split(supportRegex.bold)
   return parts.map((part, i) =>
     i % 2 === 1 ? <strong key={i}>{part}</strong> : part
   )
@@ -54,7 +54,7 @@ function parseMarkdownToReact(md: string): ReactNode[] {
     listType = null
   }
 
-  const lines = md.split(supportRegrex.lineBreak)
+  const lines = md.split(supportRegex.lineBreak)
   for (const line of lines) {
     // empty line ends list
     if (line.trim() === '') {
@@ -63,16 +63,16 @@ function parseMarkdownToReact(md: string): ReactNode[] {
     }
 
     // heading
-    if (supportRegrex.h2.test(line)) {
+    if (supportRegex.h2.test(line)) {
       flushList()
-      const text = line.replace(supportRegrex.h2, '')
+      const text = line.replace(supportRegex.h2, '')
       nodes.push(<h2 key={`h2-${nodes.length}`}>{parseInline(text)}</h2>)
       continue
     }
 
     // ul
-    if (supportRegrex.ul.test(line)) {
-      const itemText = line.replace(supportRegrex.ul, '')
+    if (supportRegex.ul.test(line)) {
+      const itemText = line.replace(supportRegex.ul, '')
       if (listType !== 'ul') {
         flushList()
         listType = 'ul'
@@ -82,8 +82,8 @@ function parseMarkdownToReact(md: string): ReactNode[] {
     }
 
     // ol
-    if (supportRegrex.ol.test(line)) {
-      const itemText = line.replace(supportRegrex.ol, '')
+    if (supportRegex.ol.test(line)) {
+      const itemText = line.replace(supportRegex.ol, '')
 
       if (listType !== 'ol') {
         flushList()

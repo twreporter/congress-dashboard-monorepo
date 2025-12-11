@@ -40,10 +40,11 @@ import NewDonationBox from '@/components/about/new-donation-box'
 import { useScrollContext } from '@/contexts/scroll-context'
 // hooks
 import { useScrollStage } from '@/components/speech/hooks/use-scroll-stage'
+import { useBillData } from './hook/use-bill-data'
 // utils
 import { openFeedback } from '@/utils/feedback'
-import { BillFromRes } from '@/types/council-bill'
-import { useBillData } from './hook/use-bill-data'
+// types
+import type { BillFromRes } from '@/types/council-bill'
 
 const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
   ${mq.desktopAndAbove`

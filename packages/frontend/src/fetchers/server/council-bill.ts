@@ -70,7 +70,7 @@ export const fetchAllCouncilBillsSlug = async (): Promise<SitemapItem[]> => {
     }
   `
   const batchSize = 500
-  let allBiils: SitemapItem[] = []
+  let allBills: SitemapItem[] = []
   let skip = 0
   let fetched = 0
 
@@ -81,7 +81,7 @@ export const fetchAllCouncilBillsSlug = async (): Promise<SitemapItem[]> => {
         councilBill: SitemapItem[]
       }>(JSON.stringify({ query, variables }), false)
       const batch = data?.data?.councilBill ?? []
-      allBiils = allBiils.concat(batch)
+      allBills = allBills.concat(batch)
       fetched = batch.length
       if (fetched < batchSize) break
       skip += batchSize
@@ -91,5 +91,5 @@ export const fetchAllCouncilBillsSlug = async (): Promise<SitemapItem[]> => {
       )
     }
   }
-  return allBiils
+  return allBills
 }

@@ -27,12 +27,12 @@ const MobileToolbarContext = createContext<ToolbarContext>({
   setButtonGroup: () => {},
 })
 
-// Source Button Conponent
-type SoureButtonProps = {
+// Source Button Component
+type SourceButtonProps = {
   link?: string
 }
 
-const SourceButton: React.FC<SoureButtonProps> = ({ link }) => {
+const SourceButton: React.FC<SourceButtonProps> = ({ link }) => {
   const { hideText } = useContext(MobileToolbarContext)
   const openSource = () => {
     if (!link) {

@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 // fetcher
 import { fetchBillBySlug } from '@/fetchers/server/council-bill'
