@@ -3,11 +3,6 @@ import { SelectorType } from '@/components/selector'
 // type
 import type { OptionGroup, Option } from '@/components/selector/types'
 import type { LegislatorForDashboard } from '@/types/legislator'
-// @twreporter
-import {
-  MemberType,
-  Constituency,
-} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 
 export type FilterOption = {
   type: SelectorType
