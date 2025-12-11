@@ -99,9 +99,9 @@ export type LegislatorForLawmaker = {
     name: string
     count: number
   }[]
-  proposalSuccessCount?: number
-  externalLink?: string
+  proposalSuccessCount: number
+  externalLink: string
   meetingTermCount: number
-  meetingTermCountInfo?: string
+  meetingTermCountInfo: string
   isActive: boolean
 }
