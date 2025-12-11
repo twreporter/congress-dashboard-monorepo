@@ -1,13 +1,11 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
+// type
+import type { LegislativeMeeting } from '@/types/legislative-meeting'
+import type { LegislativeMeetingSession } from '@/types/legislative-meeting-session'
 
 /* fetchLegislativeMeeting
  *   fetch legislative meeing order by term desc
  */
-export type LegislativeMeeting = {
-  id: number
-  term: number
-}
-
 export const fetchLegislativeMeeting = async (): Promise<
   LegislativeMeeting[]
 > => {
@@ -36,13 +34,6 @@ export const fetchLegislativeMeeting = async (): Promise<
 /* fetchLegislativeMeetingSession
  *   fetch legislative meeing sessions in given term & order by term asc
  */
-export type LegislativeMeetingSession = {
-  id: number
-  term: number
-  startTime: string
-  endTime: string
-}
-
 export const fetchLegislativeMeetingSession = async (
   legislativeMeetingTerm: string
 ): Promise<LegislativeMeetingSession[]> => {

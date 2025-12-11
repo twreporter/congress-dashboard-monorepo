@@ -1,12 +1,9 @@
 'use client'
 import useSWR from 'swr'
+// type
+import type { Committee } from '@/types/committee'
 
-export type committeeData = {
-  slug: string
-  name: string
-  type: 'standing' | 'ad-hoc'
-}
-export type stateType<T> = {
+type StateType<T> = {
   committees: T[]
   isLoading: boolean
   error?: Error
@@ -23,7 +20,7 @@ const fetchCommittee = async (url: string) => {
   const data = await res.json()
   return data
 }
-const useCommittee = () => {
+const useCommittee = (): StateType<Committee> => {
   const apiBase = process.env.NEXT_PUBLIC_API_URL as string
   const url = `${apiBase}/committee`
   const { data, isLoading, error } = useSWR(url, fetchCommittee)
