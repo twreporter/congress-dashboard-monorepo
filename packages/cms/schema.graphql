@@ -1478,7 +1478,6 @@ type CouncilMeeting {
 
 input CouncilMeetingWhereUniqueInput {
   id: ID
-  term: Int
 }
 
 input CouncilMeetingWhereInput {

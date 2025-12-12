@@ -25,7 +25,7 @@ const listConfigurations = list({
     }),
     term: integer({
       label: '屆期',
-      isIndexed: 'unique',
+      isIndexed: true,
       validation: {
         isRequired: true,
         min: 1,

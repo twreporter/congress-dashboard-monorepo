@@ -291,7 +291,7 @@ model CouncilMember {
 model CouncilMeeting {
   id                                Int             @id @default(autoincrement())
   city                              String
-  term                              Int             @unique
+  term                              Int
   startTime                         DateTime        @mysql.Date
   endTime                           DateTime        @mysql.Date
   labelForCMS                       String          @default("")
@@ -299,6 +299,8 @@ model CouncilMeeting {
   updatedAt                         DateTime?       @updatedAt
   from_CouncilBill_councilMeeting   CouncilBill[]   @relation("CouncilBill_councilMeeting")
   from_CouncilMember_councilMeeting CouncilMember[] @relation("CouncilMember_councilMeeting")
+
+  @@index([term])
 }
 
 model Party {

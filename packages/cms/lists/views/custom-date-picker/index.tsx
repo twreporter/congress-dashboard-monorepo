@@ -78,7 +78,7 @@ function formatOutput(isoDateString: string | null): string | null {
     date.getUTCMonth(),
     date.getUTCDate()
   )
-  return dateInLocalTimezone.toLocaleDateString()
+  return dateInLocalTimezone.toLocaleDateString('zh-TW')
 }
 
 export function Field({

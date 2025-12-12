@@ -19,8 +19,13 @@ import {
   councilExpectedHeaders,
   councilRequiredFields,
 } from './fields/json-uploader'
-import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 import { isRelatedType } from './views/related-article/types'
+// @shared
+import {
+  CITY_LABEL,
+  CITY,
+} from '@twreporter/congress-dashboard-shared/lib/constants/city'
+import { isValidDistrict } from '@twreporter/congress-dashboard-shared/lib/constants/city-district'
 
 /**
  * Validate JSON structure against expected headers and required fields
@@ -99,7 +104,14 @@ const validateListSpecificData: Record<
     await Promise.all(
       jsonData.map(async (item, index) => {
         const rowNum = index + 1
-        const { councilor_slug, party_slug, councilMeeting_term, city } = item
+        const {
+          councilor_slug,
+          party_slug,
+          councilMeeting_term,
+          city,
+          relatedLink,
+          administrativeDistrict,
+        } = item
 
         const councilor = await context.prisma.councilor.findFirst({
           where: { slug: councilor_slug },
@@ -119,6 +131,26 @@ const validateListSpecificData: Record<
           )
         }
 
+        if (!Object.values(CITY).includes(city)) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: city 欄位值 "${city}" 非有效的縣市代碼`
+          )
+        }
+
+        if (!Array.isArray(administrativeDistrict)) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: administrativeDistrict 欄位必須為陣列`
+          )
+        } else {
+          for (const district of administrativeDistrict) {
+            if (!isValidDistrict(city, district)) {
+              validationErrors.push(
+                `第 ${rowNum} 筆資料: administrativeDistrict 欄位值 "${district}" 非有效的${CITY_LABEL[city]}行政區`
+              )
+            }
+          }
+        }
+
         const meeting = await context.prisma.councilMeeting.findFirst({
           where: { term: Number(councilMeeting_term), city },
         })
@@ -126,6 +158,27 @@ const validateListSpecificData: Record<
           validationErrors.push(
             `第 ${rowNum} 筆資料: 找不到${CITY_LABEL[city]}第 ${councilMeeting_term} 屆的議會`
           )
+        }
+
+        if (!Array.isArray(relatedLink)) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: relatedLink 欄位必須為陣列`
+          )
+        } else {
+          // relatedLink 內的每個物件需包含 url 和 label
+          for (const link of relatedLink) {
+            if (typeof link !== 'object' || link === null) {
+              validationErrors.push(
+                `第 ${rowNum} 筆資料: relatedLink 內的每個物件必須為物件`
+              )
+              continue
+            }
+            if (!('url' in link) || !('label' in link)) {
+              validationErrors.push(
+                `第 ${rowNum} 筆資料: relatedLink 內的每個物件必須包含 url 和 label`
+              )
+            }
+          }
         }
       })
     )
@@ -138,6 +191,12 @@ const validateListSpecificData: Record<
         const rowNum = index + 1
         const { councilMeeting_city, councilMeeting_term, councilor_slug } =
           item
+
+        if (!Object.values(CITY).includes(councilMeeting_city)) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: councilMeeting_city 欄位值 "${councilMeeting_city}" 非有效的縣市代碼`
+          )
+        }
 
         const meeting = await context.prisma.councilMeeting.findFirst({
           where: {
@@ -184,7 +243,6 @@ const validateListSpecificData: Record<
         if (relatedTwreporterArticle) {
           for (const relatedItem of relatedTwreporterArticle) {
             if (!isRelatedType(relatedItem.type)) {
-              console.log('relatedItem: ', relatedItem)
               validationErrors.push(
                 `第 ${rowNum} 筆資料: relatedTwreporterArticle 的 type 應為 www-article 或 www-topic`
               )
@@ -199,7 +257,7 @@ const validateListSpecificData: Record<
     jsonData,
     context
   ) => {
-    const validateionErrors: string[] = []
+    const validationErrors: string[] = []
     await Promise.all(
       jsonData.map(async (item, index) => {
         const rowNum = index + 1
@@ -210,7 +268,7 @@ const validateListSpecificData: Record<
             where: { slug: legislativeTopicSlug },
           })
           if (!legislativeTopic) {
-            validateionErrors.push(
+            validationErrors.push(
               `第 ${rowNum} 筆資料: 找不到 slug 為 "${legislativeTopicSlug}" 的立法院議題`
             )
           }
@@ -220,19 +278,19 @@ const validateListSpecificData: Record<
           where: { slug: councilTopic_slug },
         })
         if (!councilTopic) {
-          validateionErrors.push(
+          validationErrors.push(
             `第 ${rowNum} 筆資料: 找不到 slug 為 "${councilTopic_slug}" 的縣市議題`
           )
         }
       })
     )
-    return validateionErrors
+    return validationErrors
   },
   [CouncilListName.councilTopicRelatedCouncilTopic]: async (
     jsonData,
     context
   ) => {
-    const validateionErrors: string[] = []
+    const validationErrors: string[] = []
     await Promise.all(
       jsonData.map(async (item, index) => {
         const rowNum = index + 1
@@ -244,7 +302,7 @@ const validateListSpecificData: Record<
               where: { slug: relatedCouncilTopicSlug },
             })
           if (!relatedCouncilTopic) {
-            validateionErrors.push(
+            validationErrors.push(
               `第 ${rowNum} 筆資料: 找不到 slug 為 "${relatedCouncilTopicSlug}" 的相關縣市議題`
             )
           }
@@ -254,16 +312,16 @@ const validateListSpecificData: Record<
           where: { slug: councilTopic_slug },
         })
         if (!councilTopic) {
-          validateionErrors.push(
+          validationErrors.push(
             `第 ${rowNum} 筆資料: 找不到 slug 為 "${councilTopic_slug}" 的縣市議題`
           )
         }
       })
     )
-    return validateionErrors
+    return validationErrors
   },
   [CouncilListName.councilTopicRelatedCityTopic]: async (jsonData, context) => {
-    const validateionErrors: string[] = []
+    const validationErrors: string[] = []
     await Promise.all(
       jsonData.map(async (item, index) => {
         const rowNum = index + 1
@@ -275,7 +333,7 @@ const validateListSpecificData: Record<
               where: { slug: relatedCityCouncilTopicSlug },
             })
           if (!relatedCityCouncilTopic) {
-            validateionErrors.push(
+            validationErrors.push(
               `第 ${rowNum} 筆資料: 找不到 slug 為 "${relatedCityCouncilTopicSlug}" 的相關同縣市議題`
             )
           }
@@ -285,13 +343,13 @@ const validateListSpecificData: Record<
           where: { slug: councilTopic_slug },
         })
         if (!councilTopic) {
-          validateionErrors.push(
+          validationErrors.push(
             `第 ${rowNum} 筆資料: 找不到 slug 為 "${councilTopic_slug}" 的縣市議題`
           )
         }
       })
     )
-    return validateionErrors
+    return validationErrors
   },
 }
 
@@ -363,7 +421,7 @@ const importHandlers: Record<
       const existingMember = await context.prisma.councilMember.findFirst({
         where: {
           councilor: { slug: councilor_slug },
-          councilMeeting: { term: Number(councilMeeting_term) },
+          councilMeeting: { term: Number(councilMeeting_term), city },
         },
         select: { id: true },
       })
