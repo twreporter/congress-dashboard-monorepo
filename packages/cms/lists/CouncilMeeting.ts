@@ -25,7 +25,7 @@ const listConfigurations = list({
     }),
     term: integer({
       label: '屆期',
-      isIndexed: 'unique',
+      isIndexed: true,
       validation: {
         isRequired: true,
         min: 1,
@@ -36,11 +36,17 @@ const listConfigurations = list({
       validation: {
         isRequired: true,
       },
+      ui: {
+        views: './lists/views/custom-date-picker',
+      },
     }),
     endTime: calendarDay({
       label: '屆期結束時間',
       validation: {
         isRequired: true,
+      },
+      ui: {
+        views: './lists/views/custom-date-picker',
       },
     }),
     labelForCMS: text({

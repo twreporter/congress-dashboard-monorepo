@@ -6,6 +6,8 @@ const {
   IMAGES_STORAGE_PATH,
   RELEASE_BRANCH,
   TWREPORTER_API_URL,
+  FILES_BASE_URL,
+  FILES_STORAGE_PATH,
 } = process.env
 
 const environmentVariables = {
@@ -16,6 +18,10 @@ const environmentVariables = {
   },
   gcs: {
     origin: GCS_ORIGIN || 'http://localhost:3000',
+  },
+  files: {
+    baseUrl: FILES_BASE_URL || '/files',
+    storagePath: FILES_STORAGE_PATH || 'public/files',
   },
   images: {
     baseUrl: IMAGES_BASE_URL || '/images',

@@ -31,6 +31,15 @@ export default withAuth(
     lists,
     session,
     storage: {
+      files: {
+        kind: 'local',
+        type: 'file',
+        storagePath: envVars.files.storagePath,
+        serverRoute: {
+          path: '/files',
+        },
+        generateUrl: (path) => `/files${path}`,
+      },
       images: {
         kind: 'local',
         type: 'image',

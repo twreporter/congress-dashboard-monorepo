@@ -12,14 +12,15 @@ generator client {
 }
 
 model SystemUser {
-  id                         Int            @id @default(autoincrement())
-  name                       String         @default("")
-  email                      String         @unique @default("")
-  password                   String
-  role                       String
-  createdAt                  DateTime?      @default(now())
-  updatedAt                  DateTime?      @updatedAt
-  from_ImportRecord_importer ImportRecord[] @relation("ImportRecord_importer")
+  id                                Int                   @id @default(autoincrement())
+  name                              String                @default("")
+  email                             String                @unique @default("")
+  password                          String
+  role                              String
+  createdAt                         DateTime?             @default(now())
+  updatedAt                         DateTime?             @updatedAt
+  from_ImportRecord_importer        ImportRecord[]        @relation("ImportRecord_importer")
+  from_CouncilImportRecord_importer CouncilImportRecord[] @relation("CouncilImportRecord_importer")
 }
 
 model Photo {
@@ -269,7 +270,7 @@ model CouncilMember {
   councilMeetingId       Int?            @map("councilMeeting")
   bill                   CouncilBill[]   @relation("CouncilBill_councilMember")
   type                   String
-  city                   String?
+  city                   String
   constituency           Int?
   administrativeDistrict Json?
   tooltip                String          @default("")
@@ -283,12 +284,14 @@ model CouncilMember {
   @@index([councilorId])
   @@index([partyId])
   @@index([councilMeetingId])
+  @@index([type])
+  @@index([city])
 }
 
 model CouncilMeeting {
   id                                Int             @id @default(autoincrement())
   city                              String
-  term                              Int             @unique
+  term                              Int
   startTime                         DateTime        @mysql.Date
   endTime                           DateTime        @mysql.Date
   labelForCMS                       String          @default("")
@@ -296,6 +299,8 @@ model CouncilMeeting {
   updatedAt                         DateTime?       @updatedAt
   from_CouncilBill_councilMeeting   CouncilBill[]   @relation("CouncilBill_councilMeeting")
   from_CouncilMember_councilMeeting CouncilMember[] @relation("CouncilMember_councilMeeting")
+
+  @@index([term])
 }
 
 model Party {
@@ -320,6 +325,22 @@ model ImportRecord {
   uploadData_csvData  Json
   recordCount         Int?
   importer            SystemUser? @relation("ImportRecord_importer", fields: [importerId], references: [id])
+  importerId          Int?        @map("importer")
+  createdAt           DateTime?   @default(now())
+  updatedAt           DateTime?   @updatedAt
+
+  @@index([importerId])
+}
+
+model CouncilImportRecord {
+  id                  Int         @id @default(autoincrement())
+  recordName          String      @default("")
+  uploadData_listName String?
+  uploadData_filename String?
+  uploadData_filesize Int?
+  uploadData_url      String?
+  recordCount         Int?
+  importer            SystemUser? @relation("CouncilImportRecord_importer", fields: [importerId], references: [id])
   importerId          Int?        @map("importer")
   createdAt           DateTime?   @default(now())
   updatedAt           DateTime?   @updatedAt

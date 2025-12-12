@@ -16,6 +16,7 @@ import CouncilMeeting from './CouncilMeeting'
 import CouncilMember from './CouncilMember'
 import CouncilTopic from './CouncilTopic'
 import CouncilBill from './CouncilBill'
+import CouncilImportRecord from './CouncilImportRecord'
 
 export const listDefinition = {
   SystemUser,
@@ -36,4 +37,5 @@ export const listDefinition = {
   CouncilMeeting,
   Party,
   ImportRecord,
+  CouncilImportRecord,
 }

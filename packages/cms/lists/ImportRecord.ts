@@ -1020,7 +1020,7 @@ const listConfigurations = list({
   },
 
   ui: {
-    label: '資料匯入',
+    label: '立法院資料匯入',
     labelField: 'recordName',
     listView: {
       initialColumns: [
