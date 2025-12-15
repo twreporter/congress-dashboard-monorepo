@@ -32,5 +32,8 @@
   },
   "installConfig": {
     "hoistingLimits": "workspaces"
+  },
+  "resolutions": {
+    "next": "14.2.35"
   }
 }
