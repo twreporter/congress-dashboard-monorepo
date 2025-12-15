@@ -1528,7 +1528,6 @@ const CITY_DISTRICT = {
   ],
 } as const
 
-// Type for district value
 export type DistrictValue = (typeof CITY_DISTRICT)[City][number]['value']
 
 // Type for district option
