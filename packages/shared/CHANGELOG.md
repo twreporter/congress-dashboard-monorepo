@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.0-beta.1...@twreporter/congress-dashboard-shared@0.2.0-beta.2) (2025-12-15)
+
+### Features
+
+- **shared:** city district const ([016960e](https://github.com/twreporter/congress-dashboard-monorepo/commit/016960edb05213267d80e1891b2386b79ccf503d))
+
 # [0.2.0-beta.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.0-beta.0...@twreporter/congress-dashboard-shared@0.2.0-beta.1) (2025-11-28)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-shared
