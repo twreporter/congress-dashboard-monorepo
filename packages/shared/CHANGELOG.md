@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.0-beta.3...@twreporter/congress-dashboard-shared@0.2.0-beta.4) (2025-12-15)
+
+### Features
+
+- **shared:** for publish test ([a2face5](https://github.com/twreporter/congress-dashboard-monorepo/commit/a2face5dbb44d61e85e3ebe4410fcb9aeea808c4))
+
 # [0.2.0-beta.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.0-beta.2...@twreporter/congress-dashboard-shared@0.2.0-beta.3) (2025-12-15)
 
 ### Features
