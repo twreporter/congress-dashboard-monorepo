@@ -21,9 +21,6 @@ jobs:
           node-version: '22.17.1'
           registry-url: 'https://registry.npmjs.org'
       
-      - name: Update npm for OIDC support
-        run: npm install -g npm@latest
-      
       - name: Enable Corepack
         run: corepack enable
       
