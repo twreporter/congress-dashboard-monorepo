@@ -426,6 +426,11 @@ const importHandlers: Record<
         select: { id: true },
       })
 
+      const councilMeeting = await context.prisma.councilMeeting.findFirst({
+        where: { term: Number(councilMeeting_term), city },
+        select: { id: true },
+      })
+
       const commonData = {
         type,
         constituency: constituency ? Number(constituency) : null,
@@ -453,7 +458,7 @@ const importHandlers: Record<
               ...commonData,
               councilor: { connect: { slug: councilor_slug } },
               councilMeeting: {
-                connect: { term: Number(councilMeeting_term), city },
+                connect: { id: councilMeeting.id },
               },
             },
           })
@@ -496,6 +501,14 @@ const importHandlers: Record<
         select: { id: true },
       })
 
+      const councilMeeting = await context.prisma.councilMeeting.findFirst({
+        where: {
+          term: Number(councilMeeting_term),
+          city: councilMeeting_city,
+        },
+        select: { id: true },
+      })
+
       const commonData = {
         date: new Date(date),
         title,
@@ -505,10 +518,7 @@ const importHandlers: Record<
         sourceLink,
         councilMember: { connect: { id: councilMember.id } },
         councilMeeting: {
-          connect: {
-            term: Number(councilMeeting_term),
-            city: councilMeeting_city,
-          },
+          connect: { id: councilMeeting.id },
         },
       }
 
