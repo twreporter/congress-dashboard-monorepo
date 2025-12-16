@@ -1,15 +1,10 @@
 // TODO: temporary placeholder page
 import React from 'react'
 import { notFound } from 'next/navigation'
-
-const VALID_COUNCILS = [
-  'taipei',
-  'new-taipei',
-  'taoyuan',
-  'taichung',
-  'tainan',
-  'kaohsiung',
-]
+// constants
+import { VALID_COUNCILS } from '@/constants/council'
+// utils
+import { isValidCouncil } from '@/utils/council'
 
 const COUNCIL_NAMES: Record<string, string> = {
   taipei: '臺北市議會',
@@ -23,16 +18,16 @@ const COUNCIL_NAMES: Record<string, string> = {
 export default async function CouncilDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ districtSlug: string }>
 }) {
-  const { slug } = await params
+  const { districtSlug } = await params
 
-  // Validate the council slug
-  if (!VALID_COUNCILS.includes(slug)) {
+  // Validate the council districtSlug
+  if (!isValidCouncil(districtSlug)) {
     notFound()
   }
 
-  const councilName = COUNCIL_NAMES[slug]
+  const councilName = COUNCIL_NAMES[districtSlug]
 
   return (
     <div style={{ padding: '40px', textAlign: 'center' }}>
@@ -43,7 +38,7 @@ export default async function CouncilDetailPage({
 }
 
 export async function generateStaticParams() {
-  return VALID_COUNCILS.map((slug) => ({
-    slug,
+  return VALID_COUNCILS.map((districtSlug) => ({
+    districtSlug,
   }))
 }

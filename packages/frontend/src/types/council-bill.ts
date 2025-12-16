@@ -21,11 +21,14 @@ export type BillFromRes = {
   }[]
 }
 
-export type BillData = {
+export type BillMeta = {
   slug: string
   date: string
   title: string
-  summary: string | string[]
+  summary: string
+}
+
+export type BillData = BillMeta & {
   content: string
   attendee?: string
   sourceLink?: string

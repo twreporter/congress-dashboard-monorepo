@@ -1,14 +1,10 @@
 'use client'
 import React, { useMemo, useState, useCallback, useEffect } from 'react'
-import styled from 'styled-components'
-import useSWR from 'swr'
 import Link from 'next/link'
-// @twreporter
-import {
-  colorGrayscale,
-  colorOpacity,
-} from '@twreporter/core/lib/constants/color'
-import mq from '@twreporter/core/lib/utils/media-query'
+// hooks
+import useFollowMore from '@/components/councilor/hook/use-follow-more'
+// fetchers
+import { fetchTopicsOfACouncilor } from '@/fetchers/councilor'
 // Common components
 import {
   Container,
@@ -33,84 +29,40 @@ import FilterModal from '@/components/sidebar/filter-modal'
 import { FollowMoreErrorState } from '@/components/sidebar/error-state'
 // type
 import type { TabProps } from '@/components/sidebar/type'
-// utils
-import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
+import type { Topic } from '@/types/topic'
+import type { BillMeta } from '@/types/council-bill'
+import type { CouncilDistrict } from '@/types/council'
 // constants
 import { InternalRoutes } from '@/constants/routes'
-// z-index
-import { ZIndex } from '@/styles/z-index'
+// style
+import {
+  LegislatorContainer,
+  FilterMask,
+  FilterBox,
+} from '@/components/legislator/legislator-list'
 
 const maxTabs = 5
 const mapToTabItems = (items: TabProps[]): TabProps[] =>
   items.map((item) => ({ ...item, showAvatar: false }))
 
-export const LegislatorContainer = styled.div`
-  gap: 32px;
-  display: flex;
-  overflow-x: scroll;
-  scrollbar-width: none;
-  margin-left: -24px;
-  margin-right: -24px;
-  padding-left: 24px;
-  padding-right: 24px;
-  a {
-    text-decoration: none;
+type TopicListProps = {
+  districtSlug: CouncilDistrict
+  councilor: {
+    slug: string
+    name: string
+    note?: string
   }
-`
-
-export const FilterMask = styled.div<{ $show: boolean }>`
-  visibility: ${(props) => (props.$show ? 'visible' : 'hidden')};
-  transition: visibility 0.3s ease-in-out;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: ${colorOpacity['black_0.2']};
-  z-index: ${ZIndex.SideBar};
-`
-
-export const FilterBox = styled.div<{ $show: boolean }>`
-  transform: translateX(${(props) => (props.$show ? 0 : '100%')});
-  transition: transform 0.3s ease-in-out;
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 520px;
-  height: 100vh;
-  background-color: ${colorGrayscale.white};
-  overflow-x: hidden;
-  overflow-y: hidden;
-  box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
-  z-index: ${ZIndex.SideBar};
-  ${mq.mobileOnly`
-    width: 100vw;
-  `}
-`
-
-type LegislatorListProps = {
+  topics: Topic[]
+  billsByTopic: Record<string, BillMeta[]>
   isLoading?: boolean
-  legislatorSlug: string
-  legislatorName: string
-  legislatorNote?: string
-  topics: { name: string; slug: string; count: number }[]
-  speechesByTopic: Record<
-    string,
-    { title: string; date: string; summary: string; slug: string }[]
-  >
-  currentMeetingTerm: number
-  currentMeetingSession: number[]
 }
 
-const LegislatorList: React.FC<LegislatorListProps> = ({
-  isLoading = true,
-  legislatorSlug,
-  legislatorName,
-  legislatorNote,
+const TopicList: React.FC<TopicListProps> = ({
+  districtSlug,
+  councilor,
   topics,
-  speechesByTopic,
-  currentMeetingTerm,
-  currentMeetingSession,
+  billsByTopic,
+  isLoading = true,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
@@ -130,14 +82,14 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   }, [topics, selectedTab, tabList])
 
   const followMoreTitle = useMemo(
-    () => (selectedTopic ? `${selectedTopic.name} 主題的其他人：` : ''),
+    () => (selectedTopic ? `關注 ${selectedTopic.name} 議題的其他人：` : ''),
     [selectedTopic]
   )
 
   const summaryGroupByYear = useMemo(() => {
     if (!selectedTopic) return []
     return groupSummary(
-      speechesByTopic[selectedTopic.slug].map(
+      billsByTopic[selectedTopic.slug].map(
         ({ title, date, summary, slug }) => ({
           title,
           date: new Date(date),
@@ -146,31 +98,26 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
         })
       )
     )
-  }, [selectedTopic, speechesByTopic])
+  }, [selectedTopic, billsByTopic])
 
   const {
-    data: topLegislators = [],
+    topCouncilors,
     error: swrError,
-    isLoading: isLoadingTopLegislators,
-  } = useSWR(
+    isLoading: isFollowMoreLoading,
+  } = useFollowMore(
     selectedTopic
-      ? [
-          'fetchTopLegislators',
-          selectedTopic.slug,
-          currentMeetingTerm,
-          currentMeetingSession,
-          legislatorSlug,
-        ]
-      : null,
-    ([, topicSlug, term, sessions, slug]) =>
-      fetchTopLegislatorsBySpeechCount({
-        topicSlug,
-        legislativeMeetingTerm: term,
-        legislativeMeetingSessionTerms: sessions,
-        legislatorSlug: slug,
-      })
+      ? {
+          topicSlug: selectedTopic.slug,
+          excludeCouncilorSlug: councilor.slug,
+          districtSlug,
+        }
+      : null
   )
-  const legislatorList = !swrError && selectedTopic ? topLegislators : []
+
+  const followMoreList = useMemo(
+    () => (!swrError && selectedTopic ? topCouncilors : []),
+    [swrError, selectedTopic, topCouncilors]
+  )
 
   const openFilter = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
@@ -194,7 +141,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   if (isLoading) {
     return (
       <Container>
-        <Title $isEmpty={true} text="發言摘要" />
+        <Title $isEmpty={true} text="議案" />
         <Body>
           <EmptyState>
             <Loader useAbsolute={false} />
@@ -207,11 +154,11 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   if (topics.length === 0) {
     return (
       <Container>
-        <Title $isEmpty={true} text="發言摘要" />
+        <Title $isEmpty={true} text="議案" />
         <Body>
           <EmptyStateColumn>
-            <EmptyStateTitle text="所選會期無發言資訊" />
-            {legislatorNote ? <EmptyStateText text={legislatorNote} /> : null}
+            <EmptyStateTitle text="本屆期無議案資訊" />
+            {councilor.note ? <EmptyStateText text={councilor.note} /> : null}
           </EmptyStateColumn>
         </Body>
       </Container>
@@ -220,7 +167,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
 
   return (
     <Container>
-      <Title text="發言摘要" />
+      <Title text="議案" />
       <TabNavigation
         tabs={tabList}
         selectedTab={selectedTab}
@@ -231,25 +178,25 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
         <SummarySection>
           {summaryGroupByYear.map(
             (props: CardsOfTheYearProps, index: number) => (
-              <CardsOfTheYear {...props} key={`summary-of-the-year-${index}`} />
+              <CardsOfTheYear
+                {...props}
+                type="bill"
+                key={`summary-of-the-year-${index}`}
+              />
             )
           )}
         </SummarySection>
         <FollowMoreItems title={followMoreTitle}>
-          {isLoadingTopLegislators && <Loader useAbsolute={false} />}
-          {!isLoadingTopLegislators && swrError && <FollowMoreErrorState />}
-          {legislatorList.length > 0 ? (
+          {isFollowMoreLoading && <Loader useAbsolute={false} />}
+          {!isFollowMoreLoading && swrError && <FollowMoreErrorState />}
+          {followMoreList.length > 0 ? (
             <LegislatorContainer>
-              {legislatorList.map((props, index: number) => (
+              {followMoreList.map((councilor, index: number) => (
                 <Link
-                  href={`${InternalRoutes.Legislator}/${
-                    props.slug
-                  }?meetingTerm=${currentMeetingTerm}&sessionTerm=${JSON.stringify(
-                    currentMeetingSession
-                  )}`}
-                  key={`follow-more-legislator-${index}`}
+                  href={`${InternalRoutes.Council}/${districtSlug}${InternalRoutes.Councilor}/${councilor.slug}`}
+                  key={`follow-more-councilor-${index}`}
                 >
-                  <Legislator {...props} />
+                  <Legislator {...councilor} />
                 </Link>
               ))}
             </LegislatorContainer>
@@ -259,11 +206,14 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
       <FilterMask $show={showFilter}>
         <FilterBox $show={showFilter}>
           <FilterModal
-            title={`${legislatorName} 的相關發言篩選`}
-            slug={legislatorSlug}
+            title={`${councilor.name} 的相關議題篩選`}
+            slug={councilor.slug}
             initialOption={topics}
             placeholder={'篩選議題'}
             initialSelectedOption={tabList}
+            fetcher={(slug) =>
+              fetchTopicsOfACouncilor({ councilorSlug: slug, districtSlug })
+            }
             onClose={closeFilter}
             onConfirmSelection={handleFilterConfirm}
           />
@@ -273,4 +223,4 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
   )
 }
 
-export default React.memo(LegislatorList)
+export default React.memo(TopicList)
