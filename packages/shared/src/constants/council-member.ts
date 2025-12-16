@@ -4,7 +4,7 @@ export const MEMBER_TYPE = {
   constituency: 'constituency',
   highlandAboriginal: 'highland-aboriginal',
   lowlandAboriginal: 'lowland-aboriginal',
-}
+} as const
 
 export type MemberType = ValuesOf<typeof MEMBER_TYPE>
 

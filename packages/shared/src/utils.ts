@@ -7,11 +7,12 @@ export type Option = {
 }
 
 // Helper function to create options
-export function createOptions<T extends string>(
-  enumObj: Record<string, T>,
-  labels: Record<T, string>
+export function createOptions<const E extends Record<string, string>>(
+  enumObj: E,
+  labels: Readonly<Record<E[keyof E], string>>
 ): Option[] {
-  return Object.values(enumObj).map((value: T) => ({
+  const values = Object.values(enumObj) as Array<E[keyof E]>
+  return values.map((value) => ({
     label: labels[value],
     value,
   }))

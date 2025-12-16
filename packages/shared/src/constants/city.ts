@@ -23,7 +23,7 @@ export const CITY = {
   pingtung: 'pingtung',
   taitung: 'taitung',
   hualien: 'hualien',
-}
+} as const
 
 export type City = ValuesOf<typeof CITY>
 
