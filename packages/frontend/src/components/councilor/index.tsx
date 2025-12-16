@@ -28,20 +28,20 @@ import useCouncilorData from '@/components/councilor/hook/use-councilor-data'
 type CouncilorProps = {
   slug: string
   districtSlug: CouncilDistrict
-  coucilorData: CouncilorMemberData
+  councilorData: CouncilorMemberData
   topicsData: CouncilTopicOfBillData[]
 }
 const Councilor: React.FC<CouncilorProps> = ({
   slug,
   districtSlug,
-  coucilorData,
+  councilorData,
   topicsData,
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { councilor, topics, billsByTopic } = useCouncilorData(
     slug,
-    coucilorData,
+    councilorData,
     topicsData
   )
 

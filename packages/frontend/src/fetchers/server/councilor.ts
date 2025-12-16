@@ -131,14 +131,14 @@ export const fetchCouncilor = async ({
 /** fetchCouncilorTopics
  *  fetch councilor's topics with given slug & district slug
  */
-type fetchCouncilorTopicsOfBillParams = {
+type FetchCouncilorTopicsOfBillParams = {
   slug: string
   districtSlug: CouncilDistrict
 }
 export const fetchCouncilorTopicsOfBill = async ({
   slug,
   districtSlug,
-}: fetchCouncilorTopicsOfBillParams): Promise<CouncilTopicOfBillData[]> => {
+}: FetchCouncilorTopicsOfBillParams): Promise<CouncilTopicOfBillData[]> => {
   const condition = {
     councilMember: {
       some: {

@@ -10,7 +10,7 @@ const _ = {
   isEmpty,
 }
 
-type ConcilorFromRes = {
+type CouncilorFromRes = {
   billCount: number
   councilor: {
     slug: string
@@ -82,7 +82,7 @@ const fetchTopNCouncilorOfATopic = async ({
     },
   }
 
-  const data = await keystoneFetch<{ councilMembers: ConcilorFromRes[] }>(
+  const data = await keystoneFetch<{ councilMembers: CouncilorFromRes[] }>(
     JSON.stringify({ query, variables }),
     false
   )

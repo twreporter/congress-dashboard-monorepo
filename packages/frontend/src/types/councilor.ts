@@ -1,6 +1,6 @@
 import type { KeystoneImage } from '@/types/index'
-import { CouncilDistrict } from '@/types/council'
-import { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import type { CouncilDistrict } from '@/types/council'
+import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 
 export type CouncilorMemberMeta = {
   councilor: {
