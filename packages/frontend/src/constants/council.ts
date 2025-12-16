@@ -1,8 +1,10 @@
+import { CITY } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+
 export const VALID_COUNCILS = [
-  'taipei',
-  'new-taipei',
-  'taoyuan',
-  'taichung',
-  'tainan',
-  'kaohsiung',
+  CITY.taipei,
+  CITY.newTaipei,
+  CITY.taoyuan,
+  CITY.taichung,
+  CITY.tainan,
+  CITY.kaohsiung,
 ] as const

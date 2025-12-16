@@ -1,7 +1,3 @@
-export type CouncilDistrict =
-  | 'taipei'
-  | 'new-taipei'
-  | 'taoyuan'
-  | 'taichung'
-  | 'tainan'
-  | 'kaohsiung'
+import { VALID_COUNCILS } from '@/constants/council'
+
+export type CouncilDistrict = (typeof VALID_COUNCILS)[number]
