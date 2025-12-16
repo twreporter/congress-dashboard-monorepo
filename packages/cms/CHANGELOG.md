@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0-beta.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.0-beta.6...@twreporter/congress-dashboard-cms@1.5.0-beta.7) (2025-12-16)
+
+### Bug Fixes
+
+- **cms:** use id for connect ([d43445f](https://github.com/twreporter/congress-dashboard-monorepo/commit/d43445f24195d6c5c39f3db4deeef8d76de00599))
+
 # [1.5.0-beta.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.0-beta.5...@twreporter/congress-dashboard-cms@1.5.0-beta.6) (2025-12-15)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms
