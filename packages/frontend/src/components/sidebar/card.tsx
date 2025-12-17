@@ -139,22 +139,29 @@ const More = styled.span`
   text-decoration-color: ${colorGrayscale.gray300};
 `
 
+type CardType = 'speech' | 'bill'
 export type SummaryCardProps = {
   date: string | Date
   title: string
   summary: string
   slug: string
+  type?: CardType
 }
 export const SummaryCard: React.FC<SummaryCardProps> = ({
   date,
   title,
   summary,
   slug,
+  type = 'speech',
 }) => {
   // summary will be like this:
   // "<ul><li>this is a long sentence</li><li>this is a long sentence</li></ul>" or "this is a long sentence"
   const dateObj = typeof date === 'string' ? new Date(date) : date
   const parsedSummary = summary.replace(/<[^>]*>/g, '')
+  const link =
+    type === 'speech'
+      ? `${InternalRoutes.Speech}/${slug}`
+      : `${InternalRoutes.Bill}/${slug}`
   return (
     <CardBox>
       <FlexRow>
@@ -164,7 +171,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
       <HorizontalLine />
       <Content>
         {`${parsedSummary}（`}
-        <Link href={`${InternalRoutes.Speech}/${slug}`}>
+        <Link href={link}>
           <More>{'閱讀更多'}</More>
         </Link>
         {'）'}
@@ -188,16 +195,22 @@ const CardList = styled.div`
 export type CardsOfTheYearProps = {
   cards: SummaryCardProps[]
   year: number
+  type: CardType
 }
 const CardsOfTheYear: React.FC<CardsOfTheYearProps> = ({
   year,
   cards,
+  type,
 }: CardsOfTheYearProps) => (
   <Box>
     <Year text={`${year}`} />
     <CardList>
       {cards.map((props: SummaryCardProps, index: number) => (
-        <SummaryCard {...props} key={`summary-card-${year}-${index}`} />
+        <SummaryCard
+          {...props}
+          type={type}
+          key={`summary-card-${year}-${index}`}
+        />
       ))}
     </CardList>
   </Box>

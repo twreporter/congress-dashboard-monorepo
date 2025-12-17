@@ -7,7 +7,7 @@ import { openFeedback } from '@/utils/feedback'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: row;
   padding: 24px;
@@ -24,7 +24,7 @@ const Container = styled.div`
     width: 100%;
   `}
 `
-const Feedback = styled.span`
+export const Feedback = styled.span`
   color: ${colorGrayscale.gray800};
   text-decoration: underline;
   text-decoration-color: ${colorGrayscale.gray800};
