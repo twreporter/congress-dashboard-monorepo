@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.20](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.19...@twreporter/congress-dashboard-frontend@1.8.0-beta.20) (2025-12-17)
+
+### Bug Fixes
+
+- **frontend:** update bill & councilor meta ([2eac75e](https://github.com/twreporter/congress-dashboard-monorepo/commit/2eac75e8c013a893001a11a7c9096f6b41da3d2b))
+
 # [1.8.0-beta.19](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.18...@twreporter/congress-dashboard-frontend@1.8.0-beta.19) (2025-12-17)
 
 ### Bug Fixes
