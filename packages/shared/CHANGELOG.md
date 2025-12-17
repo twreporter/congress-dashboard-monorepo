@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.0-beta.4...@twreporter/congress-dashboard-shared@0.2.0-beta.5) (2025-12-17)
+
+### Bug Fixes
+
+- **shared:** add `as const` to correct type assert ([7755cf8](https://github.com/twreporter/congress-dashboard-monorepo/commit/7755cf8e9735f2aba3163676adf31dbb4ff8c30a))
+
 # [0.2.0-beta.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.0-beta.3...@twreporter/congress-dashboard-shared@0.2.0-beta.4) (2025-12-15)
 
 ### Features

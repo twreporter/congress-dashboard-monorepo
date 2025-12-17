@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.18](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.17...@twreporter/congress-dashboard-frontend@1.8.0-beta.18) (2025-12-17)
+
+### Bug Fixes
+
+- **frontend:** address review comments ([fa6ffc5](https://github.com/twreporter/congress-dashboard-monorepo/commit/fa6ffc568e4f78eaa0e3cbc0f3dc6c8ee405ce99))
+- **frontend:** typo & meta wording ([c0ed2bb](https://github.com/twreporter/congress-dashboard-monorepo/commit/c0ed2bbfba0116c07d0e89e2fdcee316dafb478a))
+
+### Features
+
+- **frontend:** add `/api/council-topic/[slug]...` ([b72f1c0](https://github.com/twreporter/congress-dashboard-monorepo/commit/b72f1c004c03069f76d7e6165c2a3977e8c98c1a))
+- **frontend:** add `/api/councilor/[slug]/topic` ([7f7af43](https://github.com/twreporter/congress-dashboard-monorepo/commit/7f7af438bdb1a32043202c2011c9e083ca4d9f0c))
+- **frontend:** add councilor page ([636c18c](https://github.com/twreporter/congress-dashboard-monorepo/commit/636c18cc0c70a3a10061e90761dcedde4ac325fe))
+
 # [1.8.0-beta.17](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.16...@twreporter/congress-dashboard-frontend@1.8.0-beta.17) (2025-12-15)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
