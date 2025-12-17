@@ -41,16 +41,18 @@ export async function generateMetadata({
   }
 
   const councilorPageUrl = `https://lawmaker.twreporter.org${InternalRoutes.Council}/${districtSlug}${InternalRoutes.Councilor}/${slug}`
+  const metaTitle = `${CITY_LABEL[districtSlug]}議員｜${councilorName} - 報導者觀測站`
+  const metaDescription = `議員${councilorName}關心哪些議題、提出哪些議案？《報導者》用人工智慧技術分析，帶你快速掌握${councilorName}不同時段的提案重點。`
 
   return {
-    title: `${CITY_LABEL[districtSlug]}議員｜${councilorName} - 報導者觀測站`,
-    description: `${CITY_LABEL[districtSlug]}議員${councilorName}關心哪些議題、質詢哪些官員？《報導者》用人工智慧技術分析議會議案，帶你快速掌握${councilorName}不同時段的問政重點與發言紀錄。`,
+    title: metaTitle,
+    description: metaDescription,
     alternates: {
       canonical: councilorPageUrl,
     },
     openGraph: {
-      title: `${CITY_LABEL[districtSlug]}議員｜${councilorName} - 報導者觀測站`,
-      description: `${CITY_LABEL[districtSlug]}議員${councilorName}關心哪些議題、質詢哪些官員？《報導者》用人工智慧技術分析議會議案，帶你快速掌握${councilorName}不同時段的問政重點與發言紀錄。`,
+      title: metaTitle,
+      description: metaDescription,
       url: councilorPageUrl,
       type: 'profile',
       images: OG_IMAGE_URL,
