@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { H2 } from '@twreporter/react-components/lib/text/headline'
 
 type ListType = 'ul' | 'ol'
 
@@ -66,7 +67,7 @@ function parseMarkdownToReact(md: string): ReactNode[] {
     if (supportRegex.h2.test(line)) {
       flushList()
       const text = line.replace(supportRegex.h2, '')
-      nodes.push(<h2 key={`h2-${nodes.length}`}>{parseInline(text)}</h2>)
+      nodes.push(<H2 key={`h2-${nodes.length}`} text={text}></H2>)
       continue
     }
 
