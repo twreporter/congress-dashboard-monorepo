@@ -10,6 +10,8 @@ import { InternalRoutes } from '@/constants/routes'
 import { OG_IMAGE_URL } from '@/constants'
 // components
 import BillPage from '@/components/bill'
+// @twreporter
+import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 
 export async function generateMetadata({
   params,
@@ -21,20 +23,21 @@ export async function generateMetadata({
   if (!bill) {
     notFound()
   }
-  const { title, summary } = bill
+  const { title, summary, councilMeeting } = bill
+  const cityLabel = councilMeeting?.city ? CITY_LABEL[councilMeeting.city] : ''
   const titleForMetaData =
     title.length > 15 ? `${title.slice(0, 15)}...` : title
   const descriptionForMetaData = summary
-    ? `本次議案中，${summary.replace(/<\/?(?:ul|li)>/g, '').replace(/\n/g, '')}`
+    ? `在此議案中，${summary.replace(/<\/?(?:ul|li)>/g, '').replace(/\n/g, '')}`
     : '報導者觀測站 | 議案'
   return {
-    title: `議案｜${titleForMetaData} - 報導者觀測站`,
+    title: `${cityLabel}議案｜${titleForMetaData} - 報導者觀測站`,
     description: descriptionForMetaData,
     alternates: {
       canonical: `https://lawmaker.twreporter.org${InternalRoutes.Bill}/${slug}`,
     },
     openGraph: {
-      title: `議案｜${titleForMetaData} - 報導者觀測站`,
+      title: `${cityLabel}議案｜${titleForMetaData} - 報導者觀測站`,
       description: descriptionForMetaData,
       url: `https://lawmaker.twreporter.org${InternalRoutes.Bill}/${slug}`,
       type: 'article',

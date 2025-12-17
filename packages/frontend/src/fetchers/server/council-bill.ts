@@ -36,6 +36,9 @@ export const fetchBillBySlug = async ({
           title
           city
         }
+        councilMeeting {
+          city
+        }
       }
     }
   `

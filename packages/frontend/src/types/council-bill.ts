@@ -19,6 +19,9 @@ export type BillFromRes = {
     }
     city: string
   }[]
+  councilMeeting?: {
+    city: string
+  }
 }
 
 export type BillMeta = {
