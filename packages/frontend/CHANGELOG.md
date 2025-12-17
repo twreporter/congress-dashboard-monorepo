@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.19](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.18...@twreporter/congress-dashboard-frontend@1.8.0-beta.19) (2025-12-17)
+
+### Bug Fixes
+
+- **frontend:** add default value for card type ([d2d4e5d](https://github.com/twreporter/congress-dashboard-monorepo/commit/d2d4e5d1cc8b88de79563f7d76c26e56992e183e))
+- **frontend:** address defects in bill page ([a7abc21](https://github.com/twreporter/congress-dashboard-monorepo/commit/a7abc219d62ea7758d76df5d1ba88878574a9f8f))
+
 # [1.8.0-beta.18](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.17...@twreporter/congress-dashboard-frontend@1.8.0-beta.18) (2025-12-17)
 
 ### Bug Fixes
