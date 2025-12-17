@@ -2,7 +2,7 @@
 import React, { useState, createContext, useContext, useEffect } from 'react'
 // @twreporter
 import { IconWithTextButton } from '@twreporter/react-components/lib/button'
-import { Video } from '@twreporter/react-components/lib/icon'
+import { Source } from '@twreporter/react-components/lib/icon'
 // components
 import {
   FeedbackButton,
@@ -45,7 +45,7 @@ const SourceButton: React.FC<SourceButtonProps> = ({ link }) => {
     <ButtonContainer onClick={openSource}>
       <IconWithTextButton
         text="資料來源"
-        iconComponent={<Video releaseBranch={releaseBranch} />}
+        iconComponent={<Source releaseBranch={releaseBranch} />}
         hideText={hideText}
       />
     </ButtonContainer>

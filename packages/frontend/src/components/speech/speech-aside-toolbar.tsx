@@ -86,6 +86,13 @@ export const PrintIconBlock = styled.div`
   }
 `
 
+export const SourceIconBlock = styled.div`
+  ${iconBlockCSS}
+  &::after {
+    content: '資料來源';
+  }
+`
+
 export const ShareIconBlock = styled.div`
   width: 30px;
   height: 30px;

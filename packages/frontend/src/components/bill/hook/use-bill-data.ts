@@ -15,7 +15,7 @@ export const useBillData = (billData: BillFromRes): BillData => {
       summary: billData.summary ? summaryParser(billData.summary) : '',
       content: billData.content || '',
       relatedTopics: billData.topic,
-      sourceLink: billData.sourceLink,
+      sourceLink: billData.sourceLink || '',
       councilors: billData.councilMember?.map(({ councilor, city }) => ({
         city,
         ...councilor,

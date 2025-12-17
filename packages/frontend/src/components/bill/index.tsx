@@ -30,7 +30,7 @@ import MobileToolbar from '@/components/bill/mobile-toolbar'
 import Content from '@/components/bill/content'
 import SpeechDate from '@/components/speech/speech-date'
 import SpeechTitle from '@/components/speech/speech-title'
-import SpeechAsideToolBar from '@/components/speech/speech-aside-toolbar'
+import AsideToolbar from '@/components/bill/aside-toolbar'
 import SpeechSummary from '@/components/speech/speech-summary'
 import SeparationCurve from '@/components/speech/separation-curve'
 import CustomPillButton from '@/components/button/pill-button'
@@ -45,6 +45,8 @@ import { useBillData } from './hook/use-bill-data'
 import { openFeedback } from '@/utils/feedback'
 // types
 import type { BillFromRes } from '@/types/council-bill'
+// @twreporter
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 
 const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
   ${mq.desktopAndAbove`
@@ -56,6 +58,10 @@ const TabletAndBelowWithFlex = styled(TabletAndBelow)`
   ${mq.tabletAndBelow`
     display: flex !important;
   `}
+`
+const LeadingContainerWithSeparationLine = styled(LeadingContainer)`
+  border-bottom: 1px solid ${colorGrayscale.gray300};
+  padding-bottom: 40px;
 `
 
 export enum FontSize {
@@ -152,17 +158,18 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
           </DateAndTitle>
         </ControlTab>
       </ControlTabContainer>
-      <LeadingContainer ref={leadingRef}>
+      <LeadingContainerWithSeparationLine ref={leadingRef}>
         <SpeechDate date={date} />
         <SpeechTitle title={title} />
-      </LeadingContainer>
+      </LeadingContainerWithSeparationLine>
       <BodyContainer>
         <DesktopAndAboveWithFlex>
           <AsideBlock>
             <AsideInfo {...asideInfoProps} />
-            <SpeechAsideToolBar
+            <AsideToolbar
               onFontSizeChange={cycleFontSize}
               currentFontSize={fontSize}
+              sourceLink={sourceLink}
             />
             <AsideInfo {...asideInfoProps} />
           </AsideBlock>
