@@ -195,12 +195,12 @@ const CardList = styled.div`
 export type CardsOfTheYearProps = {
   cards: SummaryCardProps[]
   year: number
-  type: CardType
+  type?: CardType
 }
 const CardsOfTheYear: React.FC<CardsOfTheYearProps> = ({
   year,
   cards,
-  type,
+  type = 'speech',
 }: CardsOfTheYearProps) => (
   <Box>
     <Year text={`${year}`} />

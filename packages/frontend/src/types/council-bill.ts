@@ -28,10 +28,14 @@ export type BillMeta = {
   summary: string
 }
 
-export type BillData = BillMeta & {
+export type BillData = {
+  slug: string
+  date: string
+  title: string
+  summary: string | string[]
   content: string
   attendee?: string
-  sourceLink?: string
+  sourceLink: string
   relatedTopics?: {
     slug: string
     title: string
