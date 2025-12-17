@@ -7734,8 +7734,8 @@ __metadata:
     "@storybook/test": "npm:^8.5.1"
     "@twreporter/congress-dashboard-shared": "npm:^0.2.0-beta.5"
     "@twreporter/core": "npm:^1.27.0"
-    "@twreporter/react-article-components": "npm:^2.6.0"
-    "@twreporter/react-components": "npm:^9.8.2"
+    "@twreporter/react-article-components": "npm:^2.7.1-rc.0"
+    "@twreporter/react-components": "npm:^9.10.0-rc.0"
     "@types/lodash": "npm:^4"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
@@ -7791,14 +7791,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@twreporter/react-article-components@npm:^2.6.0":
-  version: 2.6.0
-  resolution: "@twreporter/react-article-components@npm:2.6.0"
+"@twreporter/react-article-components@npm:^2.7.1-rc.0":
+  version: 2.7.1-rc.0
+  resolution: "@twreporter/react-article-components@npm:2.7.1-rc.0"
   dependencies:
     "@twreporter/core": "npm:^1.27.0"
-    "@twreporter/react-components": "npm:^9.8.2"
+    "@twreporter/react-components": "npm:^9.10.0-rc.0"
     "@twreporter/redux": "npm:^8.4.1"
-    "@twreporter/universal-header": "npm:^3.1.1"
+    "@twreporter/universal-header": "npm:^3.2.1-rc.0"
     howler: "npm:^2.2.3"
     isomorphic-dompurify: "npm:^2.26.0"
     lodash: "npm:^4.17.11"
@@ -7810,13 +7810,13 @@ __metadata:
     smooth-scroll: "npm:16.1.3"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-  checksum: 10c0/db45003261962d8389f3ab8223ec47fb4bc79c9a1b118ce0c1b6ebc39857dc96fc23b7110adba1f155df90e50ac667b1929e809bf2b235f182d43ac2218e8dad
+  checksum: 10c0/2a91ff6da20b95ce3c365c95ad61392dc99c43bedea40e157d2ac74876a3975773f2a83c1839b27f179c29dbe636e0140c42c9b12adb552c9a16484a4df79057
   languageName: node
   linkType: hard
 
-"@twreporter/react-components@npm:^9.8.2":
-  version: 9.8.2
-  resolution: "@twreporter/react-components@npm:9.8.2"
+"@twreporter/react-components@npm:^9.10.0-rc.0":
+  version: 9.10.0-rc.0
+  resolution: "@twreporter/react-components@npm:9.10.0-rc.0"
   dependencies:
     "@twreporter/core": "npm:^1.27.0"
     "@twreporter/redux": "npm:^8.4.1"
@@ -7832,7 +7832,7 @@ __metadata:
     react-waypoint: "npm:^10.3.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-  checksum: 10c0/a4c53b69eb0dd6ef97ecdbe31e8a5c448f59a97431e5358de22ec3bb464ad68abac7e089ca25a39cd0b3736caebd8f6ce397795bfb9f69f8b86a84984762b5c6
+  checksum: 10c0/7ca3da42c0f5b213aea0318a2cfc0b3d1aa8af69f1c7595dc9ed31aef6a04aef90edd696ab5cd3cbc171af7e07fdd63f5dff9e26e9a56887ec47bbe8bbe66745
   languageName: node
   linkType: hard
 
@@ -7857,14 +7857,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@twreporter/universal-header@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "@twreporter/universal-header@npm:3.1.1"
+"@twreporter/universal-header@npm:^3.2.1-rc.0":
+  version: 3.2.1-rc.0
+  resolution: "@twreporter/universal-header@npm:3.2.1-rc.0"
   dependencies:
     "@material-symbols/svg-400": "npm:^0.27.2"
     "@reduxjs/toolkit": "npm:^2.2.5"
     "@twreporter/core": "npm:^1.27.0"
-    "@twreporter/react-components": "npm:^9.8.2"
+    "@twreporter/react-components": "npm:^9.10.0-rc.0"
     lodash: "npm:^4.17.11"
     prop-types: "npm:^15.6.2"
     querystring: "npm:^0.2.0"
@@ -7876,7 +7876,7 @@ __metadata:
     redux-thunk: "npm:^3.1.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-  checksum: 10c0/d7ed67bbcb8d3b7cf4f32ee0e2845390e7adf60021b3de9dacb949df13cef4e6e87c15bfccb4397652eeda6334756ff574ba5cd8a1a0cbee854ae3eddb63c29f
+  checksum: 10c0/ee7b0195571252e14188f83dde7bef6ba939a0b2e07e8bb2a56ef4264daefd613c77dddd69ed909268558b0ab061773758778f7f6ab2b3f93c3e01c7110ed492
   languageName: node
   linkType: hard
 
