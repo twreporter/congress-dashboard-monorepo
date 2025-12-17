@@ -67,7 +67,7 @@ function parseMarkdownToReact(md: string): ReactNode[] {
     if (supportRegex.h2.test(line)) {
       flushList()
       const text = line.replace(supportRegex.h2, '')
-      nodes.push(<H2 key={`h2-${nodes.length}`} text={text}></H2>)
+      nodes.push(<H2 key={`h2-${nodes.length}`} text={text} />)
       continue
     }
 
