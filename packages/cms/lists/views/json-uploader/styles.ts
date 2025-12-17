@@ -224,6 +224,11 @@ export const EmptyCell = styled.em`
   font-size: 11px;
 `
 
+export const WarningCell = styled.em`
+  color: #f57c00;
+  font-size: 11px;
+`
+
 export const TableFooter = styled.div`
   padding: 10px;
   text-align: center;

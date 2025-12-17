@@ -101,6 +101,7 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'city',
       'type',
       'relatedTwreporterArticle',
+      'relatedCouncilBill',
     ],
     requiredFields: ['title', 'slug', 'city', 'type'],
     description: '匯入縣市議題資料',

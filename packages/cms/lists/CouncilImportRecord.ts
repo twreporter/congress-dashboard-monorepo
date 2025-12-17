@@ -233,18 +233,31 @@ const validateListSpecificData: Record<
     )
     return validationErrors
   },
-  [CouncilListName.councilTopic]: async (jsonData) => {
+  [CouncilListName.councilTopic]: async (jsonData, context) => {
     const validationErrors: string[] = []
     await Promise.all(
       jsonData.map(async (item, index) => {
         const rowNum = index + 1
-        const { relatedTwreporterArticle } = item
+        const { relatedTwreporterArticle, relatedCouncilBill } = item
 
         if (relatedTwreporterArticle) {
           for (const relatedItem of relatedTwreporterArticle) {
             if (!isRelatedType(relatedItem.type)) {
               validationErrors.push(
                 `第 ${rowNum} 筆資料: relatedTwreporterArticle 的 type 應為 www-article 或 www-topic`
+              )
+            }
+          }
+        }
+
+        if (relatedCouncilBill) {
+          for (const relatedItem of relatedCouncilBill) {
+            const councilBill = await context.prisma.councilBill.findFirst({
+              where: { slug: relatedItem },
+            })
+            if (!councilBill) {
+              validationErrors.push(
+                `第 ${rowNum} 筆資料: 找不到 slug 為 "${relatedItem}" 的縣市議案`
               )
             }
           }
@@ -547,7 +560,14 @@ const importHandlers: Record<
     const queries: Promise<any>[] = []
 
     jsonData.forEach((item) => {
-      const { title, slug, city, type, relatedTwreporterArticle } = item
+      const {
+        title,
+        slug,
+        city,
+        type,
+        relatedTwreporterArticle,
+        relatedCouncilBill,
+      } = item
 
       const labelForCMS = `${CITY_LABEL[city]}-${title}`
 
@@ -560,6 +580,7 @@ const importHandlers: Record<
             type,
             labelForCMS,
             relatedTwreporterArticle,
+            bill: { connect: relatedCouncilBill.map((slug) => ({ slug })) },
           },
           create: {
             title,
@@ -568,6 +589,7 @@ const importHandlers: Record<
             type,
             labelForCMS,
             relatedTwreporterArticle,
+            bill: { connect: relatedCouncilBill.map((slug) => ({ slug })) },
           },
         })
       )

@@ -10,6 +10,7 @@ import React, {
 import { jsx } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel, Select } from '@keystone-ui/fields'
 import { Button } from '@keystone-ui/button'
+import { useQuery, gql } from '@keystone-6/core/admin-ui/apollo'
 // types
 import type {
   FieldController,
@@ -53,14 +54,59 @@ import {
   FileLink,
   FileSize,
   ValidationIcon,
-  MoreErrorsItem,
   CellWrapper,
   CellListName,
   CellFileName,
   CardValueWrapper,
   CardValueRow,
   NoDataText,
+  WarningCell,
 } from './styles'
+
+const CHECK_COUNCILOR_SLUGS = gql`
+  query CheckCouncilorSlugs($slugs: [String!]!) {
+    councilors(where: { slug: { in: $slugs } }) {
+      slug
+    }
+  }
+`
+
+const CHECK_COUNCIL_TOPIC_SLUGS = gql`
+  query CheckCouncilTopicSlugs($slugs: [String!]!) {
+    councilTopics(where: { slug: { in: $slugs } }) {
+      slug
+    }
+  }
+`
+
+const CHECK_COUNCIL_BILL_SLUGS = gql`
+  query CheckCouncilBillSlugs($slugs: [String!]!) {
+    councilBills(where: { slug: { in: $slugs } }) {
+      slug
+    }
+  }
+`
+
+// Helper to get slugs from JSON data based on list type
+const getSlugFieldForList = (listName: string): string | null => {
+  if (
+    listName === 'Councilor' ||
+    listName === 'CouncilTopic' ||
+    listName === 'CouncilBill'
+  ) {
+    return 'slug'
+  }
+  return null
+}
+
+const extractSlugsFromData = (jsonData: any[], slugField: string): string[] => {
+  if (!Array.isArray(jsonData)) return []
+  return jsonData
+    .map((item) => item?.[slugField])
+    .filter(
+      (slug): slug is string => typeof slug === 'string' && slug.length > 0
+    )
+}
 
 type JSONUploaderFieldValue = {
   listName: string | null
@@ -142,6 +188,48 @@ const validateJsonData = (
     }
   }
 
+  // Find slug fields and check for duplicates
+  const slugFields = listConfig.expectedHeaders.filter((header) =>
+    header.includes('slug')
+  )
+
+  // Track duplicate slugs: { fieldName: { slugValue: [rowNumbers] } }
+  const slugValueMap: Record<string, Record<string, number[]>> = {}
+  slugFields.forEach((slugField) => {
+    slugValueMap[slugField] = {}
+  })
+
+  // First pass: collect all slug values
+  jsonData.forEach((item, index) => {
+    if (typeof item !== 'object' || item === null) return
+
+    slugFields.forEach((slugField) => {
+      const slugValue = item[slugField]
+      if (slugValue && typeof slugValue === 'string') {
+        if (!slugValueMap[slugField][slugValue]) {
+          slugValueMap[slugField][slugValue] = []
+        }
+        slugValueMap[slugField][slugValue].push(index + 1)
+      }
+    })
+  })
+
+  // Find duplicates and add errors
+  const duplicateSlugs: Record<string, Set<string>> = {}
+  slugFields.forEach((slugField) => {
+    duplicateSlugs[slugField] = new Set()
+    Object.entries(slugValueMap[slugField]).forEach(([slugValue, rows]) => {
+      if (rows.length > 1) {
+        duplicateSlugs[slugField].add(slugValue)
+        errors.push(
+          `欄位 ${slugField} 的值 "${slugValue}" 重複出現於第 ${rows.join(
+            ', '
+          )} 筆`
+        )
+      }
+    })
+  })
+
   jsonData.forEach((item, index) => {
     const rowNum = index + 1
     let recordValid = true
@@ -175,6 +263,21 @@ const validateJsonData = (
       warnings.push(`第 ${rowNum} 筆: 包含非預期欄位 ${extraFields.join(', ')}`)
     }
 
+    slugFields.forEach((slugField) => {
+      const slugValue = item[slugField]
+      if (slugValue && typeof slugValue === 'string') {
+        // Check for uppercase
+        if (/[A-Z]/.test(slugValue)) {
+          errors.push(`第 ${rowNum} 筆: 欄位 ${slugField} 不可包含大寫字母`)
+          recordValid = false
+        }
+        // Check for duplicate
+        if (duplicateSlugs[slugField]?.has(slugValue)) {
+          recordValid = false
+        }
+      }
+    })
+
     if (recordValid) {
       validRecordCount++
     }
@@ -203,11 +306,79 @@ export const Field = ({
   const [validation, setValidation] = useState<ValidationResult | null>(null)
   const [fileName, setFileName] = useState<string>(value?.filename || '')
   const [fileContent, setFileContent] = useState<File | null>(null)
+  const [existingSlugs, setExistingSlugs] = useState<Set<string>>(new Set())
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleButtonClick = () => {
     fileInputRef.current?.click()
   }
+
+  // Determine which query to use based on selected list
+  const queryToUse =
+    selectedList === 'Councilor'
+      ? CHECK_COUNCILOR_SLUGS
+      : selectedList === 'CouncilTopic'
+      ? CHECK_COUNCIL_TOPIC_SLUGS
+      : selectedList === 'CouncilBill'
+      ? CHECK_COUNCIL_BILL_SLUGS
+      : null
+
+  // Extract slugs from jsonData for query
+  const slugField = getSlugFieldForList(selectedList)
+  const slugsToCheck =
+    jsonData && slugField ? extractSlugsFromData(jsonData, slugField) : []
+
+  // Query for existing slugs in database
+  const { data: existingSlugsData } = useQuery(
+    queryToUse || CHECK_COUNCILOR_SLUGS, // Fallback to avoid null query
+    {
+      variables: { slugs: slugsToCheck },
+      skip: !queryToUse || slugsToCheck.length === 0,
+    }
+  )
+
+  // Update existingSlugs when query data changes
+  useEffect(() => {
+    if (existingSlugsData) {
+      const dataKey =
+        selectedList === 'Councilor'
+          ? 'councilors'
+          : selectedList === 'CouncilTopic'
+          ? 'councilTopics'
+          : selectedList === 'CouncilBill'
+          ? 'councilBills'
+          : null
+
+      if (dataKey && existingSlugsData[dataKey]) {
+        const slugs = new Set<string>(
+          existingSlugsData[dataKey].map((item: { slug: string }) => item.slug)
+        )
+        setExistingSlugs(slugs)
+
+        // Add warnings for existing slugs
+        if (slugs.size > 0 && validation) {
+          const existingWarnings = Array.from(slugs).map(
+            (slug) => `slug "${slug}" 已存在於資料庫中，將會更新該筆資料`
+          )
+          setValidation((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  warnings: [
+                    ...prev.warnings.filter(
+                      (w) => !w.includes('已存在於資料庫中')
+                    ),
+                    ...existingWarnings,
+                  ],
+                }
+              : null
+          )
+        }
+      }
+    } else {
+      setExistingSlugs(new Set())
+    }
+  }, [existingSlugsData, selectedList])
 
   // Update when value changes (for edit mode)
   useEffect(() => {
@@ -297,14 +468,23 @@ export const Field = ({
           )
         )
 
-        // Notify Keystone - send the parsed JSON data and base64 file content
-        onChange?.({
-          listName: selectedList,
-          filename: file.name,
-          filesize: file.size,
-          jsonData: data,
-          fileContent: base64,
-        })
+        // Only send jsonData if validation passes, otherwise the record cannot be created
+        if (validationResult.isValid) {
+          onChange?.({
+            listName: selectedList,
+            filename: file.name,
+            filesize: file.size,
+            jsonData: data,
+            fileContent: base64,
+          })
+        } else {
+          // Don't send jsonData - this will prevent the record from being created
+          onChange?.({
+            listName: selectedList,
+            filename: file.name,
+            filesize: file.size,
+          })
+        }
       } catch (error) {
         setJsonData(null)
         if (error instanceof SyntaxError) {
@@ -448,14 +628,9 @@ export const Field = ({
               <ErrorSection>
                 <ErrorHeader>❌ 錯誤 ({validation.errors.length}):</ErrorHeader>
                 <ErrorList>
-                  {validation.errors.slice(0, 20).map((error, idx) => (
+                  {validation.errors.map((error, idx) => (
                     <ListItem key={idx}>{error}</ListItem>
                   ))}
-                  {validation.errors.length > 20 && (
-                    <MoreErrorsItem>
-                      還有 {validation.errors.length - 20} 個錯誤...
-                    </MoreErrorsItem>
-                  )}
                 </ErrorList>
               </ErrorSection>
             )}
@@ -466,43 +641,139 @@ export const Field = ({
                   ⚠️ 警告 ({validation.warnings.length}):
                 </WarningHeader>
                 <WarningList>
-                  {validation.warnings.slice(0, 10).map((warning, idx) => (
+                  {validation.warnings.map((warning, idx) => (
                     <ListItem key={idx}>{warning}</ListItem>
                   ))}
-                  {validation.warnings.length > 10 && (
-                    <MoreErrorsItem>
-                      還有 {validation.warnings.length - 10} 個警告...
-                    </MoreErrorsItem>
-                  )}
                 </WarningList>
               </ErrorSection>
             )}
           </ValidationBox>
         )}
 
-        {/* Error Data Table - Only show records with errors */}
+        {/* Error/Warning Data Table - Show records with errors or existing slugs */}
         {jsonData &&
           jsonData.length > 0 &&
           listConfig &&
-          !validation?.isValid &&
+          (!validation?.isValid || existingSlugs.size > 0) &&
           (() => {
+            const slugFields = listConfig.expectedHeaders.filter(
+              (header: string) => header.includes('slug')
+            )
+
+            // Build slug value map to detect duplicates
+            const slugValueMap: Record<string, Record<string, number[]>> = {}
+            slugFields.forEach((slugField: string) => {
+              slugValueMap[slugField] = {}
+            })
+            jsonData.forEach((item, index) => {
+              if (typeof item !== 'object' || item === null) return
+              slugFields.forEach((slugField: string) => {
+                const slugValue = item[slugField]
+                if (slugValue && typeof slugValue === 'string') {
+                  if (!slugValueMap[slugField][slugValue]) {
+                    slugValueMap[slugField][slugValue] = []
+                  }
+                  slugValueMap[slugField][slugValue].push(index)
+                }
+              })
+            })
+
+            // Find duplicate slug values
+            const duplicateSlugs: Record<string, Set<string>> = {}
+            slugFields.forEach((slugField: string) => {
+              duplicateSlugs[slugField] = new Set()
+              Object.entries(slugValueMap[slugField]).forEach(
+                ([slugValue, rows]) => {
+                  if (rows.length > 1) {
+                    duplicateSlugs[slugField].add(slugValue)
+                  }
+                }
+              )
+            })
+
             const errorRecords = jsonData
               .map((record, idx) => ({ record, originalIndex: idx }))
-              .filter(({ record }) =>
-                listConfig.requiredFields.some(
+              .filter(({ record }) => {
+                // Check for missing required fields
+                const hasMissingRequired = listConfig.requiredFields.some(
                   (field: string) =>
                     record[field] === undefined ||
                     record[field] === null ||
                     record[field] === ''
                 )
-              )
+                // Check for uppercase in slug fields
+                const hasUppercaseSlug = slugFields.some(
+                  (slugField: string) => {
+                    const slugValue = record[slugField]
+                    return (
+                      slugValue &&
+                      typeof slugValue === 'string' &&
+                      /[A-Z]/.test(slugValue)
+                    )
+                  }
+                )
+                // Check for duplicate slug values
+                const hasDuplicateSlug = slugFields.some(
+                  (slugField: string) => {
+                    const slugValue = record[slugField]
+                    return (
+                      slugValue &&
+                      typeof slugValue === 'string' &&
+                      duplicateSlugs[slugField]?.has(slugValue)
+                    )
+                  }
+                )
+                // Check for existing slug in database
+                const hasExistingSlug =
+                  record['slug'] &&
+                  typeof record['slug'] === 'string' &&
+                  existingSlugs.has(record['slug'])
+
+                return (
+                  hasMissingRequired ||
+                  hasUppercaseSlug ||
+                  hasDuplicateSlug ||
+                  hasExistingSlug
+                )
+              })
 
             if (errorRecords.length === 0) return null
+
+            // Count how many are errors vs just existing in DB
+            const errorCount = errorRecords.filter(({ record }) => {
+              const hasMissingRequired = listConfig.requiredFields.some(
+                (field: string) =>
+                  record[field] === undefined ||
+                  record[field] === null ||
+                  record[field] === ''
+              )
+              const hasUppercaseSlug = slugFields.some((slugField: string) => {
+                const slugValue = record[slugField]
+                return (
+                  slugValue &&
+                  typeof slugValue === 'string' &&
+                  /[A-Z]/.test(slugValue)
+                )
+              })
+              const hasDuplicateSlug = slugFields.some((slugField: string) => {
+                const slugValue = record[slugField]
+                return (
+                  slugValue &&
+                  typeof slugValue === 'string' &&
+                  duplicateSlugs[slugField]?.has(slugValue)
+                )
+              })
+              return hasMissingRequired || hasUppercaseSlug || hasDuplicateSlug
+            }).length
+
+            const updateCount = errorRecords.length - errorCount
 
             return (
               <details open>
                 <DetailsSummary>
-                  ❌ 錯誤資料 ({errorRecords.length} 筆)
+                  {errorCount > 0 && `❌ 錯誤資料 (${errorCount} 筆)`}
+                  {errorCount > 0 && updateCount > 0 && ' / '}
+                  {updateCount > 0 && `🔄 將更新資料 (${updateCount} 筆)`}
                 </DetailsSummary>
                 <TableWrapper>
                   <DataTable>
@@ -526,8 +797,8 @@ export const Field = ({
                     </thead>
                     <tbody>
                       {errorRecords.map(({ record, originalIndex }) => (
-                        <TableRow key={originalIndex} hasError>
-                          <TableCell isSticky rowHasError>
+                        <TableRow key={originalIndex} hasError={errorCount > 0}>
+                          <TableCell isSticky rowHasError={errorCount > 0}>
                             {originalIndex + 1}
                           </TableCell>
                           {listConfig.expectedHeaders.map((header: string) => {
@@ -538,21 +809,67 @@ export const Field = ({
                               cellValue === ''
                             const isRequired =
                               listConfig.requiredFields.includes(header)
-                            const cellHasError = isEmpty && isRequired
+                            const isSlugField = header.includes('slug')
+                            const hasUppercase =
+                              isSlugField &&
+                              cellValue &&
+                              typeof cellValue === 'string' &&
+                              /[A-Z]/.test(cellValue)
+                            const isDuplicate =
+                              isSlugField &&
+                              cellValue &&
+                              typeof cellValue === 'string' &&
+                              duplicateSlugs[header]?.has(cellValue)
+                            const isExistingInDb =
+                              isSlugField &&
+                              header === 'slug' &&
+                              cellValue &&
+                              typeof cellValue === 'string' &&
+                              existingSlugs.has(cellValue)
+                            const cellHasError =
+                              (isEmpty && isRequired) || hasUppercase
+
+                            const formatCellValue = (val: any): string => {
+                              if (
+                                val === undefined ||
+                                val === null ||
+                                val === ''
+                              )
+                                return ''
+                              if (Array.isArray(val)) {
+                                return JSON.stringify(val, null, 0)
+                              }
+                              if (typeof val === 'object') {
+                                return JSON.stringify(val, null, 0)
+                              }
+                              return String(val)
+                            }
+
+                            const displayValue = formatCellValue(cellValue)
 
                             return (
                               <TableCell
                                 key={header}
                                 hasError={cellHasError}
                                 isEmpty={isEmpty}
-                                title={String(cellValue || '')}
+                                title={displayValue}
                               >
                                 {isEmpty ? (
                                   <EmptyCell>
-                                    {cellHasError ? '⚠ 缺少必填' : '(空)'}
+                                    {isRequired ? '⚠ 缺少必填' : '(空)'}
                                   </EmptyCell>
+                                ) : hasUppercase ? (
+                                  <EmptyCell>
+                                    ⚠ {displayValue} (含大寫)
+                                  </EmptyCell>
+                                ) : isDuplicate ? (
+                                  <EmptyCell>⚠ {displayValue} (重複)</EmptyCell>
+                                ) : isExistingInDb ? (
+                                  <WarningCell>
+                                    {displayValue} (將更新)
+                                  </WarningCell>
                                 ) : (
-                                  String(cellValue)
+                                  displayValue
                                 )}
                               </TableCell>
                             )
