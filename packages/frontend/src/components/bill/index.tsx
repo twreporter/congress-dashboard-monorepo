@@ -171,7 +171,6 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
               currentFontSize={fontSize}
               sourceLink={sourceLink}
             />
-            <AsideInfo {...asideInfoProps} />
           </AsideBlock>
         </DesktopAndAboveWithFlex>
         <TabletAndBelowWithFlex>
