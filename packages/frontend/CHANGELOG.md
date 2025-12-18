@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.21](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.20...@twreporter/congress-dashboard-frontend@1.8.0-beta.21) (2025-12-18)
+
+### Bug Fixes
+
+- **frontend:** address defects in bill page ([60f9fcf](https://github.com/twreporter/congress-dashboard-monorepo/commit/60f9fcf1167c0989c454c11438daf031f6165380))
+- **frontend:** use short syntax for H2 tag ([44e2ecd](https://github.com/twreporter/congress-dashboard-monorepo/commit/44e2ecd1284f3d558c5e093b1647e0a3427522fa))
+
 # [1.8.0-beta.20](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.19...@twreporter/congress-dashboard-frontend@1.8.0-beta.20) (2025-12-17)
 
 ### Bug Fixes
