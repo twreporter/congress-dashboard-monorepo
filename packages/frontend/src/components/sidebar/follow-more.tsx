@@ -59,12 +59,8 @@ export const Legislator: React.FC<LegislatorProps> = ({
   count,
   slug,
 }: LegislatorProps) => {
-  const gotoLegislator = () => {
-    window.open(`${InternalRoutes.Legislator}/${slug}`, '_self')
-  }
-
   return (
-    <LegislatorItem onClick={gotoLegislator}>
+    <LegislatorItem>
       <AvatarContainer>
         {avatar ? (
           <ImageWithSkeleton

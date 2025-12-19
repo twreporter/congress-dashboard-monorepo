@@ -5,10 +5,10 @@ import type { RelatedLink } from '@/types/councilor'
 // components
 import { P1Gray800 } from '@/components/legislator/styles'
 import Tooltip from '@/components/dashboard/card/tooltip'
+import TextButton from '@/components/button/text-button'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
-import { TextButton } from '@twreporter/react-components/lib/button'
 
 const Container = styled.div`
   display: flex;
@@ -26,7 +26,7 @@ const Title = styled.div`
   gap: 4px;
 `
 const LinkList = styled.ul`
-  list-style: none;
+  list-style-position: inside;
   margin-top: 8px;
   ${mq.tabletAndBelow`
     display: grid;
@@ -35,12 +35,7 @@ const LinkList = styled.ul`
 `
 const LinkItem = styled.li``
 const LinkButton = styled(TextButton)`
-  &::before {
-    content: '•';
-    margin-right: 4px;
-    color: ${colorGrayscale.gray800};
-    font-size: 16px;
-  }
+  display: inline-flex;
 `
 
 type RelatedLinkProps = {
