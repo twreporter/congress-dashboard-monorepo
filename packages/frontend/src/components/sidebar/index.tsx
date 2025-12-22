@@ -9,7 +9,8 @@ import React, {
   RefAttributes,
 } from 'react'
 import styled from 'styled-components'
-// context
+import Link from 'next/link'
+// contet
 import { DashboardContext } from '@/components/dashboard/context'
 // fetcher
 import { fetchLegislatorsOfATopic } from '@/fetchers/legislator'
@@ -461,10 +462,12 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
                   <FollowMoreLegislator>
                     {legislatorList.map(
                       (props: LegislatorProps, index: number) => (
-                        <Legislator
-                          {...props}
+                        <Link
+                          href={`${InternalRoutes.Legislator}/${props.slug}`}
                           key={`follow-more-legislator-${index}`}
-                        />
+                        >
+                          <Legislator {...props} />
+                        </Link>
                       )
                     )}
                   </FollowMoreLegislator>
