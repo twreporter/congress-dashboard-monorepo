@@ -102,6 +102,17 @@ const AboutPage: React.FC<AboutPageProps> = ({
     }
   }, [setTabElement, leadingRef])
 
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash) {
+      const id = decodeURIComponent(hash.substring(1))
+      const element = document.getElementById(id)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }, [])
+
   return (
     <SpeechContainer>
       <LeadingContainer ref={leadingRef}>
