@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 
-const Button = styled(P1)`
+const P1Button = styled(P1)`
   color: ${colorGrayscale.gray800};
   line-height: 180% !important;
   text-decoration-line: underline;
@@ -31,7 +31,7 @@ const TextButton: FC<TextButtonProps> = ({ text, className, onClick }) => {
     onClick()
   }
   return (
-    <Button
+    <P1Button
       text={text}
       weight={P1.Weight.BOLD}
       className={className}
