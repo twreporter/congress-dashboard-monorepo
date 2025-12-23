@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -16,15 +16,11 @@ import { fundraisingId } from '@twreporter/core/lib/constants/fundraising'
 // component
 import Logo from '@/components/footer/logo'
 import FooterLink, { TextSize } from '@/components/footer/link'
+import SocialMediaIcons from '@/components/footer/social-media'
 // constants
 import { InternalRoutes, ExternalRoutes } from '@/constants/routes'
 // utils
 import { openFeedback } from '@/utils/feedback'
-// fetchers
-import {
-  useLegislativeMeeting,
-  useLegislativeMeetingSession,
-} from '@/fetchers/legislative-meeting'
 
 const StyledFooter = styled.footer`
   width: 100%;
@@ -120,10 +116,10 @@ const DividerWrapper = styled.div`
 const BottomContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   ${mq.tabletAndBelow`
     flex-direction: column;
-    align-items: center;
   `}
 `
 
@@ -161,6 +157,11 @@ const BottomLinksContainer = styled.div`
   flex-direction: row;
 `
 
+const Gap = styled.div<{ $height?: number; $width?: number }>`
+  height: ${(props) => props.$height || 0}px;
+  width: ${(props) => props.$width || 0}px;
+`
+
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 const Footer: React.FC = () => {
@@ -185,48 +186,6 @@ const Footer: React.FC = () => {
     )
   }
 
-  const {
-    legislativeMeetings,
-    isLoading: meetingsLoading,
-    error: meetingsError,
-  } = useLegislativeMeeting()
-
-  const latestLegislativeMeetingTerm = useMemo(() => {
-    return legislativeMeetings?.[0]?.term
-  }, [legislativeMeetings])
-
-  const {
-    legislativeMeetingSessions,
-    isLoading: sessionsLoading,
-    error: sessionsError,
-  } = useLegislativeMeetingSession(String(latestLegislativeMeetingTerm))
-
-  const latestLegislativeMeetingSessionTerm = useMemo(() => {
-    if (!legislativeMeetingSessions?.length) return null
-    return legislativeMeetingSessions[legislativeMeetingSessions.length - 1]
-      ?.term
-  }, [legislativeMeetingSessions])
-
-  const displayText = useMemo(() => {
-    if (meetingsLoading || sessionsLoading) {
-      return '資料載入中...'
-    }
-    if (meetingsError || sessionsError) {
-      return '資料載入失敗'
-    }
-    if (!latestLegislativeMeetingTerm || !latestLegislativeMeetingSessionTerm) {
-      return '資料更新資訊不可用'
-    }
-    return `本網站資料更新至立法院第${latestLegislativeMeetingTerm}屆第${latestLegislativeMeetingSessionTerm}會期`
-  }, [
-    meetingsLoading,
-    sessionsLoading,
-    meetingsError,
-    sessionsError,
-    latestLegislativeMeetingTerm,
-    latestLegislativeMeetingSessionTerm,
-  ])
-
   return (
     <StyledFooter className="hidden-print">
       <FooterSection>
@@ -243,8 +202,8 @@ const Footer: React.FC = () => {
                 target="_self"
               />
               <FooterLink
-                href={ExternalRoutes.AboutTwreporter}
-                text="關於我們"
+                href={`${InternalRoutes.About}#「報導者觀測站」涵蓋多少資料？更新頻率為何？會再加入其他資料？`}
+                text="資料更新說明"
                 target="_blank"
               />
               <Feedback
@@ -254,8 +213,8 @@ const Footer: React.FC = () => {
             </LinkGroup>
             <LinkGroup>
               <FooterLink
-                href={ExternalRoutes.Medium}
-                text="報導者開放實驗室"
+                href={ExternalRoutes.AboutTwreporter}
+                text="關於我們"
                 target="_blank"
               />
               <FooterLink
@@ -264,8 +223,25 @@ const Footer: React.FC = () => {
                 target="_blank"
               />
               <FooterLink
+                href={ExternalRoutes.Medium}
+                text="開放實驗室"
+                target="_blank"
+              />
+            </LinkGroup>
+            <LinkGroup>
+              <FooterLink
                 href={ExternalRoutes.Support}
                 text="贊助支持"
+                target="_blank"
+              />
+              <FooterLink
+                href={ExternalRoutes.Subscription}
+                text="訂閱電子報"
+                target="_blank"
+              />
+              <FooterLink
+                href={ExternalRoutes.SubscribePodcast}
+                text="訂閱 Podcast"
                 target="_blank"
               />
             </LinkGroup>
@@ -279,20 +255,26 @@ const Footer: React.FC = () => {
             <DesktopAndAboveWithFlex>
               <P3Gray600 text={fundraisingId} />
               <P3Gray600 text="｜" />
-              <P3Gray600 text={displayText} />
-              <P3Gray600 text="｜" />
               <BottomLinks releaseBranch={releaseBranch} />
+              <P3Gray600 text="｜" />
+              <P3Gray600
+                text={`Copyright © ${new Date().getFullYear()} The Reporter.`}
+              />
             </DesktopAndAboveWithFlex>
             <TabletAndBelowWithFlex>
+              <SocialMediaIcons />
+              <Gap $height={24} />
               <P3Gray600 text={fundraisingId} />
-              <P3Gray600 text={displayText} />
               <BottomLinks releaseBranch={releaseBranch} />
+              <P3Gray600
+                text={`Copyright © ${new Date().getFullYear()} The Reporter.`}
+              />
             </TabletAndBelowWithFlex>
           </BottomSection>
           <BottomSection>
-            <P3Gray600
-              text={`Copyright © ${new Date().getFullYear()} The Reporter.`}
-            />
+            <DesktopAndAboveWithFlex>
+              <SocialMediaIcons />
+            </DesktopAndAboveWithFlex>
           </BottomSection>
         </BottomContainer>
       </FooterSection>

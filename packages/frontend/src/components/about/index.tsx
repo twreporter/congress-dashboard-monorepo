@@ -102,6 +102,30 @@ const AboutPage: React.FC<AboutPageProps> = ({
     }
   }, [setTabElement, leadingRef])
 
+  useEffect(() => {
+    // use smooth scroll to target element when hash changes
+    const handleHashChange = () => {
+      const hash = window.location.hash
+      if (hash) {
+        const id = decodeURIComponent(hash.substring(1))
+        const element = document.getElementById(id)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+    }
+
+    // wait for content to be rendered before scrolling to hash
+    requestAnimationFrame(() => {
+      handleHashChange()
+    })
+
+    window.addEventListener('hashchange', handleHashChange)
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [content])
+
   return (
     <SpeechContainer>
       <LeadingContainer ref={leadingRef}>

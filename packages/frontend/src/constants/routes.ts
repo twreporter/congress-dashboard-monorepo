@@ -13,4 +13,5 @@ export enum ExternalRoutes {
   Support = 'https://support.twreporter.org/',
   AboutTwreporter = 'https://www.twreporter.org/about-us',
   TwReporter = 'https://www.twreporter.org',
+  SubscribePodcast = 'https://solink.soundon.fm/twreporter-U7Q',
 }
