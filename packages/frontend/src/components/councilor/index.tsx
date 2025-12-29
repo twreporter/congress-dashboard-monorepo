@@ -7,8 +7,8 @@ import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/
 import CouncilorInfo from '@/components/councilor/councilor-info'
 import CouncilorStatistics from '@/components/councilor/statistic'
 import TopicList from '@/components/councilor/topic-list'
-import Feedback from '@/components/councilor/feedback'
 import RelatedLinkBlock from '@/components/councilor/related-link'
+import FeedbackBlock from '@/components/layout/feedback-block'
 import ContentPageLayout from '@/components/layout/content-page-without-filter-layout'
 // styles
 import {
@@ -63,7 +63,7 @@ const Councilor: React.FC<CouncilorProps> = ({
           <DesktopAsideLeft>
             <CouncilorInfo councilor={councilor} />
             <RelatedLinkBlock relatedLink={councilor.relatedLink} />
-            <Feedback />
+            <FeedbackBlock eventName="councilor" />
           </DesktopAsideLeft>
           <DesktopAsideRight>
             <CouncilorStatistics
@@ -102,7 +102,7 @@ const Councilor: React.FC<CouncilorProps> = ({
                 districtSlug={districtSlug}
               />
             </ListContainer>
-            <Feedback />
+            <FeedbackBlock eventName="councilor" />
           </ContentBlock>
         </TabletAndBelow>
       </ContentPageLayout>

@@ -44,7 +44,7 @@ const maxTabs = 5
 const mapToTabItems = (items: LegislatorData[]): TabProps[] =>
   items.map((legislator) => ({ ...legislator, showAvatar: true }))
 
-const TopicContainer = styled.div`
+export const TopicContainer = styled.div`
   gap: 12px;
   display: flex;
   flex-wrap: wrap;

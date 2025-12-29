@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-// constant
-import { InternalRoutes } from '@/constants/routes'
 // component
 import PartyTag from '@/components/dashboard/card/party-tag'
 import { CircleRaw } from '@/components/skeleton'
@@ -114,14 +112,9 @@ export type IssueProps = {
 export const Issue: React.FC<IssueProps> = ({
   name = '',
   count,
-  slug,
 }: IssueProps) => {
-  const gotoIssue = () => {
-    window.open(`${InternalRoutes.Topic}/${slug}`, '_self')
-  }
-
   return (
-    <TagItem onClick={gotoIssue}>
+    <TagItem>
       <TagName>{count ? `${name}(${count})` : name}</TagName>
     </TagItem>
   )

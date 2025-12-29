@@ -23,7 +23,7 @@ type CouncilorFromRes = {
 type FetchTopNCouncilorOfATopicParams = {
   topicSlug: string
   city: string
-  excludeCouncilorSlug: string
+  excludeCouncilorSlug?: string
   top?: number
 }
 
@@ -53,13 +53,6 @@ const fetchTopNCouncilorOfATopic = async ({
 
   const variables = {
     where: {
-      councilor: {
-        slug: {
-          not: {
-            equals: excludeCouncilorSlug,
-          },
-        },
-      },
       city: {
         equals: city,
       },
@@ -80,6 +73,15 @@ const fetchTopNCouncilorOfATopic = async ({
         },
       },
     },
+  }
+  if (excludeCouncilorSlug) {
+    variables.where['councilor'] = {
+      slug: {
+        not: {
+          equals: excludeCouncilorSlug,
+        },
+      },
+    }
   }
 
   const data = await keystoneFetch<{ councilMembers: CouncilorFromRes[] }>(

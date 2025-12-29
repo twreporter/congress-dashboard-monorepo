@@ -7,7 +7,7 @@ import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 import LegislatorInfo from '@/components/legislator/legislator-info'
 import LegislatorStatistics from '@/components/legislator/legislator-statistics'
 import LegislatorList from '@/components/legislator/legislator-list'
-import Feedback from '@/components/topic/topic-feedback'
+import FeedbackBlock from '@/components/layout/feedback-block'
 import FilterModal from '@/components/filter-modal'
 import ContentPageLayout from '@/components/layout/content-page-layout'
 // styles
@@ -163,7 +163,7 @@ const Legislator: React.FC<LegislatorProps> = ({
               legislator={legislator}
               isLegislatorActive={isLegislatorActive}
             />
-            <Feedback />
+            <FeedbackBlock eventName="legislator" />
           </DesktopAsideLeft>
           <DesktopAsideRight>
             <LegislatorStatistics
@@ -210,7 +210,7 @@ const Legislator: React.FC<LegislatorProps> = ({
                 currentMeetingSession={currentMeetingSession}
               />
             </ListContainer>
-            <Feedback />
+            <FeedbackBlock eventName="legislator" />
           </ContentBlock>
         </TabletAndBelow>
       </ContentPageLayout>

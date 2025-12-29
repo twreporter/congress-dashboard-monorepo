@@ -262,7 +262,12 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
                 ) : issueList.length > 0 ? (
                   <FollowMoreTags>
                     {issueList.map((props: IssueProps, index: number) => (
-                      <Issue {...props} key={`follow-more-issue-${index}`} />
+                      <Link
+                        href={`${InternalRoutes.Topic}/${props.slug}`}
+                        key={`follow-more-issue-${index}`}
+                      >
+                        <Issue {...props} />
+                      </Link>
                     ))}
                   </FollowMoreTags>
                 ) : null}

@@ -19,12 +19,15 @@ type Params = {
 const getSearchParams = (searchParams: URLSearchParams): Params => {
   const res: Partial<Params> = {}
   const city = searchParams.get('city')
-  const excludeCouncilorSlug = searchParams.get('exclude')
-  if (!city || !excludeCouncilorSlug) {
+  if (!city) {
     throw new Error(`invalid parameter, city & exclude is required.`)
   }
   res.city = city
-  res.excludeCouncilorSlug = excludeCouncilorSlug
+
+  const excludeCouncilorSlug = searchParams.get('exclude')
+  if (excludeCouncilorSlug) {
+    res.excludeCouncilorSlug = excludeCouncilorSlug
+  }
 
   const top = getNumberParams(searchParams, 'top', false)
   if (top) {

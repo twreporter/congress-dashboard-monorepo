@@ -13,15 +13,19 @@ type TopicFromRes = {
 type FetchTopicsOfACouncilorParams = {
   councilorSlug: string
   city: string
+  excludeTopicSlug?: string
+  top?: number
 }
 
 const fetchTopicsOfACouncilor = async ({
   councilorSlug,
   city,
+  excludeTopicSlug,
+  top,
 }: FetchTopicsOfACouncilorParams): Promise<CouncilTopicForFilter[]> => {
   const query = `
-    query CouncilTopics($where: CouncilTopicWhereInput!, $billCountWhere2: CouncilBillWhereInput!) {
-      councilTopics(where: $where) {
+    query CouncilTopics($where: CouncilTopicWhereInput!, $billCountWhere2: CouncilBillWhereInput!, $take: Int) {
+      councilTopics(where: $where, take: $take) {
         slug
         title
         billCount(where: $billCountWhere2)
@@ -50,6 +54,13 @@ const fetchTopicsOfACouncilor = async ({
       },
     },
   }
+  if (excludeTopicSlug) {
+    variables.where['slug'] = {
+      not: {
+        equals: excludeTopicSlug,
+      },
+    }
+  }
 
   const data = await keystoneFetch<{ councilTopics: TopicFromRes[] }>(
     JSON.stringify({ query, variables }),
@@ -58,13 +69,14 @@ const fetchTopicsOfACouncilor = async ({
 
   const topics = data?.data?.councilTopics || []
   const topicsOrderByCount = topics
+    .filter(({ billCount }) => billCount > 0)
     .map(({ billCount, title, slug }) => ({
       slug,
       title,
       count: billCount,
     }))
     .sort(sortByCountDesc)
-  return topicsOrderByCount
+  return top ? topicsOrderByCount.slice(0, top) : topicsOrderByCount
 }
 
 export default fetchTopicsOfACouncilor

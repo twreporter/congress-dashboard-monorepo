@@ -1,4 +1,11 @@
-export type RelatedType = 'www-topic' | 'www-article'
+import type { ValidTwreporterItemType } from '@/utils/validate-twreporter-item'
+
+export type RelatedType = ValidTwreporterItemType
+
+export type RelatedItemFromRes = {
+  type: string
+  slug: string
+}
 
 export type RelatedItem = {
   type: RelatedType

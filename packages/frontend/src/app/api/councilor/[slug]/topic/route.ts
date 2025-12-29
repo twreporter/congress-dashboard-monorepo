@@ -6,11 +6,14 @@ import logger from '@/utils/logger'
 import responseHelper, {
   getCachedSuccessStatus,
 } from '@/app/api/_core/response-helper'
+import { getNumberParams } from '@/app/api/_core/utils'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
 type Params = {
   city: string
+  excludeTopicSlug?: string
+  top?: number
 }
 
 const getSearchParams = (searchParams: URLSearchParams): Params => {
@@ -20,6 +23,16 @@ const getSearchParams = (searchParams: URLSearchParams): Params => {
     throw new Error(`invalid parameter, city is required.`)
   }
   res.city = city
+
+  const excludeTopicSlug = searchParams.get('exclude')
+  if (excludeTopicSlug) {
+    res.excludeTopicSlug = excludeTopicSlug
+  }
+
+  const top = getNumberParams(searchParams, 'top', false)
+  if (top) {
+    res.top = top
+  }
 
   return res as Params
 }
@@ -51,16 +64,19 @@ export async function GET(
   }
 
   try {
-    const { city } = parsedParams
+    const { city, excludeTopicSlug, top } = parsedParams
     const topics = await fetchTopicsOfACouncilor({
       councilorSlug: slug,
       city,
+      excludeTopicSlug,
+      top,
     })
     return NextResponse.json(
       responseHelper.success(topics),
       getCachedSuccessStatus()
     )
   } catch (err) {
+    console.log(err)
     logger.error({ errMsg: err }, 'failed to fetch topics of a councilor')
     return NextResponse.json(responseHelper.error(err as Error), {
       status: HttpStatus.INTERNAL_SERVER_ERROR,

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import type { FC } from 'react'
 import styled from 'styled-components'
 // util
 import { openFeedback } from '@/utils/feedback'
@@ -7,7 +7,7 @@ import { openFeedback } from '@/utils/feedback'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: row;
   padding: 24px;
@@ -24,7 +24,7 @@ export const Container = styled.div`
     width: 100%;
   `}
 `
-export const Feedback = styled.span`
+const Feedback = styled.span`
   color: ${colorGrayscale.gray800};
   text-decoration: underline;
   text-decoration-color: ${colorGrayscale.gray800};
@@ -32,18 +32,20 @@ export const Feedback = styled.span`
   cursor: pointer;
 `
 
-const TopicFeedback: React.FC = () => {
+type ValidEventName = 'topic' | 'legislator' | 'councilor' | 'council-topic'
+type FeedbackBlockProps = {
+  eventName: ValidEventName
+}
+const FeedbackBlock: FC<FeedbackBlockProps> = ({ eventName }) => {
   return (
     <Container>
       <span>
         發現什麼問題嗎？透過
-        <Feedback onClick={() => openFeedback('topic/legislator')}>
-          問題回報
-        </Feedback>
+        <Feedback onClick={() => openFeedback(eventName)}>問題回報</Feedback>
         告訴我們，一起打造更完善的國會觀測站！
       </span>
     </Container>
   )
 }
 
-export default TopicFeedback
+export default FeedbackBlock
