@@ -2,6 +2,7 @@ import { keystoneFetch } from '@/app/api/_graphql/keystone'
 // type
 import type { CouncilDistrict } from '@/types/council'
 import type { CouncilTopicFromRes } from '@/types/council-topic'
+import type { SitemapItemWithCity } from '@/types'
 // lodash
 import { get } from 'lodash'
 const _ = {
@@ -133,4 +134,44 @@ export const fetchTopicBySlug = async ({
       `Failed to fetch council topic for slug: ${slug} in district ${districtSlug}, err: ${err}`
     )
   }
+}
+
+/**
+ * fetch all council topics slug for sitemap
+ */
+export const fetchAllCouncilTopicSlug = async (): Promise<
+  SitemapItemWithCity[]
+> => {
+  const query = `
+    query GetAllTopicsSlug($take: Int, $skip: Int) {
+      councilTopics(take: $take, skip: $skip) {
+        slug
+        updatedAt
+        city
+      }
+    }
+  `
+  const batchSize = 500
+  let allTopics: SitemapItemWithCity[] = []
+  let skip = 0
+  let fetched = 0
+
+  while (true) {
+    const variables = { take: batchSize, skip }
+    try {
+      const data = await keystoneFetch<{
+        councilTopics: SitemapItemWithCity[]
+      }>(JSON.stringify({ query, variables }), false)
+      const batch = data?.data?.councilTopics ?? []
+      allTopics = allTopics.concat(batch)
+      fetched = batch.length
+      if (fetched < batchSize) break
+      skip += batchSize
+    } catch (error) {
+      throw new Error(
+        `Failed to fetch council topics slug batch, skip: ${skip}, err: ${error}`
+      )
+    }
+  }
+  return allTopics
 }

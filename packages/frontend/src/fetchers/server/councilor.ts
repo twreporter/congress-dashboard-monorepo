@@ -1,11 +1,14 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
-// type
+// utils
+import { isValidCouncil } from '@/utils/council'
+// types
 import type { CouncilDistrict } from '@/types/council'
 import type {
   CouncilorMemberMeta,
   CouncilorMemberData,
 } from '@/types/councilor'
 import type { CouncilTopicOfBillData } from '@/types/council-topic'
+import type { SitemapItemWithCity } from '@/types'
 // lodash
 import { get } from 'lodash'
 const _ = {
@@ -188,4 +191,60 @@ export const fetchCouncilorTopicsOfBill = async ({
       `Failed to fetch councilor topics of bill for slug: ${slug} in district ${districtSlug}, err: ${err}`
     )
   }
+}
+
+/**
+ * fetch all councilors slug for sitemap
+ */
+type CouncilorFromRes = {
+  updatedAt: string
+  city: string
+  councilor: {
+    slug: string
+  }
+}
+export const fetchAllCouncilorSlug = async (): Promise<
+  SitemapItemWithCity[]
+> => {
+  const query = `
+    query GetAllCouncilorSlug($take: Int, $skip: Int) {
+      councilMembers(take: $take, skip: $skip) {
+        updatedAt
+        city
+        councilor {
+          slug
+        }
+      }
+    }
+  `
+  const batchSize = 500
+  let allCouncilors: SitemapItemWithCity[] = []
+  let skip = 0
+  let fetched = 0
+
+  while (true) {
+    const variables = { take: batchSize, skip }
+    try {
+      const data = await keystoneFetch<{
+        councilMembers: CouncilorFromRes[]
+      }>(JSON.stringify({ query, variables }), false)
+      const batch = data?.data?.councilMembers ?? []
+      const councilors = batch
+        .filter(({ city }) => isValidCouncil(city))
+        .map(({ councilor, city, ...res }) => ({
+          slug: councilor.slug,
+          city: city as CouncilDistrict,
+          ...res,
+        }))
+      allCouncilors = allCouncilors.concat(councilors)
+      fetched = batch.length
+      if (fetched < batchSize) break
+      skip += batchSize
+    } catch (error) {
+      throw new Error(
+        `Failed to fetch councilor slug batch, skip: ${skip}, err: ${error}`
+      )
+    }
+  }
+  return allCouncilors
 }
