@@ -1,5 +1,6 @@
 import React, { type FC } from 'react'
 import styled from 'styled-components'
+import Link from 'next/link'
 // types
 import type { RelatedLink } from '@/types/councilor'
 // components
@@ -52,10 +53,9 @@ const RelatedLinkBlock: FC<RelatedLinkProps> = ({ relatedLink }) => {
       <LinkList>
         {relatedLink.map(({ url, label }, index) => (
           <li key={`related-link-${index}`}>
-            <LinkButton
-              text={label}
-              onClick={() => window.open(url, '_blank')}
-            />
+            <Link href={url}>
+              <LinkButton text={label} />
+            </Link>
           </li>
         ))}
       </LinkList>
