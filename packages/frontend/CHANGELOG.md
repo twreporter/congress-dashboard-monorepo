@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.23](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.22...@twreporter/congress-dashboard-frontend@1.8.0-beta.23) (2025-12-29)
+
+### Bug Fixes
+
+- **frontend:** address review comments ([8d4c95e](https://github.com/twreporter/congress-dashboard-monorepo/commit/8d4c95e3e534294e5326727fd2cf52e34c64eb08))
+
+### Features
+
+- **frontend:** add council-topic page ([f0e5539](https://github.com/twreporter/congress-dashboard-monorepo/commit/f0e5539572e4f54b59c7934ba6c6f738df7e32c9))
+
 # [1.8.0-beta.22](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.21...@twreporter/congress-dashboard-frontend@1.8.0-beta.22) (2025-12-22)
 
 ### Bug Fixes
