@@ -25,7 +25,7 @@ const Title = styled.div`
   flex-direction: row;
   gap: 4px;
 `
-const LinkList = styled.ul`
+export const LinkList = styled.ul`
   list-style-position: inside;
   margin-top: 8px;
   ${mq.tabletAndBelow`
@@ -33,8 +33,7 @@ const LinkList = styled.ul`
     grid-template-columns: repeat(2, minmax(0, 1fr));  
   `}
 `
-const LinkItem = styled.li``
-const LinkButton = styled(TextButton)`
+export const LinkButton = styled(TextButton)`
   display: inline-flex;
 `
 
@@ -52,12 +51,12 @@ const RelatedLinkBlock: FC<RelatedLinkProps> = ({ relatedLink }) => {
       </Title>
       <LinkList>
         {relatedLink.map(({ url, label }, index) => (
-          <LinkItem key={`related-link-${index}`}>
+          <li key={`related-link-${index}`}>
             <LinkButton
               text={label}
               onClick={() => window.open(url, '_blank')}
             />
-          </LinkItem>
+          </li>
         ))}
       </LinkList>
     </Container>

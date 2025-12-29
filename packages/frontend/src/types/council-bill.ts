@@ -1,3 +1,5 @@
+import type { KeystoneImage } from '@/types'
+
 // todo: check summary type string | string[]
 export type BillFromRes = {
   slug: string
@@ -29,6 +31,17 @@ export type BillMeta = {
   date: string
   title: string
   summary: string
+}
+
+export type BillMetaWithCouncilorFromRes = BillMeta & {
+  councilMember: {
+    councilor: {
+      slug: string
+      name: string
+      image?: KeystoneImage
+      imageLink?: string
+    }
+  }[]
 }
 
 export type BillData = {
