@@ -24,8 +24,8 @@ const fetchTopicsOfACouncilor = async ({
   top,
 }: FetchTopicsOfACouncilorParams): Promise<CouncilTopicForFilter[]> => {
   const query = `
-    query CouncilTopics($where: CouncilTopicWhereInput!, $billCountWhere2: CouncilBillWhereInput!, $take: Int) {
-      councilTopics(where: $where, take: $take) {
+    query CouncilTopics($where: CouncilTopicWhereInput!, $billCountWhere2: CouncilBillWhereInput!) {
+      councilTopics(where: $where) {
         slug
         title
         billCount(where: $billCountWhere2)

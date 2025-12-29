@@ -72,16 +72,15 @@ const CouncilTopicPage: FC<TopicPageProps> = ({
             speechesCount={topic.billCount}
           />
           <TopicRelatedArticles
-            relatedArticles={topic.relatedTwreporterArticles}
+            relatedArticles={topic.relatedTwreporterArticle}
           />
           <RelatedTopicInSameCouncil
             districtSlug={councilMeeting.city}
             topics={topic.relatedCityCouncilTopic}
           />
           <RelatedTopicInElsewhere
-            districtSlug={councilMeeting.city}
             relatedCouncilTopic={topic.relatedCouncilTopic}
-            relatedLegilativeTopic={topic.relatedLegislativeTopic}
+            relatedLegislativeTopic={topic.relatedLegislativeTopic}
           />
           <FeedbackBlock eventName="council-topic" />
         </DesktopAside>
@@ -102,7 +101,7 @@ const CouncilTopicPage: FC<TopicPageProps> = ({
           </TopicListContainer>
           <Spacing $height={8} />
           <TopicRelatedArticles
-            relatedArticles={topic?.relatedTwreporterArticles}
+            relatedArticles={topic.relatedTwreporterArticle}
           />
           <Spacing $height={8} />
           <RelatedTopicInSameCouncil
@@ -111,9 +110,8 @@ const CouncilTopicPage: FC<TopicPageProps> = ({
           />
           <Spacing $height={8} />
           <RelatedTopicInElsewhere
-            districtSlug={councilMeeting.city}
             relatedCouncilTopic={topic.relatedCouncilTopic}
-            relatedLegilativeTopic={topic.relatedLegislativeTopic}
+            relatedLegislativeTopic={topic.relatedLegislativeTopic}
           />
           <Spacing $height={32} />
           <FeedbackBlock eventName="council-topic" />

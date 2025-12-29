@@ -109,7 +109,12 @@ export const fetchTopicBySlug = async ({
     },
   }
   const variables = {
-    where: cityCondition,
+    where: {
+      slug: {
+        equals: slug,
+      },
+      ...cityCondition,
+    },
     billWhere2: {
       councilMeeting: cityCondition,
     },

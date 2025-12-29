@@ -33,7 +33,7 @@ export type CouncilTopic = {
   title: string
   city: CouncilDistrict
   billCount: number
-  relatedTwreporterArticles?: {
+  relatedTwreporterArticle?: {
     slug: string
     type: RelatedType
   }[]
@@ -48,7 +48,7 @@ export type CouncilTopicFromRes = {
   city: string
   billCount: number
   bill: BillMetaWithCouncilorFromRes[]
-  relatedTwreporterArticles?: {
+  relatedTwreporterArticle?: {
     slug: string
     type: string
   }[]

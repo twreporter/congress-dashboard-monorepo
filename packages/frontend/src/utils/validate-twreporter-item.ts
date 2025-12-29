@@ -1,16 +1,12 @@
+import { VALID_TWREPORTER_TYPE } from '@/constants/related-twreporter-item'
 import type {
+  RelatedType,
   RelatedItem,
   RelatedItemFromRes,
 } from '@/types/related-twreporter-item'
 
-const validType = ['www-topic', 'www-article'] as const
-
-export type ValidTwreporterItemType = (typeof validType)[number]
-
-function isValidTwreporterItemType(
-  type: string
-): type is ValidTwreporterItemType {
-  return validType.includes(type as ValidTwreporterItemType)
+function isValidTwreporterItemType(type: string): type is RelatedType {
+  return VALID_TWREPORTER_TYPE.includes(type as RelatedType)
 }
 
 export function isValidTwreporterItem(

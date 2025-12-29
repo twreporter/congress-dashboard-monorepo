@@ -76,7 +76,6 @@ export async function GET(
       getCachedSuccessStatus()
     )
   } catch (err) {
-    console.log(err)
     logger.error({ errMsg: err }, 'failed to fetch topics of a councilor')
     return NextResponse.json(responseHelper.error(err as Error), {
       status: HttpStatus.INTERNAL_SERVER_ERROR,

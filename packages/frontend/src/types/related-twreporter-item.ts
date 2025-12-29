@@ -1,6 +1,6 @@
-import type { ValidTwreporterItemType } from '@/utils/validate-twreporter-item'
+import { VALID_TWREPORTER_TYPE } from '@/constants/related-twreporter-item'
 
-export type RelatedType = ValidTwreporterItemType
+export type RelatedType = (typeof VALID_TWREPORTER_TYPE)[number]
 
 export type RelatedItemFromRes = {
   type: string

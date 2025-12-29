@@ -20,7 +20,7 @@ const getSearchParams = (searchParams: URLSearchParams): Params => {
   const res: Partial<Params> = {}
   const city = searchParams.get('city')
   if (!city) {
-    throw new Error(`invalid parameter, city & exclude is required.`)
+    throw new Error(`invalid parameter, city is required.`)
   }
   res.city = city
 

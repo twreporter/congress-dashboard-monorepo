@@ -101,8 +101,8 @@ export const useTopicData = (
       title: topicData.title,
       city: topicData.city as CouncilDistrict,
       billCount: topicData.billCount,
-      relatedTwreporterArticles: getRelatedTwreporterItems(
-        topicData.relatedTwreporterArticles
+      relatedTwreporterArticle: getRelatedTwreporterItems(
+        topicData.relatedTwreporterArticle
       ),
       relatedCityCouncilTopic: topicData.relatedCityCouncilTopic,
       relatedCouncilTopic: getRelatedTopicFromOtherCity(
@@ -129,6 +129,12 @@ export const useTopicData = (
           })
         } else {
           billsByCouncilor[slug].push(bill)
+          const existingCouncilor = councilors.find(
+            (councilorWithCount) => councilorWithCount.slug === slug
+          )
+          if (existingCouncilor) {
+            existingCouncilor.count += 1
+          }
         }
       })
     })
