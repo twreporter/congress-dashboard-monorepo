@@ -8,7 +8,7 @@ import { renderElement } from '@twreporter/react-article-components/lib/componen
 // constants
 import { FontSize, FontSizeOffset } from '@/components/speech'
 // types
-import { Content } from '@/components/about'
+import type { Content } from '@/components/about'
 
 const Container = styled.section<{ $fontSizeOffset: number }>`
   display: block;
@@ -86,7 +86,15 @@ const AboutPageContent: React.FC<AboutPageContentProps> = ({
             </InfoBoxContainer>
           )
         } else {
-          return <NoPaddingX key={item.id}>{renderElement(item)}</NoPaddingX>
+          if (item.type === 'header-one') {
+            return (
+              <NoPaddingX key={item.id} id={item.content[0]}>
+                {renderElement(item)}
+              </NoPaddingX>
+            )
+          } else {
+            return <NoPaddingX key={item.id}>{renderElement(item)}</NoPaddingX>
+          }
         }
       })}
     </Container>
