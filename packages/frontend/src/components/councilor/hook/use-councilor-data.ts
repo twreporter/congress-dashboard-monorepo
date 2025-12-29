@@ -1,4 +1,6 @@
 import { useMemo } from 'react'
+// @twreporter
+import { getDistrictLabel } from '@twreporter/congress-dashboard-shared/lib/constants/city-district'
 // type
 import type {
   CouncilorMemberData,
@@ -49,7 +51,7 @@ const useCouncilorData = (
           councilorData,
           'administrativeDistrict',
           []
-        ),
+        ).map((district: string) => getDistrictLabel(city, district) || ''),
         note: _.get(councilorData, 'note'),
         tooltip: _.get(councilorData, 'tooltip'),
         proposalSuccessCount: _.get(councilorData, 'proposalSuccessCount', 0),

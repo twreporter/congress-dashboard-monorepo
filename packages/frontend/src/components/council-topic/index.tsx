@@ -7,7 +7,7 @@ import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/
 import TopicList from '@/components/council-topic/topic-list'
 import RelatedTopicInSameCouncil from '@/components/council-topic/related-topic-in-same-council'
 import RelatedTopicInElsewhere from '@/components/council-topic/related-topic-in-elsewhere'
-import TopicStatistics from '@/components/topic/topic-statistics'
+import Statistics from '@/components/council-topic/statistics'
 import TopicRelatedArticles from '@/components/topic/topic-related-articles'
 import FeedbackBlock from '@/components/layout/feedback-block'
 import ContentPageLayout from '../layout/content-page-without-filter-layout'
@@ -67,9 +67,9 @@ const CouncilTopicPage: FC<TopicPageProps> = ({
           </TopicListContainer>
         </DesktopList>
         <DesktopAside>
-          <TopicStatistics
-            legislatorCount={councilorCount}
-            speechesCount={topic.billCount}
+          <Statistics
+            councilorCount={councilorCount}
+            billCount={topic.billCount}
           />
           <TopicRelatedArticles
             relatedArticles={topic.relatedTwreporterArticle}
@@ -85,9 +85,9 @@ const CouncilTopicPage: FC<TopicPageProps> = ({
           <FeedbackBlock eventName="council-topic" />
         </DesktopAside>
         <TabletAndBelow>
-          <TopicStatistics
-            legislatorCount={councilorCount}
-            speechesCount={topic.billCount}
+          <Statistics
+            councilorCount={councilorCount}
+            billCount={topic.billCount}
           />
           <Spacing $height={32} />
           <TopicListContainer>
