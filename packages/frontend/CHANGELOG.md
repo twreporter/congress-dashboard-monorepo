@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.2...@twreporter/congress-dashboard-frontend@1.9.0-rc.0) (2025-12-29)
+
+### Bug Fixes
+
+- **frontend:** address comments ([cd053e9](https://github.com/twreporter/congress-dashboard-monorepo/commit/cd053e97af5cb4acd6f226d5171c2a02f6466ece))
+
+### Features
+
+- **frontend:** add social media icons component and update footer links ([c20e25f](https://github.com/twreporter/congress-dashboard-monorepo/commit/c20e25fb967ec907d077a8f8386a053891466772))
+
+## [1.8.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.2-rc.0...@twreporter/congress-dashboard-frontend@1.8.2) (2025-12-15)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 ## [1.8.2-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.1...@twreporter/congress-dashboard-frontend@1.8.2-rc.0) (2025-12-15)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
