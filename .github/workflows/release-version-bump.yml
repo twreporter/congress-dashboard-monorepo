@@ -1,13 +1,11 @@
 name: Release Version Bump
 
 on:
-  push:
-    branches:
-      - release
+  workflow_call:
+    # Called by publish-switch.yml for OIDC trusted publishing
 
 jobs:
   version-bump:
-    if: github.repository == 'twreporter/congress-dashboard-monorepo'
     runs-on: ubuntu-latest
     
     steps:
@@ -21,6 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.17.1'
+          registry-url: 'https://registry.npmjs.org'
       
       - name: Enable Corepack
         run: corepack enable
@@ -44,15 +43,8 @@ jobs:
       - name: Get branch name
         id: branch
         run: echo "name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
-      
-      - name: Authenticate to npm
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Version and publish packages (shared and cli only)
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           yarn lerna publish \
             --conventional-commits \
