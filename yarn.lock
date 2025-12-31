@@ -7757,17 +7757,10 @@ __metadata:
     "@storybook/nextjs": "npm:^8.5.1"
     "@storybook/react": "npm:^8.5.1"
     "@storybook/test": "npm:^8.5.1"
-<<<<<<< Updated upstream
     "@twreporter/congress-dashboard-shared": "npm:^0.1.0"
-    "@twreporter/core": "npm:^1.28.0-rc.0"
-    "@twreporter/react-article-components": "npm:^2.7.1-rc.1"
-    "@twreporter/react-components": "npm:^9.10.0-rc.1"
-=======
-    "@twreporter/congress-dashboard-shared": "npm:^0.2.0-beta.5"
     "@twreporter/core": "npm:^1.28.0"
     "@twreporter/react-article-components": "npm:^2.7.1"
     "@twreporter/react-components": "npm:^9.10.0"
->>>>>>> Stashed changes
     "@types/lodash": "npm:^4"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"
@@ -7802,25 +7795,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-<<<<<<< Updated upstream
-"@twreporter/core@npm:^1.28.0-rc.0":
-  version: 1.28.0-rc.0
-  resolution: "@twreporter/core@npm:1.28.0-rc.0"
-=======
 "@twreporter/core@npm:^1.28.0":
   version: 1.28.0
   resolution: "@twreporter/core@npm:1.28.0"
->>>>>>> Stashed changes
   dependencies:
     lodash: "npm:^4.0.0"
     prop-types: "npm:^15.0.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-<<<<<<< Updated upstream
-  checksum: 10c0/349552e8122dd0e3a2a38dea6614123e31bab40f6d319b1d878cc63db81dd0804e766a63e3daaa63bd4fa9a545295735c160af5c7afe9b6b86c542031d07337d
-=======
   checksum: 10c0/0bf73ce222f9b6fc511c335b31cfcedee1259caf9257501b209acd3b0ab313c2fa584edd5748de6049db0dce340181ac118525505bf83f116f3baacf0b247cd9
->>>>>>> Stashed changes
   languageName: node
   linkType: hard
 
@@ -7833,16 +7816,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< Updated upstream
-"@twreporter/react-article-components@npm:^2.7.1-rc.1":
-  version: 2.7.1-rc.1
-  resolution: "@twreporter/react-article-components@npm:2.7.1-rc.1"
-  dependencies:
-    "@twreporter/core": "npm:^1.28.0-rc.0"
-    "@twreporter/react-components": "npm:^9.10.0-rc.1"
-    "@twreporter/redux": "npm:^8.4.2-rc.0"
-    "@twreporter/universal-header": "npm:^3.2.1-rc.1"
-=======
 "@twreporter/react-article-components@npm:^2.7.1":
   version: 2.7.1
   resolution: "@twreporter/react-article-components@npm:2.7.1"
@@ -7851,7 +7824,6 @@ __metadata:
     "@twreporter/react-components": "npm:^9.10.0"
     "@twreporter/redux": "npm:^8.4.2"
     "@twreporter/universal-header": "npm:^3.2.1"
->>>>>>> Stashed changes
     howler: "npm:^2.2.3"
     isomorphic-dompurify: "npm:^2.26.0"
     lodash: "npm:^4.17.11"
@@ -7863,18 +7835,6 @@ __metadata:
     smooth-scroll: "npm:16.1.3"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-<<<<<<< Updated upstream
-  checksum: 10c0/beb64a0ff7f8d63095d86876ffd809a6882fe7f2d4b30081c3d9d9ce3472c05a6de4492ec457851677590130d2112a9dff306fbffa8749d0727e7cf47ce854fb
-  languageName: node
-  linkType: hard
-
-"@twreporter/react-components@npm:^9.10.0-rc.1":
-  version: 9.10.0-rc.1
-  resolution: "@twreporter/react-components@npm:9.10.0-rc.1"
-  dependencies:
-    "@twreporter/core": "npm:^1.28.0-rc.0"
-    "@twreporter/redux": "npm:^8.4.2-rc.0"
-=======
   checksum: 10c0/0ad8d00330aa56abdabfbfef7ccd75fa2b8f8c42c38b19a710dd0dbfabd7612c08374f0cf9f968cd574efdbc2c5a4b6d745b37a7f6dc248f6530b16a2ff4d3c1
   languageName: node
   linkType: hard
@@ -7885,7 +7845,6 @@ __metadata:
   dependencies:
     "@twreporter/core": "npm:^1.28.0"
     "@twreporter/redux": "npm:^8.4.2"
->>>>>>> Stashed changes
     fontfaceobserver-es: "npm:^3.3.3"
     hoist-non-react-statics: "npm:^2.3.1"
     lodash: "npm:^4.0.0"
@@ -7898,18 +7857,6 @@ __metadata:
     react-waypoint: "npm:^10.3.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-<<<<<<< Updated upstream
-  checksum: 10c0/6670ee76e4c85bd278cf8b0ef1decea549c50f7e5fb88c85e8ce9fbaf51c0aeb6b99019f6c4e81e3f2b6268d60b6bfc1d8192dc38c20e2984472714ac3d0bcc8
-  languageName: node
-  linkType: hard
-
-"@twreporter/redux@npm:^8.4.2-rc.0":
-  version: 8.4.2-rc.0
-  resolution: "@twreporter/redux@npm:8.4.2-rc.0"
-  dependencies:
-    "@reduxjs/toolkit": "npm:^2.2.5"
-    "@twreporter/core": "npm:^1.28.0-rc.0"
-=======
   checksum: 10c0/25bb71665f7db4dd547f50b8b53b980f43408b1805ec0eef0efc8652bb7a0e165686b459a1aef227e2f88632195beb75f569a526f4bcf50f7bf298a00b69a300
   languageName: node
   linkType: hard
@@ -7920,7 +7867,6 @@ __metadata:
   dependencies:
     "@reduxjs/toolkit": "npm:^2.2.5"
     "@twreporter/core": "npm:^1.28.0"
->>>>>>> Stashed changes
     axios: "npm:^0.19.0"
     es6-error: "npm:^4.0.2"
     humps: "npm:^0.6.0"
@@ -7932,20 +7878,6 @@ __metadata:
     react: "npm:^18.2.0"
     redux: "npm:^5.0.1"
     redux-thunk: "npm:^3.1.0"
-<<<<<<< Updated upstream
-  checksum: 10c0/14f87792d768d2dcd5c2ead13dd47f75d659843d79447f25a449e7b9c0ac24b7b88f1551b7ddf9d958b428f15b0ed12d103ab2a0a6f8b13849c5d12d492bac8c
-  languageName: node
-  linkType: hard
-
-"@twreporter/universal-header@npm:^3.2.1-rc.1":
-  version: 3.2.1-rc.1
-  resolution: "@twreporter/universal-header@npm:3.2.1-rc.1"
-  dependencies:
-    "@material-symbols/svg-400": "npm:^0.27.2"
-    "@reduxjs/toolkit": "npm:^2.2.5"
-    "@twreporter/core": "npm:^1.28.0-rc.0"
-    "@twreporter/react-components": "npm:^9.10.0-rc.1"
-=======
   checksum: 10c0/853789eb74d69fa78635f2c866362106111773dc7033fb3086893f420989f53cd3962aaac8233695bfb65a7404003bb414850634b6ed1841ddadee7a3492c11e
   languageName: node
   linkType: hard
@@ -7958,7 +7890,6 @@ __metadata:
     "@reduxjs/toolkit": "npm:^2.2.5"
     "@twreporter/core": "npm:^1.28.0"
     "@twreporter/react-components": "npm:^9.10.0"
->>>>>>> Stashed changes
     lodash: "npm:^4.17.11"
     prop-types: "npm:^15.6.2"
     querystring: "npm:^0.2.0"
@@ -7970,11 +7901,7 @@ __metadata:
     redux-thunk: "npm:^3.1.0"
     styled-components: "npm:^6.0.0"
     stylis: "npm:^4.0.0"
-<<<<<<< Updated upstream
-  checksum: 10c0/c845bd183a8a10e84d171d9ff5ed514bd09ac4558e3ce6a1d191f4ae386996ff9eed6c7251bf68ef47f605aa445958dafdc48e93236ae99b383e372071d5cac5
-=======
   checksum: 10c0/65d4e7328b365ac69c17c13ab1ea5c3d3d2cb64351001329782d0792922d0e50208405d1c50f487e2c1900ea24314854e4a9dfe5c7aed1b555e7263ca053106a
->>>>>>> Stashed changes
   languageName: node
   linkType: hard
 
