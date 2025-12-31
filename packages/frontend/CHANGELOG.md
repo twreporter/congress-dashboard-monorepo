@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.9.0-rc.0...@twreporter/congress-dashboard-frontend@1.9.0-rc.1) (2025-12-31)
+
+### Bug Fixes
+
+- **frontend:** fix packages.json & yarn.lock ([260a298](https://github.com/twreporter/congress-dashboard-monorepo/commit/260a2981e8005c7277231ff0d017892648a2d30f))
+
 # [1.9.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.2...@twreporter/congress-dashboard-frontend@1.9.0-rc.0) (2025-12-29)
 
 ### Bug Fixes
