@@ -75,7 +75,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     if (!topic || !councilMeeting) {
       notFound()
     }
-    console.log(councilMeeting)
 
     return (
       <CouncilTopicPage topicData={topic} councilMeeting={councilMeeting} />
