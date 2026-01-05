@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0-beta.10](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.0-beta.9...@twreporter/congress-dashboard-cms@1.5.0-beta.10) (2026-01-05)
+
+### Bug Fixes
+
+- **cms:** prevent self-referencing council topics import ([f6f97ef](https://github.com/twreporter/congress-dashboard-monorepo/commit/f6f97efdd69bd76ba5d5605e749612df4b9ce345))
+
 # [1.5.0-beta.9](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.0-beta.8...@twreporter/congress-dashboard-cms@1.5.0-beta.9) (2025-12-17)
 
 ### Bug Fixes
