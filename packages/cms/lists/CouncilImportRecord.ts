@@ -310,6 +310,11 @@ const validateListSpecificData: Record<
         const { councilTopic_slug, relatedCouncilTopic_slug } = item
 
         for (const relatedCouncilTopicSlug of relatedCouncilTopic_slug) {
+          if (relatedCouncilTopicSlug === councilTopic_slug) {
+            validationErrors.push(
+              `第 ${rowNum} 筆資料: 相關縣市議題不能與本身議題相同`
+            )
+          }
           const relatedCouncilTopic =
             await context.prisma.CouncilTopic.findFirst({
               where: { slug: relatedCouncilTopicSlug },
@@ -341,6 +346,11 @@ const validateListSpecificData: Record<
         const { councilTopic_slug, relatedCityCouncilTopic_slug } = item
 
         for (const relatedCityCouncilTopicSlug of relatedCityCouncilTopic_slug) {
+          if (relatedCityCouncilTopicSlug === councilTopic_slug) {
+            validationErrors.push(
+              `第 ${rowNum} 筆資料: 相關同縣市議題不能與本身議題相同`
+            )
+          }
           const relatedCityCouncilTopic =
             await context.prisma.CouncilTopic.findFirst({
               where: { slug: relatedCityCouncilTopicSlug },
