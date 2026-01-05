@@ -27,7 +27,8 @@ const Title = styled.div`
   gap: 4px;
 `
 export const LinkList = styled.ul`
-  list-style-position: inside;
+  list-style-position: outside;
+  padding-left: 1em;
   margin-top: 8px;
   ${mq.tabletAndBelow`
     display: grid;
@@ -35,7 +36,10 @@ export const LinkList = styled.ul`
   `}
 `
 export const LinkButton = styled(TextButton)`
-  display: inline-flex;
+  display: inline;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  margin: 0;
 `
 
 type RelatedLinkProps = {

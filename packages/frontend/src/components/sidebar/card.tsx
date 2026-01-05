@@ -132,11 +132,15 @@ const Content = styled(P1)`
   color: ${colorGrayscale.gray800};
   display: contents !important;
 `
-const More = styled.span`
+export const LinkText = styled.span`
   color: ${colorSupportive.heavy};
   display: inline-block;
   text-decoration: underline;
   text-decoration-color: ${colorGrayscale.gray300};
+
+  &:hover {
+    text-decoration-color: ${colorGrayscale.gray300};
+  }
 `
 
 type CardType = 'speech' | 'bill'
@@ -172,7 +176,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
       <Content>
         {`${parsedSummary}（`}
         <Link href={link}>
-          <More>{'閱讀更多'}</More>
+          <LinkText>{'閱讀更多'}</LinkText>
         </Link>
         {'）'}
       </Content>

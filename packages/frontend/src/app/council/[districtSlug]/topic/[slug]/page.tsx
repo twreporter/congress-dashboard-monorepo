@@ -8,7 +8,7 @@ import {
   fetchATopicName,
   fetchTopicBySlug,
 } from '@/fetchers/server/council-topic'
-import { fetchLatestMeetingTermOfACity } from '@/fetchers/server/council-meeting'
+import { fetchLatestCouncilMeetingOfACity } from '@/fetchers/server/council-meeting'
 // utils
 import { isValidCouncil } from '@/utils/council'
 // components
@@ -68,16 +68,12 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       notFound()
     }
 
-    const [topic, term] = await Promise.all([
+    const [topic, councilMeeting] = await Promise.all([
       fetchTopicBySlug({ slug, districtSlug }),
-      fetchLatestMeetingTermOfACity({ city: districtSlug }),
+      fetchLatestCouncilMeetingOfACity({ city: districtSlug }),
     ])
-    if (!topic || term === -1) {
+    if (!topic || !councilMeeting) {
       notFound()
-    }
-    const councilMeeting = {
-      city: districtSlug,
-      term,
     }
 
     return (

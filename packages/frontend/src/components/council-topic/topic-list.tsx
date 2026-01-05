@@ -39,7 +39,7 @@ import { FilterMask, FilterBox } from '@/components/legislator/legislator-list'
 
 const maxTabs = 5
 const mapToTabItems = (items: TabProps[]): TabProps[] =>
-  items.map((item) => ({ ...item, showAvatar: false }))
+  items.map((item) => ({ ...item, showAvatar: true }))
 
 type TopicListProps = {
   districtSlug: CouncilDistrict
