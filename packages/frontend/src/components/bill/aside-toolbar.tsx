@@ -23,7 +23,7 @@ const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 const Container = styled.div`
   height: 100%;
-  margin: 80px 0;
+  margin-top: 80px;
 `
 
 type AsideToolbarProps = {

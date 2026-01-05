@@ -60,7 +60,9 @@ const TabletAndBelowWithFlex = styled(TabletAndBelow)`
   `}
 `
 const LeadingContainerWithSeparationLine = styled(LeadingContainer)`
-  border-bottom: 1px solid ${colorGrayscale.gray300};
+  ${mq.desktopAndAbove`
+    border-bottom: 1px solid ${colorGrayscale.gray300};
+  `}
   padding-bottom: 40px;
 `
 

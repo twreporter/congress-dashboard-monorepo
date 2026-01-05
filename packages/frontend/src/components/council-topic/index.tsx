@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, type FC } from 'react'
+import React, { useEffect, useState, useMemo, type FC } from 'react'
 // @twreporter
 import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
@@ -20,16 +20,19 @@ import {
 } from '@/components/topic/styles'
 //  types
 import type { CouncilTopicFromRes } from '@/types/council-topic'
-import type { CouncilDistrict } from '@/types/council'
+import type { CouncilMeeting } from '@/types/council-meeting'
+// utils
+import { formatDate } from '@/utils/date-formatters'
 // custom hooks
 import useTopicData from '@/components/council-topic/hook/use-topic-data'
 
 type TopicPageProps = {
   topicData: CouncilTopicFromRes
-  councilMeeting: {
-    city: CouncilDistrict
-    term: number
-  }
+  councilMeeting: CouncilMeeting
+}
+
+const getDurationString = (start: Date) => {
+  return `(${formatDate(start, 'YYYY/MM')}~)`
 }
 
 const CouncilTopicPage: FC<TopicPageProps> = ({
@@ -47,14 +50,17 @@ const CouncilTopicPage: FC<TopicPageProps> = ({
     setIsLoading(false)
   }, [councilorCount, councilors, billsByCouncilor])
 
+  const councilMeetingText = useMemo(
+    () =>
+      `${CITY_LABEL[councilMeeting.city]}議會 | 第${
+        councilMeeting.term
+      }屆 ${getDurationString(councilMeeting.startTime)}`,
+    [councilMeeting]
+  )
+
   return (
     <>
-      <ContentPageLayout
-        title={pageTitle}
-        subtitle={`${CITY_LABEL[councilMeeting.city]}議會 | 第${
-          councilMeeting.term
-        }屆`}
-      >
+      <ContentPageLayout title={pageTitle} subtitle={councilMeetingText}>
         <DesktopList>
           <TopicListContainer>
             <TopicList
