@@ -21,18 +21,12 @@ import {
 //  types
 import type { CouncilTopicFromRes } from '@/types/council-topic'
 import type { CouncilMeeting } from '@/types/council-meeting'
-// utils
-import { formatDate } from '@/utils/date-formatters'
 // custom hooks
 import useTopicData from '@/components/council-topic/hook/use-topic-data'
 
 type TopicPageProps = {
   topicData: CouncilTopicFromRes
   councilMeeting: CouncilMeeting
-}
-
-const getDurationString = (start: Date) => {
-  return `(${formatDate(start, 'YYYY/MM')}~)`
 }
 
 const CouncilTopicPage: FC<TopicPageProps> = ({
@@ -51,10 +45,7 @@ const CouncilTopicPage: FC<TopicPageProps> = ({
   }, [councilorCount, councilors, billsByCouncilor])
 
   const councilMeetingText = useMemo(
-    () =>
-      `${CITY_LABEL[councilMeeting.city]}議會 | 第${
-        councilMeeting.term
-      }屆 ${getDurationString(councilMeeting.startTime)}`,
+    () => `${CITY_LABEL[councilMeeting.city]}議會 | 第${councilMeeting.term}屆`,
     [councilMeeting]
   )
 

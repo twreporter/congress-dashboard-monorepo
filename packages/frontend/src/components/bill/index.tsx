@@ -62,8 +62,8 @@ const TabletAndBelowWithFlex = styled(TabletAndBelow)`
 const LeadingContainerWithSeparationLine = styled(LeadingContainer)`
   ${mq.desktopAndAbove`
     border-bottom: 1px solid ${colorGrayscale.gray300};
+    padding-bottom: 40px;
   `}
-  padding-bottom: 40px;
 `
 
 export enum FontSize {
