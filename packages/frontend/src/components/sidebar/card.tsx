@@ -139,7 +139,7 @@ export const LinkText = styled.span`
   text-decoration-color: ${colorGrayscale.gray300};
 
   &:hover {
-    text-decoration-color: ${colorGrayscale.gray300};
+    text-decoration-color: ${colorSupportive.heavy};
   }
 `
 

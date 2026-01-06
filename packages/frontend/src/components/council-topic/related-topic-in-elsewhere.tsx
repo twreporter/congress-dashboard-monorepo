@@ -19,10 +19,14 @@ import type {
 } from '@/types/council-topic'
 
 const LinkBlock = styled(LinkList)<{ $showAll: boolean }>`
-  margin-top: 0;
+  margin-top: 0 !important;
   ${mq.mobileOnly`
-    grid-template-columns: repeat(1, minmax(0, 1fr));  
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;  
   `}
+
+  a {
+    text-decoration: none;
+  }
 
   ${(props) =>
     props.$showAll
