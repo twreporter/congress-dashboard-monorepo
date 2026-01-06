@@ -14,7 +14,7 @@ import {
 import { FontSize } from '@/components/speech'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-function changeFontSizeToPct(fontSize: FontSize): string {
+export function changeFontSizeToPct(fontSize: FontSize): string {
   switch (fontSize) {
     case FontSize.MEDIUM: {
       return '110%'
@@ -29,12 +29,12 @@ function changeFontSizeToPct(fontSize: FontSize): string {
   }
 }
 
-const Container = styled.div<{ $forAboutPage?: boolean }>`
+export const Container = styled.div<{ $forAboutPage?: boolean }>`
   height: 100%;
   margin: ${(props) => (props.$forAboutPage ? '0' : '80px 0')};
 `
 
-const ToolsContainer = styled.div`
+export const ToolsContainer = styled.div`
   position: sticky;
   top: 40%;
   display: flex;
@@ -44,7 +44,7 @@ const ToolsContainer = styled.div`
   align-items: center;
 `
 
-const iconBlockCSS = css`
+export const iconBlockCSS = css`
   position: relative;
   cursor: pointer;
   svg {
@@ -71,7 +71,7 @@ const iconBlockCSS = css`
   }
 `
 
-const TextIconBlock = styled.div<{ $currentFontSize: FontSize }>`
+export const TextIconBlock = styled.div<{ $currentFontSize: FontSize }>`
   ${iconBlockCSS}
   &::after {
     content: '字級大小${(props) =>
@@ -79,14 +79,21 @@ const TextIconBlock = styled.div<{ $currentFontSize: FontSize }>`
   }
 `
 
-const PrintIconBlock = styled.div`
+export const PrintIconBlock = styled.div`
   ${iconBlockCSS}
   &::after {
     content: '列印';
   }
 `
 
-const ShareIconBlock = styled.div`
+export const SourceIconBlock = styled.div`
+  ${iconBlockCSS}
+  &::after {
+    content: '資料來源';
+  }
+`
+
+export const ShareIconBlock = styled.div`
   width: 30px;
   height: 30px;
   svg {
@@ -101,7 +108,7 @@ const ShareIconBlock = styled.div`
   display: flex;
 `
 
-const FBShareBT: React.FC = () => {
+export const FBShareBT: React.FC = () => {
   const appID = '962589903815787'
   const handleClick = () => {
     const currentURL = window.location.href
@@ -122,7 +129,7 @@ const FBShareBT: React.FC = () => {
   )
 }
 
-const TwitterShareBT: React.FC = () => {
+export const TwitterShareBT: React.FC = () => {
   const handleClick = () => {
     const currentURL = window.location.href
     const location =
@@ -141,7 +148,7 @@ const TwitterShareBT: React.FC = () => {
   )
 }
 
-const LineShareBT: React.FC = () => {
+export const LineShareBT: React.FC = () => {
   const handleClick = () => {
     const currentURL = window.location.href
     const location = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(

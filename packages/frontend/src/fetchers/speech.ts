@@ -1,13 +1,8 @@
 'use client'
 
 import useSWR from 'swr'
-
-export type speechData = {
-  slug: string
-  title: string
-  date: string
-  summary: string
-}
+// type
+import type { SpeechDataForSidebar } from '@/types/speech'
 
 type FetchSpeechesParams = {
   topicSlug: string
@@ -21,7 +16,7 @@ const fetchSpeechesOfALegislatorInATopic = async ({
   legislatorSlug,
   legislativeMeetingId,
   legislativeMeetingSessionIds,
-}: FetchSpeechesParams): Promise<speechData[]> => {
+}: FetchSpeechesParams): Promise<SpeechDataForSidebar[]> => {
   if (!legislatorSlug || !topicSlug) {
     return []
   }

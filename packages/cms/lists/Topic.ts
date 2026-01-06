@@ -58,7 +58,7 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT(),
   },
   ui: {
-    label: '議題',
+    label: '立法院議題',
     labelField: 'title',
     listView: {
       initialColumns: ['title', 'slug'],

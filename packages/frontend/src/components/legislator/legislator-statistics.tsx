@@ -8,7 +8,7 @@ import mq from '@twreporter/core/lib/utils/media-query'
 import { P1Gray800 } from '@/components/legislator/styles'
 import Tooltip from '@/components/dashboard/card/tooltip'
 
-const LegislatorStatisticsDiv = styled.div`
+export const StatisticContainer = styled.div`
   display: flex;
   flex-direction: row;
   background-color: ${colorGrayscale.white};
@@ -46,7 +46,7 @@ const CommitteeText = styled.div`
   line-height: 180%;
 `
 
-const Separator = styled.div`
+export const Separator = styled.div`
   width: 1px;
   background-color: ${colorGrayscale.gray300};
   margin-left: 56px;
@@ -66,7 +66,7 @@ const Separator = styled.div`
   `}
 `
 
-const CountInfoContainer = styled.div`
+export const CountInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 20px;
@@ -75,7 +75,7 @@ const CountInfoContainer = styled.div`
   `}
 `
 
-const CountInfo = styled.div`
+export const CountInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -87,13 +87,13 @@ const CountInfo = styled.div`
   `}
 `
 
-const CountInfoTitle = styled.div`
+export const CountInfoTitle = styled.div`
   display: flex;
   flex-direction: row;
   gap: 4px;
 `
 
-const CountInfoValue = styled.div<{ $isOverMaxNumber?: boolean }>`
+export const CountInfoValue = styled.div<{ $isOverMaxNumber?: boolean }>`
   height: 100%;
   display: flex;
   align-items: center;
@@ -129,7 +129,7 @@ const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
 }) => {
   const isOverMaxCount = proposalSuccessCount > 999 || meetingTermCount > 999
   return (
-    <LegislatorStatisticsDiv>
+    <StatisticContainer>
       <CurrentCommittee>
         <P1Gray800 text="本屆加入" />
         <Committees>
@@ -163,7 +163,7 @@ const LegislatorStatistics: React.FC<LegislatorStatisticsProps> = ({
           </CountInfoValue>
         </CountInfo>
       </CountInfoContainer>
-    </LegislatorStatisticsDiv>
+    </StatisticContainer>
   )
 }
 

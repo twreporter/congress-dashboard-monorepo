@@ -1,10 +1,16 @@
 export enum InternalRoutes {
-  Home = '/',
+  Home = '/congress',
   About = '/about',
-  Legislator = '/lawmaker',
-  Topic = '/topics',
-  Speech = '/a',
+  Legislator = '/congress/lawmaker',
+  Topic = '/congress/topic',
+  Speech = '/congress/a',
   Search = '/search',
+  Council = '/council',
+  Bill = '/council/bill',
+  // councilor routes: /council/<region>/lawmaker/:slug
+  Councilor = '/lawmaker',
+  // council topic routes: /council/<region>/topic/:slug
+  CouncilTopic = '/topic',
 }
 
 export enum ExternalRoutes {

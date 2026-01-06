@@ -1,8 +1,9 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 // next
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 // @twreporter
 import { MenuButton, PillButton } from '@twreporter/react-components/lib/button'
 import Divider from '@twreporter/react-components/lib/divider'
@@ -15,14 +16,14 @@ import {
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
-import {
-  COMMON_MENU_LINKS,
-  PILL_BUTTON_LINKS,
-} from '@/constants/navigation-link'
+import { PILL_BUTTON_LINKS } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
-import { ExternalRoutes } from '@/constants/routes'
+import { ExternalRoutes, InternalRoutes } from '@/constants/routes'
+import { options } from '@/components/header/constants'
 // utils
 import { openFeedback } from '@/utils/feedback'
+// components
+import DropdownMenu from '@/components/hamburger-menu/dropdown-menu'
 
 const Container = styled.div<{ $isOpen: boolean }>`
   flex-direction: column;
@@ -36,6 +37,7 @@ const Container = styled.div<{ $isOpen: boolean }>`
   padding: 16px 32px 0px 32px;
   transition: transform 300ms ease-in-out;
   transform: translateX(${(props) => (props.$isOpen ? '100%' : '-100%')});
+  overflow: scroll;
 `
 
 const DividerContainer = styled.div`
@@ -73,33 +75,66 @@ const SearchSection = styled.div`
   padding: 16px 0;
 `
 
-const menuLinks = COMMON_MENU_LINKS
 const pillButtonLinks = PILL_BUTTON_LINKS
 
 type HamburgerMenuProps = {
   isOpen: boolean
 }
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
+  const pathname = usePathname()
+  const [isDropdownActive, setIsDropdownActive] = useState(false)
+  const handleDropdownClick = () => {
+    setIsDropdownActive(!isDropdownActive)
+  }
   return (
     <Container $isOpen={isOpen}>
       <SearchSection>
         <AlgoliaInstantSearch variant={layoutVariants.Menu} />
       </SearchSection>
-      {menuLinks.map(({ text, href, target }, idx) => (
-        <MenuButton
-          key={`menu-btn-${idx}`}
-          paddingLeft={0}
-          paddingRight={0}
-          fontWeight={MenuButton.FontWeight.BOLD}
-          text={text}
-          link={{ to: href, target: target }}
-        />
-      ))}
+      <MenuButton
+        paddingLeft={0}
+        paddingRight={0}
+        fontWeight={MenuButton.FontWeight.BOLD}
+        text={'立法院'}
+        link={{ to: InternalRoutes.Home, target: '_self' }}
+      />
+      <DropdownMenu
+        label="地方議會"
+        options={options}
+        onClick={handleDropdownClick}
+        isActive={isDropdownActive}
+        currentValue={pathname || ''}
+      />
+      <MenuButton
+        paddingLeft={0}
+        paddingRight={0}
+        fontWeight={MenuButton.FontWeight.BOLD}
+        text={'關於觀測站'}
+        link={{ to: InternalRoutes.About, target: '_self' }}
+      />
       <DividerContainer>
         <Divider />
       </DividerContainer>
       <Title2 onClick={() => openFeedback('hamburger-menu')}>
         <P2 text={'意見回饋'} />
+      </Title2>
+      <Title2>
+        <Link
+          href={`${InternalRoutes.About}#「報導者觀測站」涵蓋多少資料？更新頻率為何？會再加入其他資料？`}
+          target={'_blank'}
+        >
+          <P2 text={'資料更新說明'} />
+        </Link>
+      </Title2>
+      <Title2>
+        <Link href={ExternalRoutes.AboutTwreporter} target={'_blank'}>
+          <P2 text={'關於我們'} />
+        </Link>
+      </Title2>
+      <Title2>
+        <Link href={ExternalRoutes.TwReporter} target={'_blank'}>
+          <P2 text={'前往《報導者》'} />
+        </Link>
       </Title2>
       <Title2>
         <Link href={ExternalRoutes.Medium} target={'_blank'}>

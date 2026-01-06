@@ -3,6 +3,95 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.26...@twreporter/congress-dashboard-frontend@1.10.0-rc.1) (2026-01-06)
+
+### Bug Fixes
+
+- **frontend:** address comments ([cd053e9](https://github.com/twreporter/congress-dashboard-monorepo/commit/cd053e97af5cb4acd6f226d5171c2a02f6466ece))
+- **frontend:** fix packages.json & yarn.lock ([260a298](https://github.com/twreporter/congress-dashboard-monorepo/commit/260a2981e8005c7277231ff0d017892648a2d30f))
+
+### Features
+
+- **frontend:** add social media icons component and update footer links ([c20e25f](https://github.com/twreporter/congress-dashboard-monorepo/commit/c20e25fb967ec907d077a8f8386a053891466772))
+
+# [1.10.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.9.0...@twreporter/congress-dashboard-frontend@1.10.0-rc.0) (2026-01-06)
+
+### Bug Fixes
+
+- **frontend:** address defects ([64d9f81](https://github.com/twreporter/congress-dashboard-monorepo/commit/64d9f8184886a170ddd4140928caafe182466928))
+- **frontend:** address defects ([09aa019](https://github.com/twreporter/congress-dashboard-monorepo/commit/09aa0196fd11b93fde09c8a28690e610add27fb5))
+- **frontend:** remove console log ([ae570ab](https://github.com/twreporter/congress-dashboard-monorepo/commit/ae570ab7c62929865877e88129f9e17999d31a56))
+- **frontend:** address build failed & defects ([58187cf](https://github.com/twreporter/congress-dashboard-monorepo/commit/58187cf56f4dbd7ef2ccc745dafeb0be874bee82))
+- **frontend:** separate council sitemap ([6208259](https://github.com/twreporter/congress-dashboard-monorepo/commit/6208259f09120aada11009acd6d95fd6cfbd7ab9))
+- **frontend:** address review comments ([8d4c95e](https://github.com/twreporter/congress-dashboard-monorepo/commit/8d4c95e3e534294e5326727fd2cf52e34c64eb08))
+- **frontend:** defects in councilor page ([5884603](https://github.com/twreporter/congress-dashboard-monorepo/commit/5884603985c45dfd6ce25169499360ade4c46ff8))
+- **frontend:** update naming ([b699892](https://github.com/twreporter/congress-dashboard-monorepo/commit/b6998929a503dcb44082b4cd4ac57d3f3a709d4b))
+- **frontend:** address defects in bill page ([60f9fcf](https://github.com/twreporter/congress-dashboard-monorepo/commit/60f9fcf1167c0989c454c11438daf031f6165380))
+- **frontend:** use short syntax for H2 tag ([44e2ecd](https://github.com/twreporter/congress-dashboard-monorepo/commit/44e2ecd1284f3d558c5e093b1647e0a3427522fa))
+- **frontend:** update bill & councilor meta ([2eac75e](https://github.com/twreporter/congress-dashboard-monorepo/commit/2eac75e8c013a893001a11a7c9096f6b41da3d2b))
+- **frontend:** add default value for card type ([d2d4e5d](https://github.com/twreporter/congress-dashboard-monorepo/commit/d2d4e5d1cc8b88de79563f7d76c26e56992e183e))
+- **frontend:** address defects in bill page ([a7abc21](https://github.com/twreporter/congress-dashboard-monorepo/commit/a7abc219d62ea7758d76df5d1ba88878574a9f8f))
+- **frontend:** address review comments ([fa6ffc5](https://github.com/twreporter/congress-dashboard-monorepo/commit/fa6ffc568e4f78eaa0e3cbc0f3dc6c8ee405ce99))
+- **frontend:** typo & meta wording ([c0ed2bb](https://github.com/twreporter/congress-dashboard-monorepo/commit/c0ed2bbfba0116c07d0e89e2fdcee316dafb478a))
+- **frontend:** update type `LegislatorForLawmaker` ([a18e74b](https://github.com/twreporter/congress-dashboard-monorepo/commit/a18e74b273b2fc800f41d7ea8f20563d0454f5f6))
+- **frontend:** remove useless import ([93de5f3](https://github.com/twreporter/congress-dashboard-monorepo/commit/93de5f3135c999bea90f0989ea260fd029e77920))
+- **frontend:** address review comments ([0c24a38](https://github.com/twreporter/congress-dashboard-monorepo/commit/0c24a3849b3facc14c47bf1ed6b5d36e880333ae))
+- **frontend:** add committee & its member type ([f708647](https://github.com/twreporter/congress-dashboard-monorepo/commit/f708647c0b23682bc64594921966b1984d41c1fa))
+- **frontend:** add legislative-meeting types ([8ab97ae](https://github.com/twreporter/congress-dashboard-monorepo/commit/8ab97ae673a32b32eff3cf007985a4145115bf5f))
+- **frontend:** add legislator related types file ([fb4478e](https://github.com/twreporter/congress-dashboard-monorepo/commit/fb4478efd5f2c806f89d1d5dd473b8c43e4622e3))
+- **frontend:** add party type file ([307967f](https://github.com/twreporter/congress-dashboard-monorepo/commit/307967f2079c92a146474679bd261e33e567235f))
+- **frontend:** add speech types file ([451a68e](https://github.com/twreporter/congress-dashboard-monorepo/commit/451a68e8f533a5b3f93db9a4b4b9d06201b8a522))
+- **frontend:** add topic types file ([22e1db1](https://github.com/twreporter/congress-dashboard-monorepo/commit/22e1db140b5cb0c743fc6d046297f42b591d0685))
+- **frontend:** migrate enum to const & add types ([065fbd9](https://github.com/twreporter/congress-dashboard-monorepo/commit/065fbd9cdb615759d5a01caa1fde8d80c3c1f591))
+- **frontend:** move related item type to /types ([fc09d47](https://github.com/twreporter/congress-dashboard-monorepo/commit/fc09d47467f7edd1901b0d40991a2f15bd43a6c7))
+- **frontend:** add council temporary page ([a49db9f](https://github.com/twreporter/congress-dashboard-monorepo/commit/a49db9f6971b9d814aa9d64c0a2a4a649d2157d0))
+- **frontend:** use transparent for test ([d7b42d9](https://github.com/twreporter/congress-dashboard-monorepo/commit/d7b42d9f904279f2b2446868d5fdfcdfa5e7d43c))
+- **frontend:** add more log info ([625b12b](https://github.com/twreporter/congress-dashboard-monorepo/commit/625b12b24355be86a0d88512116f2855c55984ce))
+- **frontend:** add id for header-one ([670c7d4](https://github.com/twreporter/congress-dashboard-monorepo/commit/670c7d4bbfc5a6bd5fecac75d92ae05afc254211))
+- **frontend:** address comment ([2d8bc51](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d8bc517106be5322362a94d8f94b1d5b92e8e55))
+- **frontend:** adjust dropdown item height and update tab selection logic ([bcea7cd](https://github.com/twreporter/congress-dashboard-monorepo/commit/bcea7cd304b6479b32e99b794577f2f01ec4e49e))
+- **frontend:** object spreading for logger type ([7648b35](https://github.com/twreporter/congress-dashboard-monorepo/commit/7648b35eec7a2100674c33563c80c03f495aaba4))
+- **frontend:** remove unused package ([89834d3](https://github.com/twreporter/congress-dashboard-monorepo/commit/89834d3016b92e037b4fb849c6590c7eaee670cd))
+- **frontend:** replace redirect by useRouter ([d5a714f](https://github.com/twreporter/congress-dashboard-monorepo/commit/d5a714f9431ce3712b4a1a927e6731ecefd9ca07))
+- **frontend:** selectContainerRef typo ([7b2b05d](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b2b05d8cc631b4404970b86e6a9ab19c4f5d571))
+- **frontend:** test original logger ([2dda580](https://github.com/twreporter/congress-dashboard-monorepo/commit/2dda580deb40f4c834f055eb9d96c0033653bb47))
+- **frontend:** type safety ([3ff9085](https://github.com/twreporter/congress-dashboard-monorepo/commit/3ff9085c0c40a52db3a252c3ea3a17986d0e78c4))
+- **frontend:** update pino packages ([0fd076f](https://github.com/twreporter/congress-dashboard-monorepo/commit/0fd076faacba8a4d9a1cc71ae74b5bf441163869))
+- **frontend:** update routing ([c332efd](https://github.com/twreporter/congress-dashboard-monorepo/commit/c332efd437da2213475448b0de5880be53074daa))
+- **frontend:** use common logger interface ([4d20347](https://github.com/twreporter/congress-dashboard-monorepo/commit/4d203475d768e9a1cea2f0981d8881767a704742))
+- **frontend:** use pino.pino ([e0e84c6](https://github.com/twreporter/congress-dashboard-monorepo/commit/e0e84c676d2bc8348255d7c9812b826c0b2a833c))
+- **frontend:** update routing ([c332efd](https://github.com/twreporter/congress-dashboard-monorepo/commit/c332efd437da2213475448b0de5880be53074daa))
+- **frontend:** test original logger ([2dda580](https://github.com/twreporter/congress-dashboard-monorepo/commit/2dda580deb40f4c834f055eb9d96c0033653bb47))
+- **frontend:** update pino packages ([0fd076f](https://github.com/twreporter/congress-dashboard-monorepo/commit/0fd076faacba8a4d9a1cc71ae74b5bf441163869))
+- **frontend:** use pino.pino ([e0e84c6](https://github.com/twreporter/congress-dashboard-monorepo/commit/e0e84c676d2bc8348255d7c9812b826c0b2a833c))
+- **frontend:** object spreading for logger type ([7648b35](https://github.com/twreporter/congress-dashboard-monorepo/commit/7648b35eec7a2100674c33563c80c03f495aaba4))
+- **frontend:** use common logger interface ([4d20347](https://github.com/twreporter/congress-dashboard-monorepo/commit/4d203475d768e9a1cea2f0981d8881767a704742))
+- **frontend:** add id for header-one ([670c7d4](https://github.com/twreporter/congress-dashboard-monorepo/commit/670c7d4bbfc5a6bd5fecac75d92ae05afc254211))
+- **frontend:** address comment ([2d8bc51](https://github.com/twreporter/congress-dashboard-monorepo/commit/2d8bc517106be5322362a94d8f94b1d5b92e8e55))
+- **frontend:** replace redirect by useRouter ([d5a714f](https://github.com/twreporter/congress-dashboard-monorepo/commit/d5a714f9431ce3712b4a1a927e6731ecefd9ca07))
+- **frontend:** selectContainerRef typo ([7b2b05d](https://github.com/twreporter/congress-dashboard-monorepo/commit/7b2b05d8cc631b4404970b86e6a9ab19c4f5d571))
+- **frontend:** type safety ([3ff9085](https://github.com/twreporter/congress-dashboard-monorepo/commit/3ff9085c0c40a52db3a252c3ea3a17986d0e78c4))
+
+### Features
+
+- **frontend:** add council-topic page ([f0e5539](https://github.com/twreporter/congress-dashboard-monorepo/commit/f0e5539572e4f54b59c7934ba6c6f738df7e32c9))
+- **frontend:** add `/api/council-topic/[slug]...` ([b72f1c0](https://github.com/twreporter/congress-dashboard-monorepo/commit/b72f1c004c03069f76d7e6165c2a3977e8c98c1a))
+- **frontend:** add `/api/councilor/[slug]/topic` ([7f7af43](https://github.com/twreporter/congress-dashboard-monorepo/commit/7f7af438bdb1a32043202c2011c9e083ca4d9f0c))
+- **frontend:** add councilor page ([636c18c](https://github.com/twreporter/congress-dashboard-monorepo/commit/636c18cc0c70a3a10061e90761dcedde4ac325fe))
+- **frontend:** add coucil bill page ([d9dc9df](https://github.com/twreporter/congress-dashboard-monorepo/commit/d9dc9dfb8c525a5c90a5eb4fc2fe87e21a010099))
+- **frontend:** hamburger menu active check ([e47b8f4](https://github.com/twreporter/congress-dashboard-monorepo/commit/e47b8f4b3e3718c9c64ba1eb3353c07487650a85))
+- **frontend:** new header links and hamburger menu ([54ec494](https://github.com/twreporter/congress-dashboard-monorepo/commit/54ec494f36db1a71a62d2271cab37a3ce07c126c))
+- **frontend:** use new city options ([73679ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/73679ec6e7ddfb02e1e92d223052068af59c4738))
+- **frontend:** use tab component ([e56a186](https://github.com/twreporter/congress-dashboard-monorepo/commit/e56a18629973ed28eee9ed8de901ae9fdd0d44f8))
+- **frontend:** use new city options ([73679ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/73679ec6e7ddfb02e1e92d223052068af59c4738))
+- **frontend:** hamburger menu active check ([e47b8f4](https://github.com/twreporter/congress-dashboard-monorepo/commit/e47b8f4b3e3718c9c64ba1eb3353c07487650a85))
+- **frontend:** new header links and hamburger menu ([54ec494](https://github.com/twreporter/congress-dashboard-monorepo/commit/54ec494f36db1a71a62d2271cab37a3ce07c126c))
+- **frontend:** use tab component ([e56a186](https://github.com/twreporter/congress-dashboard-monorepo/commit/e56a18629973ed28eee9ed8de901ae9fdd0d44f8))
+
+# [1.9.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.9.0-rc.1...@twreporter/congress-dashboard-frontend@1.9.0) (2025-12-31)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.9.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.9.0-rc.0...@twreporter/congress-dashboard-frontend@1.9.0-rc.1) (2025-12-31)
 
 ### Bug Fixes

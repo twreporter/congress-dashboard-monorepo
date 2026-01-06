@@ -1,3 +1,5 @@
+import { createOptions } from '../utils'
+
 export enum MemberType {
   Constituency = 'constituency',
   NationwideAndOverseas = 'nationwide-and-overseas',
@@ -164,89 +166,18 @@ export const CONSTITUENCY_LABEL: Readonly<Record<Constituency, string>> = {
   [Constituency.ChiayiCity]: '嘉義市選區',
 }
 
-export enum City {
-  Taipei = 'taipei',
-  Keelung = 'keelung',
-  NewTaipei = 'new-taipei',
-  Lienchiang = 'lienchiang',
-  Yilan = 'yilan',
-  HsinchuCity = 'hsinchu-city',
-  HsinchuCounty = 'hsinchu-county',
-  Taoyuan = 'taoyuan',
-  Miaoli = 'miaoli',
-  Taichung = 'taichung',
-  Changhua = 'changhua',
-  Nantou = 'nantou',
-  ChiayiCity = 'chiayi-city',
-  ChiayiCounty = 'chiayi-county',
-  Yunlin = 'yunlin',
-  Tainan = 'tainan',
-  Kaohsiung = 'kaohsiung',
-  Penghu = 'penghu',
-  Kinmen = 'kinmen',
-  Pingtung = 'pingtung',
-  Taitung = 'taitung',
-  Hualien = 'hualien',
-}
-
-export const CITY_LABEL: Readonly<Record<City, string>> = {
-  [City.Taipei]: '台北市',
-  [City.Keelung]: '基隆市',
-  [City.NewTaipei]: '新北市',
-  [City.Lienchiang]: '連江縣',
-  [City.Yilan]: '宜蘭縣',
-  [City.HsinchuCity]: '新竹市',
-  [City.HsinchuCounty]: '新竹縣',
-  [City.Taoyuan]: '桃園市',
-  [City.Miaoli]: '苗栗縣',
-  [City.Taichung]: '台中市',
-  [City.Changhua]: '彰化縣',
-  [City.Nantou]: '南投縣',
-  [City.ChiayiCity]: '嘉義市',
-  [City.ChiayiCounty]: '嘉義縣',
-  [City.Yunlin]: '雲林縣',
-  [City.Tainan]: '台南市',
-  [City.Kaohsiung]: '高雄市',
-  [City.Penghu]: '澎湖縣',
-  [City.Kinmen]: '金門縣',
-  [City.Pingtung]: '屏東縣',
-  [City.Taitung]: '台東縣',
-  [City.Hualien]: '花蓮縣',
-}
-
-// Helper types for options
-export type Option = {
-  label: string
-  value: string
-}
-
-// Helper function to create options
-function createOptions<T extends string>(
-  enumObj: Record<string, T>,
-  labels: Record<T, string>
-): Option[] {
-  return Object.values(enumObj).map((value: T) => ({
-    label: labels[value],
-    value,
-  }))
-}
-
 // Options arrays
 export const MEMBER_TYPE_OPTIONS = createOptions(MemberType, MEMBER_TYPE_LABEL)
 export const CONSTITUENCY_OPTIONS = createOptions(
   Constituency,
   CONSTITUENCY_LABEL
 )
-export const CITY_OPTIONS = createOptions(City, CITY_LABEL)
 
 export default {
   MemberType,
   MEMBER_TYPE_LABEL,
   Constituency,
   CONSTITUENCY_LABEL,
-  City,
-  CITY_LABEL,
   MEMBER_TYPE_OPTIONS,
   CONSTITUENCY_OPTIONS,
-  CITY_OPTIONS,
 }

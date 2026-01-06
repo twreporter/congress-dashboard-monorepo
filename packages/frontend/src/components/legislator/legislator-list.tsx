@@ -44,7 +44,7 @@ const maxTabs = 5
 const mapToTabItems = (items: TabProps[]): TabProps[] =>
   items.map((item) => ({ ...item, showAvatar: false }))
 
-const LegislatorContainer = styled.div`
+export const LegislatorContainer = styled.div`
   gap: 32px;
   display: flex;
   overflow-x: scroll;
@@ -58,7 +58,7 @@ const LegislatorContainer = styled.div`
   }
 `
 
-const FilterMask = styled.div<{ $show: boolean }>`
+export const FilterMask = styled.div<{ $show: boolean }>`
   visibility: ${(props) => (props.$show ? 'visible' : 'hidden')};
   transition: visibility 0.3s ease-in-out;
   position: fixed;
@@ -70,7 +70,7 @@ const FilterMask = styled.div<{ $show: boolean }>`
   z-index: ${ZIndex.SideBar};
 `
 
-const FilterBox = styled.div<{ $show: boolean }>`
+export const FilterBox = styled.div<{ $show: boolean }>`
   transform: translateX(${(props) => (props.$show ? 0 : '100%')});
   transition: transform 0.3s ease-in-out;
   position: fixed;
