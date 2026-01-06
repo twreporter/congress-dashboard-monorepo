@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.0-beta.10...@twreporter/congress-dashboard-cms@1.6.0-rc.1) (2026-01-06)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
 # [1.6.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.1...@twreporter/congress-dashboard-cms@1.6.0-rc.0) (2026-01-06)
 
 ### Features

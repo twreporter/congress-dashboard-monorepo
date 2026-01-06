@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.26...@twreporter/congress-dashboard-frontend@1.10.0-rc.1) (2026-01-06)
+
+### Bug Fixes
+
+- **frontend:** address comments ([cd053e9](https://github.com/twreporter/congress-dashboard-monorepo/commit/cd053e97af5cb4acd6f226d5171c2a02f6466ece))
+- **frontend:** fix packages.json & yarn.lock ([260a298](https://github.com/twreporter/congress-dashboard-monorepo/commit/260a2981e8005c7277231ff0d017892648a2d30f))
+
+### Features
+
+- **frontend:** add social media icons component and update footer links ([c20e25f](https://github.com/twreporter/congress-dashboard-monorepo/commit/c20e25fb967ec907d077a8f8386a053891466772))
+
 # [1.10.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.9.0...@twreporter/congress-dashboard-frontend@1.10.0-rc.0) (2026-01-06)
 
 ### Bug Fixes
