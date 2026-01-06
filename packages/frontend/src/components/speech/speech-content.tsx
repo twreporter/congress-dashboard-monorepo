@@ -6,7 +6,7 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 // constants
 import { FontSize, FontSizeOffset } from '@/components/speech'
 
-const Container = styled.section<{ $fontSizeOffset: number }>`
+export const Container = styled.section<{ $fontSizeOffset: number }>`
   display: flex;
   color: ${colorGrayscale.gray800};
   text-align: justify;

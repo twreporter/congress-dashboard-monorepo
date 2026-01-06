@@ -132,29 +132,40 @@ const Content = styled(P1)`
   color: ${colorGrayscale.gray800};
   display: contents !important;
 `
-const More = styled.span`
+export const LinkText = styled.span`
   color: ${colorSupportive.heavy};
   display: inline-block;
   text-decoration: underline;
   text-decoration-color: ${colorGrayscale.gray300};
+
+  &:hover {
+    text-decoration-color: ${colorSupportive.heavy};
+  }
 `
 
+type CardType = 'speech' | 'bill'
 export type SummaryCardProps = {
   date: string | Date
   title: string
   summary: string
   slug: string
+  type?: CardType
 }
 export const SummaryCard: React.FC<SummaryCardProps> = ({
   date,
   title,
   summary,
   slug,
+  type = 'speech',
 }) => {
   // summary will be like this:
   // "<ul><li>this is a long sentence</li><li>this is a long sentence</li></ul>" or "this is a long sentence"
   const dateObj = typeof date === 'string' ? new Date(date) : date
   const parsedSummary = summary.replace(/<[^>]*>/g, '')
+  const link =
+    type === 'speech'
+      ? `${InternalRoutes.Speech}/${slug}`
+      : `${InternalRoutes.Bill}/${slug}`
   return (
     <CardBox>
       <FlexRow>
@@ -164,8 +175,8 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
       <HorizontalLine />
       <Content>
         {`${parsedSummary}（`}
-        <Link href={`${InternalRoutes.Speech}/${slug}`}>
-          <More>{'閱讀更多'}</More>
+        <Link href={link}>
+          <LinkText>{'閱讀更多'}</LinkText>
         </Link>
         {'）'}
       </Content>
@@ -188,16 +199,22 @@ const CardList = styled.div`
 export type CardsOfTheYearProps = {
   cards: SummaryCardProps[]
   year: number
+  type?: CardType
 }
 const CardsOfTheYear: React.FC<CardsOfTheYearProps> = ({
   year,
   cards,
+  type = 'speech',
 }: CardsOfTheYearProps) => (
   <Box>
     <Year text={`${year}`} />
     <CardList>
       {cards.map((props: SummaryCardProps, index: number) => (
-        <SummaryCard {...props} key={`summary-card-${year}-${index}`} />
+        <SummaryCard
+          {...props}
+          type={type}
+          key={`summary-card-${year}-${index}`}
+        />
       ))}
     </CardList>
   </Box>

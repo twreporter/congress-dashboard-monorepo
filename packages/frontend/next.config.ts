@@ -17,9 +17,29 @@ const nextConfig: NextConfig = {
       'lawmaker-storage.twreporter.org',
     ],
   },
-  serverExternalPackages: ['pino', 'pino-pretty'],
-  experimental: {
-    preloadEntriesOnStart: false,
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/congress',
+        permanent: true,
+      },
+      {
+        source: '/lawmaker/:slug*',
+        destination: '/congress/lawmaker/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/topics/:slug*',
+        destination: '/congress/topic/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/a/:slug*',
+        destination: '/congress/a/:slug*',
+        permanent: true,
+      },
+    ]
   },
 }
 

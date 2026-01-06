@@ -437,7 +437,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
           filterOptions={filterOptions}
           handleSelect={handleSelect}
           isMultiple={true}
-          selectCotainerRef={selectContainerRef}
+          selectContainerRef={selectContainerRef}
         />
       )}
 

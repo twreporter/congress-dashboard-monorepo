@@ -168,7 +168,7 @@ export const SingleSelect = React.memo(function SingleSelect({
           filterOptions={filterOptions}
           handleSelect={handleSelect}
           isMultiple={false}
-          selectCotainerRef={selectorContainerRef}
+          selectContainerRef={selectorContainerRef}
         />
       )}
 

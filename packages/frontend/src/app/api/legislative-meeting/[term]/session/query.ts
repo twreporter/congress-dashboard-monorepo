@@ -1,11 +1,8 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
+// type
+import type { LegislativeMeetingSession } from '@/types/legislative-meeting-session'
 
-type LegislativeMeetingSessionFromRes = {
-  id: number
-  term: number
-  startTime: string
-  endTime: string
-}
+type LegislativeMeetingSessionFromRes = LegislativeMeetingSession
 
 type FetchLegislativeMeetingSessionsParams = {
   legislativeMeetingTerm: string

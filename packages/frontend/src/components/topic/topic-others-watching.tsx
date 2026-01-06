@@ -11,7 +11,7 @@ import { Issue } from '@/components/sidebar/follow-more'
 // constants
 import { InternalRoutes } from '@/constants/routes'
 
-const OthersWatchingBlock = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -32,7 +32,7 @@ const OthersWatchingBlock = styled.div`
   `}
 `
 
-const TopicsContainer = styled.div`
+export const TopicsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -56,7 +56,7 @@ const TopicOthersWatching: React.FC<TopicOthersWatchingProps> = ({
   currentMeetingSession,
 }) => {
   return othersWatchingTags.length > 0 ? (
-    <OthersWatchingBlock>
+    <Container>
       <H4Title text="其他人也在關注" />
       <TopicsContainer>
         {othersWatchingTags.map((tag, index) => (
@@ -72,7 +72,7 @@ const TopicOthersWatching: React.FC<TopicOthersWatchingProps> = ({
           </Link>
         ))}
       </TopicsContainer>
-    </OthersWatchingBlock>
+    </Container>
   ) : null
 }
 

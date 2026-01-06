@@ -1,40 +1,8 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
-import type { partyData } from '@/fetchers/party'
-import type { RelatedType } from '@/types/related-twreporter-item'
+// type
+import type { TopicData, TopNTopicData } from '@/types/topic'
+import type { SitemapItem } from '@/types'
 
-export type SpeechData = {
-  slug: string
-  summary: string
-  title: string
-  date: Date
-  legislativeYuanMember: {
-    legislator: {
-      name: string
-      slug: string
-      imageLink?: string
-      image?: {
-        imageFile: {
-          url: string
-        }
-      }
-    }
-  }
-}
-
-export type TopicData = {
-  slug: string
-  title: string
-  speechesCount?: number
-  speeches?: SpeechData[]
-  relatedTopics?: {
-    slug: string
-    title: string
-  }[]
-  relatedTwreporterArticles?: {
-    slug: string
-    type: RelatedType
-  }[]
-}
 /** fetchTopic
  *   fetch topics with give slug in given terms & session
  */
@@ -126,32 +94,11 @@ export type FetchTopNTopicsParams = {
   legislativeMeetingSessionIds?: number[]
   partyIds?: number[]
 }
-export type TopNTopicData = {
-  title: string
-  slug: string
-  speechCount: number
-  legislatorCount: number
-  legislators: {
-    id: number
-    count: number
-    name?: string
-    slug: string
-    party?: number | partyData
-    imageLink?: string
-    image?: {
-      imageFile: {
-        url: string
-      }
-    }
-    avatar?: string
-    partyAvatar?: string
-  }[]
-}[]
 export const fetchTopNTopics = async ({
   take = 10,
   skip = 0,
   legislativeMeetingId,
-}: FetchTopNTopicsParams): Promise<TopNTopicData | undefined> => {
+}: FetchTopNTopicsParams): Promise<TopNTopicData[] | undefined> => {
   const query = `
     query TopicsOrderBySpeechCount($meetingId: Int!, $take: Int, $skip: Int) {
       topicsOrderBySpeechCount(meetingId: $meetingId, take: $take, skip: $skip) {
@@ -183,7 +130,7 @@ export const fetchTopNTopics = async ({
 
   try {
     const data = await keystoneFetch<{
-      topicsOrderBySpeechCount: TopNTopicData
+      topicsOrderBySpeechCount: TopNTopicData[]
     }>(JSON.stringify({ query, variables }), false)
     return data?.data?.topicsOrderBySpeechCount
   } catch (err) {
@@ -196,7 +143,7 @@ export const fetchTopNTopics = async ({
 /**
  * fetch all topics slug for sitemap
  */
-export const fetchAllTopicsSlug = async () => {
+export const fetchAllTopicsSlug = async (): Promise<SitemapItem[]> => {
   const query = `
     query Topics {
       topics {
@@ -208,9 +155,9 @@ export const fetchAllTopicsSlug = async () => {
 
   try {
     const data = await keystoneFetch<{
-      topics: { slug: string; updatedAt: string }[]
+      topics: SitemapItem[]
     }>(JSON.stringify({ query }), false)
-    return data?.data?.topics
+    return data?.data?.topics || []
   } catch (err) {
     throw new Error(`Failed to fetch all topics slug, err: ${err}`)
   }

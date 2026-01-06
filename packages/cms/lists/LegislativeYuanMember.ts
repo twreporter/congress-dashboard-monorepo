@@ -21,8 +21,8 @@ import {
   MemberType,
   MEMBER_TYPE_OPTIONS,
   CONSTITUENCY_OPTIONS,
-  CITY_OPTIONS,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import { CITY_OPTIONS } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 
 const listConfigurations = list({
   fields: {

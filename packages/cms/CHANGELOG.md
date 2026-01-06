@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.1...@twreporter/congress-dashboard-cms@1.6.0-rc.0) (2026-01-06)
+
+### Features
+
+- **cms:** add migration file ([ff4593e](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff4593e84cb1bcac22f2550dee42160d1ec04ba4))
+- **cms:** council import record part1 ([6199a33](https://github.com/twreporter/congress-dashboard-monorepo/commit/6199a33dfd1e96a57cdfec7f03a3cbb6fe269e45))
+- **cms:** council import record part2 ([7f92599](https://github.com/twreporter/congress-dashboard-monorepo/commit/7f925998df79818e8762666f98078250e8eb1d67))
+- **cms:** create council import record list ([e95ee08](https://github.com/twreporter/congress-dashboard-monorepo/commit/e95ee08ec0114c5b38370e4021793fa33a0881fb))
+- **cms:** use custom date picker ([a10accb](https://github.com/twreporter/congress-dashboard-monorepo/commit/a10accb7b96daea3f64970ba51d1e952318a58e2))
+- **cms:** council meeting ([52b4d39](https://github.com/twreporter/congress-dashboard-monorepo/commit/52b4d3909dece1d5424423cb441d324aeb9ee928))
+- **cms:** council meeting ([52b4d39](https://github.com/twreporter/congress-dashboard-monorepo/commit/52b4d3909dece1d5424423cb441d324aeb9ee928))
+
+### Bug Fixes
+
+- **cms:** prevent self-referencing council topics import ([f6f97ef](https://github.com/twreporter/congress-dashboard-monorepo/commit/f6f97efdd69bd76ba5d5605e749612df4b9ce345))
+- **cms:** address comments ([8c55f54](https://github.com/twreporter/congress-dashboard-monorepo/commit/8c55f5446f4050bacf51c55a3e63c1a5f14125c1))
+- **cms:** use id for connect ([d43445f](https://github.com/twreporter/congress-dashboard-monorepo/commit/d43445f24195d6c5c39f3db4deeef8d76de00599))
+- **cms:** address comments ([200efab](https://github.com/twreporter/congress-dashboard-monorepo/commit/200efab19d269abab0ebc91461debc64ce48a0f4))
+- **cms:** relatedLink typo ([9b69954](https://github.com/twreporter/congress-dashboard-monorepo/commit/9b69954bb0518e5ccc3bb4c16e8f7d8a8ab3ce11))
+- **cms:** relatedLink typo ([9b69954](https://github.com/twreporter/congress-dashboard-monorepo/commit/9b69954bb0518e5ccc3bb4c16e8f7d8a8ab3ce11))
+
 ## [1.5.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.1-rc.0...@twreporter/congress-dashboard-cms@1.5.1) (2025-12-15)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms
