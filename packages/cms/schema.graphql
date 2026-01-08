@@ -642,6 +642,7 @@ type LegislativeYuanMember {
   tooltip: String
   note: String
   proposalSuccessCount: Int
+  relatedLink: JSON
   isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
@@ -725,6 +726,7 @@ input LegislativeYuanMemberUpdateInput {
   tooltip: String
   note: String
   proposalSuccessCount: Int
+  relatedLink: JSON
   isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime
@@ -761,6 +763,7 @@ input LegislativeYuanMemberCreateInput {
   tooltip: String
   note: String
   proposalSuccessCount: Int
+  relatedLink: JSON
   isActive: Boolean
   createdAt: DateTime
   updatedAt: DateTime

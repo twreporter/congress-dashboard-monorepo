@@ -5,6 +5,7 @@ import {
   select,
   integer,
   checkbox,
+  json,
 } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
@@ -149,6 +150,9 @@ const listConfigurations = list({
     }),
     proposalSuccessCount: integer({
       label: '提案通過數',
+    }),
+    relatedLink: json({
+      label: '相關經歷',
     }),
     isActive: checkbox({
       label: '是否該屆期現任',

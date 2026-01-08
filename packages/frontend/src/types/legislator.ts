@@ -1,5 +1,6 @@
 import type { KeystoneImage } from '@/types'
 import type { Tag } from '@/components/dashboard/type'
+import type { RelatedLink } from '@/types/councilor'
 // @twreporter
 import type {
   MemberType,
@@ -41,6 +42,7 @@ export type Legislator = {
     meetingTermCountInfo?: string
   }
   isActive: boolean
+  relatedLink?: RelatedLink[]
 }
 
 export type LegislatorForDashboard = {
@@ -104,4 +106,5 @@ export type LegislatorForLawmaker = {
   meetingTermCount: number
   meetingTermCountInfo: string
   isActive: boolean
+  relatedLink: RelatedLink[]
 }

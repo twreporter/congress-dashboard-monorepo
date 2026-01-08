@@ -43,6 +43,7 @@ export const useLegislatorData = (
         legislator,
         proposalSuccessCount,
         isActive,
+        relatedLink,
       } = legislatorData
       const legislatorName = legislator.name
       const legislatorAvatar = getImageLink(legislator)
@@ -80,6 +81,7 @@ export const useLegislatorData = (
         meetingTermCount: legislator.meetingTermCount || 1,
         meetingTermCountInfo: legislator.meetingTermCountInfo || '',
         isActive,
+        relatedLink: relatedLink || [],
       }
     }
 

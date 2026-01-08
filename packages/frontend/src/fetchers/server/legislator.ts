@@ -142,6 +142,7 @@ export const fetchLegislator = async ({
           }
         }
         isActive
+        relatedLink
       }
     }
   `
