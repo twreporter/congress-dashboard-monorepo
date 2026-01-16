@@ -42,7 +42,9 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
             </Questioning>
             {councilors.map((councilor) => (
               <Link
-                href={`${InternalRoutes.Council}/${councilor.city}${InternalRoutes.Councilor}/${councilor.slug}`}
+                href={`${InternalRoutes.Councilor(councilor.city)}/${
+                  councilor.slug
+                }`}
                 key={`councilor-${councilor.slug}`}
               >
                 <P1SupportiveHeavy text={councilor.name} />
@@ -56,7 +58,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
         <IssueTagsBlock>
           {relatedTopics.map((topic) => (
             <Link
-              href={`${InternalRoutes.Council}/${topic.city}${InternalRoutes.CouncilTopic}/${topic.slug}`}
+              href={`${InternalRoutes.CouncilTopic(topic.city)}/${topic.slug}`}
               key={`council-topic-${topic.slug}`}
             >
               <IssueTag text={topic.title} />

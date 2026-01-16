@@ -156,8 +156,8 @@ export type CardHumanProps = {
   name?: string
   tooltip?: string
   note?: string
-  type?: MemberType
-  constituency?: Constituency
+  type?: MemberType | string
+  constituency?: Constituency | number
   tags?: Tag[]
   avatar?: string
   partyAvatar?: string

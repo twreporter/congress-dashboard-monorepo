@@ -1956,6 +1956,12 @@ type Query {
 
   """Get topics order by speech count desc"""
   topicsOrderBySpeechCount(meetingId: Int!, sessionIds: [Int] = [], partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [TopicWithSpeechCountAndLegislators]
+
+  """Get council topics order by bill count desc"""
+  councilTopicsOrderBySpeechCount(meetingId: Int!, partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [CouncilTopicWithBillCountAndCouncilors]
+
+  """Get top N topics of council members order by bill count desc"""
+  topNTopicsOfCouncilMembers(councilMemberIds: [Int!]!, councilMeetingId: Int!, take: Int = 10): [CouncilMemberWithTopTopics]
 }
 
 union AuthenticatedItem = SystemUser
@@ -2133,4 +2139,36 @@ type TopicWithSpeechCountAndLegislators {
   speechCount: Int!
   legislatorCount: Int!
   legislators: [LegislatorForTopic]
+}
+
+"""custom type for councilTopicsOrderBySpeechCount"""
+type CouncilorForTopic {
+  id: Int!
+  name: String!
+  party: Int
+  count: Int
+  slug: String!
+  imageLink: String
+  image: CustomImage
+}
+
+type CouncilTopicWithBillCountAndCouncilors {
+  title: String!
+  slug: String!
+  billCount: Int!
+  councilorCount: Int!
+  councilors: [CouncilorForTopic]
+}
+
+"""custom type for topNTopicsOfCouncilors"""
+type CouncilTopicWithBillCount {
+  title: String!
+  slug: String!
+  name: String!
+  count: Int!
+}
+
+type CouncilMemberWithTopTopics {
+  id: Int!
+  topics: [CouncilTopicWithBillCount]
 }

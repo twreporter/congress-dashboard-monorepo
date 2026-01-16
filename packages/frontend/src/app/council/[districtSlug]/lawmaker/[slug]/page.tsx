@@ -40,7 +40,9 @@ export async function generateMetadata({
     notFound()
   }
 
-  const councilorPageUrl = `https://lawmaker.twreporter.org${InternalRoutes.Council}/${districtSlug}${InternalRoutes.Councilor}/${slug}`
+  const councilorPageUrl = `https://lawmaker.twreporter.org${InternalRoutes.Councilor(
+    districtSlug
+  )}/${slug}`
   const metaTitle = `${CITY_LABEL[districtSlug]}議員｜${councilorName} - 報導者觀測站`
   const metaDescription = `議員${councilorName}關心哪些議題、提出哪些議案？《報導者》用人工智慧技術分析，帶你快速掌握${councilorName}不同時段的提案重點。`
 

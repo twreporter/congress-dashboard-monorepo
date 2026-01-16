@@ -29,7 +29,8 @@ export const fetchBillBySlug = async ({
           councilor {
             slug
             name
-          }
+            }
+          city
         }
         topic {
           slug

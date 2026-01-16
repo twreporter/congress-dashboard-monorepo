@@ -40,7 +40,9 @@ export async function generateMetadata({
     notFound()
   }
 
-  const topicPageUrl = `https://lawmaker.twreporter.org${InternalRoutes.Council}/${districtSlug}${InternalRoutes.CouncilTopic}/${slug}`
+  const topicPageUrl = `https://lawmaker.twreporter.org${InternalRoutes.CouncilTopic(
+    districtSlug
+  )}/${slug}`
   const metaTitle = `${CITY_LABEL[districtSlug]}議題｜${topicTitle} - 報導者觀測站`
   const metaDescription = `關注${topicTitle}的議員有哪些人？哪位民代最積極發聲？《報導者》用人工智慧技術分析議案，和你一起追蹤${topicTitle}議題在議會的討論熱度與議員關注面向。`
 
