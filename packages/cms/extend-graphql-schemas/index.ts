@@ -8,6 +8,14 @@ import {
   topicsOrderBySpeechCountTypeDefs,
   topicsOrderBySpeechCountResolver,
 } from './topics-order-by-speech-count'
+import {
+  councilTopicsOrderBySpeechCountTypeDefs,
+  councilTopicsOrderBySpeechCountResolver,
+} from './council-topics-order-by-speech-count'
+import {
+  topNTopicsOfCouncilorsTypeDefs,
+  topNTopicsOfCouncilorsResolver,
+} from './top-n-topics-of-councilors'
 
 const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -15,10 +23,14 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
     typeDefs: [
       topNTopicsOfLegislatorsTypeDefs,
       topicsOrderBySpeechCountTypeDefs,
+      councilTopicsOrderBySpeechCountTypeDefs,
+      topNTopicsOfCouncilorsTypeDefs,
     ],
     resolvers: [
       topNTopicsOfLegislatorsResolver,
       topicsOrderBySpeechCountResolver,
+      councilTopicsOrderBySpeechCountResolver,
+      topNTopicsOfCouncilorsResolver,
     ],
   })
 }
