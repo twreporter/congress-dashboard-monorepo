@@ -47,8 +47,8 @@ const listConfigurations = list({
         listView: { fieldMode: 'hidden' },
       },
     }),
-    relatedCouncilTopics: relationship({
-      ref: 'CouncilTopic.relatedLegislativeTopics',
+    relatedCouncilTopic: relationship({
+      ref: 'CouncilTopic.relatedLegislativeTopic',
       label: '縣市議會相關議題',
       many: true,
       ui: {

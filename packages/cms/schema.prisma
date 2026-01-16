@@ -90,7 +90,7 @@ model Topic {
   speeches                  Speech[]       @relation("Speech_topics")
   relatedTopics             Topic[]        @relation("Topic_referencedByTopics")
   referencedByTopics        Topic[]        @relation("Topic_referencedByTopics")
-  relatedCouncilTopics      CouncilTopic[] @relation("CouncilTopic_relatedLegislativeTopics")
+  relatedCouncilTopic       CouncilTopic[] @relation("CouncilTopic_relatedLegislativeTopic")
   relatedTwreporterArticles Json?          @default("[]")
   createdAt                 DateTime?      @default(now())
   updatedAt                 DateTime?      @updatedAt
@@ -229,7 +229,7 @@ model CouncilTopic {
   bill                         CouncilBill[]  @relation("CouncilBill_topic")
   city                         String
   type                         String         @default("general")
-  relatedLegislativeTopics     Topic[]        @relation("CouncilTopic_relatedLegislativeTopics")
+  relatedLegislativeTopic      Topic[]        @relation("CouncilTopic_relatedLegislativeTopic")
   relatedCouncilTopic          CouncilTopic[] @relation("CouncilTopic_referencedByCouncilTopic")
   referencedByCouncilTopic     CouncilTopic[] @relation("CouncilTopic_referencedByCouncilTopic")
   relatedCityCouncilTopic      CouncilTopic[] @relation("CouncilTopic_referencedByCityCouncilTopic")

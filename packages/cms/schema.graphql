@@ -452,8 +452,8 @@ type Topic {
   relatedTopicsCount(where: TopicWhereInput! = {}): Int
   referencedByTopics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
   referencedByTopicsCount(where: TopicWhereInput! = {}): Int
-  relatedCouncilTopics(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
-  relatedCouncilTopicsCount(where: CouncilTopicWhereInput! = {}): Int
+  relatedCouncilTopic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
+  relatedCouncilTopicCount(where: CouncilTopicWhereInput! = {}): Int
   relatedTwreporterArticles: JSON
   createdAt: DateTime
   updatedAt: DateTime
@@ -474,7 +474,7 @@ input TopicWhereInput {
   speeches: SpeechManyRelationFilter
   relatedTopics: TopicManyRelationFilter
   referencedByTopics: TopicManyRelationFilter
-  relatedCouncilTopics: CouncilTopicManyRelationFilter
+  relatedCouncilTopic: CouncilTopicManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -505,7 +505,7 @@ input TopicUpdateInput {
   speeches: SpeechRelateToManyForUpdateInput
   relatedTopics: TopicRelateToManyForUpdateInput
   referencedByTopics: TopicRelateToManyForUpdateInput
-  relatedCouncilTopics: CouncilTopicRelateToManyForUpdateInput
+  relatedCouncilTopic: CouncilTopicRelateToManyForUpdateInput
   relatedTwreporterArticles: JSON
   createdAt: DateTime
   updatedAt: DateTime
@@ -536,7 +536,7 @@ input TopicCreateInput {
   speeches: SpeechRelateToManyForCreateInput
   relatedTopics: TopicRelateToManyForCreateInput
   referencedByTopics: TopicRelateToManyForCreateInput
-  relatedCouncilTopics: CouncilTopicRelateToManyForCreateInput
+  relatedCouncilTopic: CouncilTopicRelateToManyForCreateInput
   relatedTwreporterArticles: JSON
   createdAt: DateTime
   updatedAt: DateTime
@@ -1172,8 +1172,8 @@ type CouncilTopic {
   billCount(where: CouncilBillWhereInput! = {}): Int
   city: String
   type: String
-  relatedLegislativeTopics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
-  relatedLegislativeTopicsCount(where: TopicWhereInput! = {}): Int
+  relatedLegislativeTopic(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
+  relatedLegislativeTopicCount(where: TopicWhereInput! = {}): Int
   relatedCouncilTopic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
   relatedCouncilTopicCount(where: CouncilTopicWhereInput! = {}): Int
   referencedByCouncilTopic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
@@ -1203,7 +1203,7 @@ input CouncilTopicWhereInput {
   bill: CouncilBillManyRelationFilter
   city: StringFilter
   type: StringFilter
-  relatedLegislativeTopics: TopicManyRelationFilter
+  relatedLegislativeTopic: TopicManyRelationFilter
   relatedCouncilTopic: CouncilTopicManyRelationFilter
   referencedByCouncilTopic: CouncilTopicManyRelationFilter
   relatedCityCouncilTopic: CouncilTopicManyRelationFilter
@@ -1236,7 +1236,7 @@ input CouncilTopicUpdateInput {
   bill: CouncilBillRelateToManyForUpdateInput
   city: String
   type: String
-  relatedLegislativeTopics: TopicRelateToManyForUpdateInput
+  relatedLegislativeTopic: TopicRelateToManyForUpdateInput
   relatedCouncilTopic: CouncilTopicRelateToManyForUpdateInput
   referencedByCouncilTopic: CouncilTopicRelateToManyForUpdateInput
   relatedCityCouncilTopic: CouncilTopicRelateToManyForUpdateInput
@@ -1265,7 +1265,7 @@ input CouncilTopicCreateInput {
   bill: CouncilBillRelateToManyForCreateInput
   city: String
   type: String
-  relatedLegislativeTopics: TopicRelateToManyForCreateInput
+  relatedLegislativeTopic: TopicRelateToManyForCreateInput
   relatedCouncilTopic: CouncilTopicRelateToManyForCreateInput
   referencedByCouncilTopic: CouncilTopicRelateToManyForCreateInput
   relatedCityCouncilTopic: CouncilTopicRelateToManyForCreateInput
