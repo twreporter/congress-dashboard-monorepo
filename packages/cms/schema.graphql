@@ -452,6 +452,8 @@ type Topic {
   relatedTopicsCount(where: TopicWhereInput! = {}): Int
   referencedByTopics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
   referencedByTopicsCount(where: TopicWhereInput! = {}): Int
+  relatedCouncilTopics(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
+  relatedCouncilTopicsCount(where: CouncilTopicWhereInput! = {}): Int
   relatedTwreporterArticles: JSON
   createdAt: DateTime
   updatedAt: DateTime
@@ -472,6 +474,7 @@ input TopicWhereInput {
   speeches: SpeechManyRelationFilter
   relatedTopics: TopicManyRelationFilter
   referencedByTopics: TopicManyRelationFilter
+  relatedCouncilTopics: CouncilTopicManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -480,6 +483,12 @@ input SpeechManyRelationFilter {
   every: SpeechWhereInput
   some: SpeechWhereInput
   none: SpeechWhereInput
+}
+
+input CouncilTopicManyRelationFilter {
+  every: CouncilTopicWhereInput
+  some: CouncilTopicWhereInput
+  none: CouncilTopicWhereInput
 }
 
 input TopicOrderByInput {
@@ -496,6 +505,7 @@ input TopicUpdateInput {
   speeches: SpeechRelateToManyForUpdateInput
   relatedTopics: TopicRelateToManyForUpdateInput
   referencedByTopics: TopicRelateToManyForUpdateInput
+  relatedCouncilTopics: CouncilTopicRelateToManyForUpdateInput
   relatedTwreporterArticles: JSON
   createdAt: DateTime
   updatedAt: DateTime
@@ -506,6 +516,13 @@ input SpeechRelateToManyForUpdateInput {
   set: [SpeechWhereUniqueInput!]
   create: [SpeechCreateInput!]
   connect: [SpeechWhereUniqueInput!]
+}
+
+input CouncilTopicRelateToManyForUpdateInput {
+  disconnect: [CouncilTopicWhereUniqueInput!]
+  set: [CouncilTopicWhereUniqueInput!]
+  create: [CouncilTopicCreateInput!]
+  connect: [CouncilTopicWhereUniqueInput!]
 }
 
 input TopicUpdateArgs {
@@ -519,6 +536,7 @@ input TopicCreateInput {
   speeches: SpeechRelateToManyForCreateInput
   relatedTopics: TopicRelateToManyForCreateInput
   referencedByTopics: TopicRelateToManyForCreateInput
+  relatedCouncilTopics: CouncilTopicRelateToManyForCreateInput
   relatedTwreporterArticles: JSON
   createdAt: DateTime
   updatedAt: DateTime
@@ -527,6 +545,11 @@ input TopicCreateInput {
 input SpeechRelateToManyForCreateInput {
   create: [SpeechCreateInput!]
   connect: [SpeechWhereUniqueInput!]
+}
+
+input CouncilTopicRelateToManyForCreateInput {
+  create: [CouncilTopicCreateInput!]
+  connect: [CouncilTopicWhereUniqueInput!]
 }
 
 type Legislator {
@@ -1073,12 +1096,6 @@ input CouncilMemberManyRelationFilter {
   none: CouncilMemberWhereInput
 }
 
-input CouncilTopicManyRelationFilter {
-  every: CouncilTopicWhereInput
-  some: CouncilTopicWhereInput
-  none: CouncilTopicWhereInput
-}
-
 input CouncilBillOrderByInput {
   id: OrderDirection
   date: OrderDirection
@@ -1117,13 +1134,6 @@ input CouncilMemberRelateToManyForUpdateInput {
   connect: [CouncilMemberWhereUniqueInput!]
 }
 
-input CouncilTopicRelateToManyForUpdateInput {
-  disconnect: [CouncilTopicWhereUniqueInput!]
-  set: [CouncilTopicWhereUniqueInput!]
-  create: [CouncilTopicCreateInput!]
-  connect: [CouncilTopicWhereUniqueInput!]
-}
-
 input CouncilBillUpdateArgs {
   where: CouncilBillWhereUniqueInput!
   data: CouncilBillUpdateInput!
@@ -1154,11 +1164,6 @@ input CouncilMemberRelateToManyForCreateInput {
   connect: [CouncilMemberWhereUniqueInput!]
 }
 
-input CouncilTopicRelateToManyForCreateInput {
-  create: [CouncilTopicCreateInput!]
-  connect: [CouncilTopicWhereUniqueInput!]
-}
-
 type CouncilTopic {
   id: ID!
   title: String
@@ -1167,8 +1172,8 @@ type CouncilTopic {
   billCount(where: CouncilBillWhereInput! = {}): Int
   city: String
   type: String
-  relatedLegislativeTopic(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
-  relatedLegislativeTopicCount(where: TopicWhereInput! = {}): Int
+  relatedLegislativeTopics(where: TopicWhereInput! = {}, orderBy: [TopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TopicWhereUniqueInput): [Topic!]
+  relatedLegislativeTopicsCount(where: TopicWhereInput! = {}): Int
   relatedCouncilTopic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
   relatedCouncilTopicCount(where: CouncilTopicWhereInput! = {}): Int
   referencedByCouncilTopic(where: CouncilTopicWhereInput! = {}, orderBy: [CouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilTopicWhereUniqueInput): [CouncilTopic!]
@@ -1198,7 +1203,7 @@ input CouncilTopicWhereInput {
   bill: CouncilBillManyRelationFilter
   city: StringFilter
   type: StringFilter
-  relatedLegislativeTopic: TopicManyRelationFilter
+  relatedLegislativeTopics: TopicManyRelationFilter
   relatedCouncilTopic: CouncilTopicManyRelationFilter
   referencedByCouncilTopic: CouncilTopicManyRelationFilter
   relatedCityCouncilTopic: CouncilTopicManyRelationFilter
@@ -1231,7 +1236,7 @@ input CouncilTopicUpdateInput {
   bill: CouncilBillRelateToManyForUpdateInput
   city: String
   type: String
-  relatedLegislativeTopic: TopicRelateToManyForUpdateInput
+  relatedLegislativeTopics: TopicRelateToManyForUpdateInput
   relatedCouncilTopic: CouncilTopicRelateToManyForUpdateInput
   referencedByCouncilTopic: CouncilTopicRelateToManyForUpdateInput
   relatedCityCouncilTopic: CouncilTopicRelateToManyForUpdateInput
@@ -1260,7 +1265,7 @@ input CouncilTopicCreateInput {
   bill: CouncilBillRelateToManyForCreateInput
   city: String
   type: String
-  relatedLegislativeTopic: TopicRelateToManyForCreateInput
+  relatedLegislativeTopics: TopicRelateToManyForCreateInput
   relatedCouncilTopic: CouncilTopicRelateToManyForCreateInput
   referencedByCouncilTopic: CouncilTopicRelateToManyForCreateInput
   relatedCityCouncilTopic: CouncilTopicRelateToManyForCreateInput

@@ -84,17 +84,17 @@ model Speech {
 }
 
 model Topic {
-  id                                        Int            @id @default(autoincrement())
-  title                                     String         @default("")
-  slug                                      String         @unique @default("")
-  speeches                                  Speech[]       @relation("Speech_topics")
-  relatedTopics                             Topic[]        @relation("Topic_referencedByTopics")
-  referencedByTopics                        Topic[]        @relation("Topic_referencedByTopics")
-  relatedTwreporterArticles                 Json?          @default("[]")
-  createdAt                                 DateTime?      @default(now())
-  updatedAt                                 DateTime?      @updatedAt
-  from_Selected_topic                       Selected[]     @relation("Selected_topic")
-  from_CouncilTopic_relatedLegislativeTopic CouncilTopic[] @relation("CouncilTopic_relatedLegislativeTopic")
+  id                        Int            @id @default(autoincrement())
+  title                     String         @default("")
+  slug                      String         @unique @default("")
+  speeches                  Speech[]       @relation("Speech_topics")
+  relatedTopics             Topic[]        @relation("Topic_referencedByTopics")
+  referencedByTopics        Topic[]        @relation("Topic_referencedByTopics")
+  relatedCouncilTopics      CouncilTopic[] @relation("CouncilTopic_relatedLegislativeTopics")
+  relatedTwreporterArticles Json?          @default("[]")
+  createdAt                 DateTime?      @default(now())
+  updatedAt                 DateTime?      @updatedAt
+  from_Selected_topic       Selected[]     @relation("Selected_topic")
 
   @@index([title])
 }
@@ -229,7 +229,7 @@ model CouncilTopic {
   bill                         CouncilBill[]  @relation("CouncilBill_topic")
   city                         String
   type                         String         @default("general")
-  relatedLegislativeTopic      Topic[]        @relation("CouncilTopic_relatedLegislativeTopic")
+  relatedLegislativeTopics     Topic[]        @relation("CouncilTopic_relatedLegislativeTopics")
   relatedCouncilTopic          CouncilTopic[] @relation("CouncilTopic_referencedByCouncilTopic")
   referencedByCouncilTopic     CouncilTopic[] @relation("CouncilTopic_referencedByCouncilTopic")
   relatedCityCouncilTopic      CouncilTopic[] @relation("CouncilTopic_referencedByCityCouncilTopic")
