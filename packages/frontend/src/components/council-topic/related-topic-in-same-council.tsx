@@ -41,7 +41,7 @@ const RelatedTopicInSameCouncil: FC<RelatedTopicInSameCouncilProps> = ({
       <TopicsContainer>
         {topics.map((tag, index) => (
           <Link
-            href={`${InternalRoutes.Council}/${districtSlug}${InternalRoutes.CouncilTopic}/${tag.slug}`}
+            href={`${InternalRoutes.CouncilTopic(districtSlug)}/${tag.slug}`}
             key={`related-topic-in-same-council-${index}`}
           >
             <Issue name={`#${tag.title}`} slug={tag.slug} />

@@ -4,12 +4,12 @@ import { notFound } from 'next/navigation'
 // constants
 import { VALID_COUNCILS } from '@/constants/council'
 // fetcher
-import { fetchLegislativeMeeting } from '@/fetchers/server/legislative-meeting'
-import { fetchTopNTopics } from '@/fetchers/server/topic'
 import { fetchParty } from '@/fetchers/server/party'
+import { fetchCouncilMeetingsOfACity } from '@/fetchers/server/council-meeting'
+import { fetchTopNCouncilTopics } from '@/fetchers/server/council-topic'
 // components
 import Open from '@/components/open'
-import Dashboard from '@/components/dashboard'
+import Dashboard from '@/components/council-dashboard'
 import TopicSliders from '@/components/topic-sliders'
 // utils
 import { isValidCouncil } from '@/utils/council'
@@ -83,27 +83,27 @@ export default async function CouncilDetailPage({
     notFound()
   }
 
-  const [meetings] = await Promise.all([fetchLegislativeMeeting()])
+  const meetings = await fetchCouncilMeetingsOfACity({ city: districtSlug })
   const latestMeetingId = meetings[0]?.id
   const [topics = [], parties] = await Promise.all([
-    fetchTopNTopics({
+    fetchTopNCouncilTopics({
       take: 10,
       skip: 0,
-      legislativeMeetingId: latestMeetingId,
+      councilMeetingId: latestMeetingId,
     }),
     fetchParty(),
   ])
   topics.forEach((topic) => {
-    topic.legislators = topic.legislators
-      ? topic.legislators.map(({ party, ...legislator }) => {
+    topic.councilors = topic.councilors
+      ? topic.councilors.map(({ party, ...councilor }) => {
           const partyData = party
             ? _.find(parties, ({ id }) => String(id) === String(party))
             : undefined
           return {
-            avatar: getImageLink(legislator),
+            avatar: getImageLink(councilor),
             partyAvatar: partyData ? getImageLink(partyData) : '',
             party: partyData || party,
-            ...legislator,
+            ...councilor,
           }
         })
       : []
@@ -113,7 +113,12 @@ export default async function CouncilDetailPage({
     <div>
       <Open />
       <TopicSliders cards={testCards} />
-      <Dashboard initialTopics={topics} parties={parties} meetings={meetings} />
+      <Dashboard
+        districtSlug={districtSlug}
+        initialTopics={topics}
+        parties={parties}
+        meetings={meetings}
+      />
     </div>
   )
 }

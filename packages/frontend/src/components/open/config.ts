@@ -4,7 +4,7 @@ import {
 } from '@twreporter/core/lib/constants/color'
 import { InternalRoutes } from '@/constants/routes'
 
-const COUNCIL_NAMES: Record<string, string> = {
+export const COUNCIL_NAMES: Record<string, string> = {
   taipei: '臺北市議會',
   'new-taipei': '新北市議會',
   taoyuan: '桃園市議會',
