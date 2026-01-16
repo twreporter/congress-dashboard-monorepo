@@ -23,6 +23,11 @@ export type TopicData = {
     slug: string
     type: RelatedType
   }[]
+  relatedCouncilTopic?: {
+    slug: string
+    title: string
+    city: string
+  }[]
 }
 
 export type TopNTopicData = {

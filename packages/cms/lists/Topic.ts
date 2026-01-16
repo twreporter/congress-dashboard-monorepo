@@ -47,6 +47,14 @@ const listConfigurations = list({
         listView: { fieldMode: 'hidden' },
       },
     }),
+    relatedCouncilTopic: relationship({
+      ref: 'CouncilTopic.relatedLegislativeTopic',
+      label: '縣市議會相關議題',
+      many: true,
+      ui: {
+        labelField: 'labelForCMS',
+      },
+    }),
     relatedTwreporterArticles: json({
       label: '相關文章',
       defaultValue: [],
