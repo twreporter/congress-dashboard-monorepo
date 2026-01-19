@@ -17,6 +17,7 @@ import IconButton from '@/components/button/icon-button'
 
 const CONTENT_MAX_WIDTH = 928
 const DESKTOP_BREAKPOINT = 1024
+const HD_BREAKPOINT = 1440
 
 const Container = styled.div`
   width: 100%;
@@ -64,10 +65,45 @@ const ButtonGroup = styled.div`
 `
 
 const SwiperContainer = styled.div`
+  position: relative;
   width: 100%;
+
   ${mq.tabletAndBelow`
     .swiper-slide {
       width: 300px;
+    }
+  `}
+
+  ${mq.hdOnly`
+    width: 1168px; // 928 + 120*2
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      width: 120px;
+    }
+
+    &::before {
+      left: 0;
+      background: linear-gradient(
+        to right,
+        ${colorGrayscale.gray100} 0%,
+        transparent 100%
+      );
+    }
+
+    &::after {
+      right: 0;
+      background: linear-gradient(
+        to left,
+        ${colorGrayscale.gray100} 0%,
+        transparent 100%
+      );
     }
   `}
 `
@@ -79,31 +115,25 @@ const Sliders: React.FC<SlidersProps> = ({ cards }) => {
   const [swiper, setSwiper] = useState<SwiperClass | null>(null)
   const [isSwiperBeginning, setIsSwiperBeginning] = useState(true)
   const [isSwiperEnd, setIsSwiperEnd] = useState(false)
-  const [desktopOffset, setDesktopOffset] = useState(256)
 
   useEffect(() => {
     const calculateOffset = () => {
-      if (
-        typeof window !== 'undefined' &&
-        window.innerWidth >= DESKTOP_BREAKPOINT
-      ) {
-        const offset = Math.max(0, (window.innerWidth - CONTENT_MAX_WIDTH) / 2)
-        setDesktopOffset(offset)
+      if (typeof window === 'undefined' || !swiper) return
+
+      const width = window.innerWidth
+      // only need to dynamically calculate offset at 1024px-1440px
+      if (width >= DESKTOP_BREAKPOINT && width < HD_BREAKPOINT) {
+        const offset = Math.max(0, (width - CONTENT_MAX_WIDTH) / 2)
+        swiper.params.slidesOffsetBefore = offset
+        swiper.params.slidesOffsetAfter = offset
       }
+      swiper.update()
     }
 
     calculateOffset()
     window.addEventListener('resize', calculateOffset)
     return () => window.removeEventListener('resize', calculateOffset)
-  }, [])
-
-  useEffect(() => {
-    if (swiper) {
-      swiper.params.slidesOffsetBefore = desktopOffset
-      swiper.params.slidesOffsetAfter = desktopOffset
-      swiper.update()
-    }
-  }, [desktopOffset, swiper])
+  }, [swiper])
 
   const onSwiperSlideChange = (swiper: SwiperClass) => {
     if (swiper.isEnd) {
@@ -157,8 +187,8 @@ const Sliders: React.FC<SlidersProps> = ({ cards }) => {
               slidesPerGroup: 3,
             },
             1440: {
-              slidesOffsetBefore: desktopOffset,
-              slidesOffsetAfter: desktopOffset,
+              slidesOffsetBefore: 120,
+              slidesOffsetAfter: 120,
               slidesPerView: 3,
               slidesPerGroup: 3,
             },
