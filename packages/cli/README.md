@@ -80,6 +80,8 @@ Feed Algolia search indices with updated records.
 
 ### Options
 
+If no data-type flags are provided, the command runs all data types (topics, legislators, and speeches).
+
 * `--meeting-term` (required)
   Legislative meeting term. Required for all runs.
 
@@ -104,7 +106,7 @@ Feed Algolia search indices with updated records.
 ### Examples
 
 ```bash
-# Dry run all data types in the meeting term 11
+# Default (no data-type flags): dry run all data types in meeting term 11
 yarn lawmaker feed-algolia --meeting-term 11
 
 # Dry run only topics in the meeting-term 10
