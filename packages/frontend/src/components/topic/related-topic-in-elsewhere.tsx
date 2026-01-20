@@ -67,7 +67,7 @@ const RelatedTopicInElsewhere: FC<RelatedTopicInElsewhereProps> = ({
   relatedCouncilTopic = [],
 }) => {
   const [showAll, setShowAll] = useState<boolean>(
-    relatedCouncilTopic.length < DEFAULT_ITEM_NUMBER
+    relatedCouncilTopic.length <= DEFAULT_ITEM_NUMBER
   )
   const relatedItems = useMemo<RelatedItem[]>(() => {
     return relatedCouncilTopic.map(({ slug, title, city }) => ({
