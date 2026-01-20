@@ -27,4 +27,5 @@ RUN yarn install --production=true
 
 ENV NODE_ENV=production
 
-CMD ["node", "lib/index.js", "feed-algolia"]
+ENTRYPOINT ["node", "lib/index.js"]
+CMD ["feed-algolia"]
