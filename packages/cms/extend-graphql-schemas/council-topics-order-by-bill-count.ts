@@ -4,11 +4,11 @@ import { gql } from 'graphql-tag'
 import {
   getCouncilTopicsSql,
   getTop5CouncilorsSql,
-} from '../custom-sql/councilTopicsOrderBySpeechCount'
+} from '../custom-sql/councilTopicsOrderByBillCount'
 
-export const councilTopicsOrderBySpeechCountTypeDefs = gql`
+export const councilTopicsOrderByBillCountTypeDefs = gql`
   """
-  custom type for councilTopicsOrderBySpeechCount
+  custom type for councilTopicsOrderByBillCount
   """
   type CouncilorForTopic {
     id: Int!
@@ -30,7 +30,7 @@ export const councilTopicsOrderBySpeechCountTypeDefs = gql`
     """
     Get council topics order by bill count desc
     """
-    councilTopicsOrderBySpeechCount(
+    councilTopicsOrderByBillCount(
       meetingId: Int!
       partyIds: [Int] = []
       take: Int = 10
@@ -67,9 +67,9 @@ type CouncilorForTopicRaw = CouncilorForTopic & {
   imageExtension?: string
 }
 
-export const councilTopicsOrderBySpeechCountResolver = {
+export const councilTopicsOrderByBillCountResolver = {
   Query: {
-    councilTopicsOrderBySpeechCount: async (
+    councilTopicsOrderByBillCount: async (
       _root: any,
       {
         meetingId,
