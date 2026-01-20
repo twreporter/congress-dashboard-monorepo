@@ -32,6 +32,25 @@ Use a library like `dotenv` (already included) to load these into runtime automa
 
 ---
 
+### Command Environment Variables (Cloud Run Job)
+
+You can pass `feed-algolia` options via environment variables, which is useful for Cloud Run Jobs.
+CLI flags are additive for data-type selection (topics/legislators/speeches). If you enable a data type via env, adding another flag includes both.
+For meeting/session terms and dryrun, CLI flags override environment variables when both are provided.
+
+| Variable                | Description                                              |
+| ----------------------- | -------------------------------------------------------- |
+| `LAWMAKER_MEETING_TERM` | Same as `--meeting-term`                                 |
+| `LAWMAKER_SESSION_TERM` | Same as `--session-term`                                 |
+| `LAWMAKER_TOPICS`       | Same as `--topics` (boolean)                             |
+| `LAWMAKER_LEGISLATORS`  | Same as `--legislators` (boolean)                        |
+| `LAWMAKER_SPEECHES`     | Same as `--speeches` (boolean)                           |
+| `LAWMAKER_DRYRUN`       | Same as `--dryrun` / `--no-dryrun` (boolean)             |
+
+Boolean values accept: `true/false` (case-sensitive).
+
+---
+
 ## Installation
 
 Clone the repository and install dependencies:
@@ -108,6 +127,9 @@ If no data-type flags are provided, the command runs all data types (topics, leg
 ```bash
 # Default (no data-type flags): dry run all data types in meeting term 11
 yarn lawmaker feed-algolia --meeting-term 11
+
+# Use environment overrides (Cloud Run Job style)
+LAWMAKER_MEETING_TERM=11 LAWMAKER_SPEECHES=true LAWMAKER_DRYRUN=false yarn lawmaker feed-algolia
 
 # Dry run only topics in the meeting-term 10
 yarn lawmaker feed-algolia --meeting-term 10 --topics
