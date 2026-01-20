@@ -32,6 +32,26 @@ Use a library like `dotenv` (already included) to load these into runtime automa
 
 ---
 
+### Command Environment Variables (Cloud Run Job)
+
+You can pass `feed-algolia` options via environment variables, which is useful for Cloud Run Jobs.
+Defaults are applied only when the env var is not set; CLI flags may override.
+CLI flags are additive for data-type selection (topics/legislators/speeches). If you enable a data type via env, adding another flag includes both.
+For meeting/session terms and dryrun, CLI flags override environment variables when both are provided.
+
+| Variable                | Description                                              | Default (env unset, before CLI flags) |
+| ----------------------- | -------------------------------------------------------- | ------------------------------------- |
+| `LAWMAKER_MEETING_TERM` | Same as `--meeting-term`                                 | `11`                                  |
+| `LAWMAKER_SESSION_TERM` | Same as `--session-term`                                 | `all`                                 |
+| `LAWMAKER_TOPICS`       | Same as `--topics` (boolean)                             | `false`                               |
+| `LAWMAKER_LEGISLATORS`  | Same as `--legislators` (boolean)                        | `false`                               |
+| `LAWMAKER_SPEECHES`     | Same as `--speeches` (boolean)                           | `false`                               |
+| `LAWMAKER_DRYRUN`       | Same as `--dryrun` / `--no-dryrun` (boolean)             | `true`                                |
+
+Boolean values accept: `true/false` (case-sensitive).
+
+---
+
 ## Installation
 
 Clone the repository and install dependencies:
@@ -108,6 +128,9 @@ If no data-type flags are provided, the command runs all data types (topics, leg
 ```bash
 # Default (no data-type flags): dry run all data types in meeting term 11
 yarn lawmaker feed-algolia --meeting-term 11
+
+# Use environment defaults (Cloud Run Job style)
+LAWMAKER_MEETING_TERM=11 LAWMAKER_SPEECHES=true LAWMAKER_DRYRUN=false yarn lawmaker feed-algolia
 
 # Dry run only topics in the meeting-term 10
 yarn lawmaker feed-algolia --meeting-term 10 --topics
