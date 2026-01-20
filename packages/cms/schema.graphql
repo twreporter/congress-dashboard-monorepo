@@ -1958,7 +1958,7 @@ type Query {
   topicsOrderBySpeechCount(meetingId: Int!, sessionIds: [Int] = [], partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [TopicWithSpeechCountAndLegislators]
 
   """Get council topics order by bill count desc"""
-  councilTopicsOrderBySpeechCount(meetingId: Int!, partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [CouncilTopicWithBillCountAndCouncilors]
+  councilTopicsOrderByBillCount(meetingId: Int!, partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [CouncilTopicWithBillCountAndCouncilors]
 
   """Get top N topics of council members order by bill count desc"""
   topNTopicsOfCouncilMembers(councilMemberIds: [Int!]!, councilMeetingId: Int!, take: Int = 10): [CouncilMemberWithTopTopics]
@@ -2141,7 +2141,7 @@ type TopicWithSpeechCountAndLegislators {
   legislators: [LegislatorForTopic]
 }
 
-"""custom type for councilTopicsOrderBySpeechCount"""
+"""custom type for councilTopicsOrderByBillCount"""
 type CouncilorForTopic {
   id: Int!
   name: String!
