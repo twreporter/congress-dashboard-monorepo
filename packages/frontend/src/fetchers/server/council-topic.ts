@@ -181,7 +181,7 @@ export const fetchAllCouncilTopicSlug = async (): Promise<
 
 /* fetchTopNTopics
  *   fetch top N topics with give take & skip in given meeting & session
- *   top logic is order by speech count desc
+ *   top logic is order by bill count desc
  */
 export type FetchTopNTopicsParams = {
   take?: number
@@ -196,8 +196,8 @@ export const fetchTopNCouncilTopics = async ({
   councilMeetingId,
 }: FetchTopNTopicsParams): Promise<TopNCouncilTopicData[] | undefined> => {
   const query = `
-    query CouncilTopicsOrderBySpeechCount($meetingId: Int!, $take: Int, $skip: Int) {
-      councilTopicsOrderBySpeechCount(meetingId: $meetingId, take: $take, skip: $skip) {
+    query CouncilTopicsOrderByBillCount($meetingId: Int!, $take: Int, $skip: Int) {
+      councilTopicsOrderByBillCount(meetingId: $meetingId, take: $take, skip: $skip) {
         councilorCount
         slug
         billCount
@@ -226,9 +226,9 @@ export const fetchTopNCouncilTopics = async ({
 
   try {
     const data = await keystoneFetch<{
-      councilTopicsOrderBySpeechCount: TopNCouncilTopicData[]
+      councilTopicsOrderByBillCount: TopNCouncilTopicData[]
     }>(JSON.stringify({ query, variables }), false)
-    return data?.data?.councilTopicsOrderBySpeechCount
+    return data?.data?.councilTopicsOrderByBillCount
   } catch (err) {
     throw new Error(
       `Failed to fetch top ${take} council topics in meeting ${councilMeetingId}, err: ${err}`

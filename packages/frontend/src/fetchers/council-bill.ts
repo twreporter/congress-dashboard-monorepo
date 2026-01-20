@@ -20,11 +20,10 @@ const fetchBillsOfACouncilorInATopic = async ({
   }
 
   const apiBase = process.env.NEXT_PUBLIC_API_URL as string
+  const params = new URLSearchParams({ mid: String(councilMeetingId) })
   const url = `${apiBase}/councilor/${encodeURIComponent(
     councilorSlug
-  )}/topic/${encodeURIComponent(topicSlug)}/bill?mid=${encodeURIComponent(
-    councilMeetingId
-  )}`
+  )}/topic/${encodeURIComponent(topicSlug)}/bill?${params.toString()}`
 
   const res = await fetch(url, {
     method: 'GET',

@@ -21,7 +21,12 @@ export const fetchTop5TopicOfACouncilor = async ({
   districtSlug,
   excludeTopicSlug,
 }: FetchTop5TopicOfACouncilorParams): Promise<CouncilTopicForFilter[]> => {
-  const url = `${apiBase}/councilor/${councilorSlug}/topic?city=${districtSlug}&exclude=${excludeTopicSlug}&top=5`
+  const params = new URLSearchParams({
+    city: districtSlug,
+    exclude: excludeTopicSlug,
+    top: '5',
+  })
+  const url = `${apiBase}/councilor/${councilorSlug}/topic?${params.toString()}`
   const res = await fetch(url, {
     method: 'GET',
   })
@@ -41,7 +46,8 @@ export const fetchCouncilorsOfATopic = async ({
   topicSlug,
   districtSlug,
 }: FetchCouncilorsOfATopicParams): Promise<CouncilorWithBillCount[]> => {
-  const url = `${apiBase}/council-topic/${topicSlug}/councilor?city=${districtSlug}`
+  const params = new URLSearchParams({ city: districtSlug })
+  const url = `${apiBase}/council-topic/${topicSlug}/councilor?${params.toString()}`
   const res = await fetch(url, {
     method: 'GET',
   })

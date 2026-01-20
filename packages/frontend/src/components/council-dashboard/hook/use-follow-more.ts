@@ -22,11 +22,14 @@ const fetchMoreCouncilTopics = async ({
   city,
 }: FetchMoreCouncilTopicsParams): Promise<CouncilTopicForFilter[]> => {
   const apiBase = process.env.NEXT_PUBLIC_API_URL as string
+  const params = new URLSearchParams({
+    city,
+    exclude: excludeTopicSlug,
+    top: '5',
+  })
   const url = `${apiBase}/councilor/${encodeURIComponent(
     councilorSlug
-  )}/topic?city=${encodeURIComponent(city)}&exclude=${encodeURIComponent(
-    excludeTopicSlug
-  )}&top=5`
+  )}/topic?${params.toString()}`
 
   const res = await fetch(url, {
     method: 'GET',
@@ -74,11 +77,14 @@ const fetchMoreCouncilors = async ({
   city,
 }: FetchMoreCouncilorsParams): Promise<CouncilorWithBillCount[]> => {
   const apiBase = process.env.NEXT_PUBLIC_API_URL as string
+  const params = new URLSearchParams({
+    city,
+    exclude: excludeCouncilorSlug,
+    top: '5',
+  })
   const url = `${apiBase}/council-topic/${encodeURIComponent(
     topicSlug
-  )}/councilor?city=${encodeURIComponent(city)}&exclude=${encodeURIComponent(
-    excludeCouncilorSlug
-  )}&top=5`
+  )}/councilor?${params.toString()}`
 
   const res = await fetch(url, {
     method: 'GET',
