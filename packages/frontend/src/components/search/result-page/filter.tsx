@@ -55,7 +55,11 @@ export const SearchFilter = ({
     legislativeMeetingSessions: sessions,
     isLoading: isLoadingSessions,
     error: errorToLoadSession,
-  } = useLegislativeMeetingSession(latestMeetingTerm)
+  } = useLegislativeMeetingSession(
+    typeof filterValue.meeting === 'string' && filterValue.meeting !== 'all'
+      ? filterValue.meeting
+      : latestMeetingTerm
+  )
 
   const getFilterOptions = (): FilterOption[] => {
     const options: FilterOption[] = [
