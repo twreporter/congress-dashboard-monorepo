@@ -2,7 +2,7 @@ import React, { type FC } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 // types
-import type { RelatedLink } from '@/types/councilor'
+import type { RelatedLink } from '@/types'
 // components
 import { P1Gray800 } from '@/components/legislator/styles'
 import Tooltip from '@/components/dashboard/card/tooltip'
