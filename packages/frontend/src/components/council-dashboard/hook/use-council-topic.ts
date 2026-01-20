@@ -20,12 +20,11 @@ const useCouncilTopic = (parties: PartyData[]) => {
         skip,
         councilMeetingId,
       })
+      const partiesMap = new Map(parties.map((p) => [String(p.id), p]))
       topics.forEach((topic) => {
         topic.councilors =
           topic.councilors?.map(({ party, ...councilor }) => {
-            const partyData = party
-              ? _.find(parties, ({ id }) => String(id) === String(party))
-              : undefined
+            const partyData = party ? partiesMap.get(String(party)) : undefined
             return {
               avatar: getImageLink(councilor),
               partyAvatar: partyData ? getImageLink(partyData) : '',

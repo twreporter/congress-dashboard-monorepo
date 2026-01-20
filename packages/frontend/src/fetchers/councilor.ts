@@ -21,7 +21,12 @@ export const fetchTop5CouncilorOfATopic = async ({
   districtSlug,
   excludeCouncilorSlug,
 }: FetchTopCouncilorOfATopicParams): Promise<CouncilorWithBillCount[]> => {
-  const url = `${apiBase}/council-topic/${topicSlug}/councilor?city=${districtSlug}&exclude=${excludeCouncilorSlug}&top=5`
+  const params = new URLSearchParams({
+    city: districtSlug,
+    exclude: excludeCouncilorSlug,
+    top: '5',
+  })
+  const url = `${apiBase}/council-topic/${topicSlug}/councilor?${params.toString()}`
   const res = await fetch(url, {
     method: 'GET',
   })
@@ -41,7 +46,8 @@ export const fetchTopicsOfACouncilor = async ({
   councilorSlug,
   districtSlug,
 }: FetchTopicsOfACouncilorParams): Promise<CouncilTopicForFilter[]> => {
-  const url = `${apiBase}/councilor/${councilorSlug}/topic?city=${districtSlug}`
+  const params = new URLSearchParams({ city: districtSlug })
+  const url = `${apiBase}/councilor/${councilorSlug}/topic?${params.toString()}`
   const res = await fetch(url, {
     method: 'GET',
   })
@@ -68,13 +74,14 @@ export const fetchCouncilors = async ({
   partyIds,
   constituencies,
 }: FetchCouncilorsParams): Promise<CouncilorForIndex[]> => {
-  let url = `${apiBase}/councilor?mid=${encodeURIComponent(councilMeetingId)}`
+  const params = new URLSearchParams({ mid: String(councilMeetingId) })
   if (partyIds && partyIds.length > 0) {
-    url = url.concat(`&pids=${partyIds}`)
+    params.set('pids', partyIds.join(','))
   }
   if (constituencies && constituencies.length > 0) {
-    url = url.concat(`&cvs=${constituencies}`)
+    params.set('cvs', constituencies.join(','))
   }
+  const url = `${apiBase}/councilor?${params.toString()}`
 
   const res = await fetch(url, {
     method: 'GET',
@@ -107,12 +114,11 @@ export const fetchTopNTopicsOfCouncilMembers = async ({
     return []
   }
 
-  let url = `${apiBase}/index/councilor/${councilMemberIds}/topic?mid=${encodeURIComponent(
-    councilMeetingId
-  )}`
-  if (take) {
-    url = url.concat(`&top=${encodeURIComponent(take)}`)
-  }
+  const params = new URLSearchParams({
+    mid: String(councilMeetingId),
+    top: String(take),
+  })
+  const url = `${apiBase}/index/councilor/${councilMemberIds}/topic?${params.toString()}`
 
   const res = await fetch(url, {
     method: 'GET',

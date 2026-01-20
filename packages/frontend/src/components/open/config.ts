@@ -2,20 +2,19 @@ import {
   colorGrayscale,
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
+import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+import type { CouncilDistrict } from '@/types/council'
 import { InternalRoutes } from '@/constants/routes'
 
-export const COUNCIL_NAMES: Record<string, string> = {
-  taipei: '臺北市議會',
-  'new-taipei': '新北市議會',
-  taoyuan: '桃園市議會',
-  taichung: '臺中市議會',
-  tainan: '臺南市議會',
-  kaohsiung: '高雄市議會',
-}
+export const getCouncilName = (city: CouncilDistrict) =>
+  `${CITY_LABEL[city]}議會`
 
 export const getOpenConfig = (pathname: string) => {
   if (pathname.startsWith(InternalRoutes.Council)) {
-    const districtSlug = pathname.replace(`${InternalRoutes.Council}/`, '')
+    const districtSlug = pathname.replace(
+      `${InternalRoutes.Council}/`,
+      ''
+    ) as CouncilDistrict
     return {
       title: '報導者觀測站',
       description: [
@@ -23,7 +22,7 @@ export const getOpenConfig = (pathname: string) => {
         '點擊你感興趣的人或話題，觀察議員的發言與提案情形',
       ],
       badge: {
-        text: COUNCIL_NAMES[districtSlug],
+        text: getCouncilName(districtSlug),
         textColor: colorGrayscale.white,
         backgroundColor: colorSupportive.main,
       },

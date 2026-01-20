@@ -73,6 +73,7 @@ export const fetchLatestCouncilMeetingOfACity = async ({
   const query = `
     query CouncilMeeting($where: CouncilMeetingWhereInput!, $orderBy: [CouncilMeetingOrderByInput!]!, $take: Int) {
       councilMeetings(where: $where, orderBy: $orderBy, take: $take) {
+        id
         term
       }
     }

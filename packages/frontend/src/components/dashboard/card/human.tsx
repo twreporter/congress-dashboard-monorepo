@@ -20,6 +20,11 @@ import {
   CONSTITUENCY_LABEL,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 import {
+  MemberType as CouncilMemberType,
+  MEMBER_TYPE as COUNCIL_MEMBER_TYPE,
+  MEMBER_TYPE_LABEL as COUNCIL_MEMBER_TYPE_LABEL,
+} from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
+import {
   colorGrayscale,
   colorOpacity,
   colorBrand,
@@ -152,11 +157,13 @@ const Party = styled(PartyTag)`
   bottom: 8px;
 `
 
+export type CardHumanType = 'legislator' | 'councilor'
 export type CardHumanProps = {
+  cardType?: CardHumanType
   name?: string
   tooltip?: string
   note?: string
-  type?: MemberType | string
+  type?: MemberType | CouncilMemberType
   constituency?: Constituency | number
   tags?: Tag[]
   avatar?: string
@@ -166,6 +173,7 @@ export type CardHumanProps = {
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 const CardHuman: React.FC<CardHumanProps> = ({
+  cardType = 'legislator',
   name = '',
   tooltip = '',
   note = '',
@@ -279,9 +287,13 @@ const CardHuman: React.FC<CardHumanProps> = ({
           </Title>
           <Type
             text={
-              type === MemberType.Constituency && constituency
-                ? CONSTITUENCY_LABEL[constituency]
-                : MEMBER_TYPE_LABEL[type]
+              cardType === 'councilor'
+                ? type === COUNCIL_MEMBER_TYPE.constituency
+                  ? `第${constituency}選區`
+                  : COUNCIL_MEMBER_TYPE_LABEL[type as CouncilMemberType]
+                : type === MemberType.Constituency && constituency
+                ? CONSTITUENCY_LABEL[constituency as Constituency]
+                : MEMBER_TYPE_LABEL[type as MemberType]
             }
           />
         </div>

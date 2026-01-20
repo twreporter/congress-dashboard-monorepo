@@ -63,12 +63,18 @@ export const fetchTopNCouncilTopics = async ({
   councilMeetingId,
   partyIds = [],
 }: FetchTopNTopicsParams): Promise<TopNCouncilTopicData[]> => {
-  let url = `${apiBase}/council-topic?mid=${encodeURIComponent(
-    councilMeetingId
-  )}&take=${encodeURIComponent(take)}&skip=${encodeURIComponent(skip)}`
-  if (partyIds && partyIds.length > 0) {
-    url = url.concat(`&pids=${partyIds}`)
+  if (!councilMeetingId) {
+    throw new Error('CouncilMeetingId is required to fetch council topics')
   }
+  const params = new URLSearchParams({
+    mid: String(councilMeetingId),
+    take: String(take),
+    skip: String(skip),
+  })
+  if (partyIds && partyIds.length > 0) {
+    params.set('pids', partyIds.join(','))
+  }
+  const url = `${apiBase}/council-topic?${params.toString()}`
 
   const res = await fetch(url, {
     method: 'GET',

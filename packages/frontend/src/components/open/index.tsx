@@ -10,6 +10,7 @@ import { notoSerif } from '@/utils/font'
 // components
 import { AlgoliaInstantSearch } from '@/components/search/instant-search'
 import Selected from '@/components/open/selected'
+import Badge from '@/components/open/badge'
 // type
 import type { EditorSelect } from '@/types/editor-pick'
 // constants
@@ -23,8 +24,6 @@ import {
   MobileOnly,
   TabletAndAbove,
 } from '@twreporter/react-components/lib/rwd'
-// components
-import Badge from './badge'
 
 const Box = styled.div`
   width: -webkit-fill-available;

@@ -39,8 +39,6 @@ const fetchBillsOfACouncilorInATopic = async ({
   return data?.data || []
 }
 
-export type BillDataForSidebar = BillMeta
-
 const useCouncilBill = (params?: FetchBillsParams) => {
   const { data, isLoading, error } = useSWR(
     params ? params : null,

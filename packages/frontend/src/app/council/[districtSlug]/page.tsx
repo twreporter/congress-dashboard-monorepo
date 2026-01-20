@@ -20,6 +20,7 @@ const _ = {
   find,
 }
 
+// TODO: temporary test data
 const testCards = [
   {
     title: '普發現金',
@@ -120,20 +121,20 @@ export default async function CouncilDetailPage({
     }),
     fetchParty(),
   ])
+  const partiesMap = parties
+    ? new Map(parties.map((p) => [String(p.id), p]))
+    : new Map()
   topics.forEach((topic) => {
-    topic.councilors = topic.councilors
-      ? topic.councilors.map(({ party, ...councilor }) => {
-          const partyData = party
-            ? _.find(parties, ({ id }) => String(id) === String(party))
-            : undefined
-          return {
-            avatar: getImageLink(councilor),
-            partyAvatar: partyData ? getImageLink(partyData) : '',
-            party: partyData || party,
-            ...councilor,
-          }
-        })
-      : []
+    topic.councilors =
+      topic.councilors?.map(({ party, ...councilor }) => {
+        const partyData = party ? partiesMap.get(String(party)) : undefined
+        return {
+          avatar: getImageLink(councilor),
+          partyAvatar: partyData ? getImageLink(partyData) : '',
+          party: partyData || party,
+          ...councilor,
+        }
+      }) || []
   })
 
   return (

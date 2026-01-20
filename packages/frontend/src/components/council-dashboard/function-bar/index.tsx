@@ -45,7 +45,7 @@ import {
 import { CITY_OPTIONS } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 // lodash
 import { isEqual, map } from 'lodash'
-import { COUNCIL_NAMES } from '@/components/open/config'
+import { getCouncilName } from '@/components/open/config'
 const _ = {
   map,
   isEqual,
@@ -189,7 +189,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   const { setTabElement, isHeaderHidden, isHeaderAboveTab } = useScrollContext()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterString, setFilterString] = useState(
-    `${COUNCIL_NAMES[districtSlug]}｜第${latestMettingTerm}屆`
+    `${getCouncilName(districtSlug)}｜第${latestMettingTerm}屆`
   )
   // TODO: open filter next scrum
   // const [filterCount, setFilterCount] = useState(0)
@@ -350,7 +350,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     //   (filterModalValue.party as string[])?.length +
     //   (filterModalValue.committee as string[])?.length
 
-    setFilterString(`${COUNCIL_NAMES[districtSlug]}｜${meetingString}`)
+    setFilterString(`${getCouncilName(districtSlug)}｜${meetingString}`)
     // setFilterCount(totalCount)
 
     if (typeof onChangeFilter === 'function') {
