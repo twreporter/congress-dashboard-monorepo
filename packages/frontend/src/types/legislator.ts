@@ -1,6 +1,5 @@
-import type { KeystoneImage } from '@/types'
+import type { KeystoneImage, RelatedLink } from '@/types'
 import type { Tag } from '@/components/dashboard/type'
-import type { RelatedLink } from '@/types/councilor'
 // @twreporter
 import type {
   MemberType,
