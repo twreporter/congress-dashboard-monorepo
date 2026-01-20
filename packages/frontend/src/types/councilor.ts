@@ -1,4 +1,4 @@
-import type { KeystoneImage } from '@/types/index'
+import type { KeystoneImage, RelatedLink } from '@/types/index'
 import type { CouncilDistrict } from '@/types/council'
 import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 
@@ -6,11 +6,6 @@ export type CouncilorMemberMeta = {
   councilor: {
     name: string
   }
-}
-
-export type RelatedLink = {
-  url: string
-  label: string
 }
 
 export type CouncilorType = MemberType
