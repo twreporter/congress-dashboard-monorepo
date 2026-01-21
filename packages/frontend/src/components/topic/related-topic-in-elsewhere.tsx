@@ -72,7 +72,7 @@ const RelatedTopicInElsewhere: FC<RelatedTopicInElsewhereProps> = ({
   const relatedItems = useMemo<RelatedItem[]>(() => {
     return relatedCouncilTopic.map(({ slug, title, city }) => ({
       text: `${CITY_LABEL[city]}議會-${title}`,
-      url: `${InternalRoutes.Council}/${city}${InternalRoutes.CouncilTopic}/${slug}`,
+      url: `${InternalRoutes.CouncilTopic(city)}/${slug}`,
     }))
   }, [relatedCouncilTopic])
   const relatedItemsForShow = useMemo<RelatedItem[]>(

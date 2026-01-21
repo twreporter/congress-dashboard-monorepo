@@ -1,5 +1,3 @@
-// constants
-import { InternalRoutes } from '@/constants/routes'
 // types
 import type { SitemapItem, SitemapItemWithCity } from '@/types'
 
@@ -10,7 +8,7 @@ type Sitemap = {
   lastModified: Date
 }
 
-export const generateSitemap = (route: typeof InternalRoutes) => {
+export const generateSitemap = (route: string) => {
   return ({ slug, updatedAt }: SitemapItem): Sitemap => ({
     url: `${baseUrl}${route}/${slug}`,
     lastModified: new Date(updatedAt),
