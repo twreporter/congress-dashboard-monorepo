@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.5...@twreporter/congress-dashboard-frontend@1.10.0-rc.6) (2026-01-21)
+
+### Bug Fixes
+
+- **frontend:** cast districtSlug to CouncilDistrict for type safety in FunctionBar ([79b8fec](https://github.com/twreporter/congress-dashboard-monorepo/commit/79b8fecb3893776f54b7f2dad5b4f71b45342af0))
+
 # [1.10.0-rc.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.4...@twreporter/congress-dashboard-frontend@1.10.0-rc.5) (2026-01-21)
 
 ### Bug Fixes
