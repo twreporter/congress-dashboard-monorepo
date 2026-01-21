@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.8](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.7...@twreporter/congress-dashboard-frontend@1.10.0-rc.8) (2026-01-21)
+
+### Bug Fixes
+
+- **frontend:** type safety ([8cf74ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/8cf74eccd085addc0ddc3035e5847408a6dd3a28))
+
 # [1.10.0-rc.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.6...@twreporter/congress-dashboard-frontend@1.10.0-rc.7) (2026-01-21)
 
 ### Bug Fixes
