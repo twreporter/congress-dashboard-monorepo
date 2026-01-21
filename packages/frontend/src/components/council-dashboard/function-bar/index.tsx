@@ -31,6 +31,7 @@ import type {
   FilterOption,
   FilterModalValueType,
 } from '@/components/dashboard/type'
+import type { CouncilDistrict } from '@/types/council'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import {
@@ -189,7 +190,9 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   const { setTabElement, isHeaderHidden, isHeaderAboveTab } = useScrollContext()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filterString, setFilterString] = useState(
-    `${getCouncilName(districtSlug)}｜第${latestMettingTerm}屆`
+    `${getCouncilName(
+      districtSlug as CouncilDistrict
+    )}｜第${latestMettingTerm}屆`
   )
   // TODO: open filter next scrum
   // const [filterCount, setFilterCount] = useState(0)
@@ -351,7 +354,9 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
     //   (filterModalValue.party as string[])?.length +
     //   (filterModalValue.committee as string[])?.length
 
-    setFilterString(`${getCouncilName(districtSlug)}｜${meetingString}`)
+    setFilterString(
+      `${getCouncilName(districtSlug as CouncilDistrict)}｜${meetingString}`
+    )
     // setFilterCount(totalCount)
 
     if (typeof onChangeFilter === 'function') {
