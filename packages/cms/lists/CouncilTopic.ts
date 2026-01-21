@@ -47,7 +47,7 @@ const listConfigurations = list({
       validation: { isRequired: true },
     }),
     relatedLegislativeTopic: relationship({
-      ref: 'Topic',
+      ref: 'Topic.relatedCouncilTopic',
       label: '立法院相關議題',
       many: true,
       ui: {

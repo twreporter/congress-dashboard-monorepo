@@ -67,6 +67,11 @@ export const fetchTopic = async ({
           title
         }
         relatedTwreporterArticles
+        relatedCouncilTopic {
+          slug
+          title
+          city
+        }
       }
     }
   `
