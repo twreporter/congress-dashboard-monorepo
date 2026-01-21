@@ -2,29 +2,34 @@
 'use client'
 
 import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 // type
-import type { TopNTopicData } from '@/types/topic'
+import type { TopNCouncilTopicData } from '@/types/council-topic'
 import type { PartyData } from '@/types/party'
-import type { LegislativeMeeting } from '@/types/legislative-meeting'
-import type { SidebarIssueProps } from '@/components/sidebar'
-import type { Legislator } from '@/components/dashboard/type'
-import type { FilterModalValueType } from '@/components/dashboard/type'
+import type { CouncilMeeting } from '@/types/council-meeting'
+import type {
+  SidebarIssueProps,
+  SidebarCouncilorProps,
+} from '@/components/council-dashboard/sidebar'
+import type {
+  CouncilorForDashboard,
+  CouncilFilterModalValueType,
+} from '@/components/council-dashboard/type'
 // utils
 import toastr from '@/utils/toastr'
 import { isMobile } from '@/utils/rwd'
 // enum
 import { Option } from '@/components/dashboard/enum'
 // context
-import { DashboardContext } from '@/components/dashboard/context'
+import { CouncilDashboardContext } from '@/components/council-dashboard/context'
 // hook
-import useFilter from '@/components/dashboard/hook/use-filter'
-import useTopic from '@/components/dashboard/hook/use-topic'
-import useLegislator from '@/components/dashboard/hook/use-legislator'
+import useCouncilFilter from '@/components/council-dashboard/hook/use-council-filter'
+import useCouncilTopic from '@/components/council-dashboard/hook/use-council-topic'
+import useCouncilor from '@/components/council-dashboard/hook/use-councilor'
 import useOutsideClick from '@/hooks/use-outside-click'
 import useWindowWidth from '@/hooks/use-window-width'
 // components
-import FunctionBar from '@/components/dashboard/function-bar'
+import FunctionBar from '@/components/council-dashboard/function-bar'
 import {
   CardIssueRWD,
   CardIssueSkeletonRWD,
@@ -35,22 +40,29 @@ import {
 } from '@/components/dashboard/card/human'
 import {
   SidebarIssue,
-  SidebarLegislator,
-  type SidebarLegislatorProps,
-} from '@/components/sidebar'
-import { GapHorizontal, Gap } from '@/components/skeleton'
+  SidebarCouncilor,
+} from '@/components/council-dashboard/sidebar'
+import { Gap } from '@/components/skeleton'
 import EmptyState from '@/components/dashboard/empty-state'
 import ErrorState from '@/components/dashboard/error-state'
+// shared styled components
+import {
+  Box,
+  functionBarCss,
+  CardBox,
+  CardIssueBox,
+  CardHumanBox,
+  LoadMore,
+  sidebarCss,
+  GapHorizontalWithStyle,
+  CardSection,
+} from '@/components/dashboard'
 // @twreporter
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import mq from '@twreporter/core/lib/utils/media-query'
 import { PillButton } from '@twreporter/react-components/lib/button'
 import {
   TabletAndAbove,
   MobileOnly,
 } from '@twreporter/react-components/lib/rwd'
-// z-index
-import { ZIndex } from '@/styles/z-index'
 // lodash
 import { find } from 'lodash'
 import { InternalRoutes } from '@/constants/routes'
@@ -58,111 +70,8 @@ const _ = {
   find,
 }
 
-export const Box = styled.div`
-  background: ${colorGrayscale.gray100};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 0 0 0;
-  gap: 32px;
-
-  ${mq.desktopOnly`
-    padding: 40px 0 0 0 ;
-  `}
-  ${mq.tabletOnly`
-    padding: 32px 0 0 0;
-    gap: 24px;
-  `}
-  ${mq.mobileOnly`
-    padding: 20px 0 0 0;
-    gap: 20px;  
-  `}
-`
 const StyledFunctionBar = styled(FunctionBar)`
-  ${mq.tabletOnly`
-    padding: 0 32px;
-  `}
-  ${mq.mobileOnly`
-    padding: 0 24px;
-  `}
-`
-export const functionBarCss = css`
-  ${mq.tabletOnly`
-    padding: 0 32px;
-  `}
-  ${mq.mobileOnly`
-    padding: 0 24px;
-  `}
-`
-export const cardCss = css`
-  width: 928px;
-
-  ${mq.tabletOnly`
-    width: calc( 100vw - 64px );
-  `}
-  ${mq.mobileOnly`
-    width: calc( 100vw - 48px);
-  `}
-`
-export const CardBox = styled.div`
-  ${cardCss}
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-export const CardIssueBox = styled.div<{ $active: boolean }>`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  ${(props) => (props.$active ? '' : 'display: none !important;')}
-`
-export const CardHumanBox = styled.div<{
-  $active: boolean
-  $showBottomPadding: boolean
-}>`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-gap: 24px;
-  ${(props) => (props.$active ? '' : 'display: none !important;')}
-  ${(props) => (props.$showBottomPadding ? 'padding-bottom: 24px;' : '')}
-
-  ${mq.mobileOnly`
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    grid-gap: 20px;
-    ${(props) => (props.$showBottomPadding ? 'padding-bottom: 20px;' : '')}
-
-    & > * {
-      width: calc(100vw - 48px);
-    }
-  `}
-`
-/*
- * grid card would have redundant column gap when number of cards is even
- * thus load more margin top would be 64px (the expected gap) - 24px (redundant column gap)
- */
-export const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
-  margin-top: 40px;
-  justify-content: center;
-  width: 300px !important;
-
-  ${mq.mobileOnly`
-    margin-top: 32px;
-    width: 100% !important;
-  `}
-
-  ${(props) => (props.$hidden ? 'display: none !important;' : '')}
-`
-export const sidebarCss = css<{ $show: boolean }>`
-  transform: translateX(${(props) => (props.$show ? 0 : 520)}px);
-  transition: transform 0.3s ease-in-out;
-
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: ${ZIndex.SideBar};
-  overflow-y: scroll;
+  ${functionBarCss}
 `
 const StyledSidebarIssue = styled(
   forwardRef<HTMLDivElement, SidebarIssueProps>((props, ref) => (
@@ -171,87 +80,34 @@ const StyledSidebarIssue = styled(
 )<{ $show: boolean }>`
   ${sidebarCss}
 `
-const StyledSidebarLegislator = styled(
-  forwardRef<HTMLDivElement, SidebarLegislatorProps>((props, ref) => (
-    <SidebarLegislator {...props} ref={ref} />
+const StyledSidebarCouncilor = styled(
+  forwardRef<HTMLDivElement, SidebarCouncilorProps>((props, ref) => (
+    <SidebarCouncilor {...props} ref={ref} />
   ))
 )<{ $show: boolean }>`
   ${sidebarCss}
 `
-export const GapHorizontalWithStyle = styled(GapHorizontal)`
-  transition: width 0.3s ease-in-out;
-`
-export const CardSection = styled.div<{
-  $isScroll: boolean
-  $isSidebarOpened: boolean
-  $windowWidth: number
-}>`
-  width: 100%;
-  display: flex;
-  flex-wrap: nowrap;
-  ${(props) =>
-    props.$isScroll
-      ? `
-    overflow-x: scroll;
-    scrollbar-width: none;
-  `
-      : ''}
-
-  ${mq.desktopAndAbove`
-    ${(props) =>
-      props.$windowWidth
-        ? `
-        max-width: 100%;
-        padding: 0 ${
-          props.$isSidebarOpened ? 0 : (props.$windowWidth - 928) / 2
-        }px 0 ${(props.$windowWidth - 928) / 2}px;
-      `
-        : `
-        max-width: 928px;
-      `}
-  `}
-
-  ${(props) =>
-    props.$isSidebarOpened
-      ? `
-      width: 100vw;
-    `
-      : ''}
-
-  ${mq.tabletAndBelow`
-    max-width: 100%;
-    padding: 0 32px;
-  `}
-
-  ${mq.mobileOnly`
-    padding: 0 24px;
-  `}
-
-  ${CardBox}, ${GapHorizontalWithStyle} {
-    flex: none;
-  }
-`
 
 const anchorId = 'anchor-id'
 type DashboardProps = {
-  initialTopics?: TopNTopicData[] & {
-    legislators?: Legislator[]
-  }
+  initialTopics?: TopNCouncilTopicData[]
   parties?: PartyData[]
-  meetings?: LegislativeMeeting[]
+  meetings?: CouncilMeeting[]
+  districtSlug: string
 }
 const Dashboard: React.FC<DashboardProps> = ({
   initialTopics = [],
   parties = [],
   meetings = [],
+  districtSlug,
 }) => {
   const windowWidth = useWindowWidth()
   const latestMeetingId = useMemo(() => meetings[0]?.id, [meetings])
-  const [selectedType, setSelectedType] = useState(Option.Issue)
+  const [selectedType, setSelectedType] = useState(Option.Human)
   const [activeCardIndex, setActiveCardIndex] = useState(-1)
   const [isLoading, setIsLoading] = useState(false)
   const [topics, setTopics] = useState(initialTopics)
-  const [legislators, setLegislators] = useState<Legislator[]>([])
+  const [councilors, setCouncilors] = useState<CouncilorForDashboard[]>([])
   const [shouldToastrOnHuman, setShouldToastrOnHuman] = useState(true)
   const [showSidebar, setShowSidebar] = useState(false)
   const [sidebarTopic, setSidebarTopic] = useState<SidebarIssueProps>({
@@ -259,60 +115,63 @@ const Dashboard: React.FC<DashboardProps> = ({
     count: 0,
     slug: '',
     legislatorList: [],
+    districtSlug,
   })
-  const [sidebarHuman, setSidebarHuman] = useState<SidebarLegislatorProps>({
+  const [sidebarHuman, setSidebarHuman] = useState<SidebarCouncilorProps>({
     title: '',
     slug: '',
     issueList: [],
+    districtSlug,
   })
   const [sidebarGap, setSidebarGap] = useState(0)
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
   const cardRef = useRef<HTMLDivElement>(null)
-  const [hasMoreLegislator, setHasMoreLegislator] = useState(false)
+  const [hasMoreCouncilor, setHasMoreCouncilor] = useState(false)
   const isShowLoadMore = useMemo(() => {
     if (isLoading) {
       return false
     }
 
     if (selectedType === Option.Human) {
-      return hasMoreLegislator
+      return hasMoreCouncilor
     }
 
     // detemine has more topics
     return topics.length >= 10 ? topics.length % 10 === 0 : false
-  }, [selectedType, topics, hasMoreLegislator, isLoading])
+  }, [selectedType, topics, hasMoreCouncilor, isLoading])
   const isShowEmpty = useMemo(() => {
     const currentListLength =
-      selectedType === Option.Issue ? topics.length : legislators.length
+      selectedType === Option.Issue ? topics.length : councilors.length
     return !isLoading && currentListLength === 0
-  }, [selectedType, topics, legislators, isLoading])
+  }, [selectedType, topics, councilors, isLoading])
   const [isShowError, setIsShowError] = useState(false)
 
   const { filterValues, setFilterValues, formatter, formattedFilterValues } =
-    useFilter(meetings)
-  const fetchTopics = useTopic(parties)
-  const { fetchLegislatorAndTopTopics, loadMoreLegislatorAndTopTopics } =
-    useLegislator()
+    useCouncilFilter(meetings)
+  const fetchTopics = useCouncilTopic(parties)
+  const { fetchCouncilorAndTopTopics, loadMoreCouncilorAndTopTopics } =
+    useCouncilor()
 
   useEffect(() => {
-    const initializeLegislator = async () => {
-      const { data, hasMore } = await fetchLegislatorAndTopTopics({
-        legislativeMeetingId: Number(latestMeetingId),
+    const initializeCouncilor = async () => {
+      const { data, hasMore } = await fetchCouncilorAndTopTopics({
+        councilMeetingId: Number(latestMeetingId),
       })
-      setLegislators(data)
-      setHasMoreLegislator(hasMore)
+      setCouncilors(data)
+      setHasMoreCouncilor(hasMore)
     }
     try {
-      initializeLegislator()
+      initializeCouncilor()
     } catch (err) {
-      console.error(`initialize legislator failed. err: ${err}`)
+      console.error(`initialize councilor failed. err: ${err}`)
       setIsShowError(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     if (shouldToastrOnHuman && selectedType === Option.Human) {
-      toastr({ text: '立委為隨機排列' })
+      toastr({ text: '議員為隨機排列' })
       setShouldToastrOnHuman(false)
     }
   }, [selectedType, shouldToastrOnHuman])
@@ -345,26 +204,24 @@ const Dashboard: React.FC<DashboardProps> = ({
   }
   const loadMoreTopics = async () => {
     const skip = topics.length
-    const { meetingId, sessionIds } = formatter(filterValues)
+    const { meetingId } = formatter(filterValues)
     const moreTopics = await fetchTopics({
       skip,
       take: 10,
-      legislativeMeetingId: meetingId,
-      legislativeMeetingSessionIds: sessionIds,
+      councilMeetingId: meetingId,
     })
     setTopics((topics) => topics.concat(moreTopics))
   }
   const loadMoreHuman = async () => {
-    const skip = legislators.length
-    const { meetingId, sessionIds } = formatter(filterValues)
-    const { data, hasMore } = await loadMoreLegislatorAndTopTopics({
+    const skip = councilors.length
+    const { meetingId } = formatter(filterValues)
+    const { data, hasMore } = await loadMoreCouncilorAndTopTopics({
       skip,
       take: 10,
-      legislativeMeetingId: meetingId,
-      legislativeMeetingSessionIds: sessionIds,
+      councilMeetingId: meetingId,
     })
-    setLegislators((legislators) => legislators.concat(data))
-    setHasMoreLegislator(hasMore)
+    setCouncilors((councilors) => councilors.concat(data))
+    setHasMoreCouncilor(hasMore)
   }
 
   const updateSidebarTopic = (index: number) => {
@@ -372,28 +229,34 @@ const Dashboard: React.FC<DashboardProps> = ({
     setSidebarTopic({
       slug: activeTopic.slug,
       title: activeTopic.title,
-      legislatorList: activeTopic.legislators,
-      count: activeTopic.speechCount,
+      legislatorList: activeTopic.councilors,
+      count: activeTopic.billCount,
+      districtSlug,
     })
   }
   const updateSidebarHuman = (index: number) => {
-    const activeLegislator = legislators[index]
+    const activeCouncilor = councilors[index]
     setSidebarHuman({
-      slug: activeLegislator.slug,
-      title: `${activeLegislator.name}`,
-      note: activeLegislator.note,
-      issueList: activeLegislator.tags,
+      slug: activeCouncilor.slug,
+      title: `${activeCouncilor.name}`,
+      note: activeCouncilor.note,
+      issueList: activeCouncilor.tags,
+      districtSlug,
     })
   }
 
   const gotoTopic = (index: number) => {
     const activeTopic = topics[index]
-    const url = `${InternalRoutes.Topic}/${activeTopic.slug}`
+    const url = `${InternalRoutes.CouncilTopic(districtSlug)}/${
+      activeTopic.slug
+    }`
     window.open(url, '_self')
   }
   const gotoHuman = (index: number) => {
-    const activeLegislator = legislators[index]
-    const url = `${InternalRoutes.Legislator}/${activeLegislator.slug}`
+    const activeCouncilor = councilors[index]
+    const url = `${InternalRoutes.Councilor(districtSlug)}/${
+      activeCouncilor.slug
+    }`
     window.open(url, '_self')
   }
 
@@ -420,6 +283,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     if (showSidebar) {
       calculateSidebarGap()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [windowWidth, showSidebar])
   useEffect(() => {
     if (activeCardIndex > -1) {
@@ -469,7 +333,9 @@ const Dashboard: React.FC<DashboardProps> = ({
     }
   }
 
-  const onChangeFilter = async (filterModalValue: FilterModalValueType) => {
+  const onChangeFilter = async (
+    filterModalValue: CouncilFilterModalValueType
+  ) => {
     setIsLoading(true)
     await Promise.all([
       onChangeTopicFilter(filterModalValue),
@@ -478,33 +344,30 @@ const Dashboard: React.FC<DashboardProps> = ({
     setIsLoading(false)
   }
   const onChangeTopicFilter = async (
-    filterModalValue: FilterModalValueType
+    filterModalValue: CouncilFilterModalValueType
   ) => {
     setTopics([])
-    const { meetingId, sessionIds } = formatter(filterModalValue)
+    const { meetingId, partyIds } = formatter(filterModalValue)
     const topics = await fetchTopics({
       take: 10,
       skip: 0,
-      legislativeMeetingId: meetingId,
-      legislativeMeetingSessionIds: sessionIds,
+      councilMeetingId: meetingId,
+      partyIds,
     })
     setTopics(topics)
   }
   const onChangeHumanFilter = async (
-    filterModalValue: FilterModalValueType
+    filterModalValue: CouncilFilterModalValueType
   ) => {
-    setLegislators([])
-    const { meetingId, sessionIds, partyIds, constituency, committeeSlugs } =
-      formatter(filterModalValue)
-    const { data, hasMore } = await fetchLegislatorAndTopTopics({
-      legislativeMeetingId: meetingId,
-      legislativeMeetingSessionIds: sessionIds,
+    setCouncilors([])
+    const { meetingId, partyIds, constituency } = formatter(filterModalValue)
+    const { data, hasMore } = await fetchCouncilorAndTopTopics({
+      councilMeetingId: meetingId,
       partyIds,
       constituencies: constituency,
-      committeeSlugs,
     })
-    setLegislators(data)
-    setHasMoreLegislator(hasMore)
+    setCouncilors(data)
+    setHasMoreCouncilor(hasMore)
     if (data.length > 0) {
       setShouldToastrOnHuman(true)
     }
@@ -520,13 +383,14 @@ const Dashboard: React.FC<DashboardProps> = ({
   const ref = useOutsideClick(closeSidebar)
 
   return (
-    <DashboardContext.Provider value={contextValue}>
+    <CouncilDashboardContext.Provider value={contextValue}>
       <Box id={anchorId} ref={ref}>
         <StyledFunctionBar
           setTab={setTab}
           parties={parties}
           meetings={meetings}
           onChangeFilter={onChangeFilter}
+          districtSlug={districtSlug}
         />
         {isShowError ? <ErrorState /> : null}
         {isShowEmpty ? <EmptyState /> : null}
@@ -539,15 +403,12 @@ const Dashboard: React.FC<DashboardProps> = ({
             <CardBox ref={cardRef}>
               <CardIssueBox $active={selectedType === Option.Issue}>
                 {topics.map(
-                  (
-                    { title, speechCount, legislatorCount, legislators },
-                    index
-                  ) => (
+                  ({ title, billCount, councilorCount, councilors }, index) => (
                     <CardIssueRWD
                       key={`issue-card-${index}`}
                       title={title}
-                      subTitle={`共 ${speechCount} 筆相關發言（${legislatorCount}人）`}
-                      legislators={legislators}
+                      subTitle={`共 ${billCount} 筆相關質詢（${councilorCount}人）`}
+                      legislators={councilors}
                       selected={activeCardIndex === index}
                       onClick={(e: React.MouseEvent<HTMLElement>) =>
                         onClickCard(e, index)
@@ -571,23 +432,26 @@ const Dashboard: React.FC<DashboardProps> = ({
                     ref={(el: HTMLDivElement) => {
                       sidebarRefs.current[Option.Issue] = el
                     }}
+                    districtSlug={districtSlug}
                   />
                 </TabletAndAbove>
               </CardIssueBox>
               <CardHumanBox
                 $active={selectedType === Option.Human}
-                $showBottomPadding={legislators.length === 1}
+                $showBottomPadding={councilors.length === 1}
               >
-                {legislators.map((props: Legislator, index: number) => (
-                  <CardHumanRWD
-                    key={`human-card-${index}`}
-                    {...props}
-                    selected={activeCardIndex === index}
-                    onClick={(e: React.MouseEvent<HTMLElement>) =>
-                      onClickCard(e, index)
-                    }
-                  />
-                ))}
+                {councilors.map(
+                  (props: CouncilorForDashboard, index: number) => (
+                    <CardHumanRWD
+                      key={`human-card-${index}`}
+                      {...props}
+                      selected={activeCardIndex === index}
+                      onClick={(e: React.MouseEvent<HTMLElement>) =>
+                        onClickCard(e, index)
+                      }
+                    />
+                  )
+                )}
                 {isLoading ? (
                   <>
                     <CardHumanSkeletonRWD />
@@ -597,13 +461,14 @@ const Dashboard: React.FC<DashboardProps> = ({
                   </>
                 ) : null}
                 <TabletAndAbove>
-                  <StyledSidebarLegislator
+                  <StyledSidebarCouncilor
                     $show={showSidebar && selectedType === Option.Human}
                     {...sidebarHuman}
                     onClose={closeSidebar}
                     ref={(el: HTMLDivElement) => {
                       sidebarRefs.current[Option.Human] = el
                     }}
+                    districtSlug={districtSlug}
                   />
                 </TabletAndAbove>
               </CardHumanBox>
@@ -627,7 +492,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </CardSection>
         ) : null}
       </Box>
-    </DashboardContext.Provider>
+    </CouncilDashboardContext.Provider>
   )
 }
 export default Dashboard

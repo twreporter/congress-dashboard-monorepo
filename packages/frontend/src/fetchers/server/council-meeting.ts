@@ -11,6 +11,48 @@ const _ = {
   get,
 }
 
+/**
+ * fetchCouncilMeetingsOfACity
+ *  fetch council meetings with given city
+ */
+type FetchCouncilMeetingsOfACityParams = {
+  city: CouncilDistrict
+}
+export const fetchCouncilMeetingsOfACity = async ({
+  city,
+}: FetchCouncilMeetingsOfACityParams): Promise<CouncilMeeting[]> => {
+  const where = {
+    city: {
+      equals: city,
+    },
+  }
+  const orderBy = [{ term: 'desc' }]
+  const query = `
+    query CouncilMeetings($where: CouncilMeetingWhereInput!, $orderBy: [CouncilMeetingOrderByInput!]!) {
+      councilMeetings(where: $where, orderBy: $orderBy) {
+        id
+        term
+      }
+    }
+  `
+  const variables = { where, orderBy }
+  try {
+    const data = await keystoneFetch<{
+      councilMeetings: CouncilMeetingFromRes[]
+    }>(JSON.stringify({ query, variables }), false)
+    const councilMeetingsFromRes = _.get(data, 'data.councilMeetings', [])
+    return councilMeetingsFromRes.map((meeting) => ({
+      id: meeting.id,
+      term: meeting.term,
+      city,
+    }))
+  } catch (err) {
+    throw new Error(
+      `Failed to fetch council meetings of city ${city}, err: ${err}`
+    )
+  }
+}
+
 /** fetchLatestCouncilMeetingOfACity
  *  fetch latest term of council meeting with given city
  */
@@ -31,6 +73,7 @@ export const fetchLatestCouncilMeetingOfACity = async ({
   const query = `
     query CouncilMeeting($where: CouncilMeetingWhereInput!, $orderBy: [CouncilMeetingOrderByInput!]!, $take: Int) {
       councilMeetings(where: $where, orderBy: $orderBy, take: $take) {
+        id
         term
       }
     }
@@ -44,6 +87,7 @@ export const fetchLatestCouncilMeetingOfACity = async ({
     if (!latestCouncilMeeting) return
 
     return {
+      id: latestCouncilMeeting.id,
       term: latestCouncilMeeting.term,
       city,
     }
