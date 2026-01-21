@@ -2,7 +2,7 @@
 'use client'
 
 import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 // type
 import type { TopNCouncilTopicData } from '@/types/council-topic'
 import type { PartyData } from '@/types/party'
@@ -42,19 +42,27 @@ import {
   SidebarIssue,
   SidebarCouncilor,
 } from '@/components/council-dashboard/sidebar'
-import { GapHorizontal, Gap } from '@/components/skeleton'
+import { Gap } from '@/components/skeleton'
 import EmptyState from '@/components/dashboard/empty-state'
 import ErrorState from '@/components/dashboard/error-state'
+// shared styled components
+import {
+  Box,
+  functionBarCss,
+  CardBox,
+  CardIssueBox,
+  CardHumanBox,
+  LoadMore,
+  sidebarCss,
+  GapHorizontalWithStyle,
+  CardSection,
+} from '@/components/dashboard'
 // @twreporter
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import mq from '@twreporter/core/lib/utils/media-query'
 import { PillButton } from '@twreporter/react-components/lib/button'
 import {
   TabletAndAbove,
   MobileOnly,
 } from '@twreporter/react-components/lib/rwd'
-// z-index
-import { ZIndex } from '@/styles/z-index'
 // lodash
 import { find } from 'lodash'
 import { InternalRoutes } from '@/constants/routes'
@@ -62,103 +70,8 @@ const _ = {
   find,
 }
 
-const Box = styled.div`
-  background: ${colorGrayscale.gray100};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 0 0 0;
-  gap: 32px;
-
-  ${mq.desktopOnly`
-    padding: 40px 0 0 0 ;
-  `}
-  ${mq.tabletOnly`
-    padding: 32px 0 0 0;
-    gap: 24px;
-  `}
-  ${mq.mobileOnly`
-    padding: 20px 0 0 0;
-    gap: 20px;  
-  `}
-`
 const StyledFunctionBar = styled(FunctionBar)`
-  ${mq.tabletOnly`
-    padding: 0 32px;
-  `}
-  ${mq.mobileOnly`
-    padding: 0 24px;
-  `}
-`
-const cardCss = css`
-  width: 928px;
-
-  ${mq.tabletOnly`
-    width: calc( 100vw - 64px );
-  `}
-  ${mq.mobileOnly`
-    width: calc( 100vw - 48px);
-  `}
-`
-const CardBox = styled.div`
-  ${cardCss}
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-const CardIssueBox = styled.div<{ $active: boolean }>`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  ${(props) => (props.$active ? '' : 'display: none !important;')}
-`
-const CardHumanBox = styled.div<{
-  $active: boolean
-  $showBottomPadding: boolean
-}>`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-gap: 24px;
-  ${(props) => (props.$active ? '' : 'display: none !important;')}
-  ${(props) => (props.$showBottomPadding ? 'padding-bottom: 24px;' : '')}
-
-  ${mq.mobileOnly`
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    grid-gap: 20px;
-    ${(props) => (props.$showBottomPadding ? 'padding-bottom: 20px;' : '')}
-
-    & > * {
-      width: calc(100vw - 48px);
-    }
-  `}
-`
-/*
- * grid card would have redundant column gap when number of cards is even
- * thus load more margin top would be 64px (the expected gap) - 24px (redundant column gap)
- */
-const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
-  margin-top: 40px;
-  justify-content: center;
-  width: 300px !important;
-
-  ${mq.mobileOnly`
-    margin-top: 32px;
-    width: 100% !important;
-  `}
-
-  ${(props) => (props.$hidden ? 'display: none !important;' : '')}
-`
-const sidebarCss = css<{ $show: boolean }>`
-  transform: translateX(${(props) => (props.$show ? 0 : 520)}px);
-  transition: transform 0.3s ease-in-out;
-
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: ${ZIndex.SideBar};
-  overflow-y: scroll;
+  ${functionBarCss}
 `
 const StyledSidebarIssue = styled(
   forwardRef<HTMLDivElement, SidebarIssueProps>((props, ref) => (
@@ -173,59 +86,6 @@ const StyledSidebarCouncilor = styled(
   ))
 )<{ $show: boolean }>`
   ${sidebarCss}
-`
-const GapHorizontalWithStyle = styled(GapHorizontal)`
-  transition: width 0.3s ease-in-out;
-`
-const CardSection = styled.div<{
-  $isScroll: boolean
-  $isSidebarOpened: boolean
-  $windowWidth: number
-}>`
-  width: 100%;
-  display: flex;
-  flex-wrap: nowrap;
-  ${(props) =>
-    props.$isScroll
-      ? `
-    overflow-x: scroll;
-    scrollbar-width: none;
-  `
-      : ''}
-
-  ${mq.desktopAndAbove`
-    ${(props) =>
-      props.$windowWidth
-        ? `
-        max-width: 100%;
-        padding: 0 ${
-          props.$isSidebarOpened ? 0 : (props.$windowWidth - 928) / 2
-        }px 0 ${(props.$windowWidth - 928) / 2}px;
-      `
-        : `
-        max-width: 928px;
-      `}
-  `}
-
-  ${(props) =>
-    props.$isSidebarOpened
-      ? `
-      width: 100vw;
-    `
-      : ''}
-
-  ${mq.tabletAndBelow`
-    max-width: 100%;
-    padding: 0 32px;
-  `}
-
-  ${mq.mobileOnly`
-    padding: 0 24px;
-  `}
-
-  ${CardBox}, ${GapHorizontalWithStyle} {
-    flex: none;
-  }
 `
 
 const anchorId = 'anchor-id'

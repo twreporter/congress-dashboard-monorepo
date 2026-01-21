@@ -18,8 +18,8 @@ const fetchTopNCouncilTopics = async ({
   skip = 0,
 }: FetchTopNCouncilTopicsParams): Promise<TopNCouncilTopicData[]> => {
   const query = `
-    query CouncilTopicsOrderBySpeechCount($meetingId: Int!, $take: Int, $skip: Int, $partyIds: [Int]) {
-      councilTopicsOrderBySpeechCount(meetingId: $meetingId, take: $take, skip: $skip, partyIds: $partyIds) {
+    query CouncilTopicsOrderByBillCount($meetingId: Int!, $take: Int, $skip: Int, $partyIds: [Int]) {
+      councilTopicsOrderByBillCount(meetingId: $meetingId, take: $take, skip: $skip, partyIds: $partyIds) {
         councilorCount
         slug
         billCount
@@ -46,10 +46,10 @@ const fetchTopNCouncilTopics = async ({
     partyIds: partyIds.length > 0 ? partyIds : undefined,
   }
   const data = await keystoneFetch<{
-    councilTopicsOrderBySpeechCount: CouncilTopicFromGraphQL[]
+    councilTopicsOrderByBillCount: CouncilTopicFromGraphQL[]
   }>(JSON.stringify({ query, variables }), false)
 
-  const topics = data?.data?.councilTopicsOrderBySpeechCount || []
+  const topics = data?.data?.councilTopicsOrderByBillCount || []
   return topics
 }
 

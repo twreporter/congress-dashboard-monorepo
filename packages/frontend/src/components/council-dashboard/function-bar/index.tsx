@@ -200,6 +200,7 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
   )
   const committeeState = useCommittee()
 
+  // TODO: open filter next scrum
   // Generate filter options
   const getFilterOptions = (): FilterOption[] => {
     const options: FilterOption[] = [

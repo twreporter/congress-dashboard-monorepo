@@ -58,7 +58,7 @@ const _ = {
   find,
 }
 
-const Box = styled.div`
+export const Box = styled.div`
   background: ${colorGrayscale.gray100};
   display: flex;
   flex-direction: column;
@@ -86,7 +86,15 @@ const StyledFunctionBar = styled(FunctionBar)`
     padding: 0 24px;
   `}
 `
-const cardCss = css`
+export const functionBarCss = css`
+  ${mq.tabletOnly`
+    padding: 0 32px;
+  `}
+  ${mq.mobileOnly`
+    padding: 0 24px;
+  `}
+`
+export const cardCss = css`
   width: 928px;
 
   ${mq.tabletOnly`
@@ -96,20 +104,20 @@ const cardCss = css`
     width: calc( 100vw - 48px);
   `}
 `
-const CardBox = styled.div`
+export const CardBox = styled.div`
   ${cardCss}
   display: flex;
   flex-direction: column;
   align-items: center;
 `
-const CardIssueBox = styled.div<{ $active: boolean }>`
+export const CardIssueBox = styled.div<{ $active: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 24px;
   ${(props) => (props.$active ? '' : 'display: none !important;')}
 `
-const CardHumanBox = styled.div<{
+export const CardHumanBox = styled.div<{
   $active: boolean
   $showBottomPadding: boolean
 }>`
@@ -134,7 +142,7 @@ const CardHumanBox = styled.div<{
  * grid card would have redundant column gap when number of cards is even
  * thus load more margin top would be 64px (the expected gap) - 24px (redundant column gap)
  */
-const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
+export const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
   margin-top: 40px;
   justify-content: center;
   width: 300px !important;
@@ -146,7 +154,7 @@ const LoadMore = styled(PillButton)<{ $hidden: boolean }>`
 
   ${(props) => (props.$hidden ? 'display: none !important;' : '')}
 `
-const sidebarCss = css<{ $show: boolean }>`
+export const sidebarCss = css<{ $show: boolean }>`
   transform: translateX(${(props) => (props.$show ? 0 : 520)}px);
   transition: transform 0.3s ease-in-out;
 
@@ -170,10 +178,10 @@ const StyledSidebarLegislator = styled(
 )<{ $show: boolean }>`
   ${sidebarCss}
 `
-const GapHorizontalWithStyle = styled(GapHorizontal)`
+export const GapHorizontalWithStyle = styled(GapHorizontal)`
   transition: width 0.3s ease-in-out;
 `
-const CardSection = styled.div<{
+export const CardSection = styled.div<{
   $isScroll: boolean
   $isSidebarOpened: boolean
   $windowWidth: number
