@@ -1,4 +1,6 @@
-// TODO: temporary placeholder page
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
 import React from 'react'
 import { notFound } from 'next/navigation'
 // constants
