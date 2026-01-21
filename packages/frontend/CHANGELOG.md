@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.6...@twreporter/congress-dashboard-frontend@1.10.0-rc.7) (2026-01-21)
+
+### Bug Fixes
+
+- **frontend:** type in councilor types ([17017f4](https://github.com/twreporter/congress-dashboard-monorepo/commit/17017f4ac8c0fcd0078c6d7789a9862d819f0ede))
+
 # [1.10.0-rc.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.5...@twreporter/congress-dashboard-frontend@1.10.0-rc.6) (2026-01-21)
 
 ### Bug Fixes

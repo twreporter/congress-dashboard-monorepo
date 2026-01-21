@@ -13,7 +13,7 @@ export type CouncilorForDashboard = {
   note?: string
   count?: number
   tags?: Tag[]
-  type?: MemberType | string
+  type?: MemberType
   constituency?: number
 }
 
@@ -29,7 +29,7 @@ export type CouncilorForIndex = {
     image?: KeystoneImage
     imageLink?: string
   }
-  type?: MemberType | string
+  type?: MemberType
   constituency?: number
   tooltip?: string
   note?: string
