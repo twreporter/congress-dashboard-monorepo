@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.4...@twreporter/congress-dashboard-frontend@1.10.0-rc.5) (2026-01-21)
+
+### Bug Fixes
+
+- **frontend:** address comments ([28125a5](https://github.com/twreporter/congress-dashboard-monorepo/commit/28125a5558f04fe65c441e7dc409025c706de0d5))
+- **frontend:** address comments ([1076c97](https://github.com/twreporter/congress-dashboard-monorepo/commit/1076c977eeb7666e8a84dad2fd7b03d69321f714))
+- **frontend:** clean up styled components ([05dbb3c](https://github.com/twreporter/congress-dashboard-monorepo/commit/05dbb3cb63ed2a627638045d518b9178abc545b6))
+- **frontend:** update page to enable dynamic rendering ([84b8209](https://github.com/twreporter/congress-dashboard-monorepo/commit/84b8209700c8c4348f844aad45055d9a3051ed4e))
+- **frontend:** update URL generation in related topics and sitemap utility ([155099d](https://github.com/twreporter/congress-dashboard-monorepo/commit/155099d8160e51eff592e67b8f7c25f9c4c9cd9e))
+
+### Features
+
+- **frontend:** add gradient mask for slider ([337da4e](https://github.com/twreporter/congress-dashboard-monorepo/commit/337da4ed3f8326d7890386b464e93bbbe8f6f625))
+- **frontend:** badge for home page ([8c22a08](https://github.com/twreporter/congress-dashboard-monorepo/commit/8c22a08397cbc69ccc82619875ea7b5ac97822b0))
+- **frontend:** council dashboard ([3ee9d78](https://github.com/twreporter/congress-dashboard-monorepo/commit/3ee9d783816b109b99afff31eaac899c855737db))
+- **frontend:** council home page slider ([24c6126](https://github.com/twreporter/congress-dashboard-monorepo/commit/24c61263a2d4d97564610bb0fd249657b2ede678))
+
 # [1.10.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.3...@twreporter/congress-dashboard-frontend@1.10.0-rc.4) (2026-01-21)
 
 ### Bug Fixes

@@ -1,7 +1,10 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
 // type
 import type { CouncilDistrict } from '@/types/council'
-import type { CouncilTopicFromRes } from '@/types/council-topic'
+import type {
+  CouncilTopicFromRes,
+  TopNCouncilTopicData,
+} from '@/types/council-topic'
 import type { SitemapItemWithCity } from '@/types'
 // lodash
 import { get } from 'lodash'
@@ -174,4 +177,61 @@ export const fetchAllCouncilTopicSlug = async (): Promise<
     }
   }
   return allTopics
+}
+
+/* fetchTopNTopics
+ *   fetch top N topics with give take & skip in given meeting & session
+ *   top logic is order by bill count desc
+ */
+export type FetchTopNTopicsParams = {
+  take?: number
+  skip?: number
+  councilMeetingId: number
+  partyIds?: number[]
+}
+
+export const fetchTopNCouncilTopics = async ({
+  take = 10,
+  skip = 0,
+  councilMeetingId,
+}: FetchTopNTopicsParams): Promise<TopNCouncilTopicData[] | undefined> => {
+  const query = `
+    query CouncilTopicsOrderByBillCount($meetingId: Int!, $take: Int, $skip: Int) {
+      councilTopicsOrderByBillCount(meetingId: $meetingId, take: $take, skip: $skip) {
+        councilorCount
+        slug
+        billCount
+        title
+        councilors {
+          id
+          name
+          imageLink
+          slug
+          party
+          count
+          image {
+            imageFile {
+              url
+            }
+          }
+        }
+      }
+    }
+  `
+  const variables = {
+    take,
+    skip,
+    meetingId: Number(councilMeetingId),
+  }
+
+  try {
+    const data = await keystoneFetch<{
+      councilTopicsOrderByBillCount: TopNCouncilTopicData[]
+    }>(JSON.stringify({ query, variables }), false)
+    return data?.data?.councilTopicsOrderByBillCount
+  } catch (err) {
+    throw new Error(
+      `Failed to fetch top ${take} council topics in meeting ${councilMeetingId}, err: ${err}`
+    )
+  }
 }

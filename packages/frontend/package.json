@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-frontend",
-  "version": "1.10.0-rc.4",
+  "version": "1.10.0-rc.5",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -30,6 +30,7 @@
     "react-intersection-observer": "^9.16.0",
     "sharp": "^0.34.4",
     "styled-components": "^6.1.14",
+    "swiper": "^12.0.3",
     "swr": "^2.3.3"
   },
   "devDependencies": {

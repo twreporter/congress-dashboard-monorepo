@@ -193,7 +193,9 @@ const TopicList: React.FC<TopicListProps> = ({
             <LegislatorContainer>
               {followMoreList.map((councilor, index: number) => (
                 <Link
-                  href={`${InternalRoutes.Council}/${districtSlug}${InternalRoutes.Councilor}/${councilor.slug}`}
+                  href={`${InternalRoutes.Councilor(districtSlug)}/${
+                    councilor.slug
+                  }`}
                   key={`follow-more-councilor-${index}`}
                 >
                   <Legislator {...councilor} />

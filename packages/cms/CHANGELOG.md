@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.3...@twreporter/congress-dashboard-cms@1.6.0-rc.4) (2026-01-21)
+
+### Bug Fixes
+
+- **cms:** rename for better reading ([560ee18](https://github.com/twreporter/congress-dashboard-monorepo/commit/560ee18286b5a209984dcb398c4ede8e2f28c3d9))
+- **cms:** update schema graphql ([4010a1d](https://github.com/twreporter/congress-dashboard-monorepo/commit/4010a1d7965e4ac6eccd92f1fd00850f3e2d01c8))
+
+### Features
+
+- **cms:** custom sql for council ([e6bb489](https://github.com/twreporter/congress-dashboard-monorepo/commit/e6bb489768d58c550d73a6a4e3fef3dbc751244d))
+
 # [1.6.0-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.2...@twreporter/congress-dashboard-cms@1.6.0-rc.3) (2026-01-21)
 
 ### Bug Fixes

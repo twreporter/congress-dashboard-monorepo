@@ -1,19 +1,105 @@
-// TODO: temporary placeholder page
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
 import React from 'react'
 import { notFound } from 'next/navigation'
 // constants
 import { VALID_COUNCILS } from '@/constants/council'
+// fetcher
+import { fetchParty } from '@/fetchers/server/party'
+import { fetchCouncilMeetingsOfACity } from '@/fetchers/server/council-meeting'
+import { fetchTopNCouncilTopics } from '@/fetchers/server/council-topic'
+// components
+import Open from '@/components/open'
+import Dashboard from '@/components/council-dashboard'
+import TopicSliders from '@/components/topic-sliders'
 // utils
 import { isValidCouncil } from '@/utils/council'
-
-const COUNCIL_NAMES: Record<string, string> = {
-  taipei: '臺北市議會',
-  'new-taipei': '新北市議會',
-  taoyuan: '桃園市議會',
-  taichung: '臺中市議會',
-  tainan: '臺南市議會',
-  kaohsiung: '高雄市議會',
+import { getImageLink } from '@/fetchers/utils'
+// lodash
+import { find } from 'lodash'
+const _ = {
+  find,
 }
+
+// TODO: temporary test data
+const testCards = [
+  {
+    title: '普發現金',
+    billCount: 123,
+    avatars: [
+      'https://picsum.photos/id/1/200',
+      'https://picsum.photos/id/2/200',
+      'https://picsum.photos/id/3/200',
+      'https://picsum.photos/id/4/200',
+      'https://picsum.photos/id/5/200',
+    ],
+    councilorCount: 2,
+  },
+  {
+    title: '金融監理與壽險風險因應處理1',
+    billCount: 1234,
+    avatars: [
+      'https://picsum.photos/id/1/200',
+      'https://picsum.photos/id/2/200',
+    ],
+    councilorCount: 10,
+  },
+  {
+    title: '金融監理與壽險風險因應處理2',
+    billCount: 1234,
+    avatars: [
+      'https://picsum.photos/id/1/200',
+      'https://picsum.photos/id/2/200',
+    ],
+    councilorCount: 10,
+  },
+  {
+    title: '金融監理與壽險風險因應處理3',
+    billCount: 1234,
+    avatars: [
+      'https://picsum.photos/id/1/200',
+      'https://picsum.photos/id/2/200',
+    ],
+    councilorCount: 10,
+  },
+  {
+    title: '金融監理與壽險風險因應處理4',
+    billCount: 1234,
+    avatars: [
+      'https://picsum.photos/id/1/200',
+      'https://picsum.photos/id/2/200',
+    ],
+    councilorCount: 10,
+  },
+  {
+    title: '金融監理與壽險風險因應處理5',
+    billCount: 1234,
+    avatars: [
+      'https://picsum.photos/id/1/200',
+      'https://picsum.photos/id/2/200',
+    ],
+    councilorCount: 10,
+  },
+  {
+    title: '金融監理與壽險風險因應處理6',
+    billCount: 1234,
+    avatars: [
+      'https://picsum.photos/id/1/200',
+      'https://picsum.photos/id/2/200',
+    ],
+    councilorCount: 10,
+  },
+  {
+    title: '金融監理與壽險風險因應處理7',
+    billCount: 1234,
+    avatars: [
+      'https://picsum.photos/id/1/200',
+      'https://picsum.photos/id/2/200',
+    ],
+    councilorCount: 10,
+  },
+]
 
 export default async function CouncilDetailPage({
   params,
@@ -27,12 +113,42 @@ export default async function CouncilDetailPage({
     notFound()
   }
 
-  const councilName = COUNCIL_NAMES[districtSlug]
+  const meetings = await fetchCouncilMeetingsOfACity({ city: districtSlug })
+  const latestMeetingId = meetings[0]?.id
+  const [topics = [], parties] = await Promise.all([
+    fetchTopNCouncilTopics({
+      take: 10,
+      skip: 0,
+      councilMeetingId: latestMeetingId,
+    }),
+    fetchParty(),
+  ])
+  const partiesMap = parties
+    ? new Map(parties.map((p) => [String(p.id), p]))
+    : new Map()
+  topics.forEach((topic) => {
+    topic.councilors =
+      topic.councilors?.map(({ party, ...councilor }) => {
+        const partyData = party ? partiesMap.get(String(party)) : undefined
+        return {
+          avatar: getImageLink(councilor),
+          partyAvatar: partyData ? getImageLink(partyData) : '',
+          party: partyData || party,
+          ...councilor,
+        }
+      }) || []
+  })
 
   return (
-    <div style={{ padding: '40px', textAlign: 'center' }}>
-      <h1>{councilName}</h1>
-      <p>此功能開發中，敬請期待</p>
+    <div>
+      <Open />
+      <TopicSliders cards={testCards} />
+      <Dashboard
+        districtSlug={districtSlug}
+        initialTopics={topics}
+        parties={parties}
+        meetings={meetings}
+      />
     </div>
   )
 }

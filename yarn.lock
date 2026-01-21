@@ -7757,6 +7757,7 @@ __metadata:
     sharp: "npm:^0.34.4"
     storybook: "npm:^8.5.1"
     styled-components: "npm:^6.1.14"
+    swiper: "npm:^12.0.3"
     swr: "npm:^2.3.3"
     typescript: "npm:^5"
   languageName: unknown
@@ -23515,6 +23516,13 @@ __metadata:
   version: 1.0.0
   resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
   checksum: 10c0/6c4032340701a9950865f7ae8ef38578d8d7053f5e10518076e6554a9381fa91bd9c6850193695c141f32b21f979c985db07265a758867bac95de05f7d8aeb39
+  languageName: node
+  linkType: hard
+
+"swiper@npm:^12.0.3":
+  version: 12.0.3
+  resolution: "swiper@npm:12.0.3"
+  checksum: 10c0/a854531791ba45cb0f6086904a99878fd207b42024820df68fbf64e01c20d542438c023ec4765b223f4dbffabf6858d311ec749bdca4ea4b4a7b74150a010162
   languageName: node
   linkType: hard
 

@@ -2,13 +2,15 @@
 
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { usePathname } from 'next/navigation'
 // config
-import { title, description } from '@/components/open/config'
+import { getOpenConfig } from '@/components/open/config'
 // utils
 import { notoSerif } from '@/utils/font'
 // components
 import { AlgoliaInstantSearch } from '@/components/search/instant-search'
 import Selected from '@/components/open/selected'
+import Badge from '@/components/open/badge'
 // type
 import type { EditorSelect } from '@/types/editor-pick'
 // constants
@@ -96,14 +98,28 @@ const InstantSearchContainer = styled.div`
   `}
 `
 
+const BadgeContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  ${mq.desktopAndAbove`
+    margin-bottom: 16px;
+  `}
+  ${mq.tabletAndBelow`
+    margin-bottom: 8px;
+  `}
+`
+
 type OpenProps = {
-  selecteds: EditorSelect[]
+  selecteds?: EditorSelect[]
 }
 const Open: React.FC<OpenProps> = ({ selecteds }) => {
+  const pathname = usePathname()
+  const { title, description, badge } = getOpenConfig(pathname)
+
   const descriptJSX = description.map((text, index) => (
     <SerifH4 text={text} key={`open-desc-${index}`} />
   ))
-  const selectedsWithPath = selecteds.map(({ label, order, type, slug }) => {
+  const selectedsWithPath = selecteds?.map(({ label, order, type, slug }) => {
     const pathFrom =
       type === EDITOR_SELECT_TYPE.legislator
         ? InternalRoutes.Legislator
@@ -116,6 +132,13 @@ const Open: React.FC<OpenProps> = ({ selecteds }) => {
   })
   return (
     <Box>
+      <BadgeContainer>
+        <Badge
+          text={badge.text}
+          textColor={badge.textColor}
+          backgroundColor={badge.backgroundColor}
+        />
+      </BadgeContainer>
       <Title className={notoSerif.className}>{title}</Title>
       <Description>{descriptJSX}</Description>
       <MobileDescription>

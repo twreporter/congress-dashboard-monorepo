@@ -44,6 +44,8 @@ export type BillMetaWithCouncilorFromRes = BillMeta & {
   }[]
 }
 
+export type BillDataForSidebar = BillMeta
+
 export type BillData = {
   slug: string
   date: string
