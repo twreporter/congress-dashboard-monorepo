@@ -145,7 +145,7 @@ const listConfigurations = list({
       label: '提案通過數',
     }),
     relatedLink: json({
-      label: '相關連結',
+      label: '相關經歷',
     }),
     isActive: checkbox({
       label: '是否該屆期現任',

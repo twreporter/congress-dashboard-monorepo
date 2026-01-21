@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.3...@twreporter/congress-dashboard-frontend@1.10.0-rc.4) (2026-01-21)
+
+### Bug Fixes
+
+- **frontend:** address comments ([9953f8e](https://github.com/twreporter/congress-dashboard-monorepo/commit/9953f8e526cf3ec402fdcafad6e54435d88d33df))
+
+### Features
+
+- **frontend:** relatedCouncilTopic for topic page ([ad50f53](https://github.com/twreporter/congress-dashboard-monorepo/commit/ad50f530c5094db7be9df1402d1d430fe99017cf))
+
+# [1.10.0-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.2...@twreporter/congress-dashboard-frontend@1.10.0-rc.3) (2026-01-20)
+
+### Bug Fixes
+
+- **frontend:** meeting session filter fallback ([695d5e6](https://github.com/twreporter/congress-dashboard-monorepo/commit/695d5e61b92ed54f6437ece8fb218586dfe5450a))
+
+# [1.10.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.1...@twreporter/congress-dashboard-frontend@1.10.0-rc.2) (2026-01-20)
+
+### Bug Fixes
+
+- **frontend:** add related link for legislator ([c89616b](https://github.com/twreporter/congress-dashboard-monorepo/commit/c89616bb4333cfb8eb0e8cc4cf905a03e37fa66e))
+- **frontend:** move RelatedLink to shared type ([54beafb](https://github.com/twreporter/congress-dashboard-monorepo/commit/54beafbb53f59ec9dee0ef741dd1856c1257627b))
+
 # [1.10.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.8.0-beta.26...@twreporter/congress-dashboard-frontend@1.10.0-rc.1) (2026-01-06)
 
 ### Bug Fixes

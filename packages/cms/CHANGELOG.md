@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.2...@twreporter/congress-dashboard-cms@1.6.0-rc.3) (2026-01-21)
+
+### Bug Fixes
+
+- **cms:** address comments ([53a6dc0](https://github.com/twreporter/congress-dashboard-monorepo/commit/53a6dc026d2195ba62f957a8e326bf8e6ce4897c))
+
+### Features
+
+- **cms:** add relatedCouncilTopics ([b01252b](https://github.com/twreporter/congress-dashboard-monorepo/commit/b01252b900a754e51485ccdcfa2ee13a50606db6))
+- **cms:** rename relatedCouncilTopic ([ef2abf2](https://github.com/twreporter/congress-dashboard-monorepo/commit/ef2abf2781898a179393307afb69ee3e889ce611))
+
+# [1.6.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.1...@twreporter/congress-dashboard-cms@1.6.0-rc.2) (2026-01-20)
+
+### Bug Fixes
+
+- **frontend:** add related link for legislator ([c89616b](https://github.com/twreporter/congress-dashboard-monorepo/commit/c89616bb4333cfb8eb0e8cc4cf905a03e37fa66e))
+
 # [1.6.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.5.0-beta.10...@twreporter/congress-dashboard-cms@1.6.0-rc.1) (2026-01-06)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms

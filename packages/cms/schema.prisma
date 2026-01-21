@@ -84,17 +84,17 @@ model Speech {
 }
 
 model Topic {
-  id                                        Int            @id @default(autoincrement())
-  title                                     String         @default("")
-  slug                                      String         @unique @default("")
-  speeches                                  Speech[]       @relation("Speech_topics")
-  relatedTopics                             Topic[]        @relation("Topic_referencedByTopics")
-  referencedByTopics                        Topic[]        @relation("Topic_referencedByTopics")
-  relatedTwreporterArticles                 Json?          @default("[]")
-  createdAt                                 DateTime?      @default(now())
-  updatedAt                                 DateTime?      @updatedAt
-  from_Selected_topic                       Selected[]     @relation("Selected_topic")
-  from_CouncilTopic_relatedLegislativeTopic CouncilTopic[] @relation("CouncilTopic_relatedLegislativeTopic")
+  id                        Int            @id @default(autoincrement())
+  title                     String         @default("")
+  slug                      String         @unique @default("")
+  speeches                  Speech[]       @relation("Speech_topics")
+  relatedTopics             Topic[]        @relation("Topic_referencedByTopics")
+  referencedByTopics        Topic[]        @relation("Topic_referencedByTopics")
+  relatedCouncilTopic       CouncilTopic[] @relation("CouncilTopic_relatedLegislativeTopic")
+  relatedTwreporterArticles Json?          @default("[]")
+  createdAt                 DateTime?      @default(now())
+  updatedAt                 DateTime?      @updatedAt
+  from_Selected_topic       Selected[]     @relation("Selected_topic")
 
   @@index([title])
 }
@@ -134,6 +134,7 @@ model LegislativeYuanMember {
   tooltip              String              @default("")
   note                 String              @default("")
   proposalSuccessCount Int?
+  relatedLink          Json?
   isActive             Boolean             @default(true)
   createdAt            DateTime?           @default(now())
   updatedAt            DateTime?           @updatedAt
