@@ -30,10 +30,15 @@ export const LinkList = styled.ul`
   list-style-position: outside;
   padding-left: 1em;
   margin-top: 8px;
+
   ${mq.tabletAndBelow`
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));  
   `}
+
+  a {
+    text-decoration: none !important;
+  }
 `
 export const LinkButton = styled(TextButton)`
   display: inline;
