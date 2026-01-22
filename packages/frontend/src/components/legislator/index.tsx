@@ -10,7 +10,7 @@ import LegislatorList from '@/components/legislator/legislator-list'
 import FeedbackBlock from '@/components/layout/feedback-block'
 import FilterModal from '@/components/filter-modal'
 import ContentPageLayout from '@/components/layout/content-page-layout'
-import RelatedLinkBlock from '@/components/councilor/related-link'
+import RelatedLinkBlock from '@/components/layout/related-link-block'
 // styles
 import {
   ContentBlock,

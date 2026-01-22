@@ -7,7 +7,7 @@ import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/
 import CouncilorInfo from '@/components/councilor/councilor-info'
 import CouncilorStatistics from '@/components/councilor/statistic'
 import TopicList from '@/components/councilor/topic-list'
-import RelatedLinkBlock from '@/components/councilor/related-link'
+import RelatedLinkBlock from '@/components/layout/related-link-block'
 import FeedbackBlock from '@/components/layout/feedback-block'
 import ContentPageLayout from '@/components/layout/content-page-without-filter-layout'
 // styles
