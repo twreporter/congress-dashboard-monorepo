@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 // components
 import { H4Title } from '@/components/topic/styles'
-import { LinkList, LinkButton } from '@/components/councilor/related-link'
+import { LinkList, LinkButton } from '@/components/layout/related-link-block'
 import { Container } from '@/components/topic/topic-others-watching'
 import { LinkText } from '@/components/sidebar/card'
 // constants
