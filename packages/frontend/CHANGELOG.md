@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.9](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.8...@twreporter/congress-dashboard-frontend@1.10.0-rc.9) (2026-01-22)
+
+### Bug Fixes
+
+- **frontend:** remove default underline for a tag ([53e6a11](https://github.com/twreporter/congress-dashboard-monorepo/commit/53e6a11d9c32814eee4c85bbb7381d7653a4aa84))
+
 # [1.10.0-rc.8](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.7...@twreporter/congress-dashboard-frontend@1.10.0-rc.8) (2026-01-21)
 
 ### Bug Fixes
