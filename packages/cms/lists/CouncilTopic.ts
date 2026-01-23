@@ -121,7 +121,7 @@ const listConfigurations = list({
     label: '縣市議題',
     labelField: 'title',
     listView: {
-      initialColumns: ['title', 'slug', 'city'],
+      initialColumns: ['title', 'slug', 'city', 'type'],
       initialSort: { field: 'createdAt', direction: 'DESC' },
       pageSize: 50,
     },

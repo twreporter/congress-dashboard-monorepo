@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.4...@twreporter/congress-dashboard-cms@1.6.0-rc.5) (2026-01-23)
+
+### Features
+
+- **cms:** type for council topic initial columns ([a187e9d](https://github.com/twreporter/congress-dashboard-monorepo/commit/a187e9d9f721dca8ebaff884a57077ea0850fbc0))
+
 # [1.6.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.3...@twreporter/congress-dashboard-cms@1.6.0-rc.4) (2026-01-21)
 
 ### Bug Fixes

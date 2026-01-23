@@ -99,6 +99,7 @@ const SummarySection = styled.div`
   gap: 32px;
   display: flex;
   flex-direction: column;
+  width: 100%;
 `
 const FollowMoreSection = styled.div`
   border-top: 1px solid ${colorGrayscale.gray300};

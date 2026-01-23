@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.10](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.9...@twreporter/congress-dashboard-frontend@1.10.0-rc.10) (2026-01-23)
+
+### Bug Fixes
+
+- **frontend:** use getImageLink ([7bc88ed](https://github.com/twreporter/congress-dashboard-monorepo/commit/7bc88ed2276c58210aa3551df13220b5fea39988))
+
+### Features
+
+- **frontend:** add fetchFeaturedCouncilTopics and update related components ([a3a4926](https://github.com/twreporter/congress-dashboard-monorepo/commit/a3a49266a581434dab95e48d004b6337cbb6e4a7))
+
 # [1.10.0-rc.9](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.8...@twreporter/congress-dashboard-frontend@1.10.0-rc.9) (2026-01-22)
 
 ### Bug Fixes

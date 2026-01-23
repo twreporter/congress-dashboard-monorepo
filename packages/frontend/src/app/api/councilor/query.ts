@@ -48,9 +48,6 @@ const fetchCouncilors = async ({
         equals: councilMeetingId,
       },
     },
-    isActive: {
-      equals: true,
-    },
   }
 
   if (partyIds && partyIds.length > 0) {

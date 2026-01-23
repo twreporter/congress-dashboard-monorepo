@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-frontend",
-  "version": "1.10.0-rc.9",
+  "version": "1.10.0-rc.10",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
