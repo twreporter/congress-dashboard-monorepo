@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import Link from 'next/link'
 import styled from 'styled-components'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -9,6 +10,12 @@ import {
 } from '@twreporter/core/lib/constants/color'
 import { H4 } from '@twreporter/react-components/lib/text/headline'
 import { P2 } from '@twreporter/react-components/lib/text/paragraph'
+// constants
+import { InternalRoutes } from '@/constants/routes'
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`
 
 const Container = styled.div`
   display: flex;
@@ -92,41 +99,47 @@ const CouncilorCount = styled(P2)`
 
 export type CardProps = {
   title: string
+  slug: string
+  city: string
   billCount: number
   avatars: string[]
   councilorCount: number
 }
 const Card: React.FC<CardProps> = ({
   title,
+  slug,
+  city,
   billCount,
   avatars,
   councilorCount,
 }) => {
   return (
-    <Container>
-      <UpperSection>
-        <Title text={title} />
-        <BillCount>
-          <BillCountNumber>
-            {billCount > 999 ? '999+' : billCount}
-          </BillCountNumber>
-          <P2 text="筆相關發言" weight={P2.Weight.BOLD} />
-        </BillCount>
-      </UpperSection>
-      <LowerSection>
-        <AvatarContainer>
-          {avatars.map((avatarUrl, index) => (
-            <Avatar
-              key={index}
-              src={avatarUrl}
-              alt={`councilor-avatar-${index}`}
-              $ZIndex={avatars.length - index}
-            />
-          ))}
-        </AvatarContainer>
-        <CouncilorCount text={`共${councilorCount}人`} />
-      </LowerSection>
-    </Container>
+    <StyledLink href={`${InternalRoutes.CouncilTopic(city)}/${slug}`} passHref>
+      <Container>
+        <UpperSection>
+          <Title text={title} />
+          <BillCount>
+            <BillCountNumber>
+              {billCount > 999 ? '999+' : billCount}
+            </BillCountNumber>
+            <P2 text="筆相關發言" weight={P2.Weight.BOLD} />
+          </BillCount>
+        </UpperSection>
+        <LowerSection>
+          <AvatarContainer>
+            {avatars.map((avatarUrl, index) => (
+              <Avatar
+                key={index}
+                src={avatarUrl}
+                alt={`councilor-avatar-${index}`}
+                $ZIndex={avatars.length - index}
+              />
+            ))}
+          </AvatarContainer>
+          <CouncilorCount text={`共${councilorCount}人`} />
+        </LowerSection>
+      </Container>
+    </StyledLink>
   )
 }
 

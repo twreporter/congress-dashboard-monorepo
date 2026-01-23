@@ -4,8 +4,12 @@ import type { CouncilDistrict } from '@/types/council'
 import type {
   CouncilTopicFromRes,
   TopNCouncilTopicData,
+  FeaturedCouncilTopicData,
 } from '@/types/council-topic'
-import type { SitemapItemWithCity } from '@/types'
+import type { SitemapItemWithCity, KeystoneImage } from '@/types'
+
+// utils
+import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // lodash
 import { get } from 'lodash'
 const _ = {
@@ -232,6 +236,129 @@ export const fetchTopNCouncilTopics = async ({
   } catch (err) {
     throw new Error(
       `Failed to fetch top ${take} council topics in meeting ${councilMeetingId}, err: ${err}`
+    )
+  }
+}
+
+/**
+ * Fetch featured council topics (type = 'twreporter') for a city
+ * Returns topics with title, slug, billCount, councilorCount, and top 5 councilor avatars
+ */
+export type FetchFeaturedCouncilTopicsParams = {
+  city: CouncilDistrict
+}
+
+type CouncilMemberFromRes = {
+  councilor: {
+    id: number
+    slug: string
+    name: string
+    imageLink?: string
+    image?: KeystoneImage
+  }
+}
+
+type FeaturedCouncilTopicFromRes = {
+  title: string
+  slug: string
+  bill: {
+    id: number
+    councilMember: CouncilMemberFromRes[]
+  }[]
+}
+
+export const fetchFeaturedCouncilTopics = async ({
+  city,
+}: FetchFeaturedCouncilTopicsParams): Promise<FeaturedCouncilTopicData[]> => {
+  const query = `
+    query FeaturedCouncilTopics($where: CouncilTopicWhereInput!) {
+      councilTopics(where: $where) {
+        title
+        slug
+        bill {
+          id
+          councilMember {
+            councilor {
+              id
+              slug
+              name
+              imageLink
+              image {
+                imageFile {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `
+  const variables = {
+    where: {
+      type: { equals: 'twreporter' },
+      city: { equals: city },
+    },
+  }
+
+  try {
+    const data = await keystoneFetch<{
+      councilTopics: FeaturedCouncilTopicFromRes[]
+    }>(JSON.stringify({ query, variables }), false)
+
+    const topics = data?.data?.councilTopics || []
+
+    return topics.map((topic) => {
+      // Count unique bills
+      const billCount = topic.bill?.length || 0
+
+      // Collect all council members from all bills with their bill count
+      const councilorBillCountMap = new Map<
+        number,
+        { councilor: CouncilMemberFromRes['councilor']; count: number }
+      >()
+
+      topic.bill?.forEach((bill) => {
+        bill.councilMember?.forEach((member) => {
+          const councilorId = member.councilor?.id
+          if (councilorId) {
+            const existing = councilorBillCountMap.get(councilorId)
+            if (existing) {
+              existing.count += 1
+            } else {
+              councilorBillCountMap.set(councilorId, {
+                councilor: member.councilor,
+                count: 1,
+              })
+            }
+          }
+        })
+      })
+
+      // Get unique councilor count
+      const councilorCount = councilorBillCountMap.size
+
+      // Sort by bill count and get top 5 avatars
+      const sortedCouncilors = Array.from(councilorBillCountMap.values())
+        .sort(sortByCountDesc)
+        .slice(0, 5)
+
+      const avatars = sortedCouncilors
+        .map(({ councilor }) => getImageLink(councilor))
+        .filter((url) => url !== '')
+
+      return {
+        title: topic.title,
+        slug: topic.slug,
+        city,
+        billCount,
+        councilorCount,
+        avatars,
+      }
+    })
+  } catch (err) {
+    throw new Error(
+      `Failed to fetch featured council topics for city: ${city}, err: ${err}`
     )
   }
 }

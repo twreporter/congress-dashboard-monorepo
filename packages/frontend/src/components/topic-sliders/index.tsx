@@ -41,10 +41,12 @@ const Container = styled.div`
 
 const Controller = styled.div`
   width: 100%;
-  max-width: 928px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  ${mq.desktopAndAbove`
+    max-width: 928px;
+  `}
   ${mq.tabletOnly`
     padding-left: 32px;
     padding-right: 32px;
@@ -127,6 +129,10 @@ const Sliders: React.FC<SlidersProps> = ({ cards }) => {
         swiper.params.slidesOffsetBefore = offset
         swiper.params.slidesOffsetAfter = offset
       }
+      if (width < DESKTOP_BREAKPOINT) {
+        swiper.params.slidesPerGroup = 1
+        swiper.params.slidesPerView = 'auto'
+      }
       swiper.update()
     }
 
@@ -146,6 +152,12 @@ const Sliders: React.FC<SlidersProps> = ({ cards }) => {
       setIsSwiperEnd(false)
       setIsSwiperBeginning(false)
     }
+  }
+
+  const onSwiperInit = (swiper: SwiperClass) => {
+    setSwiper(swiper)
+    setIsSwiperBeginning(!swiper.allowSlideNext || swiper.isBeginning)
+    setIsSwiperEnd(!swiper.allowSlidePrev || swiper.isEnd)
   }
 
   if (!cards || cards.length === 0) {
@@ -194,7 +206,7 @@ const Sliders: React.FC<SlidersProps> = ({ cards }) => {
             },
           }}
           onSlideChange={onSwiperSlideChange}
-          onSwiper={(swiper) => setSwiper(swiper)}
+          onSwiper={onSwiperInit}
         >
           {cards.map((card, index) => (
             <SwiperSlide key={index}>
