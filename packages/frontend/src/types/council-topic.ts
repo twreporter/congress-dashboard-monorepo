@@ -92,3 +92,12 @@ export type TopNTopicForCouncilors = {
   id: number
   topics: Tag[]
 }
+
+export type FeaturedCouncilTopicData = {
+  title: string
+  slug: string
+  city: string
+  billCount: number
+  councilorCount: number
+  avatars: string[]
+}

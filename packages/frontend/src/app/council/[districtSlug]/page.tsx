@@ -8,7 +8,10 @@ import { VALID_COUNCILS } from '@/constants/council'
 // fetcher
 import { fetchParty } from '@/fetchers/server/party'
 import { fetchCouncilMeetingsOfACity } from '@/fetchers/server/council-meeting'
-import { fetchTopNCouncilTopics } from '@/fetchers/server/council-topic'
+import {
+  fetchTopNCouncilTopics,
+  fetchFeaturedCouncilTopics,
+} from '@/fetchers/server/council-topic'
 // components
 import Open from '@/components/open'
 import Dashboard from '@/components/council-dashboard'
@@ -21,85 +24,6 @@ import { find } from 'lodash'
 const _ = {
   find,
 }
-
-// TODO: temporary test data
-const testCards = [
-  {
-    title: '普發現金',
-    billCount: 123,
-    avatars: [
-      'https://picsum.photos/id/1/200',
-      'https://picsum.photos/id/2/200',
-      'https://picsum.photos/id/3/200',
-      'https://picsum.photos/id/4/200',
-      'https://picsum.photos/id/5/200',
-    ],
-    councilorCount: 2,
-  },
-  {
-    title: '金融監理與壽險風險因應處理1',
-    billCount: 1234,
-    avatars: [
-      'https://picsum.photos/id/1/200',
-      'https://picsum.photos/id/2/200',
-    ],
-    councilorCount: 10,
-  },
-  {
-    title: '金融監理與壽險風險因應處理2',
-    billCount: 1234,
-    avatars: [
-      'https://picsum.photos/id/1/200',
-      'https://picsum.photos/id/2/200',
-    ],
-    councilorCount: 10,
-  },
-  {
-    title: '金融監理與壽險風險因應處理3',
-    billCount: 1234,
-    avatars: [
-      'https://picsum.photos/id/1/200',
-      'https://picsum.photos/id/2/200',
-    ],
-    councilorCount: 10,
-  },
-  {
-    title: '金融監理與壽險風險因應處理4',
-    billCount: 1234,
-    avatars: [
-      'https://picsum.photos/id/1/200',
-      'https://picsum.photos/id/2/200',
-    ],
-    councilorCount: 10,
-  },
-  {
-    title: '金融監理與壽險風險因應處理5',
-    billCount: 1234,
-    avatars: [
-      'https://picsum.photos/id/1/200',
-      'https://picsum.photos/id/2/200',
-    ],
-    councilorCount: 10,
-  },
-  {
-    title: '金融監理與壽險風險因應處理6',
-    billCount: 1234,
-    avatars: [
-      'https://picsum.photos/id/1/200',
-      'https://picsum.photos/id/2/200',
-    ],
-    councilorCount: 10,
-  },
-  {
-    title: '金融監理與壽險風險因應處理7',
-    billCount: 1234,
-    avatars: [
-      'https://picsum.photos/id/1/200',
-      'https://picsum.photos/id/2/200',
-    ],
-    councilorCount: 10,
-  },
-]
 
 export default async function CouncilDetailPage({
   params,
@@ -115,13 +39,14 @@ export default async function CouncilDetailPage({
 
   const meetings = await fetchCouncilMeetingsOfACity({ city: districtSlug })
   const latestMeetingId = meetings[0]?.id
-  const [topics = [], parties] = await Promise.all([
+  const [topics = [], parties, featuredTopics] = await Promise.all([
     fetchTopNCouncilTopics({
       take: 10,
       skip: 0,
       councilMeetingId: latestMeetingId,
     }),
     fetchParty(),
+    fetchFeaturedCouncilTopics({ city: districtSlug }),
   ])
   const partiesMap = parties
     ? new Map(parties.map((p) => [String(p.id), p]))
@@ -142,7 +67,7 @@ export default async function CouncilDetailPage({
   return (
     <div>
       <Open />
-      <TopicSliders cards={testCards} />
+      <TopicSliders cards={featuredTopics} />
       <Dashboard
         districtSlug={districtSlug}
         initialTopics={topics}
