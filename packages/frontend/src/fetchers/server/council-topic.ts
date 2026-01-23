@@ -6,9 +6,10 @@ import type {
   TopNCouncilTopicData,
   FeaturedCouncilTopicData,
 } from '@/types/council-topic'
-import type { SitemapItemWithCity } from '@/types'
+import type { SitemapItemWithCity, KeystoneImage } from '@/types'
+
 // utils
-import { sortByCountDesc } from '@/fetchers/utils'
+import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // lodash
 import { get } from 'lodash'
 const _ = {
@@ -253,11 +254,7 @@ type CouncilMemberFromRes = {
     slug: string
     name: string
     imageLink?: string
-    image?: {
-      imageFile?: {
-        url?: string
-      }
-    }
+    image?: KeystoneImage
   }
 }
 
@@ -268,17 +265,6 @@ type FeaturedCouncilTopicFromRes = {
     id: number
     councilMember: CouncilMemberFromRes[]
   }[]
-}
-
-const getCouncilorImageUrl = (
-  councilor: CouncilMemberFromRes['councilor']
-): string => {
-  const selfHostImage = councilor?.image?.imageFile?.url
-  const fallbackLink = councilor?.imageLink ?? ''
-  const imageUrl = selfHostImage
-    ? `${process.env.NEXT_PUBLIC_IMAGE_HOST}${selfHostImage}`
-    : fallbackLink
-  return imageUrl
 }
 
 export const fetchFeaturedCouncilTopics = async ({
@@ -358,7 +344,7 @@ export const fetchFeaturedCouncilTopics = async ({
         .slice(0, 5)
 
       const avatars = sortedCouncilors
-        .map(({ councilor }) => getCouncilorImageUrl(councilor))
+        .map(({ councilor }) => getImageLink(councilor))
         .filter((url) => url !== '')
 
       return {
