@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.11](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.10...@twreporter/congress-dashboard-frontend@1.10.0-rc.11) (2026-01-26)
+
+### Bug Fixes
+
+- **frontend:** defects ([f3c22ce](https://github.com/twreporter/congress-dashboard-monorepo/commit/f3c22cecef933d414a9004e5f4f87293aaf546a7))
+- **frontend:** fix comments ([5d0bbdb](https://github.com/twreporter/congress-dashboard-monorepo/commit/5d0bbdbca73ea1f80a4bfd65383b42fd4080982c))
+
+### Features
+
+- **frontend:** popover for human card ([c77b763](https://github.com/twreporter/congress-dashboard-monorepo/commit/c77b763da23efd4ea1cd2a3d29aa6faf013dd0bd))
+
 # [1.10.0-rc.10](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.9...@twreporter/congress-dashboard-frontend@1.10.0-rc.10) (2026-01-23)
 
 ### Bug Fixes
