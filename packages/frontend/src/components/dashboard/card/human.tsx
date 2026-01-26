@@ -15,7 +15,6 @@ import PartyTag from '@/components/dashboard/card/party-tag'
 import useOutsideClick from '@/hooks/use-outside-click'
 // style
 import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
-// style
 import { ZIndex } from '@/styles/z-index'
 // @twreporter
 import {
@@ -177,11 +176,11 @@ const MoreTagPopover = styled.div<{
   position: fixed;
   ${(props) =>
     props.$position.top
-      ? `bottom: ${window.innerHeight - props.$top}px; margin-bottom: 8px;`
+      ? `bottom: calc(100vh - ${props.$top}px); margin-bottom: 8px;`
       : `top: ${props.$top}px; margin-top: 8px;`}
   ${(props) =>
     props.$position.left
-      ? `right: ${window.innerWidth - props.$left}px;`
+      ? `right: calc(100vw - ${props.$left}px);`
       : `left: ${props.$left}px;`}
   background-color: ${colorGrayscale.gray800};
   box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
@@ -402,19 +401,13 @@ const CardHuman: React.FC<CardHumanProps> = ({
   const handleOutsideClick = useCallback(() => {
     setShowMorePopover(false)
   }, [])
-  const outsideClickRef = useOutsideClick(handleOutsideClick)
+  const outsideClickRef = useOutsideClick<HTMLDivElement>(handleOutsideClick)
 
   // Combine refs for moreTagRef and outsideClickRef
   const setMoreTagRefs = useCallback(
     (element: HTMLDivElement | null) => {
       moreTagRef.current = element
-      if (
-        outsideClickRef &&
-        typeof outsideClickRef === 'object' &&
-        'current' in outsideClickRef
-      ) {
-        outsideClickRef.current = element
-      }
+      outsideClickRef(element)
     },
     [outsideClickRef]
   )

@@ -167,7 +167,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       console.error(`initialize councilor failed. err: ${err}`)
       setIsShowError(true)
     }
-  }, [])
+  }, [latestMeetingId, fetchCouncilorAndTopTopics])
 
   useEffect(() => {
     const functionBarElement = functionBarRef.current
@@ -303,7 +303,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     if (showSidebar) {
       calculateSidebarGap()
     }
-  }, [windowWidth, showSidebar])
+  }, [windowWidth, showSidebar, selectedType])
   useEffect(() => {
     if (activeCardIndex > -1) {
       setShowSidebar(true)
