@@ -1,6 +1,14 @@
 'use client'
 
-import React, { useRef, useEffect, useState, useMemo, useContext } from 'react'
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useMemo,
+  useContext,
+  forwardRef,
+  useCallback,
+} from 'react'
 import styled from 'styled-components'
 // components
 import FilterModal from '@/components/filter-modal'
@@ -171,233 +179,244 @@ const OptionIcon: React.FC<{ url: string }> = ({ url }) => {
   return <PartyTag size={TagSize.S} avatar={url} />
 }
 
-const FunctionBar: React.FC<FunctionBarProps> = ({
-  setTab,
-  parties,
-  meetings,
-  className,
-  onChangeFilter,
-  districtSlug,
-}: FunctionBarProps) => {
-  const { tabType, filterValues, setFilterValues } = useContext(
-    CouncilDashboardContext
-  )
-  const latestMettingTerm = useMemo(() => `${meetings[0]?.term}`, [meetings])
-  const openFilter = () => {
-    setIsFilterOpen((prev) => !prev)
-  }
-  const tabRef = useRef<HTMLDivElement>(null)
-  const { setTabElement, isHeaderHidden, isHeaderAboveTab } = useScrollContext()
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [filterString, setFilterString] = useState(
-    `${getCouncilName(
-      districtSlug as CouncilDistrict
-    )}｜第${latestMettingTerm}屆`
-  )
-  // TODO: open filter next scrum
-  // const [filterCount, setFilterCount] = useState(0)
-  const [currentFilterValue, setCurrentFilterValue] = useState(filterValues)
-
-  const sessionState = useLegislativeMeetingSession(
-    currentFilterValue.meeting as string
-  )
-  const committeeState = useCommittee()
-
-  // TODO: open filter next scrum
-  // Generate filter options
-  const getFilterOptions = (): FilterOption[] => {
-    const options: FilterOption[] = [
-      {
-        type: SelectorType.Single,
-        disabled: true,
-        label: '單位',
-        key: 'department',
-        defaultValue: 'legislativeYuan',
-        options: [{ label: '立法院', value: 'legislativeYuan' }],
-      },
-      {
-        type: SelectorType.Single,
-        disabled: false,
-        label: '屆期',
-        key: 'meeting',
-        defaultValue: `${latestMettingTerm}`,
-        options: meetings.map(({ term }) => ({
-          label: `第 ${term} 屆`,
-          value: `${term}`,
-        })),
-      },
-      {
-        type: SelectorType.Multiple,
-        disabled: false,
-        defaultValue: ['all'],
-        label: '會期',
-        key: 'meetingSession',
-        isLoading: sessionState.isLoading,
-        showError: !!sessionState.error,
-        options: [
-          { label: '全部會期', value: 'all', isDeletable: false },
-        ].concat(
-          sessionState.legislativeMeetingSessions.map(
-            ({ id, term, startTime, endTime }) => ({
-              label: `第 ${term} 會期(${formatDate(
-                startTime,
-                'YYYY/MM'
-              )}-${formatDate(endTime, 'YYYY/MM')})`,
-              value: `${id}`,
-              isDeletable: true,
-            })
-          )
-        ),
-      },
-      {
-        type: SelectorType.Multiple,
-        hide: tabType === Option.Issue,
-        disabled: false,
-        label: '選區',
-        key: 'constituency',
-        options: [
-          {
-            groupName: '不分區',
-            options: [
-              { label: '不分區', value: MemberType.NationwideAndOverseas },
-            ],
-          },
-          {
-            groupName: '原住民',
-            options: [
-              {
-                label: MEMBER_TYPE_LABEL[MemberType.LowlandAboriginal],
-                value: MemberType.LowlandAboriginal,
-              },
-              {
-                label: MEMBER_TYPE_LABEL[MemberType.HighlandAboriginal],
-                value: MemberType.HighlandAboriginal,
-              },
-            ],
-          },
-          { groupName: '區域', options: CITY_OPTIONS },
-        ],
-      },
-      {
-        type: SelectorType.Multiple,
-        hide: tabType === Option.Issue,
-        disabled: false,
-        label: '黨籍',
-        key: 'party',
-        isLoading: false,
-        options: _.map(parties, (party) => ({
-          label: party.name,
-          value: `${party.id}`,
-          prefixIcon: <OptionIcon url={getImageLink(party)} />,
-        })),
-      },
-      {
-        type: SelectorType.Multiple,
-        hide: tabType === Option.Issue,
-        disabled: false,
-        label: '委員會',
-        key: 'committee',
-        isLoading: committeeState.isLoading,
-        showError: !!committeeState.error,
-        options: Object.values(
-          committeeState.committees.reduce(
-            (acc: CommitteeOptionGroup, committee): CommitteeOptionGroup => {
-              if (!acc[committee.type]) {
-                acc = {
-                  ...acc,
-                  [committee.type]: {
-                    groupName: committee.type === 'ad-hoc' ? '特種' : '常設',
-                    options: [],
-                  },
-                }
-              }
-              acc[committee.type].options.push({
-                label: committee.name,
-                value: committee.slug,
-              })
-              return acc
-            },
-            {} as CommitteeOptionGroup
-          )
-        ) as OptionGroup[],
-      },
-    ]
-
-    return options
-  }
-
-  const handleChange = ({
-    meeting,
-    meetingSession,
-    ...other
-  }: FilterModalValueType) => {
-    const newSession =
-      meeting === currentFilterValue.meeting ? meetingSession : ['all']
-    setCurrentFilterValue({
-      meeting,
-      meetingSession: newSession,
-      ...other,
-    })
-  }
-
-  const handleSubmit = (filterModalValue: FilterModalValueType) => {
-    if (_.isEqual(filterModalValue, filterValues)) {
-      return
-    }
-    setFilterValues(filterModalValue)
-
-    const meetingString = filterModalValue.meeting
-      ? `第${filterModalValue.meeting}屆`
-      : `第${latestMettingTerm}屆`
-    // const totalCount =
-    //   (filterModalValue.constituency as string[])?.length +
-    //   (filterModalValue.party as string[])?.length +
-    //   (filterModalValue.committee as string[])?.length
-
-    setFilterString(
-      `${getCouncilName(districtSlug as CouncilDistrict)}｜${meetingString}`
+const FunctionBar = forwardRef<HTMLDivElement, FunctionBarProps>(
+  (
+    { setTab, parties, meetings, className, onChangeFilter, districtSlug },
+    ref
+  ) => {
+    const { tabType, filterValues, setFilterValues } = useContext(
+      CouncilDashboardContext
     )
-    // setFilterCount(totalCount)
-
-    if (typeof onChangeFilter === 'function') {
-      onChangeFilter(filterModalValue)
+    const latestMettingTerm = useMemo(() => `${meetings[0]?.term}`, [meetings])
+    const openFilter = () => {
+      setIsFilterOpen((prev) => !prev)
     }
-  }
+    const tabRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (tabRef.current) {
-      setTabElement(tabRef.current)
+    const mergedRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        tabRef.current = node
+        if (typeof ref === 'function') {
+          ref(node)
+        } else if (ref) {
+          ref.current = node
+        }
+      },
+      [ref]
+    )
+
+    const { setTabElement, isHeaderHidden, isHeaderAboveTab } =
+      useScrollContext()
+    const [isFilterOpen, setIsFilterOpen] = useState(false)
+    const [filterString, setFilterString] = useState(
+      `${getCouncilName(
+        districtSlug as CouncilDistrict
+      )}｜第${latestMettingTerm}屆`
+    )
+    // TODO: open filter next scrum
+    // const [filterCount, setFilterCount] = useState(0)
+    const [currentFilterValue, setCurrentFilterValue] = useState(filterValues)
+
+    const sessionState = useLegislativeMeetingSession(
+      currentFilterValue.meeting as string
+    )
+    const committeeState = useCommittee()
+
+    // TODO: open filter next scrum
+    // Generate filter options
+    const getFilterOptions = (): FilterOption[] => {
+      const options: FilterOption[] = [
+        {
+          type: SelectorType.Single,
+          disabled: true,
+          label: '單位',
+          key: 'department',
+          defaultValue: 'legislativeYuan',
+          options: [{ label: '立法院', value: 'legislativeYuan' }],
+        },
+        {
+          type: SelectorType.Single,
+          disabled: false,
+          label: '屆期',
+          key: 'meeting',
+          defaultValue: `${latestMettingTerm}`,
+          options: meetings.map(({ term }) => ({
+            label: `第 ${term} 屆`,
+            value: `${term}`,
+          })),
+        },
+        {
+          type: SelectorType.Multiple,
+          disabled: false,
+          defaultValue: ['all'],
+          label: '會期',
+          key: 'meetingSession',
+          isLoading: sessionState.isLoading,
+          showError: !!sessionState.error,
+          options: [
+            { label: '全部會期', value: 'all', isDeletable: false },
+          ].concat(
+            sessionState.legislativeMeetingSessions.map(
+              ({ id, term, startTime, endTime }) => ({
+                label: `第 ${term} 會期(${formatDate(
+                  startTime,
+                  'YYYY/MM'
+                )}-${formatDate(endTime, 'YYYY/MM')})`,
+                value: `${id}`,
+                isDeletable: true,
+              })
+            )
+          ),
+        },
+        {
+          type: SelectorType.Multiple,
+          hide: tabType === Option.Issue,
+          disabled: false,
+          label: '選區',
+          key: 'constituency',
+          options: [
+            {
+              groupName: '不分區',
+              options: [
+                { label: '不分區', value: MemberType.NationwideAndOverseas },
+              ],
+            },
+            {
+              groupName: '原住民',
+              options: [
+                {
+                  label: MEMBER_TYPE_LABEL[MemberType.LowlandAboriginal],
+                  value: MemberType.LowlandAboriginal,
+                },
+                {
+                  label: MEMBER_TYPE_LABEL[MemberType.HighlandAboriginal],
+                  value: MemberType.HighlandAboriginal,
+                },
+              ],
+            },
+            { groupName: '區域', options: CITY_OPTIONS },
+          ],
+        },
+        {
+          type: SelectorType.Multiple,
+          hide: tabType === Option.Issue,
+          disabled: false,
+          label: '黨籍',
+          key: 'party',
+          isLoading: false,
+          options: _.map(parties, (party) => ({
+            label: party.name,
+            value: `${party.id}`,
+            prefixIcon: <OptionIcon url={getImageLink(party)} />,
+          })),
+        },
+        {
+          type: SelectorType.Multiple,
+          hide: tabType === Option.Issue,
+          disabled: false,
+          label: '委員會',
+          key: 'committee',
+          isLoading: committeeState.isLoading,
+          showError: !!committeeState.error,
+          options: Object.values(
+            committeeState.committees.reduce(
+              (acc: CommitteeOptionGroup, committee): CommitteeOptionGroup => {
+                if (!acc[committee.type]) {
+                  acc = {
+                    ...acc,
+                    [committee.type]: {
+                      groupName: committee.type === 'ad-hoc' ? '特種' : '常設',
+                      options: [],
+                    },
+                  }
+                }
+                acc[committee.type].options.push({
+                  label: committee.name,
+                  value: committee.slug,
+                })
+                return acc
+              },
+              {} as CommitteeOptionGroup
+            )
+          ) as OptionGroup[],
+        },
+      ]
+
+      return options
     }
-  }, [setTabElement, tabRef])
 
-  return (
-    <>
-      <StickyBar
-        $isHeaderHidden={isHeaderHidden}
-        ref={tabRef}
-        className={className}
-      >
-        <HorizaontalLine
-          $isHeaderAboveTab={isHeaderAboveTab}
-          $isHide={!isHeaderAboveTab}
+    const handleChange = ({
+      meeting,
+      meetingSession,
+      ...other
+    }: FilterModalValueType) => {
+      const newSession =
+        meeting === currentFilterValue.meeting ? meetingSession : ['all']
+      setCurrentFilterValue({
+        meeting,
+        meetingSession: newSession,
+        ...other,
+      })
+    }
+
+    const handleSubmit = (filterModalValue: FilterModalValueType) => {
+      if (_.isEqual(filterModalValue, filterValues)) {
+        return
+      }
+      setFilterValues(filterModalValue)
+
+      const meetingString = filterModalValue.meeting
+        ? `第${filterModalValue.meeting}屆`
+        : `第${latestMettingTerm}屆`
+      // const totalCount =
+      //   (filterModalValue.constituency as string[])?.length +
+      //   (filterModalValue.party as string[])?.length +
+      //   (filterModalValue.committee as string[])?.length
+
+      setFilterString(
+        `${getCouncilName(districtSlug as CouncilDistrict)}｜${meetingString}`
+      )
+      // setFilterCount(totalCount)
+
+      if (typeof onChangeFilter === 'function') {
+        onChangeFilter(filterModalValue)
+      }
+    }
+
+    useEffect(() => {
+      if (tabRef.current) {
+        setTabElement(tabRef.current)
+      }
+    }, [setTabElement, tabRef])
+
+    return (
+      <>
+        <StickyBar
           $isHeaderHidden={isHeaderHidden}
-        />
-        <Box>
-          <Bar>
-            <Tabs>
-              <TabItem
-                text={'看議員'}
-                selected={tabType === Option.Human}
-                onClick={() => setTab(Option.Human)}
-              />
-              <TabItem
-                text={'看議題'}
-                selected={tabType === Option.Issue}
-                onClick={() => setTab(Option.Issue)}
-              />
-            </Tabs>
-            {/* TODO: open filter next scrum */}
-            {/* <Filter onClick={openFilter}>
+          ref={mergedRef}
+          className={className}
+        >
+          <HorizaontalLine
+            $isHeaderAboveTab={isHeaderAboveTab}
+            $isHide={!isHeaderAboveTab}
+            $isHeaderHidden={isHeaderHidden}
+          />
+          <Box>
+            <Bar>
+              <Tabs>
+                <TabItem
+                  text={'看議員'}
+                  selected={tabType === Option.Human}
+                  onClick={() => setTab(Option.Human)}
+                />
+                <TabItem
+                  text={'看議題'}
+                  selected={tabType === Option.Issue}
+                  onClick={() => setTab(Option.Issue)}
+                />
+              </Tabs>
+              {/* TODO: open filter next scrum */}
+              {/* <Filter onClick={openFilter}>
               <TabletAndAbove>
                 <FilterString>{filterString}</FilterString>
               </TabletAndAbove>
@@ -405,30 +424,34 @@ const FunctionBar: React.FC<FunctionBarProps> = ({
                 filterCount={tabType === Option.Issue ? 0 : filterCount}
               />
             </Filter> */}
-            <TabletAndAbove>
-              <FilterString>{filterString}</FilterString>
-            </TabletAndAbove>
-          </Bar>
-          {isFilterOpen && (
-            <FilterModal
-              isOpen={isFilterOpen}
-              setIsOpen={setIsFilterOpen}
-              onSubmit={handleSubmit}
-              onChange={handleChange}
-              options={getFilterOptions()}
-              value={currentFilterValue}
-            />
-          )}
-        </Box>
-        <HorizaontalLine
-          $isHeaderAboveTab={isHeaderAboveTab}
-          $isHeaderHidden={isHeaderHidden}
-        />
-      </StickyBar>
-      <MobileOnlyBox className={className}>
-        <FilterString onClick={openFilter}>{filterString}</FilterString>
-      </MobileOnlyBox>
-    </>
-  )
-}
+              <TabletAndAbove>
+                <FilterString>{filterString}</FilterString>
+              </TabletAndAbove>
+            </Bar>
+            {isFilterOpen && (
+              <FilterModal
+                isOpen={isFilterOpen}
+                setIsOpen={setIsFilterOpen}
+                onSubmit={handleSubmit}
+                onChange={handleChange}
+                options={getFilterOptions()}
+                value={currentFilterValue}
+              />
+            )}
+          </Box>
+          <HorizaontalLine
+            $isHeaderAboveTab={isHeaderAboveTab}
+            $isHeaderHidden={isHeaderHidden}
+          />
+        </StickyBar>
+        <MobileOnlyBox className={className}>
+          <FilterString onClick={openFilter}>{filterString}</FilterString>
+        </MobileOnlyBox>
+      </>
+    )
+  }
+)
+
+FunctionBar.displayName = 'FunctionBar'
+
 export default FunctionBar
