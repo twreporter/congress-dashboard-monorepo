@@ -42,9 +42,19 @@ export const SingleSelect = React.memo(function SingleSelect({
 
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null)
-  const selectorContainerRef = useOutsideClick(() => {
+  const selectorContainerRef = useRef<HTMLDivElement>(null)
+  const outsideClickRef = useOutsideClick<HTMLDivElement>(() => {
     setOpen(false)
   })
+
+  // Combine refs for selectorContainerRef and outsideClickRef
+  const setSelectorContainerRefs = useCallback(
+    (element: HTMLDivElement | null) => {
+      selectorContainerRef.current = element
+      outsideClickRef(element)
+    },
+    [outsideClickRef]
+  )
 
   // Find and set the selected option when value changes
   useEffect(() => {
@@ -125,7 +135,7 @@ export const SingleSelect = React.memo(function SingleSelect({
   )
 
   return (
-    <SelectContainer ref={selectorContainerRef}>
+    <SelectContainer ref={setSelectorContainerRefs}>
       <SelectBox
         onClick={handleToggle}
         onFocus={() => setFocused(true)}
