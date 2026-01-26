@@ -22,6 +22,7 @@ export type ListConfig = {
   label: string
   expectedHeaders: string[]
   requiredFields: string[]
+  charLimitFields?: string[]
   description?: string
 }
 
@@ -90,6 +91,7 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'date',
       'title',
     ],
+    charLimitFields: ['title', 'attendee'], // prisma string type uses varchar(191)
     description: '匯入議案資料',
   },
   [CouncilListName.councilTopic]: {
@@ -360,6 +362,7 @@ export const jsonUploader = <ListTypeInfo extends BaseListTypeInfo>(
                 label: listConfig.label,
                 expectedHeaders: listConfig.expectedHeaders,
                 requiredFields: listConfig.requiredFields,
+                charLimitFields: listConfig.charLimitFields || [],
                 description: listConfig.description || '',
                 isRequired: !!config.validation?.isRequired,
               },

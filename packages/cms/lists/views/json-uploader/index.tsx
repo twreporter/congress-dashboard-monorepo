@@ -63,6 +63,8 @@ import {
   WarningCell,
 } from './styles'
 
+const MAX_STRING_LENGTH = 191
+
 const CHECK_COUNCILOR_SLUGS = gql`
   query CheckCouncilorSlugs($slugs: [String!]!) {
     councilors(where: { slug: { in: $slugs } }) {
@@ -270,6 +272,18 @@ const validateJsonData = (
     )
     if (extraFields.length > 0) {
       warnings.push(`第 ${rowNum} 筆: 包含非預期欄位 ${extraFields.join(', ')}`)
+    }
+
+    const charLimitFields = listConfig.charLimitFields
+    if (charLimitFields && charLimitFields.length > 0) {
+      charLimitFields.forEach((field) => {
+        if (item[field] && item[field].length > MAX_STRING_LENGTH) {
+          errors.push(
+            `第 ${rowNum} 筆: 超過 char limit, ${field} 上限為 ${MAX_STRING_LENGTH}`
+          )
+          recordValid = false
+        }
+      })
     }
 
     const slugFields = listConfig.expectedHeaders.filter(isSlugField)
@@ -742,11 +756,20 @@ export const Field = ({
                   typeof record['slug'] === 'string' &&
                   existingSlugs.has(record['slug'])
 
+                // Check for char limit
+                const hasExceedCharLimit = listConfig.charLimitFields?.some(
+                  (field: string) => {
+                    const value = record[field]
+                    return value && value.length > MAX_STRING_LENGTH
+                  }
+                )
+
                 return (
                   hasMissingRequired ||
                   hasUppercaseSlug ||
                   hasDuplicateSlug ||
-                  hasExistingSlug
+                  hasExistingSlug ||
+                  hasExceedCharLimit
                 )
               })
 
@@ -778,7 +801,18 @@ export const Field = ({
                   )
                 }
               )
-              return hasMissingRequired || hasUppercaseSlug || hasDuplicateSlug
+              const hasExceedCharLimit = listConfig.charLimitFields?.some(
+                (field: string) => {
+                  const value = record[field]
+                  return value && value.length > MAX_STRING_LENGTH
+                }
+              )
+              return (
+                hasMissingRequired ||
+                hasUppercaseSlug ||
+                hasDuplicateSlug ||
+                hasExceedCharLimit
+              )
             }).length
 
             const updateCount = errorRecords.length - errorCount
@@ -824,25 +858,37 @@ export const Field = ({
                               cellValue === ''
                             const isRequired =
                               listConfig.requiredFields.includes(header)
-                            const isSlugField = header.includes('slug')
+                            const isASlugField = isSlugField(header)
+                            const isHavingCharLimit =
+                              listConfig.charLimitFields?.includes(header)
                             const hasUppercase =
-                              isSlugField &&
+                              isASlugField &&
                               cellValue &&
                               typeof cellValue === 'string' &&
                               /[A-Z]/.test(cellValue)
+                            const isNeedToCheckDuplicate =
+                              isSlugFieldNeedToCheckDuplicate(header)
                             const isDuplicate =
-                              isSlugField &&
+                              isNeedToCheckDuplicate &&
                               cellValue &&
                               typeof cellValue === 'string' &&
                               duplicateSlugs[header]?.has(cellValue)
                             const isExistingInDb =
-                              isSlugField &&
-                              header === 'slug' &&
+                              isASlugField &&
                               cellValue &&
                               typeof cellValue === 'string' &&
                               existingSlugs.has(cellValue)
+                            const isExceedCharLimit =
+                              isHavingCharLimit &&
+                              cellValue &&
+                              typeof cellValue === 'string' &&
+                              cellValue.length > MAX_STRING_LENGTH
+
                             const cellHasError =
-                              (isEmpty && isRequired) || hasUppercase
+                              (isEmpty && isRequired) ||
+                              hasUppercase ||
+                              isDuplicate ||
+                              isExceedCharLimit
 
                             const formatCellValue = (val: any): string => {
                               if (
@@ -879,6 +925,10 @@ export const Field = ({
                                   </EmptyCell>
                                 ) : isDuplicate ? (
                                   <EmptyCell>⚠ {displayValue} (重複)</EmptyCell>
+                                ) : isExceedCharLimit ? (
+                                  <EmptyCell>
+                                    ⚠ {displayValue} (超過字數)
+                                  </EmptyCell>
                                 ) : isExistingInDb ? (
                                   <WarningCell>
                                     {displayValue} (將更新)
