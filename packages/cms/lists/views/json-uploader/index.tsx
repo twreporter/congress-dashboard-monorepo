@@ -108,6 +108,15 @@ const extractSlugsFromData = (jsonData: any[], slugField: string): string[] => {
     )
 }
 
+/*
+    slug fields would check duplicate, exclude those slug that don't need to check duplicate
+*/
+const noNeedCheckDuplicateSlugFields = ['party_slug']
+const isSlugFieldNeedToCheckDuplicate = (header: string): boolean =>
+  header.includes('slug') && !noNeedCheckDuplicateSlugFields.includes(header)
+
+const isSlugField = (header: string): boolean => header.includes('slug')
+
 type JSONUploaderFieldValue = {
   listName: string | null
   filename: string | null
@@ -189,13 +198,13 @@ const validateJsonData = (
   }
 
   // Find slug fields and check for duplicates
-  const slugFields = listConfig.expectedHeaders.filter((header) =>
-    header.includes('slug')
+  const slugFieldsToCheckDuplicate = listConfig.expectedHeaders.filter(
+    isSlugFieldNeedToCheckDuplicate
   )
 
   // Track duplicate slugs: { fieldName: { slugValue: [rowNumbers] } }
   const slugValueMap: Record<string, Record<string, number[]>> = {}
-  slugFields.forEach((slugField) => {
+  slugFieldsToCheckDuplicate.forEach((slugField) => {
     slugValueMap[slugField] = {}
   })
 
@@ -203,7 +212,7 @@ const validateJsonData = (
   jsonData.forEach((item, index) => {
     if (typeof item !== 'object' || item === null) return
 
-    slugFields.forEach((slugField) => {
+    slugFieldsToCheckDuplicate.forEach((slugField) => {
       const slugValue = item[slugField]
       if (slugValue && typeof slugValue === 'string') {
         if (!slugValueMap[slugField][slugValue]) {
@@ -216,7 +225,7 @@ const validateJsonData = (
 
   // Find duplicates and add errors
   const duplicateSlugs: Record<string, Set<string>> = {}
-  slugFields.forEach((slugField) => {
+  slugFieldsToCheckDuplicate.forEach((slugField) => {
     duplicateSlugs[slugField] = new Set()
     Object.entries(slugValueMap[slugField]).forEach(([slugValue, rows]) => {
       if (rows.length > 1) {
@@ -263,6 +272,7 @@ const validateJsonData = (
       warnings.push(`第 ${rowNum} 筆: 包含非預期欄位 ${extraFields.join(', ')}`)
     }
 
+    const slugFields = listConfig.expectedHeaders.filter(isSlugField)
     slugFields.forEach((slugField) => {
       const slugValue = item[slugField]
       if (slugValue && typeof slugValue === 'string') {
@@ -272,7 +282,10 @@ const validateJsonData = (
           recordValid = false
         }
         // Check for duplicate
-        if (duplicateSlugs[slugField]?.has(slugValue)) {
+        if (
+          isSlugFieldNeedToCheckDuplicate(slugField) &&
+          duplicateSlugs[slugField]?.has(slugValue)
+        ) {
           recordValid = false
         }
       }
@@ -656,18 +669,17 @@ export const Field = ({
           listConfig &&
           (!validation?.isValid || existingSlugs.size > 0) &&
           (() => {
-            const slugFields = listConfig.expectedHeaders.filter(
-              (header: string) => header.includes('slug')
-            )
+            const slugFieldsNeedToCheckDuplicate =
+              listConfig.expectedHeaders.filter(isSlugFieldNeedToCheckDuplicate)
 
             // Build slug value map to detect duplicates
             const slugValueMap: Record<string, Record<string, number[]>> = {}
-            slugFields.forEach((slugField: string) => {
+            slugFieldsNeedToCheckDuplicate.forEach((slugField: string) => {
               slugValueMap[slugField] = {}
             })
             jsonData.forEach((item, index) => {
               if (typeof item !== 'object' || item === null) return
-              slugFields.forEach((slugField: string) => {
+              slugFieldsNeedToCheckDuplicate.forEach((slugField: string) => {
                 const slugValue = item[slugField]
                 if (slugValue && typeof slugValue === 'string') {
                   if (!slugValueMap[slugField][slugValue]) {
@@ -680,7 +692,7 @@ export const Field = ({
 
             // Find duplicate slug values
             const duplicateSlugs: Record<string, Set<string>> = {}
-            slugFields.forEach((slugField: string) => {
+            slugFieldsNeedToCheckDuplicate.forEach((slugField: string) => {
               duplicateSlugs[slugField] = new Set()
               Object.entries(slugValueMap[slugField]).forEach(
                 ([slugValue, rows]) => {
@@ -691,6 +703,7 @@ export const Field = ({
               )
             })
 
+            const slugFields = listConfig.expectedHeaders.filter(isSlugField)
             const errorRecords = jsonData
               .map((record, idx) => ({ record, originalIndex: idx }))
               .filter(({ record }) => {
@@ -713,7 +726,7 @@ export const Field = ({
                   }
                 )
                 // Check for duplicate slug values
-                const hasDuplicateSlug = slugFields.some(
+                const hasDuplicateSlug = slugFieldsNeedToCheckDuplicate.some(
                   (slugField: string) => {
                     const slugValue = record[slugField]
                     return (
@@ -755,14 +768,16 @@ export const Field = ({
                   /[A-Z]/.test(slugValue)
                 )
               })
-              const hasDuplicateSlug = slugFields.some((slugField: string) => {
-                const slugValue = record[slugField]
-                return (
-                  slugValue &&
-                  typeof slugValue === 'string' &&
-                  duplicateSlugs[slugField]?.has(slugValue)
-                )
-              })
+              const hasDuplicateSlug = slugFieldsNeedToCheckDuplicate.some(
+                (slugField: string) => {
+                  const slugValue = record[slugField]
+                  return (
+                    slugValue &&
+                    typeof slugValue === 'string' &&
+                    duplicateSlugs[slugField]?.has(slugValue)
+                  )
+                }
+              )
               return hasMissingRequired || hasUppercaseSlug || hasDuplicateSlug
             }).length
 
