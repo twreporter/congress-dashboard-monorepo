@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.12](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.11...@twreporter/congress-dashboard-frontend@1.10.0-rc.12) (2026-01-26)
+
+### Bug Fixes
+
+- **frontend:** ref for outside click ([a3249ea](https://github.com/twreporter/congress-dashboard-monorepo/commit/a3249ea31685e985652f408224385a615ae28eb6))
+- **frontend:** useCallback for performance ([af29b30](https://github.com/twreporter/congress-dashboard-monorepo/commit/af29b30b4f2044e68d44829560a8beca4898a438))
+
 # [1.10.0-rc.11](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.10...@twreporter/congress-dashboard-frontend@1.10.0-rc.11) (2026-01-26)
 
 ### Bug Fixes
