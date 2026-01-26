@@ -200,21 +200,13 @@ const Tooltip: React.FC<TooltipProps> = ({ tooltip }: TooltipProps) => {
   }, [])
 
   // Use the useOutsideClick hook with our custom handler
-  const outsideClickRef = useOutsideClick(handleOutsideClick)
+  const outsideClickRef = useOutsideClick<HTMLDivElement>(handleOutsideClick)
 
   // Set up the combined ref handling
   const setRefs = useCallback(
     (element: HTMLDivElement | null) => {
       boxRef.current = element
-
-      // The useOutsideClick hook returns a ref object; we need to assign it to our element
-      if (
-        outsideClickRef &&
-        typeof outsideClickRef === 'object' &&
-        'current' in outsideClickRef
-      ) {
-        outsideClickRef.current = element
-      }
+      outsideClickRef(element)
     },
     [outsideClickRef]
   )

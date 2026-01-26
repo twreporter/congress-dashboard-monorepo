@@ -108,6 +108,9 @@ const FollowMoreSection = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  a {
+    text-decoration: none;
+  }
 `
 const FollowMoreTitle = styled(H5)`
   color: ${colorGrayscale.gray800};

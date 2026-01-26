@@ -126,6 +126,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [sidebarGap, setSidebarGap] = useState(0)
   const sidebarRefs = useRef<Map<number, HTMLDivElement>>(new Map(null))
   const cardRef = useRef<HTMLDivElement>(null)
+  const functionBarRef = useRef<HTMLDivElement>(null)
   const [hasMoreCouncilor, setHasMoreCouncilor] = useState(false)
   const isShowLoadMore = useMemo(() => {
     if (isLoading) {
@@ -166,15 +167,34 @@ const Dashboard: React.FC<DashboardProps> = ({
       console.error(`initialize councilor failed. err: ${err}`)
       setIsShowError(true)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [latestMeetingId, fetchCouncilorAndTopTopics])
 
   useEffect(() => {
-    if (shouldToastrOnHuman && selectedType === Option.Human) {
-      toastr({ text: '議員為隨機排列' })
-      setShouldToastrOnHuman(false)
+    const functionBarElement = functionBarRef.current
+    if (!functionBarElement) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (
+            entry.isIntersecting &&
+            shouldToastrOnHuman &&
+            selectedType === Option.Human
+          ) {
+            toastr({ text: '議員為隨機排列' })
+            setShouldToastrOnHuman(false)
+          }
+        })
+      },
+      { threshold: 0, rootMargin: '-50% 0px -50% 0px' }
+    )
+
+    observer.observe(functionBarElement)
+
+    return () => {
+      observer.disconnect()
     }
-  }, [selectedType, shouldToastrOnHuman])
+  }, [shouldToastrOnHuman, selectedType])
 
   useEffect(() => {
     setShowSidebar(false)
@@ -283,8 +303,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     if (showSidebar) {
       calculateSidebarGap()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [windowWidth, showSidebar])
+  }, [windowWidth, showSidebar, selectedType])
   useEffect(() => {
     if (activeCardIndex > -1) {
       setShowSidebar(true)
@@ -386,6 +405,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     <CouncilDashboardContext.Provider value={contextValue}>
       <Box id={anchorId} ref={ref}>
         <StyledFunctionBar
+          ref={functionBarRef}
           setTab={setTab}
           parties={parties}
           meetings={meetings}
