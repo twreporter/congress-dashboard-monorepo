@@ -43,9 +43,11 @@ export const SingleSelect = React.memo(function SingleSelect({
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null)
   const selectorContainerRef = useRef<HTMLDivElement>(null)
-  const outsideClickRef = useOutsideClick<HTMLDivElement>(() => {
-    setOpen(false)
-  })
+  const outsideClickRef = useOutsideClick<HTMLDivElement>(
+    useCallback(() => {
+      setOpen(false)
+    }, [])
+  )
 
   // Combine refs for selectorContainerRef and outsideClickRef
   const setSelectorContainerRefs = useCallback(
