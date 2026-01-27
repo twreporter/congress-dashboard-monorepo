@@ -458,7 +458,7 @@ export const Field = ({
     } else {
       setExistingSlugs(new Set())
     }
-  }, [existingSlugsData, selectedList, validation])
+  }, [existingSlugsData, selectedList])
 
   // Update when value changes (for edit mode)
   useEffect(() => {
@@ -499,12 +499,15 @@ export const Field = ({
       try {
         // Read file as base64 for upload
         const arrayBuffer = await fileContent.arrayBuffer()
-        const base64 = btoa(
-          new Uint8Array(arrayBuffer).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ''
-          )
-        )
+        const CHUNK_SIZE = 0x8000 // 32k
+        const bytes = new Uint8Array(arrayBuffer)
+
+        let binary = ''
+        for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+          binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK_SIZE))
+        }
+
+        const base64 = btoa(binary)
 
         // Only send jsonData if validation passes, otherwise the record cannot be created
         if (validation?.isValid) {
