@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useEffect,
   useRef,
+  useMemo,
   Fragment,
 } from 'react'
 import { jsx } from '@keystone-ui/core'
@@ -63,6 +64,8 @@ import {
   WarningCell,
 } from './styles'
 
+const MAX_STRING_LENGTH = 191
+
 const CHECK_COUNCILOR_SLUGS = gql`
   query CheckCouncilorSlugs($slugs: [String!]!) {
     councilors(where: { slug: { in: $slugs } }) {
@@ -108,6 +111,14 @@ const extractSlugsFromData = (jsonData: any[], slugField: string): string[] => {
     )
 }
 
+const isSlugField = (header: string): boolean => header.includes('slug')
+
+// validator
+const testUppercase = (value: string): boolean =>
+  typeof value === 'string' && /[A-Z]/.test(value)
+const testExceedCharLimit = (value: string): boolean =>
+  typeof value === 'string' && value.length > MAX_STRING_LENGTH
+
 type JSONUploaderFieldValue = {
   listName: string | null
   filename: string | null
@@ -150,52 +161,70 @@ export const controller = (
   }
 }
 
+type ErrorType =
+  | 'is_empty'
+  | 'has_uppercase'
+  | 'is_duplicate'
+  | 'exceed_char_limit'
+  | 'exist_in_db'
+
+type ErrorItem = {
+  field: string
+  errorType: ErrorType
+}
+
+type ErrorRecord = {
+  index: number
+  error: ErrorItem[]
+}
+
 type ValidationResult = {
   isValid: boolean
   errors: string[]
   warnings: string[]
+  errorRecords: ErrorRecord[]
   recordCount: number
   validRecordCount: number
+  errorCount: number
+  updateCount: number
 }
+
+const generateFileError = (error: string): ValidationResult => ({
+  isValid: false,
+  errors: [error],
+  warnings: [],
+  errorRecords: [],
+  recordCount: 0,
+  validRecordCount: 0,
+  errorCount: 0,
+  updateCount: 0,
+})
 
 const validateJsonData = (
   jsonData: any[],
-  listConfig: ListConfig
+  listConfig: ListConfig,
+  existingSlugs: Set<string>
 ): ValidationResult => {
   const errors: string[] = []
   const warnings: string[] = []
+  const errorRecords: ErrorRecord[] = []
   let validRecordCount = 0
+  let updateCount = 0
 
   if (!Array.isArray(jsonData)) {
-    errors.push('JSON 檔案必須是陣列格式')
-    return {
-      isValid: false,
-      errors,
-      warnings,
-      recordCount: 0,
-      validRecordCount: 0,
-    }
+    return generateFileError('JSON 檔案必須是陣列格式')
   }
 
   if (jsonData.length === 0) {
-    errors.push('JSON 檔案不包含任何資料')
-    return {
-      isValid: false,
-      errors,
-      warnings,
-      recordCount: 0,
-      validRecordCount: 0,
-    }
+    return generateFileError('JSON 檔案不包含任何資料')
   }
 
   // Find slug fields and check for duplicates
-  const slugFields = listConfig.expectedHeaders.filter((header) =>
-    header.includes('slug')
-  )
+  const slugFieldsToCheckDuplicate = listConfig.nonDuplicateFields
 
   // Track duplicate slugs: { fieldName: { slugValue: [rowNumbers] } }
   const slugValueMap: Record<string, Record<string, number[]>> = {}
-  slugFields.forEach((slugField) => {
+  slugFieldsToCheckDuplicate.forEach((slugField) => {
     slugValueMap[slugField] = {}
   })
 
@@ -203,7 +232,7 @@ const validateJsonData = (
   jsonData.forEach((item, index) => {
     if (typeof item !== 'object' || item === null) return
 
-    slugFields.forEach((slugField) => {
+    slugFieldsToCheckDuplicate.forEach((slugField) => {
       const slugValue = item[slugField]
       if (slugValue && typeof slugValue === 'string') {
         if (!slugValueMap[slugField][slugValue]) {
@@ -216,7 +245,7 @@ const validateJsonData = (
 
   // Find duplicates and add errors
   const duplicateSlugs: Record<string, Set<string>> = {}
-  slugFields.forEach((slugField) => {
+  slugFieldsToCheckDuplicate.forEach((slugField) => {
     duplicateSlugs[slugField] = new Set()
     Object.entries(slugValueMap[slugField]).forEach(([slugValue, rows]) => {
       if (rows.length > 1) {
@@ -233,6 +262,7 @@ const validateJsonData = (
   jsonData.forEach((item, index) => {
     const rowNum = index + 1
     let recordValid = true
+    let errorItems: ErrorItem[] = []
 
     if (typeof item !== 'object' || item === null) {
       errors.push(`第 ${rowNum} 筆: 資料格式錯誤`)
@@ -253,6 +283,12 @@ const validateJsonData = (
     )
     if (missingRequired.length > 0) {
       errors.push(`第 ${rowNum} 筆: 必填欄位為空 ${missingRequired.join(', ')}`)
+      errorItems = errorItems.concat(
+        missingRequired.map((header) => ({
+          field: header,
+          errorType: 'is_empty',
+        }))
+      )
       recordValid = false
     }
 
@@ -263,20 +299,57 @@ const validateJsonData = (
       warnings.push(`第 ${rowNum} 筆: 包含非預期欄位 ${extraFields.join(', ')}`)
     }
 
+    const charLimitFields = listConfig.charLimitFields
+    if (charLimitFields && charLimitFields.length > 0) {
+      charLimitFields.forEach((field) => {
+        if (testExceedCharLimit(item[field])) {
+          errors.push(
+            `第 ${rowNum} 筆: 超過字數上限, ${field} 上限為 ${MAX_STRING_LENGTH} 字`
+          )
+          if (!errorItems.some((item) => item.field === field)) {
+            errorItems.push({ field, errorType: 'exceed_char_limit' })
+          }
+          recordValid = false
+        }
+      })
+    }
+
+    const slugFields = listConfig.expectedHeaders.filter(isSlugField)
     slugFields.forEach((slugField) => {
       const slugValue = item[slugField]
       if (slugValue && typeof slugValue === 'string') {
         // Check for uppercase
-        if (/[A-Z]/.test(slugValue)) {
+        if (testUppercase(slugValue)) {
           errors.push(`第 ${rowNum} 筆: 欄位 ${slugField} 不可包含大寫字母`)
+          if (!errorItems.some((item) => item.field === slugField)) {
+            errorItems.push({ field: slugField, errorType: 'has_uppercase' })
+          }
           recordValid = false
         }
         // Check for duplicate
-        if (duplicateSlugs[slugField]?.has(slugValue)) {
+        if (
+          listConfig.nonDuplicateFields.includes(slugField) &&
+          duplicateSlugs[slugField]?.has(slugValue)
+        ) {
+          if (!errorItems.some((item) => item.field === slugField)) {
+            errorItems.push({ field: slugField, errorType: 'is_duplicate' })
+          }
           recordValid = false
         }
       }
     })
+
+    // Check for existing in db
+    if (typeof item['slug'] === 'string' && existingSlugs.has(item['slug'])) {
+      if (!errorItems.some((item) => item.field === 'slug')) {
+        errorItems.push({ field: 'slug', errorType: 'exist_in_db' })
+      }
+      updateCount++
+    }
+
+    if (errorItems.length > 0) {
+      errorRecords.push({ index, error: errorItems })
+    }
 
     if (recordValid) {
       validRecordCount++
@@ -287,8 +360,11 @@ const validateJsonData = (
     isValid: errors.length === 0,
     errors,
     warnings,
+    errorRecords,
     recordCount: jsonData.length,
     validRecordCount,
+    errorCount: errorRecords.length,
+    updateCount,
   }
 }
 
@@ -308,6 +384,10 @@ export const Field = ({
   const [fileContent, setFileContent] = useState<File | null>(null)
   const [existingSlugs, setExistingSlugs] = useState<Set<string>>(new Set())
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const listConfig = useMemo(
+    () => (selectedList ? listConfigs[selectedList] : null),
+    [selectedList, listConfigs]
+  )
 
   const handleButtonClick = () => {
     fileInputRef.current?.click()
@@ -390,6 +470,80 @@ export const Field = ({
     }
   }, [value])
 
+  // Validate data
+  useEffect(() => {
+    if (!listConfig || !jsonData || !existingSlugs) {
+      return
+    }
+
+    const validationResult = validateJsonData(
+      jsonData,
+      listConfig,
+      existingSlugs
+    )
+    setValidation(validationResult)
+  }, [listConfig, existingSlugs, jsonData])
+
+  // Prepare uploading file
+  useEffect(() => {
+    if (
+      !jsonData ||
+      !fileContent ||
+      !selectedList ||
+      typeof onChange !== 'function'
+    ) {
+      return
+    }
+
+    const validateFileContent = async () => {
+      try {
+        // Read file as base64 for upload
+        const arrayBuffer = await fileContent.arrayBuffer()
+        const CHUNK_SIZE = 0x8000 // 32k
+        const bytes = new Uint8Array(arrayBuffer)
+
+        let binary = ''
+        for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+          binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK_SIZE))
+        }
+
+        const base64 = btoa(binary)
+
+        // Only send jsonData if validation passes, otherwise the record cannot be created
+        if (validation?.isValid) {
+          onChange?.({
+            listName: selectedList,
+            filename: fileContent.name,
+            filesize: fileContent.size,
+            jsonData: jsonData,
+            fileContent: base64,
+          })
+        } else {
+          // Don't send jsonData - this will prevent the record from being created
+          onChange?.({
+            listName: selectedList,
+            filename: fileContent.name,
+            filesize: fileContent.size,
+          })
+        }
+      } catch (error) {
+        console.error('validate data failed, err:', error)
+        setJsonData(null)
+        setValidation(generateFileError('檔案讀取失敗'))
+      }
+    }
+
+    validateFileContent()
+  }, [
+    selectedList,
+    validation,
+    jsonData,
+    fileContent,
+    onChange,
+    setValidation,
+    setJsonData,
+  ])
+
   const handleListChange = useCallback(
     (option: { label: string; value: string } | null) => {
       const newListName = option?.value || ''
@@ -429,13 +583,7 @@ export const Field = ({
 
       if (!selectedList) {
         setJsonData(null)
-        setValidation({
-          isValid: false,
-          errors: ['請先選擇匯入類型'],
-          warnings: [],
-          recordCount: 0,
-          validRecordCount: 0,
-        })
+        setValidation(generateFileError('請先選擇匯入類型'))
         return
       }
 
@@ -446,70 +594,16 @@ export const Field = ({
 
         const listConfig = listConfigs[selectedList]
         if (!listConfig) {
-          setValidation({
-            isValid: false,
-            errors: ['找不到列表配置'],
-            warnings: [],
-            recordCount: 0,
-            validRecordCount: 0,
-          })
+          setValidation(generateFileError('找不到列表 config'))
           return
         }
-
-        const validationResult = validateJsonData(data, listConfig)
-        setValidation(validationResult)
-
-        // Read file as base64 for upload
-        const arrayBuffer = await file.arrayBuffer()
-        const base64 = btoa(
-          new Uint8Array(arrayBuffer).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ''
-          )
-        )
-
-        // Only send jsonData if validation passes, otherwise the record cannot be created
-        if (validationResult.isValid) {
-          onChange?.({
-            listName: selectedList,
-            filename: file.name,
-            filesize: file.size,
-            jsonData: data,
-            fileContent: base64,
-          })
-        } else {
-          // Don't send jsonData - this will prevent the record from being created
-          onChange?.({
-            listName: selectedList,
-            filename: file.name,
-            filesize: file.size,
-          })
-        }
-      } catch (error) {
+      } catch {
         setJsonData(null)
-        if (error instanceof SyntaxError) {
-          setValidation({
-            isValid: false,
-            errors: ['JSON 格式錯誤'],
-            warnings: [],
-            recordCount: 0,
-            validRecordCount: 0,
-          })
-        } else {
-          setValidation({
-            isValid: false,
-            errors: ['檔案讀取失敗'],
-            warnings: [],
-            recordCount: 0,
-            validRecordCount: 0,
-          })
-        }
+        setValidation(generateFileError('JSON 格式錯誤'))
       }
     },
     [selectedList, listConfigs, onChange]
   )
-
-  const listConfig = selectedList ? listConfigs[selectedList] : null
 
   const listNameOptions = Object.values(listConfigs).map((config) => ({
     value: config.value,
@@ -654,120 +748,10 @@ export const Field = ({
         {jsonData &&
           jsonData.length > 0 &&
           listConfig &&
-          (!validation?.isValid || existingSlugs.size > 0) &&
+          validation &&
+          (!validation.isValid || existingSlugs.size > 0) &&
           (() => {
-            const slugFields = listConfig.expectedHeaders.filter(
-              (header: string) => header.includes('slug')
-            )
-
-            // Build slug value map to detect duplicates
-            const slugValueMap: Record<string, Record<string, number[]>> = {}
-            slugFields.forEach((slugField: string) => {
-              slugValueMap[slugField] = {}
-            })
-            jsonData.forEach((item, index) => {
-              if (typeof item !== 'object' || item === null) return
-              slugFields.forEach((slugField: string) => {
-                const slugValue = item[slugField]
-                if (slugValue && typeof slugValue === 'string') {
-                  if (!slugValueMap[slugField][slugValue]) {
-                    slugValueMap[slugField][slugValue] = []
-                  }
-                  slugValueMap[slugField][slugValue].push(index)
-                }
-              })
-            })
-
-            // Find duplicate slug values
-            const duplicateSlugs: Record<string, Set<string>> = {}
-            slugFields.forEach((slugField: string) => {
-              duplicateSlugs[slugField] = new Set()
-              Object.entries(slugValueMap[slugField]).forEach(
-                ([slugValue, rows]) => {
-                  if (rows.length > 1) {
-                    duplicateSlugs[slugField].add(slugValue)
-                  }
-                }
-              )
-            })
-
-            const errorRecords = jsonData
-              .map((record, idx) => ({ record, originalIndex: idx }))
-              .filter(({ record }) => {
-                // Check for missing required fields
-                const hasMissingRequired = listConfig.requiredFields.some(
-                  (field: string) =>
-                    record[field] === undefined ||
-                    record[field] === null ||
-                    record[field] === ''
-                )
-                // Check for uppercase in slug fields
-                const hasUppercaseSlug = slugFields.some(
-                  (slugField: string) => {
-                    const slugValue = record[slugField]
-                    return (
-                      slugValue &&
-                      typeof slugValue === 'string' &&
-                      /[A-Z]/.test(slugValue)
-                    )
-                  }
-                )
-                // Check for duplicate slug values
-                const hasDuplicateSlug = slugFields.some(
-                  (slugField: string) => {
-                    const slugValue = record[slugField]
-                    return (
-                      slugValue &&
-                      typeof slugValue === 'string' &&
-                      duplicateSlugs[slugField]?.has(slugValue)
-                    )
-                  }
-                )
-                // Check for existing slug in database
-                const hasExistingSlug =
-                  record['slug'] &&
-                  typeof record['slug'] === 'string' &&
-                  existingSlugs.has(record['slug'])
-
-                return (
-                  hasMissingRequired ||
-                  hasUppercaseSlug ||
-                  hasDuplicateSlug ||
-                  hasExistingSlug
-                )
-              })
-
-            if (errorRecords.length === 0) return null
-
-            // Count how many are errors vs just existing in DB
-            const errorCount = errorRecords.filter(({ record }) => {
-              const hasMissingRequired = listConfig.requiredFields.some(
-                (field: string) =>
-                  record[field] === undefined ||
-                  record[field] === null ||
-                  record[field] === ''
-              )
-              const hasUppercaseSlug = slugFields.some((slugField: string) => {
-                const slugValue = record[slugField]
-                return (
-                  slugValue &&
-                  typeof slugValue === 'string' &&
-                  /[A-Z]/.test(slugValue)
-                )
-              })
-              const hasDuplicateSlug = slugFields.some((slugField: string) => {
-                const slugValue = record[slugField]
-                return (
-                  slugValue &&
-                  typeof slugValue === 'string' &&
-                  duplicateSlugs[slugField]?.has(slugValue)
-                )
-              })
-              return hasMissingRequired || hasUppercaseSlug || hasDuplicateSlug
-            }).length
-
-            const updateCount = errorRecords.length - errorCount
-
+            const { errorRecords, errorCount, updateCount } = validation
             return (
               <details open>
                 <DetailsSummary>
@@ -796,38 +780,23 @@ export const Field = ({
                       </TableHeaderRow>
                     </thead>
                     <tbody>
-                      {errorRecords.map(({ record, originalIndex }) => (
-                        <TableRow key={originalIndex} hasError={errorCount > 0}>
+                      {errorRecords.map(({ index, error }) => (
+                        <TableRow key={index} hasError={errorCount > 0}>
                           <TableCell isSticky rowHasError={errorCount > 0}>
-                            {originalIndex + 1}
+                            {index + 1}
                           </TableCell>
                           {listConfig.expectedHeaders.map((header: string) => {
+                            const record = jsonData[index]
                             const cellValue = record[header]
                             const isEmpty =
                               cellValue === undefined ||
                               cellValue === null ||
                               cellValue === ''
-                            const isRequired =
-                              listConfig.requiredFields.includes(header)
-                            const isSlugField = header.includes('slug')
-                            const hasUppercase =
-                              isSlugField &&
-                              cellValue &&
-                              typeof cellValue === 'string' &&
-                              /[A-Z]/.test(cellValue)
-                            const isDuplicate =
-                              isSlugField &&
-                              cellValue &&
-                              typeof cellValue === 'string' &&
-                              duplicateSlugs[header]?.has(cellValue)
-                            const isExistingInDb =
-                              isSlugField &&
-                              header === 'slug' &&
-                              cellValue &&
-                              typeof cellValue === 'string' &&
-                              existingSlugs.has(cellValue)
-                            const cellHasError =
-                              (isEmpty && isRequired) || hasUppercase
+                            const errorItem = error.find(
+                              (item) => item.field === header
+                            )
+                            const errorType = errorItem?.errorType
+                            const cellHasError = !!errorItem
 
                             const formatCellValue = (val: any): string => {
                               if (
@@ -856,15 +825,21 @@ export const Field = ({
                               >
                                 {isEmpty ? (
                                   <EmptyCell>
-                                    {isRequired ? '⚠ 缺少必填' : '(空)'}
+                                    {errorType === 'is_empty'
+                                      ? '⚠ 缺少必填'
+                                      : '(空)'}
                                   </EmptyCell>
-                                ) : hasUppercase ? (
+                                ) : errorType === 'has_uppercase' ? (
                                   <EmptyCell>
                                     ⚠ {displayValue} (含大寫)
                                   </EmptyCell>
-                                ) : isDuplicate ? (
+                                ) : errorType === 'is_duplicate' ? (
                                   <EmptyCell>⚠ {displayValue} (重複)</EmptyCell>
-                                ) : isExistingInDb ? (
+                                ) : errorType === 'exceed_char_limit' ? (
+                                  <EmptyCell>
+                                    ⚠ {displayValue} (超過字數)
+                                  </EmptyCell>
+                                ) : errorType === 'exist_in_db' ? (
                                   <WarningCell>
                                     {displayValue} (將更新)
                                   </WarningCell>
