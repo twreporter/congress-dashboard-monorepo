@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.5...@twreporter/congress-dashboard-cms@1.6.0-rc.6) (2026-01-27)
+
+### Bug Fixes
+
+- **cms:** add validation for char limit ([0d6058c](https://github.com/twreporter/congress-dashboard-monorepo/commit/0d6058c6b3f8c34ef478f3161d8fe689b010913c))
+- **cms:** address review comments ([7156984](https://github.com/twreporter/congress-dashboard-monorepo/commit/7156984ed4a14a9e340cb91ab6204fd36bd9a937))
+- **cms:** refactor json uploader ([5e339ed](https://github.com/twreporter/congress-dashboard-monorepo/commit/5e339ed4a8a4465db4c2c85b2e95bbc4e799bd79))
+- **cms:** separate slug fields validation for... ([7e2c50a](https://github.com/twreporter/congress-dashboard-monorepo/commit/7e2c50a85a76bf8fbeeae7671d2f33147b5c0067))
+
 # [1.6.0-rc.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.4...@twreporter/congress-dashboard-cms@1.6.0-rc.5) (2026-01-23)
 
 ### Features
