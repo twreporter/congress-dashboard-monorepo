@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 // fetcher
 import {
   fetchCouncilors,
@@ -31,9 +31,8 @@ type FetchCouncilorAndTopTopicsParams = LoadMoreCouncilorAndTopTopics & {
 }
 
 const useCouncilor = () => {
-  const [councilorPool, setCouncilorPool] = useState<CouncilorForDashboard[]>(
-    []
-  )
+  // Use ref instead of state to avoid recreating callbacks when pool changes
+  const councilorPoolRef = useRef<CouncilorForDashboard[]>([])
 
   const loadMoreCouncilorAndTopTopics = useCallback(
     async ({
@@ -42,7 +41,7 @@ const useCouncilor = () => {
       take = 10,
       skip = 0,
     }: LoadMoreCouncilorAndTopTopics): Promise<ResponseWithHasMore> => {
-      const pool = customCouncilorPool || councilorPool
+      const pool = customCouncilorPool || councilorPoolRef.current
       const councilors = pool.slice(skip, skip + take)
       const top5Topics = await fetchTopNTopicsOfCouncilMembers({
         councilMemberIds: councilors.map(({ id }) => id!),
@@ -62,7 +61,7 @@ const useCouncilor = () => {
         hasMore: moreCouncilors.length === take && skip + take < pool.length,
       }
     },
-    [councilorPool]
+    []
   )
 
   const fetchCouncilorAndTopTopics = useCallback(
@@ -85,7 +84,7 @@ const useCouncilor = () => {
           partyAvatar: getImageLink(party),
         }))
       )
-      setCouncilorPool(councilors)
+      councilorPoolRef.current = councilors
 
       // load councilor data with top 5 topics meta
       const { data, hasMore } = await loadMoreCouncilorAndTopTopics({
