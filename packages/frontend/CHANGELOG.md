@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.13](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.12...@twreporter/congress-dashboard-frontend@1.10.0-rc.13) (2026-01-28)
+
+### Bug Fixes
+
+- **frontend:** refactor to use ref for councilor pool to optimize callback handling ([a5ac61b](https://github.com/twreporter/congress-dashboard-monorepo/commit/a5ac61bb842ee08c6f4c6ee8053ed96bdf7600ff))
+
 # [1.10.0-rc.12](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.11...@twreporter/congress-dashboard-frontend@1.10.0-rc.12) (2026-01-26)
 
 ### Bug Fixes
