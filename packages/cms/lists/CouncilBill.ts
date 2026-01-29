@@ -1,5 +1,11 @@
-import { list } from '@keystone-6/core'
-import { text, relationship, calendarDay, json } from '@keystone-6/core/fields'
+import { list, graphql } from '@keystone-6/core'
+import {
+  text,
+  relationship,
+  calendarDay,
+  json,
+  virtual,
+} from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -11,6 +17,23 @@ import {
 } from './utils/access-control-list'
 import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
 import { logger } from '../utils/logger'
+
+/* take 100 words of content as summary */
+function toPlainTextSummary(input: unknown, limit = 100): string | null {
+  if (input === null) {
+    return null
+  }
+  const raw =
+    typeof input === 'string'
+      ? input
+      : typeof input === 'object'
+      ? JSON.stringify(input)
+      : String(input)
+
+  const lineBreakRegex = /\\n|\r?\n/g
+  const summary = raw.replace(lineBreakRegex, ' ')
+  return summary.length > limit ? summary.slice(0, limit) : summary
+}
 
 const listConfigurations = list({
   fields: {
@@ -44,6 +67,15 @@ const listConfigurations = list({
     slug: SLUG,
     summary: json({
       label: '摘要',
+    }),
+    summaryFallback: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        resolve(item) {
+          const value = item.summary ?? item.content ?? null
+          return toPlainTextSummary(value)
+        },
+      }),
     }),
     // TODO: change to editor
     content: json({
