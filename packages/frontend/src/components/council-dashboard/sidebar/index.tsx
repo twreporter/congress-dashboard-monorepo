@@ -178,7 +178,13 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
       : undefined
   )
   const summaryList: SummaryCardProps[] = useMemo(
-    () => billState.bills || [],
+    () =>
+      billState.bills
+        ? billState.bills.map(({ summaryFallback, ...bill }) => ({
+            summary: summaryFallback,
+            ...bill,
+          }))
+        : [],
     [billState.bills]
   )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
@@ -357,7 +363,13 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
       : undefined
   )
   const summaryList: SummaryCardProps[] = useMemo(
-    () => billState.bills || [],
+    () =>
+      billState.bills
+        ? billState.bills.map(({ summaryFallback, ...bill }) => ({
+            summary: summaryFallback,
+            ...bill,
+          }))
+        : [],
     [billState.bills]
   )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(

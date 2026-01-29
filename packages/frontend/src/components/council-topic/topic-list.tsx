@@ -85,10 +85,10 @@ const TopicList: React.FC<TopicListProps> = ({
     if (!selectedTopic) return []
     return groupSummary(
       billsByTopic[selectedTopic.slug].map(
-        ({ title, date, summary, slug }) => ({
+        ({ title, date, summaryFallback, slug }) => ({
           title,
           date: new Date(date),
-          summary,
+          summary: summaryFallback,
           slug,
         })
       )
