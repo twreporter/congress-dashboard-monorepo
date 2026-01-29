@@ -3,11 +3,13 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useRouter, usePathname } from 'next/navigation'
+// @twreporter
+import { CITY } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 // components
 import Tab from '@/components/header/tab'
 // constants
-import { options } from '@/components/header/constants'
 import { InternalRoutes } from '@/constants/routes'
+import { getOptions } from '@/components/header/constants'
 
 const Container = styled.div`
   display: flex;
@@ -31,6 +33,16 @@ const Tabs = () => {
     router.push(InternalRoutes.Home)
   }, [router])
 
+  // just for six main cities currently
+  const options = getOptions([
+    CITY.taipei,
+    CITY.newTaipei,
+    CITY.taoyuan,
+    CITY.taichung,
+    CITY.tainan,
+    CITY.kaohsiung,
+  ])
+
   return (
     <Container>
       <Tab
@@ -40,7 +52,7 @@ const Tabs = () => {
         type={Tab.Type.single}
       />
       <Tab
-        label="地方議會"
+        label="六都議會" // just for six main cities currently
         isSelected={isCouncilRoute}
         onClick={() => {}}
         type={Tab.Type.dropdown}

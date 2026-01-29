@@ -13,13 +13,14 @@ import {
   AlgoliaInstantSearch,
   layoutVariants,
 } from '@/components/search/instant-search'
+import { CITY } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
 import { PILL_BUTTON_LINKS } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
 import { ExternalRoutes, InternalRoutes } from '@/constants/routes'
-import { options } from '@/components/header/constants'
+import { getOptions } from '@/components/header/constants'
 // utils
 import { openFeedback } from '@/utils/feedback'
 // components
@@ -86,6 +87,17 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
   const handleDropdownClick = () => {
     setIsDropdownActive(!isDropdownActive)
   }
+
+  // just for six main cities currently
+  const options = getOptions([
+    CITY.taipei,
+    CITY.newTaipei,
+    CITY.taoyuan,
+    CITY.taichung,
+    CITY.tainan,
+    CITY.kaohsiung,
+  ])
+
   return (
     <Container $isOpen={isOpen}>
       <SearchSection>
@@ -99,7 +111,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
         link={{ to: InternalRoutes.Home, target: '_self' }}
       />
       <DropdownMenu
-        label="地方議會"
+        label="六都議會" // just for six main cities currently
         options={options}
         onClick={handleDropdownClick}
         isActive={isDropdownActive}
