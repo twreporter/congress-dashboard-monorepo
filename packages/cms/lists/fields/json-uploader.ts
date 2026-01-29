@@ -77,7 +77,6 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'slug',
       'councilMeeting_city',
       'councilMeeting_term',
-      'councilor_name',
       'councilor_slug',
       'date',
       'title',
