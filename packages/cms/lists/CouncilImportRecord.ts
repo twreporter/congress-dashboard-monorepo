@@ -570,7 +570,7 @@ const importHandlers: Record<
         content,
         attendee,
         sourceLink,
-        councilMember: { connect: councilMemberIds.map(({ id }) => ({ id })) },
+        councilMember: { connect: councilMemberIds },
         councilMeeting: {
           connect: { id: councilMeeting.id },
         },

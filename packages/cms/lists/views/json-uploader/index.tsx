@@ -363,7 +363,9 @@ const validateJsonData = (
     errorRecords,
     recordCount: jsonData.length,
     validRecordCount,
-    errorCount: errorRecords.length - updateCount,
+    errorCount: errorRecords.filter((r) =>
+      r.error.some((e) => e.errorType !== 'exist_in_db')
+    ).length,
     updateCount,
   }
 }

@@ -177,7 +177,7 @@
 | `title` | ✅ | string | 議題名稱 |
 | `slug` | ✅ | string | 唯一識別碼 |
 | `city` | ✅ | string | 所屬縣市，[見限制值](#縣市代碼-city) |
-| `type` | ✅ | string | 議題類型，[見限制值](#議題類型-type-1) |
+| `type` | ✅ | string | 議題類型，[見限制值](#議題類型-type) |
 | `relatedTwreporterArticle` | ❌ | array | 相關報導者文章，[見格式說明](#相關報導者文章-relatedtwreporterarticle) |
 | `relatedCouncilBill` | ❌ | array | 相關議案 slug 陣列（須存在於系統） |
 
