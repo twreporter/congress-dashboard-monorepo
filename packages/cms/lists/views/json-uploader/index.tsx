@@ -363,7 +363,7 @@ const validateJsonData = (
     errorRecords,
     recordCount: jsonData.length,
     validRecordCount,
-    errorCount: errorRecords.length,
+    errorCount: errorRecords.length - updateCount,
     updateCount,
   }
 }
