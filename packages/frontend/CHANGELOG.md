@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.14](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.13...@twreporter/congress-dashboard-frontend@1.10.0-rc.14) (2026-01-30)
+
+### Bug Fixes
+
+- **frontend:** add prepareSummaryProps func ([1215737](https://github.com/twreporter/congress-dashboard-monorepo/commit/12157373805d1fce735ccbd1b8647894b16d0ca2))
+- **frontend:** summaryFallback could be null ([1c208c0](https://github.com/twreporter/congress-dashboard-monorepo/commit/1c208c019c6f8935fa6dbead2a79ef3735ad80eb))
+- **frontend:** use `summaryFallback` for bill meta ([7919af0](https://github.com/twreporter/congress-dashboard-monorepo/commit/7919af06f29d210ce09becb79265a5114ba3e1e3))
+
 # [1.10.0-rc.13](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.12...@twreporter/congress-dashboard-frontend@1.10.0-rc.13) (2026-01-28)
 
 ### Bug Fixes
