@@ -210,24 +210,54 @@ const validateListSpecificData: Record<
           )
         }
 
-        const councilor = await context.prisma.councilor.findFirst({
-          where: { slug: councilor_slug },
-        })
-        if (!councilor) {
+        if (!Array.isArray(councilor_slug)) {
           validationErrors.push(
-            `第 ${rowNum} 筆資料: 找不到 slug 為 "${councilor_slug}" 的議員`
+            `第 ${rowNum} 筆資料: councilor_slug 欄位必須為陣列`
           )
+          return
         }
-        const councilMember = await context.prisma.councilMember.findFirst({
-          where: {
-            councilorId: councilor.id,
-            councilMeetingId: meeting.id,
-          },
-        })
-        if (!councilMember) {
+
+        if (councilor_slug.length === 0) {
           validationErrors.push(
-            `第 ${rowNum} 筆資料: 找不到議員 "${councilor_slug}" 在${CITY_LABEL[councilMeeting_city]}第 ${councilMeeting_term} 屆的屆資資料`
+            `第 ${rowNum} 筆資料: councilor_slug 陣列不可為空`
           )
+        } else {
+          const councilors = await context.prisma.councilor.findMany({
+            where: { slug: { in: councilor_slug } },
+            select: { id: true, slug: true },
+          })
+          const foundSlugs = new Set(councilors.map((c) => c.slug))
+
+          for (const slug of councilor_slug) {
+            if (!foundSlugs.has(slug)) {
+              validationErrors.push(
+                `第 ${rowNum} 筆資料: 找不到 slug 為 "${slug}" 的議員`
+              )
+            }
+          }
+
+          if (meeting && councilors.length > 0) {
+            const councilorIds = councilors.map((c) => c.id)
+            const councilMembers = await context.prisma.councilMember.findMany({
+              where: {
+                councilorId: { in: councilorIds },
+                councilMeetingId: meeting.id,
+              },
+              select: { councilorId: true },
+            })
+            const memberCouncilorIds = new Set(
+              councilMembers.map((cm) => cm.councilorId)
+            )
+            const councilorsWithoutMemberRecord = councilors.filter(
+              (c) => !memberCouncilorIds.has(c.id)
+            )
+
+            for (const c of councilorsWithoutMemberRecord) {
+              validationErrors.push(
+                `第 ${rowNum} 筆資料: 找不到議員 "${c.slug}" 在${CITY_LABEL[councilMeeting_city]}第 ${councilMeeting_term} 屆的屆資資料`
+              )
+            }
+          }
         }
       })
     )
@@ -513,9 +543,9 @@ const importHandlers: Record<
         select: { id: true },
       })
 
-      const councilMember = await context.prisma.councilMember.findFirst({
+      const councilMembers = await context.prisma.councilMember.findMany({
         where: {
-          councilor: { slug: councilor_slug },
+          councilor: { slug: { in: councilor_slug } },
           councilMeeting: {
             term: Number(councilMeeting_term),
             city: councilMeeting_city,
@@ -523,6 +553,7 @@ const importHandlers: Record<
         },
         select: { id: true },
       })
+      const councilMemberIds = councilMembers.map(({ id }) => ({ id }))
 
       const councilMeeting = await context.prisma.councilMeeting.findFirst({
         where: {
@@ -539,7 +570,7 @@ const importHandlers: Record<
         content,
         attendee,
         sourceLink,
-        councilMember: { connect: { id: councilMember.id } },
+        councilMember: { connect: councilMemberIds },
         councilMeeting: {
           connect: { id: councilMeeting.id },
         },
