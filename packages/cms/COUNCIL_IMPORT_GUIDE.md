@@ -336,6 +336,8 @@
 | `taitung` | 台東縣 |
 | `hualien` | 花蓮縣 |
 
+詳細資訊請參考[city](https://github.com/twreporter/congress-dashboard-monorepo/blob/master/packages/shared/src/constants/city.ts)
+
 ---
 
 ### 議員類型 (type)
@@ -347,6 +349,8 @@
 | `constituency` | 區域 |
 | `highland-aboriginal` | 山地原住民 |
 | `lowland-aboriginal` | 平地原住民 |
+
+詳細資訊請參考[council-member](https://github.com/twreporter/congress-dashboard-monorepo/blob/master/packages/shared/src/constants/council-member.ts)
 
 ---
 
