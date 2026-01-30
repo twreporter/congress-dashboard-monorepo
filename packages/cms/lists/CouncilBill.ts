@@ -18,7 +18,7 @@ import {
 import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
 import { logger } from '../utils/logger'
 
-/* take 100 words of content as summary */
+/* take 100 characters of content as summary */
 function toPlainTextSummary(input: unknown, limit = 100): string | null {
   if (input === null) {
     return null
