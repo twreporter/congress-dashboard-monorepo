@@ -21,6 +21,7 @@ import FollowMoreItems from '@/components/layout/speech-summary-list/follow-more
 //  components
 import { groupSummary } from '@/components/sidebar'
 import CardsOfTheYear, {
+  type SummaryCardProps,
   type CardsOfTheYearProps,
 } from '@/components/sidebar/card'
 import { Legislator } from '@/components/sidebar/follow-more'
@@ -44,6 +45,14 @@ import {
 const maxTabs = 5
 const mapToTabItems = (items: TabProps[]): TabProps[] =>
   items.map((item) => ({ ...item, showAvatar: false }))
+
+const prepareSummaryProps = (bills: BillMeta[]): SummaryCardProps[] =>
+  bills.map(({ title, date, summaryFallback, slug }) => ({
+    title,
+    date: new Date(date),
+    summary: summaryFallback || '',
+    slug,
+  }))
 
 type TopicListProps = {
   districtSlug: CouncilDistrict
@@ -88,16 +97,7 @@ const TopicList: React.FC<TopicListProps> = ({
 
   const summaryGroupByYear = useMemo(() => {
     if (!selectedTopic) return []
-    return groupSummary(
-      billsByTopic[selectedTopic.slug].map(
-        ({ title, date, summary, slug }) => ({
-          title,
-          date: new Date(date),
-          summary,
-          slug,
-        })
-      )
-    )
+    return groupSummary(prepareSummaryProps(billsByTopic[selectedTopic.slug]))
   }, [selectedTopic, billsByTopic])
 
   const {

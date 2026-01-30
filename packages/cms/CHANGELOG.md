@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.8](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.7...@twreporter/congress-dashboard-cms@1.6.0-rc.8) (2026-01-30)
+
+### Bug Fixes
+
+- **cms:** update comments ([82adb22](https://github.com/twreporter/congress-dashboard-monorepo/commit/82adb224e6ad01b99692744c21878b365d68325f))
+
+### Features
+
+- **cms:** add `summaryFallback` for bill ([2b5e8ac](https://github.com/twreporter/congress-dashboard-monorepo/commit/2b5e8ac463a0775e5146694b794fc5c9ae2e5797))
+
 # [1.6.0-rc.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.6...@twreporter/congress-dashboard-cms@1.6.0-rc.7) (2026-01-30)
 
 ### Bug Fixes

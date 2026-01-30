@@ -172,7 +172,7 @@ export const fetchCouncilorTopicsOfBill = async ({
         billCount(where: $billCountWhere2)
         bill(where: $billWhere2, orderBy: $orderBy) {
           date
-          summary
+          summaryFallback
           title
           slug
         }

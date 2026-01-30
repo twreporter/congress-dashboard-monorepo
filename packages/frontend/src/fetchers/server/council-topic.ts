@@ -86,7 +86,7 @@ export const fetchTopicBySlug = async ({
               imageLink
             }
           }
-          summary
+          summaryFallback
           title
           slug
           date
