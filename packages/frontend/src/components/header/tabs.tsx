@@ -3,13 +3,11 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useRouter, usePathname } from 'next/navigation'
-// @twreporter
-import { CITY } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 // components
 import Tab from '@/components/header/tab'
 // constants
 import { InternalRoutes } from '@/constants/routes'
-import { getOptions } from '@/components/header/constants'
+import { getOptions, SIX_MAIN_CITIES } from '@/components/header/constants'
 
 const Container = styled.div`
   display: flex;
@@ -34,14 +32,7 @@ const Tabs = () => {
   }, [router])
 
   // just for six main cities currently
-  const options = getOptions([
-    CITY.taipei,
-    CITY.newTaipei,
-    CITY.taoyuan,
-    CITY.taichung,
-    CITY.tainan,
-    CITY.kaohsiung,
-  ])
+  const options = getOptions(SIX_MAIN_CITIES)
 
   return (
     <Container>

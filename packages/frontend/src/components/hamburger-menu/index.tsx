@@ -13,14 +13,13 @@ import {
   AlgoliaInstantSearch,
   layoutVariants,
 } from '@/components/search/instant-search'
-import { CITY } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
 import { PILL_BUTTON_LINKS } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
 import { ExternalRoutes, InternalRoutes } from '@/constants/routes'
-import { getOptions } from '@/components/header/constants'
+import { getOptions, SIX_MAIN_CITIES } from '@/components/header/constants'
 // utils
 import { openFeedback } from '@/utils/feedback'
 // components
@@ -90,14 +89,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
   }
 
   // just for six main cities currently
-  const options = getOptions([
-    CITY.taipei,
-    CITY.newTaipei,
-    CITY.taoyuan,
-    CITY.taichung,
-    CITY.tainan,
-    CITY.kaohsiung,
-  ])
+  const options = getOptions(SIX_MAIN_CITIES)
 
   return (
     <Container $isOpen={isOpen}>
