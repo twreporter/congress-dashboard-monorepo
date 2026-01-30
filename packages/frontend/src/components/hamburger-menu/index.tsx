@@ -19,7 +19,7 @@ import { ZIndex } from '@/styles/z-index'
 import { PILL_BUTTON_LINKS } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
 import { ExternalRoutes, InternalRoutes } from '@/constants/routes'
-import { options } from '@/components/header/constants'
+import { getOptions, SIX_MAIN_CITIES } from '@/components/header/constants'
 // utils
 import { openFeedback } from '@/utils/feedback'
 // components
@@ -79,13 +79,18 @@ const pillButtonLinks = PILL_BUTTON_LINKS
 
 type HamburgerMenuProps = {
   isOpen: boolean
+  onClose: () => void
 }
-const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
+const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname()
   const [isDropdownActive, setIsDropdownActive] = useState(false)
   const handleDropdownClick = () => {
     setIsDropdownActive(!isDropdownActive)
   }
+
+  // just for six main cities currently
+  const options = getOptions(SIX_MAIN_CITIES)
+
   return (
     <Container $isOpen={isOpen}>
       <SearchSection>
@@ -97,13 +102,15 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
         fontWeight={MenuButton.FontWeight.BOLD}
         text={'立法院'}
         link={{ to: InternalRoutes.Home, target: '_self' }}
+        onClick={onClose}
       />
       <DropdownMenu
-        label="地方議會"
+        label="六都議會" // just for six main cities currently
         options={options}
         onClick={handleDropdownClick}
         isActive={isDropdownActive}
         currentValue={pathname || ''}
+        onOptionClick={onClose}
       />
       <MenuButton
         paddingLeft={0}
@@ -111,6 +118,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
         fontWeight={MenuButton.FontWeight.BOLD}
         text={'關於觀測站'}
         link={{ to: InternalRoutes.About, target: '_self' }}
+        onClick={onClose}
       />
       <DividerContainer>
         <Divider />
@@ -146,7 +154,12 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen }) => {
       </DividerContainer>
       <PillButtonsContainer>
         {pillButtonLinks.map(({ text, href, target, type }, idx) => (
-          <Link key={`pill-btn-${idx}`} href={href} target={target}>
+          <Link
+            key={`pill-btn-${idx}`}
+            href={href}
+            target={target}
+            onClick={onClose}
+          >
             <StyledPillButton
               size={PillButton.Size.L}
               type={type}

@@ -83,6 +83,7 @@ type DropdownMenuProps = {
   isActive?: boolean
   onClick?: () => void
   currentValue?: string
+  onOptionClick?: () => void
 }
 const DropdownMenu: FC<DropdownMenuProps> = ({
   label,
@@ -90,11 +91,13 @@ const DropdownMenu: FC<DropdownMenuProps> = ({
   isActive = false,
   onClick = () => {},
   currentValue = '',
+  onOptionClick,
 }) => {
   const router = useRouter()
 
   const handleItemClick = (value: string) => {
     router.push(value)
+    onOptionClick?.()
   }
 
   const isDropdownActive = options.some(
