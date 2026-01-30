@@ -77,7 +77,6 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'slug',
       'councilMeeting_city',
       'councilMeeting_term',
-      'councilor_name',
       'councilor_slug',
       'date',
       'title',
@@ -94,7 +93,7 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'date',
       'title',
     ],
-    nonDuplicateFields: ['slug', 'councilor_slug'],
+    nonDuplicateFields: ['slug'],
     charLimitFields: ['title', 'attendee'], // prisma string type uses varchar(191)
     description: '匯入議案資料',
   },

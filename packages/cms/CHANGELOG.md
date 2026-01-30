@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.6...@twreporter/congress-dashboard-cms@1.6.0-rc.7) (2026-01-30)
+
+### Bug Fixes
+
+- **cms:** add references for guide ([0588632](https://github.com/twreporter/congress-dashboard-monorepo/commit/0588632dc6725a12dd6e1b8bffa8e7149b270154))
+- **cms:** address comments ([1cbf863](https://github.com/twreporter/congress-dashboard-monorepo/commit/1cbf863397d14c03356149126f01d16f838260e0))
+- **cms:** address comments ([8866c03](https://github.com/twreporter/congress-dashboard-monorepo/commit/8866c03f5b54e46ffd00f4ca98a3da6aebc72fd7))
+- **cms:** update councilor_slug handling to support multiple slugs and improve validation ([f5e69d9](https://github.com/twreporter/congress-dashboard-monorepo/commit/f5e69d9b0a6c7a8a153c2a24111dd096a4162a23))
+
 # [1.6.0-rc.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.5...@twreporter/congress-dashboard-cms@1.6.0-rc.6) (2026-01-27)
 
 ### Bug Fixes
