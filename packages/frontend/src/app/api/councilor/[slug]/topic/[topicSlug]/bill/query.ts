@@ -20,7 +20,7 @@ const fetchBillsOfACouncilorInATopic = async ({
       councilBills(where: $where, orderBy: $orderBy) {
         date
         slug
-        summary
+        summaryFallback
         title
       }
     }

@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 // type
 import type { CouncilDistrict } from '@/types/council'
+import type { BillMeta } from '@/types/council-bill'
 // context
 import { CouncilDashboardContext } from '@/components/council-dashboard/context'
 // fetcher
@@ -32,8 +33,8 @@ import TitleSection, {
   TitleSectionProps,
 } from '@/components/sidebar/title-section'
 import CardsOfTheYear, {
-  SummaryCardProps,
-  CardsOfTheYearProps,
+  type SummaryCardProps,
+  type CardsOfTheYearProps,
 } from '@/components/sidebar/card'
 import {
   Issue,
@@ -135,6 +136,15 @@ export function groupSummary(summaryList: SummaryCardProps[]) {
   return result
 }
 
+const prepareSummaryProps = (rawBillData?: BillMeta[]): SummaryCardProps[] => {
+  if (!rawBillData) return []
+
+  return rawBillData.map(({ summaryFallback, ...bill }) => ({
+    summary: summaryFallback || '',
+    ...bill,
+  }))
+}
+
 export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
   count?: TitleSectionProps['count']
@@ -177,13 +187,9 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
         }
       : undefined
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => billState.bills || [],
-    [billState.bills]
-  )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(summaryList),
-    [summaryList]
+    () => groupSummary(prepareSummaryProps(billState.bills)),
+    [billState.bills]
   )
   const followMoreState = useMoreCouncilTopics(
     selectedCouncilor
@@ -356,13 +362,9 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
         }
       : undefined
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => billState.bills || [],
-    [billState.bills]
-  )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(summaryList),
-    [summaryList]
+    () => groupSummary(prepareSummaryProps(billState.bills)),
+    [billState.bills]
   )
   const followMoreState = useMoreCouncilors(
     selectedIssue && selectedIssue.slug
