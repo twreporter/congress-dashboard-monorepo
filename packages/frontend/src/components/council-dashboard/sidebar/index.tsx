@@ -140,7 +140,7 @@ const prepareSummaryProps = (rawBillData?: BillMeta[]): SummaryCardProps[] => {
   if (!rawBillData) return []
 
   return rawBillData.map(({ summaryFallback, ...bill }) => ({
-    summary: summaryFallback,
+    summary: summaryFallback || '',
     ...bill,
   }))
 }

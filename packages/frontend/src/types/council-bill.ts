@@ -30,7 +30,7 @@ export type BillMeta = {
   slug: string
   date: string
   title: string
-  summaryFallback: string
+  summaryFallback?: string
 }
 
 export type BillMetaWithCouncilorFromRes = BillMeta & {
