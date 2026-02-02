@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.1-rc.0...@twreporter/congress-dashboard-shared@0.2.1-rc.1) (2026-02-02)
+
+### Bug Fixes
+
+- **shared:** typo ([2b27fd1](https://github.com/twreporter/congress-dashboard-monorepo/commit/2b27fd1d80731c492ab7f29f595ca3b9c4ee9505))
+
 ## [0.2.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.0-beta.5...@twreporter/congress-dashboard-shared@0.2.1-rc.0) (2026-01-06)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-shared

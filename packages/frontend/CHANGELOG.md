@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.15](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.14...@twreporter/congress-dashboard-frontend@1.10.0-rc.15) (2026-02-02)
+
+### Bug Fixes
+
+- **frontend:** address comments ([7f3f48a](https://github.com/twreporter/congress-dashboard-monorepo/commit/7f3f48a46c1196f323d7ada291048697563a4fd9))
+- **frontend:** address comments ([fc1ef0b](https://github.com/twreporter/congress-dashboard-monorepo/commit/fc1ef0b952bea366e4088578f81742177cd0c547))
+- **frontend:** close hamburger menu when click ([45de6a3](https://github.com/twreporter/congress-dashboard-monorepo/commit/45de6a31439b1664ce2e46ae05cc31926aab5d7c))
+- **frontend:** update city options for header and hamburger ([82170dd](https://github.com/twreporter/congress-dashboard-monorepo/commit/82170dd55f7be1e5f4b6c2aa684d2a1ae7f3a275))
+
 # [1.10.0-rc.14](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.13...@twreporter/congress-dashboard-frontend@1.10.0-rc.14) (2026-01-30)
 
 ### Bug Fixes
