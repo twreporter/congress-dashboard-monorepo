@@ -7,7 +7,9 @@ import { useRouter, usePathname } from 'next/navigation'
 import Tab from '@/components/header/tab'
 // constants
 import { InternalRoutes } from '@/constants/routes'
-import { getOptions, SIX_MAIN_CITIES } from '@/components/header/constants'
+import { VALID_COUNCILS } from '@/constants/council'
+// utils
+import { getOptions } from '@/components/header/utils'
 
 const Container = styled.div`
   display: flex;
@@ -32,7 +34,7 @@ const Tabs = () => {
   }, [router])
 
   // just for six main cities currently
-  const options = getOptions(SIX_MAIN_CITIES)
+  const options = getOptions(VALID_COUNCILS)
 
   return (
     <Container>

@@ -19,8 +19,9 @@ import { ZIndex } from '@/styles/z-index'
 import { PILL_BUTTON_LINKS } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
 import { ExternalRoutes, InternalRoutes } from '@/constants/routes'
-import { getOptions, SIX_MAIN_CITIES } from '@/components/header/constants'
+import { VALID_COUNCILS } from '@/constants/council'
 // utils
+import { getOptions } from '@/components/header/utils'
 import { openFeedback } from '@/utils/feedback'
 // components
 import DropdownMenu from '@/components/hamburger-menu/dropdown-menu'
@@ -89,7 +90,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
   }
 
   // just for six main cities currently
-  const options = getOptions(SIX_MAIN_CITIES)
+  const options = getOptions(VALID_COUNCILS)
 
   return (
     <Container $isOpen={isOpen}>
