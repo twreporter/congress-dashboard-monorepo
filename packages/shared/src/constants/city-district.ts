@@ -852,7 +852,7 @@ const CITY_DISTRICT = {
       value: 'dongshi-township',
     },
     {
-      label: '臺西鄉',
+      label: '台西鄉',
       value: 'taixi-township',
     },
     {
@@ -1282,7 +1282,7 @@ const CITY_DISTRICT = {
       value: 'sandimen-township',
     },
     {
-      label: '霧臺鄉',
+      label: '霧台鄉',
       value: 'wutai-township',
     },
     {
@@ -1408,7 +1408,7 @@ const CITY_DISTRICT = {
   ],
   [CITY.taitung]: [
     {
-      label: '臺東市',
+      label: '台東市',
       value: 'taitung-city',
     },
     {
