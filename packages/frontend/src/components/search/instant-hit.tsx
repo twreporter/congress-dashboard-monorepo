@@ -33,6 +33,29 @@ export type TopicRawHit = Hit<{
   relatedMessageCount: number
 }>
 
+export type CouncilorRawHit = Hit<{
+  objectID: string
+  slug: string
+  name: string
+  desc: string
+  imgSrc: string
+  meetingTerm?: number
+  councilSlug: string
+  lastSpeechAt?: string
+  partyImgSrc: string
+}>
+
+export type CouncilTopicRawHit = Hit<{
+  objectID: string
+  name: string
+  slug: string
+  desc: string
+  meetingTerm?: number
+  councilSlug: string
+  billCount: number
+  lastSpeechAt?: string
+}>
+
 const Circle = styled.div`
   width: 48px;
   height: 48px;
@@ -189,6 +212,67 @@ export function InstantTopicHit({
             ) : (
               <span>發言：</span>
             )}
+            <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
+          </p>
+        </Text>
+      </InstantHitContainer>
+    </a>
+  )
+}
+
+export function InstantCouncilorHit({
+  hit,
+  variant,
+}: {
+  hit: CouncilorRawHit
+  variant: LayoutVariant
+}) {
+  const meetingTermParam = hit.meetingTerm
+    ? `?meetingTerm=${hit.meetingTerm}`
+    : ''
+  return (
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.Councilor(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <Avatar $imgSrc={hit.imgSrc}>
+          <Party $imgSrc={hit.partyImgSrc} />
+        </Avatar>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>{hit.desc}</p>
+        </Text>
+      </InstantHitContainer>
+    </a>
+  )
+}
+
+export function InstantCouncilTopicHit({
+  hit,
+  variant,
+}: {
+  hit: CouncilTopicRawHit
+  variant: LayoutVariant
+}) {
+  const meetingTermParam = hit.meetingTerm
+    ? `?meetingTerm=${hit.meetingTerm}`
+    : ''
+  return (
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.CouncilTopic(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <TopicCircle>
+          <IconIssue />
+        </TopicCircle>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>
+            <span>共{hit.billCount}筆相關議案：</span>
             <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
           </p>
         </Text>
