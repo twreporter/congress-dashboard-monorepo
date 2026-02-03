@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import type { FilterValueType } from '@/components/search/result-page/filter'
+import type { LegislativeFilterValueType } from '@/components/search/result-page/legislative-filter'
 import type { SearchStage } from '@/components/search/constants'
 import mq from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
@@ -10,9 +10,9 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { indexNames, searchStages } from '@/components/search/constants'
 import { AlgoliaInstantSearch } from '@/components/search/instant-search'
 import {
-  SearchFilter as _SearchFilter,
-  defaultFilterValue,
-} from '@/components/search/result-page/filter'
+  LegislativeSearchFilter as _LegislativeSearchFilter,
+  defaultLegislativeFilterValue,
+} from '@/components/search/result-page/legislative-filter'
 import { PillButton } from '@twreporter/react-components/lib/button'
 import { Filter as FilterIcon } from '@twreporter/react-components/lib/icon'
 import { ScopeFilterModal } from '@/components/search/result-page/scope-filter-modal'
@@ -111,7 +111,7 @@ const Bar = styled.div`
   border-bottom: 1px solid ${colorGrayscale.gray300};
 `
 
-const SearchFilter = styled(_SearchFilter)`
+const LegislativeSearchFilter = styled(_LegislativeSearchFilter)`
   ${mq.mobileOnly`
     width: 100%;
     margin-top: 20px;
@@ -170,8 +170,9 @@ type SearchResultsProps = {
 
 const SearchResults = ({ className, query }: SearchResultsProps) => {
   const [activeTab, setActiveTab] = useState<SearchStage>(searchStages.All)
-  const [filterValue, setFilterValue] =
-    useState<FilterValueType>(defaultFilterValue)
+  const [filterValue, setFilterValue] = useState<LegislativeFilterValueType>(
+    defaultLegislativeFilterValue
+  )
   const [scopeFilterValue, setScopeFilterValue] = useState('all')
   const [scopeFilterLabel, setScopeFilterLabel] = useState('立法院與六都議會')
   const [showScopeModal, setShowScopeModal] = useState(false)
@@ -256,13 +257,16 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
       return renderScopeFilter()
     }
 
-    // Show SearchFilter for "Speech" tab (only when legislativeYuan is selected)
+    // Show LegislativeSearchFilter for "Speech" tab (only when legislativeYuan is selected)
     if (
       activeTab === searchStages.Speech &&
       scopeFilterValue === 'legislativeYuan'
     ) {
       return (
-        <SearchFilter filterValue={filterValue} onChange={setFilterValue} />
+        <LegislativeSearchFilter
+          filterValue={filterValue}
+          onChange={setFilterValue}
+        />
       )
     }
 
