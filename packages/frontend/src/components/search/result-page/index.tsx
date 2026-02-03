@@ -20,7 +20,7 @@ import type { OptionGroup } from '@/components/selector/types'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
-const Container = styled.div`
+const SearchResultsContainer = styled.div`
   /* TODO: remove box-sizing if global already defined */
   * {
     box-sizing: border-box;
@@ -99,7 +99,7 @@ const Tabs = styled.div`
   }
 `
 
-const Bar = styled.div`
+const SearchTabBar = styled.div`
   display: flex;
   justify-content: space-between;
   ${mq.mobileOnly`
@@ -274,9 +274,9 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
   }
 
   return (
-    <Container className={className}>
+    <SearchResultsContainer className={className}>
       <BarAndResults>
-        <Bar>
+        <SearchTabBar>
           <Tabs>
             {searchTabs.map((searchTab) => {
               return (
@@ -293,7 +293,7 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
             })}
           </Tabs>
           {renderFilterByTab()}
-        </Bar>
+        </SearchTabBar>
         <HitsContainer $hidden={activeTab !== searchStages.All}>
           <MultiStageHits query={query} />
         </HitsContainer>
@@ -301,11 +301,11 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
           <Hits indexName={indexNames.Speech} query={query} filters={filters} />
         </HitsContainer>
       </BarAndResults>
-    </Container>
+    </SearchResultsContainer>
   )
 }
 
-const InsantSearchContainer = styled.div`
+const InstantSearchContainer = styled.div`
   background-color: ${colorGrayscale.gray200};
   width: 100%;
 
@@ -345,9 +345,9 @@ export type SearchPageProps = {
 export function SearchPage({ query }: SearchPageProps) {
   return (
     <div key={query}>
-      <InsantSearchContainer>
+      <InstantSearchContainer>
         <AlgoliaInstantSearch className="search-box" query={query} />
-      </InsantSearchContainer>
+      </InstantSearchContainer>
       <SearchResults query={query} />
     </div>
   )
