@@ -13,6 +13,12 @@ import {
   SearchFilter as _SearchFilter,
   defaultFilterValue,
 } from '@/components/search/result-page/filter'
+import { PillButton } from '@twreporter/react-components/lib/button'
+import { Filter as FilterIcon } from '@twreporter/react-components/lib/icon'
+import { ScopeFilterModal } from '@/components/search/result-page/scope-filter-modal'
+import type { OptionGroup } from '@/components/selector/types'
+
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 const Container = styled.div`
   /* TODO: remove box-sizing if global already defined */
@@ -68,10 +74,6 @@ const searchTabs = [
     label: '全部',
     value: searchStages.All,
   },
-  {
-    label: '發言全文',
-    value: searchStages.Speech,
-  },
 ]
 
 const Tab = styled.div`
@@ -126,6 +128,48 @@ const SearchFilter = styled(_SearchFilter)`
   `}
 `
 
+const ScopeFilterContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  ${mq.mobileOnly`
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  `}
+`
+
+const ScopeFilterLabel = styled.div`
+  color: ${colorGrayscale.gray700};
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+`
+
+const scopeFilterGroups: OptionGroup[] = [
+  {
+    groupName: '全部',
+    options: [{ label: '立法院與六都議會', value: 'all' }],
+  },
+  {
+    groupName: '中央',
+    options: [{ label: '立法院', value: 'legislativeYuan' }],
+  },
+  {
+    groupName: '地方',
+    options: [
+      { label: '六都議會', value: 'all-councils' },
+      { label: '台北市議會', value: 'taipei-council' },
+      { label: '新北市議會', value: 'new-taipei-council' },
+      { label: '桃園市議會', value: 'taoyuan-council' },
+      { label: '台中市議會', value: 'taichung-council' },
+      { label: '台南市議會', value: 'tainan-council' },
+      { label: '高雄市議會', value: 'kaohsiung-council' },
+    ],
+  },
+]
+
 type SearchResultsProps = {
   className?: string
   query?: string
@@ -135,6 +179,9 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
   const [activeTab, setActiveTab] = useState<SearchStage>(searchStages.All)
   const [filterValue, setFilterValue] =
     useState<FilterValueType>(defaultFilterValue)
+  const [scopeFilterValue, setScopeFilterValue] = useState('all')
+  const [scopeFilterLabel, setScopeFilterLabel] = useState('立法院與六都議會')
+  const [showScopeModal, setShowScopeModal] = useState(false)
 
   let filters = ''
   const meeting = filterValue.meeting
@@ -159,6 +206,40 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
     return <SearchFilter filterValue={filterValue} onChange={setFilterValue} />
   }
 
+  function renderScopeFilter() {
+    if (activeTab !== searchStages.All) {
+      return null
+    }
+
+    return (
+      <>
+        <ScopeFilterContainer>
+          <ScopeFilterLabel>{scopeFilterLabel}</ScopeFilterLabel>
+          <PillButton
+            theme={PillButton.THEME.normal}
+            type={PillButton.Type.SECONDARY}
+            size={PillButton.Size.L}
+            text="篩選"
+            leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
+            onClick={() => {
+              setShowScopeModal(true)
+            }}
+          />
+        </ScopeFilterContainer>
+        <ScopeFilterModal
+          isOpen={showScopeModal}
+          groups={scopeFilterGroups}
+          selectedValue={scopeFilterValue}
+          onSubmit={(value, label) => {
+            setScopeFilterValue(value)
+            setScopeFilterLabel(label)
+          }}
+          onClose={() => setShowScopeModal(false)}
+        />
+      </>
+    )
+  }
+
   return (
     <Container className={className}>
       <BarAndResults>
@@ -178,6 +259,7 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
               )
             })}
           </Tabs>
+          {renderScopeFilter()}
           {renderSearchFilter()}
         </Bar>
         <HitsContainer $hidden={activeTab !== searchStages.All}>
