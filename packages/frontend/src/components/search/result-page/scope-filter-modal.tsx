@@ -167,7 +167,7 @@ export const ScopeFilterModal = ({
 
   // Lock body scroll
   useBodyScrollLock({
-    toLock: true,
+    toLock: isOpen,
     lockID: 'scope-filter-modal',
   })
 

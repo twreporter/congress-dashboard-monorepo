@@ -69,13 +69,6 @@ const HitsContainer = styled.div<{ $hidden: boolean }>`
   }}
 `
 
-const searchTabs = [
-  {
-    label: '全部',
-    value: searchStages.All,
-  },
-]
-
 const Tab = styled.div`
   display: inline-block;
 
@@ -183,6 +176,31 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
   const [scopeFilterLabel, setScopeFilterLabel] = useState('立法院與六都議會')
   const [showScopeModal, setShowScopeModal] = useState(false)
 
+  // Dynamically determine tabs based on scopeFilterValue
+  const searchTabs =
+    scopeFilterValue === 'legislativeYuan'
+      ? [
+          {
+            label: '全部',
+            value: searchStages.All,
+          },
+          {
+            label: '發言全文',
+            value: searchStages.Speech,
+          },
+        ]
+      : [
+          {
+            label: '全部',
+            value: searchStages.All,
+          },
+        ]
+
+  // Reset to "All" tab when scope changes
+  React.useEffect(() => {
+    setActiveTab(searchStages.All)
+  }, [scopeFilterValue])
+
   let filters = ''
   const meeting = filterValue.meeting
   const meetingSession = filterValue.meetingSession
@@ -196,14 +214,6 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
     filters = meetingSessionFilter
       ? `(${meetingFilter}) AND (${meetingSessionFilter})`
       : meetingFilter
-  }
-
-  function renderSearchFilter() {
-    if (activeTab !== searchStages.Speech) {
-      return null
-    }
-
-    return <SearchFilter filterValue={filterValue} onChange={setFilterValue} />
   }
 
   function renderScopeFilter() {
@@ -240,6 +250,25 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
     )
   }
 
+  function renderFilterByTab() {
+    // Show ScopeFilter for "All" tab
+    if (activeTab === searchStages.All) {
+      return renderScopeFilter()
+    }
+
+    // Show SearchFilter for "Speech" tab (only when legislativeYuan is selected)
+    if (
+      activeTab === searchStages.Speech &&
+      scopeFilterValue === 'legislativeYuan'
+    ) {
+      return (
+        <SearchFilter filterValue={filterValue} onChange={setFilterValue} />
+      )
+    }
+
+    return null
+  }
+
   return (
     <Container className={className}>
       <BarAndResults>
@@ -259,8 +288,7 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
               )
             })}
           </Tabs>
-          {renderScopeFilter()}
-          {renderSearchFilter()}
+          {renderFilterByTab()}
         </Bar>
         <HitsContainer $hidden={activeTab !== searchStages.All}>
           <MultiStageHits query={query} />
