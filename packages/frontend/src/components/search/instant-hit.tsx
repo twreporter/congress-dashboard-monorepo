@@ -33,6 +33,30 @@ export type TopicRawHit = Hit<{
   relatedMessageCount: number
 }>
 
+export type CouncilorRawHit = Hit<{
+  objectID: string
+  slug: string
+  name: string
+  desc: string
+  shortDesc: string
+  imgSrc: string
+  meetingTerm: number
+  districtSlug: string
+  lastSpeechAt?: string
+  partyImgSrc: string
+}>
+
+export type CouncilTopicRawHit = Hit<{
+  objectID: string
+  name: string
+  slug: string
+  desc: string
+  meetingTerm: number
+  districtSlug: string
+  lastSpeechAt?: string
+  relatedMessageCount: number
+}>
+
 const Circle = styled.div`
   width: 48px;
   height: 48px;
@@ -176,6 +200,65 @@ export function InstantTopicHit({
   return (
     <a // use <a> to force full reload
       href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <TopicCircle>
+          <IconIssue />
+        </TopicCircle>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>
+            {variant === layoutVariants.Default ? (
+              <span>共{hit.relatedMessageCount}筆發言：</span>
+            ) : (
+              <span>發言：</span>
+            )}
+            <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
+          </p>
+        </Text>
+      </InstantHitContainer>
+    </a>
+  )
+}
+
+export function InstantCouncilorHit({
+  hit,
+  variant,
+}: {
+  hit: CouncilorRawHit
+  variant: LayoutVariant
+}) {
+  return (
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.Councilor(hit.districtSlug)}/${
+        hit.slug
+      }?meetingTerm=${hit.meetingTerm}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <Avatar $imgSrc={hit.imgSrc}>
+          <Party $imgSrc={hit.partyImgSrc} />
+        </Avatar>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>{hit.shortDesc}</p>
+        </Text>
+      </InstantHitContainer>
+    </a>
+  )
+}
+
+export function InstantCouncilTopicHit({
+  hit,
+  variant,
+}: {
+  hit: CouncilTopicRawHit
+  variant: LayoutVariant
+}) {
+  return (
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.CouncilTopic(hit.districtSlug)}/${
+        hit.slug
+      }?meetingTerm=${hit.meetingTerm}`}
     >
       <InstantHitContainer $variant={variant}>
         <TopicCircle>
