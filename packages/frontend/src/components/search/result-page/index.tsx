@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { LegislativeFilterValueType } from '@/components/search/result-page/legislative-filter'
 import type { SearchStage } from '@/components/search/constants'
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -19,6 +19,43 @@ import { ScopeFilterModal } from '@/components/search/result-page/scope-filter-m
 import type { OptionGroup } from '@/components/selector/types'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+
+// Constants for scope values
+const scopeValues = {
+  all: 'all',
+  legislativeYuan: 'legislativeYuan',
+  allCouncils: 'all-councils',
+  taipeiCouncil: 'taipei-council',
+  newTaipeiCouncil: 'new-taipei-council',
+  taoyuanCouncil: 'taoyuan-council',
+  taichungCouncil: 'taichung-council',
+  tainanCouncil: 'tainan-council',
+  kaohsiungCouncil: 'kaohsiung-council',
+} as const
+
+// Type for scope values
+type ScopeValue = (typeof scopeValues)[keyof typeof scopeValues]
+
+// Council scope values array
+const councilScopeValues: ScopeValue[] = [
+  scopeValues.allCouncils,
+  scopeValues.taipeiCouncil,
+  scopeValues.newTaipeiCouncil,
+  scopeValues.taoyuanCouncil,
+  scopeValues.taichungCouncil,
+  scopeValues.tainanCouncil,
+  scopeValues.kaohsiungCouncil,
+]
+
+const isCouncilScope = (scope: ScopeValue): boolean => {
+  return councilScopeValues.includes(scope)
+}
+
+const getScopeType = (scope: ScopeValue): 'legislative' | 'council' | 'all' => {
+  if (scope === scopeValues.legislativeYuan) return 'legislative'
+  if (isCouncilScope(scope)) return 'council'
+  return 'all'
+}
 
 const SearchResultsContainer = styled.div`
   /* TODO: remove box-sizing if global already defined */
@@ -143,22 +180,38 @@ const ScopeFilterLabel = styled.div`
 const scopeFilterGroups: OptionGroup[] = [
   {
     groupName: '全部',
-    options: [{ label: '立法院與六都議會', value: 'all' }],
+    options: [{ label: '立法院與六都議會', value: scopeValues.all }],
   },
   {
     groupName: '中央',
-    options: [{ label: '立法院', value: 'legislativeYuan' }],
+    options: [{ label: '立法院', value: scopeValues.legislativeYuan }],
   },
   {
     groupName: '地方',
     options: [
-      { label: '六都議會', value: 'all-councils' },
-      { label: '台北市議會', value: 'taipei-council' },
-      { label: '新北市議會', value: 'new-taipei-council' },
-      { label: '桃園市議會', value: 'taoyuan-council' },
-      { label: '台中市議會', value: 'taichung-council' },
-      { label: '台南市議會', value: 'tainan-council' },
-      { label: '高雄市議會', value: 'kaohsiung-council' },
+      { label: '六都議會', value: scopeValues.allCouncils },
+      { label: '台北市議會', value: scopeValues.taipeiCouncil },
+      { label: '新北市議會', value: scopeValues.newTaipeiCouncil },
+      { label: '桃園市議會', value: scopeValues.taoyuanCouncil },
+      { label: '台中市議會', value: scopeValues.taichungCouncil },
+      { label: '台南市議會', value: scopeValues.tainanCouncil },
+      { label: '高雄市議會', value: scopeValues.kaohsiungCouncil },
+    ],
+  },
+]
+
+// Council-only filter groups for Bill tab
+const councilFilterGroups: OptionGroup[] = [
+  {
+    groupName: '地方',
+    options: [
+      { label: '六都議會', value: scopeValues.allCouncils },
+      { label: '台北市議會', value: scopeValues.taipeiCouncil },
+      { label: '新北市議會', value: scopeValues.newTaipeiCouncil },
+      { label: '桃園市議會', value: scopeValues.taoyuanCouncil },
+      { label: '台中市議會', value: scopeValues.taichungCouncil },
+      { label: '台南市議會', value: scopeValues.tainanCouncil },
+      { label: '高雄市議會', value: scopeValues.kaohsiungCouncil },
     ],
   },
 ]
@@ -173,33 +226,57 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
   const [filterValue, setFilterValue] = useState<LegislativeFilterValueType>(
     defaultLegislativeFilterValue
   )
-  const [scopeFilterValue, setScopeFilterValue] = useState('all')
+  const [scopeFilterValue, setScopeFilterValue] = useState<ScopeValue>(
+    scopeValues.all
+  )
   const [scopeFilterLabel, setScopeFilterLabel] = useState('立法院與六都議會')
   const [showScopeModal, setShowScopeModal] = useState(false)
 
   // Dynamically determine tabs based on scopeFilterValue
-  const searchTabs =
-    scopeFilterValue === 'legislativeYuan'
-      ? [
-          {
-            label: '全部',
-            value: searchStages.All,
-          },
-          {
-            label: '發言全文',
-            value: searchStages.Speech,
-          },
-        ]
-      : [
-          {
-            label: '全部',
-            value: searchStages.All,
-          },
-        ]
+  const searchTabs = useMemo(() => {
+    if (scopeFilterValue === scopeValues.legislativeYuan) {
+      return [
+        {
+          label: '全部',
+          value: searchStages.All,
+        },
+        {
+          label: '發言全文',
+          value: searchStages.Speech,
+        },
+      ]
+    } else if (isCouncilScope(scopeFilterValue)) {
+      return [
+        {
+          label: '全部',
+          value: searchStages.All,
+        },
+        {
+          label: '議案',
+          value: searchStages.Bill,
+        },
+      ]
+    } else {
+      return [
+        {
+          label: '全部',
+          value: searchStages.All,
+        },
+      ]
+    }
+  }, [scopeFilterValue])
 
-  // Reset to "All" tab when scope changes
-  React.useEffect(() => {
-    setActiveTab(searchStages.All)
+  // Reset to "All" tab when scope TYPE changes (not just value)
+  const prevScopeTypeRef = useRef(getScopeType(scopeFilterValue))
+  useEffect(() => {
+    const currentScopeType = getScopeType(scopeFilterValue)
+    const prevScopeType = prevScopeTypeRef.current
+
+    // Only reset tab if scope TYPE changed (e.g., legislative <-> council <-> all)
+    if (currentScopeType !== prevScopeType) {
+      setActiveTab(searchStages.All)
+      prevScopeTypeRef.current = currentScopeType
+    }
   }, [scopeFilterValue])
 
   let filters = ''
@@ -242,7 +319,41 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
           groups={scopeFilterGroups}
           selectedValue={scopeFilterValue}
           onSubmit={(value, label) => {
-            setScopeFilterValue(value)
+            setScopeFilterValue(value as ScopeValue)
+            setScopeFilterLabel(label)
+          }}
+          onClose={() => setShowScopeModal(false)}
+        />
+      </>
+    )
+  }
+
+  function renderCouncilFilter() {
+    if (activeTab !== searchStages.Bill) {
+      return null
+    }
+
+    return (
+      <>
+        <ScopeFilterContainer>
+          <ScopeFilterLabel>{scopeFilterLabel}</ScopeFilterLabel>
+          <PillButton
+            theme={PillButton.THEME.normal}
+            type={PillButton.Type.SECONDARY}
+            size={PillButton.Size.L}
+            text="篩選"
+            leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
+            onClick={() => {
+              setShowScopeModal(true)
+            }}
+          />
+        </ScopeFilterContainer>
+        <ScopeFilterModal
+          isOpen={showScopeModal}
+          groups={councilFilterGroups}
+          selectedValue={scopeFilterValue}
+          onSubmit={(value, label) => {
+            setScopeFilterValue(value as ScopeValue)
             setScopeFilterLabel(label)
           }}
           onClose={() => setShowScopeModal(false)}
@@ -260,7 +371,7 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
     // Show LegislativeSearchFilter for "Speech" tab (only when legislativeYuan is selected)
     if (
       activeTab === searchStages.Speech &&
-      scopeFilterValue === 'legislativeYuan'
+      scopeFilterValue === scopeValues.legislativeYuan
     ) {
       return (
         <LegislativeSearchFilter
@@ -268,6 +379,11 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
           onChange={setFilterValue}
         />
       )
+    }
+
+    // Show CouncilFilter for "Bill" tab (only when council scope is selected)
+    if (activeTab === searchStages.Bill && isCouncilScope(scopeFilterValue)) {
+      return renderCouncilFilter()
     }
 
     return null
@@ -299,6 +415,9 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
         </HitsContainer>
         <HitsContainer $hidden={activeTab !== searchStages.Speech}>
           <Hits indexName={indexNames.Speech} query={query} filters={filters} />
+        </HitsContainer>
+        <HitsContainer $hidden={activeTab !== searchStages.Bill}>
+          <Hits indexName={indexNames.Bill} query={query} />
         </HitsContainer>
       </BarAndResults>
     </SearchResultsContainer>

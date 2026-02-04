@@ -13,11 +13,15 @@ import type {
   LegislatorRawHit,
   TopicRawHit,
 } from '@/components/search/instant-hit'
-import type { SpeechRawHit } from '@/components/search/result-page/hit'
+import type {
+  SpeechRawHit,
+  BillRawHit,
+} from '@/components/search/result-page/hit'
 import {
   LegislatorHit,
   TopicHit,
   SpeechHit,
+  BillHit,
 } from '@/components/search/result-page/hit'
 import {
   Configure,
@@ -319,6 +323,10 @@ export const Hits = ({
       ListComponent = SpeechHitsList
       break
     }
+    case indexNames.Bill: {
+      ListComponent = BillHitsList
+      break
+    }
   }
 
   return (
@@ -402,6 +410,16 @@ const SpeechHitsList = () => {
 
   const hitsJsx = items.map((hit, idx) => {
     return <SpeechHit key={idx} hit={hit} />
+  })
+
+  return <>{hitsJsx}</>
+}
+
+const BillHitsList = () => {
+  const { items }: { items: BillRawHit[] } = useInfiniteHits()
+
+  const hitsJsx = items.map((hit, idx) => {
+    return <BillHit key={idx} hit={hit} />
   })
 
   return <>{hitsJsx}</>
