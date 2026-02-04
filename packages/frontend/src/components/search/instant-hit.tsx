@@ -40,6 +40,7 @@ export type CouncilorRawHit = Hit<{
   desc: string
   imgSrc: string
   meetingTerm?: number
+  council: string
   councilSlug: string
   lastSpeechAt?: string
   partyImgSrc: string
@@ -51,6 +52,7 @@ export type CouncilTopicRawHit = Hit<{
   slug: string
   desc: string
   meetingTerm?: number
+  council: string
   councilSlug: string
   billCount: number
   lastSpeechAt?: string

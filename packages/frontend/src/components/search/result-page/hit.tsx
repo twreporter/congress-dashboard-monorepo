@@ -18,6 +18,8 @@ import { generateSnippetForDevices } from '@/components/search/result-page/utils
 import type {
   LegislatorRawHit,
   TopicRawHit,
+  CouncilorRawHit,
+  CouncilTopicRawHit,
 } from '@/components/search/instant-hit'
 
 export type SpeechRawHit = Hit<{
@@ -29,6 +31,18 @@ export type SpeechRawHit = Hit<{
   sessionTerm: number
   date: string
   legislatorName: string
+}>
+
+export type CouncilBillRawHit = Hit<{
+  objectID: string
+  slug: string
+  title: string
+  summary?: string
+  date: string
+  districtSlug: string
+  council: string
+  councilor: string
+  councilorCount: number
 }>
 
 /**
@@ -190,7 +204,43 @@ export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
             />
           </p>
           <LegislatorDesc>{hit.desc}</LegislatorDesc>
-          <p>最新一筆發言於{hit.lastSpeechAt}</p>
+          {hit.lastSpeechAt && <p>最新一筆發言於{hit.lastSpeechAt}</p>}
+        </Text>
+        <AvatarBorder>
+          <Avatar $imgSrc={hit.imgSrc}>
+            <Party $imgSrc={hit.partyImgSrc} />
+          </Avatar>
+        </AvatarBorder>
+      </Container>
+    </Link>
+  )
+}
+
+export function CouncilorHit({ hit }: { hit: CouncilorRawHit }) {
+  const meetingTermParam = hit.meetingTerm
+    ? `?meetingTerm=${hit.meetingTerm}`
+    : ''
+  return (
+    <Link
+      href={`${InternalRoutes.Councilor(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
+    >
+      <Container>
+        <Text>
+          <p>議員｜{hit.council}</p>
+          <p>
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="name"
+              hit={hit}
+            />
+          </p>
+          <LegislatorDesc>{hit.desc}</LegislatorDesc>
+          {hit.lastSpeechAt && <p>最新一筆發言於{hit.lastSpeechAt}</p>}
         </Text>
         <AvatarBorder>
           <Avatar $imgSrc={hit.imgSrc}>
@@ -258,6 +308,66 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
   )
 }
 
+export function CouncilTopicHit({ hit }: { hit: CouncilTopicRawHit }) {
+  const { query } = useSearchBox()
+  const windowWidth = useWindowWidth()
+  const matchedTextArr = query.split(' ')
+  const snippet = generateSnippetForDevices(
+    hit.desc,
+    matchedTextArr,
+    windowWidth
+  )
+
+  const customizedHit = {
+    ...hit,
+    _snippetResult: {
+      ...(hit._snippetResult ?? {}),
+      desc: {
+        value: snippet,
+        matchLevel: (hit._snippetResult?.desc as HitAttributeSnippetResult)
+          ?.matchLevel,
+      } as HitAttributeSnippetResult,
+    },
+  }
+
+  const meetingTermParam = hit.meetingTerm
+    ? `?meetingTerm=${hit.meetingTerm}`
+    : ''
+
+  return (
+    <Link
+      href={`${InternalRoutes.CouncilTopic(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
+    >
+      <Container>
+        <Text>
+          <p>議題｜{hit.council}</p>
+          <p>
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="name"
+              hit={hit}
+            />
+          </p>
+          <p>
+            <span>共{hit.billCount}筆相關議案：</span>
+            <Snippet
+              highlightedTagName="span"
+              attribute="desc"
+              hit={customizedHit}
+            />
+          </p>
+          {hit.lastSpeechAt && <p>最新一筆發言於{hit.lastSpeechAt}</p>}
+        </Text>
+      </Container>
+    </Link>
+  )
+}
+
 export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
   const { query } = useSearchBox()
   const windowWidth = useWindowWidth()
@@ -315,6 +425,60 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
               hit={hit}
             />
             ．發言於 {hit.date}
+          </p>
+        </Text>
+      </Container>
+    </Link>
+  )
+}
+
+/**
+ * Renders a search result hit for a council bill (議案)
+ *
+ * Displays:
+ * - Bill title with highlighting
+ * - Council affiliation
+ * - Summary snippet (if available)
+ * - Councilor proposer and co-proposer count
+ * - Decision date
+ *
+ * Links to council bill detail page
+ */
+export function CouncilBillHit({ hit }: { hit: CouncilBillRawHit }) {
+  const customizedHit = useCustomSnippet(hit, 'summary')
+
+  return (
+    <Link href={`${InternalRoutes.Bill}/${hit.slug}`}>
+      <Container>
+        <Text>
+          <p>議案｜{hit.council}</p>
+          <p>
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="title"
+              hit={hit}
+            />
+          </p>
+          {hit.summary && (
+            <p>
+              <Snippet
+                highlightedTagName="span"
+                attribute="summary"
+                hit={customizedHit}
+              />
+            </p>
+          )}
+          <p>
+            提案人／
+            <Highlight
+              highlightedTagName="span"
+              attribute="councilor"
+              hit={hit}
+            />
+            等{hit.councilorCount}人．議決日期於{hit.date}
           </p>
         </Text>
       </Container>

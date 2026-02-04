@@ -9,15 +9,29 @@ import {
   indexNames,
   instantSearchStatus,
 } from '@/components/search/constants'
+import {
+  getScopeSearchStages,
+  buildCouncilFilter,
+  scopeValues,
+  type ScopeValue,
+} from '@/components/search/result-page/scope-config'
 import type {
   LegislatorRawHit,
   TopicRawHit,
+  CouncilorRawHit,
+  CouncilTopicRawHit,
 } from '@/components/search/instant-hit'
-import type { SpeechRawHit } from '@/components/search/result-page/hit'
+import type {
+  SpeechRawHit,
+  CouncilBillRawHit,
+} from '@/components/search/result-page/hit'
 import {
   LegislatorHit,
   TopicHit,
+  CouncilorHit,
+  CouncilTopicHit,
   SpeechHit,
+  CouncilBillHit,
 } from '@/components/search/result-page/hit'
 import {
   Configure,
@@ -106,19 +120,60 @@ function EmptyResultChecker({ indexNames }: { indexNames: IndexName[] }) {
 }
 
 /**
+ * Helper: Determines if a stage should be rendered based on current progress
+ * @param currentStage - The current active stage
+ * @param targetStage - The stage to check
+ * @param searchStagesList - List of stages enabled for current scope
+ * @returns true if the target stage should be rendered
+ */
+function shouldRenderStage(
+  currentStage: SearchStage,
+  targetStage: SearchStage,
+  searchStagesList: SearchStage[]
+): boolean {
+  if (!searchStagesList.includes(targetStage)) {
+    return false
+  }
+  const currentIndex = searchStagesList.indexOf(currentStage)
+  const targetIndex = searchStagesList.indexOf(targetStage)
+  return currentIndex >= targetIndex
+}
+
+/**
  * Renders Algolia hits from multiple <Index> components
- * in a progressive staged order: Legislator → Topic → Speech
+ * in a progressive staged order based on scope.
+ *
+ * Default order (scope='all'): Legislator → Councilor → Topic → CouncilTopic → Speech → CouncilBill
+ * Legislative scope: Legislator → Topic → Speech
+ * Council scopes: Councilor → CouncilTopic → CouncilBill
  */
 export const MultiStageHits = ({
   className,
   query,
+  scope = scopeValues.all,
 }: {
   className?: string
   query?: string
+  scope?: ScopeValue
 }) => {
   const searchClient = useMemo(createAlgoliaSearchClient, [])
   const containerRef = useRef<HTMLDivElement>(null)
-  const [stage, setStage] = useState<SearchStage>(searchStages.Legislator)
+
+  // Get search stages for current scope (memoized for stable array reference)
+  const searchStagesList = useMemo(() => getScopeSearchStages(scope), [scope])
+
+  // Build council filter if needed
+  const councilFilter = buildCouncilFilter(scope)
+
+  const [stage, setStage] = useState<SearchStage>(searchStagesList[0])
+
+  // Reset stage when scope changes
+  useEffect(() => {
+    // If current stage is not in new searchStagesList, reset to first stage
+    if (!searchStagesList.includes(stage)) {
+      setStage(searchStagesList[0])
+    }
+  }, [searchStagesList, stage])
 
   if (!searchClient) {
     // @TODO render placeholder
@@ -128,39 +183,103 @@ export const MultiStageHits = ({
   return (
     <Container ref={containerRef} className={className}>
       <InstantSearch
-        indexName={indexNames.Legislator}
+        indexName={searchStagesList[0] as IndexName}
         searchClient={searchClient}
         future={{
           preserveSharedStateOnUnmount: true,
         }}
       >
-        <EmptyResultChecker
-          indexNames={[
-            indexNames.Legislator,
-            indexNames.Topic,
-            indexNames.Speech,
-          ]}
-        />
-        <Index indexName={indexNames.Legislator}>
-          <PrefillQuery query={query} />
-          <Configure hitsPerPage={hitsPerPage} />
-          <LegislatorHitsList />
-        </Index>
-        {(stage === searchStages.Topic || stage === searchStages.Speech) && (
-          <Index indexName={indexNames.Topic}>
+        <EmptyResultChecker indexNames={searchStagesList as IndexName[]} />
+
+        {/* Legislator Index */}
+        {shouldRenderStage(
+          stage,
+          searchStages.Legislator,
+          searchStagesList
+        ) && (
+          <Index
+            key={`${indexNames.Legislator}-${query}`}
+            indexName={indexNames.Legislator}
+          >
+            <PrefillQuery query={query} />
+            <Configure hitsPerPage={hitsPerPage} />
+            <LegislatorHitsList />
+          </Index>
+        )}
+
+        {/* Councilor Index */}
+        {shouldRenderStage(stage, searchStages.Councilor, searchStagesList) && (
+          <Index
+            key={`${indexNames.Councilor}-${query}-${councilFilter}`}
+            indexName={indexNames.Councilor}
+          >
+            <PrefillQuery query={query} />
+            <Configure hitsPerPage={hitsPerPage} filters={councilFilter} />
+            <CouncilorHitsList />
+          </Index>
+        )}
+
+        {/* Topic Index */}
+        {shouldRenderStage(stage, searchStages.Topic, searchStagesList) && (
+          <Index
+            key={`${indexNames.Topic}-${query}`}
+            indexName={indexNames.Topic}
+          >
             <PrefillQuery query={query} />
             <Configure hitsPerPage={hitsPerPage} />
             <TopicHitsList />
           </Index>
         )}
-        {stage === searchStages.Speech && (
-          <Index indexName={indexNames.Speech}>
+
+        {/* CouncilTopic Index */}
+        {shouldRenderStage(
+          stage,
+          searchStages.CouncilTopic,
+          searchStagesList
+        ) && (
+          <Index
+            key={`${indexNames.CouncilTopic}-${query}-${councilFilter}`}
+            indexName={indexNames.CouncilTopic}
+          >
+            <PrefillQuery query={query} />
+            <Configure hitsPerPage={hitsPerPage} filters={councilFilter} />
+            <CouncilTopicHitsList />
+          </Index>
+        )}
+
+        {/* Speech Index */}
+        {shouldRenderStage(stage, searchStages.Speech, searchStagesList) && (
+          <Index
+            key={`${indexNames.Speech}-${query}`}
+            indexName={indexNames.Speech}
+          >
             <PrefillQuery query={query} />
             <Configure hitsPerPage={hitsPerPage} />
             <SpeechHitsList />
           </Index>
         )}
-        <LoadMoreForStages stage={stage} setStage={setStage} />
+
+        {/* CouncilBill Index */}
+        {shouldRenderStage(
+          stage,
+          searchStages.CouncilBill,
+          searchStagesList
+        ) && (
+          <Index
+            key={`${indexNames.CouncilBill}-${query}-${councilFilter}`}
+            indexName={indexNames.CouncilBill}
+          >
+            <PrefillQuery query={query} />
+            <Configure hitsPerPage={hitsPerPage} filters={councilFilter} />
+            <CouncilBillHitsList />
+          </Index>
+        )}
+
+        <LoadMoreForStages
+          stage={stage}
+          setStage={setStage}
+          searchStagesList={searchStagesList}
+        />
       </InstantSearch>
     </Container>
   )
@@ -170,74 +289,78 @@ const noMoreStage = 'no_more_stage' as const
 
 const voidFunction = () => {}
 
-const stageConfig = {
-  [searchStages.Legislator]: {
-    indexName: indexNames.Legislator,
-    nextStage: searchStages.Topic,
-  },
-  [searchStages.Topic]: {
-    indexName: indexNames.Topic,
-    nextStage: searchStages.Speech,
-  },
-  [searchStages.Speech]: {
-    indexName: indexNames.Speech,
-    nextStage: noMoreStage,
-  },
+/**
+ * Builds dynamic stage configuration based on search stages list
+ * @param searchStagesList - List of search stages for current scope
+ * @returns Configuration mapping each stage to its index name and next stage
+ */
+function buildStageConfig(searchStagesList: SearchStage[]) {
+  const config: Record<
+    string,
+    { indexName: IndexName; nextStage: SearchStage | typeof noMoreStage }
+  > = {}
+
+  searchStagesList.forEach((stage, index) => {
+    const nextStage = searchStagesList[index + 1] || noMoreStage
+    config[stage] = {
+      indexName: stage as IndexName,
+      nextStage,
+    }
+  })
+
+  return config
 }
 
 const LoadMoreForStages = ({
   stage,
   setStage,
+  searchStagesList,
 }: {
   stage: SearchStage
   setStage: React.Dispatch<React.SetStateAction<SearchStage>>
+  searchStagesList: SearchStage[]
 }) => {
   // `renderState` structure from multiple <Index> components:
   //  {
   //    // legislator index
   //    legislator: {
   //      // To see all properties of `inifiniteHits`, see [docs here](https://www.algolia.com/doc/api-reference/widgets/infinite-hits/react/#hook-api).
-  //      inifiniteHits: {
-  //        isLastPage: false,
-  //        items: [],
-  //        hits: [],
-  //        results: undefined,
-  //        showMore: () => { ... },
-  //      },
+  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
+  //    },
+  //    // councilor index
+  //    councilor: {
+  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
   //    },
   //    // topic index
   //    topic: {
-  //      inifiniteHits: {
-  //        isLastPage: false,
-  //        items: [],
-  //        hits: [],
-  //        results: undefined,
-  //        showMore: () => { ... },
-  //      },
+  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
+  //    },
+  //    // council-topic index
+  //    'council-topic': {
+  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
   //    },
   //    // speech index
   //    speech: {
-  //      inifiniteHits: {
-  //        isLastPage: false,
-  //        items: [],
-  //        hits: [],
-  //        results: undefined,
-  //        showMore: () => { ... },
-  //      },
+  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
+  //    },
+  //    // council-bill index
+  //    'council-bill': {
+  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
   //    }
   //  }
   const { renderState, status } = useInstantSearch()
+
+  // Build dynamic stage config based on search stages list
+  const stageConfig = buildStageConfig(searchStagesList)
 
   // Per [react-instantsearch docs](https://www.algolia.com/doc/api-reference/widgets/use-instantsearch/react/#widget-param-status):
   // show loading indicator only when status === 'stalled'
   const showLoadingIcon = status === instantSearchStatus.Stalled
 
-  const { indexName, nextStage } = stageConfig[stage]
+  const { indexName, nextStage } = stageConfig[stage] || {}
   const hitsState = renderState[indexName]?.infiniteHits
 
-  // We load Legislator items first,
-  // and then load Topic items after all Legislator items loaded,
-  // and finally load Speech items after all Topic items loaded.
+  // Load items progressively through the configured stages
   const load = useCallback(() => {
     // infiniteHits is not ready
     if (!hitsState?.results) {
@@ -256,21 +379,21 @@ const LoadMoreForStages = ({
       // Start to load next stage items.
       setStage(nextStage)
     }
-  }, [hitsState, nextStage])
+  }, [hitsState, nextStage, setStage])
 
-  // If loaded items in the stage is not enough `${hitsPerPage}` records,
-  // try to load more.
+  // Auto-load next stage if current stage doesn't have enough items
+  // This ensures the page has enough content to display
   useEffect(() => {
     if (hitsState?.items && hitsState.items.length < hitsPerPage) {
       load()
     }
   }, [load, hitsState])
 
-  if (
-    // There are more hits to load
-    hitsState?.results &&
-    !hitsState.isLastPage
-  ) {
+  // Show "Load More" button if there are more results to load
+  const hasMoreToLoad =
+    hitsState?.results && (!hitsState.isLastPage || nextStage !== noMoreStage)
+
+  if (hasMoreToLoad) {
     return (
       <LoadMoreBlock>
         <PillButton
@@ -311,12 +434,24 @@ export const Hits = ({
       ListComponent = LegislatorHitsList
       break
     }
+    case indexNames.Councilor: {
+      ListComponent = CouncilorHitsList
+      break
+    }
     case indexNames.Topic: {
       ListComponent = TopicHitsList
       break
     }
+    case indexNames.CouncilTopic: {
+      ListComponent = CouncilTopicHitsList
+      break
+    }
     case indexNames.Speech: {
       ListComponent = SpeechHitsList
+      break
+    }
+    case indexNames.CouncilBill: {
+      ListComponent = CouncilBillHitsList
       break
     }
   }
@@ -327,7 +462,7 @@ export const Hits = ({
         indexName={indexName}
         searchClient={searchClient}
         future={{
-          preserveSharedStateOnUnmount: true,
+          preserveSharedStateOnUnmount: false,
         }}
       >
         <PrefillQuery query={query} />
@@ -387,6 +522,16 @@ const LegislatorHitsList = () => {
   return <>{hitsJsx}</>
 }
 
+const CouncilorHitsList = () => {
+  const { items }: { items: CouncilorRawHit[] } = useInfiniteHits()
+
+  const hitsJsx = items.map((hit, idx) => {
+    return <CouncilorHit key={idx} hit={hit} />
+  })
+
+  return <>{hitsJsx}</>
+}
+
 const TopicHitsList = () => {
   const { items }: { items: TopicRawHit[] } = useInfiniteHits()
 
@@ -397,11 +542,31 @@ const TopicHitsList = () => {
   return <>{hitsJsx}</>
 }
 
+const CouncilTopicHitsList = () => {
+  const { items }: { items: CouncilTopicRawHit[] } = useInfiniteHits()
+
+  const hitsJsx = items.map((hit, idx) => {
+    return <CouncilTopicHit key={idx} hit={hit} />
+  })
+
+  return <>{hitsJsx}</>
+}
+
 const SpeechHitsList = () => {
   const { items }: { items: SpeechRawHit[] } = useInfiniteHits()
 
   const hitsJsx = items.map((hit, idx) => {
     return <SpeechHit key={idx} hit={hit} />
+  })
+
+  return <>{hitsJsx}</>
+}
+
+const CouncilBillHitsList = () => {
+  const { items }: { items: CouncilBillRawHit[] } = useInfiniteHits()
+
+  const hitsJsx = items.map((hit, idx) => {
+    return <CouncilBillHit key={idx} hit={hit} />
   })
 
   return <>{hitsJsx}</>

@@ -15,6 +15,7 @@ export const searchStages = {
   Councilor: 'councilor',
   CouncilTopic: 'council-topic',
   Speech: 'speech',
+  CouncilBill: 'council-bill',
   All: 'all',
 } as const
 
@@ -26,6 +27,7 @@ export const indexNames = {
   Councilor: 'councilor',
   CouncilTopic: 'council-topic',
   Speech: 'speech',
+  CouncilBill: 'council-bill',
 } as const
 
 export type IndexName = ValuesOf<typeof indexNames>
