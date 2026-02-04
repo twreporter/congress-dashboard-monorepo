@@ -21,6 +21,17 @@ const isDevMode = process.argv[1]?.includes('src/index.ts')
 
 const defaultMeetingTerm = '11'
 const defaultSessionTerm = 'all'
+const envMeetingTerm = process.env.LAWMAKER_MEETING_TERM?.trim()
+const envSessionTerm = process.env.LAWMAKER_SESSION_TERM?.trim()
+const envTopics = process.env.LAWMAKER_TOPICS?.trim()
+const envLegislators = process.env.LAWMAKER_LEGISLATORS?.trim()
+const envSpeeches = process.env.LAWMAKER_SPEECHES?.trim()
+const envDryrun = process.env.LAWMAKER_DRYRUN?.trim()
+
+const defaultTopics = envTopics === 'true'
+const defaultLegislators = envLegislators === 'true'
+const defaultSpeeches = envSpeeches === 'true'
+const defaultDryrun = envDryrun !== 'false'
 
 program
   .name(isDevMode ? 'dev' : programName)
@@ -34,17 +45,21 @@ program
   .option(
     '--meeting-term <term>',
     'Legislative meeting term',
-    defaultMeetingTerm
+    envMeetingTerm || defaultMeetingTerm
   )
   .option(
     '--session-term <term>',
     'Legislative meeting session term. Only for updating speeches',
-    defaultSessionTerm
+    envSessionTerm || defaultSessionTerm
   )
-  .option('--topics', 'Only update topic records')
-  .option('--legislators', 'Only update legislator records')
-  .option('--speeches', 'Only update speech records')
-  .option('--dryrun', 'Enable dry-run mode (do not write to Algolia)', true)
+  .option('--topics', 'Only update topic records', defaultTopics)
+  .option('--legislators', 'Only update legislator records', defaultLegislators)
+  .option('--speeches', 'Only update speech records', defaultSpeeches)
+  .option(
+    '--dryrun',
+    'Enable dry-run mode (do not write to Algolia)',
+    defaultDryrun
+  )
   .option('--no-dryrun', 'Disable dry-run mode (actually write to Algolia)')
   .action(async (options) => {
     try {
