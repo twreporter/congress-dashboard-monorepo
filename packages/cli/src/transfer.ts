@@ -292,6 +292,8 @@ export function transferCouncilorModelToRecord(
       name: councilorName,
       slug: councilorSlug,
       council: councilDisplayName,
+      councilSlug: councilName,
+      meetingTerm: term,
       lastSpeechAt,
       desc,
       imgSrc: c.councilor?.imageLink || '',
@@ -318,6 +320,8 @@ type CouncilTopicInfoMap = Map<
     title: string
     lastSpeechAt: string
     council: string
+    meetingTerm?: number
+    billCount: number
     memberMap: CouncilMemberInfoMap
   }
 >
@@ -341,6 +345,8 @@ export function transferCouncilTopicModelToRecord(
           title: topic.title,
           lastSpeechAt: bill.date,
           council: councilName,
+          meetingTerm: bill.councilMeeting?.term,
+          billCount: bills.length,
           memberMap: new Map(),
         })
       } else {
@@ -351,6 +357,10 @@ export function transferCouncilTopicModelToRecord(
             new Date(mapValue.lastSpeechAt) < new Date(bill.date))
         ) {
           mapValue.lastSpeechAt = bill.date
+          // Update meetingTerm to the latest bill's term
+          if (bill.councilMeeting?.term) {
+            mapValue.meetingTerm = bill.councilMeeting.term
+          }
         }
       }
 
@@ -376,7 +386,18 @@ export function transferCouncilTopicModelToRecord(
   }
 
   return Array.from(topicMap.entries()).map(
-    ([, { title, slug, lastSpeechAt: _lastSpeechAt, council, memberMap }]) => {
+    ([
+      ,
+      {
+        title,
+        slug,
+        lastSpeechAt: _lastSpeechAt,
+        council,
+        meetingTerm,
+        billCount,
+        memberMap,
+      },
+    ]) => {
       const councilDisplayName =
         councilDisplayNames[council as CouncilName] || council
       const members = Array.from(memberMap.values()).sort(
@@ -396,6 +417,9 @@ export function transferCouncilTopicModelToRecord(
         name: title,
         slug,
         council: councilDisplayName,
+        councilSlug: council,
+        meetingTerm,
+        billCount,
         desc,
         lastSpeechAt,
         objectID: `${slug}_${council}`,

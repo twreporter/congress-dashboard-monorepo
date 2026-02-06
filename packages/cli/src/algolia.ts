@@ -59,6 +59,9 @@ export type CouncilTopicRecord = {
   desc: string
   lastSpeechAt: string
   council: string
+  councilSlug: string
+  meetingTerm?: number
+  billCount: number
   objectID: string
 }
 
@@ -66,6 +69,8 @@ export type CouncilorRecord = {
   slug: string
   name: string
   council: string
+  councilSlug: string
+  meetingTerm?: number
   lastSpeechAt: string
   desc: string
   objectID: string

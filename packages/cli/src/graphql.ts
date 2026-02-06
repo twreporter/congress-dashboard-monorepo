@@ -136,6 +136,9 @@ export type CouncilTopicModel = {
   bill: {
     id: string
     date: string
+    councilMeeting?: {
+      term: number
+    }
     councilMember: {
       id: number
       councilor: {
@@ -730,6 +733,9 @@ export async function* councilTopicIterator(
               bill(where: $billWhere) {
                 id
                 date
+                councilMeeting {
+                  term
+                }
                 councilMember {
                   id
                   councilor {
