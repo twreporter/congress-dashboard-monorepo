@@ -102,7 +102,7 @@ export type SpeechModel = {
 
 // Council data structures
 export type CouncilorModel = {
-  id: string
+  id: number
   councilor: {
     name: string
     slug: string
@@ -579,7 +579,6 @@ export async function* councilorIterator(
   take = 10
 ): AsyncGenerator<CouncilorModel[]> {
   const keystoneToken = await fetchKeystoneToken()
-  let cursor: { id: string } | null = null
   let skip = 0
   let hasMore = true
 
@@ -600,14 +599,12 @@ export async function* councilorIterator(
             $orderBy: [CouncilMemberOrderByInput!]!
             $take: Int
             $skip: Int!
-            $cursor: CouncilMemberWhereUniqueInput
             $where: CouncilMemberWhereInput!
           ) {
             councilMembers(
               orderBy: $orderBy
               take: $take
               skip: $skip
-              cursor: $cursor
               where: $where
             ) {
               id
@@ -648,7 +645,6 @@ export async function* councilorIterator(
             },
             take,
             skip,
-            cursor,
             orderBy: [{ id: 'asc' }],
           },
         },
@@ -677,13 +673,11 @@ export async function* councilorIterator(
 
     yield members
 
+    // Check if more data remains to be fetched
     if (members.length < take) {
       hasMore = false
     } else {
-      cursor = {
-        id: members?.[members.length - 1]?.id,
-      }
-      skip = 1
+      skip = skip + take
     }
   }
 }
