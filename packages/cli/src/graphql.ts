@@ -100,6 +100,70 @@ export type SpeechModel = {
   }
 }
 
+// Council data structures
+export type CouncilorModel = {
+  id: string
+  councilor: {
+    name: string
+    slug: string
+    imageLink?: string
+  } | null
+  party?: {
+    name: string
+    imageLink?: string
+    image?: {
+      imageFile: {
+        url: string
+      }
+    }
+  }
+  councilMeeting?: {
+    term: number
+  }
+  city: string
+  constituency?: number
+  note: string
+  bill: {
+    date: string
+  }[]
+}
+
+export type CouncilTopicModel = {
+  id: string
+  slug: string
+  title: string
+  city: string
+  bill: {
+    id: string
+    date: string
+    councilMeeting?: {
+      term: number
+    }
+    councilMember: {
+      id: number
+      councilor: {
+        name: string
+      } | null
+    }[]
+  }[]
+}
+
+export type CouncilBillModel = {
+  id: string
+  slug: string
+  title: string
+  date: string
+  summary?: string
+  councilMeeting?: {
+    city: string
+  }
+  councilMember: {
+    councilor: {
+      name: string
+    } | null
+  }[]
+}
+
 // Authenticate with Keystone and retrieve a session token
 async function fetchKeystoneToken() {
   const gqlQuery = `
@@ -505,6 +569,348 @@ export async function* legislatorIterator(
       hasMore = false
     } else {
       skip = skip + take
+    }
+  }
+}
+
+// Async generator for iterating over councilors in a specific city
+export async function* councilorIterator(
+  councilName: string,
+  take = 10
+): AsyncGenerator<CouncilorModel[]> {
+  const keystoneToken = await fetchKeystoneToken()
+  let cursor: { id: string } | null = null
+  let skip = 0
+  let hasMore = true
+
+  while (hasMore) {
+    let res: AxiosResponse<{
+      errors: any
+      data: {
+        councilMembers: CouncilorModel[]
+      }
+    }>
+
+    try {
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query CouncilMembers(
+            $orderBy: [CouncilMemberOrderByInput!]!
+            $take: Int
+            $skip: Int!
+            $cursor: CouncilMemberWhereUniqueInput
+            $where: CouncilMemberWhereInput!
+          ) {
+            councilMembers(
+              orderBy: $orderBy
+              take: $take
+              skip: $skip
+              cursor: $cursor
+              where: $where
+            ) {
+              id
+              note
+              city
+              constituency
+              councilMeeting {
+                term
+              }
+              councilor {
+                slug
+                name
+                imageLink
+              }
+              party {
+                name
+                imageLink
+                image {
+                  imageFile {
+                    url
+                  }
+                }
+              }
+              bill(take: 1, orderBy: [{ date: desc }]) {
+                date
+              }
+            }
+          }
+          `,
+          variables: {
+            where: {
+              city: {
+                equals: councilName,
+              },
+              isActive: {
+                equals: true,
+              },
+            },
+            take,
+            skip,
+            cursor,
+            orderBy: [{ id: 'asc' }],
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
+
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `CouncilMembers` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
+
+    const members: CouncilorModel[] = res.data.data.councilMembers
+    if (members.length === 0) {
+      hasMore = false
+    }
+
+    yield members
+
+    if (members.length < take) {
+      hasMore = false
+    } else {
+      cursor = {
+        id: members?.[members.length - 1]?.id,
+      }
+      skip = 1
+    }
+  }
+}
+
+// Async generator for iterating over council topics in a specific city
+export async function* councilTopicIterator(
+  councilName: string,
+  take = 10
+): AsyncGenerator<CouncilTopicModel[], void, unknown> {
+  const keystoneToken = await fetchKeystoneToken()
+  let cursor: { slug: string } | null = null
+  let skip = 0
+  let hasMore = true
+
+  while (hasMore) {
+    let res: AxiosResponse<{
+      errors: any
+      data: {
+        councilTopics: CouncilTopicModel[]
+      }
+    }>
+
+    try {
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query CouncilTopics(
+            $where: CouncilTopicWhereInput!
+            $billWhere: CouncilBillWhereInput!
+            $orderBy: [CouncilTopicOrderByInput!]!
+            $cursor: CouncilTopicWhereUniqueInput
+            $skip: Int!
+            $take: Int
+          ) {
+            councilTopics(
+              where: $where
+              orderBy: $orderBy
+              cursor: $cursor
+              skip: $skip
+              take: $take
+            ) {
+              id
+              title
+              slug
+              city
+              bill(where: $billWhere) {
+                id
+                date
+                councilMeeting {
+                  term
+                }
+                councilMember {
+                  id
+                  councilor {
+                    name
+                  }
+                }
+              }
+            }
+          }
+          `,
+          variables: {
+            where: {
+              city: {
+                equals: councilName,
+              },
+              bill: {
+                some: {
+                  councilMeeting: {
+                    city: {
+                      equals: councilName,
+                    },
+                  },
+                },
+              },
+            },
+            billWhere: {
+              councilMeeting: {
+                city: {
+                  equals: councilName,
+                },
+              },
+            },
+            take,
+            skip,
+            cursor,
+            orderBy: [{ slug: 'asc' }],
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
+
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `CouncilTopics` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
+
+    const topics = res.data.data.councilTopics
+
+    if (topics.length === 0) {
+      hasMore = false
+    }
+
+    yield topics
+
+    if (topics.length < take) {
+      hasMore = false
+    } else {
+      cursor = {
+        slug: topics?.[topics.length - 1]?.slug,
+      }
+      skip = 1
+    }
+  }
+}
+
+// Async generator for iterating over council bills in a specific city
+export async function* councilBillIterator(
+  councilName: string,
+  take = 10
+): AsyncGenerator<CouncilBillModel[], void, unknown> {
+  const keystoneToken = await fetchKeystoneToken()
+  let cursor: { slug: string } | null = null
+  let skip = 0
+  let hasMore = true
+
+  while (hasMore) {
+    let res: AxiosResponse<{
+      errors: any
+      data: {
+        councilBills: CouncilBillModel[]
+      }
+    }>
+
+    try {
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query CouncilBills(
+            $orderBy: [CouncilBillOrderByInput!]!
+            $take: Int
+            $skip: Int!
+            $cursor: CouncilBillWhereUniqueInput
+            $where: CouncilBillWhereInput!
+          ) {
+            councilBills(
+              orderBy: $orderBy
+              take: $take
+              skip: $skip
+              cursor: $cursor
+              where: $where
+            ) {
+              id
+              slug
+              title
+              summary
+              date
+              councilMeeting {
+                city
+              }
+              councilMember {
+                councilor {
+                  name
+                }
+              }
+            }
+          }
+          `,
+          variables: {
+            take,
+            skip,
+            cursor,
+            orderBy: [{ slug: 'asc' }],
+            where: {
+              councilMeeting: {
+                city: {
+                  equals: councilName,
+                },
+              },
+            },
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
+
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `CouncilBills` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
+
+    const bills = res.data.data.councilBills
+
+    if (bills.length === 0) {
+      hasMore = false
+    }
+
+    yield bills
+
+    if (bills.length < take) {
+      hasMore = false
+    } else {
+      cursor = {
+        slug: bills?.[bills.length - 1]?.slug,
+      }
+      skip = 1
     }
   }
 }
