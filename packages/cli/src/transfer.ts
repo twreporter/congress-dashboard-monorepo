@@ -23,6 +23,16 @@ import {
 import { getUrlOrigin } from './utils'
 import { councilDisplayNames, type CouncilName } from './council-config'
 
+/**
+ * Convert ISO date string to YYYY/MM/DD format in UTC+8 timezone
+ */
+function formatDateToTaipeiTimezone(isoDateString: string): string {
+  const date = new Date(isoDateString)
+  // Add 8 hours for UTC+8
+  const taipeiDate = new Date(date.getTime() + 8 * 60 * 60 * 1000)
+  return taipeiDate.toISOString().split('T')[0].replace(/-/g, '/')
+}
+
 export function transferSpeechModelToRecord(
   speechModels: SpeechModel[]
 ): SpeechRecord[] {
@@ -36,7 +46,7 @@ export function transferSpeechModelToRecord(
       objectID: s.slug,
       slug: s.slug,
       title: s.title,
-      date: s.date,
+      date: s.date ? formatDateToTaipeiTimezone(s.date) : '',
       dateTs: s.date ? new Date(s.date).getTime() : undefined,
       meetingTerm: s.legislativeMeeting?.term as number,
       sessionTerm: s.legislativeMeetingSession?.term,
@@ -102,9 +112,8 @@ export function transferLegislatorModelToRecord(
     let lastSpeechAtTs
 
     if (speechDate) {
-      const date = new Date(speechDate)
-      lastSpeechAt = date.toISOString().split('T')[0].replace(/-/g, '/')
-      lastSpeechAtTs = date.getTime()
+      lastSpeechAt = formatDateToTaipeiTimezone(speechDate)
+      lastSpeechAtTs = new Date(speechDate).getTime()
     }
 
     const urlOrigin = getUrlOrigin()
@@ -220,9 +229,8 @@ export function transferTopicModelToRecord(
       let lastSpeechAtTs
 
       if (_lastSpeechAt) {
-        const date = new Date(_lastSpeechAt)
-        lastSpeechAt = date.toISOString().split('T')[0].replace(/-/g, '/')
-        lastSpeechAtTs = date.getTime()
+        lastSpeechAt = formatDateToTaipeiTimezone(_lastSpeechAt)
+        lastSpeechAtTs = new Date(_lastSpeechAt).getTime()
       }
 
       return {
@@ -272,8 +280,7 @@ export function transferCouncilorModelToRecord(
 
     let lastSpeechAt = ''
     if (billDate) {
-      const date = new Date(billDate)
-      lastSpeechAt = date.toISOString().split('T')[0].replace(/-/g, '/')
+      lastSpeechAt = formatDateToTaipeiTimezone(billDate)
     }
 
     const urlOrigin = getUrlOrigin()
@@ -382,8 +389,7 @@ export function transferCouncilTopicModelToRecord(
 
       let lastSpeechAt = ''
       if (_lastSpeechAt) {
-        const date = new Date(_lastSpeechAt)
-        lastSpeechAt = date.toISOString().split('T')[0].replace(/-/g, '/')
+        lastSpeechAt = formatDateToTaipeiTimezone(_lastSpeechAt)
       }
 
       return {
@@ -422,7 +428,7 @@ export function transferCouncilBillModelToRecord(
     return {
       slug: b.slug,
       title: b.title,
-      date: b.date,
+      date: b.date ? formatDateToTaipeiTimezone(b.date) : '',
       summary: summary || undefined,
       council: councilDisplayName,
       councilor,
