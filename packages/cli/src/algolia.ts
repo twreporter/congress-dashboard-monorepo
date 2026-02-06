@@ -58,7 +58,6 @@ export type CouncilTopicRecord = {
   slug: string
   desc: string
   lastSpeechAt: string
-  relatedMessageCount: number
   council: string
   objectID: string
 }

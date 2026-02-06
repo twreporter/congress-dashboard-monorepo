@@ -15,14 +15,17 @@ import {
   transferLegislatorModelToRecord,
   transferTopicModelToRecord,
   transferSpeechModelToRecord,
+  transferCouncilorModelToRecord,
+  transferCouncilTopicModelToRecord,
+  transferCouncilBillModelToRecord,
 } from './transfer'
 import {
   uploadTopics,
   uploadLegislators,
   uploadSpeeches,
-  //uploadCouncilors,
-  //uploadCouncilTopics,
-  //uploadCouncilBills,
+  uploadCouncilors,
+  uploadCouncilTopics,
+  uploadCouncilBills,
 } from './algolia'
 import { dryrunState } from './state/dryrun'
 import { councilNames, isValidCouncilName } from './council-config'
@@ -246,14 +249,10 @@ feedAlgolia
           console.log(`\n🔎 Fetching councilors for ${councilName}`)
           for await (const councilorModels of councilorIterator(councilName)) {
             if (councilorModels.length > 0) {
-              // TODO: Implement in step 5 (transfer.ts)
-              // const councilorRecords = transferCouncilorModelToRecord(councilorModels)
-              // TODO: Implement in step 4 (algolia.ts)
-              // console.log('Upload councilor records to Algolia.')
-              // await uploadCouncilors(councilorRecords)
-              console.log(
-                `⚠️  Fetched ${councilorModels.length} councilor models (transfer & upload pending)`
-              )
+              const councilorRecords =
+                transferCouncilorModelToRecord(councilorModels)
+              console.log('Upload councilor records to Algolia.')
+              await uploadCouncilors(councilorRecords)
             }
           }
         }
@@ -262,14 +261,10 @@ feedAlgolia
           console.log(`\n🔎 Fetching council topics for ${councilName}`)
           for await (const topicModels of councilTopicIterator(councilName)) {
             if (topicModels.length > 0) {
-              // TODO: Implement in step 5 (transfer.ts)
-              // const topicRecords = transferCouncilTopicModelToRecord(topicModels)
-              // TODO: Implement in step 4 (algolia.ts)
-              // console.log('Upload council topic records to Algolia.')
-              // await uploadCouncilTopics(topicRecords)
-              console.log(
-                `⚠️  Fetched ${topicModels.length} council topic models (transfer & upload pending)`
-              )
+              const topicRecords =
+                transferCouncilTopicModelToRecord(topicModels)
+              console.log('Upload council topic records to Algolia.')
+              await uploadCouncilTopics(topicRecords)
             }
           }
         }
@@ -278,14 +273,9 @@ feedAlgolia
           console.log(`\n🔎 Fetching council bills for ${councilName}`)
           for await (const billModels of councilBillIterator(councilName)) {
             if (billModels.length > 0) {
-              // TODO: Implement in step 5 (transfer.ts)
-              // const billRecords = transferCouncilBillModelToRecord(billModels)
-              // TODO: Implement in step 4 (algolia.ts)
-              // console.log('Upload council bill records to Algolia.')
-              // await uploadCouncilBills(billRecords)
-              console.log(
-                `⚠️  Fetched ${billModels.length} council bill models (transfer & upload pending)`
-              )
+              const billRecords = transferCouncilBillModelToRecord(billModels)
+              console.log('Upload council bill records to Algolia.')
+              await uploadCouncilBills(billRecords)
             }
           }
         }

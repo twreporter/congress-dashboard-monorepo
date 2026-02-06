@@ -117,7 +117,11 @@ export type CouncilorModel = {
       }
     }
   }
+  councilMeeting?: {
+    term: number
+  }
   city: string
+  constituency?: number
   note: string
   bill: {
     date: string
@@ -606,6 +610,10 @@ export async function* councilorIterator(
               id
               note
               city
+              constituency
+              councilMeeting {
+                term
+              }
               councilor {
                 slug
                 name
