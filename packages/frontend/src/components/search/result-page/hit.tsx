@@ -31,6 +31,15 @@ export type SpeechRawHit = Hit<{
   legislatorName: string
 }>
 
+export type BillRawHit = Hit<{
+  objectID: string
+  slug: string
+  title: string
+  summary?: string
+  date: string
+  districtSlug: string
+}>
+
 /**
  * `AvatarBorder` is a workaround to address rendering issues when applying a semi-transparent border directly on `Avatar`.
  *
@@ -316,6 +325,57 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
             />
             ．發言於 {hit.date}
           </p>
+        </Text>
+      </Container>
+    </Link>
+  )
+}
+
+export function BillHit({ hit }: { hit: BillRawHit }) {
+  const { query } = useSearchBox()
+  const windowWidth = useWindowWidth()
+  const matchedTextArr = query.split(' ')
+  const snippet = hit.summary
+    ? generateSnippetForDevices(hit.summary, matchedTextArr, windowWidth)
+    : ''
+
+  const customizedHit = {
+    ...hit,
+    _snippetResult: {
+      ...(hit._snippetResult ?? {}),
+      summary: {
+        value: snippet,
+        matchLevel: (hit._snippetResult?.summary as HitAttributeSnippetResult)
+          ?.matchLevel,
+      } as HitAttributeSnippetResult,
+    },
+  }
+
+  return (
+    <Link href={`${InternalRoutes.Bill}/${hit.slug}`}>
+      <Container>
+        <Text>
+          <p>議案</p>
+          <p>
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="title"
+              hit={hit}
+            />
+          </p>
+          {hit.summary && (
+            <p>
+              <Snippet
+                highlightedTagName="span"
+                attribute="summary"
+                hit={customizedHit}
+              />
+            </p>
+          )}
+          <p>提案日期：{hit.date}</p>
         </Text>
       </Container>
     </Link>
