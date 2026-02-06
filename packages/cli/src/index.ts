@@ -3,7 +3,14 @@
 // @ts-ignore @twreporter/errors lacks of type definition
 import errors from '@twreporter/errors'
 import { Command } from 'commander'
-import { topicIterator, legislatorIterator, speechIterator } from './graphql'
+import {
+  topicIterator,
+  legislatorIterator,
+  speechIterator,
+  councilorIterator,
+  councilTopicIterator,
+  councilBillIterator,
+} from './graphql'
 import {
   transferLegislatorModelToRecord,
   transferTopicModelToRecord,
@@ -230,41 +237,50 @@ feedAlgolia
 
         if (options.councilor || executeAll) {
           console.log(`\n🔎 Fetching councilors for ${councilName}`)
-          // TODO: Implement in step 3 (graphql.ts)
-          // for await (const councilorModels of councilorIterator(councilName)) {
-          //   if (councilorModels.length > 0) {
-          //     const councilorRecords = transferCouncilorModelToRecord(councilorModels)
-          //     console.log('Upload councilor records to Algolia.')
-          //     await uploadCouncilors(councilorRecords)
-          //   }
-          // }
-          console.log('⚠️  Councilor fetcher pending (step 3)')
+          for await (const councilorModels of councilorIterator(councilName)) {
+            if (councilorModels.length > 0) {
+              // TODO: Implement in step 5 (transfer.ts)
+              // const councilorRecords = transferCouncilorModelToRecord(councilorModels)
+              // TODO: Implement in step 4 (algolia.ts)
+              // console.log('Upload councilor records to Algolia.')
+              // await uploadCouncilors(councilorRecords)
+              console.log(
+                `⚠️  Fetched ${councilorModels.length} councilor models (transfer & upload pending)`
+              )
+            }
+          }
         }
 
         if (options.councilTopic || executeAll) {
           console.log(`\n🔎 Fetching council topics for ${councilName}`)
-          // TODO: Implement in step 3 (graphql.ts)
-          // for await (const topicModels of councilTopicIterator(councilName)) {
-          //   if (topicModels.length > 0) {
-          //     const topicRecords = transferCouncilTopicModelToRecord(topicModels)
-          //     console.log('Upload council topic records to Algolia.')
-          //     await uploadCouncilTopics(topicRecords)
-          //   }
-          // }
-          console.log('⚠️  Council topic fetcher pending (step 3)')
+          for await (const topicModels of councilTopicIterator(councilName)) {
+            if (topicModels.length > 0) {
+              // TODO: Implement in step 5 (transfer.ts)
+              // const topicRecords = transferCouncilTopicModelToRecord(topicModels)
+              // TODO: Implement in step 4 (algolia.ts)
+              // console.log('Upload council topic records to Algolia.')
+              // await uploadCouncilTopics(topicRecords)
+              console.log(
+                `⚠️  Fetched ${topicModels.length} council topic models (transfer & upload pending)`
+              )
+            }
+          }
         }
 
         if (options.councilBill || executeAll) {
           console.log(`\n🔎 Fetching council bills for ${councilName}`)
-          // TODO: Implement in step 3 (graphql.ts)
-          // for await (const billModels of councilBillIterator(councilName)) {
-          //   if (billModels.length > 0) {
-          //     const billRecords = transferCouncilBillModelToRecord(billModels)
-          //     console.log('Upload council bill records to Algolia.')
-          //     await uploadCouncilBills(billRecords)
-          //   }
-          // }
-          console.log('⚠️  Council bill fetcher pending (step 3)')
+          for await (const billModels of councilBillIterator(councilName)) {
+            if (billModels.length > 0) {
+              // TODO: Implement in step 5 (transfer.ts)
+              // const billRecords = transferCouncilBillModelToRecord(billModels)
+              // TODO: Implement in step 4 (algolia.ts)
+              // console.log('Upload council bill records to Algolia.')
+              // await uploadCouncilBills(billRecords)
+              console.log(
+                `⚠️  Fetched ${billModels.length} council bill models (transfer & upload pending)`
+              )
+            }
+          }
         }
       }
 
