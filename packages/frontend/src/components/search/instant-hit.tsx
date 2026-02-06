@@ -38,10 +38,9 @@ export type CouncilorRawHit = Hit<{
   slug: string
   name: string
   desc: string
-  shortDesc: string
   imgSrc: string
-  meetingTerm: number
-  districtSlug: string
+  meetingTerm?: number
+  councilSlug: string
   lastSpeechAt?: string
   partyImgSrc: string
 }>
@@ -51,10 +50,10 @@ export type CouncilTopicRawHit = Hit<{
   name: string
   slug: string
   desc: string
-  meetingTerm: number
-  districtSlug: string
+  meetingTerm?: number
+  councilSlug: string
+  billCount: number
   lastSpeechAt?: string
-  relatedMessageCount: number
 }>
 
 const Circle = styled.div`
@@ -228,11 +227,14 @@ export function InstantCouncilorHit({
   hit: CouncilorRawHit
   variant: LayoutVariant
 }) {
+  const meetingTermParam = hit.meetingTerm
+    ? `?meetingTerm=${hit.meetingTerm}`
+    : ''
   return (
     <a // use <a> to force full reload
-      href={`${InternalRoutes.Councilor(hit.districtSlug)}/${
+      href={`${InternalRoutes.Councilor(hit.councilSlug)}/${
         hit.slug
-      }?meetingTerm=${hit.meetingTerm}`}
+      }${meetingTermParam}`}
     >
       <InstantHitContainer $variant={variant}>
         <Avatar $imgSrc={hit.imgSrc}>
@@ -240,7 +242,7 @@ export function InstantCouncilorHit({
         </Avatar>
         <Text>
           <Highlight highlightedTagName="span" attribute="name" hit={hit} />
-          <p>{hit.shortDesc}</p>
+          <p>{hit.desc}</p>
         </Text>
       </InstantHitContainer>
     </a>
@@ -254,11 +256,14 @@ export function InstantCouncilTopicHit({
   hit: CouncilTopicRawHit
   variant: LayoutVariant
 }) {
+  const meetingTermParam = hit.meetingTerm
+    ? `?meetingTerm=${hit.meetingTerm}`
+    : ''
   return (
     <a // use <a> to force full reload
-      href={`${InternalRoutes.CouncilTopic(hit.districtSlug)}/${
+      href={`${InternalRoutes.CouncilTopic(hit.councilSlug)}/${
         hit.slug
-      }?meetingTerm=${hit.meetingTerm}`}
+      }${meetingTermParam}`}
     >
       <InstantHitContainer $variant={variant}>
         <TopicCircle>
@@ -267,11 +272,7 @@ export function InstantCouncilTopicHit({
         <Text>
           <Highlight highlightedTagName="span" attribute="name" hit={hit} />
           <p>
-            {variant === layoutVariants.Default ? (
-              <span>共{hit.relatedMessageCount}筆發言：</span>
-            ) : (
-              <span>發言：</span>
-            )}
+            <span>共{hit.billCount}筆相關議案：</span>
             <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
           </p>
         </Text>
