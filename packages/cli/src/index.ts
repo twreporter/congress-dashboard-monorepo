@@ -16,7 +16,14 @@ import {
   transferTopicModelToRecord,
   transferSpeechModelToRecord,
 } from './transfer'
-import { uploadTopics, uploadLegislators, uploadSpeeches } from './algolia'
+import {
+  uploadTopics,
+  uploadLegislators,
+  uploadSpeeches,
+  //uploadCouncilors,
+  //uploadCouncilTopics,
+  //uploadCouncilBills,
+} from './algolia'
 import { dryrunState } from './state/dryrun'
 import { councilNames, isValidCouncilName } from './council-config'
 
