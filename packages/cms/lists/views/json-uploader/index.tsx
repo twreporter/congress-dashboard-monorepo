@@ -116,8 +116,10 @@ const isSlugField = (header: string): boolean => header.includes('slug')
 // validator
 const testUppercase = (value: string): boolean =>
   typeof value === 'string' && /[A-Z]/.test(value)
-const testExceedCharLimit = (value: string): boolean =>
-  typeof value === 'string' && value.length > MAX_STRING_LENGTH
+const testExceedCharLimit = (
+  value: string,
+  limit = MAX_STRING_LENGTH
+): boolean => typeof value === 'string' && value.length > limit
 
 type JSONUploaderFieldValue = {
   listName: string | null
@@ -300,11 +302,13 @@ const validateJsonData = (
     }
 
     const charLimitFields = listConfig.charLimitFields
+    const charLimitCustomeValue = listConfig.charLimitCustomValue || {}
     if (charLimitFields && charLimitFields.length > 0) {
       charLimitFields.forEach((field) => {
-        if (testExceedCharLimit(item[field])) {
+        const charLimit = charLimitCustomeValue[field] ?? MAX_STRING_LENGTH
+        if (testExceedCharLimit(item[field], charLimit)) {
           errors.push(
-            `第 ${rowNum} 筆: 超過字數上限, ${field} 上限為 ${MAX_STRING_LENGTH} 字`
+            `第 ${rowNum} 筆: 超過字數上限, ${field} 上限為 ${charLimit} 字`
           )
           if (!errorItems.some((item) => item.field === field)) {
             errorItems.push({ field, errorType: 'exceed_char_limit' })

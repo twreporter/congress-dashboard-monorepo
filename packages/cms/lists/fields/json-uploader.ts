@@ -24,6 +24,7 @@ export type ListConfig = {
   requiredFields: string[]
   nonDuplicateFields: string[]
   charLimitFields?: string[]
+  charLimitCustomValue?: Record<string, number> // prisma string type uses varchar(191), but could be change in text field config
   description?: string
 }
 
@@ -94,7 +95,8 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'title',
     ],
     nonDuplicateFields: ['slug'],
-    charLimitFields: ['title', 'attendee'], // prisma string type uses varchar(191)
+    charLimitFields: ['title', 'attendee'],
+    charLimitCustomValue: { attendee: 500 },
     description: '匯入議案資料',
   },
   [CouncilListName.councilTopic]: {
@@ -371,6 +373,7 @@ export const jsonUploader = <ListTypeInfo extends BaseListTypeInfo>(
                 requiredFields: listConfig.requiredFields,
                 nonDuplicateFields: listConfig.nonDuplicateFields,
                 charLimitFields: listConfig.charLimitFields || [],
+                charLimitCustomValue: listConfig.charLimitCustomValue || {},
                 description: listConfig.description || '',
                 isRequired: !!config.validation?.isRequired,
               },

@@ -211,7 +211,7 @@ model CouncilBill {
   slug             String          @unique @default("")
   summary          Json?
   content          Json?
-  attendee         String          @default("")
+  attendee         String          @default("") @mysql.VarChar(500)
   sourceLink       Json?
   topic            CouncilTopic[]  @relation("CouncilBill_topic")
   createdAt        DateTime?       @default(now())
