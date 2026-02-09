@@ -158,10 +158,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
   slug,
   type = 'speech',
 }) => {
-  // summary will be like this:
-  // "<ul><li>this is a long sentence</li><li>this is a long sentence</li></ul>" or "this is a long sentence"
   const dateObj = typeof date === 'string' ? new Date(date) : date
-  const parsedSummary = summary.replace(/<[^>]*>/g, '')
   const link =
     type === 'speech'
       ? `${InternalRoutes.Speech}/${slug}`
@@ -174,7 +171,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
       </FlexRow>
       <HorizontalLine />
       <Content>
-        {`${parsedSummary}（`}
+        {`${summary}（`}
         <Link href={link}>
           <LinkText>{'閱讀更多'}</LinkText>
         </Link>
