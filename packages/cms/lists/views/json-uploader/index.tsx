@@ -302,10 +302,10 @@ const validateJsonData = (
     }
 
     const charLimitFields = listConfig.charLimitFields
-    const charLimitCustomeValue = listConfig.charLimitCustomValue || {}
+    const charLimitCustomValue = listConfig.charLimitCustomValue || {}
     if (charLimitFields && charLimitFields.length > 0) {
       charLimitFields.forEach((field) => {
-        const charLimit = charLimitCustomeValue[field] ?? MAX_STRING_LENGTH
+        const charLimit = charLimitCustomValue[field] ?? MAX_STRING_LENGTH
         if (testExceedCharLimit(item[field], charLimit)) {
           errors.push(
             `第 ${rowNum} 筆: 超過字數上限, ${field} 上限為 ${charLimit} 字`

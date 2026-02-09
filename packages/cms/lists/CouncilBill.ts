@@ -30,11 +30,9 @@ function toPlainTextSummary(input: unknown, limit = 100): string | null {
       ? JSON.stringify(input)
       : String(input)
 
-  let summary
   const listRegrex = /<\/?(ul|li)[^>]*>/g
-  summary = raw.replace(listRegrex, '')
   const lineBreakRegex = /\\n|\r?\n/g
-  summary = summary.replace(lineBreakRegex, ' ')
+  const summary = raw.replace(listRegrex, '').replace(lineBreakRegex, ' ')
   return summary.length > limit ? summary.slice(0, limit) : summary
 }
 
@@ -75,12 +73,10 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve(item) {
-          let value
-          if (typeof item.summary === 'string' && item.summary.length > 0) {
-            value = item.summary
-          } else {
-            value = item.content ?? null
-          }
+          const value =
+            typeof item.summary === 'string' && item.summary.length > 0
+              ? item.summary
+              : item.content ?? null
           return toPlainTextSummary(value)
         },
       }),
