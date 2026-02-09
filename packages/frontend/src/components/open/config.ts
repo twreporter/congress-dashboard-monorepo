@@ -19,7 +19,7 @@ export const getOpenConfig = (pathname: string) => {
       title: '報導者觀測站',
       description: [
         '你家議員關心什麼？你關注的議題有誰在討論？',
-        '點擊你感興趣的人或話題，觀察議員的發言與提案情形',
+        '點擊你感興趣的人或話題，觀察議員的提案情形',
       ],
       badge: {
         text: getCouncilName(districtSlug),

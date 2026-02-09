@@ -150,6 +150,7 @@ export const Badge = styled.div`
   align-items: center;
   border-radius: 4px;
   background-color: ${colorSupportive.faded};
+  flex: none;
 `
 
 export const BadgeText = styled(P2)`

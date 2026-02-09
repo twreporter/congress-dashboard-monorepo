@@ -7,6 +7,7 @@ import styled, { css } from 'styled-components'
 import { TagSize } from '@/components/dashboard/enum'
 // type
 import type { Tag } from '@/components/dashboard/type'
+import { ValuesOf } from '@/types'
 // components
 import Tooltip from '@/components/dashboard/card/tooltip'
 import { Triangle, Gap } from '@/components/skeleton'
@@ -139,11 +140,19 @@ const avatarCss = css<{ $size: CardSize }>`
   width: ${(props) => (props.$size === CardSize.S ? 119 : 152)}px;
   height: 100%;
 `
-const Avatar = styled.img<{ $size: CardSize }>`
+const Avatar = styled.img<{ $size: CardSize; $cardType?: CardHumanType }>`
   ${avatarCss}
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   border-right: 1px solid ${colorOpacity['black_0.05']};
+  ${(props) =>
+    props.$cardType === 'councilor'
+      ? `
+    object-fit: cover;
+  `
+      : `
+    ''
+  `}
 `
 const Mask = styled.div<{ $size: CardSize }>`
   opacity: 0.1;
@@ -213,8 +222,11 @@ const MoreTagPopover = styled.div<{
     background-color: ${colorGrayscale.gray800};
   }
 `
-
-export type CardHumanType = 'legislator' | 'councilor'
+export const CARD_HUMAN_TYPE = {
+  Legislator: 'legislator',
+  Councilor: 'councilor',
+} as const
+export type CardHumanType = ValuesOf<typeof CARD_HUMAN_TYPE>
 export type CardHumanProps = {
   cardType?: CardHumanType
   name?: string
@@ -230,7 +242,7 @@ export type CardHumanProps = {
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 const CardHuman: React.FC<CardHumanProps> = ({
-  cardType = 'legislator',
+  cardType = CARD_HUMAN_TYPE.Legislator,
   name = '',
   tooltip = '',
   note = '',
@@ -419,7 +431,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
   return (
     <Box $selected={selected} $size={size} onClick={onClick}>
       <AvatarContainer>
-        <Avatar src={avatar} $size={size} />
+        <Avatar src={avatar} $size={size} $cardType={cardType} />
         <Mask $size={size} />
         <Party avatar={partyAvatar} size={TagSize.L} />
       </AvatarContainer>
@@ -431,7 +443,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
           </Title>
           <Type
             text={
-              cardType === 'councilor'
+              cardType === CARD_HUMAN_TYPE.Councilor
                 ? type === COUNCIL_MEMBER_TYPE.constituency
                   ? `第${constituency}選區`
                   : COUNCIL_MEMBER_TYPE_LABEL[type as CouncilMemberType]

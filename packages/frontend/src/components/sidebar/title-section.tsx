@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
+import { usePathname } from 'next/navigation'
 // components
 import Tab from '@/components/sidebar/tab'
 import { Gap } from '@/components/skeleton'
@@ -23,6 +24,8 @@ import { IconButton } from '@twreporter/react-components/lib/button'
 import { Back, More } from '@twreporter/react-components/lib/icon'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
+// constants
+import { InternalRoutes } from '@/constants/routes'
 
 // global var
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
@@ -99,8 +102,10 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   onOpenFilterModal,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
+  const [titleDescription, setTitleDescription] = useState('')
   const tabRef = useRef<HTMLDivElement>(null)
   const prevLinkRef = useRef<TitleSectionProps['link']>('')
+  const pathname = usePathname()
 
   useEffect(() => {
     setSelectedTab(0)
@@ -113,6 +118,14 @@ const TitleSection: React.FC<TitleSectionProps> = ({
       tabRef.current.scrollTo({ left: 0, behavior })
     }
   }, [link, tabs, setSelectedTab])
+
+  useEffect(() => {
+    if (pathname.startsWith(InternalRoutes.Council)) {
+      setTitleDescription('的相關議案摘要')
+    } else {
+      setTitleDescription('的相關發言摘要')
+    }
+  }, [pathname])
 
   const selectTab = (e: React.MouseEvent<HTMLElement>, index: number) => {
     e.preventDefault()
@@ -147,7 +160,9 @@ const TitleSection: React.FC<TitleSectionProps> = ({
       <TitleGroup>
         <Title>
           <TitleLink href={link}>{title}</TitleLink>
-          <TitleText>{` 的相關發言摘要${count ? `(${count})` : ''}`}</TitleText>
+          <TitleText>{` ${titleDescription}${
+            count ? `(${count})` : ''
+          }`}</TitleText>
         </Title>
         <ButtonGroup>
           <Button
