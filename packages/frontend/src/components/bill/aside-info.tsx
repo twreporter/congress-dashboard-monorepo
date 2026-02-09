@@ -52,7 +52,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
             ))}
           </CouncilorBlock>
         ) : null}
-        {attendee ? <P2Gray600 text={`列席人員／${attendee}`} /> : null}
+        {attendee ? <P2Gray600 text={`連署人／${attendee}`} /> : null}
       </LegislatorAndAttendeeBlock>
       {relatedTopics.length > 0 ? (
         <IssueTagsBlock>
