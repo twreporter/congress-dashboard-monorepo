@@ -82,7 +82,7 @@ const listConfigurations = list({
       label: '內文',
     }),
     attendee: text({
-      label: '列席質詢對象',
+      label: '連署人',
       db: { nativeType: 'VarChar(500)' },
     }),
     sourceLink: json({
