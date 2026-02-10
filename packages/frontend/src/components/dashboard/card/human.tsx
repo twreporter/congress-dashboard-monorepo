@@ -146,13 +146,10 @@ const Avatar = styled.img<{ $size: CardSize; $cardType?: CardHumanType }>`
   border-bottom-left-radius: 4px;
   border-right: 1px solid ${colorOpacity['black_0.05']};
   ${(props) =>
-    props.$cardType === 'councilor'
-      ? `
-    object-fit: cover;
-  `
-      : `
-    ''
-  `}
+    props.$cardType === CARD_HUMAN_TYPE.Councilor &&
+    css`
+      object-fit: cover;
+    `}
 `
 const Mask = styled.div<{ $size: CardSize }>`
   opacity: 0.1;

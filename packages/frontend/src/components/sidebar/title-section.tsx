@@ -102,10 +102,13 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   onOpenFilterModal,
 }) => {
   const [selectedTab, setSelectedTab] = useState(0)
-  const [titleDescription, setTitleDescription] = useState('')
   const tabRef = useRef<HTMLDivElement>(null)
   const prevLinkRef = useRef<TitleSectionProps['link']>('')
   const pathname = usePathname()
+
+  const titleDescription = pathname.startsWith(InternalRoutes.Council)
+    ? '的相關議案摘要'
+    : '的相關發言摘要'
 
   useEffect(() => {
     setSelectedTab(0)
@@ -118,14 +121,6 @@ const TitleSection: React.FC<TitleSectionProps> = ({
       tabRef.current.scrollTo({ left: 0, behavior })
     }
   }, [link, tabs, setSelectedTab])
-
-  useEffect(() => {
-    if (pathname.startsWith(InternalRoutes.Council)) {
-      setTitleDescription('的相關議案摘要')
-    } else {
-      setTitleDescription('的相關發言摘要')
-    }
-  }, [pathname])
 
   const selectTab = (e: React.MouseEvent<HTMLElement>, index: number) => {
     e.preventDefault()
