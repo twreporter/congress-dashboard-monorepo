@@ -1,6 +1,15 @@
 import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 
 /**
+ * Builds a URL query parameter string for meeting term
+ * @param meetingTerm - Optional meeting term number
+ * @returns Query string like "?meetingTerm=10" or empty string
+ */
+export function buildMeetingTermParam(meetingTerm?: number): string {
+  return meetingTerm ? `?meetingTerm=${meetingTerm}` : ''
+}
+
+/**
  * Generates a snippet of the input text centered around the first matched keyword.
  * Adds <mark> tags around all matched words, and truncates to maxLength with ellipses if needed.
  *

@@ -6,6 +6,7 @@ import { InternalRoutes } from '@/constants/routes'
 import { Highlight, Snippet } from 'react-instantsearch'
 import { Issue as IconIssue } from '@/components/search/icons'
 import { layoutVariants } from '@/components/search/constants'
+import { buildMeetingTermParam } from '@/components/search/result-page/utils'
 import {
   colorGrayscale,
   colorSupportive,
@@ -229,9 +230,7 @@ export function InstantCouncilorHit({
   hit: CouncilorRawHit
   variant: LayoutVariant
 }) {
-  const meetingTermParam = hit.meetingTerm
-    ? `?meetingTerm=${hit.meetingTerm}`
-    : ''
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
   return (
     <a // use <a> to force full reload
       href={`${InternalRoutes.Councilor(hit.councilSlug)}/${
@@ -258,9 +257,7 @@ export function InstantCouncilTopicHit({
   hit: CouncilTopicRawHit
   variant: LayoutVariant
 }) {
-  const meetingTermParam = hit.meetingTerm
-    ? `?meetingTerm=${hit.meetingTerm}`
-    : ''
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
   return (
     <a // use <a> to force full reload
       href={`${InternalRoutes.CouncilTopic(hit.councilSlug)}/${

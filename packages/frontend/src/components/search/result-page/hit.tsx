@@ -5,16 +5,15 @@ import React from 'react'
 import mq from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
-import type { HitAttributeSnippetResult } from 'instantsearch.js'
-import useWindowWidth from '@/hooks/use-window-width'
 import { InternalRoutes } from '@/constants/routes'
-import { Highlight, Snippet, useSearchBox } from 'react-instantsearch'
+import { Highlight, Snippet } from 'react-instantsearch'
 import {
   colorOpacity,
   colorGrayscale,
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
-import { generateSnippetForDevices } from '@/components/search/result-page/utils'
+import { buildMeetingTermParam } from '@/components/search/result-page/utils'
+import { useCustomSnippet } from '@/components/search/result-page/hooks'
 import type {
   LegislatorRawHit,
   TopicRawHit,
@@ -185,11 +184,21 @@ const Container = styled.div`
   `}
 `
 
+/**
+ * Renders a search result hit for a legislator (立委)
+ *
+ * Displays:
+ * - Legislator name with highlighting
+ * - Description
+ * - Latest speech date (if available)
+ * - Avatar with party logo
+ *
+ * Links to legislator detail page with meeting term filter
+ */
 export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
   return (
-    <Link
-      href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
-    >
+    <Link href={`${InternalRoutes.Legislator}/${hit.slug}${meetingTermParam}`}>
       <Container>
         <Text>
           <p>立委</p>
@@ -216,10 +225,20 @@ export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
   )
 }
 
+/**
+ * Renders a search result hit for a councilor (議員)
+ *
+ * Displays:
+ * - Councilor name with highlighting
+ * - Council affiliation
+ * - Description
+ * - Latest speech date (if available)
+ * - Avatar with party logo
+ *
+ * Links to councilor detail page with optional meeting term filter
+ */
 export function CouncilorHit({ hit }: { hit: CouncilorRawHit }) {
-  const meetingTermParam = hit.meetingTerm
-    ? `?meetingTerm=${hit.meetingTerm}`
-    : ''
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
   return (
     <Link
       href={`${InternalRoutes.Councilor(hit.councilSlug)}/${
@@ -252,34 +271,22 @@ export function CouncilorHit({ hit }: { hit: CouncilorRawHit }) {
   )
 }
 
+/**
+ * Renders a search result hit for a topic (議題)
+ *
+ * Displays:
+ * - Topic name with highlighting
+ * - Related message count and description snippet
+ * - Latest speech date (if available)
+ *
+ * Links to topic detail page with meeting term filter
+ */
 export function TopicHit({ hit }: { hit: TopicRawHit }) {
-  const { query } = useSearchBox()
-  const windowWidth = useWindowWidth()
-  const matchedTextArr = query.split(' ')
-  const snippet = generateSnippetForDevices(
-    hit.desc,
-    matchedTextArr,
-    windowWidth
-  )
+  const customizedHit = useCustomSnippet(hit)
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
 
-  const customizedHit = {
-    ...hit,
-    // Algolia allows only one global snippet length setting via attributesToSnippet.
-    // However, our UI requires different truncation lengths for different viewports.
-    // Therefore, we manually override _snippetResult.desc.value to use a custom snippet.
-    _snippetResult: {
-      ...(hit._snippetResult ?? {}),
-      desc: {
-        value: snippet,
-        matchLevel: (hit._snippetResult?.desc as HitAttributeSnippetResult)
-          ?.matchLevel,
-      } as HitAttributeSnippetResult,
-    },
-  }
   return (
-    <Link
-      href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
-    >
+    <Link href={`${InternalRoutes.Topic}/${hit.slug}${meetingTermParam}`}>
       <Container>
         <Text>
           <p>議題</p>
@@ -301,38 +308,27 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
               hit={customizedHit}
             />
           </p>
-          <p>最新一筆發言於{hit.lastSpeechAt}</p>
+          {hit.lastSpeechAt && <p>最新一筆發言於{hit.lastSpeechAt}</p>}
         </Text>
       </Container>
     </Link>
   )
 }
 
+/**
+ * Renders a search result hit for a council topic (議題)
+ *
+ * Displays:
+ * - Topic name with highlighting
+ * - Council affiliation
+ * - Bill count and description snippet
+ * - Latest speech date (if available)
+ *
+ * Links to council topic page with optional meeting term filter
+ */
 export function CouncilTopicHit({ hit }: { hit: CouncilTopicRawHit }) {
-  const { query } = useSearchBox()
-  const windowWidth = useWindowWidth()
-  const matchedTextArr = query.split(' ')
-  const snippet = generateSnippetForDevices(
-    hit.desc,
-    matchedTextArr,
-    windowWidth
-  )
-
-  const customizedHit = {
-    ...hit,
-    _snippetResult: {
-      ...(hit._snippetResult ?? {}),
-      desc: {
-        value: snippet,
-        matchLevel: (hit._snippetResult?.desc as HitAttributeSnippetResult)
-          ?.matchLevel,
-      } as HitAttributeSnippetResult,
-    },
-  }
-
-  const meetingTermParam = hit.meetingTerm
-    ? `?meetingTerm=${hit.meetingTerm}`
-    : ''
+  const customizedHit = useCustomSnippet(hit)
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
 
   return (
     <Link
@@ -368,30 +364,19 @@ export function CouncilTopicHit({ hit }: { hit: CouncilTopicRawHit }) {
   )
 }
 
+/**
+ * Renders a search result hit for a speech (發言全文)
+ *
+ * Displays:
+ * - Speech title with highlighting
+ * - Summary snippet
+ * - Legislator name
+ * - Meeting date
+ *
+ * Links to speech detail page with meeting term and session term filters
+ */
 export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
-  const { query } = useSearchBox()
-  const windowWidth = useWindowWidth()
-  const matchedTextArr = query.split(' ')
-  const snippet = generateSnippetForDevices(
-    hit.summary,
-    matchedTextArr,
-    windowWidth
-  )
-
-  const customizedHit = {
-    ...hit,
-    // Algolia allows only one global snippet length setting via attributesToSnippet.
-    // However, our UI requires different truncation lengths for different viewports.
-    // Therefore, we manually override _snippetResult.summary.value to use a custom snippet.
-    _snippetResult: {
-      ...(hit._snippetResult ?? {}),
-      summary: {
-        value: snippet,
-        matchLevel: (hit._snippetResult?.summary as HitAttributeSnippetResult)
-          ?.matchLevel,
-      } as HitAttributeSnippetResult,
-    },
-  }
+  const customizedHit = useCustomSnippet(hit, 'summary')
 
   return (
     <Link
