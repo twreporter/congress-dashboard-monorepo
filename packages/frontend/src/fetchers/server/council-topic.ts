@@ -107,6 +107,8 @@ export const fetchTopicBySlug = async ({
         relatedCityCouncilTopic {
           slug
           title
+          type
+          billCount
         }
       }
     }
@@ -135,7 +137,23 @@ export const fetchTopicBySlug = async ({
     const data = await keystoneFetch<{
       councilTopics: CouncilTopicFromRes[]
     }>(JSON.stringify({ query, variables }), false)
-    return _.get(data, 'data.councilTopics[0]')
+    const topic = _.get(data, 'data.councilTopics[0]')
+    if (topic?.relatedCityCouncilTopic) {
+      const sortByBillCountDesc = (
+        a: { billCount?: number },
+        b: { billCount?: number }
+      ) => (b.billCount ?? 0) - (a.billCount ?? 0)
+
+      const twreporterTopics = topic.relatedCityCouncilTopic
+        .filter((t) => t.type === 'twreporter')
+        .sort(sortByBillCountDesc)
+      const generalTopics = topic.relatedCityCouncilTopic
+        .filter((t) => t.type !== 'twreporter')
+        .sort(sortByBillCountDesc)
+
+      topic.relatedCityCouncilTopic = [...twreporterTopics, ...generalTopics]
+    }
+    return topic
   } catch (err) {
     throw new Error(
       `Failed to fetch council topic for slug: ${slug} in district ${districtSlug}, err: ${err}`
