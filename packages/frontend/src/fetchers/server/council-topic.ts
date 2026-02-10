@@ -308,54 +308,56 @@ export const fetchFeaturedCouncilTopics = async ({
 
     const topics = data?.data?.councilTopics || []
 
-    return topics.map((topic) => {
-      // Count unique bills
-      const billCount = topic.bill?.length || 0
+    return topics
+      .map((topic) => {
+        // Count unique bills
+        const billCount = topic.bill?.length || 0
 
-      // Collect all council members from all bills with their bill count
-      const councilorBillCountMap = new Map<
-        number,
-        { councilor: CouncilMemberFromRes['councilor']; count: number }
-      >()
+        // Collect all council members from all bills with their bill count
+        const councilorBillCountMap = new Map<
+          number,
+          { councilor: CouncilMemberFromRes['councilor']; count: number }
+        >()
 
-      topic.bill?.forEach((bill) => {
-        bill.councilMember?.forEach((member) => {
-          const councilorId = member.councilor?.id
-          if (councilorId) {
-            const existing = councilorBillCountMap.get(councilorId)
-            if (existing) {
-              existing.count += 1
-            } else {
-              councilorBillCountMap.set(councilorId, {
-                councilor: member.councilor,
-                count: 1,
-              })
+        topic.bill?.forEach((bill) => {
+          bill.councilMember?.forEach((member) => {
+            const councilorId = member.councilor?.id
+            if (councilorId) {
+              const existing = councilorBillCountMap.get(councilorId)
+              if (existing) {
+                existing.count += 1
+              } else {
+                councilorBillCountMap.set(councilorId, {
+                  councilor: member.councilor,
+                  count: 1,
+                })
+              }
             }
-          }
+          })
         })
+
+        // Get unique councilor count
+        const councilorCount = councilorBillCountMap.size
+
+        // Sort by bill count and get top 5 avatars
+        const sortedCouncilors = Array.from(councilorBillCountMap.values())
+          .sort(sortByCountDesc)
+          .slice(0, 5)
+
+        const avatars = sortedCouncilors
+          .map(({ councilor }) => getImageLink(councilor))
+          .filter((url) => url !== '')
+
+        return {
+          title: topic.title,
+          slug: topic.slug,
+          city,
+          billCount,
+          councilorCount,
+          avatars,
+        }
       })
-
-      // Get unique councilor count
-      const councilorCount = councilorBillCountMap.size
-
-      // Sort by bill count and get top 5 avatars
-      const sortedCouncilors = Array.from(councilorBillCountMap.values())
-        .sort(sortByCountDesc)
-        .slice(0, 5)
-
-      const avatars = sortedCouncilors
-        .map(({ councilor }) => getImageLink(councilor))
-        .filter((url) => url !== '')
-
-      return {
-        title: topic.title,
-        slug: topic.slug,
-        city,
-        billCount,
-        councilorCount,
-        avatars,
-      }
-    })
+      .sort((a, b) => b.billCount - a.billCount)
   } catch (err) {
     throw new Error(
       `Failed to fetch featured council topics for city: ${city}, err: ${err}`
