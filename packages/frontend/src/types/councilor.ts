@@ -11,7 +11,7 @@ export type CouncilorMemberMeta = {
 export type CouncilorType = MemberType
 
 export type CouncilorMemberData = {
-  type?: string
+  type: string
   constituency?: number
   administrativeDistrict?: string[]
   note?: string
@@ -43,7 +43,7 @@ export type CouncilorForLawmaker = {
   name: string
   avatar: string
   city: CouncilDistrict
-  type?: string
+  type: string
   constituency?: number
   administrativeDistrict: string[]
   note?: string
