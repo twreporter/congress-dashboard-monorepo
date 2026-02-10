@@ -170,7 +170,7 @@ Feed city council data (councilors, topics, bills).
 If no data-type flags are provided, the command runs all data types (councilors, topics, bills).
 
 * `--council-name <name>`
-  Specific council to update. Valid values: `taipei`, `newtaipei`, `taoyuan`, `taichung`, `tainan`, `kaohsiung`. Omit this option to update all six major cities.
+  Specific council to update. Valid values: `taipei`, `new-taipei`, `taoyuan`, `taichung`, `tainan`, `kaohsiung`. Omit this option to update all six major cities.
 
 * `--councilor`
   Only update councilor records.

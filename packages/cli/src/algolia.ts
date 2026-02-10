@@ -16,6 +16,7 @@ export type SpeechRecord = {
   slug: string
   title: string
   date: string
+  dateTs?: number
   meetingTerm: number
   sessionTerm?: number
   summary?: string
@@ -44,38 +45,47 @@ export type LegislatorRecord = {
 }
 
 export type CouncilBillRecord = {
-  slug: string
-  title: string
-  date: string
-  summary?: string
-  council: string
-  councilor: string
-  objectID: string
+  slug: string // Unique identifier for the bill
+  title: string // Bill title
+  date: string // Formatted date (YYYY/MM/DD) in UTC+8
+  dateTs?: number // Unix timestamp in milliseconds for Algolia ranking
+  summary?: string // HTML-stripped summary text
+  council: string // Display name (e.g., "台北市議會")
+  councilSlug: string // English identifier for filtering/routing (e.g., "taipei")
+  councilRank: number // Ranking order for Algolia custom ranking (1-6)
+  meetingTerm: number // Council meeting term number
+  councilor: string // First proposer name (e.g., "林亮君")
+  councilorCount: number // Total number of proposers (e.g., 15)
+  objectID: string // Format: ${slug}_${councilSlug}_${meetingTerm}
 }
 
 export type CouncilTopicRecord = {
-  name: string
-  slug: string
-  desc: string
-  lastSpeechAt: string
-  council: string
-  councilSlug: string
-  meetingTerm?: number
-  billCount: number
-  objectID: string
+  name: string // Topic title
+  slug: string // Unique identifier for the topic
+  desc: string // Formatted string of participating members (e.g., "林亮君(16)、王鴻薇(8)")
+  lastSpeechAt: string // Formatted date (YYYY/MM/DD) in UTC+8 of latest bill
+  lastSpeechAtTs?: number // Unix timestamp in milliseconds for Algolia ranking
+  council: string // Display name (e.g., "台北市議會")
+  councilSlug: string // English identifier for filtering/routing (e.g., "taipei")
+  councilRank: number // Ranking order for Algolia custom ranking (1-6)
+  meetingTerm: number // Council meeting term number
+  billCount: number // Total number of bills in this topic
+  objectID: string // Format: ${slug}_${councilSlug}_${meetingTerm}
 }
 
 export type CouncilorRecord = {
-  slug: string
-  name: string
-  council: string
-  councilSlug: string
-  meetingTerm?: number
-  lastSpeechAt: string
-  desc: string
-  objectID: string
-  imgSrc: string
-  partyImgSrc: string
+  slug: string // Councilor slug from Councilor entity
+  name: string // Councilor full name
+  council: string // Display name (e.g., "台北市議會")
+  councilSlug: string // English identifier for filtering/routing (e.g., "taipei")
+  councilRank: number // Ranking order for Algolia custom ranking (1-6)
+  meetingTerm: number // Council meeting term number
+  lastSpeechAt: string // Formatted date (YYYY/MM/DD) in UTC+8 of latest bill
+  lastSpeechAtTs?: number // Unix timestamp in milliseconds for Algolia ranking
+  desc: string // Formatted description with party, term, constituency info
+  objectID: string // Format: ${slug}_${councilSlug}_${meetingTerm}
+  imgSrc: string // Councilor profile image URL
+  partyImgSrc: string // Party logo image URL
 }
 
 export async function uploadSpeeches(records: SpeechRecord[]) {
@@ -172,8 +182,7 @@ export async function uploadCouncilors(records: CouncilorRecord[]) {
       JSON.stringify(
         records.map((r) => {
           return {
-            slug: r.slug,
-            council: r.council,
+            objectID: r.objectID,
           }
         })
       )
@@ -199,8 +208,7 @@ export async function uploadCouncilTopics(records: CouncilTopicRecord[]) {
       JSON.stringify(
         records.map((r) => {
           return {
-            slug: r.slug,
-            council: r.council,
+            objectID: r.objectID,
           }
         })
       )
@@ -228,8 +236,7 @@ export async function uploadCouncilBills(records: CouncilBillRecord[]) {
       JSON.stringify(
         records.map((r) => {
           return {
-            slug: r.slug,
-            council: r.council,
+            objectID: r.objectID,
           }
         })
       )

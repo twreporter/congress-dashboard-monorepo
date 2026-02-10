@@ -153,9 +153,10 @@ export type CouncilBillModel = {
   slug: string
   title: string
   date: string
-  summary?: string
+  summaryFallback?: string
   councilMeeting?: {
     city: string
+    term: number
   }
   councilMember: {
     councilor: {
@@ -845,10 +846,11 @@ export async function* councilBillIterator(
               id
               slug
               title
-              summary
+              summaryFallback
               date
               councilMeeting {
                 city
+                term
               }
               councilMember {
                 councilor {

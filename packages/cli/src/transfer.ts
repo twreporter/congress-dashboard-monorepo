@@ -21,7 +21,11 @@ import {
   MemberType,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 import { getUrlOrigin } from './utils'
-import { councilDisplayNames, type CouncilName } from './council-config'
+import {
+  councilDisplayNames,
+  councilRankings,
+  type CouncilName,
+} from './council-config'
 
 /**
  * Convert ISO date string to YYYY/MM/DD format in UTC+8 timezone.
@@ -263,13 +267,18 @@ export function transferTopicModelToRecord(
 export function transferCouncilorModelToRecord(
   councilorModels: CouncilorModel[]
 ): CouncilorRecord[] {
-  return councilorModels.map((c) => {
+  // Filter out records without councilMeeting.term and valid councilor identity (defensive)
+  const validModels = councilorModels.filter(
+    (c) => c.councilMeeting?.term && c.councilor?.slug && c.councilor?.name
+  )
+
+  return validModels.map((c) => {
     const billDate = c.bill?.[0]?.date
     const councilName = c.city as CouncilName
     const councilDisplayName = councilDisplayNames[councilName] || councilName
-    const councilorSlug = c.councilor?.slug || ''
-    const councilorName = c.councilor?.name || ''
-    const term = c.councilMeeting?.term
+    const councilorSlug = c.councilor!.slug
+    const councilorName = c.councilor!.name
+    const term = c.councilMeeting!.term
     const constituency = c.constituency
 
     let desc = ''
@@ -279,21 +288,21 @@ export function transferCouncilorModelToRecord(
         : `${c.party.name}籍，`
     }
 
-    if (term) {
-      desc = desc + `現任第 ${term} 屆${councilDisplayName}議員`
-      if (constituency) {
-        desc = desc + `（第 ${constituency} 選舉區）`
-      }
-      desc = desc + '。'
+    desc = desc + `現任第 ${term} 屆${councilDisplayName}議員`
+    if (constituency) {
+      desc = desc + `（第 ${constituency} 選舉區）`
     }
+    desc = desc + '。'
 
     if (c.note) {
       desc = desc + c.note
     }
 
     let lastSpeechAt = ''
+    let lastSpeechAtTs: number | undefined
     if (billDate) {
       lastSpeechAt = formatDateToTaipeiTimezone(billDate)
+      lastSpeechAtTs = new Date(billDate).getTime()
     }
 
     const urlOrigin = getUrlOrigin()
@@ -306,12 +315,14 @@ export function transferCouncilorModelToRecord(
       slug: councilorSlug,
       council: councilDisplayName,
       councilSlug: councilName,
+      councilRank: councilRankings[councilName] || 999,
       meetingTerm: term,
       lastSpeechAt,
+      lastSpeechAtTs,
       desc,
       imgSrc: c.councilor?.imageLink || '',
       partyImgSrc: c.party?.imageLink || _partyImgSrc || '',
-      objectID: `${councilorSlug}_${councilName}`,
+      objectID: `${c.id}_${councilName}_${term}`,
     }
   })
 }
@@ -345,10 +356,14 @@ export function transferCouncilTopicModelToRecord(
   const topicMap: CouncilTopicInfoMap = new Map()
 
   for (const topic of topicModels) {
-    const bills = topic.bill
     const councilName = topic.city
+    // Filter bills with councilMeeting.term (defensive)
+    const validBills = topic.bill.filter((b) => b.councilMeeting?.term)
 
-    for (const bill of bills) {
+    // Skip topic if no valid bills
+    if (validBills.length === 0) continue
+
+    for (const bill of validBills) {
       const topicMapKey = `${topic.slug}_${councilName}`
 
       if (!topicMap.has(topicMapKey)) {
@@ -358,8 +373,8 @@ export function transferCouncilTopicModelToRecord(
           title: topic.title,
           lastSpeechAt: bill.date,
           council: councilName,
-          meetingTerm: bill.councilMeeting?.term,
-          billCount: bills.length,
+          meetingTerm: bill.councilMeeting!.term,
+          billCount: validBills.length,
           memberMap: new Map(),
         })
       } else {
@@ -371,9 +386,7 @@ export function transferCouncilTopicModelToRecord(
         ) {
           mapValue.lastSpeechAt = bill.date
           // Update meetingTerm to the latest bill's term
-          if (bill.councilMeeting?.term) {
-            mapValue.meetingTerm = bill.councilMeeting.term
-          }
+          mapValue.meetingTerm = bill.councilMeeting!.term
         }
       }
 
@@ -398,78 +411,92 @@ export function transferCouncilTopicModelToRecord(
     }
   }
 
-  return Array.from(topicMap.entries()).map(
-    ([
-      ,
-      {
-        title,
-        slug,
-        lastSpeechAt: _lastSpeechAt,
-        council,
-        meetingTerm,
-        billCount,
-        memberMap,
-      },
-    ]) => {
-      const councilDisplayName =
-        councilDisplayNames[council as CouncilName] || council
-      const members = Array.from(memberMap.values()).sort(
-        (a, b) => b.count - a.count
-      )
-      const desc =
-        members.length > 0
-          ? members.map((m) => `${m.name}(${m.count})`).join('、')
-          : ''
+  return Array.from(topicMap.entries())
+    .filter(([, topicInfo]) => topicInfo.meetingTerm !== undefined) // Filter out topics without term
+    .map(
+      ([
+        ,
+        {
+          title,
+          slug,
+          lastSpeechAt: _lastSpeechAt,
+          council,
+          meetingTerm,
+          billCount,
+          memberMap,
+        },
+      ]) => {
+        const councilDisplayName =
+          councilDisplayNames[council as CouncilName] || council
+        const members = Array.from(memberMap.values()).sort(
+          (a, b) => b.count - a.count
+        )
+        const desc =
+          members.length > 0
+            ? members.map((m) => `${m.name}(${m.count})`).join('、')
+            : ''
 
-      let lastSpeechAt = ''
-      if (_lastSpeechAt) {
-        lastSpeechAt = formatDateToTaipeiTimezone(_lastSpeechAt)
-      }
+        let lastSpeechAt = ''
+        let lastSpeechAtTs: number | undefined
+        if (_lastSpeechAt) {
+          lastSpeechAt = formatDateToTaipeiTimezone(_lastSpeechAt)
+          lastSpeechAtTs = new Date(_lastSpeechAt).getTime()
+        }
 
-      return {
-        name: title,
-        slug,
-        council: councilDisplayName,
-        councilSlug: council,
-        meetingTerm,
-        billCount,
-        desc,
-        lastSpeechAt,
-        objectID: `${slug}_${council}`,
+        return {
+          name: title,
+          slug,
+          council: councilDisplayName,
+          councilSlug: council,
+          councilRank: councilRankings[council as CouncilName] || 999,
+          meetingTerm: meetingTerm!,
+          billCount,
+          desc,
+          lastSpeechAt,
+          lastSpeechAtTs,
+          objectID: `${slug}_${council}_${meetingTerm}`,
+        }
       }
-    }
-  )
+    )
 }
 
 export function transferCouncilBillModelToRecord(
   billModels: CouncilBillModel[]
 ): CouncilBillRecord[] {
-  return billModels.map((b) => {
-    const councilName = b.councilMeeting?.city || ''
+  // Filter out records without councilMeeting.term and city (defensive)
+  const validModels = billModels.filter(
+    (b) => b.councilMeeting?.term && b.councilMeeting?.city
+  )
+
+  return validModels.map((b) => {
+    const councilName = b.councilMeeting!.city
     const councilDisplayName =
       councilDisplayNames[councilName as CouncilName] || councilName
+    const meetingTerm = b.councilMeeting!.term
     const councilMembers = b.councilMember || []
     const firstCouncilor = councilMembers?.[0]?.councilor?.name || ''
     const councilorCount = councilMembers.length
 
-    const councilor =
-      councilorCount > 1
-        ? `${firstCouncilor}等${councilorCount}人`
-        : firstCouncilor
-
     const summary =
-      typeof b.summary === 'string'
-        ? b.summary.replace(/<\/?[a-z][\s\S]*?>/gi, '').replace(/\r?\n/g, '')
+      typeof b.summaryFallback === 'string'
+        ? b.summaryFallback
+            .replace(/<\/?[a-z][\s\S]*?>/gi, '')
+            .replace(/\r?\n/g, '')
         : ''
 
     return {
       slug: b.slug,
       title: b.title,
       date: b.date ? formatDateToTaipeiTimezone(b.date) : '',
-      summary: summary || undefined,
+      dateTs: b.date ? new Date(b.date).getTime() : undefined,
+      summary,
       council: councilDisplayName,
-      councilor,
-      objectID: `${b.slug}_${councilName}`,
+      councilSlug: councilName,
+      councilRank: councilRankings[councilName as CouncilName] || 999,
+      meetingTerm,
+      councilor: firstCouncilor,
+      councilorCount,
+      objectID: `${b.slug}_${councilName}_${meetingTerm}`,
     }
   })
 }
