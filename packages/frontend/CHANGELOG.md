@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.17](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.16...@twreporter/congress-dashboard-frontend@1.10.0-rc.17) (2026-02-11)
+
+### Bug Fixes
+
+- **frontend:** enhance fetchTopicBySlug to sort related topics by bill count ([a75b2a2](https://github.com/twreporter/congress-dashboard-monorepo/commit/a75b2a26f2572a52b6abac3342bce198a7ff95aa))
+- **frontend:** topic slide sort by bill count ([c9a96c7](https://github.com/twreporter/congress-dashboard-monorepo/commit/c9a96c7d5bec5461a6fc970f6347f88a3ea8ba9c))
+- **frontend:** use council topic type from shared ([eb839fe](https://github.com/twreporter/congress-dashboard-monorepo/commit/eb839fee431ca1b09ae535647a110d3ef204c192))
+
+# [1.10.0-rc.16](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.15...@twreporter/congress-dashboard-frontend@1.10.0-rc.16) (2026-02-11)
+
+### Bug Fixes
+
+- **frontend:** address bill page spec change ([c149914](https://github.com/twreporter/congress-dashboard-monorepo/commit/c149914c8e0c1b94af6adaf3d0bdbfb854ff0535))
+- **frontend:** address comments ([98ee786](https://github.com/twreporter/congress-dashboard-monorepo/commit/98ee7867f72991ee6c8b82f3be401ef89285a410))
+- **frontend:** address comments ([5eefc72](https://github.com/twreporter/congress-dashboard-monorepo/commit/5eefc72589cccd9ea97942e89134028a9b8fe641))
+- **frontend:** councilor member district string ([c7d9a3d](https://github.com/twreporter/congress-dashboard-monorepo/commit/c7d9a3d1356c1b4e8885efa08a9236e292f46dbe))
+- **frontend:** some text chaneg and css style ([d542c93](https://github.com/twreporter/congress-dashboard-monorepo/commit/d542c93157db23ab3f118b935825cb5f11108bfb))
+- parsed summary on cms ([b736f4c](https://github.com/twreporter/congress-dashboard-monorepo/commit/b736f4c5b6b77c1d07245fe6fae5ba7882b84fb2))
+
 # [1.10.0-rc.15](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.14...@twreporter/congress-dashboard-frontend@1.10.0-rc.15) (2026-02-02)
 
 ### Bug Fixes

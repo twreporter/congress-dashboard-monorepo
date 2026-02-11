@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@2.1.0-rc.0...lawmaker-cli@2.1.0-rc.1) (2026-02-11)
+
+**Note:** Version bump only for package lawmaker-cli
+
+# [2.1.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@2.0.0...lawmaker-cli@2.1.0-rc.0) (2026-02-11)
+
+### Bug Fixes
+
+- **frontend:** address comments ([98ee786](https://github.com/twreporter/congress-dashboard-monorepo/commit/98ee7867f72991ee6c8b82f3be401ef89285a410))
+
+### Features
+
+- **cli:** support LAWMAKER\_\* env defaults ([132e2b4](https://github.com/twreporter/congress-dashboard-monorepo/commit/132e2b4d0c28b6d86e651dff2d547e4bdcb2faf9))
+
 # [2.0.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@2.0.0-rc.0...lawmaker-cli@2.0.0) (2025-10-20)
 
 **Note:** Version bump only for package lawmaker-cli

@@ -7,9 +7,10 @@ import type {
   FeaturedCouncilTopicData,
 } from '@/types/council-topic'
 import type { SitemapItemWithCity, KeystoneImage } from '@/types'
-
 // utils
 import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
+// @twreporter
+import { COUNCIL_TOPIC_TYPE } from '@twreporter/congress-dashboard-shared/lib/constants/council-topic'
 // lodash
 import { get } from 'lodash'
 const _ = {
@@ -107,6 +108,8 @@ export const fetchTopicBySlug = async ({
         relatedCityCouncilTopic {
           slug
           title
+          type
+          billCount
         }
       }
     }
@@ -135,7 +138,23 @@ export const fetchTopicBySlug = async ({
     const data = await keystoneFetch<{
       councilTopics: CouncilTopicFromRes[]
     }>(JSON.stringify({ query, variables }), false)
-    return _.get(data, 'data.councilTopics[0]')
+    const topic = _.get(data, 'data.councilTopics[0]')
+    if (topic?.relatedCityCouncilTopic) {
+      const sortByBillCountDesc = (
+        a: { billCount?: number },
+        b: { billCount?: number }
+      ) => (b.billCount ?? 0) - (a.billCount ?? 0)
+
+      const twreporterTopics = topic.relatedCityCouncilTopic
+        .filter((t) => t.type === COUNCIL_TOPIC_TYPE.twreporter)
+        .sort(sortByBillCountDesc)
+      const generalTopics = topic.relatedCityCouncilTopic
+        .filter((t) => t.type !== COUNCIL_TOPIC_TYPE.twreporter)
+        .sort(sortByBillCountDesc)
+
+      topic.relatedCityCouncilTopic = [...twreporterTopics, ...generalTopics]
+    }
+    return topic
   } catch (err) {
     throw new Error(
       `Failed to fetch council topic for slug: ${slug} in district ${districtSlug}, err: ${err}`
@@ -308,54 +327,56 @@ export const fetchFeaturedCouncilTopics = async ({
 
     const topics = data?.data?.councilTopics || []
 
-    return topics.map((topic) => {
-      // Count unique bills
-      const billCount = topic.bill?.length || 0
+    return topics
+      .map((topic) => {
+        // Count unique bills
+        const billCount = topic.bill?.length || 0
 
-      // Collect all council members from all bills with their bill count
-      const councilorBillCountMap = new Map<
-        number,
-        { councilor: CouncilMemberFromRes['councilor']; count: number }
-      >()
+        // Collect all council members from all bills with their bill count
+        const councilorBillCountMap = new Map<
+          number,
+          { councilor: CouncilMemberFromRes['councilor']; count: number }
+        >()
 
-      topic.bill?.forEach((bill) => {
-        bill.councilMember?.forEach((member) => {
-          const councilorId = member.councilor?.id
-          if (councilorId) {
-            const existing = councilorBillCountMap.get(councilorId)
-            if (existing) {
-              existing.count += 1
-            } else {
-              councilorBillCountMap.set(councilorId, {
-                councilor: member.councilor,
-                count: 1,
-              })
+        topic.bill?.forEach((bill) => {
+          bill.councilMember?.forEach((member) => {
+            const councilorId = member.councilor?.id
+            if (councilorId) {
+              const existing = councilorBillCountMap.get(councilorId)
+              if (existing) {
+                existing.count += 1
+              } else {
+                councilorBillCountMap.set(councilorId, {
+                  councilor: member.councilor,
+                  count: 1,
+                })
+              }
             }
-          }
+          })
         })
+
+        // Get unique councilor count
+        const councilorCount = councilorBillCountMap.size
+
+        // Sort by bill count and get top 5 avatars
+        const sortedCouncilors = Array.from(councilorBillCountMap.values())
+          .sort(sortByCountDesc)
+          .slice(0, 5)
+
+        const avatars = sortedCouncilors
+          .map(({ councilor }) => getImageLink(councilor))
+          .filter((url) => url !== '')
+
+        return {
+          title: topic.title,
+          slug: topic.slug,
+          city,
+          billCount,
+          councilorCount,
+          avatars,
+        }
       })
-
-      // Get unique councilor count
-      const councilorCount = councilorBillCountMap.size
-
-      // Sort by bill count and get top 5 avatars
-      const sortedCouncilors = Array.from(councilorBillCountMap.values())
-        .sort(sortByCountDesc)
-        .slice(0, 5)
-
-      const avatars = sortedCouncilors
-        .map(({ councilor }) => getImageLink(councilor))
-        .filter((url) => url !== '')
-
-      return {
-        title: topic.title,
-        slug: topic.slug,
-        city,
-        billCount,
-        councilorCount,
-        avatars,
-      }
-    })
+      .sort((a, b) => b.billCount - a.billCount)
   } catch (err) {
     throw new Error(
       `Failed to fetch featured council topics for city: ${city}, err: ${err}`

@@ -25,6 +25,8 @@ export type CouncilTopicForFilter = {
 export type RelatedTopic = {
   slug: string
   title: string
+  type?: string
+  billCount?: number
 }
 
 export type RelatedTopicInOtherCity = RelatedTopic & {
@@ -58,6 +60,8 @@ export type CouncilTopicFromRes = {
   relatedCityCouncilTopic?: {
     slug: string
     title: string
+    type?: string
+    billCount?: number
   }[]
   relatedCouncilTopic?: {
     slug: string

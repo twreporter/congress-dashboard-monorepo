@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.11](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.10...@twreporter/congress-dashboard-cms@1.6.0-rc.11) (2026-02-11)
+
+### Bug Fixes
+
+- **cms:** use council topic type from shared ([d514547](https://github.com/twreporter/congress-dashboard-monorepo/commit/d514547ffd864cbcc75f9c1149a307ac8f873028))
+
+# [1.6.0-rc.10](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.9...@twreporter/congress-dashboard-cms@1.6.0-rc.10) (2026-02-11)
+
+### Bug Fixes
+
+- **cms:** address review comments ([947a722](https://github.com/twreporter/congress-dashboard-monorepo/commit/947a722c87e387dd402c5abcc53f86ad1443c474))
+- **cms:** update attendee field label ([c9080b4](https://github.com/twreporter/congress-dashboard-monorepo/commit/c9080b49a1a047afefdbcdc216c61c011827c76e))
+- **cms:** update bill attendee length to 500 ([a3d15b5](https://github.com/twreporter/congress-dashboard-monorepo/commit/a3d15b5afca33272cb8d0de48ff06623063de27b))
+- parsed summary on cms ([b736f4c](https://github.com/twreporter/congress-dashboard-monorepo/commit/b736f4c5b6b77c1d07245fe6fae5ba7882b84fb2))
+
 # [1.6.0-rc.9](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.8...@twreporter/congress-dashboard-cms@1.6.0-rc.9) (2026-02-02)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms

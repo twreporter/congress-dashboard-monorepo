@@ -67,6 +67,8 @@ const Councilor: React.FC<CouncilorProps> = ({
           </DesktopAsideLeft>
           <DesktopAsideRight>
             <CouncilorStatistics
+              city={councilor.city}
+              councilorType={councilor.type}
               administrativeDistrict={councilor.administrativeDistrict}
               proposalSuccessCount={councilor.proposalSuccessCount}
               meetingTermCount={councilor.meetingTermCount}
@@ -87,6 +89,8 @@ const Councilor: React.FC<CouncilorProps> = ({
           <ContentBlock>
             <CouncilorInfo councilor={councilor} />
             <CouncilorStatistics
+              city={councilor.city}
+              councilorType={councilor.type}
               administrativeDistrict={councilor.administrativeDistrict}
               proposalSuccessCount={councilor.proposalSuccessCount}
               meetingTermCount={councilor.meetingTermCount}

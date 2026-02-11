@@ -122,7 +122,7 @@ const Card: React.FC<CardProps> = ({
             <BillCountNumber>
               {billCount > 999 ? '999+' : billCount}
             </BillCountNumber>
-            <P2 text="筆相關發言" weight={P2.Weight.BOLD} />
+            <P2 text="筆相關議案" weight={P2.Weight.BOLD} />
           </BillCount>
         </UpperSection>
         <LowerSection>

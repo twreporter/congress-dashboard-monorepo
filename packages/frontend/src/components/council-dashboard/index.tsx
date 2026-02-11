@@ -63,9 +63,11 @@ import {
   TabletAndAbove,
   MobileOnly,
 } from '@twreporter/react-components/lib/rwd'
+// constants
+import { InternalRoutes } from '@/constants/routes'
+import { CARD_HUMAN_TYPE } from '@/components/dashboard/card/human'
 // lodash
 import { find } from 'lodash'
-import { InternalRoutes } from '@/constants/routes'
 const _ = {
   find,
 }
@@ -427,7 +429,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                     <CardIssueRWD
                       key={`issue-card-${index}`}
                       title={title}
-                      subTitle={`共 ${billCount} 筆相關質詢（${councilorCount}人）`}
+                      subTitle={`共 ${billCount} 筆相關議案（${councilorCount}人）`}
                       legislators={councilors}
                       selected={activeCardIndex === index}
                       onClick={(e: React.MouseEvent<HTMLElement>) =>
@@ -469,6 +471,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                       onClick={(e: React.MouseEvent<HTMLElement>) =>
                         onClickCard(e, index)
                       }
+                      cardType={CARD_HUMAN_TYPE.Councilor}
                     />
                   )
                 )}

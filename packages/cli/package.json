@@ -1,6 +1,6 @@
 {
   "name": "lawmaker-cli",
-  "version": "2.0.0",
+  "version": "2.1.0-rc.1",
   "main": "lib/index.js",
   "scripts": {
     "build": "rm -rf lib && tsc && chmod +x lib/index.js",
@@ -8,6 +8,7 @@
     "lawmaker": "node lib/index.js"
   },
   "dependencies": {
+    "@twreporter/congress-dashboard-shared": "^0.3.0-rc.0",
     "@twreporter/errors": "^1.1.2",
     "algoliasearch": "^5.25.0",
     "axios": "^1.9.0",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@algolia/cli": "^4.0.8",
+    "@types/node": "^25.0.9",
     "ts-node": "^10.9.2",
     "tsc": "^2.0.4",
     "typescript": "^5.8.3"
