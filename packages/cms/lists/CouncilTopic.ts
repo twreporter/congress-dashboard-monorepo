@@ -15,6 +15,10 @@ import {
   CITY_OPTIONS,
   CITY_LABEL,
 } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+import {
+  COUNCIL_TOPIC_TYPE_OPTIONS,
+  COUNCIL_TOPIC_TYPE,
+} from '@twreporter/congress-dashboard-shared/lib/constants/council-topic'
 
 const listConfigurations = list({
   fields: {
@@ -39,11 +43,8 @@ const listConfigurations = list({
     }),
     type: select({
       label: '議題類型',
-      options: [
-        { label: '基本', value: 'general' },
-        { label: '精選', value: 'twreporter' },
-      ],
-      defaultValue: 'general',
+      options: COUNCIL_TOPIC_TYPE_OPTIONS,
+      defaultValue: COUNCIL_TOPIC_TYPE.general,
       validation: { isRequired: true },
     }),
     relatedLegislativeTopic: relationship({
