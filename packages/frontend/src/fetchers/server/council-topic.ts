@@ -7,9 +7,10 @@ import type {
   FeaturedCouncilTopicData,
 } from '@/types/council-topic'
 import type { SitemapItemWithCity, KeystoneImage } from '@/types'
-
 // utils
 import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
+// @twreporter
+import { COUNCIL_TOPIC_TYPE } from '@twreporter/congress-dashboard-shared/lib/constants/council-topic'
 // lodash
 import { get } from 'lodash'
 const _ = {
@@ -145,10 +146,10 @@ export const fetchTopicBySlug = async ({
       ) => (b.billCount ?? 0) - (a.billCount ?? 0)
 
       const twreporterTopics = topic.relatedCityCouncilTopic
-        .filter((t) => t.type === 'twreporter')
+        .filter((t) => t.type === COUNCIL_TOPIC_TYPE.twreporter)
         .sort(sortByBillCountDesc)
       const generalTopics = topic.relatedCityCouncilTopic
-        .filter((t) => t.type !== 'twreporter')
+        .filter((t) => t.type !== COUNCIL_TOPIC_TYPE.twreporter)
         .sort(sortByBillCountDesc)
 
       topic.relatedCityCouncilTopic = [...twreporterTopics, ...generalTopics]
