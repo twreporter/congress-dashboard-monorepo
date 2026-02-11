@@ -3,6 +3,13 @@ import React from 'react'
 import styled from 'styled-components'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
+import { getDistrictsByCity } from '@twreporter/congress-dashboard-shared/lib/constants/city-district'
+import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+import {
+  MEMBER_TYPE,
+  MEMBER_TYPE_LABEL,
+  MemberType,
+} from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
 // components
 import { P1Gray800 } from '@/components/legislator/styles'
 import Tooltip from '@/components/dashboard/card/tooltip'
@@ -29,18 +36,32 @@ const AdministrativeDistrict = styled.div`
 `
 
 type CouncilorStatisticsProps = {
+  city: string
+  councilorType: MemberType
   administrativeDistrict: string[]
   proposalSuccessCount: number
   meetingTermCount: number
   meetingTermCountInfo: string
 }
 const CouncilorStatistics: React.FC<CouncilorStatisticsProps> = ({
+  city,
+  councilorType,
   administrativeDistrict,
   proposalSuccessCount,
   meetingTermCount,
   meetingTermCountInfo,
 }) => {
-  const administrativeDistrictString = administrativeDistrict.join('、')
+  const allDistricts = getDistrictsByCity(city)
+  let administrativeDistrictString =
+    allDistricts.length === administrativeDistrict.length
+      ? `${CITY_LABEL[city]}全區`
+      : administrativeDistrict.join('、')
+  if (
+    councilorType === MEMBER_TYPE.highlandAboriginal ||
+    councilorType === MEMBER_TYPE.lowlandAboriginal
+  ) {
+    administrativeDistrictString += `（${MEMBER_TYPE_LABEL[councilorType]}）`
+  }
   const isOverMaxCount = proposalSuccessCount > 999 || meetingTermCount > 999
   return (
     <StatisticContainer>

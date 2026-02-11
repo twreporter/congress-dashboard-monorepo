@@ -8244,6 +8244,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^25.0.9":
+  version: 25.2.3
+  resolution: "@types/node@npm:25.2.3"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10c0/925833029ce0bb4a72c36f90b93287184d3511aeb0fa60a994ae94b5430c22f9be6693d67d210df79267cb54c6f6978caaefb149d99ab5f83af5827ba7cb9822
+  languageName: node
+  linkType: hard
+
 "@types/normalize-package-data@npm:^2.4.0":
   version: 2.4.4
   resolution: "@types/normalize-package-data@npm:2.4.4"
@@ -16213,7 +16222,9 @@ __metadata:
   resolution: "lawmaker-cli@workspace:packages/cli"
   dependencies:
     "@algolia/cli": "npm:^4.0.8"
+    "@twreporter/congress-dashboard-shared": "npm:^0.2.1-rc.1"
     "@twreporter/errors": "npm:^1.1.2"
+    "@types/node": "npm:^25.0.9"
     algoliasearch: "npm:^5.25.0"
     axios: "npm:^1.9.0"
     commander: "npm:^11.0.0"
@@ -24458,6 +24469,13 @@ __metadata:
   version: 6.20.0
   resolution: "undici-types@npm:6.20.0"
   checksum: 10c0/68e659a98898d6a836a9a59e6adf14a5d799707f5ea629433e025ac90d239f75e408e2e5ff086afc3cace26f8b26ee52155293564593fbb4a2f666af57fc59bf
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~7.16.0":
+  version: 7.16.0
+  resolution: "undici-types@npm:7.16.0"
+  checksum: 10c0/3033e2f2b5c9f1504bdc5934646cb54e37ecaca0f9249c983f7b1fc2e87c6d18399ebb05dc7fd5419e02b2e915f734d872a65da2e3eeed1813951c427d33cc9a
   languageName: node
   linkType: hard
 
