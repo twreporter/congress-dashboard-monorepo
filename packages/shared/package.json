@@ -9,8 +9,7 @@
   "scripts": {
     "clean": "rm -rf lib",
     "build": "yarn clean && tsup src/*",
-    "prepublishOnly": "yarn build",
-    "publish": "npm publish"
+    "prepublishOnly": "yarn build"
   },
   "type": "commonjs",
   "main": "lib/index.js",
