@@ -2,6 +2,11 @@
   "name": "lawmaker-cli",
   "version": "2.1.0-rc.3",
   "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/twreporter/congress-dashboard-monorepo.git",
+    "directory": "packages/cli"
+  },
   "scripts": {
     "build": "rm -rf lib && tsc && chmod +x lib/index.js",
     "dev": "ts-node src/index.ts",
