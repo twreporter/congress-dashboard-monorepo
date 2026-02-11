@@ -23,6 +23,8 @@ import {
   DateAndTitle,
   ControlTabDate,
   ControlTabTitle,
+  ControlItems,
+  IvodBlock,
 } from '@/components/speech/styles'
 // components
 import AsideInfo from '@/components/bill/aside-info'
@@ -46,7 +48,7 @@ import { openFeedback } from '@/utils/feedback'
 // types
 import type { BillFromRes } from '@/types/council-bill'
 // @twreporter
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import { Source } from '@twreporter/react-components/lib/icon'
 
 const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
   ${mq.desktopAndAbove`
@@ -57,12 +59,6 @@ const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
 const TabletAndBelowWithFlex = styled(TabletAndBelow)`
   ${mq.tabletAndBelow`
     display: flex !important;
-  `}
-`
-const LeadingContainerWithSeparationLine = styled(LeadingContainer)`
-  ${mq.desktopAndAbove`
-    border-bottom: 1px solid ${colorGrayscale.gray300};
-    padding-bottom: 40px;
   `}
 `
 
@@ -158,12 +154,28 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
             <ControlTabDate weight={P1.Weight.BOLD} text={date} />
             <ControlTabTitle weight={P1.Weight.BOLD} text={title} />
           </DateAndTitle>
+          <ControlItems>
+            <CustomPillButton
+              onClick={() => window.open(sourceLink, '_blank')}
+              leftIconComponent={<Source releaseBranch={releaseBranch} />}
+              text={'資料來源'}
+            />
+          </ControlItems>
         </ControlTab>
       </ControlTabContainer>
-      <LeadingContainerWithSeparationLine ref={leadingRef}>
+      <LeadingContainer ref={leadingRef}>
         <SpeechDate date={date} />
         <SpeechTitle title={title} />
-      </LeadingContainerWithSeparationLine>
+        <DesktopAndAboveWithFlex>
+          <IvodBlock>
+            <CustomPillButton
+              onClick={() => window.open(sourceLink, '_blank')}
+              leftIconComponent={<Source releaseBranch={releaseBranch} />}
+              text={'資料來源'}
+            />
+          </IvodBlock>
+        </DesktopAndAboveWithFlex>
+      </LeadingContainer>
       <BodyContainer>
         <DesktopAndAboveWithFlex>
           <AsideBlock>
@@ -171,7 +183,6 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
             <AsideToolbar
               onFontSizeChange={cycleFontSize}
               currentFontSize={fontSize}
-              sourceLink={sourceLink}
             />
           </AsideBlock>
         </DesktopAndAboveWithFlex>
@@ -183,7 +194,7 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
             summary={summary}
             fontSizeOffset={FontSizeOffset[fontSize]}
           />
-          <SeparationCurve />
+          {summary.length > 0 && <SeparationCurve />}
           <Content
             content={content}
             fontSizeOffset={FontSizeOffset[fontSize]}

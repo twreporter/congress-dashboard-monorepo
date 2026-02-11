@@ -30,8 +30,9 @@ function toPlainTextSummary(input: unknown, limit = 100): string | null {
       ? JSON.stringify(input)
       : String(input)
 
+  const listRegrex = /<\/?(ul|li)[^>]*>/g
   const lineBreakRegex = /\\n|\r?\n/g
-  const summary = raw.replace(lineBreakRegex, ' ')
+  const summary = raw.replace(listRegrex, '').replace(lineBreakRegex, ' ')
   return summary.length > limit ? summary.slice(0, limit) : summary
 }
 
@@ -72,7 +73,10 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve(item) {
-          const value = item.summary ?? item.content ?? null
+          const value =
+            typeof item.summary === 'string' && item.summary.length > 0
+              ? item.summary
+              : item.content ?? null
           return toPlainTextSummary(value)
         },
       }),
@@ -82,7 +86,8 @@ const listConfigurations = list({
       label: '內文',
     }),
     attendee: text({
-      label: '列席質詢對象',
+      label: '連署人',
+      db: { nativeType: 'VarChar(500)' },
     }),
     sourceLink: json({
       label: '資料來源連結',
