@@ -12,6 +12,61 @@ const client = algoliasearch(
   process.env.ALGOLIA_WRITE_KEY
 )
 
+const ALGOLIA_INDEX_NAMES = {
+  speech: 'speech',
+  topic: 'topic',
+  legislator: 'legislator',
+  councilor: 'councilor',
+  councilTopic: 'council-topic',
+  councilBill: 'council-bill',
+} as const
+
+type AlgoliaIndexName =
+  (typeof ALGOLIA_INDEX_NAMES)[keyof typeof ALGOLIA_INDEX_NAMES]
+
+type RecordType =
+  | 'speech'
+  | 'topic'
+  | 'legislator'
+  | 'councilor'
+  | 'council topic'
+  | 'council bill'
+
+/**
+ * Generic upload function for Algolia records.
+ * Handles dryrun mode and provides consistent logging.
+ */
+async function uploadRecords<T extends Record<string, any>>(
+  indexName: AlgoliaIndexName,
+  records: T[],
+  recordType: RecordType,
+  getLogFields?: (record: T) => Record<string, any>
+) {
+  if (dryrunState.isEnabled()) {
+    console.log(
+      `[dryrun] ${recordType} records to upload: `,
+      JSON.stringify(records, null, 2)
+    )
+  } else {
+    console.log(
+      `Try to upload the following ${recordType} records: `,
+      JSON.stringify(
+        getLogFields
+          ? records.map(getLogFields)
+          : records.map((r) => ({ objectID: r.objectID }))
+      )
+    )
+    const result = await client.saveObjects({
+      indexName,
+      objects: records,
+    })
+    console.log(
+      `✅ Uploaded ${records.length} ${recordType} records to Algolia`
+    )
+    return result
+  }
+}
+
 export type SpeechRecord = {
   slug: string
   title: string
@@ -89,163 +144,44 @@ export type CouncilorRecord = {
 }
 
 export async function uploadSpeeches(records: SpeechRecord[]) {
-  if (dryrunState.isEnabled()) {
-    console.log(
-      '[dryrun] speech records to upload: ',
-      JSON.stringify(records, null, 2)
-    )
-  } else {
-    console.log(
-      'Try to upload the following speech records: ',
-      JSON.stringify(
-        records.map((r) => {
-          return {
-            slug: r.slug,
-            meetingTerm: r.meetingTerm,
-            sessionTerm: r.sessionTerm,
-          }
-        })
-      )
-    )
-    const result = await client.saveObjects({
-      indexName: 'speech',
-      objects: records,
-    })
-    console.log(`✅ Uploaded ${records.length} speech records to Algolia`)
-    return result
-  }
+  return uploadRecords(ALGOLIA_INDEX_NAMES.speech, records, 'speech', (r) => ({
+    slug: r.slug,
+    meetingTerm: r.meetingTerm,
+    sessionTerm: r.sessionTerm,
+  }))
 }
 
 export async function uploadTopics(records: TopicRecord[]) {
-  if (dryrunState.isEnabled()) {
-    console.log(
-      '[dryrun] topic records to upload: ',
-      JSON.stringify(records, null, 2)
-    )
-  } else {
-    console.log(
-      'Try to upload the following topic records: ',
-      JSON.stringify(
-        records.map((r) => {
-          return {
-            slug: r.slug,
-            meetingTerm: r.meetingTerm,
-          }
-        })
-      )
-    )
-    const result = await client.saveObjects({
-      indexName: 'topic',
-      objects: records,
-    })
-    console.log(`✅ Uploaded ${records.length} topic records to Algolia`)
-    return result
-  }
+  return uploadRecords(ALGOLIA_INDEX_NAMES.topic, records, 'topic', (r) => ({
+    slug: r.slug,
+    meetingTerm: r.meetingTerm,
+  }))
 }
 
 export async function uploadLegislators(records: LegislatorRecord[]) {
-  if (dryrunState.isEnabled()) {
-    console.log(
-      '[dryrun] legislator records to upload: ',
-      JSON.stringify(records, null, 2)
-    )
-  } else {
-    console.log(
-      'Try to upload the following legislator records: ',
-      JSON.stringify(
-        records.map((r) => {
-          return {
-            slug: r.slug,
-            meetingTerm: r.meetingTerm,
-          }
-        })
-      )
-    )
-    const result = await client.saveObjects({
-      indexName: 'legislator',
-      objects: records,
+  return uploadRecords(
+    ALGOLIA_INDEX_NAMES.legislator,
+    records,
+    'legislator',
+    (r) => ({
+      slug: r.slug,
+      meetingTerm: r.meetingTerm,
     })
-    console.log(`✅ Uploaded ${records.length} legislator records to Algolia`)
-    return result
-  }
+  )
 }
 
 export async function uploadCouncilors(records: CouncilorRecord[]) {
-  if (dryrunState.isEnabled()) {
-    console.log(
-      '[dryrun] councilor records to upload: ',
-      JSON.stringify(records, null, 2)
-    )
-  } else {
-    console.log(
-      'Try to upload the following councilor records: ',
-      JSON.stringify(
-        records.map((r) => {
-          return {
-            objectID: r.objectID,
-          }
-        })
-      )
-    )
-    const result = await client.saveObjects({
-      indexName: 'councilor',
-      objects: records,
-    })
-    console.log(`✅ Uploaded ${records.length} councilor records to Algolia`)
-    return result
-  }
+  return uploadRecords(ALGOLIA_INDEX_NAMES.councilor, records, 'councilor')
 }
 
 export async function uploadCouncilTopics(records: CouncilTopicRecord[]) {
-  if (dryrunState.isEnabled()) {
-    console.log(
-      '[dryrun] council topic records to upload: ',
-      JSON.stringify(records, null, 2)
-    )
-  } else {
-    console.log(
-      'Try to upload the following council topic records: ',
-      JSON.stringify(
-        records.map((r) => {
-          return {
-            objectID: r.objectID,
-          }
-        })
-      )
-    )
-    const result = await client.saveObjects({
-      indexName: 'council-topic',
-      objects: records,
-    })
-    console.log(
-      `✅ Uploaded ${records.length} council topic records to Algolia`
-    )
-    return result
-  }
+  return uploadRecords(
+    ALGOLIA_INDEX_NAMES.councilTopic,
+    records,
+    'council topic'
+  )
 }
 
 export async function uploadCouncilBills(records: CouncilBillRecord[]) {
-  if (dryrunState.isEnabled()) {
-    console.log(
-      '[dryrun] council bill records to upload: ',
-      JSON.stringify(records, null, 2)
-    )
-  } else {
-    console.log(
-      'Try to upload the following council bill records: ',
-      JSON.stringify(
-        records.map((r) => {
-          return {
-            objectID: r.objectID,
-          }
-        })
-      )
-    )
-    const result = await client.saveObjects({
-      indexName: 'council-bill',
-      objects: records,
-    })
-    console.log(`✅ Uploaded ${records.length} council bill records to Algolia`)
-    return result
-  }
+  return uploadRecords(ALGOLIA_INDEX_NAMES.councilBill, records, 'council bill')
 }
