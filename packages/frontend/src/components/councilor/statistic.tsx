@@ -4,7 +4,10 @@ import styled from 'styled-components'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 import { getDistrictsByCity } from '@twreporter/congress-dashboard-shared/lib/constants/city-district'
-import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+import {
+  CITY_LABEL,
+  type City,
+} from '@twreporter/congress-dashboard-shared/lib/constants/city'
 import {
   MEMBER_TYPE,
   MEMBER_TYPE_LABEL,
@@ -36,7 +39,7 @@ const AdministrativeDistrict = styled.div`
 `
 
 type CouncilorStatisticsProps = {
-  city: string
+  city: City
   councilorType: MemberType
   administrativeDistrict: string[]
   proposalSuccessCount: number
