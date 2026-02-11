@@ -1,6 +1,6 @@
 import type { KeystoneImage, RelatedLink } from '@/types/index'
 import type { CouncilDistrict } from '@/types/council'
-import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/councilor-member'
 
 export type CouncilorMemberMeta = {
   councilor: {
@@ -11,7 +11,7 @@ export type CouncilorMemberMeta = {
 export type CouncilorType = MemberType
 
 export type CouncilorMemberData = {
-  type: string
+  type: CouncilorType
   constituency?: number
   administrativeDistrict?: string[]
   note?: string
@@ -43,7 +43,7 @@ export type CouncilorForLawmaker = {
   name: string
   avatar: string
   city: CouncilDistrict
-  type: string
+  type: CouncilorType
   constituency?: number
   administrativeDistrict: string[]
   note?: string
