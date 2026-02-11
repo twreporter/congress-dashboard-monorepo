@@ -53,7 +53,10 @@ function formatDateToTaipeiTimezone(isoDateString: string): string {
 export function transferSpeechModelToRecord(
   speechModels: SpeechModel[]
 ): SpeechRecord[] {
-  return speechModels.map((s) => {
+  // Filter out records without required meeting term (defensive)
+  const validModels = speechModels.filter((s) => s.legislativeMeeting?.term)
+
+  return validModels.map((s) => {
     const summary = s.summary
       // remove html tags
       ?.replace(/<\/?[a-z][\s\S]*?>/gi, '')
@@ -65,7 +68,7 @@ export function transferSpeechModelToRecord(
       title: s.title,
       date: s.date ? formatDateToTaipeiTimezone(s.date) : '',
       dateTs: s.date ? new Date(s.date).getTime() : undefined,
-      meetingTerm: s.legislativeMeeting?.term as number,
+      meetingTerm: s.legislativeMeeting!.term,
       sessionTerm: s.legislativeMeetingSession?.term,
       legislatorName: s.legislativeYuanMember?.legislator?.name,
       summary,
@@ -76,7 +79,12 @@ export function transferSpeechModelToRecord(
 export function transferLegislatorModelToRecord(
   legislatorModels: LegislatorModel[]
 ): LegislatorRecord[] {
-  return legislatorModels.map((l) => {
+  // Filter out records without legislator identity (defensive)
+  const validModels = legislatorModels.filter(
+    (l) => l.legislator?.slug && l.legislator?.name
+  )
+
+  return validModels.map((l) => {
     const speechDate = l.speeches?.[0]?.date
     let desc = ''
     let shortDesc = ''
@@ -183,8 +191,11 @@ export function transferTopicModelToRecord(
   for (const topic of topicModels) {
     const speeches = topic.speeches
     for (const speech of speeches) {
+      // Skip speeches without member info (defensive)
+      if (!speech.legislativeYuanMember) continue
+
       // Composite key to separate topics by meeting term
-      const topicMapKey = `${topic.slug}_${speech.legislativeMeeting?.term}`
+      const topicMapKey = `${topic.slug}_${speech.legislativeMeeting.term}`
 
       // Initialize topic info in map if not yet present
       if (!topicMap.has(topicMapKey)) {
@@ -193,7 +204,7 @@ export function transferTopicModelToRecord(
           slug: topic.slug,
           title: topic.title,
           lastSpeechAt: speech.date,
-          meetingTerm: speech.legislativeMeeting?.term,
+          meetingTerm: speech.legislativeMeeting.term,
           // Initialize member info in map
           memberMap: new Map(),
         })
@@ -209,7 +220,12 @@ export function transferTopicModelToRecord(
         }
       }
 
-      const member = speech.legislativeYuanMember!
+      const member = speech.legislativeYuanMember
+      const memberName = member.legislator?.name
+
+      // Skip members without valid legislator names
+      if (!memberName) continue
+
       const memberMap = topicMap.get(topicMapKey)?.memberMap
       const memberId = member.id.toString()
       const existing = memberMap?.get(memberId)
@@ -221,7 +237,7 @@ export function transferTopicModelToRecord(
         // Otherwise, add a new member speech record
         memberMap?.set(memberId, {
           memberId,
-          name: member.legislator?.name ?? '',
+          name: memberName,
           count: 1,
         })
       }
@@ -394,8 +410,12 @@ export function transferCouncilTopicModelToRecord(
       const councilMembers = bill.councilMember || []
 
       for (const member of councilMembers) {
+        const memberName = member.councilor?.name
+
+        // Skip members without valid councilor names
+        if (!memberName) continue
+
         const memberId = member.id.toString()
-        const memberName = member.councilor?.name || ''
         const existing = memberMap?.get(memberId)
 
         if (existing) {
