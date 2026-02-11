@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.17](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.16...@twreporter/congress-dashboard-frontend@1.10.0-rc.17) (2026-02-11)
+
+### Bug Fixes
+
+- **frontend:** enhance fetchTopicBySlug to sort related topics by bill count ([a75b2a2](https://github.com/twreporter/congress-dashboard-monorepo/commit/a75b2a26f2572a52b6abac3342bce198a7ff95aa))
+- **frontend:** topic slide sort by bill count ([c9a96c7](https://github.com/twreporter/congress-dashboard-monorepo/commit/c9a96c7d5bec5461a6fc970f6347f88a3ea8ba9c))
+- **frontend:** use council topic type from shared ([eb839fe](https://github.com/twreporter/congress-dashboard-monorepo/commit/eb839fee431ca1b09ae535647a110d3ef204c192))
+
 # [1.10.0-rc.16](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.15...@twreporter/congress-dashboard-frontend@1.10.0-rc.16) (2026-02-11)
 
 ### Bug Fixes

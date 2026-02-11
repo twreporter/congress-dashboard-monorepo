@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.1-rc.1...@twreporter/congress-dashboard-shared@0.3.0-rc.0) (2026-02-11)
+
+### Features
+
+- **shared:** council topic type ([088f19b](https://github.com/twreporter/congress-dashboard-monorepo/commit/088f19ba841b826547511f7aeae0c509153bde2e))
+
 ## [0.2.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.1-rc.0...@twreporter/congress-dashboard-shared@0.2.1-rc.1) (2026-02-02)
 
 ### Bug Fixes
