@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-cms",
-  "version": "1.6.0-rc.13",
+  "version": "1.6.0-rc.14",
   "private": true,
   "scripts": {
     "dev": "keystone dev",

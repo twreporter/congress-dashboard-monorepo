@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.14](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.13...@twreporter/congress-dashboard-cms@1.6.0-rc.14) (2026-02-12)
+
+### Bug Fixes
+
+- **cms:** remove H2 md syntax in summaryFallback ([a3e8480](https://github.com/twreporter/congress-dashboard-monorepo/commit/a3e8480270c42864064681958810c632c430ea0a))
+
 # [1.6.0-rc.13](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.12...@twreporter/congress-dashboard-cms@1.6.0-rc.13) (2026-02-11)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms
