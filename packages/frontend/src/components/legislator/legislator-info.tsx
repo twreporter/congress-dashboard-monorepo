@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 // @twreporter
 import {
   colorGrayscale,
@@ -23,6 +23,10 @@ import PartyTag from '@/components/dashboard/card/party-tag'
 import { TagSize } from '@/components/dashboard/enum'
 // types
 import type { LegislatorForLawmaker } from '@/types/legislator'
+import {
+  CARD_HUMAN_TYPE,
+  type CardHumanType,
+} from '@/components/dashboard/card/human'
 
 export const InfoContainer = styled.div`
   display: flex;
@@ -63,7 +67,7 @@ export const InfoImageContainer = styled.div`
   `}
 `
 
-export const Avatar = styled.img`
+export const Avatar = styled.img<{ $cardType?: CardHumanType }>`
   width: 300px;
   aspect-ratio: 3.5 / 4.5;
   border-radius: 8px 8px 0 0;
@@ -83,6 +87,11 @@ export const Avatar = styled.img`
     aspect-ratio: 1/1;
     border-radius: 50%;
   `}
+  ${(props) =>
+    props.$cardType === CARD_HUMAN_TYPE.Councilor &&
+    css`
+      object-fit: cover;
+    `}
 `
 
 export const Mask = styled.div`
@@ -177,7 +186,10 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
   return (
     <InfoContainer>
       <InfoImageContainer>
-        <Avatar src={legislator.avatar} />
+        <Avatar
+          src={legislator.avatar}
+          $cardType={CARD_HUMAN_TYPE.Legislator}
+        />
         <DesktopAndAbove>
           <Mask />
         </DesktopAndAbove>
