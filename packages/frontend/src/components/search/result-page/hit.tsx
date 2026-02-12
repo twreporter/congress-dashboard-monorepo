@@ -289,7 +289,7 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
     <Link href={`${InternalRoutes.Topic}/${hit.slug}${meetingTermParam}`}>
       <Container>
         <Text>
-          <p>議題</p>
+          <p>議題｜立法院</p>
           <p>
             <Highlight
               classNames={{

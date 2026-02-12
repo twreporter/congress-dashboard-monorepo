@@ -62,14 +62,17 @@ const SearchResultsContainer = styled.div`
 
   ${mq.desktopAndAbove`
     padding-top: 40px;
+    padding-bottom: 120px;
   `}
 
   ${mq.tabletOnly`
     padding-top: 32px;
+    padding-bottom: 120px;
   `}
 
   ${mq.mobileOnly`
     padding-top: 20px;
+    padding-bottom: 64px;
   `}
 `
 
@@ -324,7 +327,11 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
           {renderFilterByTab()}
         </SearchTabBar>
         <HitsContainer $hidden={activeTab !== searchStages.All}>
-          <MultiStageHits query={query} scope={scopeFilterValue} />
+          <MultiStageHits
+            key={`${scopeFilterValue}-${query}`}
+            query={query}
+            scope={scopeFilterValue}
+          />
         </HitsContainer>
         {mountedTabs.has(searchStages.Speech) && (
           <HitsContainer $hidden={activeTab !== searchStages.Speech}>

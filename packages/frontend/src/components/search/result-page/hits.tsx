@@ -59,13 +59,14 @@ const Container = styled.div`
 const LoadMoreBlock = styled.div`
   width: fit-content;
   padding-top: 64px;
-  padding-bottom: 120px;
   margin-left: auto;
   margin-right: auto;
 `
 
 const PillButton = styled(_PillButton)`
-  padding: 8px 114px;
+  && {
+    padding: 8px 114px;
+  }
 `
 
 const EmptyStateContainer = styled.div`
@@ -167,14 +168,6 @@ export const MultiStageHits = ({
 
   const [stage, setStage] = useState<SearchStage>(searchStagesList[0])
 
-  // Reset stage when scope changes
-  useEffect(() => {
-    // If current stage is not in new searchStagesList, reset to first stage
-    if (!searchStagesList.includes(stage)) {
-      setStage(searchStagesList[0])
-    }
-  }, [searchStagesList, stage])
-
   if (!searchClient) {
     // @TODO render placeholder
     return null
@@ -185,9 +178,6 @@ export const MultiStageHits = ({
       <InstantSearch
         indexName={searchStagesList[0] as IndexName}
         searchClient={searchClient}
-        future={{
-          preserveSharedStateOnUnmount: true,
-        }}
       >
         <EmptyResultChecker indexNames={searchStagesList as IndexName[]} />
 
@@ -197,10 +187,7 @@ export const MultiStageHits = ({
           searchStages.Legislator,
           searchStagesList
         ) && (
-          <Index
-            key={`${indexNames.Legislator}-${query}`}
-            indexName={indexNames.Legislator}
-          >
+          <Index indexName={indexNames.Legislator}>
             <PrefillQuery query={query} />
             <Configure hitsPerPage={hitsPerPage} />
             <LegislatorHitsList />
@@ -209,10 +196,7 @@ export const MultiStageHits = ({
 
         {/* Councilor Index */}
         {shouldRenderStage(stage, searchStages.Councilor, searchStagesList) && (
-          <Index
-            key={`${indexNames.Councilor}-${query}-${councilFilter}`}
-            indexName={indexNames.Councilor}
-          >
+          <Index indexName={indexNames.Councilor}>
             <PrefillQuery query={query} />
             <Configure hitsPerPage={hitsPerPage} filters={councilFilter} />
             <CouncilorHitsList />
@@ -221,10 +205,7 @@ export const MultiStageHits = ({
 
         {/* Topic Index */}
         {shouldRenderStage(stage, searchStages.Topic, searchStagesList) && (
-          <Index
-            key={`${indexNames.Topic}-${query}`}
-            indexName={indexNames.Topic}
-          >
+          <Index indexName={indexNames.Topic}>
             <PrefillQuery query={query} />
             <Configure hitsPerPage={hitsPerPage} />
             <TopicHitsList />
@@ -237,10 +218,7 @@ export const MultiStageHits = ({
           searchStages.CouncilTopic,
           searchStagesList
         ) && (
-          <Index
-            key={`${indexNames.CouncilTopic}-${query}-${councilFilter}`}
-            indexName={indexNames.CouncilTopic}
-          >
+          <Index indexName={indexNames.CouncilTopic}>
             <PrefillQuery query={query} />
             <Configure hitsPerPage={hitsPerPage} filters={councilFilter} />
             <CouncilTopicHitsList />
@@ -249,10 +227,7 @@ export const MultiStageHits = ({
 
         {/* Speech Index */}
         {shouldRenderStage(stage, searchStages.Speech, searchStagesList) && (
-          <Index
-            key={`${indexNames.Speech}-${query}`}
-            indexName={indexNames.Speech}
-          >
+          <Index indexName={indexNames.Speech}>
             <PrefillQuery query={query} />
             <Configure hitsPerPage={hitsPerPage} />
             <SpeechHitsList />
@@ -265,10 +240,7 @@ export const MultiStageHits = ({
           searchStages.CouncilBill,
           searchStagesList
         ) && (
-          <Index
-            key={`${indexNames.CouncilBill}-${query}-${councilFilter}`}
-            indexName={indexNames.CouncilBill}
-          >
+          <Index indexName={indexNames.CouncilBill}>
             <PrefillQuery query={query} />
             <Configure hitsPerPage={hitsPerPage} filters={councilFilter} />
             <CouncilBillHitsList />
@@ -458,13 +430,7 @@ export const Hits = ({
 
   return (
     <Container ref={containerRef} className={className}>
-      <InstantSearch
-        indexName={indexName}
-        searchClient={searchClient}
-        future={{
-          preserveSharedStateOnUnmount: false,
-        }}
-      >
+      <InstantSearch indexName={indexName} searchClient={searchClient}>
         <PrefillQuery query={query} />
         <EmptyResultChecker indexNames={[indexName]} />
         <Configure hitsPerPage={10} filters={filters} />
