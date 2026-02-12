@@ -49,6 +49,7 @@ import {
   FollowMoreErrorState,
 } from '@/components/sidebar/error-state'
 import NoIssueState from '@/components/sidebar/no-issue-state'
+import { groupSummary } from '@/components/sidebar'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 import {
@@ -57,11 +58,9 @@ import {
 } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
 // lodash
-import { get, groupBy, forEach } from 'lodash'
+import { get } from 'lodash'
 const _ = {
   get,
-  groupBy,
-  forEach,
 }
 
 // sidebar issue component
@@ -121,20 +120,6 @@ const FollowMoreTags = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
-
-export function groupSummary(summaryList: SummaryCardProps[]) {
-  const result: CardsOfTheYearProps[] = []
-  const summaryGroupByYear = _.groupBy(summaryList, (summary) =>
-    new Date(summary.date).getFullYear()
-  )
-  _.forEach(
-    summaryGroupByYear,
-    (summarys: SummaryCardProps[], year: number | string) =>
-      result.push({ year: Number(year), cards: summarys })
-  )
-
-  return result
-}
 
 const prepareSummaryProps = (rawBillData?: BillMeta[]): SummaryCardProps[] => {
   if (!rawBillData) return []
