@@ -14,11 +14,8 @@ import { TagSize } from '@/components/dashboard/enum'
 // types
 import type { CouncilorForLawmaker } from '@/types/councilor'
 // constants
-import {
-  MEMBER_TYPE,
-  MEMBER_TYPE_LABEL,
-} from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
 import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+import { CARD_HUMAN_TYPE } from '@/components/dashboard/card/human'
 // styles
 import { H3Gray900, P1Gray800 } from '@/components/legislator/styles'
 import {
@@ -45,18 +42,14 @@ const CouncilorInfo: React.FC<CouncilorInfoProps> = ({ councilor }) => {
     window.open(councilor.externalLink, '_blank')
   }
 
-  const constituency =
-    councilor.type === MEMBER_TYPE.highlandAboriginal ||
-    councilor.type === MEMBER_TYPE.lowlandAboriginal
-      ? MEMBER_TYPE_LABEL[councilor.type]
-      : `${CITY_LABEL[councilor.councilMeeting.city]}第${
-          councilor.constituency
-        }選區`
+  const constituency = `${CITY_LABEL[councilor.councilMeeting.city]}第${
+    councilor.constituency
+  }選區`
 
   return (
     <InfoContainer>
       <InfoImageContainer>
-        <Avatar src={councilor.avatar} />
+        <Avatar src={councilor.avatar} $cardType={CARD_HUMAN_TYPE.Councilor} />
         <DesktopAndAbove>
           <Mask />
         </DesktopAndAbove>
