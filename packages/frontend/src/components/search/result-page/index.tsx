@@ -90,7 +90,7 @@ const BarAndResults = styled.div`
   margin-right: auto;
 `
 
-const HitsContainer = styled.div<{ $hidden: boolean }>`
+const HitsContainer = styled.div<{ $hidden?: boolean }>`
   width: 100%;
 
   ${({ $hidden }) => {
@@ -181,6 +181,16 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
   )
   const [scopeFilterLabel, setScopeFilterLabel] = useState('立法院與六都議會')
   const [showScopeModal, setShowScopeModal] = useState(false)
+
+  // Track which tabs have been mounted (for lazy mounting)
+  const [mountedTabs, setMountedTabs] = useState<Set<SearchStage>>(
+    new Set([searchStages.All])
+  )
+
+  // Mark tab as mounted when activated
+  useEffect(() => {
+    setMountedTabs((prev) => new Set(prev).add(activeTab))
+  }, [activeTab])
 
   // Build council filter for specific council scopes
   const councilFilter = buildCouncilFilter(scopeFilterValue)
@@ -316,20 +326,26 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
         <HitsContainer $hidden={activeTab !== searchStages.All}>
           <MultiStageHits query={query} scope={scopeFilterValue} />
         </HitsContainer>
-        <HitsContainer $hidden={activeTab !== searchStages.Speech}>
-          <Hits
-            indexName={indexNames.Speech}
-            query={query}
-            filters={buildLegislativeSpeechFilters(filterValue)}
-          />
-        </HitsContainer>
-        <HitsContainer $hidden={activeTab !== searchStages.CouncilBill}>
-          <Hits
-            indexName={indexNames.CouncilBill}
-            query={query}
-            filters={councilFilter}
-          />
-        </HitsContainer>
+        {mountedTabs.has(searchStages.Speech) && (
+          <HitsContainer $hidden={activeTab !== searchStages.Speech}>
+            <Hits
+              key={indexNames.Speech}
+              indexName={indexNames.Speech}
+              query={query}
+              filters={buildLegislativeSpeechFilters(filterValue)}
+            />
+          </HitsContainer>
+        )}
+        {mountedTabs.has(searchStages.CouncilBill) && (
+          <HitsContainer $hidden={activeTab !== searchStages.CouncilBill}>
+            <Hits
+              key={indexNames.CouncilBill}
+              indexName={indexNames.CouncilBill}
+              query={query}
+              filters={councilFilter}
+            />
+          </HitsContainer>
+        )}
       </BarAndResults>
     </SearchResultsContainer>
   )
