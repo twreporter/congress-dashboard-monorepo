@@ -128,7 +128,7 @@ export function groupSummary(summaryList: SummaryCardProps[]) {
       result.push({ year: Number(year), cards: summarys })
   )
 
-  return result
+  return result.sort((a, b) => b.year - a.year)
 }
 
 export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
