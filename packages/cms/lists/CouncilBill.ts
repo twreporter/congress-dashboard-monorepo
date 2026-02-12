@@ -30,9 +30,15 @@ function toPlainTextSummary(input: unknown, limit = 100): string | null {
       ? JSON.stringify(input)
       : String(input)
 
-  const listRegrex = /<\/?(ul|li)[^>]*>/g
+  const specificH2Regex = /^##\s+說明\s*\n?/gm // remove `## 說明` whole line
+  const H2regex = /^##\s+/gm // remove only ## for rest H2
+  const listRegex = /<\/?(ul|li)[^>]*>/g
   const lineBreakRegex = /\\n|\r?\n/g
-  const summary = raw.replace(listRegrex, '').replace(lineBreakRegex, ' ')
+  const summary = raw
+    .replace(specificH2Regex, '')
+    .replace(H2regex, '')
+    .replace(listRegex, '')
+    .replace(lineBreakRegex, ' ')
   return summary.length > limit ? summary.slice(0, limit) : summary
 }
 

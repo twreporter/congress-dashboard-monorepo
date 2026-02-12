@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.20](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.19...@twreporter/congress-dashboard-frontend@1.10.0-rc.20) (2026-02-12)
+
+### Bug Fixes
+
+- **frontend:** councilor avatar and constituency ([dc503c0](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc503c0626402ad4c9e02a824b6409a593802c10))
+
 # [1.10.0-rc.19](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.18...@twreporter/congress-dashboard-frontend@1.10.0-rc.19) (2026-02-11)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
