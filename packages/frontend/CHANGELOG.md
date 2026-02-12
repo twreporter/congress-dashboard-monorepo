@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.21](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.20...@twreporter/congress-dashboard-frontend@1.10.0-rc.21) (2026-02-12)
+
+### Bug Fixes
+
+- **frontend:** bill sort by year ([a6ec878](https://github.com/twreporter/congress-dashboard-monorepo/commit/a6ec87818194467290f6584d1fcdf7f7a4a3911f))
+
 # [1.10.0-rc.20](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.19...@twreporter/congress-dashboard-frontend@1.10.0-rc.20) (2026-02-12)
 
 ### Bug Fixes
