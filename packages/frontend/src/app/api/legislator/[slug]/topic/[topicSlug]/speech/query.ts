@@ -22,7 +22,7 @@ const fetchSpeechesOfALegislatorInATopic = async ({
       speeches(where: $where, orderBy: $orderBy) {
         date
         slug
-        summary
+        summaryFallback
         title
       }
     }

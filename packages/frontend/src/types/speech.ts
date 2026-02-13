@@ -40,11 +40,11 @@ export type SpeechData = SpeechBaseData & {
 }
 
 export type SpeechDataForSidebar = SpeechBaseData & {
-  summary: string
+  summaryFallback: string
 }
 
 export type SpeechDataForTopic = SpeechBaseData & {
-  summary: string
+  summaryFallback: string
   legislativeYuanMember: {
     legislator: LegislatorBase
   }
