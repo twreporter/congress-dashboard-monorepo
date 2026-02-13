@@ -172,13 +172,15 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
         }
       : undefined
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => speechState.speeches || [],
-    [speechState.speeches]
-  )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(summaryList),
-    [summaryList]
+    () =>
+      groupSummary(
+        speechState.speeches?.map(({ summaryFallback, ...speech }) => ({
+          summary: summaryFallback || '',
+          ...speech,
+        })) || []
+      ),
+    [speechState.speeches]
   )
   const followMoreState = useMoreTopics(
     formattedFilterValues && selectedLegislator && selectedLegislator.id
@@ -369,13 +371,15 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
         }
       : undefined
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => speechState.speeches || [],
-    [speechState.speeches]
-  )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(summaryList),
-    [summaryList]
+    () =>
+      groupSummary(
+        speechState.speeches?.map(({ summaryFallback, ...speech }) => ({
+          summary: summaryFallback || '',
+          ...speech,
+        })) || []
+      ),
+    [speechState.speeches]
   )
   const followMoreState = useMoreLegislators(
     formattedFilterValues && selectedIssue && selectedIssue.slug

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0-rc.15](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.14...@twreporter/congress-dashboard-cms@1.6.0-rc.15) (2026-02-13)
+
+### Bug Fixes
+
+- **cms:** add `summaryFallback` for speech ([d590f01](https://github.com/twreporter/congress-dashboard-monorepo/commit/d590f01f62bafddfbdc9ec1f71fc8e34b1441447))
+
 # [1.6.0-rc.14](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.13...@twreporter/congress-dashboard-cms@1.6.0-rc.14) (2026-02-12)
 
 ### Bug Fixes
