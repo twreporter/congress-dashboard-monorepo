@@ -1,13 +1,18 @@
+import {
+  CITY,
+  type City,
+} from '@twreporter/congress-dashboard-shared/lib/constants/city'
+
 export const councilNames = [
-  'taipei',
-  'new-taipei',
-  'taoyuan',
-  'taichung',
-  'tainan',
-  'kaohsiung',
+  CITY.taipei,
+  CITY.newTaipei,
+  CITY.taoyuan,
+  CITY.taichung,
+  CITY.tainan,
+  CITY.kaohsiung,
 ] as const
 
-export type CouncilName = (typeof councilNames)[number]
+export type CouncilName = Extract<(typeof councilNames)[number], City>
 
 export const councilDisplayNames: Record<CouncilName, string> = {
   taipei: '台北市議會',
