@@ -222,8 +222,8 @@ const LoadMore = ({
   //  {
   //    // legislator index
   //    legislator: {
-  //      // To see all properties of `inifiniteHits`, see [docs here](https://www.algolia.com/doc/api-reference/widgets/infinite-hits/react/#hook-api).
-  //      inifiniteHits: {
+  //      // To see all properties of `infiniteHits`, see [docs here](https://www.algolia.com/doc/api-reference/widgets/infinite-hits/react/#hook-api).
+  //      infiniteHits: {
   //        isLastPage: false,
   //        items: [],
   //        hits: [],
@@ -233,7 +233,7 @@ const LoadMore = ({
   //    },
   //    // topic index
   //    topic: {
-  //      inifiniteHits: {
+  //      infiniteHits: {
   //        isLastPage: false,
   //        items: [],
   //        hits: [],
@@ -243,7 +243,7 @@ const LoadMore = ({
   //    },
   //    // councilor index
   //    councilor: {
-  //      inifiniteHits: {
+  //      infiniteHits: {
   //        isLastPage: false,
   //        items: [],
   //        hits: [],
@@ -253,7 +253,7 @@ const LoadMore = ({
   //    },
   //    // council-topic index
   //    'council-topic': {
-  //      inifiniteHits: {
+  //      infiniteHits: {
   //        isLastPage: false,
   //        items: [],
   //        hits: [],
@@ -402,8 +402,10 @@ const LoadMore = ({
 const InstantLegislatorHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: LegislatorRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <InstantLegislatorHit key={idx} hit={hit} variant={variant} />
+  const hitsJsx = items.map((hit) => {
+    return (
+      <InstantLegislatorHit key={hit.objectID} hit={hit} variant={variant} />
+    )
   })
 
   return <>{hitsJsx}</>
@@ -412,8 +414,8 @@ const InstantLegislatorHits = ({ variant }: { variant: LayoutVariant }) => {
 const InstantTopicHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: TopicRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <InstantTopicHit key={idx} hit={hit} variant={variant} />
+  const hitsJsx = items.map((hit) => {
+    return <InstantTopicHit key={hit.objectID} hit={hit} variant={variant} />
   })
 
   return <>{hitsJsx}</>
@@ -422,8 +424,10 @@ const InstantTopicHits = ({ variant }: { variant: LayoutVariant }) => {
 const InstantCouncilorHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: CouncilorRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <InstantCouncilorHit key={idx} hit={hit} variant={variant} />
+  const hitsJsx = items.map((hit) => {
+    return (
+      <InstantCouncilorHit key={hit.objectID} hit={hit} variant={variant} />
+    )
   })
 
   return <>{hitsJsx}</>
@@ -432,8 +436,10 @@ const InstantCouncilorHits = ({ variant }: { variant: LayoutVariant }) => {
 const InstantCouncilTopicHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: CouncilTopicRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <InstantCouncilTopicHit key={idx} hit={hit} variant={variant} />
+  const hitsJsx = items.map((hit) => {
+    return (
+      <InstantCouncilTopicHit key={hit.objectID} hit={hit} variant={variant} />
+    )
   })
 
   return <>{hitsJsx}</>

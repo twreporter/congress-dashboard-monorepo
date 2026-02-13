@@ -324,28 +324,28 @@ const LoadMoreForStages = ({
   //  {
   //    // legislator index
   //    legislator: {
-  //      // To see all properties of `inifiniteHits`, see [docs here](https://www.algolia.com/doc/api-reference/widgets/infinite-hits/react/#hook-api).
-  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
+  //      // To see all properties of `infiniteHits`, see [docs here](https://www.algolia.com/doc/api-reference/widgets/infinite-hits/react/#hook-api).
+  //      infiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
   //    },
   //    // councilor index
   //    councilor: {
-  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
+  //      infiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
   //    },
   //    // topic index
   //    topic: {
-  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
+  //      infiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
   //    },
   //    // council-topic index
   //    'council-topic': {
-  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
+  //      infiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
   //    },
   //    // speech index
   //    speech: {
-  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
+  //      infiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
   //    },
   //    // council-bill index
   //    'council-bill': {
-  //      inifiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
+  //      infiniteHits: { isLastPage: false, items: [], hits: [], results: undefined, showMore: () => { ... } },
   //    }
   //  }
   const { renderState, status } = useInstantSearch()
@@ -515,8 +515,8 @@ const LoadMore = ({ indexName }: { indexName: IndexName }) => {
 const LegislatorHitsList = () => {
   const { items }: { items: LegislatorRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <LegislatorHit key={idx} hit={hit} />
+  const hitsJsx = items.map((hit) => {
+    return <LegislatorHit key={hit.objectID} hit={hit} />
   })
 
   return <>{hitsJsx}</>
@@ -525,8 +525,8 @@ const LegislatorHitsList = () => {
 const CouncilorHitsList = () => {
   const { items }: { items: CouncilorRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <CouncilorHit key={idx} hit={hit} />
+  const hitsJsx = items.map((hit) => {
+    return <CouncilorHit key={hit.objectID} hit={hit} />
   })
 
   return <>{hitsJsx}</>
@@ -535,8 +535,8 @@ const CouncilorHitsList = () => {
 const TopicHitsList = () => {
   const { items }: { items: TopicRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <TopicHit key={idx} hit={hit} />
+  const hitsJsx = items.map((hit) => {
+    return <TopicHit key={hit.objectID} hit={hit} />
   })
 
   return <>{hitsJsx}</>
@@ -545,8 +545,8 @@ const TopicHitsList = () => {
 const CouncilTopicHitsList = () => {
   const { items }: { items: CouncilTopicRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <CouncilTopicHit key={idx} hit={hit} />
+  const hitsJsx = items.map((hit) => {
+    return <CouncilTopicHit key={hit.objectID} hit={hit} />
   })
 
   return <>{hitsJsx}</>
@@ -555,8 +555,8 @@ const CouncilTopicHitsList = () => {
 const SpeechHitsList = () => {
   const { items }: { items: SpeechRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <SpeechHit key={idx} hit={hit} />
+  const hitsJsx = items.map((hit) => {
+    return <SpeechHit key={hit.objectID} hit={hit} />
   })
 
   return <>{hitsJsx}</>
@@ -565,8 +565,8 @@ const SpeechHitsList = () => {
 const CouncilBillHitsList = () => {
   const { items }: { items: CouncilBillRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <CouncilBillHit key={idx} hit={hit} />
+  const hitsJsx = items.map((hit) => {
+    return <CouncilBillHit key={hit.objectID} hit={hit} />
   })
 
   return <>{hitsJsx}</>
