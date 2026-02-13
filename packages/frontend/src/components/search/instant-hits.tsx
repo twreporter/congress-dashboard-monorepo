@@ -10,11 +10,15 @@ import { useInView } from 'react-intersection-observer'
 import type {
   LegislatorRawHit,
   TopicRawHit,
+  CouncilorRawHit,
+  CouncilTopicRawHit,
 } from '@/components/search/instant-hit'
 import { Search as IconSearch } from '@/components/search/icons'
 import {
   InstantLegislatorHit,
   InstantTopicHit,
+  InstantCouncilorHit,
+  InstantCouncilTopicHit,
 } from '@/components/search/instant-hit'
 import {
   Configure,
@@ -148,6 +152,15 @@ export const InstantHits = ({
   className?: string
   variant?: LayoutVariant
 }) => {
+  const stageOrder: SearchStage[] = [
+    searchStages.Legislator,
+    searchStages.Councilor,
+    searchStages.Topic,
+    searchStages.CouncilTopic,
+  ]
+  const hasReached = (current: SearchStage, target: SearchStage) => {
+    return stageOrder.indexOf(current) >= stageOrder.indexOf(target)
+  }
   const containerRef = useRef<HTMLDivElement>(null)
   const { query } = useSearchBox()
   const [stage, setStage] = useState<SearchStage>(searchStages.Legislator)
@@ -172,10 +185,22 @@ export const InstantHits = ({
           <Configure hitsPerPage={10} />
           <InstantLegislatorHits variant={variant} />
         </Index>
-        {stage === searchStages.Topic && (
+        {hasReached(stage, searchStages.Councilor) && (
+          <Index indexName={indexNames.Councilor}>
+            <Configure hitsPerPage={10} />
+            <InstantCouncilorHits variant={variant} />
+          </Index>
+        )}
+        {hasReached(stage, searchStages.Topic) && (
           <Index indexName={indexNames.Topic}>
             <Configure hitsPerPage={10} />
             <InstantTopicHits variant={variant} />
+          </Index>
+        )}
+        {hasReached(stage, searchStages.CouncilTopic) && (
+          <Index indexName={indexNames.CouncilTopic}>
+            <Configure hitsPerPage={10} />
+            <InstantCouncilTopicHits variant={variant} />
           </Index>
         )}
       </Rows>
@@ -197,8 +222,8 @@ const LoadMore = ({
   //  {
   //    // legislator index
   //    legislator: {
-  //      // To see all properties of `inifiniteHits`, see [docs here](https://www.algolia.com/doc/api-reference/widgets/infinite-hits/react/#hook-api).
-  //      inifiniteHits: {
+  //      // To see all properties of `infiniteHits`, see [docs here](https://www.algolia.com/doc/api-reference/widgets/infinite-hits/react/#hook-api).
+  //      infiniteHits: {
   //        isLastPage: false,
   //        items: [],
   //        hits: [],
@@ -208,7 +233,27 @@ const LoadMore = ({
   //    },
   //    // topic index
   //    topic: {
-  //      inifiniteHits: {
+  //      infiniteHits: {
+  //        isLastPage: false,
+  //        items: [],
+  //        hits: [],
+  //        results: undefined,
+  //        showMore: () => { ... },
+  //      },
+  //    },
+  //    // councilor index
+  //    councilor: {
+  //      infiniteHits: {
+  //        isLastPage: false,
+  //        items: [],
+  //        hits: [],
+  //        results: undefined,
+  //        showMore: () => { ... },
+  //      },
+  //    },
+  //    // council-topic index
+  //    'council-topic': {
+  //      infiniteHits: {
   //        isLastPage: false,
   //        items: [],
   //        hits: [],
@@ -247,7 +292,7 @@ const LoadMore = ({
     }
 
     // We load Legislator items first,
-    // and then load Topic items after all Legislator items loaded.
+    // then Councilor items, then Topic items, and finally CouncilTopic items.
     const load = () => {
       // In Legislator stage
       if (stage === searchStages.Legislator) {
@@ -268,6 +313,29 @@ const LoadMore = ({
           legislatorState.showMore()
         } else {
           // All Legislator items have been loaded.
+          // Start to load Councilor items.
+          setStage(searchStages.Councilor)
+        }
+      }
+      // In Councilor stage
+      else if (stage === searchStages.Councilor) {
+        const councilorState = renderState[indexNames.Councilor]?.infiniteHits
+        // Councilor infiniteHits is not ready
+        if (!councilorState || !councilorState.results) {
+          // Do nothing
+          return
+        }
+
+        // Ensure the results belong to the current query before proceeding
+        if (councilorState.results.query !== query) {
+          return
+        }
+
+        if (!councilorState?.isLastPage) {
+          // Not last page, load more Councilor items
+          councilorState.showMore()
+        } else {
+          // All Councilor items have been loaded.
           // Start to load Topic items.
           setStage(searchStages.Topic)
         }
@@ -290,6 +358,30 @@ const LoadMore = ({
           // Not last page, load more Topic items
           topicState.showMore()
         } else {
+          // All Topic items have been loaded.
+          // Start to load CouncilTopic items.
+          setStage(searchStages.CouncilTopic)
+        }
+      }
+      // In CouncilTopic stage
+      else if (stage === searchStages.CouncilTopic) {
+        const councilTopicState =
+          renderState[indexNames.CouncilTopic]?.infiniteHits
+        // CouncilTopic infiniteHits is not ready
+        if (!councilTopicState || !councilTopicState.results) {
+          // Do nothing
+          return
+        }
+
+        // Ensure the results belong to the current query before proceeding
+        if (councilTopicState.results.query !== query) {
+          return
+        }
+
+        if (!councilTopicState?.isLastPage) {
+          // Not last page, load more CouncilTopic items
+          councilTopicState.showMore()
+        } else {
           // Stop auto-load more
           setNoMoreHits(true)
         }
@@ -310,8 +402,10 @@ const LoadMore = ({
 const InstantLegislatorHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: LegislatorRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <InstantLegislatorHit key={idx} hit={hit} variant={variant} />
+  const hitsJsx = items.map((hit) => {
+    return (
+      <InstantLegislatorHit key={hit.objectID} hit={hit} variant={variant} />
+    )
   })
 
   return <>{hitsJsx}</>
@@ -320,8 +414,32 @@ const InstantLegislatorHits = ({ variant }: { variant: LayoutVariant }) => {
 const InstantTopicHits = ({ variant }: { variant: LayoutVariant }) => {
   const { items }: { items: TopicRawHit[] } = useInfiniteHits()
 
-  const hitsJsx = items.map((hit, idx) => {
-    return <InstantTopicHit key={idx} hit={hit} variant={variant} />
+  const hitsJsx = items.map((hit) => {
+    return <InstantTopicHit key={hit.objectID} hit={hit} variant={variant} />
+  })
+
+  return <>{hitsJsx}</>
+}
+
+const InstantCouncilorHits = ({ variant }: { variant: LayoutVariant }) => {
+  const { items }: { items: CouncilorRawHit[] } = useInfiniteHits()
+
+  const hitsJsx = items.map((hit) => {
+    return (
+      <InstantCouncilorHit key={hit.objectID} hit={hit} variant={variant} />
+    )
+  })
+
+  return <>{hitsJsx}</>
+}
+
+const InstantCouncilTopicHits = ({ variant }: { variant: LayoutVariant }) => {
+  const { items }: { items: CouncilTopicRawHit[] } = useInfiniteHits()
+
+  const hitsJsx = items.map((hit) => {
+    return (
+      <InstantCouncilTopicHit key={hit.objectID} hit={hit} variant={variant} />
+    )
   })
 
   return <>{hitsJsx}</>

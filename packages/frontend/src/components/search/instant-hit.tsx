@@ -6,6 +6,7 @@ import { InternalRoutes } from '@/constants/routes'
 import { Highlight, Snippet } from 'react-instantsearch'
 import { Issue as IconIssue } from '@/components/search/icons'
 import { layoutVariants } from '@/components/search/constants'
+import { buildMeetingTermParam } from '@/components/search/result-page/utils'
 import {
   colorGrayscale,
   colorSupportive,
@@ -31,6 +32,31 @@ export type TopicRawHit = Hit<{
   meetingTerm: number
   lastSpeechAt?: string
   relatedMessageCount: number
+}>
+
+export type CouncilorRawHit = Hit<{
+  objectID: string
+  slug: string
+  name: string
+  desc: string
+  imgSrc: string
+  meetingTerm?: number
+  council: string
+  councilSlug: string
+  lastSpeechAt?: string
+  partyImgSrc: string
+}>
+
+export type CouncilTopicRawHit = Hit<{
+  objectID: string
+  name: string
+  slug: string
+  desc: string
+  meetingTerm?: number
+  council: string
+  councilSlug: string
+  billCount: number
+  lastSpeechAt?: string
 }>
 
 const Circle = styled.div`
@@ -189,6 +215,63 @@ export function InstantTopicHit({
             ) : (
               <span>發言：</span>
             )}
+            <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
+          </p>
+        </Text>
+      </InstantHitContainer>
+    </a>
+  )
+}
+
+export function InstantCouncilorHit({
+  hit,
+  variant,
+}: {
+  hit: CouncilorRawHit
+  variant: LayoutVariant
+}) {
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
+  return (
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.Councilor(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <Avatar $imgSrc={hit.imgSrc}>
+          <Party $imgSrc={hit.partyImgSrc} />
+        </Avatar>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>{hit.desc}</p>
+        </Text>
+      </InstantHitContainer>
+    </a>
+  )
+}
+
+export function InstantCouncilTopicHit({
+  hit,
+  variant,
+}: {
+  hit: CouncilTopicRawHit
+  variant: LayoutVariant
+}) {
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
+  return (
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.CouncilTopic(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <TopicCircle>
+          <IconIssue />
+        </TopicCircle>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>
+            <span>共{hit.billCount}筆相關議案：</span>
             <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
           </p>
         </Text>
