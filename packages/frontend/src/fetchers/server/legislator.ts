@@ -221,7 +221,7 @@ export const fetchLegislatorTopics = async ({
           slug
           date
           title
-          summary
+          summaryFallback
         }
       }
     }
