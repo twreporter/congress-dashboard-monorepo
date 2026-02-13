@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.24](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.23...@twreporter/congress-dashboard-frontend@1.10.0-rc.24) (2026-02-13)
+
+### Bug Fixes
+
+- **frontend:** import SearchPageProps from result-page types ([5c2a663](https://github.com/twreporter/congress-dashboard-monorepo/commit/5c2a663b9437acc773a64d63246ab45360c7d6cd))
+
 # [1.10.0-rc.23](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.22...@twreporter/congress-dashboard-frontend@1.10.0-rc.23) (2026-02-13)
 
 ### Bug Fixes
