@@ -288,6 +288,7 @@ type Speech {
   title: String
   slug: String
   summary: JSON
+  summaryFallback: String
   content: JSON
   attendee: String
   ivodLink: String

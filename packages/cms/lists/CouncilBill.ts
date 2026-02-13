@@ -16,31 +16,8 @@ import {
   hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
 import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
+import toPlainTextSummary from './utils/summary-parser'
 import { logger } from '../utils/logger'
-
-/* take 100 characters of content as summary */
-function toPlainTextSummary(input: unknown, limit = 100): string | null {
-  if (input === null) {
-    return null
-  }
-  const raw =
-    typeof input === 'string'
-      ? input
-      : typeof input === 'object'
-      ? JSON.stringify(input)
-      : String(input)
-
-  const specificH2Regex = /^##\s+說明\s*\n?/gm // remove `## 說明` whole line
-  const H2regex = /^##\s+/gm // remove only ## for rest H2
-  const listRegex = /<\/?(ul|li)[^>]*>/g
-  const lineBreakRegex = /\\n|\r?\n/g
-  const summary = raw
-    .replace(specificH2Regex, '')
-    .replace(H2regex, '')
-    .replace(listRegex, '')
-    .replace(lineBreakRegex, ' ')
-  return summary.length > limit ? summary.slice(0, limit) : summary
-}
 
 const listConfigurations = list({
   fields: {
@@ -79,11 +56,10 @@ const listConfigurations = list({
       field: graphql.field({
         type: graphql.String,
         resolve(item) {
-          const value =
-            typeof item.summary === 'string' && item.summary.length > 0
-              ? item.summary
-              : item.content ?? null
-          return toPlainTextSummary(value)
+          if (typeof item.summary === 'string' && item.summary.length > 0) {
+            return toPlainTextSummary('bill', item.summary)
+          }
+          return toPlainTextSummary('bill', item.content, 100)
         },
       }),
     }),
