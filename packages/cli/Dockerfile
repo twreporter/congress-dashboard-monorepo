@@ -33,4 +33,4 @@ RUN yarn install --production=true
 ENV NODE_ENV=production
 
 ENTRYPOINT ["node", "lib/index.js"]
-CMD ["feed-algolia"]
+CMD ["feed-algolia", "legislative-yuan"]
