@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.23](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.22...@twreporter/congress-dashboard-frontend@1.10.0-rc.23) (2026-02-13)
+
+### Bug Fixes
+
+- **frontend:** prevent duplicate requests and state corruption on scope or query change ([660c2d8](https://github.com/twreporter/congress-dashboard-monorepo/commit/660c2d816218d1d0ab56e541f63402dbd8cc390d))
+
+### Features
+
+- **frontend:** add councilor/council-topic instant search ([90580af](https://github.com/twreporter/congress-dashboard-monorepo/commit/90580af8520f554c898fe07f3f09c6b3818d5f06))
+- **frontend:** add scope filter modal and scope-driven search tabs ([c3c6e86](https://github.com/twreporter/congress-dashboard-monorepo/commit/c3c6e8624949050915c46d0490796e38576b47ec))
+- **frontend:** implement scope-aware council search with 6-stage result pipeline ([84f9506](https://github.com/twreporter/congress-dashboard-monorepo/commit/84f95069e41adcce65622e0a40b66b4689841115))
+
+### Performance Improvements
+
+- **frontend:** implement lazy-mount strategy for search result tabs ([6b811cd](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b811cddba197101ab44653c16cf5c1553901e4e))
+
 # [1.10.0-rc.22](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.21...@twreporter/congress-dashboard-frontend@1.10.0-rc.22) (2026-02-13)
 
 ### Bug Fixes
