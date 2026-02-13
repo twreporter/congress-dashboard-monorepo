@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.22](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.21...@twreporter/congress-dashboard-frontend@1.10.0-rc.22) (2026-02-13)
+
+### Bug Fixes
+
+- **frontend:** use summaryFallback for speech meta ([7283a2c](https://github.com/twreporter/congress-dashboard-monorepo/commit/7283a2c5bf542fe10a1e102ec70120245f7c3ecb))
+
 # [1.10.0-rc.21](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.20...@twreporter/congress-dashboard-frontend@1.10.0-rc.21) (2026-02-12)
 
 ### Bug Fixes
