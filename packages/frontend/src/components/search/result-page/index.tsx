@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
-import type { FilterValueType } from '@/components/search/result-page/filter'
+import React, { useEffect, useRef, useState } from 'react'
+import type { LegislativeFilterValueType } from '@/components/search/result-page/legislative-filter'
 import type { SearchStage } from '@/components/search/constants'
 import mq from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
@@ -10,11 +10,48 @@ import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { indexNames, searchStages } from '@/components/search/constants'
 import { AlgoliaInstantSearch } from '@/components/search/instant-search'
 import {
-  SearchFilter as _SearchFilter,
-  defaultFilterValue,
-} from '@/components/search/result-page/filter'
+  LegislativeSearchFilter as _LegislativeSearchFilter,
+  defaultLegislativeFilterValue,
+} from '@/components/search/result-page/legislative-filter'
+import { PillButton } from '@twreporter/react-components/lib/button'
+import { Filter as FilterIcon } from '@twreporter/react-components/lib/icon'
+import { ScopeFilterModal } from '@/components/search/result-page/scope-filter-modal'
+import type { OptionGroup } from '@/components/selector/types'
+import {
+  scopeValues,
+  type ScopeValue,
+  isCouncilScope,
+  getScopeType,
+  scopeFilterGroups,
+  councilFilterGroups,
+  buildCouncilFilter,
+} from '@/components/search/result-page/scope-config'
+import type {
+  SearchResultsProps,
+  SearchPageProps,
+} from '@/components/search/result-page/types'
 
-const Container = styled.div`
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
+
+function buildLegislativeSpeechFilters(
+  filterValue: LegislativeFilterValueType
+): string {
+  const meeting = filterValue.meeting
+  if (meeting === 'all') return ''
+
+  const meetingFilter = `meetingTerm: ${meeting}`
+  const meetingSession = filterValue.meetingSession
+  const meetingSessionFilter =
+    meetingSession.indexOf('all') > -1
+      ? ''
+      : meetingSession.map((s) => `sessionTerm: ${s}`).join(' OR ')
+
+  return meetingSessionFilter
+    ? `(${meetingFilter}) AND (${meetingSessionFilter})`
+    : meetingFilter
+}
+
+const SearchResultsContainer = styled.div`
   /* TODO: remove box-sizing if global already defined */
   * {
     box-sizing: border-box;
@@ -25,14 +62,17 @@ const Container = styled.div`
 
   ${mq.desktopAndAbove`
     padding-top: 40px;
+    padding-bottom: 120px;
   `}
 
   ${mq.tabletOnly`
     padding-top: 32px;
+    padding-bottom: 120px;
   `}
 
   ${mq.mobileOnly`
     padding-top: 20px;
+    padding-bottom: 64px;
   `}
 `
 
@@ -53,7 +93,7 @@ const BarAndResults = styled.div`
   margin-right: auto;
 `
 
-const HitsContainer = styled.div<{ $hidden: boolean }>`
+const HitsContainer = styled.div<{ $hidden?: boolean }>`
   width: 100%;
 
   ${({ $hidden }) => {
@@ -62,17 +102,6 @@ const HitsContainer = styled.div<{ $hidden: boolean }>`
     }
   }}
 `
-
-const searchTabs = [
-  {
-    label: '全部',
-    value: searchStages.All,
-  },
-  {
-    label: '發言全文',
-    value: searchStages.Speech,
-  },
-]
 
 const Tab = styled.div`
   display: inline-block;
@@ -104,7 +133,7 @@ const Tabs = styled.div`
   }
 `
 
-const Bar = styled.div`
+const SearchTabBar = styled.div`
   display: flex;
   justify-content: space-between;
   ${mq.mobileOnly`
@@ -116,7 +145,7 @@ const Bar = styled.div`
   border-bottom: 1px solid ${colorGrayscale.gray300};
 `
 
-const SearchFilter = styled(_SearchFilter)`
+const LegislativeSearchFilter = styled(_LegislativeSearchFilter)`
   ${mq.mobileOnly`
     width: 100%;
     margin-top: 20px;
@@ -126,43 +155,160 @@ const SearchFilter = styled(_SearchFilter)`
   `}
 `
 
-type SearchResultsProps = {
-  className?: string
-  query?: string
-}
+const ScopeFilterContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  ${mq.mobileOnly`
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  `}
+`
+
+const ScopeFilterLabel = styled.div`
+  color: ${colorGrayscale.gray700};
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+`
 
 const SearchResults = ({ className, query }: SearchResultsProps) => {
   const [activeTab, setActiveTab] = useState<SearchStage>(searchStages.All)
-  const [filterValue, setFilterValue] =
-    useState<FilterValueType>(defaultFilterValue)
+  const [filterValue, setFilterValue] = useState<LegislativeFilterValueType>(
+    defaultLegislativeFilterValue
+  )
+  const [scopeFilterValue, setScopeFilterValue] = useState<ScopeValue>(
+    scopeValues.all
+  )
+  const [scopeFilterLabel, setScopeFilterLabel] = useState('立法院與六都議會')
+  const [showScopeModal, setShowScopeModal] = useState(false)
 
-  let filters = ''
-  const meeting = filterValue.meeting
-  const meetingSession = filterValue.meetingSession
+  // Track which tabs have been mounted (for lazy mounting)
+  const [mountedTabs, setMountedTabs] = useState<Set<SearchStage>>(
+    new Set([searchStages.All])
+  )
 
-  if (meeting !== 'all') {
-    const meetingFilter = `meetingTerm: ${meeting}`
-    const meetingSessionFilter =
-      meetingSession.indexOf('all') > -1
-        ? ''
-        : meetingSession.map((s) => `sessionTerm: ${s}`).join(' OR ')
-    filters = meetingSessionFilter
-      ? `(${meetingFilter}) AND (${meetingSessionFilter})`
-      : meetingFilter
+  // Mark tab as mounted when activated
+  useEffect(() => {
+    setMountedTabs((prev) => new Set(prev).add(activeTab))
+  }, [activeTab])
+
+  // Build council filter for specific council scopes
+  const councilFilter = buildCouncilFilter(scopeFilterValue)
+
+  // Dynamically determine tabs based on scopeFilterValue
+  const searchTabs = (() => {
+    if (scopeFilterValue === scopeValues.legislativeYuan) {
+      return [
+        {
+          label: '全部',
+          value: searchStages.All,
+        },
+        {
+          label: '發言全文',
+          value: searchStages.Speech,
+        },
+      ]
+    } else if (isCouncilScope(scopeFilterValue)) {
+      return [
+        {
+          label: '全部',
+          value: searchStages.All,
+        },
+        {
+          label: '議案',
+          value: searchStages.CouncilBill,
+        },
+      ]
+    } else {
+      return [
+        {
+          label: '全部',
+          value: searchStages.All,
+        },
+      ]
+    }
+  })()
+
+  // Reset to "All" tab when scope TYPE changes (not just value)
+  const prevScopeTypeRef = useRef(getScopeType(scopeFilterValue))
+  useEffect(() => {
+    const currentScopeType = getScopeType(scopeFilterValue)
+    const prevScopeType = prevScopeTypeRef.current
+
+    // Only reset tab if scope TYPE changed (e.g., legislative <-> council <-> all)
+    if (currentScopeType !== prevScopeType) {
+      setActiveTab(searchStages.All)
+      prevScopeTypeRef.current = currentScopeType
+    }
+  }, [scopeFilterValue])
+
+  function renderScopeFilterModal(groups: OptionGroup[]) {
+    return (
+      <>
+        <ScopeFilterContainer>
+          <ScopeFilterLabel>{scopeFilterLabel}</ScopeFilterLabel>
+          <PillButton
+            theme={PillButton.THEME.normal}
+            type={PillButton.Type.SECONDARY}
+            size={PillButton.Size.L}
+            text="篩選"
+            leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
+            onClick={() => {
+              setShowScopeModal(true)
+            }}
+          />
+        </ScopeFilterContainer>
+        <ScopeFilterModal
+          isOpen={showScopeModal}
+          groups={groups}
+          selectedValue={scopeFilterValue}
+          onSubmit={(value, label) => {
+            setScopeFilterValue(value as ScopeValue)
+            setScopeFilterLabel(label)
+          }}
+          onClose={() => setShowScopeModal(false)}
+        />
+      </>
+    )
   }
 
-  function renderSearchFilter() {
-    if (activeTab !== searchStages.Speech) {
-      return null
+  function renderFilterByTab() {
+    // Show ScopeFilter for "All" tab
+    if (activeTab === searchStages.All) {
+      return renderScopeFilterModal(scopeFilterGroups)
     }
 
-    return <SearchFilter filterValue={filterValue} onChange={setFilterValue} />
+    // Show LegislativeSearchFilter for "Speech" tab (only when legislativeYuan is selected)
+    if (
+      activeTab === searchStages.Speech &&
+      scopeFilterValue === scopeValues.legislativeYuan
+    ) {
+      return (
+        <LegislativeSearchFilter
+          filterValue={filterValue}
+          onChange={setFilterValue}
+        />
+      )
+    }
+
+    // Show CouncilFilter for "Bill" tab (only when council scope is selected)
+    if (
+      activeTab === searchStages.CouncilBill &&
+      isCouncilScope(scopeFilterValue)
+    ) {
+      return renderScopeFilterModal(councilFilterGroups)
+    }
+
+    return null
   }
 
   return (
-    <Container className={className}>
+    <SearchResultsContainer className={className}>
       <BarAndResults>
-        <Bar>
+        <SearchTabBar>
           <Tabs>
             {searchTabs.map((searchTab) => {
               return (
@@ -178,20 +324,41 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
               )
             })}
           </Tabs>
-          {renderSearchFilter()}
-        </Bar>
+          {renderFilterByTab()}
+        </SearchTabBar>
         <HitsContainer $hidden={activeTab !== searchStages.All}>
-          <MultiStageHits query={query} />
+          <MultiStageHits
+            key={`${scopeFilterValue}-${query}`}
+            query={query}
+            scope={scopeFilterValue}
+          />
         </HitsContainer>
-        <HitsContainer $hidden={activeTab !== searchStages.Speech}>
-          <Hits indexName={indexNames.Speech} query={query} filters={filters} />
-        </HitsContainer>
+        {mountedTabs.has(searchStages.Speech) && (
+          <HitsContainer $hidden={activeTab !== searchStages.Speech}>
+            <Hits
+              key={indexNames.Speech}
+              indexName={indexNames.Speech}
+              query={query}
+              filters={buildLegislativeSpeechFilters(filterValue)}
+            />
+          </HitsContainer>
+        )}
+        {mountedTabs.has(searchStages.CouncilBill) && (
+          <HitsContainer $hidden={activeTab !== searchStages.CouncilBill}>
+            <Hits
+              key={indexNames.CouncilBill}
+              indexName={indexNames.CouncilBill}
+              query={query}
+              filters={councilFilter}
+            />
+          </HitsContainer>
+        )}
       </BarAndResults>
-    </Container>
+    </SearchResultsContainer>
   )
 }
 
-const InsantSearchContainer = styled.div`
+const InstantSearchContainer = styled.div`
   background-color: ${colorGrayscale.gray200};
   width: 100%;
 
@@ -224,16 +391,12 @@ const InsantSearchContainer = styled.div`
   `}
 `
 
-export type SearchPageProps = {
-  query?: string
-}
-
 export function SearchPage({ query }: SearchPageProps) {
   return (
     <div key={query}>
-      <InsantSearchContainer>
+      <InstantSearchContainer>
         <AlgoliaInstantSearch className="search-box" query={query} />
-      </InsantSearchContainer>
+      </InstantSearchContainer>
       <SearchResults query={query} />
     </div>
   )
