@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.24...@twreporter/congress-dashboard-frontend@1.10.0) (2026-02-14)
+
+### Bug Fixes
+
+- **frontend:** meeting session filter fallback ([f425777](https://github.com/twreporter/congress-dashboard-monorepo/commit/f425777cb090057ac384687a050c92e9986b1052))
+
 # [1.10.0-rc.24](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.23...@twreporter/congress-dashboard-frontend@1.10.0-rc.24) (2026-02-13)
 
 ### Bug Fixes
