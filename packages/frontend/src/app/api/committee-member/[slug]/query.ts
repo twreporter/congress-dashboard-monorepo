@@ -1,6 +1,8 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
 // util
 import { sortByCountDesc } from '@/fetchers/utils'
+// type
+import type { CommitteeMember } from '@/types/committee-member'
 
 type CommitteeMemberDataFromRes = {
   committee: {
@@ -10,10 +12,7 @@ type CommitteeMemberDataFromRes = {
   committeeCount: number
 }
 
-type CommitteeMemberForReturn = {
-  count: number
-  name: string
-}
+type CommitteeMemberForReturn = CommitteeMember
 
 type FetchCommitteeMemberParams = {
   slug: string

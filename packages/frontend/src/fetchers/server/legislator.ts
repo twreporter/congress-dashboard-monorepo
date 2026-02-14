@@ -1,46 +1,8 @@
 import { keystoneFetch } from '@/app/api/_graphql/keystone'
-
-export type LegislatorFromRes = {
-  proposalSuccessCount?: number
-  party: {
-    name: string
-    image?: {
-      imageFile: {
-        url: string
-      }
-    }
-    imageLink?: string
-  }
-  note?: string
-  tooltip?: string
-  legislativeMeeting: {
-    term: number
-  }
-  constituency: string
-  type: string
-  sessionAndCommittee: {
-    committee: {
-      name: string
-    }[]
-    legislativeMeetingSession: {
-      term: number
-    }
-  }[]
-  legislator: {
-    name: string
-    slug: string
-    image?: {
-      imageFile: {
-        url: string
-      }
-    }
-    imageLink?: string
-    externalLink?: string
-    meetingTermCount?: number
-    meetingTermCountInfo?: string
-  }
-  isActive: boolean
-}
+// type
+import type { TopicDataForLegislator } from '@/types/topic'
+import type { Legislator } from '@/types/legislator'
+import type { SitemapItem } from '@/types'
 
 /** checkLegislatorExist
  *  check if legislator exist with given slug
@@ -125,7 +87,7 @@ export const fetchLegislator = async ({
 }: {
   slug: string
   legislativeMeeting: number
-}): Promise<LegislatorFromRes | undefined> => {
+}): Promise<Legislator | undefined> => {
   const where = {
     legislator: {
       slug: {
@@ -180,6 +142,7 @@ export const fetchLegislator = async ({
           }
         }
         isActive
+        relatedLink
       }
     }
   `
@@ -187,7 +150,7 @@ export const fetchLegislator = async ({
 
   try {
     const data = await keystoneFetch<{
-      legislativeYuanMembers?: LegislatorFromRes[]
+      legislativeYuanMembers?: Legislator[]
     }>(JSON.stringify({ query, variables }), false)
     return data?.data?.legislativeYuanMembers?.[0]
   } catch (err) {
@@ -195,20 +158,6 @@ export const fetchLegislator = async ({
       `Failed to fetch legislators for slug: ${slug}, err: ${err}`
     )
   }
-}
-
-export type SpeechData = {
-  slug: string
-  title: string
-  date: string
-  summary: string
-}
-
-export type TopicData = {
-  title: string
-  slug: string
-  speechesCount: number
-  speeches: SpeechData[]
 }
 
 /** fetchLegislatorTopics
@@ -222,7 +171,7 @@ export const fetchLegislatorTopics = async ({
   slug: string
   legislativeMeetingTerm: number
   legislativeMeetingSessionTerms: number[]
-}): Promise<TopicData[]> => {
+}): Promise<TopicDataForLegislator[]> => {
   // Create where conditions for topics
   const where = {
     speeches: {
@@ -272,7 +221,7 @@ export const fetchLegislatorTopics = async ({
           slug
           date
           title
-          summary
+          summaryFallback
         }
       }
     }
@@ -283,7 +232,7 @@ export const fetchLegislatorTopics = async ({
   }
 
   try {
-    const data = await keystoneFetch<{ topics: TopicData[] }>(
+    const data = await keystoneFetch<{ topics: TopicDataForLegislator[] }>(
       JSON.stringify({ query, variables }),
       false
     )
@@ -298,7 +247,7 @@ export const fetchLegislatorTopics = async ({
 /**
  * fetch all legislators slug for sitemap
  */
-export const fetchAllLegislatorsSlug = async () => {
+export const fetchAllLegislatorsSlug = async (): Promise<SitemapItem[]> => {
   const query = `
     query GetAllLegislatorsSlug {
       legislators {
@@ -309,9 +258,9 @@ export const fetchAllLegislatorsSlug = async () => {
   `
   try {
     const data = await keystoneFetch<{
-      legislators: { slug: string; updatedAt: string }[]
+      legislators: SitemapItem[]
     }>(JSON.stringify({ query }), false)
-    return data?.data?.legislators
+    return data?.data?.legislators || []
   } catch (err) {
     throw new Error(`Failed to fetch all legislators, err: ${err}`)
   }

@@ -1,11 +1,8 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
+// type
+import type { SpeechDataForSidebar } from '@/types/speech'
 
-type SpeechFromRes = {
-  date: string
-  slug: string
-  summary: string
-  title: string
-}
+type SpeechFromRes = SpeechDataForSidebar
 
 type FetchSpeechesOfALegislatorInATopicParams = {
   slug: string
@@ -25,7 +22,7 @@ const fetchSpeechesOfALegislatorInATopic = async ({
       speeches(where: $where, orderBy: $orderBy) {
         date
         slug
-        summary
+        summaryFallback
         title
       }
     }

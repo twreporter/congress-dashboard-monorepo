@@ -22,6 +22,7 @@ import {
 } from '@/components/search/instant-search'
 // components
 import HamburgerMenu from '@/components/hamburger-menu'
+import Tabs from '@/components/header/tabs'
 // hooks
 import useWindowWidth from '@/hooks/use-window-width'
 import { useBodyScrollLock } from '@/hooks/use-scroll-lock'
@@ -30,6 +31,7 @@ import { ZIndex } from '@/styles/z-index'
 // constants
 import { COMPACT_PILL_BUTTON_LINKS } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
+import { ExternalRoutes } from '@/constants/routes'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 
@@ -69,13 +71,14 @@ const HeaderSection = styled.div`
 
   ${mq.hdOnly`
     width: 1280px;
-    margin: auto;
+    margin: 0 auto;
+    padding: 0 16px;
   `}
   ${mq.mobileOnly`
     padding: 0 24px;
   `}
 `
-const LogoContainer = styled.div`
+const LeftContainer = styled.div`
   a,
   img {
     display: flex;
@@ -86,6 +89,10 @@ const LogoContainer = styled.div`
       height: 20px;
     `}
   }
+`
+const RightContainer = styled.div`
+  display: flex;
+  gap: 24px;
 `
 const ButtonContainer = styled.div`
   display: flex;
@@ -178,7 +185,7 @@ const Header: React.FC = () => {
         className="hidden-print"
       >
         <HeaderSection>
-          <LogoContainer>
+          <LeftContainer>
             <Link href={'/'} target={'_self'}>
               <TabletAndAbove>
                 <Image
@@ -199,65 +206,67 @@ const Header: React.FC = () => {
                 />
               </MobileOnly>
             </Link>
-          </LogoContainer>
+          </LeftContainer>
           <TabletAndAbove>
-            <ButtonContainer>
-              {pillButtonLinks.map(({ href, text, target, type }, idx) => (
-                <React.Fragment key={`pill-btn-${idx}`}>
-                  <Button $isHide={isSearchOpen}>
-                    <Link href={href} target={target}>
-                      <PillButton
-                        text={text}
-                        size={PillButton.Size.S}
-                        type={type}
-                      />
-                    </Link>
-                  </Button>
-                  {idx < pillButtonLinks.length - 1 ? (
-                    <Spacing $width={16} />
-                  ) : null}
-                </React.Fragment>
-              ))}
-              <SearchBox key="search">
-                <BtnContainer
-                  onClick={handleClickSearch}
-                  $isOpen={isSearchOpen}
-                >
-                  <IconButton
-                    iconComponent={<SearchIcon releaseBranch={releaseBranch} />}
-                    theme={IconButton.THEME.normal}
-                  />
-                </BtnContainer>
-                <SearchContainer $isOpen={isSearchOpen}>
-                  {isSearchOpen && (
-                    <>
-                      <AlgoliaInstantSearch
-                        variant={layoutVariants.Header}
-                        autoFocus={isSearchOpen}
-                      />
-                      <IconButton
-                        iconComponent={crossIcon}
-                        onClick={closeSearchBox}
-                      />
-                    </>
-                  )}
-                </SearchContainer>
-              </SearchBox>
-            </ButtonContainer>
+            <RightContainer>
+              <Tabs />
+              <ButtonContainer>
+                {pillButtonLinks.map(({ href, text, target, type }, idx) => (
+                  <React.Fragment key={`pill-btn-${idx}`}>
+                    <Button $isHide={isSearchOpen}>
+                      <Link href={href} target={target}>
+                        <PillButton
+                          text={text}
+                          size={PillButton.Size.S}
+                          type={type}
+                        />
+                      </Link>
+                    </Button>
+                    {idx < pillButtonLinks.length - 1 ? (
+                      <Spacing $width={16} />
+                    ) : null}
+                  </React.Fragment>
+                ))}
+                <SearchBox key="search">
+                  <BtnContainer
+                    onClick={handleClickSearch}
+                    $isOpen={isSearchOpen}
+                  >
+                    <IconButton
+                      iconComponent={
+                        <SearchIcon releaseBranch={releaseBranch} />
+                      }
+                      theme={IconButton.THEME.normal}
+                    />
+                  </BtnContainer>
+                  <SearchContainer $isOpen={isSearchOpen}>
+                    {isSearchOpen && (
+                      <>
+                        <AlgoliaInstantSearch
+                          variant={layoutVariants.Header}
+                          autoFocus={isSearchOpen}
+                        />
+                        <IconButton
+                          iconComponent={crossIcon}
+                          onClick={closeSearchBox}
+                        />
+                      </>
+                    )}
+                  </SearchContainer>
+                </SearchBox>
+              </ButtonContainer>
+            </RightContainer>
           </TabletAndAbove>
           <MobileOnly>
             <ButtonContainer>
               {!isHamburgerOpen ? (
                 <>
                   <Button>
-                    <Link
-                      href={pillButtonLinks[1].href}
-                      target={pillButtonLinks[1].target}
-                    >
+                    <Link href={ExternalRoutes.Support} target={'_blank'}>
                       <PillButton
-                        text={pillButtonLinks[1].text}
+                        text={'贊助'}
                         size={PillButton.Size.S}
-                        type={pillButtonLinks[1].type}
+                        type={PillButton.Type.PRIMARY}
                       />
                     </Link>
                   </Button>
@@ -274,7 +283,10 @@ const Header: React.FC = () => {
           </MobileOnly>
         </HeaderSection>
       </Container>
-      <HamburgerMenu isOpen={isHamburgerOpen} />
+      <HamburgerMenu
+        isOpen={isHamburgerOpen}
+        onClose={() => setIsHamburgerOpen(false)}
+      />
     </React.Fragment>
   )
 }

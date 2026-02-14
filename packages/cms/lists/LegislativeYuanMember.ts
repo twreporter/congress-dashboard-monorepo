@@ -5,6 +5,7 @@ import {
   select,
   integer,
   checkbox,
+  json,
 } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
@@ -21,8 +22,8 @@ import {
   MemberType,
   MEMBER_TYPE_OPTIONS,
   CONSTITUENCY_OPTIONS,
-  CITY_OPTIONS,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import { CITY_OPTIONS } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 
 const listConfigurations = list({
   fields: {
@@ -149,6 +150,9 @@ const listConfigurations = list({
     }),
     proposalSuccessCount: integer({
       label: '提案通過數',
+    }),
+    relatedLink: json({
+      label: '相關經歷',
     }),
     isActive: checkbox({
       label: '是否該屆期現任',

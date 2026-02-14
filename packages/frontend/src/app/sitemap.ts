@@ -5,9 +5,11 @@ import { fetchAllSpeechesSlug } from '@/fetchers/server/speech'
 import { fetchAllTopicsSlug } from '@/fetchers/server/topic'
 // constants
 import { InternalRoutes } from '@/constants/routes'
+// utils
+import { generateSitemap } from '@/utils/sitemap'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
-const baseUrl = 'https://lawmaker.twreporter.org'
+const baseUrl = 'https://lawmaker.twreporter.org' as const
 
 export const dynamic = 'force-dynamic'
 
@@ -24,20 +26,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
     ]
     const legislators = await fetchAllLegislatorsSlug()
-    const legislatorSitemap = legislators?.map(({ slug, updatedAt }) => ({
-      url: `${baseUrl}${InternalRoutes.Legislator}/${slug}`,
-      lastModified: new Date(updatedAt),
-    }))
+    const legislatorSitemap = legislators?.map(
+      generateSitemap(InternalRoutes.Legislator)
+    )
+
     const speeches = await fetchAllSpeechesSlug()
-    const speechSitemap = speeches?.map(({ slug, updatedAt }) => ({
-      url: `${baseUrl}${InternalRoutes.Speech}/${slug}`,
-      lastModified: new Date(updatedAt),
-    }))
+    const speechSitemap = speeches?.map(generateSitemap(InternalRoutes.Speech))
+
     const topics = await fetchAllTopicsSlug()
-    const topicSitemap = topics?.map(({ slug, updatedAt }) => ({
-      url: `${baseUrl}${InternalRoutes.Topic}/${slug}`,
-      lastModified: new Date(updatedAt),
-    }))
+    const topicSitemap = topics?.map(generateSitemap(InternalRoutes.Topic))
+
     return baseSitemap.concat(
       legislatorSitemap ?? [],
       speechSitemap ?? [],

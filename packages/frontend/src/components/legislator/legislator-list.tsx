@@ -33,6 +33,7 @@ import FilterModal from '@/components/sidebar/filter-modal'
 import { FollowMoreErrorState } from '@/components/sidebar/error-state'
 // type
 import type { TabProps } from '@/components/sidebar/type'
+import type { SpeechDataForSidebar } from '@/types/speech'
 // utils
 import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
 // constants
@@ -44,7 +45,7 @@ const maxTabs = 5
 const mapToTabItems = (items: TabProps[]): TabProps[] =>
   items.map((item) => ({ ...item, showAvatar: false }))
 
-const LegislatorContainer = styled.div`
+export const LegislatorContainer = styled.div`
   gap: 32px;
   display: flex;
   overflow-x: scroll;
@@ -58,7 +59,7 @@ const LegislatorContainer = styled.div`
   }
 `
 
-const FilterMask = styled.div<{ $show: boolean }>`
+export const FilterMask = styled.div<{ $show: boolean }>`
   visibility: ${(props) => (props.$show ? 'visible' : 'hidden')};
   transition: visibility 0.3s ease-in-out;
   position: fixed;
@@ -70,7 +71,7 @@ const FilterMask = styled.div<{ $show: boolean }>`
   z-index: ${ZIndex.SideBar};
 `
 
-const FilterBox = styled.div<{ $show: boolean }>`
+export const FilterBox = styled.div<{ $show: boolean }>`
   transform: translateX(${(props) => (props.$show ? 0 : '100%')});
   transition: transform 0.3s ease-in-out;
   position: fixed;
@@ -94,10 +95,7 @@ type LegislatorListProps = {
   legislatorName: string
   legislatorNote?: string
   topics: { name: string; slug: string; count: number }[]
-  speechesByTopic: Record<
-    string,
-    { title: string; date: string; summary: string; slug: string }[]
-  >
+  speechesByTopic: Record<string, SpeechDataForSidebar[]>
   currentMeetingTerm: number
   currentMeetingSession: number[]
 }
@@ -138,10 +136,10 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
     if (!selectedTopic) return []
     return groupSummary(
       speechesByTopic[selectedTopic.slug].map(
-        ({ title, date, summary, slug }) => ({
+        ({ title, date, summaryFallback, slug }) => ({
           title,
           date: new Date(date),
-          summary,
+          summary: summaryFallback || '',
           slug,
         })
       )

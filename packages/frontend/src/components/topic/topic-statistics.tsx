@@ -7,7 +7,7 @@ import mq from '@twreporter/core/lib/utils/media-query'
 // components
 import { P1Gray800 } from '@/components/topic/styles'
 
-const StatisticsBlock = styled.div`
+export const StatisticsBlock = styled.div`
   display: flex;
   padding: 32px 24px;
   border-radius: 8px;
@@ -19,13 +19,13 @@ const StatisticsBlock = styled.div`
   `}
 `
 
-const StatisticsDiv = styled.div`
+export const StatisticsDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
 `
 
-const StatisticsNumber = styled.div`
+export const StatisticsNumber = styled.div`
   color: ${colorGrayscale.gray800};
   font-size: 48px;
   font-style: normal;

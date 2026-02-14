@@ -9,7 +9,8 @@ import React, {
   RefAttributes,
 } from 'react'
 import styled from 'styled-components'
-// context
+import Link from 'next/link'
+// contet
 import { DashboardContext } from '@/components/dashboard/context'
 // fetcher
 import { fetchLegislatorsOfATopic } from '@/fetchers/legislator'
@@ -103,6 +104,9 @@ const FollowMoreSection = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  a {
+    text-decoration: none;
+  }
 `
 const FollowMoreTitle = styled(H5)`
   color: ${colorGrayscale.gray800};
@@ -124,7 +128,7 @@ export function groupSummary(summaryList: SummaryCardProps[]) {
       result.push({ year: Number(year), cards: summarys })
   )
 
-  return result
+  return result.sort((a, b) => b.year - a.year)
 }
 
 export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
@@ -168,13 +172,15 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
         }
       : undefined
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => speechState.speeches || [],
-    [speechState.speeches]
-  )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(summaryList),
-    [summaryList]
+    () =>
+      groupSummary(
+        speechState.speeches?.map(({ summaryFallback, ...speech }) => ({
+          summary: summaryFallback || '',
+          ...speech,
+        })) || []
+      ),
+    [speechState.speeches]
   )
   const followMoreState = useMoreTopics(
     formattedFilterValues && selectedLegislator && selectedLegislator.id
@@ -261,7 +267,12 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
                 ) : issueList.length > 0 ? (
                   <FollowMoreTags>
                     {issueList.map((props: IssueProps, index: number) => (
-                      <Issue {...props} key={`follow-more-issue-${index}`} />
+                      <Link
+                        href={`${InternalRoutes.Topic}/${props.slug}`}
+                        key={`follow-more-issue-${index}`}
+                      >
+                        <Issue {...props} />
+                      </Link>
                     ))}
                   </FollowMoreTags>
                 ) : null}
@@ -360,13 +371,15 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
         }
       : undefined
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => speechState.speeches || [],
-    [speechState.speeches]
-  )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(summaryList),
-    [summaryList]
+    () =>
+      groupSummary(
+        speechState.speeches?.map(({ summaryFallback, ...speech }) => ({
+          summary: summaryFallback || '',
+          ...speech,
+        })) || []
+      ),
+    [speechState.speeches]
   )
   const followMoreState = useMoreLegislators(
     formattedFilterValues && selectedIssue && selectedIssue.slug
@@ -461,10 +474,12 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
                   <FollowMoreLegislator>
                     {legislatorList.map(
                       (props: LegislatorProps, index: number) => (
-                        <Legislator
-                          {...props}
+                        <Link
+                          href={`${InternalRoutes.Legislator}/${props.slug}`}
                           key={`follow-more-legislator-${index}`}
-                        />
+                        >
+                          <Legislator {...props} />
+                        </Link>
                       )
                     )}
                   </FollowMoreLegislator>

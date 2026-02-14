@@ -5,14 +5,14 @@ import { fetchTopNTopics } from '@/fetchers/topic'
 import { getImageLink } from '@/fetchers/utils'
 // type
 import type { FetchTopNTopicsParams } from '@/fetchers/server/topic'
-import type { partyData } from '@/fetchers/party'
+import type { PartyData } from '@/types/party'
 // lodash
 import { find } from 'lodash'
 const _ = {
   find,
 }
 
-const useTopic = (parties: partyData[]) => {
+const useTopic = (parties: PartyData[]) => {
   const fetchTopic = useCallback(
     async ({
       take,

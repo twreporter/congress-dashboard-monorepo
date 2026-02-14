@@ -35,7 +35,7 @@ type DropdownMenuProps = {
   filterOptions: (options: Option[]) => Option[]
   handleSelect: (option: Option) => void
   isMultiple?: boolean
-  selectCotainerRef: RefObject<HTMLDivElement | null>
+  selectContainerRef: RefObject<HTMLDivElement | null>
 }
 
 export const DropdownMenu: React.FC<DropdownMenuProps> = ({
@@ -44,15 +44,15 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
   filterOptions,
   handleSelect,
   isMultiple = false,
-  selectCotainerRef,
+  selectContainerRef,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [showAbove, setShowAbove] = useState(false)
 
   useEffect(() => {
     const checkPosition = _.throttle(() => {
-      if (!selectCotainerRef.current || !dropdownRef.current) return
-      const selectRect = selectCotainerRef.current.getBoundingClientRect()
+      if (!selectContainerRef.current || !dropdownRef.current) return
+      const selectRect = selectContainerRef.current.getBoundingClientRect()
       const dropdownHeight = dropdownRef.current.offsetHeight
       const windowHeight = window.innerHeight
       const spaceBelow = windowHeight - selectRect.bottom
@@ -76,7 +76,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({
       window.removeEventListener('scroll', checkPosition)
       window.removeEventListener('resize', checkPosition)
     }
-  }, [selectCotainerRef])
+  }, [selectContainerRef])
 
   const isSelected = useCallback(
     (optionValue: ValueType): boolean => {

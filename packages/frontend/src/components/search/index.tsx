@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 
 import type { AlgoliaInstantSearchProps } from '@/components/search/instant-search'
-import type { SearchPageProps } from '@/components/search/result-page/index'
+import type { SearchPageProps } from '@/components/search/result-page/types'
 
 const AlgoliaInstantSearch = dynamic<AlgoliaInstantSearchProps>(
   () =>

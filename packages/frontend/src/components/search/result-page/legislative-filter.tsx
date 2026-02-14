@@ -11,12 +11,12 @@ import { formatDate } from '@/utils/date-formatters'
 import { useLegislativeMeeting } from '@/fetchers/legislative-meeting'
 import { useLegislativeMeetingSession } from '@/fetchers/legislative-meeting'
 
-export type FilterValueType = {
+export type LegislativeFilterValueType = {
   meeting: string
   meetingSession: string[]
 }
 
-export const defaultFilterValue = {
+export const defaultLegislativeFilterValue = {
   meeting: 'all',
   meetingSession: ['all'],
 }
@@ -34,17 +34,18 @@ const FilterString = styled.div`
   line-height: 150%;
 `
 
-export const SearchFilter = ({
+export const LegislativeSearchFilter = ({
   className,
   filterValue: _filterValue,
   onChange,
 }: {
   className?: string
-  filterValue: FilterValueType
-  onChange: (FilterValueType) => void
+  filterValue: LegislativeFilterValueType
+  onChange: (LegislativeFilterValueType) => void
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [filterValue, setFilterValue] = useState<FilterValueType>(_filterValue)
+  const [filterValue, setFilterValue] =
+    useState<LegislativeFilterValueType>(_filterValue)
   const {
     legislativeMeetings: meetings,
     isLoading: isLoadingMeeting,
@@ -123,14 +124,14 @@ export const SearchFilter = ({
       <FilterModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        initialValues={defaultFilterValue}
+        initialValues={defaultLegislativeFilterValue}
         onSubmit={onChange}
         onChange={(value) => {
           if (value.meeting === 'all') {
-            setFilterValue(defaultFilterValue)
+            setFilterValue(defaultLegislativeFilterValue)
             return
           }
-          setFilterValue(value as FilterValueType)
+          setFilterValue(value as LegislativeFilterValueType)
         }}
         options={getFilterOptions()}
         value={filterValue}

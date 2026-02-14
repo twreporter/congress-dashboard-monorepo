@@ -11,6 +11,12 @@ import Speech from './Speech'
 import CommitteeMember from './CommitteeMember'
 import Selected from './Selected'
 import ImportRecord from './ImportRecord'
+import Councilor from './Councilor'
+import CouncilMeeting from './CouncilMeeting'
+import CouncilMember from './CouncilMember'
+import CouncilTopic from './CouncilTopic'
+import CouncilBill from './CouncilBill'
+import CouncilImportRecord from './CouncilImportRecord'
 
 export const listDefinition = {
   SystemUser,
@@ -20,10 +26,16 @@ export const listDefinition = {
   Topic,
   Legislator,
   LegislativeYuanMember,
-  Party,
   LegislativeMeeting,
   LegislativeMeetingSession,
   Committee,
   CommitteeMember,
+  CouncilBill,
+  CouncilTopic,
+  Councilor,
+  CouncilMember,
+  CouncilMeeting,
+  Party,
   ImportRecord,
+  CouncilImportRecord,
 }

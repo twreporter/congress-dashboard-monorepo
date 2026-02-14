@@ -1,0 +1,72 @@
+import type { KeystoneImage, RelatedLink } from '@/types/index'
+import type { CouncilDistrict } from '@/types/council'
+import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
+
+export type CouncilorMemberMeta = {
+  councilor: {
+    name: string
+  }
+}
+
+export type CouncilorType = MemberType
+
+export type CouncilorMemberData = {
+  type: CouncilorType
+  constituency?: number
+  administrativeDistrict?: string[]
+  note?: string
+  tooltip?: string
+  proposalSuccessCount?: number
+  relatedLink?: RelatedLink[]
+  isActive: boolean
+  councilor: {
+    name: string
+    image?: KeystoneImage
+    imageLink?: string
+    externalLink?: string
+    meetingTermCount?: number
+    meetingTermCountInfo?: string
+  }
+  party: {
+    name: string
+    image?: KeystoneImage
+    imageLink?: string
+  }
+  councilMeeting: {
+    term: number
+    city: string
+  }
+}
+
+export type CouncilorForLawmaker = {
+  slug: string
+  name: string
+  avatar: string
+  city: CouncilDistrict
+  type: CouncilorType
+  constituency?: number
+  administrativeDistrict: string[]
+  note?: string
+  tooltip?: string
+  proposalSuccessCount: number
+  relatedLink: RelatedLink[]
+  externalLink?: string
+  meetingTermCount: number
+  meetingTermCountInfo: string
+  isActive: boolean
+  party: {
+    name: string
+    image: string
+  }
+  councilMeeting: {
+    term: number
+    city: CouncilDistrict
+  }
+}
+
+export type CouncilorWithBillCount = {
+  slug: string
+  name: string
+  avatar: string
+  count: number
+}

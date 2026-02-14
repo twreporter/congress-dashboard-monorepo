@@ -1,9 +1,7 @@
 import { useMemo } from 'react'
-// fetcher
-import {
-  type LegislatorFromRes,
-  type TopicData,
-} from '@/fetchers/server/legislator'
+// type
+import type { TopicDataForLegislator, Topic } from '@/types/topic'
+import type { Legislator, LegislatorForLawmaker } from '@/types/legislator'
 // utils
 import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
 // @twreporter
@@ -28,34 +26,12 @@ const _ = {
   mapValues,
 }
 
-export type Legislator = {
-  name: string
-  slug: string
-  constituency: string
-  avatar: string
-  party: {
-    name: string
-    image: string
-  }
-  tooltip?: string
-  note?: string
-  meetingTerm: number
-  committees: {
-    name: string
-    count: number
-  }[]
-  proposalSuccessCount?: number
-  externalLink?: string
-  meetingTermCount: number
-  meetingTermCountInfo?: string
-}
-
 export const useLegislatorData = (
-  legislatorData: LegislatorFromRes,
-  topicsData: TopicData[]
+  legislatorData: Legislator,
+  topicsData: TopicDataForLegislator[]
 ) => {
   return useMemo(() => {
-    const legislator = () => {
+    const legislator = (): LegislatorForLawmaker => {
       const {
         party,
         tooltip,
@@ -67,6 +43,7 @@ export const useLegislatorData = (
         legislator,
         proposalSuccessCount,
         isActive,
+        relatedLink,
       } = legislatorData
       const legislatorName = legislator.name
       const legislatorAvatar = getImageLink(legislator)
@@ -104,10 +81,11 @@ export const useLegislatorData = (
         meetingTermCount: legislator.meetingTermCount || 1,
         meetingTermCountInfo: legislator.meetingTermCountInfo || '',
         isActive,
+        relatedLink: relatedLink || [],
       }
     }
 
-    const topics = _.map(topicsData, (topic) => ({
+    const topics: Topic[] = _.map(topicsData, (topic) => ({
       slug: topic.slug,
       name: topic.title,
       count: topic.speechesCount,

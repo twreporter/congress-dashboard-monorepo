@@ -9,8 +9,9 @@ import FilterModal from '@/components/filter-modal'
 import TopicStatistics from '@/components/topic/topic-statistics'
 import TopicRelatedArticles from '@/components/topic/topic-related-articles'
 import TopicOthersWatching from '@/components/topic/topic-others-watching'
-import TopicFeedback from '@/components/topic/topic-feedback'
+import FeedbackBlock from '@/components/layout/feedback-block'
 import ContentPageLayout from '@/components/layout/content-page-layout'
+import RelatedTopicInElsewhere from '@/components/topic/related-topic-in-elsewhere'
 // styles
 import {
   Spacing,
@@ -18,8 +19,8 @@ import {
   DesktopAside,
   TopicListContainer,
 } from '@/components/topic/styles'
-//  fetcher
-import { type TopicData } from '@/fetchers/server/topic'
+//  type
+import type { TopicData } from '@/types/topic'
 // custom hooks
 import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
 import { useTopicData } from '@/components/topic/hooks/use-topic-data'
@@ -159,7 +160,10 @@ const Topic: React.FC<TopicPageProps> = ({
             currentMeetingTerm={currentMeetingTerm}
             currentMeetingSession={currentMeetingSession}
           />
-          <TopicFeedback />
+          <RelatedTopicInElsewhere
+            relatedCouncilTopic={topic.relatedCouncilTopic}
+          />
+          <FeedbackBlock eventName="topic" />
         </DesktopAside>
         <TabletAndBelow>
           <TopicStatistics
@@ -188,8 +192,12 @@ const Topic: React.FC<TopicPageProps> = ({
             currentMeetingTerm={currentMeetingTerm}
             currentMeetingSession={currentMeetingSession}
           />
+          <Spacing $height={8} />
+          <RelatedTopicInElsewhere
+            relatedCouncilTopic={topic.relatedCouncilTopic}
+          />
           <Spacing $height={32} />
-          <TopicFeedback />
+          <FeedbackBlock eventName="topic" />
         </TabletAndBelow>
       </ContentPageLayout>
 

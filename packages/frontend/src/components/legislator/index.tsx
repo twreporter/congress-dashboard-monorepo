@@ -7,9 +7,10 @@ import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 import LegislatorInfo from '@/components/legislator/legislator-info'
 import LegislatorStatistics from '@/components/legislator/legislator-statistics'
 import LegislatorList from '@/components/legislator/legislator-list'
-import Feedback from '@/components/topic/topic-feedback'
+import FeedbackBlock from '@/components/layout/feedback-block'
 import FilterModal from '@/components/filter-modal'
 import ContentPageLayout from '@/components/layout/content-page-layout'
+import RelatedLinkBlock from '@/components/layout/related-link-block'
 // styles
 import {
   ContentBlock,
@@ -19,10 +20,8 @@ import {
   ListContainer,
 } from '@/components/legislator/styles'
 // type
-import {
-  type LegislatorFromRes,
-  type TopicData,
-} from '@/fetchers/server/legislator'
+import type { TopicDataForLegislator } from '@/types/topic'
+import type { Legislator } from '@/types/legislator'
 // fetcher
 import { useLegislativeMeeting } from '@/fetchers/legislative-meeting'
 // hooks
@@ -33,8 +32,8 @@ import { useLegislativeMeetingFilters } from '@/hooks/use-filters'
 import { InternalRoutes } from '@/constants/routes'
 
 type LegislatorProps = {
-  legislatorData: LegislatorFromRes
-  topicsData: TopicData[]
+  legislatorData: Legislator
+  topicsData: TopicDataForLegislator[]
   currentMeetingTerm: number
   currentMeetingSession: number[]
 }
@@ -165,7 +164,8 @@ const Legislator: React.FC<LegislatorProps> = ({
               legislator={legislator}
               isLegislatorActive={isLegislatorActive}
             />
-            <Feedback />
+            <RelatedLinkBlock relatedLink={legislator.relatedLink} />
+            <FeedbackBlock eventName="legislator" />
           </DesktopAsideLeft>
           <DesktopAsideRight>
             <LegislatorStatistics
@@ -212,7 +212,8 @@ const Legislator: React.FC<LegislatorProps> = ({
                 currentMeetingSession={currentMeetingSession}
               />
             </ListContainer>
-            <Feedback />
+            <RelatedLinkBlock relatedLink={legislator.relatedLink} />
+            <FeedbackBlock eventName="legislator" />
           </ContentBlock>
         </TabletAndBelow>
       </ContentPageLayout>

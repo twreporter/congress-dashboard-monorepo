@@ -1,17 +1,22 @@
 'use client'
 
 import React, { useRef, useState, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import styled, { css } from 'styled-components'
 // enum
 import { TagSize } from '@/components/dashboard/enum'
 // type
 import type { Tag } from '@/components/dashboard/type'
+import { ValuesOf } from '@/types'
 // components
 import Tooltip from '@/components/dashboard/card/tooltip'
 import { Triangle, Gap } from '@/components/skeleton'
 import PartyTag from '@/components/dashboard/card/party-tag'
+// hook
+import useOutsideClick from '@/hooks/use-outside-click'
 // style
 import { textOverflowEllipsisCss } from '@/styles/cheetsheet'
+import { ZIndex } from '@/styles/z-index'
 // @twreporter
 import {
   MEMBER_TYPE_LABEL,
@@ -19,6 +24,11 @@ import {
   Constituency,
   CONSTITUENCY_LABEL,
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import {
+  MemberType as CouncilMemberType,
+  MEMBER_TYPE as COUNCIL_MEMBER_TYPE,
+  MEMBER_TYPE_LABEL as COUNCIL_MEMBER_TYPE_LABEL,
+} from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
 import {
   colorGrayscale,
   colorOpacity,
@@ -130,11 +140,16 @@ const avatarCss = css<{ $size: CardSize }>`
   width: ${(props) => (props.$size === CardSize.S ? 119 : 152)}px;
   height: 100%;
 `
-const Avatar = styled.img<{ $size: CardSize }>`
+const Avatar = styled.img<{ $size: CardSize; $cardType?: CardHumanType }>`
   ${avatarCss}
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   border-right: 1px solid ${colorOpacity['black_0.05']};
+  ${(props) =>
+    props.$cardType === CARD_HUMAN_TYPE.Councilor &&
+    css`
+      object-fit: cover;
+    `}
 `
 const Mask = styled.div<{ $size: CardSize }>`
   opacity: 0.1;
@@ -152,12 +167,70 @@ const Party = styled(PartyTag)`
   bottom: 8px;
 `
 
+// More tag popover styles
+const MoreTagWrapper = styled.div`
+  display: inline-flex;
+`
+
+const MoreTagPopover = styled.div<{
+  $show: boolean
+  $top: number
+  $left: number
+  $position: { top: boolean; left: boolean }
+}>`
+  z-index: ${ZIndex.Tooltip};
+  position: fixed;
+  ${(props) =>
+    props.$position.top
+      ? `bottom: calc(100vh - ${props.$top}px); margin-bottom: 8px;`
+      : `top: ${props.$top}px; margin-top: 8px;`}
+  ${(props) =>
+    props.$position.left
+      ? `right: calc(100vw - ${props.$left}px);`
+      : `left: ${props.$left}px;`}
+  background-color: ${colorGrayscale.gray800};
+  box-shadow: 0px 0px 24px 0px ${colorOpacity['black_0.1']};
+  padding: 8px 16px;
+  border-radius: 4px;
+  display: ${(props) => (props.$show ? 'block' : 'none')};
+  color: ${colorGrayscale.white};
+  font-size: 14px;
+  line-height: 150%;
+  pointer-events: none;
+  max-width: 256px;
+  word-break: break-all;
+
+  &:before {
+    content: '';
+    position: absolute;
+    ${(props) => (props.$position.left ? 'right: 12px;' : 'left: 12px;')}
+    ${(props) =>
+      props.$position.top
+        ? `
+      bottom: -4px;
+      clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+    `
+        : `
+      top: -4px;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    `}
+    width: 8px;
+    height: 4px;
+    background-color: ${colorGrayscale.gray800};
+  }
+`
+export const CARD_HUMAN_TYPE = {
+  Legislator: 'legislator',
+  Councilor: 'councilor',
+} as const
+export type CardHumanType = ValuesOf<typeof CARD_HUMAN_TYPE>
 export type CardHumanProps = {
+  cardType?: CardHumanType
   name?: string
   tooltip?: string
   note?: string
-  type?: MemberType
-  constituency?: Constituency
+  type?: MemberType | CouncilMemberType
+  constituency?: Constituency | number
   tags?: Tag[]
   avatar?: string
   partyAvatar?: string
@@ -166,6 +239,7 @@ export type CardHumanProps = {
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 const CardHuman: React.FC<CardHumanProps> = ({
+  cardType = CARD_HUMAN_TYPE.Legislator,
   name = '',
   tooltip = '',
   note = '',
@@ -262,12 +336,99 @@ const CardHuman: React.FC<CardHumanProps> = ({
     []
   )
   const visibleTags = tags.slice(0, visibleTagCount)
+  const hiddenTags = tags.slice(visibleTagCount)
   const hasMoreTag = tags.length > visibleTagCount
+
+  // More tag hover state
+  const [showMorePopover, setShowMorePopover] = useState(false)
+  const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 })
+  const [popoverPlacement, setPopoverPlacement] = useState({
+    top: false,
+    left: false,
+  })
+  const moreTagRef = useRef<HTMLDivElement>(null)
+  const popoverRef = useRef<HTMLDivElement>(null)
+
+  const checkPopoverPosition = useCallback(() => {
+    if (!moreTagRef.current) return
+
+    const rect = moreTagRef.current.getBoundingClientRect()
+    const popoverWidth = popoverRef.current?.offsetWidth || 256 // use actual width or max-width estimate
+    const popoverHeight = popoverRef.current?.offsetHeight || 100 // estimate if not rendered
+    const windowWidth = window.innerWidth
+    const windowHeight = window.innerHeight
+
+    // Check if popover would overflow to the right
+    const overflowRight = rect.left + popoverWidth > windowWidth
+
+    // Check if popover would overflow to the bottom
+    const overflowBottom = rect.bottom + popoverHeight + 8 > windowHeight
+
+    setPopoverPlacement({
+      left: overflowRight,
+      top: overflowBottom,
+    })
+
+    setPopoverPosition({
+      top: overflowBottom ? rect.top : rect.bottom,
+      left: overflowRight ? rect.right : rect.left,
+    })
+  }, [])
+
+  const handleMoreMouseEnter = useCallback(() => {
+    checkPopoverPosition()
+    setShowMorePopover(true)
+  }, [checkPopoverPosition])
+  const handleMoreMouseLeave = useCallback(() => {
+    setShowMorePopover(false)
+  }, [])
+  const handleMoreClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      checkPopoverPosition()
+      setShowMorePopover((prev) => !prev)
+    },
+    [checkPopoverPosition]
+  )
+
+  // Hide popover on scroll
+  useEffect(() => {
+    if (!showMorePopover) return
+
+    const handleScroll = () => {
+      setShowMorePopover(false)
+    }
+
+    window.addEventListener('scroll', handleScroll, true)
+    return () => {
+      window.removeEventListener('scroll', handleScroll, true)
+    }
+  }, [showMorePopover])
+
+  // Hide popover on click outside
+  const handleOutsideClick = useCallback(() => {
+    setShowMorePopover(false)
+  }, [])
+  const outsideClickRef = useOutsideClick<HTMLDivElement>(handleOutsideClick)
+
+  // Combine refs for moreTagRef and outsideClickRef
+  const setMoreTagRefs = useCallback(
+    (element: HTMLDivElement | null) => {
+      moreTagRef.current = element
+      outsideClickRef(element)
+    },
+    [outsideClickRef]
+  )
+
+  const popoverContent = hiddenTags
+    .map(({ name, count }: Tag) => `${name}(${count})`)
+    .join('、')
 
   return (
     <Box $selected={selected} $size={size} onClick={onClick}>
       <AvatarContainer>
-        <Avatar src={avatar} $size={size} />
+        <Avatar src={avatar} $size={size} $cardType={cardType} />
         <Mask $size={size} />
         <Party avatar={partyAvatar} size={TagSize.L} />
       </AvatarContainer>
@@ -279,9 +440,13 @@ const CardHuman: React.FC<CardHumanProps> = ({
           </Title>
           <Type
             text={
-              type === MemberType.Constituency && constituency
-                ? CONSTITUENCY_LABEL[constituency]
-                : MEMBER_TYPE_LABEL[type]
+              cardType === CARD_HUMAN_TYPE.Councilor
+                ? type === COUNCIL_MEMBER_TYPE.constituency
+                  ? `第${constituency}選區`
+                  : COUNCIL_MEMBER_TYPE_LABEL[type as CouncilMemberType]
+                : type === MemberType.Constituency && constituency
+                ? CONSTITUENCY_LABEL[constituency as Constituency]
+                : MEMBER_TYPE_LABEL[type as MemberType]
             }
           />
         </div>
@@ -301,9 +466,29 @@ const CardHuman: React.FC<CardHumanProps> = ({
               )
             })}
             {hasMoreTag ? (
-              <TagItem>
-                <More releaseBranch={releaseBranch} />
-              </TagItem>
+              <MoreTagWrapper
+                ref={setMoreTagRefs}
+                onMouseEnter={handleMoreMouseEnter}
+                onMouseLeave={handleMoreMouseLeave}
+                onClick={handleMoreClick}
+              >
+                <TagItem>
+                  <More releaseBranch={releaseBranch} />
+                </TagItem>
+                {typeof document !== 'undefined' &&
+                  createPortal(
+                    <MoreTagPopover
+                      ref={popoverRef}
+                      $show={showMorePopover}
+                      $top={popoverPosition.top}
+                      $left={popoverPosition.left}
+                      $position={popoverPlacement}
+                    >
+                      {popoverContent}
+                    </MoreTagPopover>,
+                    document.body
+                  )}
+              </MoreTagWrapper>
             ) : null}
           </TagContainer>
         ) : (

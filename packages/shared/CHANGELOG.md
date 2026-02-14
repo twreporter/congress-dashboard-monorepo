@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.3.0-rc.1...@twreporter/congress-dashboard-shared@0.3.0-rc.2) (2026-02-11)
+
+### Bug Fixes
+
+- **shared:** for publish test ([dbbc22c](https://github.com/twreporter/congress-dashboard-monorepo/commit/dbbc22c20d84aa0e0d6db93e5bef2dfdaa1914ca))
+
+# [0.3.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.3.0-rc.0...@twreporter/congress-dashboard-shared@0.3.0-rc.1) (2026-02-11)
+
+### Bug Fixes
+
+- **shared:** for publish test ([63d5d44](https://github.com/twreporter/congress-dashboard-monorepo/commit/63d5d44e0cbc023db97b0de5bd8e80c713f14bd9))
+
+# [0.3.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.1-rc.1...@twreporter/congress-dashboard-shared@0.3.0-rc.0) (2026-02-11)
+
+### Features
+
+- **shared:** council topic type ([088f19b](https://github.com/twreporter/congress-dashboard-monorepo/commit/088f19ba841b826547511f7aeae0c509153bde2e))
+
+## [0.2.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.1-rc.0...@twreporter/congress-dashboard-shared@0.2.1-rc.1) (2026-02-02)
+
+### Bug Fixes
+
+- **shared:** typo ([2b27fd1](https://github.com/twreporter/congress-dashboard-monorepo/commit/2b27fd1d80731c492ab7f29f595ca3b9c4ee9505))
+
+## [0.2.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.2.0-beta.5...@twreporter/congress-dashboard-shared@0.2.1-rc.0) (2026-01-06)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-shared
+
+# [0.2.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.1.0...@twreporter/congress-dashboard-shared@0.2.0) (2026-01-06)
+
+### Bug Fixes
+
+- **shared:** add `as const` to correct type assert ([7755cf8](https://github.com/twreporter/congress-dashboard-monorepo/commit/7755cf8e9735f2aba3163676adf31dbb4ff8c30a))
+- **shared:** import route ([709ee5f](https://github.com/twreporter/congress-dashboard-monorepo/commit/709ee5f8fb07dfa553b2a6163bd5cdf5bbb97f54))
+
+### Features
+
+- **shared:** for publish test ([a2face5](https://github.com/twreporter/congress-dashboard-monorepo/commit/a2face5dbb44d61e85e3ebe4410fcb9aeea808c4))
+- **shared:** for publish test ([34ccf68](https://github.com/twreporter/congress-dashboard-monorepo/commit/34ccf68bc525d506c18a8c2882eb8922c4d14a42))
+- **shared:** city district const ([016960e](https://github.com/twreporter/congress-dashboard-monorepo/commit/016960edb05213267d80e1891b2386b79ccf503d))
+- **shared:** council constants ([5fe7e50](https://github.com/twreporter/congress-dashboard-monorepo/commit/5fe7e50295d859525c02c704d4a09b6c77002a75))
+
 # [0.1.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-shared@0.1.0-rc.0...@twreporter/congress-dashboard-shared@0.1.0) (2025-08-13)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-shared
@@ -25,8 +67,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - ignore eslintcache ([8508af4](https://github.com/twreporter/congress-dashboard-monorepo/commit/8508af454e429adc5b9fdb4b49b63032449c5a14))
 - **shared:** remove deprecated city entries from legislative yuan member constants ([6e08c83](https://github.com/twreporter/congress-dashboard-monorepo/commit/6e08c83f2a12e3fcb1a888596d28048034b3aac4))
 - **shared:** use typescript enum for export constants ([e3f9ad3](https://github.com/twreporter/congress-dashboard-monorepo/commit/e3f9ad3a7153e4ea4ecaf9d02db956cb0f1be532))
-
-# Changelog
 
 ## 0.0.7
 

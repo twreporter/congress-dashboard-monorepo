@@ -12,14 +12,15 @@ generator client {
 }
 
 model SystemUser {
-  id                         Int            @id @default(autoincrement())
-  name                       String         @default("")
-  email                      String         @unique @default("")
-  password                   String
-  role                       String
-  createdAt                  DateTime?      @default(now())
-  updatedAt                  DateTime?      @updatedAt
-  from_ImportRecord_importer ImportRecord[] @relation("ImportRecord_importer")
+  id                                Int                   @id @default(autoincrement())
+  name                              String                @default("")
+  email                             String                @unique @default("")
+  password                          String
+  role                              String
+  createdAt                         DateTime?             @default(now())
+  updatedAt                         DateTime?             @updatedAt
+  from_ImportRecord_importer        ImportRecord[]        @relation("ImportRecord_importer")
+  from_CouncilImportRecord_importer CouncilImportRecord[] @relation("CouncilImportRecord_importer")
 }
 
 model Photo {
@@ -33,6 +34,7 @@ model Photo {
   createdAt             DateTime?    @default(now())
   updatedAt             DateTime?    @updatedAt
   from_Legislator_image Legislator[] @relation("Legislator_image")
+  from_Councilor_image  Councilor[]  @relation("Councilor_image")
   from_Party_image      Party[]      @relation("Party_image")
 
   @@index([name])
@@ -82,16 +84,17 @@ model Speech {
 }
 
 model Topic {
-  id                        Int        @id @default(autoincrement())
-  title                     String     @default("")
-  slug                      String     @unique @default("")
-  speeches                  Speech[]   @relation("Speech_topics")
-  relatedTopics             Topic[]    @relation("Topic_referencedByTopics")
-  referencedByTopics        Topic[]    @relation("Topic_referencedByTopics")
-  relatedTwreporterArticles Json?      @default("[]")
-  createdAt                 DateTime?  @default(now())
-  updatedAt                 DateTime?  @updatedAt
-  from_Selected_topic       Selected[] @relation("Selected_topic")
+  id                        Int            @id @default(autoincrement())
+  title                     String         @default("")
+  slug                      String         @unique @default("")
+  speeches                  Speech[]       @relation("Speech_topics")
+  relatedTopics             Topic[]        @relation("Topic_referencedByTopics")
+  referencedByTopics        Topic[]        @relation("Topic_referencedByTopics")
+  relatedCouncilTopic       CouncilTopic[] @relation("CouncilTopic_relatedLegislativeTopic")
+  relatedTwreporterArticles Json?          @default("[]")
+  createdAt                 DateTime?      @default(now())
+  updatedAt                 DateTime?      @updatedAt
+  from_Selected_topic       Selected[]     @relation("Selected_topic")
 
   @@index([title])
 }
@@ -131,6 +134,7 @@ model LegislativeYuanMember {
   tooltip              String              @default("")
   note                 String              @default("")
   proposalSuccessCount Int?
+  relatedLink          Json?
   isActive             Boolean             @default(true)
   createdAt            DateTime?           @default(now())
   updatedAt            DateTime?           @updatedAt
@@ -138,20 +142,6 @@ model LegislativeYuanMember {
   @@index([legislatorId])
   @@index([partyId])
   @@index([legislativeMeetingId])
-}
-
-model Party {
-  id                               Int                     @id @default(autoincrement())
-  name                             String                  @default("")
-  slug                             String                  @unique @default("")
-  image                            Photo?                  @relation("Party_image", fields: [imageId], references: [id])
-  imageId                          Int?                    @map("image")
-  imageLink                        String                  @default("")
-  createdAt                        DateTime?               @default(now())
-  updatedAt                        DateTime?               @updatedAt
-  from_LegislativeYuanMember_party LegislativeYuanMember[] @relation("LegislativeYuanMember_party")
-
-  @@index([imageId])
 }
 
 model LegislativeMeeting {
@@ -211,6 +201,124 @@ model CommitteeMember {
   @@index([legislativeYuanMemberId])
 }
 
+model CouncilBill {
+  id               Int             @id @default(autoincrement())
+  councilMeeting   CouncilMeeting? @relation("CouncilBill_councilMeeting", fields: [councilMeetingId], references: [id])
+  councilMeetingId Int?            @map("councilMeeting")
+  councilMember    CouncilMember[] @relation("CouncilBill_councilMember")
+  date             DateTime        @mysql.Date
+  title            String          @default("")
+  slug             String          @unique @default("")
+  summary          Json?
+  content          Json?
+  attendee         String          @default("") @mysql.VarChar(500)
+  sourceLink       Json?
+  topic            CouncilTopic[]  @relation("CouncilBill_topic")
+  createdAt        DateTime?       @default(now())
+  updatedAt        DateTime?       @updatedAt
+
+  @@index([councilMeetingId])
+  @@index([date])
+  @@index([title])
+  @@index([updatedAt])
+}
+
+model CouncilTopic {
+  id                           Int            @id @default(autoincrement())
+  title                        String         @default("")
+  slug                         String         @unique @default("")
+  bill                         CouncilBill[]  @relation("CouncilBill_topic")
+  city                         String
+  type                         String         @default("general")
+  relatedLegislativeTopic      Topic[]        @relation("CouncilTopic_relatedLegislativeTopic")
+  relatedCouncilTopic          CouncilTopic[] @relation("CouncilTopic_referencedByCouncilTopic")
+  referencedByCouncilTopic     CouncilTopic[] @relation("CouncilTopic_referencedByCouncilTopic")
+  relatedCityCouncilTopic      CouncilTopic[] @relation("CouncilTopic_referencedByCityCouncilTopic")
+  referencedByCityCouncilTopic CouncilTopic[] @relation("CouncilTopic_referencedByCityCouncilTopic")
+  relatedTwreporterArticle     Json?          @default("[]")
+  labelForCMS                  String         @default("")
+  createdAt                    DateTime?      @default(now())
+  updatedAt                    DateTime?      @updatedAt
+
+  @@index([title])
+}
+
+model Councilor {
+  id                           Int             @id @default(autoincrement())
+  name                         String          @default("")
+  slug                         String          @unique @default("")
+  image                        Photo?          @relation("Councilor_image", fields: [imageId], references: [id])
+  imageId                      Int?            @map("image")
+  imageLink                    String          @default("")
+  externalLink                 String          @default("")
+  meetingTermCount             Int?
+  meetingTermCountInfo         String          @default("")
+  createdAt                    DateTime?       @default(now())
+  updatedAt                    DateTime?       @updatedAt
+  from_CouncilMember_councilor CouncilMember[] @relation("CouncilMember_councilor")
+
+  @@index([imageId])
+}
+
+model CouncilMember {
+  id                     Int             @id @default(autoincrement())
+  councilor              Councilor?      @relation("CouncilMember_councilor", fields: [councilorId], references: [id])
+  councilorId            Int?            @map("councilor")
+  labelForCMS            String          @default("")
+  party                  Party?          @relation("CouncilMember_party", fields: [partyId], references: [id])
+  partyId                Int?            @map("party")
+  councilMeeting         CouncilMeeting? @relation("CouncilMember_councilMeeting", fields: [councilMeetingId], references: [id])
+  councilMeetingId       Int?            @map("councilMeeting")
+  bill                   CouncilBill[]   @relation("CouncilBill_councilMember")
+  type                   String
+  city                   String
+  constituency           Int?
+  administrativeDistrict Json?
+  tooltip                String          @default("")
+  note                   String          @default("")
+  proposalSuccessCount   Int?
+  relatedLink            Json?
+  isActive               Boolean         @default(true)
+  createdAt              DateTime?       @default(now())
+  updatedAt              DateTime?       @updatedAt
+
+  @@index([councilorId])
+  @@index([partyId])
+  @@index([councilMeetingId])
+  @@index([type])
+  @@index([city])
+}
+
+model CouncilMeeting {
+  id                                Int             @id @default(autoincrement())
+  city                              String
+  term                              Int
+  startTime                         DateTime        @mysql.Date
+  endTime                           DateTime        @mysql.Date
+  labelForCMS                       String          @default("")
+  createdAt                         DateTime?       @default(now())
+  updatedAt                         DateTime?       @updatedAt
+  from_CouncilBill_councilMeeting   CouncilBill[]   @relation("CouncilBill_councilMeeting")
+  from_CouncilMember_councilMeeting CouncilMember[] @relation("CouncilMember_councilMeeting")
+
+  @@index([term])
+}
+
+model Party {
+  id                               Int                     @id @default(autoincrement())
+  name                             String                  @default("")
+  slug                             String                  @unique @default("")
+  image                            Photo?                  @relation("Party_image", fields: [imageId], references: [id])
+  imageId                          Int?                    @map("image")
+  imageLink                        String                  @default("")
+  createdAt                        DateTime?               @default(now())
+  updatedAt                        DateTime?               @updatedAt
+  from_LegislativeYuanMember_party LegislativeYuanMember[] @relation("LegislativeYuanMember_party")
+  from_CouncilMember_party         CouncilMember[]         @relation("CouncilMember_party")
+
+  @@index([imageId])
+}
+
 model ImportRecord {
   id                  Int         @id @default(autoincrement())
   recordName          String      @default("")
@@ -218,6 +326,22 @@ model ImportRecord {
   uploadData_csvData  Json
   recordCount         Int?
   importer            SystemUser? @relation("ImportRecord_importer", fields: [importerId], references: [id])
+  importerId          Int?        @map("importer")
+  createdAt           DateTime?   @default(now())
+  updatedAt           DateTime?   @updatedAt
+
+  @@index([importerId])
+}
+
+model CouncilImportRecord {
+  id                  Int         @id @default(autoincrement())
+  recordName          String      @default("")
+  uploadData_listName String?
+  uploadData_filename String?
+  uploadData_filesize Int?
+  uploadData_url      String?
+  recordCount         Int?
+  importer            SystemUser? @relation("CouncilImportRecord_importer", fields: [importerId], references: [id])
   importerId          Int?        @map("importer")
   createdAt           DateTime?   @default(now())
   updatedAt           DateTime?   @updatedAt

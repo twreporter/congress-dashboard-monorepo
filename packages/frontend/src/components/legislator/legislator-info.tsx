@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 // @twreporter
 import {
   colorGrayscale,
@@ -21,10 +21,14 @@ import { AvatarCircleCss } from '@/styles/cheetsheet'
 import PartyTag from '@/components/dashboard/card/party-tag'
 // enums
 import { TagSize } from '@/components/dashboard/enum'
-// fetcher
-import { type Legislator } from '@/components/legislator/hooks/use-legislator-data'
+// types
+import type { LegislatorForLawmaker } from '@/types/legislator'
+import {
+  CARD_HUMAN_TYPE,
+  type CardHumanType,
+} from '@/components/dashboard/card/human'
 
-const LegislatorInfoDiv = styled.div`
+export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${colorGrayscale.white};
@@ -43,7 +47,7 @@ const LegislatorInfoDiv = styled.div`
   `}
 `
 
-const LegislatorImageContainer = styled.div`
+export const InfoImageContainer = styled.div`
   position: relative;
   height: fit-content;
   width: 300px;
@@ -63,7 +67,7 @@ const LegislatorImageContainer = styled.div`
   `}
 `
 
-const LegislatorImage = styled.img`
+export const Avatar = styled.img<{ $cardType?: CardHumanType }>`
   width: 300px;
   aspect-ratio: 3.5 / 4.5;
   border-radius: 8px 8px 0 0;
@@ -83,9 +87,14 @@ const LegislatorImage = styled.img`
     aspect-ratio: 1/1;
     border-radius: 50%;
   `}
+  ${(props) =>
+    props.$cardType === CARD_HUMAN_TYPE.Councilor &&
+    css`
+      object-fit: cover;
+    `}
 `
 
-const Mask = styled.div`
+export const Mask = styled.div`
   opacity: 0.1;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 100%);
   position: absolute;
@@ -94,7 +103,7 @@ const Mask = styled.div`
   height: 80px;
 `
 
-const PartyTagContainer = styled.div`
+export const PartyTagContainer = styled.div`
   position: absolute;
   ${mq.desktopAndAbove`
     bottom: 16px;
@@ -106,7 +115,7 @@ const PartyTagContainer = styled.div`
   `}
 `
 
-const LegislatorDetail = styled.div`
+export const InfoDetail = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -118,51 +127,52 @@ const LegislatorDetail = styled.div`
   `}
 `
 
-const LegislatorInfoTitle = styled.div`
+export const InfoTitle = styled.div`
   display: flex;
   flex-direction: row;
   gap: 12px;
   align-items: center;
 `
 
-const LegislatorInfoContent = styled.div`
+export const InfoContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
 `
 
-const InfoItem = styled.div`
+export const InfoItem = styled.div`
   display: flex;
   flex-direction: row;
   gap: 12px;
   align-items: baseline;
 `
 
-const InfoTitle = styled.div`
+export const ItemTitle = styled.div`
   display: flex;
   flex: 0 0 32px;
 `
 
-const Badge = styled.div`
+export const Badge = styled.div`
   display: flex;
   padding: 2px 6px;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
   background-color: ${colorSupportive.faded};
+  flex: none;
 `
 
-const BadgeText = styled(P2)`
+export const BadgeText = styled(P2)`
   color: ${colorSupportive.heavy};
 `
 
-const ExternalLinkButton = styled(IconButton)`
+export const ExternalLinkButton = styled(IconButton)`
   width: 24px;
   height: 24px;
 `
 
 type LegislatorInfoProps = {
-  legislator: Legislator
+  legislator: LegislatorForLawmaker
   isLegislatorActive?: boolean
 }
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
@@ -174,9 +184,12 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
     window.open(legislator.externalLink, '_blank')
   }
   return (
-    <LegislatorInfoDiv>
-      <LegislatorImageContainer>
-        <LegislatorImage src={legislator.avatar} />
+    <InfoContainer>
+      <InfoImageContainer>
+        <Avatar
+          src={legislator.avatar}
+          $cardType={CARD_HUMAN_TYPE.Legislator}
+        />
         <DesktopAndAbove>
           <Mask />
         </DesktopAndAbove>
@@ -188,9 +201,9 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
             <PartyTag size={TagSize.XL} avatar={legislator.party.image} />
           </TabletAndBelow>
         </PartyTagContainer>
-      </LegislatorImageContainer>
-      <LegislatorDetail>
-        <LegislatorInfoTitle>
+      </InfoImageContainer>
+      <InfoDetail>
+        <InfoItem>
           <H3Gray900 text={legislator.name} />
           {legislator.externalLink ? (
             <ExternalLinkButton
@@ -202,12 +215,12 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
               }
             />
           ) : null}
-        </LegislatorInfoTitle>
-        <LegislatorInfoContent>
+        </InfoItem>
+        <InfoContent>
           <InfoItem>
-            <InfoTitle>
+            <ItemTitle>
               <P1Gray800 text="屆別" />
-            </InfoTitle>
+            </ItemTitle>
             <P1Gray800
               weight={P1.Weight.BOLD}
               text={`第${legislator.meetingTerm}屆立法委員`}
@@ -219,26 +232,26 @@ const LegislatorInfo: React.FC<LegislatorInfoProps> = ({
             ) : null}
           </InfoItem>
           <InfoItem>
-            <InfoTitle>
+            <ItemTitle>
               <P1Gray800 text="黨籍" />
-            </InfoTitle>
+            </ItemTitle>
             <P1Gray800 weight={P1.Weight.BOLD} text={legislator.party.name} />
           </InfoItem>
           <InfoItem>
-            <InfoTitle>
+            <ItemTitle>
               <P1Gray800 text="選區" />
-            </InfoTitle>
+            </ItemTitle>
             <P1Gray800 weight={P1.Weight.BOLD} text={legislator.constituency} />
           </InfoItem>
           <InfoItem>
-            <InfoTitle>
+            <ItemTitle>
               <P1Gray800 text="備註" />
-            </InfoTitle>
+            </ItemTitle>
             <P1Gray800 weight={P1.Weight.BOLD} text={legislator.tooltip} />
           </InfoItem>
-        </LegislatorInfoContent>
-      </LegislatorDetail>
-    </LegislatorInfoDiv>
+        </InfoContent>
+      </InfoDetail>
+    </InfoContainer>
   )
 }
 
