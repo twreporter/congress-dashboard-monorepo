@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.24...@twreporter/congress-dashboard-frontend@1.10.0) (2026-02-14)
+
+### Bug Fixes
+
+- **frontend:** meeting session filter fallback ([f425777](https://github.com/twreporter/congress-dashboard-monorepo/commit/f425777cb090057ac384687a050c92e9986b1052))
+
 # [1.10.0-rc.24](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.23...@twreporter/congress-dashboard-frontend@1.10.0-rc.24) (2026-02-13)
 
 ### Bug Fixes
@@ -271,6 +277,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - **frontend:** hamburger menu active check ([e47b8f4](https://github.com/twreporter/congress-dashboard-monorepo/commit/e47b8f4b3e3718c9c64ba1eb3353c07487650a85))
 - **frontend:** new header links and hamburger menu ([54ec494](https://github.com/twreporter/congress-dashboard-monorepo/commit/54ec494f36db1a71a62d2271cab37a3ce07c126c))
 - **frontend:** use tab component ([e56a186](https://github.com/twreporter/congress-dashboard-monorepo/commit/e56a18629973ed28eee9ed8de901ae9fdd0d44f8))
+
+## [1.9.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.9.0...@twreporter/congress-dashboard-frontend@1.9.1) (2026-01-20)
+
+### Bug Fixes
+
+- **frontend:** meeting session filter fallback ([f425777](https://github.com/twreporter/congress-dashboard-monorepo/commit/f425777cb090057ac384687a050c92e9986b1052))
 
 # [1.9.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.9.0-rc.1...@twreporter/congress-dashboard-frontend@1.9.0) (2025-12-31)
 
