@@ -4,6 +4,7 @@ import { v4 as uuidV4 } from 'uuid'
 import logger from '@/utils/logger'
 import { isFeedback } from '@/app/api/feedback/utils'
 import slack from '@/app/api/feedback/slack'
+import sendReplyEmail from '@/app/api/feedback/email'
 import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
@@ -49,6 +50,20 @@ export async function POST(req: NextRequest) {
         { requestId, response: { status: 'success' } },
         'slack api response'
       )
+
+      // Send reply email if user provided an email address
+      if (body.email) {
+        const emailRes = await sendReplyEmail(body)
+        if (!emailRes.ok) {
+          logger.error(
+            { requestId, errMsg: emailRes.error?.message },
+            'reply email error'
+          )
+        } else {
+          logger.debug({ requestId, email: body.email }, 'reply email sent')
+        }
+      }
+
       return NextResponse.json(responseHelper.success({ success: true }))
     }
 
