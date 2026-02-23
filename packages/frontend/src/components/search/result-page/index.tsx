@@ -158,12 +158,13 @@ const LegislativeSearchFilter = styled(_LegislativeSearchFilter)`
 const ScopeFilterContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
 
   ${mq.mobileOnly`
     width: 100%;
     margin-top: 20px;
     margin-bottom: 20px;
+    justify-content: space-between;
   `}
 `
 
