@@ -384,7 +384,7 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
     >
       <Container>
         <Text>
-          <p>發言全文</p>
+          <p>發言全文｜立法院</p>
           <p>
             <Highlight
               classNames={{
