@@ -1,6 +1,6 @@
 {
   "name": "lawmaker-cli",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
     "lawmaker": "node lib/index.js"
   },
   "dependencies": {
-    "@twreporter/congress-dashboard-shared": "^0.3.0-rc.2",
+    "@twreporter/congress-dashboard-shared": "^0.3.0",
     "@twreporter/errors": "^1.1.2",
     "algoliasearch": "^5.25.0",
     "axios": "^1.9.0",
