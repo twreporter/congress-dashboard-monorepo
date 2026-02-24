@@ -129,11 +129,11 @@ export function generateSnippetForDevices(
   switch (true) {
     case windowWidth >= DEFAULT_SCREEN.tablet.minWidth &&
       windowWidth < DEFAULT_SCREEN.desktop.minWidth: {
-      maxLength = 82 // for table only
+      maxLength = 82 // for tablet only
       break
     }
     case windowWidth < DEFAULT_SCREEN.tablet.minWidth: {
-      maxLength = 34 // for table below
+      maxLength = 34 // for tablet below
       break
     }
   }
