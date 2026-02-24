@@ -248,13 +248,14 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
   function renderScopeFilterModal(groups: OptionGroup[]) {
     return (
       <>
-        <ScopeFilterContainer
-          onClick={() => {
-            setShowScopeModal(true)
-          }}
-        >
+        <ScopeFilterContainer>
           <ScopeFilterLabel>{scopeFilterLabel}</ScopeFilterLabel>
-          <FilterButton filterCount={0} />
+          <FilterButton
+            filterCount={0}
+            onClick={() => {
+              setShowScopeModal(true)
+            }}
+          />
         </ScopeFilterContainer>
         <ScopeFilterModal
           isOpen={showScopeModal}
