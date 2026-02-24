@@ -85,13 +85,9 @@ const FirstRow = styled.div<{ $variant: LayoutVariant }>`
   }}
   margin: 4px 0;
 
-  /**
-    * @TODO: add back when search page is ready
-    *
   &:hover {
     background-color: ${colorGrayscale.gray100};
   }
-  */
 `
 
 const SearchIconContainer = styled.div`

@@ -12,11 +12,13 @@ import { useLegislativeMeeting } from '@/fetchers/legislative-meeting'
 import { useLegislativeMeetingSession } from '@/fetchers/legislative-meeting'
 
 export type LegislativeFilterValueType = {
+  department: string
   meeting: string
   meetingSession: string[]
 }
 
 export const defaultLegislativeFilterValue = {
+  department: 'legislativeYuan',
   meeting: 'all',
   meetingSession: ['all'],
 }
@@ -64,6 +66,14 @@ export const LegislativeSearchFilter = ({
 
   const getFilterOptions = (): FilterOption[] => {
     const options: FilterOption[] = [
+      {
+        type: SelectorType.Single,
+        disabled: true,
+        label: '單位',
+        key: 'department',
+        defaultValue: 'legislativeYuan',
+        options: [{ label: '立法院', value: 'legislativeYuan' }],
+      },
       {
         type: SelectorType.Single,
         disabled: false,
@@ -137,7 +147,7 @@ export const LegislativeSearchFilter = ({
         value={filterValue}
       />
       <Container className={className} onClick={() => setIsOpen(true)}>
-        <FilterString>{filterString}</FilterString>
+        <FilterString>立法院｜{filterString}</FilterString>
         <FilterButton filterCount={0} />
       </Container>
     </>
