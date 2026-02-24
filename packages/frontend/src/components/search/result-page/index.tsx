@@ -1,5 +1,6 @@
 'use client'
 
+import FilterButton from '@/components/button/filter-button'
 import React, { useEffect, useRef, useState } from 'react'
 import type { LegislativeFilterValueType } from '@/components/search/result-page/legislative-filter'
 import type { SearchStage } from '@/components/search/constants'
@@ -13,8 +14,6 @@ import {
   LegislativeSearchFilter as _LegislativeSearchFilter,
   defaultLegislativeFilterValue,
 } from '@/components/search/result-page/legislative-filter'
-import { PillButton } from '@twreporter/react-components/lib/button'
-import { Filter as FilterIcon } from '@twreporter/react-components/lib/icon'
 import { ScopeFilterModal } from '@/components/search/result-page/scope-filter-modal'
 import type { OptionGroup } from '@/components/selector/types'
 import {
@@ -30,8 +29,6 @@ import type {
   SearchResultsProps,
   SearchPageProps,
 } from '@/components/search/result-page/types'
-
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 function buildLegislativeSpeechFilters(
   filterValue: LegislativeFilterValueType
@@ -198,6 +195,8 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
 
   // Build council filter for specific council scopes
   const councilFilter = buildCouncilFilter(scopeFilterValue)
+  // Build speech filter for specific legislative meeting and session terms
+  const speechFilter = buildLegislativeSpeechFilters(filterValue)
 
   // Dynamically determine tabs based on scopeFilterValue
   const searchTabs = (() => {
@@ -251,12 +250,8 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
       <>
         <ScopeFilterContainer>
           <ScopeFilterLabel>{scopeFilterLabel}</ScopeFilterLabel>
-          <PillButton
-            theme={PillButton.THEME.normal}
-            type={PillButton.Type.SECONDARY}
-            size={PillButton.Size.L}
-            text="篩選"
-            leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
+          <FilterButton
+            filterCount={0}
             onClick={() => {
               setShowScopeModal(true)
             }}
@@ -337,17 +332,17 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
         {mountedTabs.has(searchStages.Speech) && (
           <HitsContainer $hidden={activeTab !== searchStages.Speech}>
             <Hits
-              key={indexNames.Speech}
+              key={`${indexNames.Speech}-${speechFilter}`}
               indexName={indexNames.Speech}
               query={query}
-              filters={buildLegislativeSpeechFilters(filterValue)}
+              filters={speechFilter}
             />
           </HitsContainer>
         )}
         {mountedTabs.has(searchStages.CouncilBill) && (
           <HitsContainer $hidden={activeTab !== searchStages.CouncilBill}>
             <Hits
-              key={indexNames.CouncilBill}
+              key={`${indexNames.CouncilBill}-${councilFilter}`}
               indexName={indexNames.CouncilBill}
               query={query}
               filters={councilFilter}
