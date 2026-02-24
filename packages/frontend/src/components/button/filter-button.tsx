@@ -36,7 +36,7 @@ const P4White = styled(P4)`
   color: ${colorGrayscale.white};
 `
 
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 type FilterButtonProps = {
   filterCount: number
 }
