@@ -55,12 +55,13 @@ export function generateSnippet(
     return text
   }
 
+  const ellipsis = '...'
   let snippet = text.slice(0, maxLength)
   let isTruncated = false
 
   // Append ellipsis if original text is longer than maxLength
   if (text.length > maxLength) {
-    snippet += '...'
+    snippet += ellipsis
   }
 
   // Try to find the first keyword to center snippet around
@@ -76,28 +77,36 @@ export function generateSnippet(
 
     // Only truncate once based on the first matched keyword
     if (!isTruncated) {
-      const buffer = 3
+      // Reserve ellipsis width when computing slice bounds so visible text
+      // remains close to `maxLength` after we prepend/append "...".
+      const buffer = ellipsis.length
       let startIdx = 0
       let endIdx = text.length
 
       if (matchIndex <= text.length / 2) {
         // Prefer showing content from the beginning
         startIdx = Math.max(matchIndex - buffer, 0)
-        endIdx = Math.min(startIdx + maxLength, text.length)
+
+        // Include `buffer` so appending trailing "..." does not reduce the
+        // intended visible snippet window (`maxLength`).
+        endIdx = Math.min(startIdx + maxLength + buffer, text.length)
       } else {
-        // Prefer showing content near the end
+        // Latter-half match: keep the matched keyword within the snippet window
         endIdx = Math.min(matchIndex + maxLength + buffer, text.length)
-        startIdx = Math.max(endIdx - maxLength, 0)
+
+        // Include `buffer` so prepending leading "..." does not reduce the
+        // intended visible snippet window (`maxLength`).
+        startIdx = Math.max(endIdx - maxLength - buffer, 0)
       }
 
       snippet = text.slice(startIdx, endIdx)
 
       // Add ellipses as needed
       if (startIdx > 0) {
-        snippet = '...' + snippet
+        snippet = ellipsis + snippet
       }
       if (endIdx < text.length) {
-        snippet += '...'
+        snippet += ellipsis
       }
 
       isTruncated = true
