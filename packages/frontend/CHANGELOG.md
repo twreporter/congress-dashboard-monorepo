@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.1-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.1-rc.1...@twreporter/congress-dashboard-frontend@1.10.1-rc.2) (2026-02-24)
+
+### Bug Fixes
+
+- **frontend:** correct snippet window bounds around matched keywords ([e9a2da3](https://github.com/twreporter/congress-dashboard-monorepo/commit/e9a2da3a194bb931104ca1f2a7706be22a49b852))
+
 ## [1.10.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.1-rc.0...@twreporter/congress-dashboard-frontend@1.10.1-rc.1) (2026-02-24)
 
 ### Bug Fixes
