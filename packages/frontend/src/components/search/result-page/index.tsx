@@ -195,6 +195,8 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
 
   // Build council filter for specific council scopes
   const councilFilter = buildCouncilFilter(scopeFilterValue)
+  // Build speech filter for specific legislative meeting and session terms
+  const speechFilter = buildLegislativeSpeechFilters(filterValue)
 
   // Dynamically determine tabs based on scopeFilterValue
   const searchTabs = (() => {
@@ -329,17 +331,17 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
         {mountedTabs.has(searchStages.Speech) && (
           <HitsContainer $hidden={activeTab !== searchStages.Speech}>
             <Hits
-              key={indexNames.Speech}
+              key={`${indexNames.Speech}-${speechFilter}`}
               indexName={indexNames.Speech}
               query={query}
-              filters={buildLegislativeSpeechFilters(filterValue)}
+              filters={speechFilter}
             />
           </HitsContainer>
         )}
         {mountedTabs.has(searchStages.CouncilBill) && (
           <HitsContainer $hidden={activeTab !== searchStages.CouncilBill}>
             <Hits
-              key={indexNames.CouncilBill}
+              key={`${indexNames.CouncilBill}-${councilFilter}`}
               indexName={indexNames.CouncilBill}
               query={query}
               filters={councilFilter}
