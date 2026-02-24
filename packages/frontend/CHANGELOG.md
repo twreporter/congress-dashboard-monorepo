@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.1-rc.0...@twreporter/congress-dashboard-frontend@1.10.1-rc.1) (2026-02-24)
+
+### Bug Fixes
+
+- **frontend:** correct NEXT_PUBLIC_RELEASE_BRANCH env var in filter button ([952ad5a](https://github.com/twreporter/congress-dashboard-monorepo/commit/952ad5aaa6b4b837f8b43353999d7ca5c0fa6217))
+- **frontend:** ensure filter changes trigger new search with lazy-mounted tabs ([8141d4d](https://github.com/twreporter/congress-dashboard-monorepo/commit/8141d4df3ab2e26cd5f098db142d1d4aa7f13e06))
+
 ## [1.10.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0...@twreporter/congress-dashboard-frontend@1.10.1-rc.0) (2026-02-23)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
