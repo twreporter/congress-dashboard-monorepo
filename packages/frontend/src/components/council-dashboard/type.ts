@@ -31,6 +31,7 @@ export type CouncilorForIndex = {
   }
   type?: MemberType
   constituency?: number
+  administrativeDistrict?: string[]
   tooltip?: string
   note?: string
 }
@@ -39,6 +40,8 @@ export type CouncilFormattedFilterValue = {
   meetingId: number
   partyIds: number[]
   constituency: number[]
+  types: string[]
+  administrativeDistricts: string[]
 }
 
 export type CouncilFilterFormatter = (

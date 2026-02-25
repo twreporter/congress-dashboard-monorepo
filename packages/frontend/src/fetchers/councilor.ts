@@ -68,11 +68,13 @@ type FetchCouncilorsParams = {
   councilMeetingId: number
   partyIds?: number[]
   constituencies?: number[]
+  types?: string[]
 }
 export const fetchCouncilors = async ({
   councilMeetingId,
   partyIds,
   constituencies,
+  types,
 }: FetchCouncilorsParams): Promise<CouncilorForIndex[]> => {
   const params = new URLSearchParams({ mid: String(councilMeetingId) })
   if (partyIds && partyIds.length > 0) {
@@ -80,6 +82,9 @@ export const fetchCouncilors = async ({
   }
   if (constituencies && constituencies.length > 0) {
     params.set('cvs', constituencies.join(','))
+  }
+  if (types && types.length > 0) {
+    params.set('types', types.join(','))
   }
   const url = `${apiBase}/councilor?${params.toString()}`
 

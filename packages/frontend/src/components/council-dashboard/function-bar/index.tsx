@@ -13,7 +13,7 @@ import styled from 'styled-components'
 // components
 import FilterModal from '@/components/filter-modal'
 import Tab from '@/components/dashboard/function-bar/tab'
-// import FilterButton from '@/components/button/filter-button'
+import FilterButton from '@/components/button/filter-button'
 import PartyTag from '@/components/dashboard/card/party-tag'
 // enum
 import { Option, TagSize } from '@/components/dashboard/enum'
@@ -27,14 +27,10 @@ import { ZIndex } from '@/styles/z-index'
 import { HEADER_HEIGHT } from '@/constants/header'
 // utils
 import { getImageLink } from '@/fetchers/utils'
-import { formatDate } from '@/utils/date-formatters'
 // fetcher
-import { useLegislativeMeetingSession } from '@/fetchers/legislative-meeting'
-import useCommittee from '@/fetchers/committee'
 // type
 import type { PartyData } from '@/types/party'
 import type { LegislativeMeeting } from '@/types/legislative-meeting'
-import type { OptionGroup } from '@/components/selector/types'
 import type {
   FilterOption,
   FilterModalValueType,
@@ -48,10 +44,11 @@ import {
 } from '@twreporter/react-components/lib/rwd'
 import mq from '@twreporter/core/lib/utils/media-query'
 import {
-  MemberType,
+  MEMBER_TYPE,
   MEMBER_TYPE_LABEL,
-} from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
-import { CITY_OPTIONS } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+} from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
+import { getDistrictsByCity } from '@twreporter/congress-dashboard-shared/lib/constants/city-district'
+import type { City } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 // lodash
 import { isEqual, map } from 'lodash'
 import { getCouncilName } from '@/components/open/config'
@@ -154,12 +151,11 @@ const FilterString = styled.div`
     font-size: 14px;  
   `}
 `
-// TODO: open filter next scrum
-// const Filter = styled.div`
-//   cursor: pointer;
-//   display: flex;
-//   align-items: center;
-// `
+const Filter = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+`
 const MobileOnlyBox = styled(MobileOnly)`
   width: 100%;
 `
@@ -172,8 +168,6 @@ type FunctionBarProps = {
   onChangeFilter?: (filterModalValue: FilterModalValueType) => void
   districtSlug: string
 }
-
-type CommitteeOptionGroup = Record<string, OptionGroup>
 
 const OptionIcon: React.FC<{ url: string }> = ({ url }) => {
   return <PartyTag size={TagSize.S} avatar={url} />
@@ -213,93 +207,41 @@ const FunctionBar = forwardRef<HTMLDivElement, FunctionBarProps>(
         districtSlug as CouncilDistrict
       )}｜第${latestMettingTerm}屆`
     )
-    // TODO: open filter next scrum
-    // const [filterCount, setFilterCount] = useState(0)
+    const [filterCount, setFilterCount] = useState(0)
     const [currentFilterValue, setCurrentFilterValue] = useState(filterValues)
 
-    const sessionState = useLegislativeMeetingSession(
-      currentFilterValue.meeting as string
-    )
-    const committeeState = useCommittee()
-
-    // TODO: open filter next scrum
     // Generate filter options
     const getFilterOptions = (): FilterOption[] => {
       const options: FilterOption[] = [
         {
-          type: SelectorType.Single,
-          disabled: true,
-          label: '單位',
-          key: 'department',
-          defaultValue: 'legislativeYuan',
-          options: [{ label: '立法院', value: 'legislativeYuan' }],
-        },
-        {
-          type: SelectorType.Single,
-          disabled: false,
-          label: '屆期',
-          key: 'meeting',
-          defaultValue: `${latestMettingTerm}`,
-          options: meetings.map(({ term }) => ({
-            label: `第 ${term} 屆`,
-            value: `${term}`,
-          })),
-        },
-        {
           type: SelectorType.Multiple,
           disabled: false,
-          defaultValue: ['all'],
-          label: '會期',
-          key: 'meetingSession',
-          isLoading: sessionState.isLoading,
-          showError: !!sessionState.error,
-          options: [
-            { label: '全部會期', value: 'all', isDeletable: false },
-          ].concat(
-            sessionState.legislativeMeetingSessions.map(
-              ({ id, term, startTime, endTime }) => ({
-                label: `第 ${term} 會期(${formatDate(
-                  startTime,
-                  'YYYY/MM'
-                )}-${formatDate(endTime, 'YYYY/MM')})`,
-                value: `${id}`,
-                isDeletable: true,
-              })
-            )
-          ),
+          label: '行政區',
+          key: 'administrativeDistrict',
+          options: [...getDistrictsByCity(districtSlug as City)],
         },
         {
-          type: SelectorType.Multiple,
-          hide: tabType === Option.Issue,
+          type: SelectorType.Single,
           disabled: false,
-          label: '選區',
-          key: 'constituency',
+          label: '身份別',
+          key: 'type',
           options: [
             {
-              groupName: '不分區',
-              options: [
-                { label: '不分區', value: MemberType.NationwideAndOverseas },
-              ],
+              label: MEMBER_TYPE_LABEL[MEMBER_TYPE.lowlandAboriginal],
+              value: MEMBER_TYPE.lowlandAboriginal,
             },
             {
-              groupName: '原住民',
-              options: [
-                {
-                  label: MEMBER_TYPE_LABEL[MemberType.LowlandAboriginal],
-                  value: MemberType.LowlandAboriginal,
-                },
-                {
-                  label: MEMBER_TYPE_LABEL[MemberType.HighlandAboriginal],
-                  value: MemberType.HighlandAboriginal,
-                },
-              ],
+              label: MEMBER_TYPE_LABEL[MEMBER_TYPE.highlandAboriginal],
+              value: MEMBER_TYPE.highlandAboriginal,
             },
-            { groupName: '區域', options: CITY_OPTIONS },
+            {
+              label: '非原住民',
+              value: MEMBER_TYPE.constituency,
+            },
           ],
         },
         {
           type: SelectorType.Multiple,
-          hide: tabType === Option.Issue,
           disabled: false,
           label: '黨籍',
           key: 'party',
@@ -309,36 +251,6 @@ const FunctionBar = forwardRef<HTMLDivElement, FunctionBarProps>(
             value: `${party.id}`,
             prefixIcon: <OptionIcon url={getImageLink(party)} />,
           })),
-        },
-        {
-          type: SelectorType.Multiple,
-          hide: tabType === Option.Issue,
-          disabled: false,
-          label: '委員會',
-          key: 'committee',
-          isLoading: committeeState.isLoading,
-          showError: !!committeeState.error,
-          options: Object.values(
-            committeeState.committees.reduce(
-              (acc: CommitteeOptionGroup, committee): CommitteeOptionGroup => {
-                if (!acc[committee.type]) {
-                  acc = {
-                    ...acc,
-                    [committee.type]: {
-                      groupName: committee.type === 'ad-hoc' ? '特種' : '常設',
-                      options: [],
-                    },
-                  }
-                }
-                acc[committee.type].options.push({
-                  label: committee.name,
-                  value: committee.slug,
-                })
-                return acc
-              },
-              {} as CommitteeOptionGroup
-            )
-          ) as OptionGroup[],
         },
       ]
 
@@ -368,15 +280,15 @@ const FunctionBar = forwardRef<HTMLDivElement, FunctionBarProps>(
       const meetingString = filterModalValue.meeting
         ? `第${filterModalValue.meeting}屆`
         : `第${latestMettingTerm}屆`
-      // const totalCount =
-      //   (filterModalValue.constituency as string[])?.length +
-      //   (filterModalValue.party as string[])?.length +
-      //   (filterModalValue.committee as string[])?.length
+      const totalCount =
+        ((filterModalValue.administrativeDistrict as string[])?.length || 0) +
+        (filterModalValue.type && filterModalValue.type !== 'all' ? 1 : 0) +
+        ((filterModalValue.party as string[])?.length || 0)
 
       setFilterString(
         `${getCouncilName(districtSlug as CouncilDistrict)}｜${meetingString}`
       )
-      // setFilterCount(totalCount)
+      setFilterCount(totalCount)
 
       if (typeof onChangeFilter === 'function') {
         onChangeFilter(filterModalValue)
@@ -415,18 +327,18 @@ const FunctionBar = forwardRef<HTMLDivElement, FunctionBarProps>(
                   onClick={() => setTab(Option.Issue)}
                 />
               </Tabs>
-              {/* TODO: open filter next scrum */}
-              {/* <Filter onClick={openFilter}>
-              <TabletAndAbove>
-                <FilterString>{filterString}</FilterString>
-              </TabletAndAbove>
-              <FilterButton
-                filterCount={tabType === Option.Issue ? 0 : filterCount}
-              />
-            </Filter> */}
-              <TabletAndAbove>
-                <FilterString>{filterString}</FilterString>
-              </TabletAndAbove>
+              {tabType === Option.Human ? (
+                <Filter onClick={openFilter}>
+                  <TabletAndAbove>
+                    <FilterString>{filterString}</FilterString>
+                  </TabletAndAbove>
+                  <FilterButton filterCount={filterCount} />
+                </Filter>
+              ) : (
+                <TabletAndAbove>
+                  <FilterString>{filterString}</FilterString>
+                </TabletAndAbove>
+              )}
             </Bar>
             {isFilterOpen && (
               <FilterModal
@@ -445,7 +357,11 @@ const FunctionBar = forwardRef<HTMLDivElement, FunctionBarProps>(
           />
         </StickyBar>
         <MobileOnlyBox className={className}>
-          <FilterString onClick={openFilter}>{filterString}</FilterString>
+          {tabType === Option.Human ? (
+            <FilterString onClick={openFilter}>{filterString}</FilterString>
+          ) : (
+            <FilterString>{filterString}</FilterString>
+          )}
         </MobileOnlyBox>
       </>
     )
