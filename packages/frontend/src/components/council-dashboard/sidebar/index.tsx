@@ -256,28 +256,28 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
                 )
               )}
             </SummarySection>
-            {followMoreState.isLoading ? null : followMoreState.error ? (
-              <FollowMoreSection>
-                <FollowMoreTitle text={followMoreTitle} />
-                <FollowMoreErrorState />
-              </FollowMoreSection>
-            ) : issueList.length > 0 ? (
-              <FollowMoreSection>
-                <FollowMoreTitle text={followMoreTitle} />
-                <FollowMoreTags>
-                  {issueList.map((props: IssueProps, index: number) => (
-                    <Link
-                      href={`${InternalRoutes.CouncilTopic(districtSlug)}/${
-                        props.slug
-                      }`}
-                      key={`follow-more-issue-${index}`}
-                    >
-                      <Issue {...props} />
-                    </Link>
-                  ))}
-                </FollowMoreTags>
-              </FollowMoreSection>
-            ) : null}
+            {!followMoreState.isLoading &&
+              (followMoreState.error || issueList.length > 0) && (
+                <FollowMoreSection>
+                  <FollowMoreTitle text={followMoreTitle} />
+                  {followMoreState.error ? (
+                    <FollowMoreErrorState />
+                  ) : (
+                    <FollowMoreTags>
+                      {issueList.map((props: IssueProps, index: number) => (
+                        <Link
+                          href={`${InternalRoutes.CouncilTopic(districtSlug)}/${
+                            props.slug
+                          }`}
+                          key={`follow-more-issue-${index}`}
+                        >
+                          <Issue {...props} />
+                        </Link>
+                      ))}
+                    </FollowMoreTags>
+                  )}
+                </FollowMoreSection>
+              )}
           </Body>
         ) : null}
       </ContentBox>
@@ -438,30 +438,30 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
                 )
               )}
             </SummarySection>
-            {followMoreState.isLoading ? null : followMoreState.error ? (
-              <FollowMoreSection>
-                <FollowMoreTitle text={followMoreTitle} />
-                <FollowMoreErrorState />
-              </FollowMoreSection>
-            ) : councilorList.length > 0 ? (
-              <FollowMoreSection>
-                <FollowMoreTitle text={followMoreTitle} />
-                <FollowMoreLegislator>
-                  {councilorList.map(
-                    (props: LegislatorProps, index: number) => (
-                      <Link
-                        href={`${InternalRoutes.Councilor(districtSlug)}/${
-                          props.slug
-                        }`}
-                        key={`follow-more-councilor-${index}`}
-                      >
-                        <Legislator {...props} />
-                      </Link>
-                    )
+            {!followMoreState.isLoading &&
+              (followMoreState.error || councilorList.length > 0) && (
+                <FollowMoreSection>
+                  <FollowMoreTitle text={followMoreTitle} />
+                  {followMoreState.error ? (
+                    <FollowMoreErrorState />
+                  ) : (
+                    <FollowMoreLegislator>
+                      {councilorList.map(
+                        (props: LegislatorProps, index: number) => (
+                          <Link
+                            href={`${InternalRoutes.Councilor(districtSlug)}/${
+                              props.slug
+                            }`}
+                            key={`follow-more-councilor-${index}`}
+                          >
+                            <Legislator {...props} />
+                          </Link>
+                        )
+                      )}
+                    </FollowMoreLegislator>
                   )}
-                </FollowMoreLegislator>
-              </FollowMoreSection>
-            ) : null}
+                </FollowMoreSection>
+              )}
           </Body>
         )}
       </ContentBox>

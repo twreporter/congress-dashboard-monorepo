@@ -467,28 +467,28 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
                 )
               )}
             </SummarySection>
-            {followMoreState.isLoading ? null : followMoreState.error ? (
-              <FollowMoreSection>
-                <FollowMoreTitle text={followMoreTitle} />
-                <FollowMoreErrorState />
-              </FollowMoreSection>
-            ) : legislatorList.length > 0 ? (
-              <FollowMoreSection>
-                <FollowMoreTitle text={followMoreTitle} />
-                <FollowMoreLegislator>
-                  {legislatorList.map(
-                    (props: LegislatorProps, index: number) => (
-                      <Link
-                        href={`${InternalRoutes.Legislator}/${props.slug}`}
-                        key={`follow-more-legislator-${index}`}
-                      >
-                        <Legislator {...props} />
-                      </Link>
-                    )
+            {!followMoreState.isLoading &&
+              (followMoreState.error || legislatorList.length > 0) && (
+                <FollowMoreSection>
+                  <FollowMoreTitle text={followMoreTitle} />
+                  {followMoreState.error ? (
+                    <FollowMoreErrorState />
+                  ) : (
+                    <FollowMoreLegislator>
+                      {legislatorList.map(
+                        (props: LegislatorProps, index: number) => (
+                          <Link
+                            href={`${InternalRoutes.Legislator}/${props.slug}`}
+                            key={`follow-more-legislator-${index}`}
+                          >
+                            <Legislator {...props} />
+                          </Link>
+                        )
+                      )}
+                    </FollowMoreLegislator>
                   )}
-                </FollowMoreLegislator>
-              </FollowMoreSection>
-            ) : null}
+                </FollowMoreSection>
+              )}
           </Body>
         )}
       </ContentBox>

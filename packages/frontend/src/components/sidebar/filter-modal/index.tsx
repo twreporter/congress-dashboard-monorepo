@@ -31,9 +31,8 @@ import {
   useSnackBar,
 } from '@twreporter/react-components/lib/snack-bar'
 // lodash
-import { filter, map, findIndex, unionBy, without, find } from 'lodash'
+import { map, findIndex, unionBy, without, find } from 'lodash'
 const _ = {
-  filter,
   map,
   findIndex,
   unionBy,
@@ -229,16 +228,6 @@ type FilterModalProps = {
   onClose: () => void
   onConfirmSelection: (selectedOptions: FilterOption[]) => void
 }
-const filterByKeyword = (
-  options: FilterOption[],
-  keyword: string
-): FilterOption[] => {
-  return keyword
-    ? _.filter(options, (option) =>
-        Boolean(option.name && option.name.includes(keyword))
-      )
-    : options
-}
 const FilterModal: React.FC<FilterModalProps> = ({
   title,
   link,
@@ -277,10 +266,13 @@ const FilterModal: React.FC<FilterModalProps> = ({
     [selectedOptions]
   )
   const optionsForShow = useMemo<FilterOption[]>(
-    () => {
-      const filtered = isSearchMode ? filterByKeyword(options, keyword) : options
-      return filtered.filter((option) => option.selected || (option.count != null && option.count > 0))
-    },
+    () =>
+      options.filter((option) => {
+        if (isSearchMode && keyword && !(option.name && option.name.includes(keyword))) {
+          return false
+        }
+        return option.selected || (option.count != null && option.count > 0)
+      }),
     [options, keyword, isSearchMode]
   )
 
