@@ -472,7 +472,7 @@ export function CouncilBillHit({ hit }: { hit: CouncilBillRawHit }) {
               attribute="councilor"
               hit={hit}
             />
-            等 {hit.councilorCount} 人．議決日期於{hit.date}
+            等 {hit.councilorCount} 人．決議日期於 {hit.date}
           </p>
         </Text>
       </Container>

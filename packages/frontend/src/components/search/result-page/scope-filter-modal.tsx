@@ -228,14 +228,14 @@ export const ScopeFilterModal = ({
         <Footer>
           <StyledPillButton
             theme={PillButton.THEME.normal}
-            type={PillButton.Type.GHOST}
+            type={PillButton.Type.SECONDARY}
             size={PillButton.Size.L}
             text={'重設'}
             onClick={handleReset}
           />
           <StyledPillButton
             theme={PillButton.THEME.normal}
-            type={PillButton.Type.SECONDARY}
+            type={PillButton.Type.GHOST}
             size={PillButton.Size.L}
             text={'確定'}
             onClick={handleConfirm}
