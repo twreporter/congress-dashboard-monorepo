@@ -113,9 +113,10 @@ const LegislatorDesc = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  height: 48px;
 `
+
+const CouncilorDesc = LegislatorDesc
+
 const Text = styled.div`
   p {
     color: ${colorGrayscale.gray800};
@@ -127,13 +128,13 @@ const Text = styled.div`
     margin: 0 0 8px 0;
   }
 
-  p:first-child {
+  p.meta {
     font-size: 14px;
     font-weight: 700;
     color: ${colorGrayscale.gray900};
   }
 
-  p:last-child {
+  p.footnote {
     font-size: 14px;
     margin: 0;
   }
@@ -201,7 +202,7 @@ export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
     <Link href={`${InternalRoutes.Legislator}/${hit.slug}${meetingTermParam}`}>
       <Container>
         <Text>
-          <p>立委</p>
+          <p className="meta">立委</p>
           <p>
             <Highlight
               classNames={{
@@ -213,7 +214,9 @@ export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
             />
           </p>
           <LegislatorDesc>{hit.desc}</LegislatorDesc>
-          {hit.lastSpeechAt && <p>最新一筆發言於{hit.lastSpeechAt}</p>}
+          {hit.lastSpeechAt && (
+            <p className="footnote">最新一筆發言於 {hit.lastSpeechAt}</p>
+          )}
         </Text>
         <AvatarBorder>
           <Avatar $imgSrc={hit.imgSrc}>
@@ -247,7 +250,7 @@ export function CouncilorHit({ hit }: { hit: CouncilorRawHit }) {
     >
       <Container>
         <Text>
-          <p>議員｜{hit.council}</p>
+          <p className="meta">議員｜{hit.council}</p>
           <p>
             <Highlight
               classNames={{
@@ -258,8 +261,10 @@ export function CouncilorHit({ hit }: { hit: CouncilorRawHit }) {
               hit={hit}
             />
           </p>
-          <LegislatorDesc>{hit.desc}</LegislatorDesc>
-          {hit.lastSpeechAt && <p>最新一筆發言於{hit.lastSpeechAt}</p>}
+          <CouncilorDesc>{hit.desc}</CouncilorDesc>
+          {hit.lastSpeechAt && (
+            <p className="footnote">最新一筆發言於 {hit.lastSpeechAt}</p>
+          )}
         </Text>
         <AvatarBorder>
           <Avatar $imgSrc={hit.imgSrc}>
@@ -289,7 +294,7 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
     <Link href={`${InternalRoutes.Topic}/${hit.slug}${meetingTermParam}`}>
       <Container>
         <Text>
-          <p>議題｜立法院</p>
+          <p className="meta">議題｜立法院</p>
           <p>
             <Highlight
               classNames={{
@@ -308,7 +313,9 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
               hit={customizedHit}
             />
           </p>
-          {hit.lastSpeechAt && <p>最新一筆發言於{hit.lastSpeechAt}</p>}
+          {hit.lastSpeechAt && (
+            <p className="footnote">最新一筆發言於 {hit.lastSpeechAt}</p>
+          )}
         </Text>
       </Container>
     </Link>
@@ -338,7 +345,7 @@ export function CouncilTopicHit({ hit }: { hit: CouncilTopicRawHit }) {
     >
       <Container>
         <Text>
-          <p>議題｜{hit.council}</p>
+          <p className="meta">議題｜{hit.council}</p>
           <p>
             <Highlight
               classNames={{
@@ -357,7 +364,9 @@ export function CouncilTopicHit({ hit }: { hit: CouncilTopicRawHit }) {
               hit={customizedHit}
             />
           </p>
-          {hit.lastSpeechAt && <p>最新一筆發言於{hit.lastSpeechAt}</p>}
+          {hit.lastSpeechAt && (
+            <p className="footnote">最新一筆發言於 {hit.lastSpeechAt}</p>
+          )}
         </Text>
       </Container>
     </Link>
@@ -384,7 +393,7 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
     >
       <Container>
         <Text>
-          <p>發言全文｜立法院</p>
+          <p className="meta">發言全文｜立法院</p>
           <p>
             <Highlight
               classNames={{
@@ -402,14 +411,14 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
               hit={customizedHit}
             />
           </p>
-          <p>
+          <p className="footnote">
             質詢立委／
             <Highlight
               highlightedTagName="span"
               attribute="legislatorName"
               hit={hit}
             />
-            ．發言於 {hit.date}
+            ．發言於 {hit.date?.replaceAll('-', '/')}
           </p>
         </Text>
       </Container>
@@ -436,7 +445,7 @@ export function CouncilBillHit({ hit }: { hit: CouncilBillRawHit }) {
     <Link href={`${InternalRoutes.Bill}/${hit.slug}`}>
       <Container>
         <Text>
-          <p>議案｜{hit.council}</p>
+          <p className="meta">議案｜{hit.council}</p>
           <p>
             <Highlight
               classNames={{
@@ -456,14 +465,14 @@ export function CouncilBillHit({ hit }: { hit: CouncilBillRawHit }) {
               />
             </p>
           )}
-          <p>
+          <p className="footnote">
             提案人／
             <Highlight
               highlightedTagName="span"
               attribute="councilor"
               hit={hit}
             />
-            等{hit.councilorCount}人．議決日期於{hit.date}
+            等 {hit.councilorCount} 人．議決日期於{hit.date}
           </p>
         </Text>
       </Container>
