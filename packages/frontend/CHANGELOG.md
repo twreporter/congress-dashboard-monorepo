@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.1-rc.2...@twreporter/congress-dashboard-frontend@1.11.0-rc.0) (2026-02-26)
+
+### Bug Fixes
+
+- **frontend:** polish search result card text, legislative filter labeling and styles defects ([9579ef7](https://github.com/twreporter/congress-dashboard-monorepo/commit/9579ef737391c78bd99e162e7b13a66d2ab494af))
+
+### Features
+
+- **frontend:** add topic source tags in instant search hits ([e8a992e](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8a992e25bbb9b9a13f73dd8570864c6b619dda5))
+
 ## [1.10.1-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.1-rc.1...@twreporter/congress-dashboard-frontend@1.10.1-rc.2) (2026-02-24)
 
 ### Bug Fixes
