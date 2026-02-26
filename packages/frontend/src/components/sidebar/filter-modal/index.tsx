@@ -277,7 +277,10 @@ const FilterModal: React.FC<FilterModalProps> = ({
     [selectedOptions]
   )
   const optionsForShow = useMemo<FilterOption[]>(
-    () => (isSearchMode ? filterByKeyword(options, keyword) : options),
+    () => {
+      const filtered = isSearchMode ? filterByKeyword(options, keyword) : options
+      return filtered.filter((option) => option.selected || (option.count != null && option.count > 0))
+    },
     [options, keyword, isSearchMode]
   )
 

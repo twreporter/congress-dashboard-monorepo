@@ -110,7 +110,7 @@ const TopicList: React.FC<TopicListProps> = ({
   )
 
   const followMoreList = useMemo(
-    () => (!swrError && selectedTopic ? topTopics : []),
+    () => (!swrError && selectedTopic ? topTopics.filter(({ count }) => count > 0) : []),
     [swrError, selectedTopic, topTopics]
   )
 
@@ -193,7 +193,7 @@ const TopicList: React.FC<TopicListProps> = ({
                   key={`follow-more-topic-${index}`}
                 >
                   <Issue
-                    name={topic.title}
+                    name={topic.name}
                     count={topic.count}
                     slug={topic.slug}
                   />

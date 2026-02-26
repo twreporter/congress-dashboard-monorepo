@@ -157,18 +157,20 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   useEffect(() => {
     const initializeCouncilor = async () => {
-      const { data, hasMore } = await fetchCouncilorAndTopTopics({
-        councilMeetingId: Number(latestMeetingId),
-      })
-      setCouncilors(data)
-      setHasMoreCouncilor(hasMore)
+      setIsLoading(true)
+      try {
+        const { data, hasMore } = await fetchCouncilorAndTopTopics({
+          councilMeetingId: Number(latestMeetingId),
+        })
+        setCouncilors(data)
+        setHasMoreCouncilor(hasMore)
+      } catch (err) {
+        console.error(`initialize councilor failed. err: ${err}`)
+        setIsShowError(true)
+      }
+      setIsLoading(false)
     }
-    try {
-      initializeCouncilor()
-    } catch (err) {
-      console.error(`initialize councilor failed. err: ${err}`)
-      setIsShowError(true)
-    }
+    initializeCouncilor()
   }, [latestMeetingId, fetchCouncilorAndTopTopics])
 
   useEffect(() => {

@@ -212,6 +212,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 
   useEffect(() => {
     setIsLoading(true)
+    setShowFilter(false)
   }, [slug, selectedTab])
 
   useEffect(() => {
@@ -395,7 +396,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
       : undefined
   )
   const legislatorList: LegislatorProps[] = useMemo(
-    () => followMoreState.legislators || [],
+    () => (followMoreState.legislators || []).filter(({ count }) => count && count > 0),
     [followMoreState.legislators]
   )
 
@@ -414,6 +415,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
 
   useEffect(() => {
     setIsLoading(true)
+    setShowFilter(false)
   }, [slug, selectedTab])
 
   useEffect(() => {
@@ -465,27 +467,28 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
                 )
               )}
             </SummarySection>
-            {followMoreState.isLoading ? null : (
+            {followMoreState.isLoading ? null : followMoreState.error ? (
               <FollowMoreSection>
                 <FollowMoreTitle text={followMoreTitle} />
-                {followMoreState.error ? (
-                  <FollowMoreErrorState />
-                ) : legislatorList.length > 0 ? (
-                  <FollowMoreLegislator>
-                    {legislatorList.map(
-                      (props: LegislatorProps, index: number) => (
-                        <Link
-                          href={`${InternalRoutes.Legislator}/${props.slug}`}
-                          key={`follow-more-legislator-${index}`}
-                        >
-                          <Legislator {...props} />
-                        </Link>
-                      )
-                    )}
-                  </FollowMoreLegislator>
-                ) : null}
+                <FollowMoreErrorState />
               </FollowMoreSection>
-            )}
+            ) : legislatorList.length > 0 ? (
+              <FollowMoreSection>
+                <FollowMoreTitle text={followMoreTitle} />
+                <FollowMoreLegislator>
+                  {legislatorList.map(
+                    (props: LegislatorProps, index: number) => (
+                      <Link
+                        href={`${InternalRoutes.Legislator}/${props.slug}`}
+                        key={`follow-more-legislator-${index}`}
+                      >
+                        <Legislator {...props} />
+                      </Link>
+                    )
+                  )}
+                </FollowMoreLegislator>
+              </FollowMoreSection>
+            ) : null}
           </Body>
         )}
       </ContentBox>

@@ -115,7 +115,7 @@ const TopicList: React.FC<TopicListProps> = ({
   )
 
   const followMoreList = useMemo(
-    () => (!swrError && selectedTopic ? topCouncilors : []),
+    () => (!swrError && selectedTopic ? topCouncilors.filter(({ count }) => count > 0) : []),
     [swrError, selectedTopic, topCouncilors]
   )
 
