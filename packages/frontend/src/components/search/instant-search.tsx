@@ -15,8 +15,6 @@ import { SearchModal } from '@/components/search/modal'
 import { ZIndex } from '@/styles/z-index'
 import { layoutVariants } from '@/components/search/constants'
 import { createAlgoliaSearchClient } from '@/components/search/algolia-client'
-import { usePathname } from 'next/navigation'
-import { InternalRoutes } from '@/constants/routes'
 
 export { layoutVariants }
 
@@ -110,17 +108,7 @@ export const AlgoliaInstantSearch = ({
   const containerRef = useRef(null)
   const [focused, setFocused] = useState(autoFocus)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [placeholder, setPlaceholder] = useState('搜尋立委和議題')
   const windowWidth = useWindowWidth()
-  const pathname = usePathname()
-
-  useEffect(() => {
-    if (pathname.startsWith(InternalRoutes.Council)) {
-      setPlaceholder('搜尋議員和議題')
-    } else {
-      setPlaceholder('搜尋立委和議題')
-    }
-  }, [pathname])
 
   const searchClient = useMemo(createAlgoliaSearchClient, [])
 
@@ -166,7 +154,6 @@ export const AlgoliaInstantSearch = ({
               setFocused(true)
             }
           }}
-          placeholder={placeholder}
         />
         <InstantHits $hide={!focused} variant={variant} />
         <ClickOutsideWidget

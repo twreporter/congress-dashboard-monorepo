@@ -1,21 +1,22 @@
 'use client'
 
-import FilterButton from '@/components/button/filter-button'
 import React, { useEffect, useRef, useState } from 'react'
 import type { LegislativeFilterValueType } from '@/components/search/result-page/legislative-filter'
 import type { SearchStage } from '@/components/search/constants'
 import mq from '@twreporter/core/lib/utils/media-query'
+import { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
 import { MultiStageHits, Hits } from '@/components/search/result-page/hits'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { indexNames, searchStages } from '@/components/search/constants'
 import { AlgoliaInstantSearch } from '@/components/search/instant-search'
 import {
-  LegislativeSearchFilter as _LegislativeSearchFilter,
+  LegislativeSearchFilter,
   defaultLegislativeFilterValue,
+  buildLegislativeFilterString,
 } from '@/components/search/result-page/legislative-filter'
-import { ScopeFilterModal } from '@/components/search/result-page/scope-filter-modal'
-import type { OptionGroup } from '@/components/selector/types'
+import { ScopeFilter } from '@/components/search/result-page/scope-filter'
+import useWindowWidth from '@/hooks/use-window-width'
 import {
   scopeValues,
   type ScopeValue,
@@ -133,6 +134,8 @@ const Tabs = styled.div`
 const SearchTabBar = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+
   ${mq.mobileOnly`
     flex-wrap: wrap;
   `}
@@ -142,37 +145,46 @@ const SearchTabBar = styled.div`
   border-bottom: 1px solid ${colorGrayscale.gray300};
 `
 
-const LegislativeSearchFilter = styled(_LegislativeSearchFilter)`
-  ${mq.mobileOnly`
-    width: 100%;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-  `}
-`
-
-const ScopeFilterContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
-  ${mq.mobileOnly`
-    width: 100%;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    justify-content: space-between;
-  `}
-`
-
-const ScopeFilterLabel = styled.div`
+const FilterLabel = styled.div`
   color: ${colorGrayscale.gray700};
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
 `
 
+/**
+ * Desktop filter bar: displays filter label and button side by side
+ * Hidden on mobile devices
+ */
+const DesktopFilterBar = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+
+  ${mq.mobileOnly`
+    display: none;
+  `}
+`
+
+/**
+ * Mobile filter container
+ * Used for both filter button (inside SearchTabBar) and filter label (below SearchTabBar)
+ */
+const MobileFilterContainer = styled.div`
+  display: none;
+
+  ${mq.mobileOnly`
+    display: block;
+  `}
+
+  ${FilterLabel} {
+    margin-top: 20px;
+  }
+`
+
 const SearchResults = ({ className, query }: SearchResultsProps) => {
+  const windowWidth = useWindowWidth()
+  const isMobileViewport = windowWidth < DEFAULT_SCREEN.tablet.minWidth
   const [activeTab, setActiveTab] = useState<SearchStage>(searchStages.All)
   const [filterValue, setFilterValue] = useState<LegislativeFilterValueType>(
     defaultLegislativeFilterValue
@@ -181,7 +193,6 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
     scopeValues.all
   )
   const [scopeFilterLabel, setScopeFilterLabel] = useState('立法院與六都議會')
-  const [showScopeModal, setShowScopeModal] = useState(false)
 
   // Track which tabs have been mounted (for lazy mounting)
   const [mountedTabs, setMountedTabs] = useState<Set<SearchStage>>(
@@ -245,36 +256,57 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
     }
   }, [scopeFilterValue])
 
-  function renderScopeFilterModal(groups: OptionGroup[]) {
-    return (
-      <>
-        <ScopeFilterContainer>
-          <ScopeFilterLabel>{scopeFilterLabel}</ScopeFilterLabel>
-          <FilterButton
-            filterCount={0}
-            onClick={() => {
-              setShowScopeModal(true)
-            }}
-          />
-        </ScopeFilterContainer>
-        <ScopeFilterModal
-          isOpen={showScopeModal}
-          groups={groups}
-          selectedValue={scopeFilterValue}
-          onSubmit={(value, label) => {
-            setScopeFilterValue(value as ScopeValue)
-            setScopeFilterLabel(label)
-          }}
-          onClose={() => setShowScopeModal(false)}
-        />
-      </>
-    )
+  /**
+   * Render filter label based on active tab
+   * - All tab: show scope filter label
+   * - Speech tab: show legislative filter string (meeting term + session)
+   * - CouncilBill tab: show scope filter label
+   */
+  function renderFilterString() {
+    if (activeTab === searchStages.All) {
+      return <FilterLabel>{scopeFilterLabel}</FilterLabel>
+    }
+
+    // Show LegislativeSearchFilter for "Speech" tab (only when legislativeYuan is selected)
+    if (
+      activeTab === searchStages.Speech &&
+      scopeFilterValue === scopeValues.legislativeYuan
+    ) {
+      return (
+        <FilterLabel>{buildLegislativeFilterString(filterValue)}</FilterLabel>
+      )
+    }
+
+    // Show CouncilFilter for "Bill" tab (only when council scope is selected)
+    if (
+      activeTab === searchStages.CouncilBill &&
+      isCouncilScope(scopeFilterValue)
+    ) {
+      return <FilterLabel>{scopeFilterLabel}</FilterLabel>
+    }
+
+    return null
   }
 
+  /**
+   * Render filter button based on active tab
+   * - All tab: show scope filter modal
+   * - Speech tab: show legislative filter modal (meeting term + session)
+   * - CouncilBill tab: show scope filter modal (council only)
+   */
   function renderFilterByTab() {
     // Show ScopeFilter for "All" tab
     if (activeTab === searchStages.All) {
-      return renderScopeFilterModal(scopeFilterGroups)
+      return (
+        <ScopeFilter
+          groups={scopeFilterGroups}
+          selectedValue={scopeFilterValue}
+          onChange={(value, label) => {
+            setScopeFilterValue(value)
+            setScopeFilterLabel(label)
+          }}
+        />
+      )
     }
 
     // Show LegislativeSearchFilter for "Speech" tab (only when legislativeYuan is selected)
@@ -295,7 +327,16 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
       activeTab === searchStages.CouncilBill &&
       isCouncilScope(scopeFilterValue)
     ) {
-      return renderScopeFilterModal(councilFilterGroups)
+      return (
+        <ScopeFilter
+          groups={councilFilterGroups}
+          selectedValue={scopeFilterValue}
+          onChange={(value, label) => {
+            setScopeFilterValue(value)
+            setScopeFilterLabel(label)
+          }}
+        />
+      )
     }
 
     return null
@@ -320,8 +361,21 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
               )
             })}
           </Tabs>
-          {renderFilterByTab()}
+          {isMobileViewport ? (
+            // Mobile: keep filter control in tab bar.
+            <MobileFilterContainer>{renderFilterByTab()}</MobileFilterContainer>
+          ) : (
+            // Desktop/Tablet: render label and filter control side by side.
+            <DesktopFilterBar>
+              {renderFilterString()}
+              {renderFilterByTab()}
+            </DesktopFilterBar>
+          )}
         </SearchTabBar>
+        {/* Mobile: render filter label below tab bar */}
+        {isMobileViewport && (
+          <MobileFilterContainer>{renderFilterString()}</MobileFilterContainer>
+        )}
         <HitsContainer $hidden={activeTab !== searchStages.All}>
           <MultiStageHits
             key={`${scopeFilterValue}-${query}`}
