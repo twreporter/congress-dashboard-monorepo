@@ -169,7 +169,7 @@ const listConfigurations = list({
               },
             },
           })
-          return count
+          return count || 0
         },
       }),
       ui: {
