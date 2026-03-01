@@ -167,7 +167,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       } catch (err) {
         console.error(`initialize councilor failed. err: ${err}`)
         setIsShowError(true)
-      } finally{
+      } finally {
         setIsLoading(false)
       }
     }
