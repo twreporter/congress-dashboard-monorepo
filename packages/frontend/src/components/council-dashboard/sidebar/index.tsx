@@ -187,11 +187,13 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   )
   const issueList: IssueProps[] = useMemo(
     () =>
-      followMoreState.topics.map(({ slug, title, count }) => ({
-        slug,
-        name: title,
-        count,
-      })) || [],
+      followMoreState.topics
+        .filter(({ count }) => count > 0)
+        .map(({ slug, name, count }) => ({
+          slug,
+          name,
+          count,
+        })) || [],
     [followMoreState.topics]
   )
 
@@ -205,6 +207,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 
   useEffect(() => {
     setIsLoading(true)
+    setShowFilter(false)
   }, [slug, selectedTab])
 
   useEffect(() => {
@@ -253,27 +256,28 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
                 )
               )}
             </SummarySection>
-            {followMoreState.isLoading ? null : (
-              <FollowMoreSection>
-                <FollowMoreTitle text={followMoreTitle} />
-                {followMoreState.error ? (
-                  <FollowMoreErrorState />
-                ) : issueList.length > 0 ? (
-                  <FollowMoreTags>
-                    {issueList.map((props: IssueProps, index: number) => (
-                      <Link
-                        href={`${InternalRoutes.CouncilTopic(districtSlug)}/${
-                          props.slug
-                        }`}
-                        key={`follow-more-issue-${index}`}
-                      >
-                        <Issue {...props} />
-                      </Link>
-                    ))}
-                  </FollowMoreTags>
-                ) : null}
-              </FollowMoreSection>
-            )}
+            {!followMoreState.isLoading &&
+              (followMoreState.error || issueList.length > 0) && (
+                <FollowMoreSection>
+                  <FollowMoreTitle text={followMoreTitle} />
+                  {followMoreState.error ? (
+                    <FollowMoreErrorState />
+                  ) : (
+                    <FollowMoreTags>
+                      {issueList.map((props: IssueProps, index: number) => (
+                        <Link
+                          href={`${InternalRoutes.CouncilTopic(districtSlug)}/${
+                            props.slug
+                          }`}
+                          key={`follow-more-issue-${index}`}
+                        >
+                          <Issue {...props} />
+                        </Link>
+                      ))}
+                    </FollowMoreTags>
+                  )}
+                </FollowMoreSection>
+              )}
           </Body>
         ) : null}
       </ContentBox>
@@ -362,12 +366,14 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
   )
   const councilorList: LegislatorProps[] = useMemo(
     () =>
-      followMoreState.councilors.map(({ slug, name, avatar, count }) => ({
-        slug,
-        name,
-        avatar,
-        count,
-      })) || [],
+      followMoreState.councilors
+        .filter(({ count }) => count > 0)
+        .map(({ slug, name, avatar, count }) => ({
+          slug,
+          name,
+          avatar,
+          count,
+        })) || [],
     [followMoreState.councilors]
   )
 
@@ -380,6 +386,7 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
 
   useEffect(() => {
     setIsLoading(true)
+    setShowFilter(false)
   }, [slug, selectedTab])
 
   useEffect(() => {
@@ -431,29 +438,30 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
                 )
               )}
             </SummarySection>
-            {followMoreState.isLoading ? null : (
-              <FollowMoreSection>
-                <FollowMoreTitle text={followMoreTitle} />
-                {followMoreState.error ? (
-                  <FollowMoreErrorState />
-                ) : councilorList.length > 0 ? (
-                  <FollowMoreLegislator>
-                    {councilorList.map(
-                      (props: LegislatorProps, index: number) => (
-                        <Link
-                          href={`${InternalRoutes.Councilor(districtSlug)}/${
-                            props.slug
-                          }`}
-                          key={`follow-more-councilor-${index}`}
-                        >
-                          <Legislator {...props} />
-                        </Link>
-                      )
-                    )}
-                  </FollowMoreLegislator>
-                ) : null}
-              </FollowMoreSection>
-            )}
+            {!followMoreState.isLoading &&
+              (followMoreState.error || councilorList.length > 0) && (
+                <FollowMoreSection>
+                  <FollowMoreTitle text={followMoreTitle} />
+                  {followMoreState.error ? (
+                    <FollowMoreErrorState />
+                  ) : (
+                    <FollowMoreLegislator>
+                      {councilorList.map(
+                        (props: LegislatorProps, index: number) => (
+                          <Link
+                            href={`${InternalRoutes.Councilor(districtSlug)}/${
+                              props.slug
+                            }`}
+                            key={`follow-more-councilor-${index}`}
+                          >
+                            <Legislator {...props} />
+                          </Link>
+                        )
+                      )}
+                    </FollowMoreLegislator>
+                  )}
+                </FollowMoreSection>
+              )}
           </Body>
         )}
       </ContentBox>
