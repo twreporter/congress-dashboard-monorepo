@@ -40,7 +40,7 @@ export type CouncilFormattedFilterValue = {
   meetingId: number
   partyIds: number[]
   constituency: number[]
-  types: string[]
+  types: MemberType[]
   administrativeDistricts: string[]
 }
 

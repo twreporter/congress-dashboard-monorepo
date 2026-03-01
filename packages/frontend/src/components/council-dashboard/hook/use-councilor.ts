@@ -6,6 +6,7 @@ import {
 } from '@/fetchers/councilor'
 // type
 import type { CouncilorForDashboard } from '@/components/council-dashboard/type'
+import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
 // utils
 import { getImageLink } from '@/fetchers/utils'
 // lodash
@@ -28,7 +29,7 @@ type LoadMoreCouncilorAndTopTopics = {
 type FetchCouncilorAndTopTopicsParams = LoadMoreCouncilorAndTopTopics & {
   partyIds?: number[]
   constituencies?: number[]
-  types?: string[]
+  types?: MemberType[]
   administrativeDistricts?: string[]
 }
 
@@ -92,8 +93,8 @@ const useCouncilor = () => {
 
       if (administrativeDistricts && administrativeDistricts.length > 0) {
         councilors = councilors.filter((councilor) => {
-          const districts = (councilor as Record<string, unknown>)
-            .administrativeDistrict as string[] | undefined
+          const districts = councilor
+            .administrativeDistrict
           if (!districts || !Array.isArray(districts)) return false
           return administrativeDistricts.some((d) => districts.includes(d))
         })
