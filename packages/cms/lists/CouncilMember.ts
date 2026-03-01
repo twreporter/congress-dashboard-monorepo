@@ -1,4 +1,4 @@
-import { list } from '@keystone-6/core'
+import { list, graphql } from '@keystone-6/core'
 import {
   text,
   relationship,
@@ -6,6 +6,7 @@ import {
   integer,
   checkbox,
   json,
+  virtual,
 } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
@@ -141,8 +142,42 @@ const listConfigurations = list({
     note: text({
       label: '特殊說明',
     }),
-    proposalSuccessCount: integer({
-      label: '提案通過數',
+    proposalSuccessCount: virtual({
+      label: '提案數',
+      field: graphql.field({
+        type: graphql.Int,
+        async resolve(item, _args, context) {
+          const { id, councilMeetingId } = item as {
+            id: number
+            councilMeetingId: number | null
+          }
+          if (!councilMeetingId) return 0
+
+          const count = await context.query.CouncilBill.count({
+            where: {
+              councilMeeting: {
+                id: {
+                  equals: councilMeetingId,
+                },
+              },
+              councilMember: {
+                some: {
+                  id: {
+                    equals: id,
+                  },
+                },
+              },
+            },
+          })
+          return count || 0
+        },
+      }),
+      ui: {
+        description: '僅統計本屆期的提案數',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'read' },
+        listView: { fieldMode: 'hidden' },
+      },
     }),
     relatedLink: json({
       label: '相關經歷',

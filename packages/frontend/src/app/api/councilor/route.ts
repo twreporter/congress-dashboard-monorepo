@@ -3,7 +3,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import fetchCouncilors from '@/app/api/councilor/query'
 // util
 import logger from '@/utils/logger'
-import { getNumberParams, getNumberArrayParams } from '@/app/api/_core/utils'
+import {
+  getNumberParams,
+  getNumberArrayParams,
+  getStringArrayParams,
+} from '@/app/api/_core/utils'
 import responseHelper, {
   getCachedSuccessStatus,
 } from '@/app/api/_core/response-helper'
@@ -14,6 +18,7 @@ type Params = {
   councilMeeting: number
   partys?: number[]
   constituencies?: number[]
+  types?: string[]
 }
 
 const getSearchParams = (searchParams: URLSearchParams): Params => {
@@ -32,6 +37,11 @@ const getSearchParams = (searchParams: URLSearchParams): Params => {
     res.constituencies = constituencies
   }
 
+  const types = getStringArrayParams(searchParams, 'types', false)
+  if (types.length > 0) {
+    res.types = types
+  }
+
   return res as Params
 }
 
@@ -47,11 +57,12 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const { councilMeeting, partys, constituencies } = parsedParams
+    const { councilMeeting, partys, constituencies, types } = parsedParams
     const councilors = await fetchCouncilors({
       councilMeetingId: councilMeeting,
       partyIds: partys,
       constituencies,
+      types,
     })
     return NextResponse.json(
       responseHelper.success(councilors),

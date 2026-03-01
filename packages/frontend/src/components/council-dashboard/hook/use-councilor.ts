@@ -6,6 +6,7 @@ import {
 } from '@/fetchers/councilor'
 // type
 import type { CouncilorForDashboard } from '@/components/council-dashboard/type'
+import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
 // utils
 import { getImageLink } from '@/fetchers/utils'
 // lodash
@@ -28,6 +29,8 @@ type LoadMoreCouncilorAndTopTopics = {
 type FetchCouncilorAndTopTopicsParams = LoadMoreCouncilorAndTopTopics & {
   partyIds?: number[]
   constituencies?: number[]
+  types?: MemberType[]
+  administrativeDistricts?: string[]
 }
 
 const useCouncilor = () => {
@@ -69,13 +72,16 @@ const useCouncilor = () => {
       councilMeetingId,
       partyIds,
       constituencies,
+      types,
+      administrativeDistricts,
     }: FetchCouncilorAndTopTopicsParams): Promise<ResponseWithHasMore> => {
       const councilMembers = await fetchCouncilors({
         councilMeetingId,
         partyIds,
         constituencies,
+        types,
       })
-      const councilors = _.shuffle(
+      let councilors = _.shuffle(
         _.map(councilMembers, ({ councilor, party, id, ...rest }) => ({
           ...rest,
           ...councilor,
@@ -84,6 +90,16 @@ const useCouncilor = () => {
           partyAvatar: getImageLink(party),
         }))
       )
+
+      if (administrativeDistricts && administrativeDistricts.length > 0) {
+        councilors = councilors.filter((councilor) => {
+          const districts = councilor
+            .administrativeDistrict
+          if (!districts || !Array.isArray(districts)) return false
+          return administrativeDistricts.some((d) => districts.includes(d))
+        })
+      }
+
       councilorPoolRef.current = councilors
 
       // load councilor data with top 5 topics meta

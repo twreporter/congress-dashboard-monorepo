@@ -93,7 +93,6 @@
 | `administrativeDistrict` | ❌ | array | 行政區陣列，[見限制值](#行政區-administrativedistrict) |
 | `tooltip` | ❌ | string | 提示文字 |
 | `note` | ❌ | string | 備註 |
-| `proposalSuccessCount` | ❌ | number | 提案成功數 |
 | `relatedLink` | ❌ | array | 相關連結陣列，[見格式說明](#相關連結-relatedlink) |
 
 #### JSON 範例
@@ -111,7 +110,6 @@
     "administrativeDistrict": ["zhongzheng-dist", "datong-dist"],
     "tooltip": "第一選區",
     "note": "",
-    "proposalSuccessCount": 15,
     "relatedLink": [
       {
         "url": "https://council.gov.tw/member/123",

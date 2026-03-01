@@ -381,11 +381,19 @@ const Dashboard: React.FC<DashboardProps> = ({
     filterModalValue: CouncilFilterModalValueType
   ) => {
     setCouncilors([])
-    const { meetingId, partyIds, constituency } = formatter(filterModalValue)
+    const {
+      meetingId,
+      partyIds,
+      constituency,
+      types,
+      administrativeDistricts,
+    } = formatter(filterModalValue)
     const { data, hasMore } = await fetchCouncilorAndTopTopics({
       councilMeetingId: meetingId,
       partyIds,
       constituencies: constituency,
+      types,
+      administrativeDistricts,
     })
     setCouncilors(data)
     setHasMoreCouncilor(hasMore)
