@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses'
 // type
 import type { Feedback } from '@/app/api/feedback/type'
 // constant
@@ -12,18 +12,14 @@ type ResponseData = {
   error?: Error
 }
 
-const createTransporter = () => {
-  const user = process.env.FEEDBACK_GMAIL_USER
-  const pass = process.env.FEEDBACK_GMAIL_APP_PASSWORD
+const createSESClient = () => {
+  const region = process.env.AWS_SES_REGION
 
-  if (!user || !pass) {
+  if (!region) {
     return null
   }
 
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user, pass },
-  })
+  return new SESClient({ region })
 }
 
 const generateReplySubject = (): string => {
@@ -53,22 +49,38 @@ const sendReplyEmail: SendReplyEmailType = async (data) => {
     return { ok: true, status: HttpStatus.OK }
   }
 
-  const transporter = createTransporter()
-  if (!transporter) {
+  const sesClient = createSESClient()
+  const source = process.env.AWS_SES_FROM_EMAIL
+
+  if (!sesClient || !source) {
     return {
       ok: false,
       status: HttpStatus.INTERNAL_SERVER_ERROR,
-      error: new Error('SMTP configuration is missing'),
+      error: new Error('AWS SES configuration is missing'),
     }
   }
 
   try {
-    await transporter.sendMail({
-      from: process.env.FEEDBACK_GMAIL_USER,
-      to: data.email,
-      subject: generateReplySubject(),
-      text: generateReplyBody(data),
+    const command = new SendEmailCommand({
+      Source: source,
+      Destination: {
+        ToAddresses: [data.email],
+      },
+      Message: {
+        Subject: {
+          Charset: 'UTF-8',
+          Data: generateReplySubject(),
+        },
+        Body: {
+          Text: {
+            Charset: 'UTF-8',
+            Data: generateReplyBody(data),
+          },
+        },
+      },
     })
+
+    await sesClient.send(command)
 
     return { ok: true, status: HttpStatus.OK }
   } catch (err) {
