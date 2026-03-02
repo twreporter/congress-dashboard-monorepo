@@ -18,7 +18,7 @@ export type CouncilTopicOfBillData = {
 
 export type CouncilTopicForFilter = {
   slug: string
-  title: string
+  name: string
   count: number
 }
 

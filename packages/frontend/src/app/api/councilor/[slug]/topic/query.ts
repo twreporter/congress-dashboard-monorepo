@@ -72,7 +72,7 @@ const fetchTopicsOfACouncilor = async ({
     .filter(({ billCount }) => billCount > 0)
     .map(({ billCount, title, slug }) => ({
       slug,
-      title,
+      name: title,
       count: billCount,
     }))
     .sort(sortByCountDesc)

@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.3...@twreporter/congress-dashboard-frontend@1.11.0-rc.4) (2026-03-02)
+
+### Bug Fixes
+
+- **frontend:** address comments ([f58b6af](https://github.com/twreporter/congress-dashboard-monorepo/commit/f58b6af522736f74bdacec33c4ecec0f481d6c73))
+- **frontend:** format code ([c612198](https://github.com/twreporter/congress-dashboard-monorepo/commit/c612198ffa3db82fced95e5f29a129fe4e7df701))
+- **frontend:** remove test image domins ([b86f7de](https://github.com/twreporter/congress-dashboard-monorepo/commit/b86f7de2e58385b1bc48c4b4465ed37f7d1ac49e))
+- **frontend:** some filter and dashboard bug ([8c0fb0b](https://github.com/twreporter/congress-dashboard-monorepo/commit/8c0fb0bf01a824e3b0cae276c1ed599e116ca0a5))
+
+# [1.11.0-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.2...@twreporter/congress-dashboard-frontend@1.11.0-rc.3) (2026-03-02)
+
+### Bug Fixes
+
+- **frontend:** apply outputFileTracingRoot only during production build ([a4d7060](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4d70603f047bd96912f2b64e7eb5fdf7ca17bef))
+
+# [1.11.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.1...@twreporter/congress-dashboard-frontend@1.11.0-rc.2) (2026-02-26)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.11.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.0...@twreporter/congress-dashboard-frontend@1.11.0-rc.1) (2026-02-26)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
