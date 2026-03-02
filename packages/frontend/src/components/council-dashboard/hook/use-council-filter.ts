@@ -6,6 +6,7 @@ import type {
   CouncilFilterFormatter,
 } from '@/components/council-dashboard/type'
 import type { CouncilMeeting } from '@/types/council-meeting'
+import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
 // lodash
 import { find } from 'lodash'
 const _ = {
@@ -38,9 +39,8 @@ const useCouncilFilter = (meetings: CouncilMeeting[]) => {
       const constituency = Array.isArray(filterValues.constituency)
         ? filterValues.constituency.map((idString: string) => Number(idString))
         : []
-      const types =
-        filterValues.type && filterValues.type !== 'all'
-          ? [filterValues.type as string]
+      const types = typeof filterValues.type === 'string' && filterValues.type !== 'all'
+          ? [filterValues.type as MemberType]
           : []
       const administrativeDistricts = Array.isArray(
         filterValues.administrativeDistrict
