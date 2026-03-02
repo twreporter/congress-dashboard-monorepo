@@ -6,12 +6,14 @@ type FetchCouncilorsParams = {
   councilMeetingId: number
   partyIds?: number[]
   constituencies?: number[]
+  types?: string[]
 }
 
 const fetchCouncilors = async ({
   councilMeetingId,
   partyIds,
   constituencies,
+  types,
 }: FetchCouncilorsParams): Promise<CouncilorForIndex[]> => {
   const query = `
     query CouncilMembers($where: CouncilMemberWhereInput!) {
@@ -29,6 +31,7 @@ const fetchCouncilors = async ({
         }
         constituency
         type
+        administrativeDistrict
         party {
           image {
             imageFile {
@@ -61,6 +64,12 @@ const fetchCouncilors = async ({
   if (constituencies && constituencies.length > 0) {
     where.constituency = {
       in: constituencies,
+    }
+  }
+
+  if (types && types.length > 0) {
+    where.type = {
+      in: types,
     }
   }
 

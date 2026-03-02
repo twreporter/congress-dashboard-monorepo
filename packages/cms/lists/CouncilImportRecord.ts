@@ -462,7 +462,6 @@ const importHandlers: Record<
         administrativeDistrict,
         tooltip,
         note,
-        proposalSuccessCount,
         relatedLink,
       } = item
 
@@ -493,7 +492,6 @@ const importHandlers: Record<
         note,
         labelForCMS: `${councilorData.name} | ${CITY_LABEL[city]} - 第 ${councilMeeting_term} 屆`,
         party: { connect: { slug: party_slug } },
-        proposalSuccessCount,
         relatedLink,
       }
 

@@ -17,6 +17,8 @@ const useCouncilFilter = (meetings: CouncilMeeting[]) => {
   const [filterValues, setFilterValues] = useState<CouncilFilterModalValueType>(
     {
       meeting: latestMeetingTerm,
+      administrativeDistrict: [],
+      type: 'all',
       constituency: [],
       party: [],
     }
@@ -36,8 +38,23 @@ const useCouncilFilter = (meetings: CouncilMeeting[]) => {
       const constituency = Array.isArray(filterValues.constituency)
         ? filterValues.constituency.map((idString: string) => Number(idString))
         : []
+      const types =
+        filterValues.type && filterValues.type !== 'all'
+          ? [filterValues.type as string]
+          : []
+      const administrativeDistricts = Array.isArray(
+        filterValues.administrativeDistrict
+      )
+        ? filterValues.administrativeDistrict
+        : []
 
-      return { meetingId, partyIds, constituency }
+      return {
+        meetingId,
+        partyIds,
+        constituency,
+        types,
+        administrativeDistricts,
+      }
     },
     [meetings]
   )

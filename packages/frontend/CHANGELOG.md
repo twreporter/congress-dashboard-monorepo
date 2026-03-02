@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0-rc.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.4...@twreporter/congress-dashboard-frontend@1.11.0-rc.5) (2026-03-02)
+
+### Bug Fixes
+
+- **frontend:** address comments ([faee4db](https://github.com/twreporter/congress-dashboard-monorepo/commit/faee4db9bc77753158d3b3dfd89b3c43557afdf1))
+- **frontend:** proposalSuccessCount text change ([48c462e](https://github.com/twreporter/congress-dashboard-monorepo/commit/48c462e9595e6b552b7fefe34ab4ec15d0764cac))
+
+### Features
+
+- **frontend:** council dashboard filter for councilor ([87655d6](https://github.com/twreporter/congress-dashboard-monorepo/commit/87655d69e96e1ce35d604261ef3c4d83d95888f1))
+
 # [1.11.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.3...@twreporter/congress-dashboard-frontend@1.11.0-rc.4) (2026-03-02)
 
 ### Bug Fixes

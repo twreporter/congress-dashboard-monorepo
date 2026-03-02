@@ -1401,7 +1401,6 @@ input CouncilMemberWhereInput {
   constituency: IntNullableFilter
   tooltip: StringFilter
   note: StringFilter
-  proposalSuccessCount: IntNullableFilter
   isActive: BooleanFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -1415,7 +1414,6 @@ input CouncilMemberOrderByInput {
   constituency: OrderDirection
   tooltip: OrderDirection
   note: OrderDirection
-  proposalSuccessCount: OrderDirection
   isActive: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
@@ -1433,7 +1431,6 @@ input CouncilMemberUpdateInput {
   administrativeDistrict: JSON
   tooltip: String
   note: String
-  proposalSuccessCount: Int
   relatedLink: JSON
   isActive: Boolean
   createdAt: DateTime
@@ -1463,7 +1460,6 @@ input CouncilMemberCreateInput {
   administrativeDistrict: JSON
   tooltip: String
   note: String
-  proposalSuccessCount: Int
   relatedLink: JSON
   isActive: Boolean
   createdAt: DateTime
