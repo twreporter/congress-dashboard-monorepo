@@ -39,8 +39,7 @@ const useCouncilFilter = (meetings: CouncilMeeting[]) => {
       const constituency = Array.isArray(filterValues.constituency)
         ? filterValues.constituency.map((idString: string) => Number(idString))
         : []
-      const types =
-        filterValues.type && filterValues.type !== 'all'
+      const types = typeof filterValues.type === 'string' && filterValues.type !== 'all'
           ? [filterValues.type as MemberType]
           : []
       const administrativeDistricts = Array.isArray(
