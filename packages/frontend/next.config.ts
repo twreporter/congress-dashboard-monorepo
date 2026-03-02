@@ -6,7 +6,6 @@ const nextConfig = (phase: string): NextConfig => ({
   // outputFileTracingRoot is only needed during build to avoid generating monorepo folder structure.
   // Setting it during dev causes Turbopack to fail with "Next.js package not found".
   ...(phase === PHASE_PRODUCTION_BUILD && { outputFileTracingRoot: __dirname }),
-
   compiler: {
     styledComponents: true,
   },
