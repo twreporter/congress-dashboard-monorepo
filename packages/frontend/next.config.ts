@@ -20,7 +20,6 @@ const nextConfig = (phase: string): NextConfig => ({
       'dev-lawmaker-storage.twreporter.org',
       'staging-lawmaker-storage.twreporter.org',
       'lawmaker-storage.twreporter.org',
-      'picsum.photos',
     ],
   },
   async redirects() {
