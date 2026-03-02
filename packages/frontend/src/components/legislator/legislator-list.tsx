@@ -168,7 +168,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
         legislatorSlug: slug,
       })
   )
-  const legislatorList = !swrError && selectedTopic ? topLegislators : []
+  const legislatorList = !swrError && selectedTopic ? topLegislators.filter(({ count }) => count > 0) : []
 
   const openFilter = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
