@@ -58,7 +58,6 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'administrativeDistrict',
       'tooltip',
       'note',
-      'proposalSuccessCount',
       'relatedLink',
     ],
     requiredFields: [
