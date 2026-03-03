@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0-rc.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.6...@twreporter/congress-dashboard-frontend@1.11.0-rc.7) (2026-03-03)
+
+### Bug Fixes
+
+- **frontend:** add searchable option to FilterOption and FilterModal ([7f7626d](https://github.com/twreporter/congress-dashboard-monorepo/commit/7f7626d0c02daa015274d074327f4b9edb6d4c47))
+- **frontend:** searchable for muti selector ([f342739](https://github.com/twreporter/congress-dashboard-monorepo/commit/f3427399ad02a9a3c7869d0d919edd5a66755219))
+
 # [1.11.0-rc.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.5...@twreporter/congress-dashboard-frontend@1.11.0-rc.6) (2026-03-02)
 
 ### Bug Fixes

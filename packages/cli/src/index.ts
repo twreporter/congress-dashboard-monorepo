@@ -179,6 +179,7 @@ feedAlgolia
           ),
         })
       )
+      process.exitCode = 1
     }
   })
 
@@ -305,6 +306,7 @@ feedAlgolia
           ),
         })
       )
+      process.exitCode = 1
     }
   })
 

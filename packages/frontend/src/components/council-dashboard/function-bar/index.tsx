@@ -222,6 +222,7 @@ const FunctionBar = forwardRef<HTMLDivElement, FunctionBarProps>(
         },
         {
           type: SelectorType.Single,
+          searchable: false,
           disabled: false,
           label: '身份別',
           key: 'type',
