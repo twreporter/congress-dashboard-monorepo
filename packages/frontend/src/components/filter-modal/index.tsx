@@ -300,6 +300,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                         }
                         loading={isLoading}
                         showError={showError}
+                        searchable={searchable}
                       />
                     </SelectorContainer>
                   </SelectContainer>
