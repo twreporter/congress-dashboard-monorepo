@@ -14,6 +14,7 @@ export type FilterOption = {
   defaultValue?: string | string[]
   isLoading?: boolean
   showError?: boolean
+  searchable?: boolean
 }
 
 export type FilterModalValueType = {

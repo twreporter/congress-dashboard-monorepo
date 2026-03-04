@@ -157,18 +157,21 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   useEffect(() => {
     const initializeCouncilor = async () => {
-      const { data, hasMore } = await fetchCouncilorAndTopTopics({
-        councilMeetingId: Number(latestMeetingId),
-      })
-      setCouncilors(data)
-      setHasMoreCouncilor(hasMore)
+      setIsLoading(true)
+      try {
+        const { data, hasMore } = await fetchCouncilorAndTopTopics({
+          councilMeetingId: Number(latestMeetingId),
+        })
+        setCouncilors(data)
+        setHasMoreCouncilor(hasMore)
+      } catch (err) {
+        console.error(`initialize councilor failed. err: ${err}`)
+        setIsShowError(true)
+      } finally {
+        setIsLoading(false)
+      }
     }
-    try {
-      initializeCouncilor()
-    } catch (err) {
-      console.error(`initialize councilor failed. err: ${err}`)
-      setIsShowError(true)
-    }
+    initializeCouncilor()
   }, [latestMeetingId, fetchCouncilorAndTopTopics])
 
   useEffect(() => {
@@ -381,11 +384,19 @@ const Dashboard: React.FC<DashboardProps> = ({
     filterModalValue: CouncilFilterModalValueType
   ) => {
     setCouncilors([])
-    const { meetingId, partyIds, constituency } = formatter(filterModalValue)
+    const {
+      meetingId,
+      partyIds,
+      constituency,
+      types,
+      administrativeDistricts,
+    } = formatter(filterModalValue)
     const { data, hasMore } = await fetchCouncilorAndTopTopics({
       councilMeetingId: meetingId,
       partyIds,
       constituencies: constituency,
+      types,
+      administrativeDistricts,
     })
     setCouncilors(data)
     setHasMoreCouncilor(hasMore)

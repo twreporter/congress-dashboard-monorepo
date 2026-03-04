@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0...@twreporter/congress-dashboard-cms@1.7.0-rc.0) (2026-03-02)
+
+### Bug Fixes
+
+- **cms:** return 0 ([0f8d06b](https://github.com/twreporter/congress-dashboard-monorepo/commit/0f8d06b068f8b28b2f1d4aa177110d9c17e2027d))
+
+### Features
+
+- **cms:** use auto count proposalSuccessCount ([8909e65](https://github.com/twreporter/congress-dashboard-monorepo/commit/8909e65115c29ee86840a451a0dae10107581fa5))
+
 # [1.6.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.6.0-rc.15...@twreporter/congress-dashboard-cms@1.6.0) (2026-02-14)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms

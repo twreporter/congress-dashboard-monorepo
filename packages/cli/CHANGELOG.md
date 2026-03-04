@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.0...lawmaker-cli@3.0.1-rc.0) (2026-03-03)
+
+### Bug Fixes
+
+- **cli:** exit with code 1 when feed-algolia command fails ([ffe2c55](https://github.com/twreporter/congress-dashboard-monorepo/commit/ffe2c55196a078309bb686b62a6267426782b6d1))
+
 # [3.0.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.0-rc.1...lawmaker-cli@3.0.0) (2026-02-14)
 
 **Note:** Version bump only for package lawmaker-cli

@@ -56,7 +56,7 @@ const FollowMoreErrorBox = styled.div`
   background-color: rgba(241, 241, 241, 0.5);
 `
 const FollowMoreErrorText = styled(P1Gray700)`
-  display: contents;
+  display: contents !important;
   margin-top: 4px;
 `
 

@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0-rc.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.6...@twreporter/congress-dashboard-frontend@1.11.0-rc.7) (2026-03-03)
+
+### Bug Fixes
+
+- **frontend:** add searchable option to FilterOption and FilterModal ([7f7626d](https://github.com/twreporter/congress-dashboard-monorepo/commit/7f7626d0c02daa015274d074327f4b9edb6d4c47))
+- **frontend:** searchable for muti selector ([f342739](https://github.com/twreporter/congress-dashboard-monorepo/commit/f3427399ad02a9a3c7869d0d919edd5a66755219))
+
+# [1.11.0-rc.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.5...@twreporter/congress-dashboard-frontend@1.11.0-rc.6) (2026-03-02)
+
+### Bug Fixes
+
+- **frontend:** address comments ([a37d3c7](https://github.com/twreporter/congress-dashboard-monorepo/commit/a37d3c7d3c390b0bdc5d1062f20fec0547a5153b))
+- **frontend:** build failed type ([0e50806](https://github.com/twreporter/congress-dashboard-monorepo/commit/0e5080624a6635cbbb48e054d032ddf09e1d4525))
+
+# [1.11.0-rc.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.4...@twreporter/congress-dashboard-frontend@1.11.0-rc.5) (2026-03-02)
+
+### Bug Fixes
+
+- **frontend:** address comments ([faee4db](https://github.com/twreporter/congress-dashboard-monorepo/commit/faee4db9bc77753158d3b3dfd89b3c43557afdf1))
+- **frontend:** proposalSuccessCount text change ([48c462e](https://github.com/twreporter/congress-dashboard-monorepo/commit/48c462e9595e6b552b7fefe34ab4ec15d0764cac))
+
+### Features
+
+- **frontend:** council dashboard filter for councilor ([87655d6](https://github.com/twreporter/congress-dashboard-monorepo/commit/87655d69e96e1ce35d604261ef3c4d83d95888f1))
+
+# [1.11.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.3...@twreporter/congress-dashboard-frontend@1.11.0-rc.4) (2026-03-02)
+
+### Bug Fixes
+
+- **frontend:** address comments ([f58b6af](https://github.com/twreporter/congress-dashboard-monorepo/commit/f58b6af522736f74bdacec33c4ecec0f481d6c73))
+- **frontend:** format code ([c612198](https://github.com/twreporter/congress-dashboard-monorepo/commit/c612198ffa3db82fced95e5f29a129fe4e7df701))
+- **frontend:** remove test image domins ([b86f7de](https://github.com/twreporter/congress-dashboard-monorepo/commit/b86f7de2e58385b1bc48c4b4465ed37f7d1ac49e))
+- **frontend:** some filter and dashboard bug ([8c0fb0b](https://github.com/twreporter/congress-dashboard-monorepo/commit/8c0fb0bf01a824e3b0cae276c1ed599e116ca0a5))
+
+# [1.11.0-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.2...@twreporter/congress-dashboard-frontend@1.11.0-rc.3) (2026-03-02)
+
+### Bug Fixes
+
+- **frontend:** apply outputFileTracingRoot only during production build ([a4d7060](https://github.com/twreporter/congress-dashboard-monorepo/commit/a4d70603f047bd96912f2b64e7eb5fdf7ca17bef))
+
+# [1.11.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.1...@twreporter/congress-dashboard-frontend@1.11.0-rc.2) (2026-02-26)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+# [1.11.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.0...@twreporter/congress-dashboard-frontend@1.11.0-rc.1) (2026-02-26)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+# [1.11.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.1-rc.2...@twreporter/congress-dashboard-frontend@1.11.0-rc.0) (2026-02-26)
+
+### Bug Fixes
+
+- **frontend:** polish search result card text, legislative filter labeling and styles defects ([9579ef7](https://github.com/twreporter/congress-dashboard-monorepo/commit/9579ef737391c78bd99e162e7b13a66d2ab494af))
+
+### Features
+
+- **frontend:** add topic source tags in instant search hits ([e8a992e](https://github.com/twreporter/congress-dashboard-monorepo/commit/e8a992e25bbb9b9a13f73dd8570864c6b619dda5))
+
+## [1.10.1-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.1-rc.1...@twreporter/congress-dashboard-frontend@1.10.1-rc.2) (2026-02-24)
+
+### Bug Fixes
+
+- **frontend:** correct snippet window bounds around matched keywords ([e9a2da3](https://github.com/twreporter/congress-dashboard-monorepo/commit/e9a2da3a194bb931104ca1f2a7706be22a49b852))
+
+## [1.10.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.1-rc.0...@twreporter/congress-dashboard-frontend@1.10.1-rc.1) (2026-02-24)
+
+### Bug Fixes
+
+- **frontend:** correct NEXT_PUBLIC_RELEASE_BRANCH env var in filter button ([952ad5a](https://github.com/twreporter/congress-dashboard-monorepo/commit/952ad5aaa6b4b837f8b43353999d7ca5c0fa6217))
+- **frontend:** ensure filter changes trigger new search with lazy-mounted tabs ([8141d4d](https://github.com/twreporter/congress-dashboard-monorepo/commit/8141d4df3ab2e26cd5f098db142d1d4aa7f13e06))
+
+## [1.10.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0...@twreporter/congress-dashboard-frontend@1.10.1-rc.0) (2026-02-23)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.10.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.10.0-rc.24...@twreporter/congress-dashboard-frontend@1.10.0) (2026-02-14)
 
 ### Bug Fixes

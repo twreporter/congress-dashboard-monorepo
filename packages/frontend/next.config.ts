@@ -1,6 +1,11 @@
 import type { NextConfig } from 'next'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 
-const nextConfig: NextConfig = {
+const nextConfig = (phase: string): NextConfig => ({
+  output: 'standalone',
+  // outputFileTracingRoot is only needed during build to avoid generating monorepo folder structure.
+  // Setting it during dev causes Turbopack to fail with "Next.js package not found".
+  ...(phase === PHASE_PRODUCTION_BUILD && { outputFileTracingRoot: __dirname }),
   compiler: {
     styledComponents: true,
   },
@@ -41,6 +46,6 @@ const nextConfig: NextConfig = {
       },
     ]
   },
-}
+})
 
 export default nextConfig

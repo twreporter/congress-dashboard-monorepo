@@ -75,6 +75,22 @@ const TopicCircle = styled(Circle)`
   overflow: hidden;
 `
 
+const TopicTag = styled.div`
+  border: 0.5px solid ${colorGrayscale.gray800};
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1;
+  padding: 3px 3px 3px 3px;
+  color: ${colorGrayscale.gray800};
+`
+
+const TopicTitleAndTag = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
+`
+
 const Avatar = styled(Circle)<{ $imgSrc: string }>`
   ${({ $imgSrc }) => {
     return `background-image: url(${$imgSrc});`
@@ -208,7 +224,10 @@ export function InstantTopicHit({
           <IconIssue />
         </TopicCircle>
         <Text>
-          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <TopicTitleAndTag>
+            <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+            <TopicTag>立法院</TopicTag>
+          </TopicTitleAndTag>
           <p>
             {variant === layoutVariants.Default ? (
               <span>共{hit.relatedMessageCount}筆發言：</span>
@@ -269,7 +288,10 @@ export function InstantCouncilTopicHit({
           <IconIssue />
         </TopicCircle>
         <Text>
-          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <TopicTitleAndTag>
+            <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+            <TopicTag>{hit.council}</TopicTag>
+          </TopicTitleAndTag>
           <p>
             <span>共{hit.billCount}筆相關議案：</span>
             <Snippet highlightedTagName="span" attribute="desc" hit={hit} />

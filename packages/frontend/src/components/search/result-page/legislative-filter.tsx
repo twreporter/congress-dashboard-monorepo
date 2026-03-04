@@ -1,10 +1,9 @@
 'use client'
 
+import { useEffect } from 'react'
 import FilterButton from '@/components/button/filter-button'
 import FilterModal from '@/components/filter-modal'
-import styled from 'styled-components'
 import type { FilterOption } from '@/components/dashboard/type'
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { useState } from 'react'
 import { SelectorType } from '@/components/selector'
 import { formatDate } from '@/utils/date-formatters'
@@ -12,37 +11,28 @@ import { useLegislativeMeeting } from '@/fetchers/legislative-meeting'
 import { useLegislativeMeetingSession } from '@/fetchers/legislative-meeting'
 
 export type LegislativeFilterValueType = {
+  // NOTE: currently fixed to 'legislativeYuan' only.
+  // Kept in the value shape for FilterModal schema compatibility
+  department: string
   meeting: string
   meetingSession: string[]
 }
 
 export const defaultLegislativeFilterValue = {
+  department: 'legislativeYuan',
   meeting: 'all',
   meetingSession: ['all'],
 }
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-`
-
-const FilterString = styled.div`
-  color: ${colorGrayscale.gray700};
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 150%;
-`
+type LegislativeSearchFilterProps = {
+  filterValue: LegislativeFilterValueType
+  onChange: (value: LegislativeFilterValueType) => void
+}
 
 export const LegislativeSearchFilter = ({
-  className,
   filterValue: _filterValue,
   onChange,
-}: {
-  className?: string
-  filterValue: LegislativeFilterValueType
-  onChange: (LegislativeFilterValueType) => void
-}) => {
+}: LegislativeSearchFilterProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [filterValue, setFilterValue] =
     useState<LegislativeFilterValueType>(_filterValue)
@@ -64,6 +54,14 @@ export const LegislativeSearchFilter = ({
 
   const getFilterOptions = (): FilterOption[] => {
     const options: FilterOption[] = [
+      {
+        type: SelectorType.Single,
+        disabled: true,
+        label: '單位',
+        key: 'department',
+        defaultValue: 'legislativeYuan',
+        options: [{ label: '立法院', value: 'legislativeYuan' }],
+      },
       {
         type: SelectorType.Single,
         disabled: false,
@@ -107,17 +105,9 @@ export const LegislativeSearchFilter = ({
     return options
   }
 
-  let filterString = '全部屆期'
-
-  if (filterValue.meeting !== 'all') {
-    filterString = `第${filterValue.meeting}屆｜`
-
-    if (filterValue.meetingSession[0] === 'all') {
-      filterString += `全部會期`
-    } else {
-      filterString += `部分會期`
-    }
-  }
+  useEffect(() => {
+    setFilterValue(_filterValue)
+  }, [_filterValue])
 
   return (
     <>
@@ -125,7 +115,7 @@ export const LegislativeSearchFilter = ({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         initialValues={defaultLegislativeFilterValue}
-        onSubmit={onChange}
+        onSubmit={(value) => onChange(value as LegislativeFilterValueType)}
         onChange={(value) => {
           if (value.meeting === 'all') {
             setFilterValue(defaultLegislativeFilterValue)
@@ -136,10 +126,32 @@ export const LegislativeSearchFilter = ({
         options={getFilterOptions()}
         value={filterValue}
       />
-      <Container className={className} onClick={() => setIsOpen(true)}>
-        <FilterString>{filterString}</FilterString>
-        <FilterButton filterCount={0} />
-      </Container>
+      <FilterButton filterCount={0} onClick={() => setIsOpen(true)} />
     </>
   )
+}
+
+/**
+ * Generate filter display string for legislative filter
+ * @param filterValue - Current filter value
+ * @returns Human-readable filter string
+ */
+export function buildLegislativeFilterString(
+  filterValue: LegislativeFilterValueType
+): string {
+  // NOTE: department is not user-switchable in current UI,
+  // so the display prefix is intentionally hard-coded.
+  if (filterValue.meeting === 'all') {
+    return '立法院｜全部屆期'
+  }
+
+  let result = `立法院｜第${filterValue.meeting}屆｜`
+
+  if (filterValue.meetingSession[0] === 'all') {
+    result += '全部會期'
+  } else {
+    result += '部分會期'
+  }
+
+  return result
 }
