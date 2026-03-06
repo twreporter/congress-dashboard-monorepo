@@ -5,12 +5,31 @@ import logger from '@/utils/logger'
 import { isFeedback } from '@/app/api/feedback/utils'
 import slack from '@/app/api/feedback/slack'
 import sendReplyEmail from '@/app/api/feedback/email'
+import { isRateLimited } from '@/app/api/feedback/rate-limiter'
+import { sanitizeUsername } from '@/app/api/feedback/sanitize'
 import responseHelper from '@/app/api/_core/response-helper'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
 export async function POST(req: NextRequest) {
   const requestId = uuidV4()
+
+  // --- Rate limiting (by IP) ---
+  const ip =
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    req.headers.get('x-real-ip') ||
+    'unknown'
+
+  if (isRateLimited(ip)) {
+    logger.warn({ requestId, ip }, 'rate limited feedback request')
+    return NextResponse.json(
+      responseHelper.error(
+        new Error('Too many requests. Please try again later.')
+      ),
+      { status: HttpStatus.TOO_MANY_REQUESTS }
+    )
+  }
+
   let body
   try {
     body = await req.json()
@@ -43,6 +62,9 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  // --- Sanitize username before downstream use ---
+  body.username = sanitizeUsername(body.username)
+
   try {
     const slackRes = await slack(body)
     if (slackRes.ok) {
@@ -60,7 +82,7 @@ export async function POST(req: NextRequest) {
             'reply email error'
           )
         } else {
-          logger.debug({ requestId, email: body.email }, 'reply email sent')
+          logger.debug({ requestId }, 'reply email sent')
         }
       }
 

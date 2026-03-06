@@ -4,7 +4,7 @@ import type { Feedback } from '@/app/api/feedback/type'
 // constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
-const releaseBranch = process.env.RELEASE_BRANCH
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 type ResponseData = {
   ok: boolean
@@ -52,11 +52,20 @@ const sendReplyEmail: SendReplyEmailType = async (data) => {
   const sesClient = createSESClient()
   const source = process.env.AWS_SES_FROM_EMAIL
 
-  if (!sesClient || !source) {
+    if (!sesClient || !source) {
+    const missing: string[] = []
+    if (!sesClient) {
+      missing.push('AWS_SES_REGION')
+    }
+    if (!source) {
+      missing.push('AWS_SES_FROM_EMAIL')
+    }
     return {
       ok: false,
       status: HttpStatus.INTERNAL_SERVER_ERROR,
-      error: new Error('AWS SES configuration is missing'),
+      error: new Error(
+        `AWS SES configuration is missing: ${missing.join(', ')}`
+      ),
     }
   }
 
