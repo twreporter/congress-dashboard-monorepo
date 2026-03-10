@@ -1,0 +1,58 @@
+{
+  "settings": {
+    "minWordSizefor1Typo": 4,
+    "minWordSizefor2Typos": 8,
+    "hitsPerPage": 20,
+    "maxValuesPerFacet": 100,
+    "searchableAttributes": [
+      "unordered(title)",
+      "councilor",
+      "unordered(summary)"
+    ],
+    "numericAttributesToIndex": null,
+    "attributesToRetrieve": null,
+    "unretrievableAttributes": null,
+    "optionalWords": null,
+    "attributesForFaceting": [
+      "filterOnly(councilSlug)",
+      "filterOnly(meetingTerm)"
+    ],
+    "attributesToSnippet": [
+      "summary:80"
+    ],
+    "attributesToHighlight": [
+      "councilor",
+      "title",
+      "summary"
+    ],
+    "paginationLimitedTo": 1000,
+    "attributeForDistinct": null,
+    "exactOnSingleWordQuery": "attribute",
+    "ranking": [
+      "typo",
+      "geo",
+      "words",
+      "filters",
+      "proximity",
+      "attribute",
+      "exact",
+      "custom"
+    ],
+    "customRanking": [
+      "asc(councilRank)",
+      "desc(dateTs)"
+    ],
+    "separatorsToIndex": "",
+    "removeWordsIfNoResults": "none",
+    "queryType": "prefixLast",
+    "highlightPreTag": "<em>",
+    "highlightPostTag": "</em>",
+    "alternativesAsExact": [
+      "ignorePlurals",
+      "singleWordSynonym"
+    ]
+  },
+  "rules": [],
+  "synonyms": []
+}
+
