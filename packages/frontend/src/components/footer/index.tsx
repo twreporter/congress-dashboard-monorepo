@@ -257,18 +257,14 @@ const Footer: React.FC = () => {
               <P3Gray600 text="｜" />
               <BottomLinks releaseBranch={releaseBranch} />
               <P3Gray600 text="｜" />
-              <P3Gray600
-                text={`Copyright © ${new Date().getFullYear()} The Reporter.`}
-              />
+              <P3Gray600 text={'Copyright © The Reporter.'} />
             </DesktopAndAboveWithFlex>
             <TabletAndBelowWithFlex>
               <SocialMediaIcons />
               <Gap $height={24} />
               <P3Gray600 text={fundraisingId} />
               <BottomLinks releaseBranch={releaseBranch} />
-              <P3Gray600
-                text={`Copyright © ${new Date().getFullYear()} The Reporter.`}
-              />
+              <P3Gray600 text={'Copyright © The Reporter.'} />
             </TabletAndBelowWithFlex>
           </BottomSection>
           <BottomSection>
