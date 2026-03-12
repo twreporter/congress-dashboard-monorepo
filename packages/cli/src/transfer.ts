@@ -304,7 +304,7 @@ export function transferCouncilorModelToRecord(
         : `${c.party.name}籍，`
     }
 
-    desc = desc + `現任第 ${term} 屆${councilDisplayName}議員`
+    desc = desc + `第 ${term} 屆${councilDisplayName}議員`
     if (constituency) {
       desc = desc + `（第 ${constituency} 選舉區）`
     }
