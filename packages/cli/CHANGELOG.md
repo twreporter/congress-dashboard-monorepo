@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.2-rc.0...lawmaker-cli@3.0.2-rc.1) (2026-03-12)
+
+### Bug Fixes
+
+- **cli:** add incumbency wording only for active councilors ([6dca8cd](https://github.com/twreporter/congress-dashboard-monorepo/commit/6dca8cd3bff3d25a1a902c23ef91be498af5adff))
+
 ## [3.0.2-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.1...lawmaker-cli@3.0.2-rc.0) (2026-03-12)
 
 ### Bug Fixes
