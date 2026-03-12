@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.12.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0...@twreporter/congress-dashboard-frontend@1.12.0-rc.0) (2026-03-08)
+
+### Bug Fixes
+
+- **frontend:** rate limit and sanitize ([9cfbfa0](https://github.com/twreporter/congress-dashboard-monorepo/commit/9cfbfa0f3129de52e6a1d3909c992c19db468637))
+
+### Features
+
+- **frontend:** reply eamil for feedback ([1310fe1](https://github.com/twreporter/congress-dashboard-monorepo/commit/1310fe1332936d30e3aea279ead0a20e0ab83b41))
+- **frontend:** use aws ses for mail ([979b028](https://github.com/twreporter/congress-dashboard-monorepo/commit/979b0285dfa9cbcc2b0a0a0ca3b44da3447888f0))
+
 # [1.11.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.11.0-rc.7...@twreporter/congress-dashboard-frontend@1.11.0) (2026-03-04)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
