@@ -123,6 +123,7 @@ export type CouncilorModel = {
   city: string
   constituency?: number
   note: string
+  isActive: boolean
   bill: {
     date: string
   }[]
@@ -612,6 +613,7 @@ export async function* councilorIterator(
               note
               city
               constituency
+              isActive
               councilMeeting {
                 term
               }
@@ -639,9 +641,6 @@ export async function* councilorIterator(
             where: {
               city: {
                 equals: councilName,
-              },
-              isActive: {
-                equals: true,
               },
             },
             take,
