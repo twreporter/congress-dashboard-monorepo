@@ -145,6 +145,14 @@ const validateListSpecificData: Record<
               legislator_slug,
               party_slug,
               legislativeMeeting_term,
+              _type,
+              _constituency,
+              _city,
+              _tooltip,
+              _note,
+              _proposalSuccessCount,
+              _councilor_city,
+              councilor_slug,
             ],
             index
           ) => {
@@ -172,6 +180,16 @@ const validateListSpecificData: Record<
               validationErrors.push(
                 `第 ${rowNum} 行: 屆期 第 ${legislativeMeeting_term} 屆 不存在，請先匯入屆期資料`
               )
+            }
+            if (councilor_slug) {
+              const councilor = await context.prisma.councilor.findFirst({
+                where: { slug: councilor_slug },
+              })
+              if (!councilor) {
+                validationErrors.push(
+                  `第 ${rowNum} 行: 縣市議員 "${councilor_slug}" 不存在，請先匯入縣市議員資料`
+                )
+              }
             }
           }
         )
@@ -546,6 +564,8 @@ const importHandlers: Record<
       tooltip,
       note,
       proposalSuccessCount,
+      councilor_city,
+      councilor_slug,
     ] of csvData.slice(1)) {
       const legislatorData = await context.prisma.legislator.findFirst({
         where: { slug: legislator_slug },
@@ -561,6 +581,14 @@ const importHandlers: Record<
           select: { id: true },
         })
 
+      const relatedLink: { url: string; label: string }[] = []
+      if (councilor_slug && councilor_city) {
+        relatedLink.push({
+          url: `https://lawmaker.twreporter.org/council/${councilor_city}/lawmaker/${councilor_slug}`,
+          label: '議員提案分析',
+        })
+      }
+
       const commonData = {
         type,
         constituency,
@@ -570,6 +598,7 @@ const importHandlers: Record<
         labelForCMS: `${legislatorData.name} | 第 ${legislativeMeeting_term} 屆`,
         party: { connect: { slug: party_slug } },
         proposalSuccessCount: Number(proposalSuccessCount),
+        ...(relatedLink.length > 0 ? { relatedLink } : {}),
       }
 
       if (existingMember) {

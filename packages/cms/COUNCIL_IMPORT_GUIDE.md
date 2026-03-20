@@ -94,6 +94,9 @@
 | `tooltip` | ❌ | string | 提示文字 |
 | `note` | ❌ | string | 備註 |
 | `relatedLink` | ❌ | array | 相關連結陣列，[見格式說明](#相關連結-relatedlink) |
+| `legislator_slug` | ❌ | string | 對應的立法委員 slug（須存在於系統） |
+
+> 💡 **自動產生相關連結**：若提供 `legislator_slug`，系統會自動在 `relatedLink` 中新增一筆「立委發言分析」連結，格式為 `https://lawmaker.twreporter.org/congress/lawmaker/{legislator_slug}`。此連結會與 `relatedLink` 欄位中手動提供的連結合併。
 
 #### JSON 範例
 
@@ -115,7 +118,8 @@
         "url": "https://council.gov.tw/member/123",
         "label": "議會個人頁面"
       }
-    ]
+    ],
+    "legislator_slug": "wang-xiao-ming-legislator"
   }
 ]
 ```
@@ -427,6 +431,7 @@
 | `找不到 slug 為 "XXX" 的政黨` | 政黨資料尚未建立 |
 | `city 欄位值 "XXX" 非有效的縣市代碼` | 縣市代碼錯誤 |
 | `找不到 XXX 市第 X 屆的議會` | 該縣市屆期的議會資料尚未建立 |
+| `找不到 slug 為 "XXX" 的立法委員，請先匯入立法委員資料` | 提供的 `legislator_slug` 對應的立法委員不存在 |
 
 ---
 
