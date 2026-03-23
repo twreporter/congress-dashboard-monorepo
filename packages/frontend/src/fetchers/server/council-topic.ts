@@ -376,7 +376,10 @@ export const fetchFeaturedCouncilTopics = async ({
           avatars,
         }
       })
-      .sort((a, b) => b.billCount - a.billCount || b.councilorCount - a.councilorCount)
+      .sort(
+        (a, b) =>
+          b.billCount - a.billCount || b.councilorCount - a.councilorCount
+      )
   } catch (err) {
     throw new Error(
       `Failed to fetch featured council topics for city: ${city}, err: ${err}`
