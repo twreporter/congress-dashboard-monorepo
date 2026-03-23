@@ -35,6 +35,7 @@ import {
   MAX_RELATED_ITEM,
   RELATED_TYPE,
 } from './views/related-article/constants'
+import { CITY } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 
 /**
  * Validate CSV structure against expected headers and required fields
@@ -151,7 +152,7 @@ const validateListSpecificData: Record<
               _tooltip,
               _note,
               _proposalSuccessCount,
-              _councilor_city,
+              councilor_city,
               councilor_slug,
             ],
             index
@@ -181,14 +182,33 @@ const validateListSpecificData: Record<
                 `第 ${rowNum} 行: 屆期 第 ${legislativeMeeting_term} 屆 不存在，請先匯入屆期資料`
               )
             }
-            if (councilor_slug) {
-              const councilor = await context.prisma.councilor.findFirst({
-                where: { slug: councilor_slug },
-              })
-              if (!councilor) {
+            if (councilor_slug || councilor_city) {
+              if (councilor_slug && !councilor_city) {
                 validationErrors.push(
-                  `第 ${rowNum} 行: 縣市議員 "${councilor_slug}" 不存在，請先匯入縣市議員資料`
+                  `第 ${rowNum} 行: 提供 councilor_slug 時，councilor_city 為必填`
                 )
+              } else if (councilor_city && !councilor_slug) {
+                validationErrors.push(
+                  `第 ${rowNum} 行: 提供 councilor_city 時，councilor_slug 為必填`
+                )
+              }
+              if (
+                councilor_city &&
+                !Object.values(CITY).includes(councilor_city as any)
+              ) {
+                validationErrors.push(
+                  `第 ${rowNum} 行: councilor_city "${councilor_city}" 非有效的縣市代碼`
+                )
+              }
+              if (councilor_slug) {
+                const councilor = await context.prisma.councilor.findFirst({
+                  where: { slug: councilor_slug },
+                })
+                if (!councilor) {
+                  validationErrors.push(
+                    `第 ${rowNum} 行: 縣市議員 "${councilor_slug}" 不存在，請先匯入縣市議員資料`
+                  )
+                }
               }
             }
           }
@@ -584,7 +604,7 @@ const importHandlers: Record<
       const relatedLink: { url: string; label: string }[] = []
       if (councilor_slug && councilor_city) {
         relatedLink.push({
-          url: `https://lawmaker.twreporter.org/council/${councilor_city}/lawmaker/${councilor_slug}`,
+          url: `/council/${councilor_city}/lawmaker/${councilor_slug}`,
           label: '議員提案分析',
         })
       }
@@ -598,7 +618,7 @@ const importHandlers: Record<
         labelForCMS: `${legislatorData.name} | 第 ${legislativeMeeting_term} 屆`,
         party: { connect: { slug: party_slug } },
         proposalSuccessCount: Number(proposalSuccessCount),
-        ...(relatedLink.length > 0 ? { relatedLink } : {}),
+        relatedLink,
       }
 
       if (existingMember) {
@@ -620,6 +640,42 @@ const importHandlers: Record<
             },
           })
         )
+      }
+
+      // Two-way binding: update all CouncilMember records belonging to this councilor
+      // with a '立委發言分析' relatedLink pointing to this legislator
+      if (councilor_slug && councilor_city) {
+        const councilMembers =
+          await context.prisma.councilMember.findMany({
+            where: {
+              councilor: { slug: councilor_slug },
+            },
+            select: { id: true, relatedLink: true },
+          })
+
+        const reverseLink = {
+          url: `/congress/lawmaker/${legislator_slug}`,
+          label: '立委發言分析',
+        }
+
+        for (const member of councilMembers) {
+          const existingLinks = Array.isArray(member.relatedLink)
+            ? (member.relatedLink as { url: string; label: string }[])
+            : []
+          const alreadyExists = existingLinks.some(
+            (link) => link.url === reverseLink.url
+          )
+          if (!alreadyExists) {
+            queries.push(
+              context.prisma.councilMember.update({
+                where: { id: member.id },
+                data: {
+                  relatedLink: [...existingLinks, reverseLink],
+                },
+              })
+            )
+          }
+        }
       }
     }
 

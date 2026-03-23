@@ -483,7 +483,7 @@ const importHandlers: Record<
         : []
       if (legislator_slug) {
         mergedRelatedLink.push({
-          url: `https://lawmaker.twreporter.org/congress/lawmaker/${legislator_slug}`,
+          url: `/congress/lawmaker/${legislator_slug}`,
           label: '立委發言分析',
         })
       }
@@ -537,6 +537,42 @@ const importHandlers: Record<
             },
           })
         )
+      }
+
+      // Two-way binding: update all LegislativeYuanMember records belonging to this legislator
+      // with a '議員提案分析' relatedLink pointing to this councilor
+      if (legislator_slug) {
+        const legislativeYuanMembers =
+          await context.prisma.legislativeYuanMember.findMany({
+            where: {
+              legislator: { slug: legislator_slug },
+            },
+            select: { id: true, relatedLink: true },
+          })
+
+        const reverseLink = {
+          url: `/council/${city}/lawmaker/${councilor_slug}`,
+          label: '議員提案分析',
+        }
+
+        for (const member of legislativeYuanMembers) {
+          const existingLinks = Array.isArray(member.relatedLink)
+            ? (member.relatedLink as { url: string; label: string }[])
+            : []
+          const alreadyExists = existingLinks.some(
+            (link) => link.url === reverseLink.url
+          )
+          if (!alreadyExists) {
+            queries.push(
+              context.prisma.legislativeYuanMember.update({
+                where: { id: member.id },
+                data: {
+                  relatedLink: [...existingLinks, reverseLink],
+                },
+              })
+            )
+          }
+        }
       }
     }
 
