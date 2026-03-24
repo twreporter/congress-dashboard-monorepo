@@ -598,18 +598,10 @@ const importHandlers: Record<
             legislator: { slug: legislator_slug },
             legislativeMeeting: { term: Number(legislativeMeeting_term) },
           },
-          select: { id: true },
+          select: { id: true, relatedLink: true },
         })
 
-      const relatedLink: { url: string; label: string }[] = []
-      if (councilor_slug && councilor_city) {
-        relatedLink.push({
-          url: `/council/${councilor_city}/lawmaker/${councilor_slug}`,
-          label: '議員提案分析',
-        })
-      }
-
-      const commonData = {
+      const commonData: Record<string, any> = {
         type,
         constituency,
         city,
@@ -618,7 +610,25 @@ const importHandlers: Record<
         labelForCMS: `${legislatorData.name} | 第 ${legislativeMeeting_term} 屆`,
         party: { connect: { slug: party_slug } },
         proposalSuccessCount: Number(proposalSuccessCount),
-        relatedLink,
+      }
+
+      if (councilor_slug && councilor_city) {
+        const newLink = {
+          url: `/council/${councilor_city}/lawmaker/${councilor_slug}`,
+          label: '議員提案分析',
+        }
+
+        const existingLinks =
+          existingMember && Array.isArray(existingMember.relatedLink)
+            ? (existingMember.relatedLink as { url: string; label: string }[])
+            : []
+
+        const alreadyExists = existingLinks.some(
+          (link) => link.url === newLink.url
+        )
+        commonData.relatedLink = alreadyExists
+          ? existingLinks
+          : [...existingLinks, newLink]
       }
 
       if (existingMember) {

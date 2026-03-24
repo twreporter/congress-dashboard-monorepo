@@ -96,7 +96,7 @@
 | `relatedLink` | ❌ | array | 相關連結陣列，[見格式說明](#相關連結-relatedlink) |
 | `legislator_slug` | ❌ | string | 對應的立法委員 slug（須存在於系統） |
 
-> 💡 **自動產生相關連結**：若提供 `legislator_slug`，系統會自動在 `relatedLink` 中新增一筆「立委發言分析」連結，格式為 `https://lawmaker.twreporter.org/congress/lawmaker/{legislator_slug}`。此連結會與 `relatedLink` 欄位中手動提供的連結合併。
+> 💡 **自動產生相關連結**：若提供 `legislator_slug`，系統會自動在 `relatedLink` 中新增一筆「立委發言分析」連結，格式為 `/congress/lawmaker/{legislator_slug}`（相對路徑）。此連結會與 `relatedLink` 欄位中手動提供的連結合併。
 
 #### JSON 範例
 
