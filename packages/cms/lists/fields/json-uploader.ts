@@ -59,6 +59,7 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'tooltip',
       'note',
       'relatedLink',
+      'legislator_slug',
     ],
     requiredFields: [
       'councilor_slug',
