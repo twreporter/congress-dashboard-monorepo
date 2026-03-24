@@ -111,6 +111,7 @@ const validateListSpecificData: Record<
           city,
           relatedLink,
           administrativeDistrict,
+          legislator_slug,
         } = item
 
         const councilor = await context.prisma.councilor.findFirst({
@@ -120,6 +121,17 @@ const validateListSpecificData: Record<
           validationErrors.push(
             `第 ${rowNum} 筆資料: 找不到 slug 為 "${councilor_slug}" 的議員`
           )
+        }
+
+        if (legislator_slug) {
+          const legislator = await context.prisma.legislator.findFirst({
+            where: { slug: legislator_slug },
+          })
+          if (!legislator) {
+            validationErrors.push(
+              `第 ${rowNum} 筆資料: 找不到 slug 為 "${legislator_slug}" 的立法委員，請先匯入立法委員資料`
+            )
+          }
         }
 
         const party = await context.prisma.party.findFirst({
@@ -463,7 +475,18 @@ const importHandlers: Record<
         tooltip,
         note,
         relatedLink,
+        legislator_slug,
       } = item
+
+      const mergedRelatedLink = Array.isArray(relatedLink)
+        ? [...relatedLink]
+        : []
+      if (legislator_slug) {
+        mergedRelatedLink.push({
+          url: `/congress/lawmaker/${legislator_slug}`,
+          label: '立委發言分析',
+        })
+      }
 
       const councilorData = await context.prisma.councilor.findFirst({
         where: { slug: councilor_slug },
@@ -492,7 +515,7 @@ const importHandlers: Record<
         note,
         labelForCMS: `${councilorData.name} | ${CITY_LABEL[city]} - 第 ${councilMeeting_term} 屆`,
         party: { connect: { slug: party_slug } },
-        relatedLink,
+        relatedLink: mergedRelatedLink,
       }
 
       if (existingMember) {
@@ -514,6 +537,42 @@ const importHandlers: Record<
             },
           })
         )
+      }
+
+      // Two-way binding: update all LegislativeYuanMember records belonging to this legislator
+      // with a '議員提案分析' relatedLink pointing to this councilor
+      if (legislator_slug) {
+        const legislativeYuanMembers =
+          await context.prisma.legislativeYuanMember.findMany({
+            where: {
+              legislator: { slug: legislator_slug },
+            },
+            select: { id: true, relatedLink: true },
+          })
+
+        const reverseLink = {
+          url: `/council/${city}/lawmaker/${councilor_slug}`,
+          label: '議員提案分析',
+        }
+
+        for (const member of legislativeYuanMembers) {
+          const existingLinks = Array.isArray(member.relatedLink)
+            ? (member.relatedLink as { url: string; label: string }[])
+            : []
+          const alreadyExists = existingLinks.some(
+            (link) => link.url === reverseLink.url
+          )
+          if (!alreadyExists) {
+            queries.push(
+              context.prisma.legislativeYuanMember.update({
+                where: { id: member.id },
+                data: {
+                  relatedLink: [...existingLinks, reverseLink],
+                },
+              })
+            )
+          }
+        }
       }
     }
 
