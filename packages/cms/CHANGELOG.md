@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.7.0...@twreporter/congress-dashboard-cms@1.8.0-rc.0) (2026-03-24)
+
+### Features
+
+- **cms:** enhance related link handling for councilors in import ([e67e852](https://github.com/twreporter/congress-dashboard-monorepo/commit/e67e8524358113bf184c09f0c259acc0903d4966))
+- **cms:** implement two-way binding for related links between councilors and legislative members ([f9e2eb7](https://github.com/twreporter/congress-dashboard-monorepo/commit/f9e2eb76321e261cfe6381328511f86c2acd1930))
+- **cms:** slug for related_link for both upload method ([5cceafe](https://github.com/twreporter/congress-dashboard-monorepo/commit/5cceafe00455561c0820d5511773f8d8cbb2f9e5))
+
 # [1.7.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.7.0-rc.0...@twreporter/congress-dashboard-cms@1.7.0) (2026-03-04)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms

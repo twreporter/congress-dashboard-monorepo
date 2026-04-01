@@ -37,6 +37,8 @@ export const expectedHeaders: Record<string, string[]> = {
     'tooltip',
     'note',
     'proposalSuccessCount',
+    'councilor_city',
+    'councilor_slug',
   ],
   [ListName.speech]: [
     'slug',

@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.12.1-rc.2...@twreporter/congress-dashboard-frontend@1.13.0-rc.0) (2026-03-23)
+
+### Bug Fixes
+
+- **frontend:** format copyright text ([1e46d69](https://github.com/twreporter/congress-dashboard-monorepo/commit/1e46d69e09d7a985af5a75bec7e7dbf85bf74fed))
+
+### Features
+
+- **frontend:** remove current year for copyright text ([4c6ef30](https://github.com/twreporter/congress-dashboard-monorepo/commit/4c6ef30c85fb765b777b06770c5c1f0c7e8260d6))
+
+## [1.12.1-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.12.0...@twreporter/congress-dashboard-frontend@1.12.1-rc.2) (2026-03-23)
+
+### Bug Fixes
+
+- **frontend:** formatter ([fe489d7](https://github.com/twreporter/congress-dashboard-monorepo/commit/fe489d7f9ff6c0f21ad4763cb150d854b4f3e738))
+- **frontend:** order by billCount then councilorCount ([d78ae80](https://github.com/twreporter/congress-dashboard-monorepo/commit/d78ae804f5580d9fead82109bc5cdc81cd960d50))
+
+# [1.12.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.12.0-rc.0...@twreporter/congress-dashboard-frontend@1.12.0-rc.1) (2026-03-10)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.12.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.12.0-rc.0...@twreporter/congress-dashboard-frontend@1.12.0) (2026-03-12)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
