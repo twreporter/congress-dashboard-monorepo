@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.13.0...@twreporter/congress-dashboard-frontend@1.13.1-rc.0) (2026-07-07)
+
+### Bug Fixes
+
+- **frontend:** update robots.txt route ([8846f67](https://github.com/twreporter/congress-dashboard-monorepo/commit/8846f6779328e017407719b6e89ba85797a104e4))
+
 # [1.13.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.13.0-rc.0...@twreporter/congress-dashboard-frontend@1.13.0) (2026-04-01)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
