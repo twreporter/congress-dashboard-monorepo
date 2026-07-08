@@ -44,6 +44,8 @@ RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces foc
 COPY packages/cms packages/cms
 COPY --from=build $APP_DIR/packages/shared/lib packages/shared/lib
 
+RUN yarn workspace @twreporter/congress-dashboard-cms postinstall
+
 FROM node:22.23.1-slim AS runner
 
 ## Install system dependencies, `gcsfuse` in particular.
