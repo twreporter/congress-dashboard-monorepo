@@ -1,3 +1,4 @@
+export const dynamic = 'force-static'
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 const releaseRobotsTxt = `
