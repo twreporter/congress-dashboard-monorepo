@@ -77,7 +77,9 @@ RUN mkdir -p $APP_DIR
 
 WORKDIR $APP_DIR
 
-RUN corepack enable
+COPY --from=production-deps $APP_DIR/package.json $APP_DIR/.yarnrc.yml ./
+
+RUN corepack enable && corepack prepare yarn@4.6.0 --activate
 
 COPY packages/cms packages/cms
 
