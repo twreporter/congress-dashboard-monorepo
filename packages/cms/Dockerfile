@@ -1,4 +1,50 @@
-FROM node:22.23.1
+FROM node:22.23.1-slim AS build
+
+ENV APP_DIR=/app
+
+WORKDIR $APP_DIR
+
+RUN corepack enable
+
+COPY package.json yarn.lock .yarnrc.yml $APP_DIR/
+COPY packages/cms/package.json packages/cms/package.json
+COPY packages/cli/package.json packages/cli/package.json
+COPY packages/frontend/package.json packages/frontend/package.json
+COPY packages/shared/package.json packages/shared/package.json
+
+COPY packages/shared packages/shared
+COPY packages/cms packages/cms
+
+## Install application dependencies
+RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus @twreporter/congress-dashboard-cms @twreporter/congress-dashboard-shared
+
+RUN yarn workspace @twreporter/congress-dashboard-shared build
+
+## Build application bundles
+RUN yarn workspace @twreporter/congress-dashboard-cms build
+
+FROM node:22.23.1-slim AS production-deps
+
+ENV APP_DIR=/app
+
+WORKDIR $APP_DIR
+
+RUN corepack enable
+
+COPY package.json yarn.lock .yarnrc.yml $APP_DIR/
+COPY packages/cms/package.json packages/cms/package.json
+COPY packages/cli/package.json packages/cli/package.json
+COPY packages/frontend/package.json packages/frontend/package.json
+COPY packages/shared/package.json packages/shared/package.json
+
+COPY packages/shared packages/shared
+COPY packages/cms packages/cms
+
+## Install production application dependencies
+RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus @twreporter/congress-dashboard-cms --production && yarn cache clean
+COPY --from=build $APP_DIR/packages/shared/lib packages/shared/lib
+
+FROM node:22.23.1-slim AS runner
 
 ## Install system dependencies, `gcsfuse` in particular.
 RUN set -e; \
@@ -21,28 +67,30 @@ RUN set -e; \
     wget https://github.com/GoogleCloudPlatform/gcsfuse/releases/download/v1.2.0/gcsfuse_1.2.0_amd64.deb -O gcsfuse.deb && apt-get install -y ./gcsfuse.deb && rm -f ./gcsfuse.deb \
     && apt-get clean
 
-ENV APP_DIR /app
+ENV APP_DIR=/app
 ## Set fallback mount directory
-ENV MNT_DIR /app/gcs
-ENV HOST 0.0.0.0
-ENV PORT 3000
+ENV MNT_DIR=/app/packages/cms/gcs
+ENV HOST=0.0.0.0
+ENV PORT=3000
 
 RUN mkdir -p $APP_DIR
 
 WORKDIR $APP_DIR
 
-COPY . $APP_DIR
+RUN corepack enable
 
-## Install application dependencies
-RUN SKIP_BUILD_DEPS=true yarn install
+COPY --from=production-deps $APP_DIR/node_modules ./node_modules
+COPY --from=production-deps $APP_DIR/packages/cms/node_modules ./packages/cms/node_modules
+COPY --from=production-deps $APP_DIR/packages/shared/package.json ./packages/shared/package.json
+COPY --from=production-deps $APP_DIR/packages/shared/lib ./packages/shared/lib
 
-## Build application bundles
-RUN yarn build
-
-RUN yarn cache clean
+COPY packages/cms packages/cms
+COPY --from=build $APP_DIR/packages/cms/.keystone ./packages/cms/.keystone
 
 ## Ensure the script is executable
-RUN chmod +x run.sh
+RUN chmod +x packages/cms/run.sh
+
+WORKDIR $APP_DIR/packages/cms
 
 EXPOSE 3000
 
@@ -51,4 +99,4 @@ EXPOSE 3000
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
 ## Pass the startup script as arguments to Tini
-CMD [ "/app/run.sh"]
+CMD [ "/app/packages/cms/run.sh"]
