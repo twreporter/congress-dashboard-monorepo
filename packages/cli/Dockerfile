@@ -14,10 +14,11 @@ COPY packages/cli/package.json packages/cli/package.json
 COPY packages/frontend/package.json packages/frontend/package.json
 COPY packages/shared/package.json packages/shared/package.json
 
+RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus lawmaker-cli @twreporter/congress-dashboard-shared
+
 COPY packages/shared packages/shared
 COPY packages/cli packages/cli
 
-RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus lawmaker-cli @twreporter/congress-dashboard-shared
 RUN yarn workspace @twreporter/congress-dashboard-shared build
 RUN yarn workspace lawmaker-cli build
 
@@ -34,9 +35,6 @@ COPY packages/cms/package.json packages/cms/package.json
 COPY packages/cli/package.json packages/cli/package.json
 COPY packages/frontend/package.json packages/frontend/package.json
 COPY packages/shared/package.json packages/shared/package.json
-
-COPY packages/shared packages/shared
-COPY packages/cli packages/cli
 
 RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus lawmaker-cli --production && yarn cache clean
 COPY --from=builder $APP_DIR/packages/shared/lib packages/shared/lib

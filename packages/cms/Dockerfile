@@ -12,13 +12,14 @@ COPY packages/cli/package.json packages/cli/package.json
 COPY packages/frontend/package.json packages/frontend/package.json
 COPY packages/shared/package.json packages/shared/package.json
 
-COPY packages/shared packages/shared
-COPY packages/cms packages/cms
-
 ## Install application dependencies
 RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus @twreporter/congress-dashboard-cms @twreporter/congress-dashboard-shared
 
+COPY packages/shared packages/shared
+COPY packages/cms packages/cms
+
 RUN yarn workspace @twreporter/congress-dashboard-shared build
+RUN yarn workspace @twreporter/congress-dashboard-cms postinstall
 
 ## Build application bundles
 RUN yarn workspace @twreporter/congress-dashboard-cms build
@@ -37,11 +38,10 @@ COPY packages/cli/package.json packages/cli/package.json
 COPY packages/frontend/package.json packages/frontend/package.json
 COPY packages/shared/package.json packages/shared/package.json
 
-COPY packages/shared packages/shared
-COPY packages/cms packages/cms
-
 ## Install production application dependencies
 RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus @twreporter/congress-dashboard-cms --production && yarn cache clean
+
+COPY packages/cms packages/cms
 COPY --from=build $APP_DIR/packages/shared/lib packages/shared/lib
 
 FROM node:22.23.1-slim AS runner
@@ -79,12 +79,12 @@ WORKDIR $APP_DIR
 
 RUN corepack enable
 
+COPY packages/cms packages/cms
+
 COPY --from=production-deps $APP_DIR/node_modules ./node_modules
 COPY --from=production-deps $APP_DIR/packages/cms/node_modules ./packages/cms/node_modules
 COPY --from=production-deps $APP_DIR/packages/shared/package.json ./packages/shared/package.json
 COPY --from=production-deps $APP_DIR/packages/shared/lib ./packages/shared/lib
-
-COPY packages/cms packages/cms
 COPY --from=build $APP_DIR/packages/cms/.keystone ./packages/cms/.keystone
 
 ## Ensure the script is executable

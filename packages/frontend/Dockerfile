@@ -12,10 +12,11 @@ COPY packages/cli/package.json packages/cli/package.json
 COPY packages/frontend/package.json packages/frontend/package.json
 COPY packages/shared/package.json packages/shared/package.json
 
+RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus @twreporter/congress-dashboard-frontend @twreporter/congress-dashboard-shared
+
 COPY packages/shared packages/shared
 COPY packages/frontend packages/frontend
 
-RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus @twreporter/congress-dashboard-frontend @twreporter/congress-dashboard-shared
 RUN yarn workspace @twreporter/congress-dashboard-shared build
 RUN yarn workspace @twreporter/congress-dashboard-frontend build
 
