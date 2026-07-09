@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 ARG NODE_VERSION=22.23.1
 
 FROM node:${NODE_VERSION}-alpine AS build
@@ -7,10 +9,7 @@ WORKDIR /repo
 RUN corepack enable
 
 COPY package.json yarn.lock .yarnrc.yml ./
-COPY packages/cms/package.json packages/cms/package.json
-COPY packages/cli/package.json packages/cli/package.json
-COPY packages/frontend/package.json packages/frontend/package.json
-COPY packages/shared/package.json packages/shared/package.json
+COPY --parents ./packages/*/package.json ./
 
 RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus @twreporter/congress-dashboard-frontend @twreporter/congress-dashboard-shared
 

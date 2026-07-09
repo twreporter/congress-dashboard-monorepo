@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 FROM node:22.23.1-slim AS build
 
 ENV APP_DIR=/app
@@ -7,10 +9,7 @@ WORKDIR $APP_DIR
 RUN corepack enable
 
 COPY package.json yarn.lock .yarnrc.yml $APP_DIR/
-COPY packages/cms/package.json packages/cms/package.json
-COPY packages/cli/package.json packages/cli/package.json
-COPY packages/frontend/package.json packages/frontend/package.json
-COPY packages/shared/package.json packages/shared/package.json
+COPY --parents ./packages/*/package.json ./
 
 ## Install application dependencies
 RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus @twreporter/congress-dashboard-cms @twreporter/congress-dashboard-shared
@@ -33,10 +32,7 @@ WORKDIR $APP_DIR
 RUN corepack enable
 
 COPY package.json yarn.lock .yarnrc.yml $APP_DIR/
-COPY packages/cms/package.json packages/cms/package.json
-COPY packages/cli/package.json packages/cli/package.json
-COPY packages/frontend/package.json packages/frontend/package.json
-COPY packages/shared/package.json packages/shared/package.json
+COPY --parents ./packages/*/package.json ./
 
 ## Install production application dependencies
 RUN SKIP_BUILD_DEPS=true YARN_ENABLE_IMMUTABLE_INSTALLS=true yarn workspaces focus @twreporter/congress-dashboard-cms --production && yarn cache clean
@@ -79,16 +75,10 @@ RUN mkdir -p $APP_DIR
 
 WORKDIR $APP_DIR
 
-COPY --from=production-deps $APP_DIR/package.json $APP_DIR/.yarnrc.yml ./
+COPY --from=production-deps $APP_DIR $APP_DIR
 
 RUN corepack enable && corepack prepare yarn@4.6.0 --activate
 
-COPY packages/cms packages/cms
-
-COPY --from=production-deps $APP_DIR/node_modules ./node_modules
-COPY --from=production-deps $APP_DIR/packages/cms/node_modules ./packages/cms/node_modules
-COPY --from=production-deps $APP_DIR/packages/shared/package.json ./packages/shared/package.json
-COPY --from=production-deps $APP_DIR/packages/shared/lib ./packages/shared/lib
 COPY --from=build $APP_DIR/packages/cms/.keystone ./packages/cms/.keystone
 
 ## Ensure the script is executable
