@@ -7,7 +7,7 @@
     "start": "keystone start",
     "build": "keystone build --no-prisma",
     "db-migrate": "keystone prisma migrate deploy",
-    "postinstall": "keystone postinstall --fix",
+    "postinstall": "node -e \"if (process.env.SKIP_BUILD_DEPS !== 'true') require('child_process').execFileSync('keystone', ['postinstall', '--fix'], {stdio:'inherit'})\"",
     "generate-migrate": "keystone prisma migrate dev",
     "generate-migrate-preview": "keystone prisma migrate dev --create-only",
     "changelog-maker": "changelog-maker twreporter congress-dashboard-monorepo --markdown",

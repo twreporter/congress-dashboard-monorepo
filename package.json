@@ -12,7 +12,7 @@
   "scripts": {
     "prepare": "husky",
     "build:shared": "yarn workspace @twreporter/congress-dashboard-shared build",
-    "postinstall": "yarn build:shared",
+    "postinstall": "node -e \"if (process.env.SKIP_BUILD_DEPS !== 'true') require('child_process').execFileSync('yarn', ['build:shared'], {stdio:'inherit'})\"",
     "publish:shared": "yarn workspace @twreporter/congress-dashboard-shared publish",
     "version:bump": "lerna version --conventional-commits --yes",
     "postversion": "yarn install --immutable"
@@ -37,5 +37,8 @@
       "prettier --write"
     ]
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.6.0",
+  "engines": {
+    "node": "22.23.1"
+  }
 }

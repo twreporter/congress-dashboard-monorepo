@@ -23,6 +23,7 @@
   ],
   "types": "lib/index.d.ts",
   "devDependencies": {
-    "tsup": "^8.3.6"
+    "tsup": "^8.3.6",
+    "typescript": "^5.8.3"
   }
 }

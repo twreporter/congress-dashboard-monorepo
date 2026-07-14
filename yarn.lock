@@ -8639,6 +8639,7 @@ __metadata:
   resolution: "@twreporter/congress-dashboard-shared@workspace:packages/shared"
   dependencies:
     tsup: "npm:^8.3.6"
+    typescript: "npm:^5.8.3"
   languageName: unknown
   linkType: soft
 
