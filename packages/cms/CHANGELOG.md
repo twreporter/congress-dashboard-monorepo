@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.2-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.8.1...@twreporter/congress-dashboard-cms@1.8.2-rc.0) (2026-07-14)
+
+### Bug Fixes
+
+- address review comments ([4721541](https://github.com/twreporter/congress-dashboard-monorepo/commit/4721541a1956dfb466a9c044d12499fdc721f5b8))
+- address review comments ([96490e3](https://github.com/twreporter/congress-dashboard-monorepo/commit/96490e3c5af4970ae93dd297bd4e9635d6012e61))
+- assure yarn version on cms runtime ([7bd64ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/7bd64ecf30a38d5fbe2cc714c56997d5b5215185))
+- run cms postinstall in production-deps stage ([18fe963](https://github.com/twreporter/congress-dashboard-monorepo/commit/18fe9636bcf788f1d6b810e524a9bc754ea5468a))
+
 ## [1.8.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.8.1-rc.0...@twreporter/congress-dashboard-cms@1.8.1) (2026-07-08)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms
