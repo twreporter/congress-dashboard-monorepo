@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.2-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.13.1...@twreporter/congress-dashboard-frontend@1.13.2-rc.0) (2026-07-14)
+
+### Bug Fixes
+
+- address review comments ([4721541](https://github.com/twreporter/congress-dashboard-monorepo/commit/4721541a1956dfb466a9c044d12499fdc721f5b8))
+- address review comments ([96490e3](https://github.com/twreporter/congress-dashboard-monorepo/commit/96490e3c5af4970ae93dd297bd4e9635d6012e61))
+- **frontend:** set `force-static` for cache ([6b49100](https://github.com/twreporter/congress-dashboard-monorepo/commit/6b49100c538975f2365b89d6ca7c842c7450beb3))
+
+## [1.13.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.13.1-rc.1...@twreporter/congress-dashboard-frontend@1.13.1) (2026-07-08)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 ## [1.13.1-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.13.1-rc.0...@twreporter/congress-dashboard-frontend@1.13.1-rc.1) (2026-07-08)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend

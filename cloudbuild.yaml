@@ -9,9 +9,7 @@ steps:
   #  args:
   #    - '-c'
   #    - |
-  #      cp yarn.lock packages/$_TARGET_PACKAGE
-  #      cd packages/$_TARGET_PACKAGE
-  #      /kaniko/executor --context="$(pwd)" --cache=true --cache-ttl=48h --destination=gcr.io/$PROJECT_ID/$_IMAGE_NAME:${_BRANCH_NAME}_${SHORT_SHA}
+  #      /kaniko/executor --context="$(pwd)" --dockerfile=packages/$_TARGET_PACKAGE/Dockerfile --cache=true --cache-ttl=48h --destination=gcr.io/$PROJECT_ID/$_IMAGE_NAME:${_BRANCH_NAME}_${SHORT_SHA}
 
   # Pull previous image
   - name: gcr.io/cloud-builders/docker
@@ -22,24 +20,20 @@ steps:
 
   # Build image
   - name: gcr.io/cloud-builders/docker
+    env:
+      - DOCKER_BUILDKIT=1
     args:
       - '-c'
-      - >
-        cp yarn.lock packages/$_TARGET_PACKAGE
-
-        cd packages/$_TARGET_PACKAGE
-
-        echo 'copy .env.${_BRANCH_NAME}.public to .env.local'
-
-        cp .env.${_BRANCH_NAME}.public .env.local
-
+      - |
+        if [[ -f "packages/$_TARGET_PACKAGE/.env.${_BRANCH_NAME}.public" ]]; then
+          echo 'copy .env.${_BRANCH_NAME}.public to .env.local'
+          cp "packages/$_TARGET_PACKAGE/.env.${_BRANCH_NAME}.public" "packages/$_TARGET_PACKAGE/.env.local"
+        fi
         docker build -t \
-
-        gcr.io/$PROJECT_ID/$_IMAGE_NAME:${_BRANCH_NAME}_${SHORT_SHA} \
-
-        -t gcr.io/$PROJECT_ID/$_IMAGE_NAME:latest \
-
-        --cache-from gcr.io/$PROJECT_ID/$_IMAGE_NAME:latest .
+          gcr.io/$PROJECT_ID/$_IMAGE_NAME:${_BRANCH_NAME}_${SHORT_SHA} \
+          -t gcr.io/$PROJECT_ID/$_IMAGE_NAME:latest \
+          --cache-from gcr.io/$PROJECT_ID/$_IMAGE_NAME:latest \
+          -f packages/$_TARGET_PACKAGE/Dockerfile .
     entrypoint: bash
 
   # Push container image to registry
