@@ -64,19 +64,21 @@ steps:
         fi
 
         # dev/staging are test environments and scale down, and stay off the
-        # prod-only subnet; every other resource setting for a given service
-        # package is aligned to prod's, below. cli is a Cloud Run Job and
-        # doesn't use instance scaling or a subnet here.
+        # prod-only subnets; every other resource setting for a given
+        # service package is aligned to prod's, below. cli is a Cloud Run
+        # Job and doesn't use instance scaling.
         case "$_ENV" in
           dev|staging)
             min_instances=0
             max_instances=3
             subnet=asia-east1-cloud-run-nonprod
+            job_subnet=asia-east1-cloud-run-nonprod
             ;;
           prod)
             min_instances=1
             max_instances=10
             subnet=asia-east1-cloud-run-prod-services
+            job_subnet=asia-east1-cloud-run-prod-jobs
             ;;
           *)
             echo "Unsupported _ENV: $_ENV" >&2
@@ -123,6 +125,11 @@ steps:
         )
 
         if [[ "$_TARGET_PACKAGE" == "cli" ]]; then
+          deploy_options+=(
+            --network twreporter-custom-network
+            --subnet "$job_subnet"
+            --vpc-egress all-traffic
+          )
           if gcloud run jobs describe "$cloud_run_name" --region "$region" &> /dev/null; then
             gcloud run jobs update "$cloud_run_name" "${deploy_options[@]}"
           else

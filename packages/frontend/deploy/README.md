@@ -60,14 +60,11 @@ before deploying.
 ## Resource Configuration
 
 `cloudbuild.yaml`'s deploy step applies the same cpu, memory, concurrency,
-timeout, ingress, network/subnet, vpc-egress, and execution-environment
-settings across dev, staging, and prod. The only difference between
-environments is instance scaling: dev/staging run `--min-instances 0
---max-instances 3`, prod runs `--min-instances 1 --max-instances 20`.
-
-All three environments deploy into the `asia-east1-cloud-run-prod-services`
-VPC subnet — confirm that subnet is reachable/appropriate for dev/staging
-traffic before deploying.
+timeout, ingress, vpc-egress, and execution-environment settings across dev,
+staging, and prod. Instance scaling and VPC subnet differ by environment:
+dev/staging run `--min-instances 0 --max-instances 3` on the
+`asia-east1-cloud-run-nonprod` subnet, prod runs `--min-instances 1
+--max-instances 10` on `asia-east1-cloud-run-prod-services`.
 
 ## Rollout
 

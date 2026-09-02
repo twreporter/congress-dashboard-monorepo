@@ -9,6 +9,11 @@ to `dev`, `staging`, or `prod`. The job name is derived as
 The job runs as `sa-cloud-run-runtime@coastal-run-106202.iam.gserviceaccount.com`.
 Confirm that account has the permissions the job needs before deploying.
 
+The job connects through the `twreporter-custom-network` VPC with
+`all-traffic` egress, needed to reach the CMS's internal GraphQL endpoint.
+Subnet is `asia-east1-cloud-run-nonprod` for dev/staging and
+`asia-east1-cloud-run-prod-jobs` for prod.
+
 ## Public Configuration
 
 Public environment variables are stored in:
