@@ -17,6 +17,7 @@ export type CouncilorMemberData = {
   note?: string
   tooltip?: string
   proposalSuccessCount?: number
+  speechCount: number
   relatedLink?: RelatedLink[]
   isActive: boolean
   councilor: {
@@ -33,6 +34,7 @@ export type CouncilorMemberData = {
     imageLink?: string
   }
   councilMeeting: {
+    id: number
     term: number
     city: string
   }
@@ -49,6 +51,7 @@ export type CouncilorForLawmaker = {
   note?: string
   tooltip?: string
   proposalSuccessCount: number
+  speechCount: number
   relatedLink: RelatedLink[]
   externalLink?: string
   meetingTermCount: number
@@ -59,14 +62,22 @@ export type CouncilorForLawmaker = {
     image: string
   }
   councilMeeting: {
+    id: number
     term: number
     city: CouncilDistrict
   }
 }
 
-export type CouncilorWithBillCount = {
+export type CouncilorWithCount = {
   slug: string
   name: string
   avatar: string
   count: number
+}
+
+export type CouncilorWithBillCount = CouncilorWithCount
+
+export type CouncilorWithWorkCounts = Omit<CouncilorWithCount, 'count'> & {
+  speechCount: number
+  billCount: number
 }

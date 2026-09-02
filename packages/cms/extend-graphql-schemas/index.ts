@@ -9,9 +9,9 @@ import {
   topicsOrderBySpeechCountResolver,
 } from './topics-order-by-speech-count'
 import {
-  councilTopicsOrderByBillCountTypeDefs,
-  councilTopicsOrderByBillCountResolver,
-} from './council-topics-order-by-bill-count'
+  councilTopicsOrderByWorkTypeDefs,
+  councilTopicsOrderByWorkResolver,
+} from './council-topics-order-by-work'
 import {
   topNTopicsOfCouncilorsTypeDefs,
   topNTopicsOfCouncilorsResolver,
@@ -23,13 +23,13 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
     typeDefs: [
       topNTopicsOfLegislatorsTypeDefs,
       topicsOrderBySpeechCountTypeDefs,
-      councilTopicsOrderByBillCountTypeDefs,
+      councilTopicsOrderByWorkTypeDefs,
       topNTopicsOfCouncilorsTypeDefs,
     ],
     resolvers: [
       topNTopicsOfLegislatorsResolver,
       topicsOrderBySpeechCountResolver,
-      councilTopicsOrderByBillCountResolver,
+      councilTopicsOrderByWorkResolver,
       topNTopicsOfCouncilorsResolver,
     ],
   })

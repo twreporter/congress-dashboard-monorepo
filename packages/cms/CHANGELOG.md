@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.1...@twreporter/congress-dashboard-cms@1.10.0-rc.2) (2026-09-02)
+
+### Bug Fixes
+
+- update speech councilor fetcher logic ([829dd66](https://github.com/twreporter/congress-dashboard-monorepo/commit/829dd66a30ffb0685340666e0fc7151f246d2326))
+
+### Features
+
+- include council speech data in councilor page ([2fefea7](https://github.com/twreporter/congress-dashboard-monorepo/commit/2fefea784f412a5957c992cfea0bb4fe865dfdd3))
+
+# [1.10.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.0...@twreporter/congress-dashboard-cms@1.10.0-rc.1) (2026-09-02)
+
+### Bug Fixes
+
+- **cms:** valid date for council speech import ([0366737](https://github.com/twreporter/congress-dashboard-monorepo/commit/036673712e2864a060fe30f7f540e0a21f226631))
+
+### Features
+
+- **cms:** council speech and councilMember many to many ([1982260](https://github.com/twreporter/congress-dashboard-monorepo/commit/19822605bdd2ab13628ce92ceb9a47763b0a0f16))
+- **cms:** council speech import record ([d8ce50b](https://github.com/twreporter/congress-dashboard-monorepo/commit/d8ce50b29c4af5d9f9df564c80699d5ed8a4cf39))
+
+# [1.10.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.9.0...@twreporter/congress-dashboard-cms@1.10.0-rc.0) (2026-08-31)
+
+### Features
+
+- **cms,frontend:** add council speech data on dashboard ([f4a0488](https://github.com/twreporter/congress-dashboard-monorepo/commit/f4a04882683c52168cd1b8bbd51ac35149b17f4b))
+- **frontend:** separate featured & general topic on sidebar filter ([ff18266](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff1826657c647b0e24e8ff8fafcabed1cf560753))
+
+# [1.9.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.9.0-rc.1...@twreporter/congress-dashboard-cms@1.9.0) (2026-08-10)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
 # [1.9.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.9.0-rc.0...@twreporter/congress-dashboard-cms@1.9.0-rc.1) (2026-08-10)
 
 ### Bug Fixes

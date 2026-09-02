@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-rc.1...@twreporter/congress-dashboard-frontend@1.15.0-rc.2) (2026-09-02)
+
+### Bug Fixes
+
+- update empty state wording ([442cfb9](https://github.com/twreporter/congress-dashboard-monorepo/commit/442cfb958123dd1123be2e588a86f9cddfac0a65))
+- update speech councilor fetcher logic ([829dd66](https://github.com/twreporter/congress-dashboard-monorepo/commit/829dd66a30ffb0685340666e0fc7151f246d2326))
+
+### Features
+
+- include council speech data in councilor page ([2fefea7](https://github.com/twreporter/congress-dashboard-monorepo/commit/2fefea784f412a5957c992cfea0bb4fe865dfdd3))
+
+# [1.15.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-rc.0...@twreporter/congress-dashboard-frontend@1.15.0-rc.1) (2026-09-02)
+
+### Bug Fixes
+
+- **frontend:** address comments ([bd19cd6](https://github.com/twreporter/congress-dashboard-monorepo/commit/bd19cd617ea298739dfb2b7859802defec341c5d))
+
+### Features
+
+- **cms:** council speech and councilMember many to many ([1982260](https://github.com/twreporter/congress-dashboard-monorepo/commit/19822605bdd2ab13628ce92ceb9a47763b0a0f16))
+
+# [1.15.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.14.0...@twreporter/congress-dashboard-frontend@1.15.0-rc.0) (2026-08-31)
+
+### Bug Fixes
+
+- **frontend:** address review comments ([252d830](https://github.com/twreporter/congress-dashboard-monorepo/commit/252d830b1c98ac5ac6df16391f3ec2904b52cddd))
+
+### Features
+
+- **cms,frontend:** add council speech data on dashboard ([f4a0488](https://github.com/twreporter/congress-dashboard-monorepo/commit/f4a04882683c52168cd1b8bbd51ac35149b17f4b))
+- **frontend:** separate featured & general topic on sidebar filter ([ff18266](https://github.com/twreporter/congress-dashboard-monorepo/commit/ff1826657c647b0e24e8ff8fafcabed1cf560753))
+
+# [1.14.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.14.0-rc.1...@twreporter/congress-dashboard-frontend@1.14.0) (2026-08-10)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.14.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.14.0-rc.0...@twreporter/congress-dashboard-frontend@1.14.0-rc.1) (2026-08-10)
 
 ### Bug Fixes

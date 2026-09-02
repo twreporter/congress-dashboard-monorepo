@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation'
 import {
   fetchCouncilorName,
   fetchCouncilor,
-  fetchCouncilorTopicsOfBill,
+  fetchCouncilorTopics,
 } from '@/fetchers/server/councilor'
 // utils
 import { isValidCouncil } from '@/utils/council'
@@ -44,7 +44,7 @@ export async function generateMetadata({
     districtSlug
   )}/${slug}`
   const metaTitle = `${CITY_LABEL[districtSlug]}議員｜${councilorName} - 報導者觀測站`
-  const metaDescription = `議員${councilorName}關心哪些議題、提出哪些議案？《報導者》用人工智慧技術分析，帶你快速掌握${councilorName}不同時段的提案重點。`
+  const metaDescription = `議員${councilorName}關心哪些議題、有哪些發言與議案？《報導者》用人工智慧技術分析，帶你快速掌握${councilorName}不同時段的問政重點。`
 
   return {
     title: metaTitle,
@@ -70,14 +70,16 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       notFound()
     }
 
-    const [councilorData, topicsData] = await Promise.all([
-      fetchCouncilor({ slug, districtSlug }),
-      fetchCouncilorTopicsOfBill({ slug, districtSlug }),
-    ])
+    const councilorData = await fetchCouncilor({ slug, districtSlug })
 
     if (!councilorData) {
       notFound()
     }
+    const topicsData = await fetchCouncilorTopics({
+      slug,
+      districtSlug,
+      councilMeetingId: councilorData.councilMeeting.id,
+    })
 
     return (
       <CouncilorPage

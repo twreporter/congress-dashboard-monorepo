@@ -8,7 +8,7 @@ import type {
 } from '@/types/council-topic'
 import type { SitemapItemWithCity, KeystoneImage } from '@/types'
 // utils
-import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
+import { getImageLink } from '@/fetchers/utils'
 // @twreporter
 import { COUNCIL_TOPIC_TYPE } from '@twreporter/congress-dashboard-shared/lib/constants/council-topic'
 // lodash
@@ -204,7 +204,7 @@ export const fetchAllCouncilTopicSlug = async (): Promise<
 
 /* fetchTopNTopics
  *   fetch top N topics with give take & skip in given meeting & session
- *   top logic is order by bill count desc
+ *   top logic is order by speech count, then bill count desc
  */
 export type FetchTopNTopicsParams = {
   take?: number
@@ -219,10 +219,11 @@ export const fetchTopNCouncilTopics = async ({
   councilMeetingId,
 }: FetchTopNTopicsParams): Promise<TopNCouncilTopicData[] | undefined> => {
   const query = `
-    query CouncilTopicsOrderByBillCount($meetingId: Int!, $take: Int, $skip: Int) {
-      councilTopicsOrderByBillCount(meetingId: $meetingId, take: $take, skip: $skip) {
+    query CouncilTopicsOrderByWork($meetingId: Int!, $take: Int, $skip: Int) {
+      councilTopicsOrderByWork(meetingId: $meetingId, take: $take, skip: $skip) {
         councilorCount
         slug
+        speechCount
         billCount
         title
         councilors {
@@ -249,9 +250,9 @@ export const fetchTopNCouncilTopics = async ({
 
   try {
     const data = await keystoneFetch<{
-      councilTopicsOrderByBillCount: TopNCouncilTopicData[]
+      councilTopicsOrderByWork: TopNCouncilTopicData[]
     }>(JSON.stringify({ query, variables }), false)
-    return data?.data?.councilTopicsOrderByBillCount
+    return data?.data?.councilTopicsOrderByWork
   } catch (err) {
     throw new Error(
       `Failed to fetch top ${take} council topics in meeting ${councilMeetingId}, err: ${err}`
@@ -261,7 +262,8 @@ export const fetchTopNCouncilTopics = async ({
 
 /**
  * Fetch featured council topics (type = 'twreporter') for a city
- * Returns topics with title, slug, billCount, councilorCount, and top 5 councilor avatars
+ * Returns topics with title, slug, billCount, speechCount, councilorCount, and
+ * top 5 councilor avatars
  */
 export type FetchFeaturedCouncilTopicsParams = {
   city: CouncilDistrict
@@ -284,6 +286,10 @@ type FeaturedCouncilTopicFromRes = {
     id: number
     councilMember: CouncilMemberFromRes[]
   }[]
+  speech: {
+    id: number
+    councilMember: CouncilMemberFromRes[]
+  }[]
 }
 
 export const fetchFeaturedCouncilTopics = async ({
@@ -295,6 +301,22 @@ export const fetchFeaturedCouncilTopics = async ({
         title
         slug
         bill {
+          id
+          councilMember {
+            councilor {
+              id
+              slug
+              name
+              imageLink
+              image {
+                imageFile {
+                  url
+                }
+              }
+            }
+          }
+        }
+        speech {
           id
           councilMember {
             councilor {
@@ -329,38 +351,66 @@ export const fetchFeaturedCouncilTopics = async ({
 
     return topics
       .map((topic) => {
-        // Count unique bills
-        const billCount = topic.bill?.length || 0
+        const billCount = topic.bill?.length ?? 0
+        const speechCount = topic.speech?.length ?? 0
 
-        // Collect all council members from all bills with their bill count
-        const councilorBillCountMap = new Map<
+        // Collect the union of councilors from bills and speeches, along with
+        // their unique participation counts for avatar ranking.
+        const councilorCountMap = new Map<
           number,
-          { councilor: CouncilMemberFromRes['councilor']; count: number }
+          {
+            councilor: CouncilMemberFromRes['councilor']
+            billIds: Set<number>
+            speechIds: Set<number>
+          }
         >()
 
         topic.bill?.forEach((bill) => {
           bill.councilMember?.forEach((member) => {
             const councilorId = member.councilor?.id
-            if (councilorId) {
-              const existing = councilorBillCountMap.get(councilorId)
+            if (councilorId !== undefined) {
+              const existing = councilorCountMap.get(councilorId)
               if (existing) {
-                existing.count += 1
+                existing.billIds.add(bill.id)
               } else {
-                councilorBillCountMap.set(councilorId, {
+                councilorCountMap.set(councilorId, {
                   councilor: member.councilor,
-                  count: 1,
+                  billIds: new Set([bill.id]),
+                  speechIds: new Set(),
                 })
               }
             }
           })
         })
 
-        // Get unique councilor count
-        const councilorCount = councilorBillCountMap.size
+        topic.speech?.forEach((speech) => {
+          speech.councilMember?.forEach((member) => {
+            const councilor = member.councilor
+            const councilorId = councilor?.id
+            if (councilorId !== undefined && councilor) {
+              const existing = councilorCountMap.get(councilorId)
+              if (existing) {
+                existing.speechIds.add(speech.id)
+              } else {
+                councilorCountMap.set(councilorId, {
+                  councilor,
+                  billIds: new Set(),
+                  speechIds: new Set([speech.id]),
+                })
+              }
+            }
+          })
+        })
 
-        // Sort by bill count and get top 5 avatars
-        const sortedCouncilors = Array.from(councilorBillCountMap.values())
-          .sort(sortByCountDesc)
+        const councilorCount = councilorCountMap.size
+
+        // Prioritize speech participation, then bill participation.
+        const sortedCouncilors = Array.from(councilorCountMap.values())
+          .sort(
+            (a, b) =>
+              b.speechIds.size - a.speechIds.size ||
+              b.billIds.size - a.billIds.size
+          )
           .slice(0, 5)
 
         const avatars = sortedCouncilors
@@ -372,13 +422,16 @@ export const fetchFeaturedCouncilTopics = async ({
           slug: topic.slug,
           city,
           billCount,
+          speechCount,
           councilorCount,
           avatars,
         }
       })
       .sort(
         (a, b) =>
-          b.billCount - a.billCount || b.councilorCount - a.councilorCount
+          b.speechCount - a.speechCount ||
+          b.billCount - a.billCount ||
+          b.councilorCount - a.councilorCount
       )
   } catch (err) {
     throw new Error(

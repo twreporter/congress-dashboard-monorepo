@@ -24,6 +24,7 @@ import { isRelatedType } from './views/related-article/types'
 import {
   CITY_LABEL,
   CITY,
+  type City,
 } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 import { isValidDistrict } from '@twreporter/congress-dashboard-shared/lib/constants/city-district'
 
@@ -58,9 +59,10 @@ const validateJsonStructure = (
       continue
     }
 
-    // Check if all expected headers exist
+    // Check if all required headers exist
     const missingHeaders = expectedHeadersArray.filter(
-      (header) => !(header in item)
+      (header) =>
+        requiredFields[listName]?.includes(header) && !(header in item)
     )
     if (missingHeaders.length > 0) {
       errors.push(`第 ${i + 1} 筆資料: 缺少欄位 ${missingHeaders.join(', ')}`)
@@ -89,6 +91,17 @@ const validateJsonStructure = (
 const formatValidationErrors = (errors: string[]) => {
   if (errors.length === 0) return ''
   return `JSON 檔案含有錯誤:\n${errors.join('\n')}`
+}
+
+const isValidDate = (value: unknown) => {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false
+  }
+
+  const date = new Date(`${value}T00:00:00.000Z`)
+  return (
+    !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value
+  )
 }
 
 const validateListSpecificData: Record<
@@ -201,8 +214,18 @@ const validateListSpecificData: Record<
     await Promise.all(
       jsonData.map(async (item, index) => {
         const rowNum = index + 1
-        const { councilMeeting_city, councilMeeting_term, councilor_slug } =
-          item
+        const {
+          councilMeeting_city,
+          councilMeeting_term,
+          councilor_slug,
+          date,
+        } = item
+
+        if (!isValidDate(date)) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: date 欄位必須為有效的 YYYY-MM-DD 日期`
+          )
+        }
 
         if (!Object.values(CITY).includes(councilMeeting_city)) {
           validationErrors.push(
@@ -269,6 +292,126 @@ const validateListSpecificData: Record<
                 `第 ${rowNum} 筆資料: 找不到議員 "${c.slug}" 在${CITY_LABEL[councilMeeting_city]}第 ${councilMeeting_term} 屆的屆資資料`
               )
             }
+          }
+        }
+      })
+    )
+    return validationErrors
+  },
+  [CouncilListName.councilSpeech]: async (jsonData, context) => {
+    const validationErrors: string[] = []
+    await Promise.all(
+      jsonData.map(async (item, index) => {
+        const rowNum = index + 1
+        const {
+          councilMeeting_city,
+          councilMeeting_term,
+          councilors,
+          date,
+          relatedCouncilTopic_slug,
+        } = item
+
+        if (!isValidDate(date)) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: date 欄位必須為有效的 YYYY-MM-DD 日期`
+          )
+        }
+
+        if (!Object.values(CITY).includes(councilMeeting_city)) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: councilMeeting_city 欄位值 "${councilMeeting_city}" 非有效的縣市代碼`
+          )
+          return
+        }
+        const cityLabel = CITY_LABEL[councilMeeting_city as City]
+
+        const meeting = await context.prisma.councilMeeting.findFirst({
+          where: {
+            term: Number(councilMeeting_term),
+            city: councilMeeting_city,
+          },
+          select: { id: true },
+        })
+        if (!meeting) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: 找不到${cityLabel}第 ${councilMeeting_term} 屆的議會`
+          )
+        }
+
+        if (!Array.isArray(councilors) || councilors.length === 0) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: councilors 欄位必須為非空陣列`
+          )
+        } else {
+          await Promise.all(
+            councilors.map(async (councilor) => {
+              if (
+                typeof councilor !== 'object' ||
+                councilor === null ||
+                typeof councilor.slug !== 'string' ||
+                councilor.slug === '' ||
+                typeof councilor.name !== 'string' ||
+                councilor.name === '' ||
+                councilor.term === undefined ||
+                councilor.term === null ||
+                councilor.term === '' ||
+                !Number.isInteger(Number(councilor.term))
+              ) {
+                validationErrors.push(
+                  `第 ${rowNum} 筆資料: councilors 內的每筆資料必須包含有效的 slug、name 和 term`
+                )
+                return
+              }
+
+              const councilMember =
+                await context.prisma.councilMember.findFirst({
+                  where: {
+                    councilor: { slug: councilor.slug },
+                    councilMeeting: {
+                      term: Number(councilor.term),
+                      city: councilMeeting_city,
+                    },
+                  },
+                  select: { id: true },
+                })
+              if (!councilMember) {
+                validationErrors.push(
+                  `第 ${rowNum} 筆資料: 找不到議員 "${councilor.slug}" 在${cityLabel}第 ${councilor.term} 屆的屆資資料`
+                )
+              }
+            })
+          )
+        }
+
+        const relatedCouncilTopicSlugs =
+          relatedCouncilTopic_slug === undefined ? [] : relatedCouncilTopic_slug
+
+        if (!Array.isArray(relatedCouncilTopicSlugs)) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: relatedCouncilTopic_slug 欄位必須為陣列`
+          )
+          return
+        }
+
+        const topicSlugs = relatedCouncilTopicSlugs.filter(
+          (slug): slug is string => typeof slug === 'string'
+        )
+        const councilTopics = await context.prisma.councilTopic.findMany({
+          where: { slug: { in: topicSlugs } },
+          select: { slug: true },
+        })
+        const foundSlugs = new Set(
+          councilTopics.map((topic: { slug: string }) => topic.slug)
+        )
+        for (const slug of relatedCouncilTopicSlugs) {
+          if (typeof slug !== 'string') {
+            validationErrors.push(
+              `第 ${rowNum} 筆資料: relatedCouncilTopic_slug 內的值必須為字串`
+            )
+          } else if (!foundSlugs.has(slug)) {
+            validationErrors.push(
+              `第 ${rowNum} 筆資料: 找不到 slug 為 "${slug}" 的縣市議題`
+            )
           }
         }
       })
@@ -650,6 +793,89 @@ const importHandlers: Record<
           })
         )
       }
+    }
+
+    return queries
+  },
+  [CouncilListName.councilSpeech]: async (jsonData, context) => {
+    const queries: Promise<any>[] = []
+
+    for (const item of jsonData) {
+      const {
+        slug,
+        councilMeeting_city,
+        councilMeeting_term,
+        councilors,
+        date,
+        title,
+        summary,
+        content,
+        attendee,
+        source,
+        relatedCouncilTopic_slug,
+      } = item
+
+      const councilMeeting = await context.prisma.councilMeeting.findFirst({
+        where: {
+          term: Number(councilMeeting_term),
+          city: councilMeeting_city,
+        },
+        select: { id: true },
+      })
+      const councilMembers = await context.prisma.councilMember.findMany({
+        where: {
+          OR: councilors.map(
+            (councilor: { slug: string; term: string | number }) => ({
+              councilor: { slug: councilor.slug },
+              councilMeeting: {
+                city: councilMeeting_city,
+                term: Number(councilor.term),
+              },
+            })
+          ),
+        },
+        select: { id: true },
+      })
+      const councilMemberIds = councilMembers.map(
+        (councilMember: { id: number }) => ({ id: councilMember.id })
+      )
+      const relatedCouncilTopicSlugs =
+        relatedCouncilTopic_slug === undefined ? [] : relatedCouncilTopic_slug
+
+      const commonData = {
+        date: new Date(date),
+        title,
+        summary,
+        content,
+        attendee,
+        sourceLink: source,
+        councilMeeting: { connect: { id: councilMeeting.id } },
+        councilMember: { connect: councilMemberIds },
+        topic: {
+          connect: relatedCouncilTopicSlugs.map((topicSlug: string) => ({
+            slug: topicSlug,
+          })),
+        },
+      }
+
+      queries.push(
+        context.prisma.councilSpeech.upsert({
+          where: { slug },
+          update: {
+            ...commonData,
+            topic: {
+              set: relatedCouncilTopicSlugs.map((topicSlug: string) => ({
+                slug: topicSlug,
+              })),
+            },
+            councilMember: { set: councilMemberIds },
+          },
+          create: {
+            slug,
+            ...commonData,
+          },
+        })
+      )
     }
 
     return queries

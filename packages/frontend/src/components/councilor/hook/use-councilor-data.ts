@@ -6,36 +6,25 @@ import type {
   CouncilorMemberData,
   CouncilorForLawmaker,
 } from '@/types/councilor'
-import type { CouncilTopicOfBillData } from '@/types/council-topic'
-import type { Topic } from '@/types/topic'
+import type { CouncilTopicForFilter } from '@/types/council-topic'
 import type { CouncilDistrict } from '@/types/council'
-import type { BillMeta } from '@/types/council-bill'
 // utils
-import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
+import { getImageLink } from '@/fetchers/utils'
 // lodash
-import groupBy from 'lodash/groupBy'
-import flatMap from 'lodash/flatMap'
 import get from 'lodash/get'
-import map from 'lodash/map'
-import mapValues from 'lodash/mapValues'
 const _ = {
-  flatMap,
   get,
-  map,
-  groupBy,
-  mapValues,
 }
 
 type CouncilorPageData = {
   councilor: CouncilorForLawmaker
-  topics: Topic[]
-  billsByTopic: Record<string, BillMeta[]>
+  topics: CouncilTopicForFilter[]
 }
 
 const useCouncilorData = (
   slug: string,
   councilorData: CouncilorMemberData,
-  topicsData: CouncilTopicOfBillData[]
+  topicsData: CouncilTopicForFilter[]
 ): CouncilorPageData => {
   return useMemo(() => {
     const normalizeCouncilorData = (): CouncilorForLawmaker => {
@@ -51,10 +40,14 @@ const useCouncilorData = (
           councilorData,
           'administrativeDistrict',
           []
-        ).map((district: string) => getDistrictLabel(city, district) || ''),
+        )
+          .map((district: string) => getDistrictLabel(city, district) || '')
+          // Intentionally omit district codes that have no corresponding label.
+          .filter(Boolean),
         note: _.get(councilorData, 'note'),
         tooltip: _.get(councilorData, 'tooltip'),
         proposalSuccessCount: _.get(councilorData, 'proposalSuccessCount', 0),
+        speechCount: _.get(councilorData, 'speechCount', 0),
         relatedLink: _.get(councilorData, 'relatedLink', []),
         externalLink: _.get(councilorData, 'councilor.externalLink'),
         meetingTermCount: _.get(councilorData, 'councilor.meetingTermCount', 0),
@@ -69,23 +62,14 @@ const useCouncilorData = (
           image: getImageLink(councilorData.party),
         },
         councilMeeting: {
+          id: _.get(councilorData, 'councilMeeting.id'),
           term: _.get(councilorData, 'councilMeeting.term'),
           city,
         },
       }
     }
 
-    const topics: Topic[] = _.map(topicsData, (topic) => ({
-      slug: topic.slug,
-      name: topic.title,
-      count: topic.billCount,
-    })).sort(sortByCountDesc)
-
-    const billsByTopic = _.mapValues(_.groupBy(topicsData, 'slug'), (topics) =>
-      _.flatMap(topics, (topic) => topic.bill || [])
-    )
-
-    return { councilor: normalizeCouncilorData(), topics, billsByTopic }
+    return { councilor: normalizeCouncilorData(), topics: topicsData }
   }, [slug, councilorData, topicsData])
 }
 

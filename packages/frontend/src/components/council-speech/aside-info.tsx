@@ -25,33 +25,44 @@ const CouncilorBlock = styled(PersonBlock)`
   flex-wrap: wrap;
 `
 
+const CouncilorLinkBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+`
+
 type AsideInfoProps = {
-  councilor?: CouncilSpeechData['councilor']
+  councilors?: CouncilSpeechData['councilors']
   attendee?: CouncilSpeechData['attendee']
   relatedTopics?: CouncilSpeechData['relatedTopics']
 }
 const AsideInfo: React.FC<AsideInfoProps> = ({
-  councilor,
+  councilors = [],
   attendee,
   relatedTopics = [],
 }) => {
   return (
     <AsideInfoContainer>
       <PersonAndAttendeeBlock>
-        {councilor ? (
+        {councilors.length > 0 ? (
           <CouncilorBlock>
             <PersonLabel>
               <P2Gray600 text="諮詢議員" />
               <SlashIcon />
             </PersonLabel>
-            <Link
-              href={`${InternalRoutes.Councilor(councilor.city)}/${
-                councilor.slug
-              }`}
-              key={`councilor-${councilor.slug}`}
-            >
-              <P1SupportiveHeavy text={councilor.name} />
-            </Link>
+            <CouncilorLinkBlock>
+              {councilors.map((councilor) => (
+                <Link
+                  href={`${InternalRoutes.Councilor(councilor.city)}/${
+                    councilor.slug
+                  }`}
+                  key={`councilor-${councilor.slug}`}
+                >
+                  <P1SupportiveHeavy text={councilor.name} />
+                </Link>
+              ))}
+            </CouncilorLinkBlock>
           </CouncilorBlock>
         ) : null}
         {attendee ? <P2Gray600 text={`列席質詢對象／${attendee}`} /> : null}

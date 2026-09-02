@@ -119,7 +119,7 @@ const CouncilSpeechPage: React.FC<CouncilSpeechPageProps> = ({ speech }) => {
     content,
     sourceLink,
     relatedTopics,
-    councilor,
+    councilors,
   } = useCouncilSpeechData(speech)
 
   const cycleFontSize = useCallback(() => {
@@ -142,8 +142,8 @@ const CouncilSpeechPage: React.FC<CouncilSpeechPageProps> = ({ speech }) => {
 
   // memoize props passed repeatedly
   const asideInfoProps = useMemo(
-    () => ({ councilor, attendee, relatedTopics }),
-    [councilor, attendee, relatedTopics]
+    () => ({ councilors, attendee, relatedTopics }),
+    [councilors, attendee, relatedTopics]
   )
 
   return (

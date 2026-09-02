@@ -1,25 +1,16 @@
 // types
-import type {
-  BillMeta,
-  BillMetaWithCouncilorFromRes,
-} from '@/types/council-bill'
+import type { BillMetaWithCouncilorFromRes } from '@/types/council-bill'
 import type { RelatedType } from '@/types/related-twreporter-item'
 import type { CouncilDistrict } from '@/types/council'
 import type { PartyData } from '@/types/party'
 import type { KeystoneImage } from '@/types'
 import type { Tag } from '@/components/dashboard/type'
 
-export type CouncilTopicOfBillData = {
-  slug: string
-  title: string
-  billCount: number
-  bill: BillMeta[]
-}
-
 export type CouncilTopicForFilter = {
   slug: string
   name: string
   count: number
+  isFeatured?: boolean
 }
 
 export type RelatedTopic = {
@@ -77,6 +68,7 @@ export type CouncilTopicFromRes = {
 export type TopNCouncilTopicData = {
   slug: string
   title: string
+  speechCount: number
   billCount: number
   councilorCount: number
   councilors: {
@@ -102,6 +94,7 @@ export type FeaturedCouncilTopicData = {
   slug: string
   city: string
   billCount: number
+  speechCount: number
   councilorCount: number
   avatars: string[]
 }

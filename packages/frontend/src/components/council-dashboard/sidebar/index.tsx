@@ -12,15 +12,15 @@ import styled from 'styled-components'
 import Link from 'next/link'
 // type
 import type { CouncilDistrict } from '@/types/council'
-import type { BillMeta } from '@/types/council-bill'
+import type { CouncilWorkMeta } from '@/types/council-work'
 // context
 import { CouncilDashboardContext } from '@/components/council-dashboard/context'
 // fetcher
 import {
-  fetchTop5CouncilorOfATopic,
+  fetchCouncilorsOfATopic,
   fetchTopicsOfACouncilor,
 } from '@/fetchers/councilor'
-import useCouncilBill from '@/fetchers/council-bill'
+import useCouncilWork from '@/fetchers/council-work'
 // hook
 import {
   useMoreCouncilTopics,
@@ -49,9 +49,10 @@ import {
   FollowMoreErrorState,
 } from '@/components/sidebar/error-state'
 import NoIssueState from '@/components/sidebar/no-issue-state'
-import { groupSummary } from '@/components/sidebar'
+import { groupCouncilWorkByMonth } from '@/utils/council-work'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
+import { P2 } from '@twreporter/react-components/lib/text/paragraph'
 import {
   colorGrayscale,
   colorOpacity,
@@ -101,6 +102,9 @@ const SummarySection = styled.div`
   flex-direction: column;
   width: 100%;
 `
+const SummaryCount = styled(P2)`
+  color: ${colorGrayscale.gray700};
+`
 const FollowMoreSection = styled.div`
   border-top: 1px solid ${colorGrayscale.gray300};
   padding-top: 40px;
@@ -121,12 +125,17 @@ const FollowMoreTags = styled.div`
   flex-wrap: wrap;
 `
 
-const prepareSummaryProps = (rawBillData?: BillMeta[]): SummaryCardProps[] => {
-  if (!rawBillData) return []
+const prepareWorkCardProps = (
+  rawWork?: CouncilWorkMeta[],
+  showTypeBadge = false
+): SummaryCardProps[] => {
+  if (!rawWork) return []
 
-  return rawBillData.map(({ summaryFallback, ...bill }) => ({
+  return rawWork.map(({ summaryFallback, ...work }) => ({
     summary: summaryFallback || '',
-    ...bill,
+    showTypeBadge,
+    isCouncil: true,
+    ...work,
   }))
 }
 
@@ -151,7 +160,6 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 }: SidebarIssueProps) => {
   const topRef = useRef<HTMLDivElement>(null)
   const [tabList, setTabList] = useState(legislatorList)
-  const [isLoading, setIsLoading] = useState(true)
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
   const selectedCouncilor = useMemo(
@@ -163,7 +171,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
     [selectedCouncilor]
   )
   const { formattedFilterValues } = useContext(CouncilDashboardContext)
-  const billState = useCouncilBill(
+  const workState = useCouncilWork(
     formattedFilterValues && selectedCouncilor
       ? {
           councilorSlug: selectedCouncilor.slug as string,
@@ -172,9 +180,12 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
         }
       : undefined
   )
-  const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(prepareSummaryProps(billState.bills)),
-    [billState.bills]
+  const workByMonth: CardsOfTheYearProps[] = useMemo(
+    () =>
+      groupCouncilWorkByMonth(prepareWorkCardProps(workState.work, true)).map(
+        ({ period, cards }) => ({ period, cards, year: 0 })
+      ),
+    [workState.work]
   )
   const followMoreState = useMoreCouncilTopics(
     selectedCouncilor
@@ -187,18 +198,17 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   )
   const issueList: IssueProps[] = useMemo(
     () =>
-      followMoreState.topics
-        .filter(({ count }) => count > 0)
-        .map(({ slug, name, count }) => ({
-          slug,
-          name,
-          count,
-        })) || [],
+      followMoreState.topics.map(({ slug, name, count }) => ({
+        slug,
+        name,
+        count,
+        showCount: false,
+      })) || [],
     [followMoreState.topics]
   )
 
   const fetchFilterOptions = () => {
-    return fetchTop5CouncilorOfATopic({
+    return fetchCouncilorsOfATopic({
       topicSlug: slug,
       districtSlug: districtSlug as CouncilDistrict,
       excludeCouncilorSlug: '',
@@ -206,15 +216,8 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   }
 
   useEffect(() => {
-    setIsLoading(true)
     setShowFilter(false)
   }, [slug, selectedTab])
-
-  useEffect(() => {
-    if (billState.bills != undefined) {
-      setIsLoading(billState.isLoading)
-    }
-  }, [billState.bills, billState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
@@ -232,29 +235,31 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
         <div ref={topRef}>
           <TitleSection
             title={title}
+            titleDescription="的相關發言與議案摘要"
             count={count}
             tabs={tabList}
             showTabAvatar={true}
+            showTabCount={false}
             link={`${InternalRoutes.CouncilTopic(districtSlug)}/${slug}`}
             onSelectTab={setSelectedTab}
             onOpenFilterModal={() => setShowFilter(true)}
             onClose={onClose}
           />
         </div>
-        {isLoading ? <Loader /> : null}
-        {billState.error ? <BodyErrorState /> : null}
-        {!isLoading && !billState.error ? (
+        {workState.isLoading ? <Loader /> : null}
+        {workState.error ? <BodyErrorState /> : null}
+        {!workState.isLoading && !workState.error ? (
           <Body $topBoxHeight={topRef?.current?.offsetHeight || 0}>
             <SummarySection>
-              {summaryGroupByYear.map(
-                (props: CardsOfTheYearProps, index: number) => (
-                  <CardsOfTheYear
-                    {...props}
-                    type="bill"
-                    key={`summary-of-the-year-${index}`}
-                  />
-                )
-              )}
+              <SummaryCount
+                text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
+              />
+              {workByMonth.map((props: CardsOfTheYearProps, index: number) => (
+                <CardsOfTheYear
+                  {...props}
+                  key={`summary-of-the-month-${index}`}
+                />
+              ))}
             </SummarySection>
             {!followMoreState.isLoading &&
               (followMoreState.error || issueList.length > 0) && (
@@ -290,6 +295,8 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
             placeholder={'篩選議員'}
             initialSelectedOption={tabList}
             fetcher={fetchFilterOptions}
+            includeZeroCountOptions={true}
+            showOptionCount={false}
             onClose={() => {
               setShowFilter(false)
             }}
@@ -328,7 +335,6 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
   districtSlug,
 }: SidebarCouncilorProps) => {
   const topRef = useRef<HTMLDivElement>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [tabList, setTabList] = useState(issueList)
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
@@ -342,7 +348,7 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
     [selectedIssue]
   )
   const { formattedFilterValues } = useContext(CouncilDashboardContext)
-  const billState = useCouncilBill(
+  const workState = useCouncilWork(
     formattedFilterValues && selectedIssue
       ? {
           councilorSlug: slug,
@@ -351,9 +357,12 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
         }
       : undefined
   )
-  const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(prepareSummaryProps(billState.bills)),
-    [billState.bills]
+  const workByMonth: CardsOfTheYearProps[] = useMemo(
+    () =>
+      groupCouncilWorkByMonth(prepareWorkCardProps(workState.work, true)).map(
+        ({ period, cards }) => ({ period, cards, year: 0 })
+      ),
+    [workState.work]
   )
   const followMoreState = useMoreCouncilors(
     selectedIssue && selectedIssue.slug
@@ -366,14 +375,13 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
   )
   const councilorList: LegislatorProps[] = useMemo(
     () =>
-      followMoreState.councilors
-        .filter(({ count }) => count > 0)
-        .map(({ slug, name, avatar, count }) => ({
-          slug,
-          name,
-          avatar,
-          count,
-        })) || [],
+      followMoreState.councilors.map(({ slug, name, avatar, count }) => ({
+        slug,
+        name,
+        avatar,
+        count,
+        showCount: false,
+      })) || [],
     [followMoreState.councilors]
   )
 
@@ -385,7 +393,6 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
   }
 
   useEffect(() => {
-    setIsLoading(true)
     setShowFilter(false)
   }, [slug, selectedTab])
 
@@ -394,12 +401,6 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
       setTabList(issueList)
     }
   }, [issueList])
-
-  useEffect(() => {
-    if (billState.bills != undefined) {
-      setIsLoading(billState.isLoading)
-    }
-  }, [billState.bills, billState.isLoading])
 
   useEffect(() => {
     setSelectedTab(0)
@@ -413,6 +414,8 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
             title={title}
             tabs={tabList}
             showTabAvatar={false}
+            showTabCount={false}
+            titleDescription="的相關發言與議案摘要"
             link={`${InternalRoutes.Councilor(districtSlug)}/${slug}`}
             onSelectTab={setSelectedTab}
             onClose={onClose}
@@ -423,20 +426,22 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
           <Body $topBoxHeight={topRef.current?.offsetHeight || 0}>
             <NoIssueState note={note} />
           </Body>
-        ) : isLoading ? (
+        ) : workState.isLoading ? (
           <Loader />
+        ) : workState.error ? (
+          <BodyErrorState />
         ) : (
           <Body $topBoxHeight={topRef.current?.offsetHeight || 0}>
             <SummarySection>
-              {summaryGroupByYear.map(
-                (props: CardsOfTheYearProps, index: number) => (
-                  <CardsOfTheYear
-                    {...props}
-                    type="bill"
-                    key={`summary-of-the-year-${index}`}
-                  />
-                )
-              )}
+              <SummaryCount
+                text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
+              />
+              {workByMonth.map((props: CardsOfTheYearProps, index: number) => (
+                <CardsOfTheYear
+                  {...props}
+                  key={`summary-of-the-year-${index}`}
+                />
+              ))}
             </SummarySection>
             {!followMoreState.isLoading &&
               (followMoreState.error || councilorList.length > 0) && (
@@ -474,6 +479,9 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
             placeholder={'篩選議題'}
             initialSelectedOption={tabList}
             fetcher={fetchFilterOptions}
+            includeZeroCountOptions={true}
+            showOptionCount={false}
+            groupOptionsByFeatured={true}
             onClose={() => {
               setShowFilter(false)
             }}

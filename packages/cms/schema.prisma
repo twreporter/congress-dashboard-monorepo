@@ -206,8 +206,7 @@ model CouncilSpeech {
   id               Int             @id @default(autoincrement())
   councilMeeting   CouncilMeeting? @relation("CouncilSpeech_councilMeeting", fields: [councilMeetingId], references: [id])
   councilMeetingId Int?            @map("councilMeeting")
-  councilMember    CouncilMember?  @relation("CouncilSpeech_councilMember", fields: [councilMemberId], references: [id])
-  councilMemberId  Int?            @map("councilMember")
+  councilMember    CouncilMember[] @relation("CouncilMember_speech")
   date             DateTime        @mysql.Date
   title            String          @default("")
   slug             String          @unique @default("")
@@ -220,7 +219,6 @@ model CouncilSpeech {
   updatedAt        DateTime?       @updatedAt
 
   @@index([councilMeetingId])
-  @@index([councilMemberId])
   @@index([date])
   @@index([title])
   @@index([updatedAt])
@@ -303,7 +301,7 @@ model CouncilMember {
   note                   String          @default("")
   relatedLink            Json?
   isActive               Boolean         @default(true)
-  speech                 CouncilSpeech[] @relation("CouncilSpeech_councilMember")
+  speech                 CouncilSpeech[] @relation("CouncilMember_speech")
   bill                   CouncilBill[]   @relation("CouncilBill_councilMember")
   createdAt              DateTime?       @default(now())
   updatedAt              DateTime?       @updatedAt

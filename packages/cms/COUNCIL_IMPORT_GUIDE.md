@@ -307,6 +307,61 @@
 
 ---
 
+### 8. 縣市逐字稿 (CouncilSpeech)
+
+匯入縣市議會逐字稿及其議員、議題關聯。
+
+#### 欄位說明
+
+| 欄位名稱 | 必填 | 類型 | 說明 |
+|---------|------|------|------|
+| `slug` | ✅ | string | 逐字稿唯一識別碼；已存在時更新原資料 |
+| `councilMeeting_city` | ✅ | string | 議會所屬縣市，[見限制值](#縣市代碼-city) |
+| `councilMeeting_term` | ✅ | number | 逐字稿所屬議會屆期 |
+| `councilors` | ✅ | array | 議員陣列；每筆須包含 `slug`、`name`、`term` |
+| `date` | ✅ | string | 日期（ISO 8601 格式） |
+| `title` | ✅ | string | 標題 |
+| `summary` | ❌ | JSON | 摘要 |
+| `content` | ✅ | JSON | 逐字稿內容 |
+| `attendee` | ❌ | string | 列席質詢對象 |
+| `source` | ❌ | string | 資料來源連結 |
+| `relatedCouncilTopic_slug` | ❌ | string array | 相關縣市議題 slug 陣列 |
+
+每個 `councilors` 項目的 `term` 會和 `councilMeeting_city` 一起用來尋找該議員的屆資。
+
+#### JSON 範例
+
+```json
+[
+  {
+    "slug": "taipei-speech-001",
+    "councilMeeting_city": "taipei",
+    "councilMeeting_term": 14,
+    "councilors": [
+      {
+        "slug": "wang-xiao-ming",
+        "name": "王小明",
+        "term": 14
+      },
+      {
+        "slug": "li-xiao-hua",
+        "name": "李小華",
+        "term": 14
+      }
+    ],
+    "date": "2026-08-28",
+    "title": "市政總質詢",
+    "summary": "逐字稿摘要",
+    "content": "逐字稿內容",
+    "attendee": "市政府相關局處",
+    "source": "https://example.com/speech/001",
+    "relatedCouncilTopic_slug": ["public-transport", "urban-renewal"]
+  }
+]
+```
+
+---
+
 ## 欄位值限制說明
 
 ### 縣市代碼 (city)

@@ -15,6 +15,7 @@ export enum CouncilListName {
   councilTopicRelatedLegislativeTopic = 'CouncilTopicRelatedLegislativeTopic',
   councilTopicRelatedCouncilTopic = 'CouncilTopicRelatedCouncilTopic',
   councilTopicRelatedCityTopic = 'CouncilTopicRelatedCityTopic',
+  councilSpeech = 'CouncilSpeech',
 }
 
 export type ListConfig = {
@@ -113,6 +114,34 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
     requiredFields: ['title', 'slug', 'city', 'type'],
     nonDuplicateFields: ['slug'],
     description: '匯入縣市議題資料',
+  },
+  [CouncilListName.councilSpeech]: {
+    value: CouncilListName.councilSpeech,
+    label: '縣市逐字稿',
+    expectedHeaders: [
+      'slug',
+      'councilMeeting_city',
+      'councilMeeting_term',
+      'councilors',
+      'date',
+      'title',
+      'summary',
+      'content',
+      'attendee',
+      'source',
+      'relatedCouncilTopic_slug',
+    ],
+    requiredFields: [
+      'slug',
+      'councilMeeting_city',
+      'councilMeeting_term',
+      'councilors',
+      'date',
+      'title',
+      'content',
+    ],
+    nonDuplicateFields: ['slug'],
+    description: '匯入縣市逐字稿',
   },
   [CouncilListName.councilTopicRelatedLegislativeTopic]: {
     value: CouncilListName.councilTopicRelatedLegislativeTopic,

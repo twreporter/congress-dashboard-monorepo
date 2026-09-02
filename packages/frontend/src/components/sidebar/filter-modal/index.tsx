@@ -166,6 +166,9 @@ const Seleted = styled(FlexColumn)`
 const UnSelected = styled(FlexColumn)`
   gap: 12px;
 `
+const OptionGroups = styled(FlexColumn)`
+  gap: 24px;
+`
 const TagBox = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -225,6 +228,9 @@ type FilterModalProps = {
   placeholder?: string
   initialSelectedOption?: FilterOption[]
   fetcher?: (slug: string) => Promise<FilterOption[]>
+  includeZeroCountOptions?: boolean
+  showOptionCount?: boolean
+  groupOptionsByFeatured?: boolean
   onClose: () => void
   onConfirmSelection: (selectedOptions: FilterOption[]) => void
 }
@@ -237,6 +243,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
   placeholder,
   initialSelectedOption = [],
   fetcher,
+  includeZeroCountOptions = false,
+  showOptionCount = true,
+  groupOptionsByFeatured = false,
   onClose,
   onConfirmSelection,
 }) => {
@@ -268,12 +277,33 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const optionsForShow = useMemo<FilterOption[]>(
     () =>
       options.filter((option) => {
-        if (isSearchMode && keyword && !(option.name && option.name.includes(keyword))) {
+        if (
+          isSearchMode &&
+          keyword &&
+          !(option.name && option.name.includes(keyword))
+        ) {
           return false
         }
-        return option.selected || (option.count != null && option.count > 0)
+        return (
+          option.selected ||
+          includeZeroCountOptions ||
+          (option.count != null && option.count > 0)
+        )
       }),
-    [options, keyword, isSearchMode]
+    [options, keyword, isSearchMode, includeZeroCountOptions]
+  )
+  const hasFeaturedOptions = useMemo(
+    () =>
+      groupOptionsByFeatured && options.some(({ isFeatured }) => isFeatured),
+    [groupOptionsByFeatured, options]
+  )
+  const featuredOptions = useMemo(
+    () => optionsForShow.filter(({ isFeatured }) => isFeatured),
+    [optionsForShow]
+  )
+  const generalOptions = useMemo(
+    () => optionsForShow.filter(({ isFeatured }) => !isFeatured),
+    [optionsForShow]
   )
 
   const { toastr, showSnackBar, snackBarText } = useSnackBar()
@@ -308,18 +338,23 @@ const FilterModal: React.FC<FilterModalProps> = ({
 
   useEffect(() => {
     if (!data || hasLoaded) return
-    const newOptions = _.unionBy(
-      options,
-      _.map(data, (item) => {
-        const isSelected =
-          _.findIndex(
-            initialSelectedOption,
-            (selectedOption) => selectedOption.slug === item.slug
-          ) !== -1
-        return { selected: isSelected, ...item }
-      }),
-      'slug'
-    )
+    const loadedOptions = _.map(data, (item) => {
+      const existingOption = _.find(
+        options,
+        (option) => option.slug === item.slug
+      )
+      const isInitiallySelected =
+        _.findIndex(
+          initialSelectedOption,
+          (selectedOption) => selectedOption.slug === item.slug
+        ) !== -1
+      return {
+        ...existingOption,
+        ...item,
+        selected: existingOption?.selected ?? isInitiallySelected,
+      }
+    })
+    const newOptions = _.unionBy(loadedOptions, options, 'slug')
     setOptions(newOptions)
     setHasLoaded(true)
   }, [data, hasLoaded, options, initialSelectedOption])
@@ -330,10 +365,12 @@ const FilterModal: React.FC<FilterModalProps> = ({
     }
   }, [isSearchMode])
 
-  const toggleSelect = (e: React.MouseEvent<HTMLElement>, index: number) => {
+  const toggleSelect = (
+    e: React.MouseEvent<HTMLElement>,
+    targetOption: FilterOption
+  ) => {
     e.stopPropagation()
     e.preventDefault()
-    const targetOption = optionsForShow[index]
     const newSelected = !targetOption.selected
     if (!newSelected && selectedOptions.length === minSelectedCount.count) {
       toastr({ text: minSelectedCount.snackBarText })
@@ -472,33 +509,67 @@ const FilterModal: React.FC<FilterModalProps> = ({
               <TagBox>
                 {_.map(selectedOptionsForShow, (selectedOption, index) => (
                   <SelectTag
-                    key={`selected-tag-${index}`}
+                    key={`selected-tag-${selectedOption.slug ?? index}`}
                     withDelete={true}
                     isLast={selectedOptions.length === 1}
                     {...selectedOption}
                     selected={true}
+                    showCount={showOptionCount}
                     onClick={(e) => unSelect(e, index)}
                   />
                 ))}
               </TagBox>
             </Seleted>
             <HorizontalLine $show={true} />
-            <UnSelected>
-              <Text text={`全部`} />
-              <TagBox>
-                {_.map(optionsForShow, (option, index) => (
-                  <SelectTag
-                    key={`all-options-${index}`}
-                    withDelete={false}
-                    {...option}
-                    onClick={(e) => toggleSelect(e, index)}
-                  />
-                ))}
-                {optionsForShow.length === 0 ? (
-                  <EmptyText text={'找不到任何結果'} />
-                ) : null}
-              </TagBox>
-            </UnSelected>
+            {optionsForShow.length === 0 ? (
+              <EmptyText text="找不到任何結果" />
+            ) : hasFeaturedOptions ? (
+              <OptionGroups>
+                <UnSelected>
+                  <Text text="精選議題" />
+                  <TagBox>
+                    {featuredOptions.map((option, index) => (
+                      <SelectTag
+                        key={`featured-options-${option.slug ?? index}`}
+                        withDelete={false}
+                        {...option}
+                        showCount={showOptionCount}
+                        onClick={(e) => toggleSelect(e, option)}
+                      />
+                    ))}
+                  </TagBox>
+                </UnSelected>
+                <UnSelected>
+                  <Text text="地方議題" />
+                  <TagBox>
+                    {generalOptions.map((option, index) => (
+                      <SelectTag
+                        key={`general-options-${option.slug ?? index}`}
+                        withDelete={false}
+                        {...option}
+                        showCount={showOptionCount}
+                        onClick={(e) => toggleSelect(e, option)}
+                      />
+                    ))}
+                  </TagBox>
+                </UnSelected>
+              </OptionGroups>
+            ) : (
+              <UnSelected>
+                <Text text="全部" />
+                <TagBox>
+                  {optionsForShow.map((option, index) => (
+                    <SelectTag
+                      key={`all-options-${option.slug ?? index}`}
+                      withDelete={false}
+                      {...option}
+                      showCount={showOptionCount}
+                      onClick={(e) => toggleSelect(e, option)}
+                    />
+                  ))}
+                </TagBox>
+              </UnSelected>
+            )}
           </SelectBox>
         </ContentBox>
       )}

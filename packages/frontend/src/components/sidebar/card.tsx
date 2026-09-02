@@ -102,6 +102,15 @@ const DateStamp: React.FC<DateStampProps> = memo(({ date }) => {
 })
 DateStamp.displayName = 'date-stamp'
 
+const TypeBadge = styled(P4)<{ $type: CardType }>`
+  flex-shrink: 0;
+  padding: 3px 6px;
+  border-radius: 3px;
+  color: ${colorGrayscale.white};
+  background-color: ${(props) =>
+    props.$type === 'speech' ? colorGrayscale.gray800 : colorGrayscale.gray500};
+`
+
 // summary card component
 const CardBox = styled.div`
   width: 100%;
@@ -150,6 +159,8 @@ export type SummaryCardProps = {
   summary: string
   slug: string
   type?: CardType
+  showTypeBadge?: boolean
+  isCouncil?: boolean
 }
 export const SummaryCard: React.FC<SummaryCardProps> = ({
   date,
@@ -157,16 +168,28 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
   summary,
   slug,
   type = 'speech',
+  showTypeBadge = false,
+  isCouncil = false,
 }) => {
   const dateObj = typeof date === 'string' ? new Date(date) : date
   const link =
     type === 'speech'
-      ? `${InternalRoutes.Speech}/${slug}`
+      ? `${
+          isCouncil ? InternalRoutes.CouncilSpeech : InternalRoutes.Speech
+        }/${slug}`
       : `${InternalRoutes.Bill}/${slug}`
   return (
     <CardBox>
       <FlexRow>
-        <DateStamp date={dateObj} />
+        {showTypeBadge ? (
+          <TypeBadge
+            text={type === 'speech' ? '發言' : '議案'}
+            weight={P4.Weight.BOLD}
+            $type={type}
+          />
+        ) : (
+          <DateStamp date={dateObj} />
+        )}
         <Title text={title} weight={P1.Weight.BOLD} />
       </FlexRow>
       <HorizontalLine />
@@ -196,20 +219,22 @@ const CardList = styled.div`
 export type CardsOfTheYearProps = {
   cards: SummaryCardProps[]
   year: number
+  period?: string
   type?: CardType
 }
 const CardsOfTheYear: React.FC<CardsOfTheYearProps> = ({
   year,
+  period,
   cards,
-  type = 'speech',
+  type,
 }: CardsOfTheYearProps) => (
   <Box>
-    <Year text={`${year}`} />
+    <Year text={period || `${year}`} />
     <CardList>
       {cards.map((props: SummaryCardProps, index: number) => (
         <SummaryCard
           {...props}
-          type={type}
+          type={type ?? props.type}
           key={`summary-card-${year}-${index}`}
         />
       ))}

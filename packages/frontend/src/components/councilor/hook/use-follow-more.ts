@@ -3,7 +3,7 @@ import useSWR from 'swr'
 // fetcher
 import { fetchTop5CouncilorOfATopic } from '@/fetchers/councilor'
 // type
-import type { CouncilorWithBillCount } from '@/types/councilor'
+import type { CouncilorWithCount } from '@/types/councilor'
 import type { FetchTopCouncilorOfATopicParams } from '@/fetchers/councilor'
 
 type StateType<T> = {
@@ -13,7 +13,7 @@ type StateType<T> = {
 }
 const useFollowMore = (
   params: FetchTopCouncilorOfATopicParams | null
-): StateType<CouncilorWithBillCount> => {
+): StateType<CouncilorWithCount> => {
   const { data, isLoading, error } = useSWR(
     params ? params : null,
     fetchTop5CouncilorOfATopic

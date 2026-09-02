@@ -30,14 +30,12 @@ export const useCouncilSpeechData = (
             city: t.city as CouncilDistrict,
           })) || [],
       sourceLink: speechData.sourceLink || '',
-      councilor:
-        speechData.councilMember &&
-        isValidCouncil(speechData.councilMember.city)
-          ? {
-              city: speechData.councilMember.city,
-              ...speechData.councilMember.councilor,
-            }
-          : undefined,
+      councilors: (speechData.councilMember ?? [])
+        .filter((member) => isValidCouncil(member.city))
+        .map((member) => ({
+          city: member.city as CouncilDistrict,
+          ...member.councilor,
+        })),
     }
   }, [speechData])
 }

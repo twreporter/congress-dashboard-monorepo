@@ -21,7 +21,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 268px;
+  height: 271px;
   padding: 24px;
   gap: 20px;
   background-color: ${colorGrayscale.white};
@@ -56,23 +56,30 @@ const Title = styled(H4)`
   color: ${colorGrayscale.gray900};
 `
 
-const BillCount = styled.div`
+const Metrics = styled.div`
   display: flex;
-  flex-direction: row;
+  gap: 32px;
   color: ${colorGrayscale.gray900};
-  gap: 12px;
-  align-items: baseline;
 `
 
-const BillCountNumber = styled.div`
+const Metric = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`
+
+const MetricLabel = styled.div`
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+`
+
+const MetricNumber = styled.div`
   font-family: 'Roboto Slab';
-  font-size: 56px;
+  font-size: 40px;
   font-style: normal;
   font-weight: 700;
   line-height: 125%;
-  ${mq.tabletAndBelow`
-    font-size: 48px;
-  `}
 `
 
 const AvatarContainer = styled.div`
@@ -102,6 +109,7 @@ export type CardProps = {
   slug: string
   city: string
   billCount: number
+  speechCount: number
   avatars: string[]
   councilorCount: number
 }
@@ -110,6 +118,7 @@ const Card: React.FC<CardProps> = ({
   slug,
   city,
   billCount,
+  speechCount,
   avatars,
   councilorCount,
 }) => {
@@ -118,12 +127,20 @@ const Card: React.FC<CardProps> = ({
       <Container>
         <UpperSection>
           <Title text={title} />
-          <BillCount>
-            <BillCountNumber>
-              {billCount > 999 ? '999+' : billCount}
-            </BillCountNumber>
-            <P2 text="筆相關議案" weight={P2.Weight.BOLD} />
-          </BillCount>
+          <Metrics>
+            <Metric>
+              <MetricLabel>相關發言</MetricLabel>
+              <MetricNumber>
+                {speechCount > 999 ? '999+' : speechCount}
+              </MetricNumber>
+            </Metric>
+            <Metric>
+              <MetricLabel>相關議案</MetricLabel>
+              <MetricNumber>
+                {billCount > 999 ? '999+' : billCount}
+              </MetricNumber>
+            </Metric>
+          </Metrics>
         </UpperSection>
         <LowerSection>
           <AvatarContainer>

@@ -266,7 +266,7 @@ export const LeadingBadge = styled(P1)<{
   `}
 `
 
-export const ControlTabBadge = styled(P1)<{
+export const ControlTabBadge = styled(P2)<{
   $bgColor: string
   $textColor?: string
 }>`

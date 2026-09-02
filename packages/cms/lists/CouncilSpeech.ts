@@ -31,7 +31,7 @@ const listConfigurations = list({
     councilMember: relationship({
       ref: 'CouncilMember.speech',
       label: '所屬議員',
-      many: false,
+      many: true,
       ui: {
         labelField: 'labelForCMS',
       },

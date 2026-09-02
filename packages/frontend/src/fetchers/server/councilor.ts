@@ -7,8 +7,9 @@ import type {
   CouncilorMemberMeta,
   CouncilorMemberData,
 } from '@/types/councilor'
-import type { CouncilTopicOfBillData } from '@/types/council-topic'
+import type { CouncilTopicForFilter } from '@/types/council-topic'
 import type { SitemapItemWithCity } from '@/types'
+import { COUNCIL_TOPIC_TYPE } from '@twreporter/congress-dashboard-shared/lib/constants/council-topic'
 // lodash
 import { get } from 'lodash'
 const _ = {
@@ -82,6 +83,7 @@ export const fetchCouncilor = async ({
   const query = `
     query CouncilMembers($where: CouncilMemberWhereInput!) {
       councilMembers(where: $where) {
+        speechCount
         councilor {
           name
           image {
@@ -95,6 +97,7 @@ export const fetchCouncilor = async ({
           meetingTermCountInfo
         }
         councilMeeting {
+          id
           term
           city
         }
@@ -131,64 +134,62 @@ export const fetchCouncilor = async ({
   }
 }
 
-/** fetchCouncilorTopics
- *  fetch councilor's topics with given slug & district slug
- */
-type FetchCouncilorTopicsOfBillParams = {
+type CouncilTopicFromRes = {
+  slug: string
+  title: string
+  type?: string
+  speechCount: number
+  billCount: number
+  councilorCount: number
+}
+
+/** Fetch the current council member's topics in dashboard order. */
+type FetchCouncilorTopicsParams = {
   slug: string
   districtSlug: CouncilDistrict
+  councilMeetingId: number
 }
-export const fetchCouncilorTopicsOfBill = async ({
+export const fetchCouncilorTopics = async ({
   slug,
   districtSlug,
-}: FetchCouncilorTopicsOfBillParams): Promise<CouncilTopicOfBillData[]> => {
-  const condition = {
-    councilMember: {
-      some: {
-        city: {
-          equals: districtSlug,
-        },
-        councilor: {
-          slug: {
-            equals: slug,
-          },
-        },
-      },
-    },
+  councilMeetingId,
+}: FetchCouncilorTopicsParams): Promise<CouncilTopicForFilter[]> => {
+  const normalizedMeetingId = Number(councilMeetingId)
+  if (!Number.isInteger(normalizedMeetingId)) {
+    throw new Error(`Invalid council meeting ID: ${councilMeetingId}`)
   }
+
   const variables = {
-    where: {
-      bill: {
-        some: condition,
-      },
-    },
-    billWhere2: condition,
-    billCountWhere2: condition,
-    orderBy: [{ date: 'desc' }],
+    councilorSlug: slug,
+    meetingId: normalizedMeetingId,
   }
   const query = `
-    query CouncilTopicsOfBill($where: CouncilTopicWhereInput!, $billCountWhere2: CouncilBillWhereInput!, $billWhere2: CouncilBillWhereInput!, $orderBy: [CouncilBillOrderByInput!]!) {
-      councilTopics(where: $where) {
-        billCount(where: $billCountWhere2)
-        bill(where: $billWhere2, orderBy: $orderBy) {
-          date
-          summaryFallback
-          title
-          slug
-        }
+    query CouncilorTopics($councilorSlug: String!, $meetingId: Int!) {
+      councilorTopicsOrderByWork(councilorSlug: $councilorSlug, meetingId: $meetingId) {
         slug
         title
+        type
+        speechCount
+        billCount
+        councilorCount
       }
     }
   `
   try {
     const data = await keystoneFetch<{
-      councilTopics: CouncilTopicOfBillData[]
+      councilorTopicsOrderByWork: CouncilTopicFromRes[]
     }>(JSON.stringify({ query, variables }), false)
-    return data?.data?.councilTopics || []
+    return (data?.data?.councilorTopicsOrderByWork || []).map(
+      ({ slug: topicSlug, title, speechCount, type }) => ({
+        slug: topicSlug,
+        name: title,
+        count: speechCount,
+        isFeatured: type === COUNCIL_TOPIC_TYPE.twreporter,
+      })
+    )
   } catch (err) {
     throw new Error(
-      `Failed to fetch councilor topics of bill for slug: ${slug} in district ${districtSlug}, err: ${err}`
+      `Failed to fetch councilor topics for slug: ${slug} in district ${districtSlug}, err: ${err}`
     )
   }
 }

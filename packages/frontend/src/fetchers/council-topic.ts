@@ -5,7 +5,10 @@ import type {
   CouncilTopicForFilter,
   TopNCouncilTopicData,
 } from '@/types/council-topic'
-import type { CouncilorWithBillCount } from '@/types/councilor'
+import type {
+  CouncilorWithBillCount,
+  CouncilorWithWorkCounts,
+} from '@/types/councilor'
 import type { FetchTopNTopicsParams } from '@/fetchers/server/council-topic'
 
 // global var
@@ -56,12 +59,18 @@ export const fetchCouncilorsOfATopic = async ({
     throw new Error(`Failed to fetch all councilors of a topic: ${topicSlug}`)
   }
   const data = await res.json()
-  return data?.data || []
+  const councilors: CouncilorWithWorkCounts[] = data?.data || []
+  return councilors.map(
+    ({ billCount, speechCount: _speechCount, ...councilor }) => ({
+      ...councilor,
+      count: billCount,
+    })
+  )
 }
 
 /* fetchTopNCouncilTopics
  * fetch top N council topics with given take & skip in given meeting
- *   top logic is order by bill count desc
+ *   top logic is order by speech count, bill count, then councilor count desc
  */
 export const fetchTopNCouncilTopics = async ({
   take = 10,

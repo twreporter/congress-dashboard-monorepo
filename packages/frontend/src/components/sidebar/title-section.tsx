@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
-import { usePathname } from 'next/navigation'
 // components
 import Tab from '@/components/sidebar/tab'
 import { Gap } from '@/components/skeleton'
@@ -24,9 +23,6 @@ import { IconButton } from '@twreporter/react-components/lib/button'
 import { Back, More } from '@twreporter/react-components/lib/icon'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
-// constants
-import { InternalRoutes } from '@/constants/routes'
-
 // global var
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
@@ -84,8 +80,10 @@ export type TitleSectionProps = {
   title: string
   count?: number
   subtitle?: string
+  titleDescription: string
   tabs?: TabProps[]
   showTabAvatar?: boolean
+  showTabCount?: boolean
   onSelectTab?: (index: number) => void
   onClose?: () => void
   onOpenFilterModal?: () => void
@@ -95,8 +93,10 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   title,
   count = 0,
   subtitle = '',
+  titleDescription,
   tabs = [],
   showTabAvatar = false,
+  showTabCount = true,
   onSelectTab,
   onClose,
   onOpenFilterModal,
@@ -104,12 +104,6 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   const [selectedTab, setSelectedTab] = useState(0)
   const tabRef = useRef<HTMLDivElement>(null)
   const prevLinkRef = useRef<TitleSectionProps['link']>('')
-  const pathname = usePathname()
-
-  const titleDescription = pathname.startsWith(InternalRoutes.Council)
-    ? '的相關議案摘要'
-    : '的相關發言摘要'
-
   useEffect(() => {
     setSelectedTab(0)
 
@@ -182,6 +176,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
                 <Tab
                   {...tabProps}
                   showAvatar={showTabAvatar}
+                  showCount={showTabCount}
                   selected={index === selectedTab}
                 />
               </TabItem>

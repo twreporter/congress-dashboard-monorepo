@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 // @twreporter
 import { TabletAndBelow } from '@twreporter/react-components/lib/rwd'
 import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
@@ -7,6 +7,7 @@ import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/
 import CouncilorInfo from '@/components/councilor/councilor-info'
 import CouncilorStatistics from '@/components/councilor/statistic'
 import TopicList from '@/components/councilor/topic-list'
+import BackToTopButton from '@/components/councilor/back-to-top-button'
 import RelatedLinkBlock from '@/components/layout/related-link-block'
 import FeedbackBlock from '@/components/layout/feedback-block'
 import ContentPageLayout from '@/components/layout/content-page-without-filter-layout'
@@ -20,7 +21,7 @@ import {
 } from '@/components/legislator/styles'
 // type
 import type { CouncilorMemberData } from '@/types/councilor'
-import type { CouncilTopicOfBillData } from '@/types/council-topic'
+import type { CouncilTopicForFilter } from '@/types/council-topic'
 import type { CouncilDistrict } from '@/types/council'
 // hooks
 import useCouncilorData from '@/components/councilor/hook/use-councilor-data'
@@ -29,7 +30,7 @@ type CouncilorProps = {
   slug: string
   districtSlug: CouncilDistrict
   councilorData: CouncilorMemberData
-  topicsData: CouncilTopicOfBillData[]
+  topicsData: CouncilTopicForFilter[]
 }
 const Councilor: React.FC<CouncilorProps> = ({
   slug,
@@ -37,19 +38,13 @@ const Councilor: React.FC<CouncilorProps> = ({
   councilorData,
   topicsData,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const { councilor, topics, billsByTopic } = useCouncilorData(
+  const { councilor, topics } = useCouncilorData(
     slug,
     councilorData,
     topicsData
   )
 
-  const pageTitle = `${councilor.name} 的相關議案`
-
-  useEffect(() => {
-    setIsLoading(false)
-  }, [councilor, topics, billsByTopic])
+  const pageTitle = `${councilor.name} 的相關發言與議案`
 
   return (
     <>
@@ -67,20 +62,17 @@ const Councilor: React.FC<CouncilorProps> = ({
           </DesktopAsideLeft>
           <DesktopAsideRight>
             <CouncilorStatistics
-              city={councilor.city}
-              councilorType={councilor.type}
-              administrativeDistrict={councilor.administrativeDistrict}
+              speechCount={councilor.speechCount}
               proposalSuccessCount={councilor.proposalSuccessCount}
               meetingTermCount={councilor.meetingTermCount}
               meetingTermCountInfo={councilor.meetingTermCountInfo}
             />
             <ListContainer>
               <TopicList
-                isLoading={isLoading}
                 councilor={councilor}
                 topics={topics}
-                billsByTopic={billsByTopic}
                 districtSlug={districtSlug}
+                councilMeetingId={councilor.councilMeeting.id}
               />
             </ListContainer>
           </DesktopAsideRight>
@@ -89,9 +81,7 @@ const Councilor: React.FC<CouncilorProps> = ({
           <ContentBlock>
             <CouncilorInfo councilor={councilor} />
             <CouncilorStatistics
-              city={councilor.city}
-              councilorType={councilor.type}
-              administrativeDistrict={councilor.administrativeDistrict}
+              speechCount={councilor.speechCount}
               proposalSuccessCount={councilor.proposalSuccessCount}
               meetingTermCount={councilor.meetingTermCount}
               meetingTermCountInfo={councilor.meetingTermCountInfo}
@@ -99,17 +89,17 @@ const Councilor: React.FC<CouncilorProps> = ({
             <RelatedLinkBlock relatedLink={councilor.relatedLink} />
             <ListContainer>
               <TopicList
-                isLoading={isLoading}
                 councilor={councilor}
                 topics={topics}
-                billsByTopic={billsByTopic}
                 districtSlug={districtSlug}
+                councilMeetingId={councilor.councilMeeting.id}
               />
             </ListContainer>
             <FeedbackBlock eventName="councilor" />
           </ContentBlock>
         </TabletAndBelow>
       </ContentPageLayout>
+      <BackToTopButton />
     </>
   )
 }
