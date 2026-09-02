@@ -68,6 +68,24 @@ Boolean values accept: `true/false` (case-sensitive).
 
 ---
 
+## Deployment
+
+The root `cloudbuild.yaml` builds and deploys this package as a **Cloud Run
+Job** (`gcloud run jobs create`/`update` instead of frontend/cms's `gcloud
+run deploy`). The Cloud Build trigger sets `_ENV` to `dev`, `staging`, or
+`prod`, and the job name is derived as
+`${_ENV}-congress-dashboard-${_TARGET_PACKAGE}` (e.g.
+`prod-congress-dashboard-cli`), same as frontend/cms.
+
+Public job configuration (including the `LAWMAKER_*` variables above, when
+overridden) lives in `deploy/env.${_ENV}.cli.public.yaml`, and secrets
+(`ALGOLIA_WRITE_KEY`, `HEADLESS_ACCOUNT_PASSWORD`) are provisioned in Secret
+Manager via `deploy/secrets/create-secrets.sh`. See
+[`deploy/README.md`](deploy/README.md) for the full breakdown, migration
+notes from the existing `prod-lawmaker-cli` job, and rollout notes.
+
+---
+
 ## Installation
 
 Clone the repository and install dependencies:

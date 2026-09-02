@@ -42,36 +42,111 @@ steps:
       - push
       - 'gcr.io/$PROJECT_ID/$_IMAGE_NAME:${_BRANCH_NAME}_${SHORT_SHA}'
 
-  # Deploy container image to Cloud Runs
+  # Deploy container image to Cloud Run
   - name: gcr.io/cloud-builders/gcloud
     id: Deploy Image
     entrypoint: 'bash'
     args:
       - '-c'
       - |
+        set -euo pipefail
 
-        # read cloud run service names from substitution variable
-        IFS=',' read -r -a cloud_runs <<< "$_CLOUD_RUN_SERVICE_NAMES"
+        region="asia-east1"
+        runtime_service_account="sa-cloud-run-runtime@$PROJECT_ID.iam.gserviceaccount.com"
+        image="gcr.io/$PROJECT_ID/$_IMAGE_NAME:${_BRANCH_NAME}_${SHORT_SHA}"
 
-        for cr in "${cloud_runs[@]}"
-        do
+        cloud_run_name="${_ENV}-congress-dashboard-${_TARGET_PACKAGE}"
+        env_file="packages/${_TARGET_PACKAGE}/deploy/env.${_ENV}.${_TARGET_PACKAGE}.public.yaml"
 
-        # check if _DEPLOYMENT_TYPE is 'job'
-        if [[ "$_DEPLOYMENT_TYPE" == "job" ]]; then
-          # check if job exists
-          if gcloud run jobs describe "$cr" --region asia-east1 &> /dev/null; then
-            # update cloud run job
-            gcloud run jobs update "$cr" --image gcr.io/$PROJECT_ID/$_IMAGE_NAME:${_BRANCH_NAME}_${SHORT_SHA} --region asia-east1
-          else
-            # create cloud run job
-            gcloud run jobs create "$cr" --image gcr.io/$PROJECT_ID/$_IMAGE_NAME:${_BRANCH_NAME}_${SHORT_SHA} --region asia-east1
-          fi
-        else
-          # deploy cloud run service
-          gcloud run deploy "$cr" --image gcr.io/$PROJECT_ID/$_IMAGE_NAME:${_BRANCH_NAME}_${SHORT_SHA} --region asia-east1
+        if [[ ! -f "$env_file" ]]; then
+          echo "Env file not found: $env_file" >&2
+          exit 1
         fi
 
-        done
+        # dev/staging are test environments and scale down, and stay off the
+        # prod-only subnet; every other resource setting for a given service
+        # package is aligned to prod's, below. cli is a Cloud Run Job and
+        # doesn't use instance scaling or a subnet here.
+        case "$_ENV" in
+          dev|staging)
+            min_instances=0
+            max_instances=3
+            subnet=asia-east1-cloud-run-nonprod
+            ;;
+          prod)
+            min_instances=1
+            max_instances=10
+            subnet=asia-east1-cloud-run-prod-services
+            ;;
+          *)
+            echo "Unsupported _ENV: $_ENV" >&2
+            exit 1
+            ;;
+        esac
+
+        # Secret IDs follow ${cloud_run_name}_${secret-key}; see
+        # packages/$_TARGET_PACKAGE/deploy/secrets/*.secrets for the spec.
+        # cpu/timeout/execution-environment are shared by both services.
+        cpu=1
+        timeout=30s
+        execution_environment=gen2
+        case "$_TARGET_PACKAGE" in
+          frontend)
+            memory=1Gi
+            concurrency=15
+            ingress=internal-and-cloud-load-balancing
+            vpc_egress=all-traffic
+            secrets="API_AUTH_PASSWORD=${cloud_run_name}_api-auth-password:latest,FEEDBACK_SLACK_WEBHOOK_URL=${cloud_run_name}_feedback-slack-webhook-url:latest,AWS_ACCESS_KEY_ID=${cloud_run_name}_aws-access-key-id:latest,AWS_SECRET_ACCESS_KEY=${cloud_run_name}_aws-secret-access-key:latest"
+            ;;
+          cms)
+            memory=2Gi
+            concurrency=15
+            ingress=internal-and-cloud-load-balancing
+            vpc_egress=private-ranges-only
+            secrets="DATABASE_URL=${cloud_run_name}_database-url:latest,SESSION_SECRET=${cloud_run_name}_session-secret:latest"
+            ;;
+          cli)
+            secrets="ALGOLIA_WRITE_KEY=${cloud_run_name}_algolia-write-key:latest,HEADLESS_ACCOUNT_PASSWORD=${cloud_run_name}_headless-account-password:latest"
+            ;;
+          *)
+            echo "Unknown target package: $_TARGET_PACKAGE" >&2
+            exit 1
+            ;;
+        esac
+
+        deploy_options=(
+          --image "$image"
+          --region "$region"
+          --env-vars-file "$env_file"
+          --service-account "$runtime_service_account"
+          --set-secrets "$secrets"
+        )
+
+        if [[ "$_TARGET_PACKAGE" == "cli" ]]; then
+          if gcloud run jobs describe "$cloud_run_name" --region "$region" &> /dev/null; then
+            gcloud run jobs update "$cloud_run_name" "${deploy_options[@]}"
+          else
+            gcloud run jobs create "$cloud_run_name" "${deploy_options[@]}"
+          fi
+          exit 0
+        fi
+
+        deploy_options+=(
+          --cpu "$cpu"
+          --memory "$memory"
+          --cpu-boost
+          --concurrency "$concurrency"
+          --timeout "$timeout"
+          --ingress "$ingress"
+          --min-instances "$min_instances"
+          --max-instances "$max_instances"
+          --network twreporter-custom-network
+          --subnet "$subnet"
+          --vpc-egress "$vpc_egress"
+          --execution-environment "$execution_environment"
+        )
+
+        gcloud run deploy "$cloud_run_name" "${deploy_options[@]}"
 
   # Push container image to registry to update the latest one
   - name: gcr.io/cloud-builders/docker
@@ -87,6 +162,5 @@ options:
 substitutions:
   _TARGET_PACKAGE: '' # default value
   _IMAGE_NAME: '' # default value
-  _CLOUD_RUN_SERVICE_NAMES: '' # default value
-  _DEPLOYMENT_TYPE: 'service' # default value
+  _ENV: '' # dev, staging, or prod; derives the Cloud Run service/job name and deploy/env.*.public.yaml file
   _BRANCH_NAME: 'dev' # default value
