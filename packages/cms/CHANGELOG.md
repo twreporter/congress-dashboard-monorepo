@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.2...@twreporter/congress-dashboard-cms@1.10.0-rc.3) (2026-09-04)
+
+### Bug Fixes
+
+- **cms:** file dir sync ([863d30d](https://github.com/twreporter/congress-dashboard-monorepo/commit/863d30d6237aa870e558cbedb8353f5dafad3f40))
+
 # [1.10.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.1...@twreporter/congress-dashboard-cms@1.10.0-rc.2) (2026-09-02)
 
 ### Bug Fixes
