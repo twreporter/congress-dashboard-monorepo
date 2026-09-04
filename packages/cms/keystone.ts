@@ -1,10 +1,14 @@
 import { config } from '@keystone-6/core'
 import express from 'express'
+import { mkdirSync } from 'fs'
 import Path from 'path'
 import envVars from './environment-variables'
 import { listDefinition as lists } from './lists'
 import { withAuth, session } from './auth'
 import extendGraphqlSchema from './extend-graphql-schemas/index'
+
+mkdirSync(envVars.files.storagePath, { recursive: true })
+mkdirSync(envVars.images.storagePath, { recursive: true })
 
 export default withAuth(
   config({
