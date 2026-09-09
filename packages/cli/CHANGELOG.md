@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.3...lawmaker-cli@3.0.4-rc.0) (2026-09-09)
+
+### Bug Fixes
+
+- **root:** attach cli Cloud Run Job to the VPC ([e582c73](https://github.com/twreporter/congress-dashboard-monorepo/commit/e582c73174cd5c0e0debc5d3e782fe2373cad315))
+
 ## [3.0.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.3-rc.0...lawmaker-cli@3.0.3) (2026-08-10)
 
 **Note:** Version bump only for package lawmaker-cli

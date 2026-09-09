@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-rc.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-rc.2...@twreporter/congress-dashboard-frontend@1.15.0-rc.3) (2026-09-09)
+
+### Bug Fixes
+
+- **root:** attach cli Cloud Run Job to the VPC ([e582c73](https://github.com/twreporter/congress-dashboard-monorepo/commit/e582c73174cd5c0e0debc5d3e782fe2373cad315))
+
 # [1.15.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-rc.1...@twreporter/congress-dashboard-frontend@1.15.0-rc.2) (2026-09-02)
 
 ### Bug Fixes
