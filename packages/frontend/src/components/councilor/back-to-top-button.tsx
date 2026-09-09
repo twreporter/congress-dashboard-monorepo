@@ -1,21 +1,24 @@
 'use client'
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import {
   colorGrayscale,
   colorOpacity,
 } from '@twreporter/core/lib/constants/color'
-import mq from '@twreporter/core/lib/utils/media-query'
+import mq, { DEFAULT_SCREEN } from '@twreporter/core/lib/utils/media-query'
 import { ZIndex } from '@/styles/z-index'
 
-const Button = styled.button`
+const Button = styled.button<{ $footerOffset: number }>`
   width: 40px;
   height: 40px;
   position: fixed;
   z-index: ${ZIndex.BackToTopButton};
   right: 80px;
-  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  bottom: max(
+    calc(24px + env(safe-area-inset-bottom, 0px)),
+    ${(props) => props.$footerOffset}px
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,11 +40,18 @@ const Button = styled.button`
 
   ${mq.tabletOnly`
     right: 32px;
+    bottom: max(
+      calc(16px + env(safe-area-inset-bottom, 0px)),
+      ${(props) => props.$footerOffset}px
+    );
   `}
 
   ${mq.mobileOnly`
     right: 24px;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    bottom: max(
+      calc(16px + env(safe-area-inset-bottom, 0px)),
+      ${(props) => props.$footerOffset}px
+    );
   `}
 
   &:hover {
@@ -65,13 +75,70 @@ const ArrowUpward = (
 )
 
 const BackToTopButton: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false)
+  const [footerOffset, setFooterOffset] = useState(0)
+
+  useEffect(() => {
+    let animationFrame: number | null = null
+    let footer: HTMLElement | null = null
+
+    const updatePosition = () => {
+      animationFrame = null
+      setIsVisible(window.scrollY > window.innerHeight * 0.2)
+
+      footer ??= document.querySelector('footer')
+      if (!footer) {
+        setFooterOffset(0)
+        return
+      }
+
+      const footerTop = footer.getBoundingClientRect().top
+      if (footerTop >= window.innerHeight) {
+        setFooterOffset(0)
+        return
+      }
+
+      const footerGap =
+        window.innerWidth >= DEFAULT_SCREEN.hd.minWidth
+          ? 120
+          : window.innerWidth >= DEFAULT_SCREEN.desktop.minWidth
+          ? 40
+          : 20
+      setFooterOffset(window.innerHeight - footerTop + footerGap)
+    }
+
+    const scheduleUpdate = () => {
+      if (animationFrame !== null) return
+      animationFrame = window.requestAnimationFrame(updatePosition)
+    }
+
+    updatePosition()
+    window.addEventListener('scroll', scheduleUpdate, { passive: true })
+    window.addEventListener('resize', scheduleUpdate)
+
+    return () => {
+      window.removeEventListener('scroll', scheduleUpdate)
+      window.removeEventListener('resize', scheduleUpdate)
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame)
+      }
+    }
+  }, [])
+
   const scrollToTop = useCallback(
     () => window.scrollTo({ top: 0, behavior: 'smooth' }),
     []
   )
 
+  if (!isVisible) return null
+
   return (
-    <Button type="button" aria-label="回到頁面頂端" onClick={scrollToTop}>
+    <Button
+      type="button"
+      aria-label="回到頁面頂端"
+      $footerOffset={footerOffset}
+      onClick={scrollToTop}
+    >
       {ArrowUpward}
     </Button>
   )

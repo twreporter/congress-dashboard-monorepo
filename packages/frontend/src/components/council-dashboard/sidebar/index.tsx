@@ -52,7 +52,7 @@ import NoIssueState from '@/components/sidebar/no-issue-state'
 import { groupCouncilWorkByMonth } from '@/utils/council-work'
 // @twreporter
 import { H5 } from '@twreporter/react-components/lib/text/headline'
-import { P2 } from '@twreporter/react-components/lib/text/paragraph'
+import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import {
   colorGrayscale,
   colorOpacity,
@@ -102,8 +102,9 @@ const SummarySection = styled.div`
   flex-direction: column;
   width: 100%;
 `
-const SummaryCount = styled(P2)`
+const SummaryCount = styled(P1)`
   color: ${colorGrayscale.gray700};
+  margin-bottom: -16px !important;
 `
 const FollowMoreSection = styled.div`
   border-top: 1px solid ${colorGrayscale.gray300};
@@ -252,6 +253,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
           <Body $topBoxHeight={topRef?.current?.offsetHeight || 0}>
             <SummarySection>
               <SummaryCount
+                weight={P1.Weight.BOLD}
                 text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
               />
               {workByMonth.map((props: CardsOfTheYearProps, index: number) => (
@@ -291,6 +293,8 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
           <FilterModal
             title={title}
             link={`${InternalRoutes.CouncilTopic(districtSlug)}/${slug}`}
+            titlePrefix="討論 "
+            titleSuffix=" 的議員篩選"
             slug={slug}
             placeholder={'篩選議員'}
             initialSelectedOption={tabList}
@@ -434,6 +438,7 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
           <Body $topBoxHeight={topRef.current?.offsetHeight || 0}>
             <SummarySection>
               <SummaryCount
+                weight={P1.Weight.BOLD}
                 text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
               />
               {workByMonth.map((props: CardsOfTheYearProps, index: number) => (
@@ -475,6 +480,7 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
           <FilterModal
             title={title}
             link={`${InternalRoutes.Councilor(districtSlug)}/${slug}`}
+            titleSuffix=" 的相關議題篩選"
             slug={slug}
             placeholder={'篩選議題'}
             initialSelectedOption={tabList}

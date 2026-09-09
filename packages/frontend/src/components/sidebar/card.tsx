@@ -102,10 +102,10 @@ const DateStamp: React.FC<DateStampProps> = memo(({ date }) => {
 })
 DateStamp.displayName = 'date-stamp'
 
-const TypeBadge = styled(P4)<{ $type: CardType }>`
+const TypeBadge = styled(P2)<{ $type: CardType }>`
   flex-shrink: 0;
-  padding: 3px 6px;
-  border-radius: 3px;
+  padding: 2px 6px;
+  border-radius: 4px;
   color: ${colorGrayscale.white};
   background-color: ${(props) =>
     props.$type === 'speech' ? colorGrayscale.gray800 : colorGrayscale.gray500};
@@ -184,7 +184,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
         {showTypeBadge ? (
           <TypeBadge
             text={type === 'speech' ? '發言' : '議案'}
-            weight={P4.Weight.BOLD}
+            weight={P2.Weight.BOLD}
             $type={type}
           />
         ) : (

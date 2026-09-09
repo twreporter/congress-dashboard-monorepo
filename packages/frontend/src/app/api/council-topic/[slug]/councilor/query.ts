@@ -24,6 +24,7 @@ type CouncilorFromRes = {
 type FetchTopNCouncilorOfATopicParams = {
   topicSlug: string
   city: string
+  councilMeetingId?: number
   excludeCouncilorSlug?: string
   top?: number
 }
@@ -31,6 +32,7 @@ type FetchTopNCouncilorOfATopicParams = {
 const fetchTopNCouncilorOfATopic = async ({
   topicSlug,
   city,
+  councilMeetingId,
   excludeCouncilorSlug,
   top,
 }: FetchTopNCouncilorOfATopicParams): Promise<CouncilorWithWorkCounts[]> => {
@@ -58,6 +60,9 @@ const fetchTopNCouncilorOfATopic = async ({
       city: {
         equals: city,
       },
+      ...(councilMeetingId
+        ? { councilMeeting: { id: { equals: councilMeetingId } } }
+        : {}),
     },
     speechCountWhere: {
       topic: {
@@ -74,6 +79,9 @@ const fetchTopNCouncilorOfATopic = async ({
           },
         },
       },
+      ...(councilMeetingId
+        ? { councilMeeting: { id: { equals: councilMeetingId } } }
+        : {}),
     },
     billCountWhere: {
       topic: {
@@ -90,6 +98,9 @@ const fetchTopNCouncilorOfATopic = async ({
           },
         },
       },
+      ...(councilMeetingId
+        ? { councilMeeting: { id: { equals: councilMeetingId } } }
+        : {}),
     },
   }
   if (excludeCouncilorSlug) {

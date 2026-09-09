@@ -1,5 +1,4 @@
 // types
-import type { BillMetaWithCouncilorFromRes } from '@/types/council-bill'
 import type { RelatedType } from '@/types/related-twreporter-item'
 import type { CouncilDistrict } from '@/types/council'
 import type { PartyData } from '@/types/party'
@@ -29,6 +28,7 @@ export type CouncilTopic = {
   title: string
   city: CouncilDistrict
   billCount: number
+  speechCount: number
   relatedTwreporterArticle?: {
     slug: string
     type: RelatedType
@@ -43,7 +43,7 @@ export type CouncilTopicFromRes = {
   title: string
   city: string
   billCount: number
-  bill: BillMetaWithCouncilorFromRes[]
+  speechCount: number
   relatedTwreporterArticle?: {
     slug: string
     type: string

@@ -7,6 +7,7 @@ import {
   colorGrayscale,
   colorOpacity,
 } from '@twreporter/core/lib/constants/color'
+import mq from '@twreporter/core/lib/utils/media-query'
 import type { WorkFilter } from '@/utils/council-work'
 
 const workFilterOptions: [WorkFilter, string][] = [
@@ -23,9 +24,14 @@ const Container = styled.div`
   border-radius: 50px;
   background: ${colorGrayscale.white};
   box-shadow: 0 0 12px ${colorOpacity['black_0.1']};
+
+  ${mq.mobileOnly`
+    width: max-content;
+  `}
 `
 
 const Item = styled.button<{ $selected: boolean }>`
+  flex-shrink: 0;
   appearance: none;
   border: 0;
   border-radius: 40px;

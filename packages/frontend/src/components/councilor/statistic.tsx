@@ -54,8 +54,8 @@ const CouncilorStatistics: React.FC<CouncilorStatisticsProps> = ({
         </CountInfo>
         <CountInfo>
           <CountInfoTitle>
-            <P1Gray800 text="提案數" />
-            <Tooltip tooltip="僅統計本屆期的提案數" />
+            <P1Gray800 text="議案通過數" />
+            <Tooltip tooltip="僅統計本屆期的議案通過數" />
           </CountInfoTitle>
           <CountInfoValue $isOverMaxNumber={isOverMaxCount}>
             {proposalSuccessCount > 999 ? '999+' : proposalSuccessCount}

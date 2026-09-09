@@ -36,8 +36,9 @@ import {
   BadgeText,
 } from '@/components/legislator/legislator-info'
 
-const AlignCenter = styled.div`
+const TooltipContainer = styled.div`
   align-self: center;
+  margin-left: -8px;
 `
 
 type CouncilorInfoProps = {
@@ -117,11 +118,11 @@ const CouncilorInfo: React.FC<CouncilorInfoProps> = ({ councilor }) => {
             </ItemTitle>
             <P1Gray800 weight={P1.Weight.BOLD} text={constituency} />
             {administrativeDistrictString ? (
-              <AlignCenter>
+              <TooltipContainer>
                 <Tooltip
                   tooltip={`選區涵蓋之行政區：${administrativeDistrictString}`}
                 />
-              </AlignCenter>
+              </TooltipContainer>
             ) : null}
           </InfoItem>
           <InfoItem>
