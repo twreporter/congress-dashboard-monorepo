@@ -97,6 +97,7 @@ export type AlgoliaInstantSearchProps = {
   variant?: LayoutVariant
   autoFocus?: boolean
   query?: string
+  onModalClose?: () => void
 }
 
 export const AlgoliaInstantSearch = ({
@@ -104,6 +105,7 @@ export const AlgoliaInstantSearch = ({
   variant = layoutVariants.Default,
   autoFocus = false,
   query = '',
+  onModalClose,
 }: AlgoliaInstantSearchProps) => {
   const containerRef = useRef(null)
   const [focused, setFocused] = useState(autoFocus)
@@ -127,6 +129,7 @@ export const AlgoliaInstantSearch = ({
           onClose={() => {
             setFocused(false)
             setIsModalOpen(false)
+            onModalClose?.()
           }}
         />
       </InstantSearch>
