@@ -9,7 +9,7 @@ export const MEMBER_ACCOUNT_LINKS = [
   {
     label: '電子報管理',
     href: `${ExternalRoutes.TwReporter}/account/email-subscription`,
-    icon: 'letter',
+    icon: 'email',
   },
   {
     label: '專屬回饋',

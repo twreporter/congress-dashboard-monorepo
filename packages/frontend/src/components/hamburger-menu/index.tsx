@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 // @twreporter
 import { MenuButton, PillButton } from '@twreporter/react-components/lib/button'
 import Divider from '@twreporter/react-components/lib/divider'
-import { P2 } from '@twreporter/react-components/lib/text/paragraph'
+import { P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import {
   AlgoliaInstantSearch,
@@ -90,10 +90,20 @@ const MemberIdentity = styled.div`
   padding: 8px 0 16px;
 `
 
-const MemberEmail = styled.p`
+const MemberEmail = styled(P3)`
   overflow: hidden;
   color: ${colorGrayscale.gray600};
-  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+const MemberText = styled.div`
+  min-width: 0;
+`
+
+const MemberName = styled(P2)`
+  overflow: hidden;
+  color: ${colorGrayscale.gray800};
   text-overflow: ellipsis;
   white-space: nowrap;
 `
@@ -106,7 +116,7 @@ type HamburgerMenuProps = {
 }
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname()
-  const { email, status: authStatus, logout } = useAuth()
+  const { name, email, status: authStatus, logout } = useAuth()
   const [isDropdownActive, setIsDropdownActive] = useState(false)
   const handleDropdownClick = () => {
     setIsDropdownActive(!isDropdownActive)
@@ -122,13 +132,16 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
       </SearchSection>
       {authStatus === 'authenticated' ? (
         <>
-        <MemberIdentity>
-          <MemberAvatar email={email} size={40} />
-          {email && <MemberEmail>{email}</MemberEmail>}
-        </MemberIdentity>
-        <DividerContainer>
-          <Divider />
-        </DividerContainer>
+          <MemberIdentity>
+            <MemberAvatar name={name} email={email} size={40} />
+            <MemberText>
+              {name && <MemberName weight={P2.Weight.BOLD} text={name} />}
+              {email && <MemberEmail text={email} />}
+            </MemberText>
+          </MemberIdentity>
+          <DividerContainer>
+            <Divider />
+          </DividerContainer>
         </>
       ) : null}
       <MenuButton
@@ -169,9 +182,9 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
       <DividerContainer>
         <Divider />
       </DividerContainer>
-      {authStatus !== 'authenticated' ? (
+      {authStatus === 'authenticated' ? (
         <>
-          <MemberAccountLinks onNavigate={onClose} />
+          <MemberAccountLinks onNavigate={onClose} showIcon={true} />
           <DividerContainer>
             <Divider />
           </DividerContainer>

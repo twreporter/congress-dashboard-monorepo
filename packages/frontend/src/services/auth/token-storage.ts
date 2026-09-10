@@ -3,6 +3,9 @@ const AUTH_STORAGE_KEY = 'congress-dashboard-auth-token'
 export type StoredAccessToken = {
   accessToken: string
   expiresAt: number
+  userId?: string
+  email?: string
+  name?: string
 }
 
 export function readStoredAccessToken(): StoredAccessToken | null {
@@ -14,6 +17,9 @@ export function readStoredAccessToken(): StoredAccessToken | null {
     if (
       typeof parsed.accessToken !== 'string' ||
       typeof parsed.expiresAt !== 'number' ||
+      (parsed.userId !== undefined && typeof parsed.userId !== 'string') ||
+      (parsed.email !== undefined && typeof parsed.email !== 'string') ||
+      (parsed.name !== undefined && typeof parsed.name !== 'string') ||
       parsed.expiresAt <= Math.floor(Date.now() / 1000) + 60
     ) {
       sessionStorage.removeItem(AUTH_STORAGE_KEY)

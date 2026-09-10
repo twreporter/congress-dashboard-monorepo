@@ -24,6 +24,7 @@ type AccessTokenClaims = {
 
 type AuthContextValue = {
   accessToken?: string
+  name?: string
   email?: string
   userId?: string
   status: AuthStatus
@@ -44,19 +45,37 @@ function decodeClaims(accessToken: string): AccessTokenClaims {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [accessToken, setAccessToken] = useState<string>()
   const [claims, setClaims] = useState<AccessTokenClaims>()
+  const [name, setName] = useState<string>()
+  const [profileEmail, setProfileEmail] = useState<string>()
   const [status, setStatus] = useState<AuthStatus>('loading')
 
-  const setAuthenticated = useCallback((token: string) => {
-    const nextClaims = decodeClaims(token)
-    if (typeof nextClaims.exp !== 'number') {
-      throw new Error('Access token expiration is missing')
-    }
+  const setAuthenticated = useCallback(
+    (
+      token: string,
+      profile?: { userId?: string; email?: string; name?: string }
+    ) => {
+      const nextClaims = decodeClaims(token)
+      if (typeof nextClaims.exp !== 'number') {
+        throw new Error('Access token expiration is missing')
+      }
 
-    setAccessToken(token)
-    setClaims(nextClaims)
-    setStatus('authenticated')
-    writeStoredAccessToken({ accessToken: token, expiresAt: nextClaims.exp })
-  }, [])
+      const email = profile?.email ?? nextClaims.email
+      const name = profile?.name ?? email?.split('@')[0]
+      setAccessToken(token)
+      setClaims(nextClaims)
+      setName(name)
+      setProfileEmail(email)
+      setStatus('authenticated')
+      writeStoredAccessToken({
+        accessToken: token,
+        expiresAt: nextClaims.exp,
+        userId: profile?.userId,
+        email,
+        name,
+      })
+    },
+    []
+  )
 
   const exchangeToken = useCallback(async () => {
     try {
@@ -68,14 +87,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         clearStoredAccessToken()
         setAccessToken(undefined)
         setClaims(undefined)
+        setName(undefined)
+        setProfileEmail(undefined)
         setStatus('unauthenticated')
         return
       }
       if (!response.ok) throw new Error('Unable to exchange access token')
 
-      const payload = (await response.json()) as { accessToken?: string }
+      const payload = (await response.json()) as {
+        accessToken?: string
+        userId?: string
+        email?: string
+        name?: string
+      }
       if (!payload.accessToken) throw new Error('Access token is missing')
-      setAuthenticated(payload.accessToken)
+      setAuthenticated(payload.accessToken, payload)
     } catch {
       setStatus('error')
     }
@@ -85,7 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const stored = readStoredAccessToken()
     if (stored) {
       try {
-        setAuthenticated(stored.accessToken)
+        setAuthenticated(stored.accessToken, stored)
         return
       } catch {
         clearStoredAccessToken()
@@ -117,6 +143,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       clearStoredAccessToken()
       setAccessToken(undefined)
       setClaims(undefined)
+      setName(undefined)
+      setProfileEmail(undefined)
       setStatus('unauthenticated')
     }
   }, [])
@@ -125,9 +153,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         accessToken,
-        email: claims?.email,
+        name,
+        email: profileEmail ?? claims?.email,
         userId:
-          typeof claims?.user_id === 'number' ? String(claims.user_id) : undefined,
+          typeof claims?.user_id === 'number'
+            ? String(claims.user_id)
+            : undefined,
         status,
         logout,
       }}

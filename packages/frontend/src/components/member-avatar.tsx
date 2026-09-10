@@ -21,14 +21,17 @@ const Avatar = styled.span<{ $size: 36 | 40 }>`
 `
 
 type MemberAvatarProps = {
+  name?: string
   email?: string
   size?: 36 | 40
 }
 
-function MemberAvatar({ email, size = 36 }: MemberAvatarProps) {
+function MemberAvatar({ name, email, size = 36 }: MemberAvatarProps) {
+  const initial = (name || email)?.trim().slice(0, 1) || '?'
+
   return (
     <Avatar $size={size} aria-hidden>
-      {email?.trim().slice(0, 1) || '?'}
+      {initial}
     </Avatar>
   )
 }
