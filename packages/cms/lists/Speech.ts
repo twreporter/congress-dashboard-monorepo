@@ -1,5 +1,11 @@
-import { list } from '@keystone-6/core'
-import { text, relationship, calendarDay, json } from '@keystone-6/core/fields'
+import { list, graphql } from '@keystone-6/core'
+import {
+  text,
+  relationship,
+  calendarDay,
+  json,
+  virtual,
+} from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -10,6 +16,7 @@ import {
   hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
 import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
+import toPlainTextSummary from './utils/summary-parser'
 import { logger } from '../utils/logger'
 
 const listConfigurations = list({
@@ -52,6 +59,14 @@ const listConfigurations = list({
     summary: json({
       label: '摘要',
     }),
+    summaryFallback: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        resolve(item) {
+          return toPlainTextSummary('speech', item.summary)
+        },
+      }),
+    }),
     // TODO: change to editor
     content: json({
       label: '內文',
@@ -82,7 +97,7 @@ const listConfigurations = list({
     }),
   },
   ui: {
-    label: '逐字稿',
+    label: '立法院逐字稿',
     labelField: 'title',
     listView: {
       initialColumns: [

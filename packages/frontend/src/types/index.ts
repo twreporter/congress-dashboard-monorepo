@@ -18,3 +18,8 @@ export type SitemapItemWithCity = {
   city: CouncilDistrict
   updatedAt: string
 }
+
+export type RelatedLink = {
+  url: string
+  label: string
+}

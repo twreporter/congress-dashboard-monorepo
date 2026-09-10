@@ -15,6 +15,7 @@ export enum CouncilListName {
   councilTopicRelatedLegislativeTopic = 'CouncilTopicRelatedLegislativeTopic',
   councilTopicRelatedCouncilTopic = 'CouncilTopicRelatedCouncilTopic',
   councilTopicRelatedCityTopic = 'CouncilTopicRelatedCityTopic',
+  councilSpeech = 'CouncilSpeech',
 }
 
 export type ListConfig = {
@@ -22,6 +23,9 @@ export type ListConfig = {
   label: string
   expectedHeaders: string[]
   requiredFields: string[]
+  nonDuplicateFields: string[]
+  charLimitFields?: string[]
+  charLimitCustomValue?: Record<string, number> // prisma string type uses varchar(191), but could be change in text field config
   description?: string
 }
 
@@ -38,6 +42,7 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'meetingTermCountInfo',
     ],
     requiredFields: ['name', 'slug'],
+    nonDuplicateFields: ['slug'],
     description: '匯入縣市議員基本資料',
   },
   [CouncilListName.councilMember]: {
@@ -54,8 +59,8 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'administrativeDistrict',
       'tooltip',
       'note',
-      'proposalSuccessCount',
       'relatedLink',
+      'legislator_slug',
     ],
     requiredFields: [
       'councilor_slug',
@@ -64,6 +69,7 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'city',
       'type',
     ],
+    nonDuplicateFields: ['councilor_slug'],
     description: '匯入議員在各屆議會的資料',
   },
   [CouncilListName.councilBill]: {
@@ -73,7 +79,6 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'slug',
       'councilMeeting_city',
       'councilMeeting_term',
-      'councilor_name',
       'councilor_slug',
       'date',
       'title',
@@ -90,6 +95,9 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'date',
       'title',
     ],
+    nonDuplicateFields: ['slug'],
+    charLimitFields: ['title', 'attendee'],
+    charLimitCustomValue: { attendee: 500 },
     description: '匯入議案資料',
   },
   [CouncilListName.councilTopic]: {
@@ -104,7 +112,36 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'relatedCouncilBill',
     ],
     requiredFields: ['title', 'slug', 'city', 'type'],
+    nonDuplicateFields: ['slug'],
     description: '匯入縣市議題資料',
+  },
+  [CouncilListName.councilSpeech]: {
+    value: CouncilListName.councilSpeech,
+    label: '縣市逐字稿',
+    expectedHeaders: [
+      'slug',
+      'councilMeeting_city',
+      'councilMeeting_term',
+      'councilors',
+      'date',
+      'title',
+      'summary',
+      'content',
+      'attendee',
+      'source',
+      'relatedCouncilTopic_slug',
+    ],
+    requiredFields: [
+      'slug',
+      'councilMeeting_city',
+      'councilMeeting_term',
+      'councilors',
+      'date',
+      'title',
+      'content',
+    ],
+    nonDuplicateFields: ['slug'],
+    description: '匯入縣市逐字稿',
   },
   [CouncilListName.councilTopicRelatedLegislativeTopic]: {
     value: CouncilListName.councilTopicRelatedLegislativeTopic,
@@ -115,6 +152,7 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'legislativeTopic_slug',
     ],
     requiredFields: ['councilTopic_slug', 'legislativeTopic_slug'],
+    nonDuplicateFields: ['councilTopic_slug', 'legislativeTopic_slug'],
   },
   [CouncilListName.councilTopicRelatedCouncilTopic]: {
     value: CouncilListName.councilTopicRelatedCouncilTopic,
@@ -125,6 +163,7 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'relatedCouncilTopic_slug',
     ],
     requiredFields: ['councilTopic_slug', 'relatedCouncilTopic_slug'],
+    nonDuplicateFields: ['councilTopic_slug', 'relatedCouncilTopic_slug'],
   },
   [CouncilListName.councilTopicRelatedCityTopic]: {
     value: CouncilListName.councilTopicRelatedCityTopic,
@@ -135,6 +174,7 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'relatedCityCouncilTopic_slug',
     ],
     requiredFields: ['councilTopic_slug', 'relatedCityCouncilTopic_slug'],
+    nonDuplicateFields: ['councilTopic_slug', 'relatedCityCouncilTopic_slug'],
   },
 }
 
@@ -360,6 +400,9 @@ export const jsonUploader = <ListTypeInfo extends BaseListTypeInfo>(
                 label: listConfig.label,
                 expectedHeaders: listConfig.expectedHeaders,
                 requiredFields: listConfig.requiredFields,
+                nonDuplicateFields: listConfig.nonDuplicateFields,
+                charLimitFields: listConfig.charLimitFields || [],
+                charLimitCustomValue: listConfig.charLimitCustomValue || {},
                 description: listConfig.description || '',
                 isRequired: !!config.validation?.isRequired,
               },

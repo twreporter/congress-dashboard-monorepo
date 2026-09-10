@@ -6,6 +6,7 @@ import { InternalRoutes } from '@/constants/routes'
 import { Highlight, Snippet } from 'react-instantsearch'
 import { Issue as IconIssue } from '@/components/search/icons'
 import { layoutVariants } from '@/components/search/constants'
+import { buildMeetingTermParam } from '@/components/search/result-page/utils'
 import {
   colorGrayscale,
   colorSupportive,
@@ -33,6 +34,31 @@ export type TopicRawHit = Hit<{
   relatedMessageCount: number
 }>
 
+export type CouncilorRawHit = Hit<{
+  objectID: string
+  slug: string
+  name: string
+  desc: string
+  imgSrc: string
+  meetingTerm?: number
+  council: string
+  councilSlug: string
+  lastSpeechAt?: string
+  partyImgSrc: string
+}>
+
+export type CouncilTopicRawHit = Hit<{
+  objectID: string
+  name: string
+  slug: string
+  desc: string
+  meetingTerm?: number
+  council: string
+  councilSlug: string
+  billCount: number
+  lastSpeechAt?: string
+}>
+
 const Circle = styled.div`
   width: 48px;
   height: 48px;
@@ -47,6 +73,22 @@ const TopicCircle = styled(Circle)`
   align-items: center;
 
   overflow: hidden;
+`
+
+const TopicTag = styled.div`
+  border: 0.5px solid ${colorGrayscale.gray800};
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1;
+  padding: 3px 3px 3px 3px;
+  color: ${colorGrayscale.gray800};
+`
+
+const TopicTitleAndTag = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
 `
 
 const Avatar = styled(Circle)<{ $imgSrc: string }>`
@@ -182,13 +224,76 @@ export function InstantTopicHit({
           <IconIssue />
         </TopicCircle>
         <Text>
-          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <TopicTitleAndTag>
+            <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+            <TopicTag>立法院</TopicTag>
+          </TopicTitleAndTag>
           <p>
             {variant === layoutVariants.Default ? (
               <span>共{hit.relatedMessageCount}筆發言：</span>
             ) : (
               <span>發言：</span>
             )}
+            <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
+          </p>
+        </Text>
+      </InstantHitContainer>
+    </a>
+  )
+}
+
+export function InstantCouncilorHit({
+  hit,
+  variant,
+}: {
+  hit: CouncilorRawHit
+  variant: LayoutVariant
+}) {
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
+  return (
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.Councilor(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <Avatar $imgSrc={hit.imgSrc}>
+          <Party $imgSrc={hit.partyImgSrc} />
+        </Avatar>
+        <Text>
+          <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+          <p>{hit.desc}</p>
+        </Text>
+      </InstantHitContainer>
+    </a>
+  )
+}
+
+export function InstantCouncilTopicHit({
+  hit,
+  variant,
+}: {
+  hit: CouncilTopicRawHit
+  variant: LayoutVariant
+}) {
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
+  return (
+    <a // use <a> to force full reload
+      href={`${InternalRoutes.CouncilTopic(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
+    >
+      <InstantHitContainer $variant={variant}>
+        <TopicCircle>
+          <IconIssue />
+        </TopicCircle>
+        <Text>
+          <TopicTitleAndTag>
+            <Highlight highlightedTagName="span" attribute="name" hit={hit} />
+            <TopicTag>{hit.council}</TopicTag>
+          </TopicTitleAndTag>
+          <p>
+            <span>共{hit.billCount}筆相關議案：</span>
             <Snippet highlightedTagName="span" attribute="desc" hit={hit} />
           </p>
         </Text>

@@ -65,9 +65,21 @@ export const MultipleSelect = React.memo(function MultipleSelect({
   const searchInputRef = useRef<HTMLInputElement>(null)
   const selectBoxContentRef = useRef<HTMLDivElement>(null)
   const tagRefs = useRef<Map<string, HTMLDivElement>>(new Map())
-  const selectContainerRef = useOutsideClick(() => {
-    setOpen(false)
-  })
+  const selectContainerRef = useRef<HTMLDivElement>(null)
+  const outsideClickRef = useOutsideClick<HTMLDivElement>(
+    useCallback(() => {
+      setOpen(false)
+    }, [])
+  )
+
+  // Combine refs for selectContainerRef and outsideClickRef
+  const setSelectContainerRefs = useCallback(
+    (element: HTMLDivElement | null) => {
+      selectContainerRef.current = element
+      outsideClickRef(element)
+    },
+    [outsideClickRef]
+  )
 
   // Get all available options (flattened if grouped)
   const getAllOptions = useMemo((): Option[] => {
@@ -332,7 +344,7 @@ export const MultipleSelect = React.memo(function MultipleSelect({
   )
 
   return (
-    <SelectContainer ref={selectContainerRef}>
+    <SelectContainer ref={setSelectContainerRefs}>
       <SelectBox
         onClick={handleToggle}
         onFocus={() => setFocused(true)}

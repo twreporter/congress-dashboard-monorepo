@@ -1,10 +1,14 @@
 import { config } from '@keystone-6/core'
 import express from 'express'
+import { mkdirSync } from 'fs'
 import Path from 'path'
 import envVars from './environment-variables'
 import { listDefinition as lists } from './lists'
 import { withAuth, session } from './auth'
 import extendGraphqlSchema from './extend-graphql-schemas/index'
+
+mkdirSync(envVars.files.storagePath, { recursive: true })
+mkdirSync(envVars.images.storagePath, { recursive: true })
 
 export default withAuth(
   config({
@@ -14,6 +18,11 @@ export default withAuth(
       idField: {
         kind: 'autoincrement',
       },
+      extendPrismaSchema: (schema) =>
+        schema.replace(
+          'provider = "prisma-client-js"',
+          'provider = "prisma-client-js"\n  binaryTargets = ["native", "debian-openssl-3.0.x"]'
+        ),
     },
     ui: {
       // For our starter, we check that someone has session data before letting them see the Admin UI.

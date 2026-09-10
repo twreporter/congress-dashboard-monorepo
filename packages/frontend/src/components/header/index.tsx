@@ -283,7 +283,10 @@ const Header: React.FC = () => {
           </MobileOnly>
         </HeaderSection>
       </Container>
-      <HamburgerMenu isOpen={isHamburgerOpen} />
+      <HamburgerMenu
+        isOpen={isHamburgerOpen}
+        onClose={() => setIsHamburgerOpen(false)}
+      />
     </React.Fragment>
   )
 }

@@ -135,10 +135,10 @@ const TopicList: React.FC<TopicListProps> = ({
       return []
 
     return speechesByLegislator[selectedLegislator.slug].map(
-      ({ title, date, summary, slug }) => ({
+      ({ title, date, summaryFallback, slug }) => ({
         title,
         date: new Date(date),
-        summary,
+        summary: summaryFallback || '',
         slug,
       })
     )

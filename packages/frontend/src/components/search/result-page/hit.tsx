@@ -5,19 +5,20 @@ import React from 'react'
 import mq from '@twreporter/core/lib/utils/media-query'
 import styled from 'styled-components'
 import type { Hit } from 'instantsearch.js'
-import type { HitAttributeSnippetResult } from 'instantsearch.js'
-import useWindowWidth from '@/hooks/use-window-width'
 import { InternalRoutes } from '@/constants/routes'
-import { Highlight, Snippet, useSearchBox } from 'react-instantsearch'
+import { Highlight, Snippet } from 'react-instantsearch'
 import {
   colorOpacity,
   colorGrayscale,
   colorSupportive,
 } from '@twreporter/core/lib/constants/color'
-import { generateSnippetForDevices } from '@/components/search/result-page/utils'
+import { buildMeetingTermParam } from '@/components/search/result-page/utils'
+import { useCustomSnippet } from '@/components/search/result-page/hooks'
 import type {
   LegislatorRawHit,
   TopicRawHit,
+  CouncilorRawHit,
+  CouncilTopicRawHit,
 } from '@/components/search/instant-hit'
 
 export type SpeechRawHit = Hit<{
@@ -29,6 +30,18 @@ export type SpeechRawHit = Hit<{
   sessionTerm: number
   date: string
   legislatorName: string
+}>
+
+export type CouncilBillRawHit = Hit<{
+  objectID: string
+  slug: string
+  title: string
+  summary?: string
+  date: string
+  districtSlug: string
+  council: string
+  councilor: string
+  councilorCount: number
 }>
 
 /**
@@ -100,9 +113,10 @@ const LegislatorDesc = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  height: 48px;
 `
+
+const CouncilorDesc = LegislatorDesc
+
 const Text = styled.div`
   p {
     color: ${colorGrayscale.gray800};
@@ -114,13 +128,13 @@ const Text = styled.div`
     margin: 0 0 8px 0;
   }
 
-  p:first-child {
+  p.meta {
     font-size: 14px;
     font-weight: 700;
     color: ${colorGrayscale.gray900};
   }
 
-  p:last-child {
+  p.footnote {
     font-size: 14px;
     margin: 0;
   }
@@ -171,14 +185,24 @@ const Container = styled.div`
   `}
 `
 
+/**
+ * Renders a search result hit for a legislator (立委)
+ *
+ * Displays:
+ * - Legislator name with highlighting
+ * - Description
+ * - Latest speech date (if available)
+ * - Avatar with party logo
+ *
+ * Links to legislator detail page with meeting term filter
+ */
 export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
   return (
-    <Link
-      href={`${InternalRoutes.Legislator}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
-    >
+    <Link href={`${InternalRoutes.Legislator}/${hit.slug}${meetingTermParam}`}>
       <Container>
         <Text>
-          <p>立委</p>
+          <p className="meta">立委</p>
           <p>
             <Highlight
               classNames={{
@@ -190,7 +214,9 @@ export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
             />
           </p>
           <LegislatorDesc>{hit.desc}</LegislatorDesc>
-          <p>最新一筆發言於{hit.lastSpeechAt}</p>
+          {hit.lastSpeechAt && (
+            <p className="footnote">最新一筆發言於 {hit.lastSpeechAt}</p>
+          )}
         </Text>
         <AvatarBorder>
           <Avatar $imgSrc={hit.imgSrc}>
@@ -202,37 +228,73 @@ export function LegislatorHit({ hit }: { hit: LegislatorRawHit }) {
   )
 }
 
-export function TopicHit({ hit }: { hit: TopicRawHit }) {
-  const { query } = useSearchBox()
-  const windowWidth = useWindowWidth()
-  const matchedTextArr = query.split(' ')
-  const snippet = generateSnippetForDevices(
-    hit.desc,
-    matchedTextArr,
-    windowWidth
-  )
-
-  const customizedHit = {
-    ...hit,
-    // Algolia allows only one global snippet length setting via attributesToSnippet.
-    // However, our UI requires different truncation lengths for different viewports.
-    // Therefore, we manually override _snippetResult.desc.value to use a custom snippet.
-    _snippetResult: {
-      ...(hit._snippetResult ?? {}),
-      desc: {
-        value: snippet,
-        matchLevel: (hit._snippetResult?.desc as HitAttributeSnippetResult)
-          ?.matchLevel,
-      } as HitAttributeSnippetResult,
-    },
-  }
+/**
+ * Renders a search result hit for a councilor (議員)
+ *
+ * Displays:
+ * - Councilor name with highlighting
+ * - Council affiliation
+ * - Description
+ * - Latest speech date (if available)
+ * - Avatar with party logo
+ *
+ * Links to councilor detail page with optional meeting term filter
+ */
+export function CouncilorHit({ hit }: { hit: CouncilorRawHit }) {
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
   return (
     <Link
-      href={`${InternalRoutes.Topic}/${hit.slug}?meetingTerm=${hit.meetingTerm}`}
+      href={`${InternalRoutes.Councilor(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
     >
       <Container>
         <Text>
-          <p>議題</p>
+          <p className="meta">議員｜{hit.council}</p>
+          <p>
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="name"
+              hit={hit}
+            />
+          </p>
+          <CouncilorDesc>{hit.desc}</CouncilorDesc>
+          {hit.lastSpeechAt && (
+            <p className="footnote">最新一筆發言於 {hit.lastSpeechAt}</p>
+          )}
+        </Text>
+        <AvatarBorder>
+          <Avatar $imgSrc={hit.imgSrc}>
+            <Party $imgSrc={hit.partyImgSrc} />
+          </Avatar>
+        </AvatarBorder>
+      </Container>
+    </Link>
+  )
+}
+
+/**
+ * Renders a search result hit for a topic (議題)
+ *
+ * Displays:
+ * - Topic name with highlighting
+ * - Related message count and description snippet
+ * - Latest speech date (if available)
+ *
+ * Links to topic detail page with meeting term filter
+ */
+export function TopicHit({ hit }: { hit: TopicRawHit }) {
+  const customizedHit = useCustomSnippet(hit)
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
+
+  return (
+    <Link href={`${InternalRoutes.Topic}/${hit.slug}${meetingTermParam}`}>
+      <Container>
+        <Text>
+          <p className="meta">議題｜立法院</p>
           <p>
             <Highlight
               classNames={{
@@ -251,37 +313,79 @@ export function TopicHit({ hit }: { hit: TopicRawHit }) {
               hit={customizedHit}
             />
           </p>
-          <p>最新一筆發言於{hit.lastSpeechAt}</p>
+          {hit.lastSpeechAt && (
+            <p className="footnote">最新一筆發言於 {hit.lastSpeechAt}</p>
+          )}
         </Text>
       </Container>
     </Link>
   )
 }
 
-export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
-  const { query } = useSearchBox()
-  const windowWidth = useWindowWidth()
-  const matchedTextArr = query.split(' ')
-  const snippet = generateSnippetForDevices(
-    hit.summary,
-    matchedTextArr,
-    windowWidth
-  )
+/**
+ * Renders a search result hit for a council topic (議題)
+ *
+ * Displays:
+ * - Topic name with highlighting
+ * - Council affiliation
+ * - Bill count and description snippet
+ * - Latest speech date (if available)
+ *
+ * Links to council topic page with optional meeting term filter
+ */
+export function CouncilTopicHit({ hit }: { hit: CouncilTopicRawHit }) {
+  const customizedHit = useCustomSnippet(hit)
+  const meetingTermParam = buildMeetingTermParam(hit.meetingTerm)
 
-  const customizedHit = {
-    ...hit,
-    // Algolia allows only one global snippet length setting via attributesToSnippet.
-    // However, our UI requires different truncation lengths for different viewports.
-    // Therefore, we manually override _snippetResult.summary.value to use a custom snippet.
-    _snippetResult: {
-      ...(hit._snippetResult ?? {}),
-      summary: {
-        value: snippet,
-        matchLevel: (hit._snippetResult?.summary as HitAttributeSnippetResult)
-          ?.matchLevel,
-      } as HitAttributeSnippetResult,
-    },
-  }
+  return (
+    <Link
+      href={`${InternalRoutes.CouncilTopic(hit.councilSlug)}/${
+        hit.slug
+      }${meetingTermParam}`}
+    >
+      <Container>
+        <Text>
+          <p className="meta">議題｜{hit.council}</p>
+          <p>
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="name"
+              hit={hit}
+            />
+          </p>
+          <p>
+            <span>共{hit.billCount}筆相關議案：</span>
+            <Snippet
+              highlightedTagName="span"
+              attribute="desc"
+              hit={customizedHit}
+            />
+          </p>
+          {hit.lastSpeechAt && (
+            <p className="footnote">最新一筆發言於 {hit.lastSpeechAt}</p>
+          )}
+        </Text>
+      </Container>
+    </Link>
+  )
+}
+
+/**
+ * Renders a search result hit for a speech (發言全文)
+ *
+ * Displays:
+ * - Speech title with highlighting
+ * - Summary snippet
+ * - Legislator name
+ * - Meeting date
+ *
+ * Links to speech detail page with meeting term and session term filters
+ */
+export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
+  const customizedHit = useCustomSnippet(hit, 'summary')
 
   return (
     <Link
@@ -289,7 +393,7 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
     >
       <Container>
         <Text>
-          <p>發言全文</p>
+          <p className="meta">發言全文｜立法院</p>
           <p>
             <Highlight
               classNames={{
@@ -307,14 +411,68 @@ export function SpeechHit({ hit }: { hit: SpeechRawHit }) {
               hit={customizedHit}
             />
           </p>
-          <p>
+          <p className="footnote">
             質詢立委／
             <Highlight
               highlightedTagName="span"
               attribute="legislatorName"
               hit={hit}
             />
-            ．發言於 {hit.date}
+            ．發言於 {hit.date?.replaceAll('-', '/')}
+          </p>
+        </Text>
+      </Container>
+    </Link>
+  )
+}
+
+/**
+ * Renders a search result hit for a council bill (議案)
+ *
+ * Displays:
+ * - Bill title with highlighting
+ * - Council affiliation
+ * - Summary snippet (if available)
+ * - Councilor proposer and co-proposer count
+ * - Decision date
+ *
+ * Links to council bill detail page
+ */
+export function CouncilBillHit({ hit }: { hit: CouncilBillRawHit }) {
+  const customizedHit = useCustomSnippet(hit, 'summary')
+
+  return (
+    <Link href={`${InternalRoutes.Bill}/${hit.slug}`}>
+      <Container>
+        <Text>
+          <p className="meta">議案｜{hit.council}</p>
+          <p>
+            <Highlight
+              classNames={{
+                root: 'title',
+              }}
+              highlightedTagName="span"
+              attribute="title"
+              hit={hit}
+            />
+          </p>
+          {hit.summary && (
+            <p>
+              <Snippet
+                highlightedTagName="span"
+                attribute="summary"
+                hit={customizedHit}
+              />
+            </p>
+          )}
+          <p className="footnote">
+            提案人／
+            <Highlight
+              highlightedTagName="span"
+              attribute="councilor"
+              hit={hit}
+            />
+            等 {hit.councilorCount} 人．決議日期於 {hit.date}
           </p>
         </Text>
       </Container>

@@ -30,6 +30,7 @@ export const fetchBillBySlug = async ({
             slug
             name
           }
+          city
         }
         topic {
           slug

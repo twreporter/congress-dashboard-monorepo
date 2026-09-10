@@ -15,6 +15,11 @@ import {
   CITY_OPTIONS,
   CITY_LABEL,
 } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+import {
+  COUNCIL_TOPIC_TYPE_OPTIONS,
+  COUNCIL_TOPIC_TYPE,
+} from '@twreporter/congress-dashboard-shared/lib/constants/council-topic'
+import { scrollableRelationship } from './fields/scrollable-relationship'
 
 const listConfigurations = list({
   fields: {
@@ -24,12 +29,20 @@ const listConfigurations = list({
       isIndexed: true,
     }),
     slug: SLUG,
-    bill: relationship({
+    speech: scrollableRelationship({
+      ref: 'CouncilSpeech.topic',
+      label: '縣市逐字稿',
+      many: true,
+      ui: {
+        labelField: 'slug',
+      },
+    }),
+    bill: scrollableRelationship({
       ref: 'CouncilBill.topic',
       label: '縣市議案',
       many: true,
       ui: {
-        labelField: 'title',
+        labelField: 'slug',
       },
     }),
     city: select({
@@ -39,15 +52,12 @@ const listConfigurations = list({
     }),
     type: select({
       label: '議題類型',
-      options: [
-        { label: '基本', value: 'general' },
-        { label: '精選', value: 'twreporter' },
-      ],
-      defaultValue: 'general',
+      options: COUNCIL_TOPIC_TYPE_OPTIONS,
+      defaultValue: COUNCIL_TOPIC_TYPE.general,
       validation: { isRequired: true },
     }),
     relatedLegislativeTopic: relationship({
-      ref: 'Topic',
+      ref: 'Topic.relatedCouncilTopic',
       label: '立法院相關議題',
       many: true,
       ui: {
@@ -121,7 +131,7 @@ const listConfigurations = list({
     label: '縣市議題',
     labelField: 'title',
     listView: {
-      initialColumns: ['title', 'slug', 'city'],
+      initialColumns: ['title', 'slug', 'city', 'type'],
       initialSort: { field: 'createdAt', direction: 'DESC' },
       pageSize: 50,
     },

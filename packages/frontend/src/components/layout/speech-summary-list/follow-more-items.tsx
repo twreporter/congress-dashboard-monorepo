@@ -11,7 +11,8 @@ type FollowMoreItemsProps = {
 }
 const FollowMoreItems = React.memo<FollowMoreItemsProps>(
   ({ title, children }) => {
-    if (!children) {
+    const hasChildren = React.Children.toArray(children).length > 0
+    if (!hasChildren) {
       return null
     }
     return (

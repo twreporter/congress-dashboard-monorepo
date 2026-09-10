@@ -48,6 +48,7 @@ export type LegislatorProps = {
   avatar?: string
   partyAvatar?: string
   count?: number
+  showCount?: boolean
   slug: string
 }
 export const Legislator: React.FC<LegislatorProps> = ({
@@ -55,6 +56,7 @@ export const Legislator: React.FC<LegislatorProps> = ({
   avatar,
   partyAvatar,
   count,
+  showCount = true,
   slug,
 }: LegislatorProps) => {
   return (
@@ -73,7 +75,7 @@ export const Legislator: React.FC<LegislatorProps> = ({
         {partyAvatar ? <Party avatar={partyAvatar} /> : null}
       </AvatarContainer>
       <Text text={name} />
-      <Text text={`(${count})`} />
+      {showCount ? <Text text={`(${count ?? 0})`} /> : null}
     </LegislatorItem>
   )
 }
@@ -107,15 +109,17 @@ const TagItem = styled.div`
 export type IssueProps = {
   name?: string
   count?: number
+  showCount?: boolean
   slug: string
 }
 export const Issue: React.FC<IssueProps> = ({
   name = '',
   count,
+  showCount = true,
 }: IssueProps) => {
   return (
     <TagItem>
-      <TagName>{count ? `${name}(${count})` : name}</TagName>
+      <TagName>{showCount && count ? `${name}(${count})` : name}</TagName>
     </TagItem>
   )
 }

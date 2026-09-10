@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import styled from 'styled-components'
-// @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
 // components
 import { P1Gray800 } from '@/components/legislator/styles'
@@ -9,54 +8,54 @@ import Tooltip from '@/components/dashboard/card/tooltip'
 // styles
 import {
   StatisticContainer,
-  Separator,
   CountInfoContainer,
   CountInfo,
   CountInfoTitle,
   CountInfoValue,
 } from '@/components/legislator/legislator-statistics'
 
-const AdministrativeDistrict = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  ${mq.hdOnly`
-    width: 266px;
-  `}
-  ${mq.desktopAndBelow`
-    flex: 50%;
+const CouncilorCountInfoContainer = styled(CountInfoContainer)`
+  flex: 1;
+  justify-content: space-between;
+
+  ${CountInfo} {
+    flex: 1;
+  }
+
+  ${mq.mobileOnly`
+    gap: 12px;
   `}
 `
 
 type CouncilorStatisticsProps = {
-  administrativeDistrict: string[]
+  speechCount: number
   proposalSuccessCount: number
   meetingTermCount: number
   meetingTermCountInfo: string
 }
 const CouncilorStatistics: React.FC<CouncilorStatisticsProps> = ({
-  administrativeDistrict,
+  speechCount,
   proposalSuccessCount,
   meetingTermCount,
   meetingTermCountInfo,
 }) => {
-  const administrativeDistrictString = administrativeDistrict.join('、')
-  const isOverMaxCount = proposalSuccessCount > 999 || meetingTermCount > 999
+  const isOverMaxCount =
+    speechCount > 999 || proposalSuccessCount > 999 || meetingTermCount > 999
   return (
     <StatisticContainer>
-      <AdministrativeDistrict>
-        <P1Gray800 text="選區涵蓋之行政區" />
-        <P1Gray800
-          text={administrativeDistrictString}
-          weight={P1Gray800.Weight.BOLD}
-        />
-      </AdministrativeDistrict>
-      <Separator />
-      <CountInfoContainer>
+      <CouncilorCountInfoContainer>
         <CountInfo>
           <CountInfoTitle>
-            <P1Gray800 text="提案通過數" />
-            <Tooltip tooltip="僅統計本屆期的提案通過數" />
+            <P1Gray800 text="發言數" />
+          </CountInfoTitle>
+          <CountInfoValue $isOverMaxNumber={isOverMaxCount}>
+            {speechCount > 999 ? '999+' : speechCount}
+          </CountInfoValue>
+        </CountInfo>
+        <CountInfo>
+          <CountInfoTitle>
+            <P1Gray800 text="提案數" />
+            <Tooltip tooltip="僅統計本屆期的提案數" />
           </CountInfoTitle>
           <CountInfoValue $isOverMaxNumber={isOverMaxCount}>
             {proposalSuccessCount > 999 ? '999+' : proposalSuccessCount}
@@ -73,7 +72,7 @@ const CouncilorStatistics: React.FC<CouncilorStatisticsProps> = ({
             {meetingTermCount > 999 ? '999+' : meetingTermCount}
           </CountInfoValue>
         </CountInfo>
-      </CountInfoContainer>
+      </CouncilorCountInfoContainer>
     </StatisticContainer>
   )
 }

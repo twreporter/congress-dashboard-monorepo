@@ -4,9 +4,12 @@ import styled from 'styled-components'
 // utils
 import { markdownParser } from '@/utils/string-parser'
 // constants
-import { FontSize, FontSizeOffset } from '@/components/speech'
+import {
+  FontSize,
+  FontSizeOffset,
+} from '@/components/general-article/constants'
 // style
-import { Container } from '@/components/speech/speech-content'
+import { Container } from '@/components/general-article/content'
 
 const MarkdownContainer = styled(Container)`
   flex-direction: column;

@@ -1,6 +1,6 @@
-import type { KeystoneImage } from '@/types/index'
+import type { KeystoneImage, RelatedLink } from '@/types/index'
 import type { CouncilDistrict } from '@/types/council'
-import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
+import type { MemberType } from '@twreporter/congress-dashboard-shared/lib/constants/council-member'
 
 export type CouncilorMemberMeta = {
   councilor: {
@@ -8,20 +8,16 @@ export type CouncilorMemberMeta = {
   }
 }
 
-export type RelatedLink = {
-  url: string
-  label: string
-}
-
 export type CouncilorType = MemberType
 
 export type CouncilorMemberData = {
-  type?: string
+  type: CouncilorType
   constituency?: number
   administrativeDistrict?: string[]
   note?: string
   tooltip?: string
   proposalSuccessCount?: number
+  speechCount: number
   relatedLink?: RelatedLink[]
   isActive: boolean
   councilor: {
@@ -38,6 +34,7 @@ export type CouncilorMemberData = {
     imageLink?: string
   }
   councilMeeting: {
+    id: number
     term: number
     city: string
   }
@@ -48,12 +45,13 @@ export type CouncilorForLawmaker = {
   name: string
   avatar: string
   city: CouncilDistrict
-  type?: string
+  type: CouncilorType
   constituency?: number
   administrativeDistrict: string[]
   note?: string
   tooltip?: string
   proposalSuccessCount: number
+  speechCount: number
   relatedLink: RelatedLink[]
   externalLink?: string
   meetingTermCount: number
@@ -64,14 +62,22 @@ export type CouncilorForLawmaker = {
     image: string
   }
   councilMeeting: {
+    id: number
     term: number
     city: CouncilDistrict
   }
 }
 
-export type CouncilorWithBillCount = {
+export type CouncilorWithCount = {
   slug: string
   name: string
   avatar: string
   count: number
+}
+
+export type CouncilorWithBillCount = CouncilorWithCount
+
+export type CouncilorWithWorkCounts = Omit<CouncilorWithCount, 'count'> & {
+  speechCount: number
+  billCount: number
 }

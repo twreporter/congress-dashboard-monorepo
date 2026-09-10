@@ -12,30 +12,33 @@ import mq from '@twreporter/core/lib/utils/media-query'
 import { TEN_YEAR_ANNIVERSARY } from '@twreporter/core/lib/constants/feature-flag'
 // styles
 import {
-  SpeechContainer,
+  ArticleContainer,
   LeadingContainer,
   BodyContainer,
   AsideBlock,
   ContentBlock,
   Feedback,
-} from '@/components/speech/styles'
+} from '@/components/general-article/styles'
 // components
-import SpeechSubtitle from '@/components/speech/speech-date'
-import SpeechTitle from '@/components/speech/speech-title'
-import SpeechAsideToolBar from '@/components/speech/speech-aside-toolbar'
-import SpeechSummary from '@/components/speech/speech-summary'
-import SeparationCurve from '@/components/speech/separation-curve'
-import { AboutPageMobileToolbar } from '@/components/speech/speech-mobile-toolbar'
+import SpeechSubtitle from '@/components/general-article/date'
+import SpeechTitle from '@/components/general-article/title'
+import SpeechAsideToolBar from '@/components/general-article/aside-toolbar'
+import SpeechSummary from '@/components/general-article/summary'
+import SeparationCurve from '@/components/general-article/separation-curve'
+import { AboutPageMobileToolbar } from '@/components/general-article/mobile-toolbar'
 import CustomPillButton from '@/components/button/pill-button'
 import AboutPageContent from '@/components/about/content'
 import DonationBox from '@/components/about/donation-box'
 import NewDonationBox from '@/components/about/new-donation-box'
 // constants
-import { FontSize, FontSizeOffset } from '@/components/speech'
+import {
+  FontSize,
+  FontSizeOffset,
+} from '@/components/general-article/constants'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 // hooks
-import { useScrollStage } from '@/components/speech/hooks/use-scroll-stage'
+import { useScrollStage } from '@/components/general-article/hooks/use-scroll-stage'
 // utils
 import { openFeedback } from '@/utils/feedback'
 
@@ -102,8 +105,32 @@ const AboutPage: React.FC<AboutPageProps> = ({
     }
   }, [setTabElement, leadingRef])
 
+  useEffect(() => {
+    // use smooth scroll to target element when hash changes
+    const handleHashChange = () => {
+      const hash = window.location.hash
+      if (hash) {
+        const id = decodeURIComponent(hash.substring(1))
+        const element = document.getElementById(id)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+    }
+
+    // wait for content to be rendered before scrolling to hash
+    requestAnimationFrame(() => {
+      handleHashChange()
+    })
+
+    window.addEventListener('hashchange', handleHashChange)
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [content])
+
   return (
-    <SpeechContainer>
+    <ArticleContainer>
       <LeadingContainer ref={leadingRef}>
         <SpeechSubtitle date={subtitle} />
         <SpeechTitle title={title} />
@@ -149,7 +176,7 @@ const AboutPage: React.FC<AboutPageProps> = ({
           scrollStage={scrollStage}
         />
       </TabletAndBelow>
-    </SpeechContainer>
+    </ArticleContainer>
   )
 }
 

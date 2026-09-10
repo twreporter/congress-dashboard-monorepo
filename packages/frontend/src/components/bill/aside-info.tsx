@@ -4,20 +4,23 @@ import Link from 'next/link'
 import styled from 'styled-components'
 // components
 import IssueTag from '@/components/button/issue-tag'
-import { SlashIcon } from '@/components/speech/speech-aside-info'
+import {
+  AsideInfoContainer,
+  PersonAndAttendeeBlock,
+  PersonBlock,
+  PersonLabel,
+  IssueTagsBlock,
+  SlashIcon,
+} from '@/components/general-article/aside-info'
 // constants
 import { InternalRoutes } from '@/constants/routes'
 // styles
-import { P1SupportiveHeavy, P2Gray600 } from '@/components/speech/styles'
 import {
-  AsideInfoContainer,
-  LegislatorAndAttendeeBlock,
-  LegislatorBlock,
-  Questioning,
-  IssueTagsBlock,
-} from '@/components/speech/speech-aside-info'
+  P1SupportiveHeavy,
+  P2Gray600,
+} from '@/components/general-article/styles'
 
-const CouncilorBlock = styled(LegislatorBlock)`
+const CouncilorBlock = styled(PersonBlock)`
   flex-wrap: wrap;
 `
 
@@ -33,16 +36,18 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
 }) => {
   return (
     <AsideInfoContainer>
-      <LegislatorAndAttendeeBlock>
+      <PersonAndAttendeeBlock>
         {councilors.length > 0 ? (
           <CouncilorBlock>
-            <Questioning>
+            <PersonLabel>
               <P2Gray600 text="提案人" />
               <SlashIcon />
-            </Questioning>
+            </PersonLabel>
             {councilors.map((councilor) => (
               <Link
-                href={`${InternalRoutes.Council}/${councilor.city}${InternalRoutes.Councilor}/${councilor.slug}`}
+                href={`${InternalRoutes.Councilor(councilor.city)}/${
+                  councilor.slug
+                }`}
                 key={`councilor-${councilor.slug}`}
               >
                 <P1SupportiveHeavy text={councilor.name} />
@@ -50,13 +55,13 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
             ))}
           </CouncilorBlock>
         ) : null}
-        {attendee ? <P2Gray600 text={`列席人員／${attendee}`} /> : null}
-      </LegislatorAndAttendeeBlock>
+        {attendee ? <P2Gray600 text={`連署人／${attendee}`} /> : null}
+      </PersonAndAttendeeBlock>
       {relatedTopics.length > 0 ? (
         <IssueTagsBlock>
           {relatedTopics.map((topic) => (
             <Link
-              href={`${InternalRoutes.Council}/${topic.city}${InternalRoutes.CouncilTopic}/${topic.slug}`}
+              href={`${InternalRoutes.CouncilTopic(topic.city)}/${topic.slug}`}
               key={`council-topic-${topic.slug}`}
             >
               <IssueTag text={topic.title} />

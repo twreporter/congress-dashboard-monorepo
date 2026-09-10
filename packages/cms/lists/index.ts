@@ -16,6 +16,7 @@ import CouncilMeeting from './CouncilMeeting'
 import CouncilMember from './CouncilMember'
 import CouncilTopic from './CouncilTopic'
 import CouncilBill from './CouncilBill'
+import CouncilSpeech from './CouncilSpeech'
 import CouncilImportRecord from './CouncilImportRecord'
 
 export const listDefinition = {
@@ -30,6 +31,7 @@ export const listDefinition = {
   LegislativeMeetingSession,
   Committee,
   CommitteeMember,
+  CouncilSpeech,
   CouncilBill,
   CouncilTopic,
   Councilor,

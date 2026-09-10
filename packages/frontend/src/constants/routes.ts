@@ -1,16 +1,17 @@
-export enum InternalRoutes {
-  Home = '/congress',
-  About = '/about',
-  Legislator = '/congress/lawmaker',
-  Topic = '/congress/topic',
-  Speech = '/congress/a',
-  Search = '/search',
-  Council = '/council',
-  Bill = '/council/bill',
+export const InternalRoutes = {
+  Home: '/congress',
+  About: '/about',
+  Legislator: '/congress/lawmaker',
+  Topic: '/congress/topic',
+  Speech: '/congress/a',
+  Search: '/search',
+  Council: '/council',
+  Bill: '/council/bill',
+  CouncilSpeech: '/council/a',
   // councilor routes: /council/<region>/lawmaker/:slug
-  Councilor = '/lawmaker',
+  Councilor: (districtSlug: string) => `/council/${districtSlug}/lawmaker`,
   // council topic routes: /council/<region>/topic/:slug
-  CouncilTopic = '/topic',
+  CouncilTopic: (districtSlug: string) => `/council/${districtSlug}/topic`,
 }
 
 export enum ExternalRoutes {
@@ -19,4 +20,5 @@ export enum ExternalRoutes {
   Support = 'https://support.twreporter.org/',
   AboutTwreporter = 'https://www.twreporter.org/about-us',
   TwReporter = 'https://www.twreporter.org',
+  SubscribePodcast = 'https://solink.soundon.fm/twreporter-U7Q',
 }

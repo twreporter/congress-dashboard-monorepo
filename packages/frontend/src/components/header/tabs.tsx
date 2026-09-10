@@ -6,8 +6,10 @@ import { useRouter, usePathname } from 'next/navigation'
 // components
 import Tab from '@/components/header/tab'
 // constants
-import { options } from '@/components/header/constants'
 import { InternalRoutes } from '@/constants/routes'
+import { VALID_COUNCILS } from '@/constants/council'
+// utils
+import { getOptions } from '@/components/header/utils'
 
 const Container = styled.div`
   display: flex;
@@ -31,6 +33,9 @@ const Tabs = () => {
     router.push(InternalRoutes.Home)
   }, [router])
 
+  // just for six main cities currently
+  const options = getOptions(VALID_COUNCILS)
+
   return (
     <Container>
       <Tab
@@ -40,7 +45,7 @@ const Tabs = () => {
         type={Tab.Type.single}
       />
       <Tab
-        label="地方議會"
+        label="六都議會" // just for six main cities currently
         isSelected={isCouncilRoute}
         onClick={() => {}}
         type={Tab.Type.dropdown}

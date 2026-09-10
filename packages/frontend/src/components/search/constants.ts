@@ -12,7 +12,10 @@ export type LayoutVariant = ValuesOf<typeof layoutVariants>
 export const searchStages = {
   Legislator: 'legislator',
   Topic: 'topic',
+  Councilor: 'councilor',
+  CouncilTopic: 'council-topic',
   Speech: 'speech',
+  CouncilBill: 'council-bill',
   All: 'all',
 } as const
 
@@ -21,7 +24,10 @@ export type SearchStage = ValuesOf<typeof searchStages>
 export const indexNames = {
   Legislator: 'legislator',
   Topic: 'topic',
+  Councilor: 'councilor',
+  CouncilTopic: 'council-topic',
   Speech: 'speech',
+  CouncilBill: 'council-bill',
 } as const
 
 export type IndexName = ValuesOf<typeof indexNames>

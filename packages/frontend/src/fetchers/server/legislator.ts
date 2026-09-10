@@ -142,6 +142,7 @@ export const fetchLegislator = async ({
           }
         }
         isActive
+        relatedLink
       }
     }
   `
@@ -220,7 +221,7 @@ export const fetchLegislatorTopics = async ({
           slug
           date
           title
-          summary
+          summaryFallback
         }
       }
     }

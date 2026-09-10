@@ -1,4 +1,4 @@
-import type { KeystoneImage } from '@/types'
+import type { KeystoneImage, RelatedLink } from '@/types'
 import type { Tag } from '@/components/dashboard/type'
 // @twreporter
 import type {
@@ -41,6 +41,7 @@ export type Legislator = {
     meetingTermCountInfo?: string
   }
   isActive: boolean
+  relatedLink?: RelatedLink[]
 }
 
 export type LegislatorForDashboard = {
@@ -104,4 +105,5 @@ export type LegislatorForLawmaker = {
   meetingTermCount: number
   meetingTermCountInfo: string
   isActive: boolean
+  relatedLink: RelatedLink[]
 }

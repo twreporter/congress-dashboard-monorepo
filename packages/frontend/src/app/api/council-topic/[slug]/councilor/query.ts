@@ -1,9 +1,9 @@
 import keystoneFetch from '@/app/api/_graphql/keystone'
 // utils
-import { getImageLink, sortByCountDesc } from '@/fetchers/utils'
+import { getImageLink } from '@/fetchers/utils'
 // type
 import type { KeystoneImage } from '@/types'
-import type { CouncilorWithBillCount } from '@/types/councilor'
+import type { CouncilorWithWorkCounts } from '@/types/councilor'
 // lodash
 import { isEmpty } from 'lodash'
 const _ = {
@@ -11,6 +11,7 @@ const _ = {
 }
 
 type CouncilorFromRes = {
+  speechCount: number
   billCount: number
   councilor: {
     slug: string
@@ -32,11 +33,12 @@ const fetchTopNCouncilorOfATopic = async ({
   city,
   excludeCouncilorSlug,
   top,
-}: FetchTopNCouncilorOfATopicParams): Promise<CouncilorWithBillCount[]> => {
+}: FetchTopNCouncilorOfATopicParams): Promise<CouncilorWithWorkCounts[]> => {
   const query = `
-    query CouncilMembers($where: CouncilMemberWhereInput!, $billCountWhere2: CouncilBillWhereInput!) {
+    query CouncilMembers($where: CouncilMemberWhereInput!, $speechCountWhere: CouncilSpeechWhereInput!, $billCountWhere: CouncilBillWhereInput!) {
       councilMembers(where: $where) {
-        billCount(where: $billCountWhere2)
+        speechCount(where: $speechCountWhere)
+        billCount(where: $billCountWhere)
         councilor {
           name
           slug
@@ -57,7 +59,23 @@ const fetchTopNCouncilorOfATopic = async ({
         equals: city,
       },
     },
-    billCountWhere2: {
+    speechCountWhere: {
+      topic: {
+        some: {
+          slug: {
+            equals: topicSlug,
+          },
+        },
+      },
+      councilMember: {
+        some: {
+          city: {
+            equals: city,
+          },
+        },
+      },
+    },
+    billCountWhere: {
       topic: {
         some: {
           slug: {
@@ -90,14 +108,34 @@ const fetchTopNCouncilorOfATopic = async ({
   )
 
   const councilors = data?.data?.councilMembers || []
-  const councilorsOrderByCount = councilors
-    .map(({ billCount, councilor }) => ({
-      count: billCount,
+  const councilorsBySlug = councilors.reduce<Map<string, CouncilorFromRes>>(
+    (result, item) => {
+      const existing = result.get(item.councilor.slug)
+      if (existing) {
+        existing.speechCount += item.speechCount
+        existing.billCount += item.billCount
+      } else {
+        result.set(item.councilor.slug, { ...item })
+      }
+      return result
+    },
+    new Map()
+  )
+  const councilorsOrderByCount = Array.from(councilorsBySlug.values())
+    .filter(({ speechCount, billCount }) => speechCount > 0 || billCount > 0)
+    .sort(
+      (a, b) =>
+        b.speechCount - a.speechCount ||
+        b.billCount - a.billCount ||
+        a.councilor.slug.localeCompare(b.councilor.slug)
+    )
+    .map(({ speechCount, billCount, councilor }) => ({
+      speechCount,
+      billCount,
       slug: councilor.slug,
       name: councilor.name,
       avatar: getImageLink(councilor),
     }))
-    .sort(sortByCountDesc)
   return top ? councilorsOrderByCount.slice(0, top) : councilorsOrderByCount
 }
 

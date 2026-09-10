@@ -37,7 +37,7 @@ export const fetchTopic = async ({
       topic(where: $where) {
         speeches(where: $speechesWhere, orderBy: { date: desc }) {
           slug
-          summary
+          summaryFallback
           title
           date
           legislativeYuanMember {
@@ -67,6 +67,11 @@ export const fetchTopic = async ({
           title
         }
         relatedTwreporterArticles
+        relatedCouncilTopic {
+          slug
+          title
+          city
+        }
       }
     }
   `

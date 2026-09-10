@@ -11,6 +11,7 @@ import TopicRelatedArticles from '@/components/topic/topic-related-articles'
 import TopicOthersWatching from '@/components/topic/topic-others-watching'
 import FeedbackBlock from '@/components/layout/feedback-block'
 import ContentPageLayout from '@/components/layout/content-page-layout'
+import RelatedTopicInElsewhere from '@/components/topic/related-topic-in-elsewhere'
 // styles
 import {
   Spacing,
@@ -159,6 +160,9 @@ const Topic: React.FC<TopicPageProps> = ({
             currentMeetingTerm={currentMeetingTerm}
             currentMeetingSession={currentMeetingSession}
           />
+          <RelatedTopicInElsewhere
+            relatedCouncilTopic={topic.relatedCouncilTopic}
+          />
           <FeedbackBlock eventName="topic" />
         </DesktopAside>
         <TabletAndBelow>
@@ -187,6 +191,10 @@ const Topic: React.FC<TopicPageProps> = ({
             othersWatchingTags={topic?.relatedTopics}
             currentMeetingTerm={currentMeetingTerm}
             currentMeetingSession={currentMeetingSession}
+          />
+          <Spacing $height={8} />
+          <RelatedTopicInElsewhere
+            relatedCouncilTopic={topic.relatedCouncilTopic}
           />
           <Spacing $height={32} />
           <FeedbackBlock eventName="topic" />

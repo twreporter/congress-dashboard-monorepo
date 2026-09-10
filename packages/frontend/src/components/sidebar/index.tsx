@@ -104,6 +104,9 @@ const FollowMoreSection = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  a {
+    text-decoration: none;
+  }
 `
 const FollowMoreTitle = styled(H5)`
   color: ${colorGrayscale.gray800};
@@ -125,7 +128,7 @@ export function groupSummary(summaryList: SummaryCardProps[]) {
       result.push({ year: Number(year), cards: summarys })
   )
 
-  return result
+  return result.sort((a, b) => b.year - a.year)
 }
 
 export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
@@ -169,13 +172,15 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
         }
       : undefined
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => speechState.speeches || [],
-    [speechState.speeches]
-  )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(summaryList),
-    [summaryList]
+    () =>
+      groupSummary(
+        speechState.speeches?.map(({ summaryFallback, ...speech }) => ({
+          summary: summaryFallback || '',
+          ...speech,
+        })) || []
+      ),
+    [speechState.speeches]
   )
   const followMoreState = useMoreTopics(
     formattedFilterValues && selectedLegislator && selectedLegislator.id
@@ -207,6 +212,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 
   useEffect(() => {
     setIsLoading(true)
+    setShowFilter(false)
   }, [slug, selectedTab])
 
   useEffect(() => {
@@ -231,6 +237,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
         <div ref={topRef}>
           <TitleSection
             title={title}
+            titleDescription="的相關發言摘要"
             count={count}
             tabs={tabList}
             showTabAvatar={true}
@@ -366,13 +373,15 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
         }
       : undefined
   )
-  const summaryList: SummaryCardProps[] = useMemo(
-    () => speechState.speeches || [],
-    [speechState.speeches]
-  )
   const summaryGroupByYear: CardsOfTheYearProps[] = useMemo(
-    () => groupSummary(summaryList),
-    [summaryList]
+    () =>
+      groupSummary(
+        speechState.speeches?.map(({ summaryFallback, ...speech }) => ({
+          summary: summaryFallback || '',
+          ...speech,
+        })) || []
+      ),
+    [speechState.speeches]
   )
   const followMoreState = useMoreLegislators(
     formattedFilterValues && selectedIssue && selectedIssue.slug
@@ -388,7 +397,10 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
       : undefined
   )
   const legislatorList: LegislatorProps[] = useMemo(
-    () => followMoreState.legislators || [],
+    () =>
+      (followMoreState.legislators || []).filter(
+        ({ count }) => count && count > 0
+      ),
     [followMoreState.legislators]
   )
 
@@ -407,6 +419,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
 
   useEffect(() => {
     setIsLoading(true)
+    setShowFilter(false)
   }, [slug, selectedTab])
 
   useEffect(() => {
@@ -431,6 +444,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
         <div ref={topRef}>
           <TitleSection
             title={title}
+            titleDescription="的相關發言摘要"
             subtitle={subtitle}
             tabs={tabList}
             showTabAvatar={false}
@@ -458,27 +472,28 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
                 )
               )}
             </SummarySection>
-            {followMoreState.isLoading ? null : (
-              <FollowMoreSection>
-                <FollowMoreTitle text={followMoreTitle} />
-                {followMoreState.error ? (
-                  <FollowMoreErrorState />
-                ) : legislatorList.length > 0 ? (
-                  <FollowMoreLegislator>
-                    {legislatorList.map(
-                      (props: LegislatorProps, index: number) => (
-                        <Link
-                          href={`${InternalRoutes.Legislator}/${props.slug}`}
-                          key={`follow-more-legislator-${index}`}
-                        >
-                          <Legislator {...props} />
-                        </Link>
-                      )
-                    )}
-                  </FollowMoreLegislator>
-                ) : null}
-              </FollowMoreSection>
-            )}
+            {!followMoreState.isLoading &&
+              (followMoreState.error || legislatorList.length > 0) && (
+                <FollowMoreSection>
+                  <FollowMoreTitle text={followMoreTitle} />
+                  {followMoreState.error ? (
+                    <FollowMoreErrorState />
+                  ) : (
+                    <FollowMoreLegislator>
+                      {legislatorList.map(
+                        (props: LegislatorProps, index: number) => (
+                          <Link
+                            href={`${InternalRoutes.Legislator}/${props.slug}`}
+                            key={`follow-more-legislator-${index}`}
+                          >
+                            <Legislator {...props} />
+                          </Link>
+                        )
+                      )}
+                    </FollowMoreLegislator>
+                  )}
+                </FollowMoreSection>
+              )}
           </Body>
         )}
       </ContentBox>

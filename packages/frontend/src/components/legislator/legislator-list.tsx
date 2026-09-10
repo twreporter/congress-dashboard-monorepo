@@ -33,6 +33,7 @@ import FilterModal from '@/components/sidebar/filter-modal'
 import { FollowMoreErrorState } from '@/components/sidebar/error-state'
 // type
 import type { TabProps } from '@/components/sidebar/type'
+import type { SpeechDataForSidebar } from '@/types/speech'
 // utils
 import { fetchTopLegislatorsBySpeechCount } from '@/fetchers/legislator'
 // constants
@@ -94,10 +95,7 @@ type LegislatorListProps = {
   legislatorName: string
   legislatorNote?: string
   topics: { name: string; slug: string; count: number }[]
-  speechesByTopic: Record<
-    string,
-    { title: string; date: string; summary: string; slug: string }[]
-  >
+  speechesByTopic: Record<string, SpeechDataForSidebar[]>
   currentMeetingTerm: number
   currentMeetingSession: number[]
 }
@@ -138,10 +136,10 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
     if (!selectedTopic) return []
     return groupSummary(
       speechesByTopic[selectedTopic.slug].map(
-        ({ title, date, summary, slug }) => ({
+        ({ title, date, summaryFallback, slug }) => ({
           title,
           date: new Date(date),
-          summary,
+          summary: summaryFallback || '',
           slug,
         })
       )
@@ -170,7 +168,7 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
         legislatorSlug: slug,
       })
   )
-  const legislatorList = !swrError && selectedTopic ? topLegislators : []
+  const legislatorList = !swrError && selectedTopic ? topLegislators.filter(({ count }) => count > 0) : []
 
   const openFilter = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()

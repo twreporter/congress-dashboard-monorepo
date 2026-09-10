@@ -36,16 +36,21 @@ const P4White = styled(P4)`
   color: ${colorGrayscale.white};
 `
 
-const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRNCH
+const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 type FilterButtonProps = {
   filterCount: number
+  onClick?: () => void
 }
-const FilterButton: React.FC<FilterButtonProps> = ({ filterCount }) => (
+const FilterButton: React.FC<FilterButtonProps> = ({
+  filterCount,
+  onClick,
+}) => (
   <BasePillButton
     theme={PillButton.THEME.normal}
     type={PillButton.Type.SECONDARY}
     size={PillButton.Size.L}
     text={'篩選'}
+    onClick={onClick}
     leftIconComponent={<FilterIcon releaseBranch={releaseBranch} />}
     rightIconComponent={
       filterCount > 0 ? (

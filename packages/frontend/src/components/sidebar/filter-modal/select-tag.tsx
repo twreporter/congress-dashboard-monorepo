@@ -83,6 +83,7 @@ const SelectTag: React.FC<SelectTagProps> = ({
   selected = false,
   withDelete = false,
   isLast = false,
+  showCount = true,
   onClick,
 }) => {
   const { color, bgColor, hoverColor, hoverBgColor, hasBorder, cursor } =
@@ -106,7 +107,7 @@ const SelectTag: React.FC<SelectTagProps> = ({
           height={24}
         />
       ) : null}
-      <P1 text={`${name}(${count ?? 0})`} />
+      <P1 text={showCount ? `${name}(${count ?? 0})` : name} />
       {withDelete && !isLast ? <TagCloseIcon /> : null}
     </Box>
   )

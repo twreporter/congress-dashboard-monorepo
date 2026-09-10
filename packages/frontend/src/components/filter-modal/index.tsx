@@ -259,6 +259,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                 isLoading,
                 defaultValue,
                 showError,
+                searchable,
               },
               idx
             ) => {
@@ -279,6 +280,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                         }
                         loading={isLoading}
                         showError={showError}
+                        searchable={searchable}
                       />
                     </SelectorContainer>
                   </SelectContainer>
@@ -298,6 +300,7 @@ const FilterModal: React.FC<FilterModelProps> = ({
                         }
                         loading={isLoading}
                         showError={showError}
+                        searchable={searchable}
                       />
                     </SelectorContainer>
                   </SelectContainer>

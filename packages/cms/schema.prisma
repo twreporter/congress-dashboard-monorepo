@@ -8,7 +8,8 @@ datasource mysql {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 model SystemUser {
@@ -84,17 +85,17 @@ model Speech {
 }
 
 model Topic {
-  id                                        Int            @id @default(autoincrement())
-  title                                     String         @default("")
-  slug                                      String         @unique @default("")
-  speeches                                  Speech[]       @relation("Speech_topics")
-  relatedTopics                             Topic[]        @relation("Topic_referencedByTopics")
-  referencedByTopics                        Topic[]        @relation("Topic_referencedByTopics")
-  relatedTwreporterArticles                 Json?          @default("[]")
-  createdAt                                 DateTime?      @default(now())
-  updatedAt                                 DateTime?      @updatedAt
-  from_Selected_topic                       Selected[]     @relation("Selected_topic")
-  from_CouncilTopic_relatedLegislativeTopic CouncilTopic[] @relation("CouncilTopic_relatedLegislativeTopic")
+  id                        Int            @id @default(autoincrement())
+  title                     String         @default("")
+  slug                      String         @unique @default("")
+  speeches                  Speech[]       @relation("Speech_topics")
+  relatedTopics             Topic[]        @relation("Topic_referencedByTopics")
+  referencedByTopics        Topic[]        @relation("Topic_referencedByTopics")
+  relatedCouncilTopic       CouncilTopic[] @relation("CouncilTopic_relatedLegislativeTopic")
+  relatedTwreporterArticles Json?          @default("[]")
+  createdAt                 DateTime?      @default(now())
+  updatedAt                 DateTime?      @updatedAt
+  from_Selected_topic       Selected[]     @relation("Selected_topic")
 
   @@index([title])
 }
@@ -134,6 +135,7 @@ model LegislativeYuanMember {
   tooltip              String              @default("")
   note                 String              @default("")
   proposalSuccessCount Int?
+  relatedLink          Json?
   isActive             Boolean             @default(true)
   createdAt            DateTime?           @default(now())
   updatedAt            DateTime?           @updatedAt
@@ -200,6 +202,28 @@ model CommitteeMember {
   @@index([legislativeYuanMemberId])
 }
 
+model CouncilSpeech {
+  id               Int             @id @default(autoincrement())
+  councilMeeting   CouncilMeeting? @relation("CouncilSpeech_councilMeeting", fields: [councilMeetingId], references: [id])
+  councilMeetingId Int?            @map("councilMeeting")
+  councilMember    CouncilMember[] @relation("CouncilMember_speech")
+  date             DateTime        @mysql.Date
+  title            String          @default("")
+  slug             String          @unique @default("")
+  summary          Json?
+  content          Json?
+  attendee         String          @default("")
+  sourceLink       String          @default("")
+  topic            CouncilTopic[]  @relation("CouncilSpeech_topic")
+  createdAt        DateTime?       @default(now())
+  updatedAt        DateTime?       @updatedAt
+
+  @@index([councilMeetingId])
+  @@index([date])
+  @@index([title])
+  @@index([updatedAt])
+}
+
 model CouncilBill {
   id               Int             @id @default(autoincrement())
   councilMeeting   CouncilMeeting? @relation("CouncilBill_councilMeeting", fields: [councilMeetingId], references: [id])
@@ -210,7 +234,7 @@ model CouncilBill {
   slug             String          @unique @default("")
   summary          Json?
   content          Json?
-  attendee         String          @default("")
+  attendee         String          @default("") @mysql.VarChar(500)
   sourceLink       Json?
   topic            CouncilTopic[]  @relation("CouncilBill_topic")
   createdAt        DateTime?       @default(now())
@@ -223,21 +247,22 @@ model CouncilBill {
 }
 
 model CouncilTopic {
-  id                           Int            @id @default(autoincrement())
-  title                        String         @default("")
-  slug                         String         @unique @default("")
-  bill                         CouncilBill[]  @relation("CouncilBill_topic")
+  id                           Int             @id @default(autoincrement())
+  title                        String          @default("")
+  slug                         String          @unique @default("")
+  speech                       CouncilSpeech[] @relation("CouncilSpeech_topic")
+  bill                         CouncilBill[]   @relation("CouncilBill_topic")
   city                         String
-  type                         String         @default("general")
-  relatedLegislativeTopic      Topic[]        @relation("CouncilTopic_relatedLegislativeTopic")
-  relatedCouncilTopic          CouncilTopic[] @relation("CouncilTopic_referencedByCouncilTopic")
-  referencedByCouncilTopic     CouncilTopic[] @relation("CouncilTopic_referencedByCouncilTopic")
-  relatedCityCouncilTopic      CouncilTopic[] @relation("CouncilTopic_referencedByCityCouncilTopic")
-  referencedByCityCouncilTopic CouncilTopic[] @relation("CouncilTopic_referencedByCityCouncilTopic")
-  relatedTwreporterArticle     Json?          @default("[]")
-  labelForCMS                  String         @default("")
-  createdAt                    DateTime?      @default(now())
-  updatedAt                    DateTime?      @updatedAt
+  type                         String          @default("general")
+  relatedLegislativeTopic      Topic[]         @relation("CouncilTopic_relatedLegislativeTopic")
+  relatedCouncilTopic          CouncilTopic[]  @relation("CouncilTopic_referencedByCouncilTopic")
+  referencedByCouncilTopic     CouncilTopic[]  @relation("CouncilTopic_referencedByCouncilTopic")
+  relatedCityCouncilTopic      CouncilTopic[]  @relation("CouncilTopic_referencedByCityCouncilTopic")
+  referencedByCityCouncilTopic CouncilTopic[]  @relation("CouncilTopic_referencedByCityCouncilTopic")
+  relatedTwreporterArticle     Json?           @default("[]")
+  labelForCMS                  String          @default("")
+  createdAt                    DateTime?       @default(now())
+  updatedAt                    DateTime?       @updatedAt
 
   @@index([title])
 }
@@ -268,16 +293,16 @@ model CouncilMember {
   partyId                Int?            @map("party")
   councilMeeting         CouncilMeeting? @relation("CouncilMember_councilMeeting", fields: [councilMeetingId], references: [id])
   councilMeetingId       Int?            @map("councilMeeting")
-  bill                   CouncilBill[]   @relation("CouncilBill_councilMember")
   type                   String
   city                   String
   constituency           Int?
   administrativeDistrict Json?
   tooltip                String          @default("")
   note                   String          @default("")
-  proposalSuccessCount   Int?
   relatedLink            Json?
   isActive               Boolean         @default(true)
+  speech                 CouncilSpeech[] @relation("CouncilMember_speech")
+  bill                   CouncilBill[]   @relation("CouncilBill_councilMember")
   createdAt              DateTime?       @default(now())
   updatedAt              DateTime?       @updatedAt
 
@@ -297,6 +322,7 @@ model CouncilMeeting {
   labelForCMS                       String          @default("")
   createdAt                         DateTime?       @default(now())
   updatedAt                         DateTime?       @updatedAt
+  from_CouncilSpeech_councilMeeting CouncilSpeech[] @relation("CouncilSpeech_councilMeeting")
   from_CouncilBill_councilMeeting   CouncilBill[]   @relation("CouncilBill_councilMeeting")
   from_CouncilMember_councilMeeting CouncilMember[] @relation("CouncilMember_councilMeeting")
 

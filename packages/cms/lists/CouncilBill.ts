@@ -1,5 +1,11 @@
-import { list } from '@keystone-6/core'
-import { text, relationship, calendarDay, json } from '@keystone-6/core/fields'
+import { list, graphql } from '@keystone-6/core'
+import {
+  text,
+  relationship,
+  calendarDay,
+  json,
+  virtual,
+} from '@keystone-6/core/fields'
 import {
   allowAllRoles,
   excludeReadOnlyRoles,
@@ -10,6 +16,7 @@ import {
   hideNotAllowDeleteRoles,
 } from './utils/access-control-list'
 import { SLUG, CREATED_AT, UPDATED_AT } from './utils/common-field'
+import toPlainTextSummary from './utils/summary-parser'
 import { logger } from '../utils/logger'
 
 const listConfigurations = list({
@@ -45,12 +52,24 @@ const listConfigurations = list({
     summary: json({
       label: '摘要',
     }),
+    summaryFallback: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        resolve(item) {
+          if (typeof item.summary === 'string' && item.summary.length > 0) {
+            return toPlainTextSummary('bill', item.summary)
+          }
+          return toPlainTextSummary('bill', item.content, 100)
+        },
+      }),
+    }),
     // TODO: change to editor
     content: json({
       label: '內文',
     }),
     attendee: text({
-      label: '列席質詢對象',
+      label: '連署人',
+      db: { nativeType: 'VarChar(500)' },
     }),
     sourceLink: json({
       label: '資料來源連結',

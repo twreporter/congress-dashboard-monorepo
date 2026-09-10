@@ -23,7 +23,6 @@ import { IconButton } from '@twreporter/react-components/lib/button'
 import { Back, More } from '@twreporter/react-components/lib/icon'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import mq from '@twreporter/core/lib/utils/media-query'
-
 // global var
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
@@ -81,8 +80,10 @@ export type TitleSectionProps = {
   title: string
   count?: number
   subtitle?: string
+  titleDescription: string
   tabs?: TabProps[]
   showTabAvatar?: boolean
+  showTabCount?: boolean
   onSelectTab?: (index: number) => void
   onClose?: () => void
   onOpenFilterModal?: () => void
@@ -92,8 +93,10 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   title,
   count = 0,
   subtitle = '',
+  titleDescription,
   tabs = [],
   showTabAvatar = false,
+  showTabCount = true,
   onSelectTab,
   onClose,
   onOpenFilterModal,
@@ -101,7 +104,6 @@ const TitleSection: React.FC<TitleSectionProps> = ({
   const [selectedTab, setSelectedTab] = useState(0)
   const tabRef = useRef<HTMLDivElement>(null)
   const prevLinkRef = useRef<TitleSectionProps['link']>('')
-
   useEffect(() => {
     setSelectedTab(0)
 
@@ -147,7 +149,9 @@ const TitleSection: React.FC<TitleSectionProps> = ({
       <TitleGroup>
         <Title>
           <TitleLink href={link}>{title}</TitleLink>
-          <TitleText>{` 的相關發言摘要${count ? `(${count})` : ''}`}</TitleText>
+          <TitleText>{` ${titleDescription}${
+            count ? `(${count})` : ''
+          }`}</TitleText>
         </Title>
         <ButtonGroup>
           <Button
@@ -172,6 +176,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({
                 <Tab
                   {...tabProps}
                   showAvatar={showTabAvatar}
+                  showCount={showTabCount}
                   selected={index === selectedTab}
                 />
               </TabItem>

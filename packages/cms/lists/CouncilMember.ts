@@ -1,4 +1,4 @@
-import { list } from '@keystone-6/core'
+import { list, graphql } from '@keystone-6/core'
 import {
   text,
   relationship,
@@ -6,6 +6,7 @@ import {
   integer,
   checkbox,
   json,
+  virtual,
 } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
@@ -26,6 +27,7 @@ import {
   CITY_OPTIONS,
   CITY_LABEL,
 } from '@twreporter/congress-dashboard-shared/lib/constants/city'
+import { scrollableRelationship } from './fields/scrollable-relationship'
 
 const listConfigurations = list({
   fields: {
@@ -100,19 +102,6 @@ const listConfigurations = list({
         labelField: 'labelForCMS',
       },
     }),
-    bill: relationship({
-      ref: 'CouncilBill.councilMember',
-      label: '發言紀錄',
-      many: true,
-      ui: {
-        createView: {
-          fieldMode: 'hidden',
-        },
-        itemView: {
-          fieldMode: 'read',
-        },
-      },
-    }),
     type: select({
       label: '類別',
       options: MEMBER_TYPE_OPTIONS,
@@ -141,15 +130,77 @@ const listConfigurations = list({
     note: text({
       label: '特殊說明',
     }),
-    proposalSuccessCount: integer({
-      label: '提案通過數',
+    proposalSuccessCount: virtual({
+      label: '提案數',
+      field: graphql.field({
+        type: graphql.Int,
+        async resolve(item, _args, context) {
+          const { id, councilMeetingId } = item as {
+            id: number
+            councilMeetingId: number | null
+          }
+          if (!councilMeetingId) return 0
+
+          const count = await context.query.CouncilBill.count({
+            where: {
+              councilMeeting: {
+                id: {
+                  equals: councilMeetingId,
+                },
+              },
+              councilMember: {
+                some: {
+                  id: {
+                    equals: id,
+                  },
+                },
+              },
+            },
+          })
+          return count || 0
+        },
+      }),
+      ui: {
+        description: '僅統計本屆期的提案數',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'read' },
+        listView: { fieldMode: 'hidden' },
+      },
     }),
     relatedLink: json({
-      label: '相關連結',
+      label: '相關經歷',
     }),
     isActive: checkbox({
       label: '是否該屆期現任',
       defaultValue: true,
+    }),
+    speech: scrollableRelationship({
+      ref: 'CouncilSpeech.councilMember',
+      label: '縣市逐字稿',
+      many: true,
+      ui: {
+        labelField: 'slug',
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
+    }),
+    bill: scrollableRelationship({
+      ref: 'CouncilBill.councilMember',
+      label: '縣市議案',
+      many: true,
+      ui: {
+        labelField: 'slug',
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+      },
     }),
     createdAt: CREATED_AT(),
     updatedAt: UPDATED_AT(),

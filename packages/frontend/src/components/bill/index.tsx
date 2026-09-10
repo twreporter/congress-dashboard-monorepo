@@ -12,7 +12,7 @@ import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import { TEN_YEAR_ANNIVERSARY } from '@twreporter/core/lib/constants/feature-flag'
 // styles
 import {
-  SpeechContainer,
+  ArticleContainer,
   LeadingContainer,
   BodyContainer,
   AsideBlock,
@@ -23,29 +23,39 @@ import {
   DateAndTitle,
   ControlTabDate,
   ControlTabTitle,
-} from '@/components/speech/styles'
+  ControlItems,
+  IvodBlock,
+  ControlTabBadge,
+  LeadingSubtitle,
+  LeadingBadge,
+} from '@/components/general-article/styles'
 // components
 import AsideInfo from '@/components/bill/aside-info'
-import MobileToolbar from '@/components/bill/mobile-toolbar'
+import { SourceMobileToolbar } from '@/components/general-article/mobile-toolbar'
 import Content from '@/components/bill/content'
-import SpeechDate from '@/components/speech/speech-date'
-import SpeechTitle from '@/components/speech/speech-title'
+import SpeechDate from '@/components/general-article/date'
+import SpeechTitle from '@/components/general-article/title'
 import AsideToolbar from '@/components/bill/aside-toolbar'
-import SpeechSummary from '@/components/speech/speech-summary'
-import SeparationCurve from '@/components/speech/separation-curve'
+import SpeechSummary from '@/components/general-article/summary'
+import SeparationCurve from '@/components/general-article/separation-curve'
 import CustomPillButton from '@/components/button/pill-button'
 import DonationBox from '@/components/about/donation-box'
 import NewDonationBox from '@/components/about/new-donation-box'
 // context
 import { useScrollContext } from '@/contexts/scroll-context'
 // hooks
-import { useScrollStage } from '@/components/speech/hooks/use-scroll-stage'
+import { useScrollStage } from '@/components/general-article/hooks/use-scroll-stage'
+import {
+  FontSize,
+  FontSizeOffset,
+} from '@/components/general-article/constants'
 import { useBillData } from './hook/use-bill-data'
 // utils
 import { openFeedback } from '@/utils/feedback'
 // types
 import type { BillFromRes } from '@/types/council-bill'
 // @twreporter
+import { Source } from '@twreporter/react-components/lib/icon'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 
 const DesktopAndAboveWithFlex = styled(DesktopAndAbove)`
@@ -59,24 +69,6 @@ const TabletAndBelowWithFlex = styled(TabletAndBelow)`
     display: flex !important;
   `}
 `
-const LeadingContainerWithSeparationLine = styled(LeadingContainer)`
-  ${mq.desktopAndAbove`
-    border-bottom: 1px solid ${colorGrayscale.gray300};
-    padding-bottom: 40px;
-  `}
-`
-
-export enum FontSize {
-  SMALL = 'small',
-  MEDIUM = 'medium',
-  LARGE = 'large',
-}
-
-export const FontSizeOffset = Object.freeze({
-  [FontSize.SMALL]: 0,
-  [FontSize.MEDIUM]: 2,
-  [FontSize.LARGE]: 4,
-})
 
 // constants
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
@@ -140,6 +132,14 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
     )
   }, [])
 
+  const openSourceLink = useCallback(() => {
+    if (!sourceLink) {
+      alert('此議案沒有資料來源')
+      return
+    }
+    window.open(sourceLink, '_blank', 'noopener,noreferrer')
+  }, [sourceLink])
+
   // memoize props passed repeatedly
   const asideInfoProps = useMemo(
     () => ({ councilors, attendee, relatedTopics }),
@@ -147,7 +147,7 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
   )
 
   return (
-    <SpeechContainer>
+    <ArticleContainer>
       <ControlTabContainer
         className="hidden-print"
         $isHeaderHidden={isHeaderHidden}
@@ -155,15 +155,37 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
       >
         <ControlTab $isHeaderAbove={!isHeaderHidden && !isControllBarHidden}>
           <DateAndTitle>
+            <ControlTabBadge $bgColor={colorGrayscale.gray600}>
+              議案
+            </ControlTabBadge>
             <ControlTabDate weight={P1.Weight.BOLD} text={date} />
             <ControlTabTitle weight={P1.Weight.BOLD} text={title} />
           </DateAndTitle>
+          <ControlItems>
+            <CustomPillButton
+              onClick={openSourceLink}
+              leftIconComponent={<Source releaseBranch={releaseBranch} />}
+              text={'資料來源'}
+            />
+          </ControlItems>
         </ControlTab>
       </ControlTabContainer>
-      <LeadingContainerWithSeparationLine ref={leadingRef}>
-        <SpeechDate date={date} />
+      <LeadingContainer ref={leadingRef}>
+        <LeadingSubtitle>
+          <LeadingBadge $bgColor={colorGrayscale.gray600}>議案</LeadingBadge>
+          <SpeechDate date={date} />
+        </LeadingSubtitle>
         <SpeechTitle title={title} />
-      </LeadingContainerWithSeparationLine>
+        <DesktopAndAboveWithFlex>
+          <IvodBlock>
+            <CustomPillButton
+              onClick={openSourceLink}
+              leftIconComponent={<Source releaseBranch={releaseBranch} />}
+              text={'資料來源'}
+            />
+          </IvodBlock>
+        </DesktopAndAboveWithFlex>
+      </LeadingContainer>
       <BodyContainer>
         <DesktopAndAboveWithFlex>
           <AsideBlock>
@@ -171,7 +193,6 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
             <AsideToolbar
               onFontSizeChange={cycleFontSize}
               currentFontSize={fontSize}
-              sourceLink={sourceLink}
             />
           </AsideBlock>
         </DesktopAndAboveWithFlex>
@@ -183,7 +204,7 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
             summary={summary}
             fontSizeOffset={FontSizeOffset[fontSize]}
           />
-          <SeparationCurve />
+          {summary.length > 0 && <SeparationCurve />}
           <Content
             content={content}
             fontSizeOffset={FontSizeOffset[fontSize]}
@@ -203,13 +224,15 @@ const BillPage: React.FC<BillPageProps> = ({ bill }) => {
       </BodyContainer>
       <Donation />
       <TabletAndBelow className="hidden-print">
-        <MobileToolbar
+        <SourceMobileToolbar
           onFontSizeChange={cycleFontSize}
           scrollStage={scrollStage}
           sourceLink={sourceLink}
+          feedbackEventName="council bill mobile toolbar"
+          emptySourceMessage="此議案沒有資料來源"
         />
       </TabletAndBelow>
-    </SpeechContainer>
+    </ArticleContainer>
   )
 }
 

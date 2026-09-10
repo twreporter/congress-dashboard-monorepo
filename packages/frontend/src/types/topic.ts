@@ -3,6 +3,7 @@ import type { SpeechDataForTopic } from '@/types/speech'
 import type { RelatedType } from '@/types/related-twreporter-item'
 import type { SpeechDataForSidebar } from '@/types/speech'
 import type { KeystoneImage } from '@/types'
+import type { CouncilDistrict } from '@/types/council'
 
 export type Topic = {
   slug: string
@@ -22,6 +23,11 @@ export type TopicData = {
   relatedTwreporterArticles?: {
     slug: string
     type: RelatedType
+  }[]
+  relatedCouncilTopic?: {
+    slug: string
+    title: string
+    city: CouncilDistrict
   }[]
 }
 
