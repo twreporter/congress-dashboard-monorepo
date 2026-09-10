@@ -22,21 +22,25 @@ export function readStoredAccessToken(): StoredAccessToken | null {
       (parsed.name !== undefined && typeof parsed.name !== 'string') ||
       parsed.expiresAt <= Math.floor(Date.now() / 1000) + 60
     ) {
-      sessionStorage.removeItem(AUTH_STORAGE_KEY)
+      clearStoredAccessToken()
       return null
     }
 
     return parsed as StoredAccessToken
   } catch {
-    sessionStorage.removeItem(AUTH_STORAGE_KEY)
+    clearStoredAccessToken()
     return null
   }
 }
 
 export function writeStoredAccessToken(token: StoredAccessToken) {
-  sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(token))
+  try {
+    sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(token))
+  } catch {}
 }
 
 export function clearStoredAccessToken() {
-  sessionStorage.removeItem(AUTH_STORAGE_KEY)
+  try {
+    sessionStorage.removeItem(AUTH_STORAGE_KEY)
+  } catch {}
 }
