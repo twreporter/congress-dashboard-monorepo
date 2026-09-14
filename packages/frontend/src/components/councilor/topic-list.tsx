@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState, useCallback, useEffect, useRef } from 'react'
+import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import useFollowMore from '@/components/councilor/hook/use-follow-more'
@@ -42,9 +42,11 @@ import {
   FilterBox,
 } from '@/components/legislator/legislator-list'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import { P2 } from '@twreporter/react-components/lib/text/paragraph'
+import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import { ZIndex } from '@/styles/z-index'
 import ContentFilterControl from '@/components/councilor/content-filter-control'
+import useFloatingContentFilter from '@/components/councilor/hook/use-floating-content-filter'
+import mq from '@twreporter/core/lib/utils/media-query'
 
 const maxTabs = 5
 const workFilterLabel: Record<WorkFilter, string> = {
@@ -53,22 +55,32 @@ const workFilterLabel: Record<WorkFilter, string> = {
   bill: '議案',
 }
 
-const SummaryCount = styled(P2)`
+const SummaryCount = styled(P1)`
   color: ${colorGrayscale.gray700};
+  margin-bottom: -16px !important;
 `
 
-const FixedContentFilter = styled.div<{ $show: boolean }>`
-  display: ${(props) => (props.$show ? 'flex' : 'none')};
+const FixedContentFilter = styled.div<{ $show: boolean; $left: number | null }>`
+  display: flex;
+  visibility: ${(props) =>
+    props.$show && props.$left !== null ? 'visible' : 'hidden'};
+  pointer-events: ${(props) =>
+    props.$show && props.$left !== null ? 'auto' : 'none'};
   position: fixed;
   z-index: ${ZIndex.Tooltip};
   bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
+  left: ${(props) => props.$left ?? 0}px;
   transform: translateX(-50%);
+
+  ${mq.tabletAndBelow`
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  `}
 `
 
-const InlineContentFilter = styled.div`
+const InlineContentFilter = styled.div<{ $hidden: boolean }>`
   display: flex;
   justify-content: center;
+  visibility: ${(props) => (props.$hidden ? 'hidden' : 'visible')};
 `
 
 const mapToTabItems = (items: CouncilTopicForFilter[]): TabProps[] =>
@@ -102,8 +114,6 @@ const TopicList: React.FC<TopicListProps> = ({
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFilter, setShowFilter] = useState(false)
   const [workFilter, setWorkFilter] = useState<WorkFilter>('all')
-  const [isInlineFilterVisible, setIsInlineFilterVisible] = useState(false)
-  const inlineFilterRef = useRef<HTMLDivElement>(null)
 
   const [tabList, setTabList] = useState(() =>
     mapToTabItems(topics).slice(0, maxTabs)
@@ -129,20 +139,16 @@ const TopicList: React.FC<TopicListProps> = ({
         }
       : undefined
   )
-
-  useEffect(() => {
-    const target = inlineFilterRef.current
-    if (!target) {
-      setIsInlineFilterVisible(false)
-      return
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsInlineFilterVisible(entry.isIntersecting),
-      { threshold: 0.5 }
-    )
-    observer.observe(target)
-    return () => observer.disconnect()
-  }, [selectedTab, workState.isLoading])
+  const {
+    topicListRef,
+    inlineFilterRef,
+    fixedFilterRef,
+    isInlineFilterActive,
+    isWithinFloatingRange,
+    filterCenter,
+  } = useFloatingContentFilter(
+    `${selectedTab}-${workState.isLoading}-${workState.error ? 'error' : 'ok'}`
+  )
 
   const filteredWork = useMemo(
     () => filterCouncilWork(workState.work, workFilter),
@@ -221,7 +227,7 @@ const TopicList: React.FC<TopicListProps> = ({
   }
 
   return (
-    <Container>
+    <Container ref={topicListRef}>
       <Title $isEmpty={false} text="發言與議案" />
       <TabNavigation
         tabs={tabList}
@@ -236,6 +242,7 @@ const TopicList: React.FC<TopicListProps> = ({
           <>
             <SummarySection>
               <SummaryCount
+                weight={P1.Weight.BOLD}
                 text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
               />
               {workByMonth.length === 0 ? (
@@ -253,7 +260,10 @@ const TopicList: React.FC<TopicListProps> = ({
                 ))
               )}
             </SummarySection>
-            <InlineContentFilter ref={inlineFilterRef}>
+            <InlineContentFilter
+              ref={inlineFilterRef}
+              $hidden={isWithinFloatingRange && !isInlineFilterActive}
+            >
               <ContentFilterControl
                 value={workFilter}
                 onChange={setWorkFilter}
@@ -281,8 +291,11 @@ const TopicList: React.FC<TopicListProps> = ({
         </FollowMoreItems>
       </Body>
       <FixedContentFilter
+        ref={fixedFilterRef}
+        $left={filterCenter}
         $show={
-          !isInlineFilterVisible &&
+          !isInlineFilterActive &&
+          isWithinFloatingRange &&
           !showFilter &&
           !workState.isLoading &&
           !workState.error

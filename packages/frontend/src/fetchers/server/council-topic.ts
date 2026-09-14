@@ -65,33 +65,18 @@ export const fetchATopicName = async ({
 type FetchTopicBySlugParams = {
   slug: string
   districtSlug: CouncilDistrict
+  councilMeetingId: number
 }
 export const fetchTopicBySlug = async ({
   slug,
   districtSlug,
+  councilMeetingId,
 }: FetchTopicBySlugParams): Promise<CouncilTopicFromRes | undefined> => {
   const query = `
-    query CouncilTopics($where: CouncilTopicWhereInput!, $billWhere2: CouncilBillWhereInput!, $orderBy: [CouncilBillOrderByInput!]!, $billCountWhere2: CouncilBillWhereInput!) {
+    query CouncilTopics($where: CouncilTopicWhereInput!, $speechCountWhere: CouncilSpeechWhereInput!, $billCountWhere: CouncilBillWhereInput!) {
       councilTopics(where: $where) {
-        billCount(where: $billCountWhere2)
-        bill(where: $billWhere2, orderBy: $orderBy) {
-          councilMember {
-            councilor {
-              slug
-              name
-              image {
-                imageFile {
-                  url
-                }
-              }
-              imageLink
-            }
-          }
-          summaryFallback
-          title
-          slug
-          date
-        }
+        speechCount(where: $speechCountWhere)
+        billCount(where: $billCountWhere)
         slug
         title
         city
@@ -126,13 +111,12 @@ export const fetchTopicBySlug = async ({
       },
       ...cityCondition,
     },
-    billWhere2: {
-      councilMeeting: cityCondition,
+    speechCountWhere: {
+      councilMeeting: { id: { equals: Number(councilMeetingId) } },
     },
-    billCountWhere2: {
-      councilMeeting: cityCondition,
+    billCountWhere: {
+      councilMeeting: { id: { equals: Number(councilMeetingId) } },
     },
-    orderBy: [{ date: 'desc' }],
   }
   try {
     const data = await keystoneFetch<{

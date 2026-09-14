@@ -58,28 +58,27 @@ const Title = styled(H4)`
 
 const Metrics = styled.div`
   display: flex;
-  gap: 32px;
+  gap: 20px;
   color: ${colorGrayscale.gray900};
 `
 
 const Metric = styled.div`
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
 `
 
-const MetricLabel = styled.div`
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.5;
-`
-
 const MetricNumber = styled.div`
   font-family: 'Roboto Slab';
-  font-size: 40px;
+  font-size: 48px;
   font-style: normal;
   font-weight: 700;
   line-height: 125%;
+  ${mq.tabletAndBelow`
+    font-size: 44px;
+  `}
 `
 
 const AvatarContainer = styled.div`
@@ -129,13 +128,13 @@ const Card: React.FC<CardProps> = ({
           <Title text={title} />
           <Metrics>
             <Metric>
-              <MetricLabel>相關發言</MetricLabel>
+              <P2 text="相關發言" weight={P2.Weight.BOLD} />
               <MetricNumber>
                 {speechCount > 999 ? '999+' : speechCount}
               </MetricNumber>
             </Metric>
             <Metric>
-              <MetricLabel>相關議案</MetricLabel>
+              <P2 text="相關議案" weight={P2.Weight.BOLD} />
               <MetricNumber>
                 {billCount > 999 ? '999+' : billCount}
               </MetricNumber>
