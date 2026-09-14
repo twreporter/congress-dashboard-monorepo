@@ -145,7 +145,6 @@ const FilterString = styled.div`
   font-size: 16px;
   font-weight: 400;
   line-height: 150%;
-  margin-right: 20px;
 
   ${mq.mobileOnly`
     font-size: 14px;  
@@ -155,6 +154,7 @@ const Filter = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+  gap: 20px;
 `
 const MobileOnlyBox = styled(MobileOnly)`
   width: 100%;
