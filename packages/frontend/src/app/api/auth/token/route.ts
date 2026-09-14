@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const getGoApiUrl = () =>
+const getGoApiUrl =
   process.env.NEXT_PUBLIC_TWREPORTER_API_URL ||
   'https://staging-go-api.twreporter.org'
 
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const response = await fetch(`${getGoApiUrl()}/v2/auth/token`, {
+    const response = await fetch(`${getGoApiUrl}/v2/auth/token`, {
       method: 'POST',
       headers: {
         Cookie: `id_token=${encodeURIComponent(idToken)}`,
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     if (userId) {
       try {
         const profileResponse = await fetch(
-          `${getGoApiUrl()}/v2/users/${userId}`,
+          `${getGoApiUrl}/v2/users/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,

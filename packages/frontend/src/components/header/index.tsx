@@ -377,12 +377,9 @@ const Header: React.FC = () => {
                     )}
                   </SearchContainer>
                 </SearchBox>
-                <IconButton
-                  iconComponent={kidStarIcon}
-                  onClick={() =>
-                    (window.location.href = InternalRoutes.Favorites)
-                  }
-                />
+                <Link href={InternalRoutes.Favorites} aria-label="收藏文章">
+                  <IconButton iconComponent={kidStarIcon} />
+                </Link>
                 <AccountContainer>
                   {desktopAccountControl}
                   {isAccountOpen && (
