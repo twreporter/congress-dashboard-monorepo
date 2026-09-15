@@ -52,7 +52,7 @@ const Menu = styled.div<{ $isActive: boolean }>`
   padding: 0px 16px;
   max-height: ${(props) => (props.$isActive ? '100%' : '0')};
   transition: max-height 300ms ease-in-out;
-  overflow: hidden;
+  overflow: ${(props) => (props.$isActive ? 'visible' : 'hidden')};
 `
 
 const Item = styled.div<{ $isActive: boolean }>`

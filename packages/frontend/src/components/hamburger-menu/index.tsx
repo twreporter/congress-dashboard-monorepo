@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 // @twreporter
 import { MenuButton, PillButton } from '@twreporter/react-components/lib/button'
 import Divider from '@twreporter/react-components/lib/divider'
-import { P2 } from '@twreporter/react-components/lib/text/paragraph'
+import { P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import {
   AlgoliaInstantSearch,
@@ -18,15 +18,20 @@ import { ZIndex } from '@/styles/z-index'
 // constants
 import { PILL_BUTTON_LINKS } from '@/constants/navigation-link'
 import { HEADER_HEIGHT } from '@/constants/header'
-import { ExternalRoutes, InternalRoutes } from '@/constants/routes'
+import { InternalRoutes } from '@/constants/routes'
 import { VALID_COUNCILS } from '@/constants/council'
 // utils
 import { getOptions } from '@/components/header/utils'
 import { openFeedback } from '@/utils/feedback'
+import { getLoginUrl } from '@/utils/get-login-url'
+import { useAuth } from '@/services/auth/auth-provider'
 // components
 import DropdownMenu from '@/components/hamburger-menu/dropdown-menu'
+import MemberAccountLinks from '@/components/member-account-links'
+import MemberAvatar from '@/components/member-avatar'
 
 const Container = styled.div<{ $isOpen: boolean }>`
+  display: flex;
   flex-direction: column;
   width: 100%;
   height: calc(100% - ${HEADER_HEIGHT}px);
@@ -59,6 +64,7 @@ const Title2 = styled.div`
 const PillButtonsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: auto;
   padding-top: 24px;
   padding-bottom: 32px;
   gap: 16px;
@@ -76,6 +82,32 @@ const SearchSection = styled.div`
   padding: 16px 0;
 `
 
+const MemberIdentity = styled.div`
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0 16px;
+`
+
+const MemberEmail = styled(P3)`
+  overflow: hidden;
+  color: ${colorGrayscale.gray600};
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+const MemberText = styled.div`
+  min-width: 0;
+`
+
+const MemberName = styled(P2)`
+  overflow: hidden;
+  color: ${colorGrayscale.gray800};
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
 const pillButtonLinks = PILL_BUTTON_LINKS
 
 type HamburgerMenuProps = {
@@ -84,6 +116,7 @@ type HamburgerMenuProps = {
 }
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname()
+  const { name, email, status: authStatus, logout } = useAuth()
   const [isDropdownActive, setIsDropdownActive] = useState(false)
   const handleDropdownClick = () => {
     setIsDropdownActive(!isDropdownActive)
@@ -97,6 +130,20 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
       <SearchSection>
         <AlgoliaInstantSearch variant={layoutVariants.Menu} />
       </SearchSection>
+      {authStatus === 'authenticated' ? (
+        <>
+          <MemberIdentity>
+            <MemberAvatar name={name} email={email} size={40} />
+            <MemberText>
+              {name && <MemberName weight={P2.Weight.BOLD} text={name} />}
+              {email && <MemberEmail text={email} />}
+            </MemberText>
+          </MemberIdentity>
+          <DividerContainer>
+            <Divider />
+          </DividerContainer>
+        </>
+      ) : null}
       <MenuButton
         paddingLeft={0}
         paddingRight={0}
@@ -124,6 +171,25 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
       <DividerContainer>
         <Divider />
       </DividerContainer>
+      <MenuButton
+        paddingLeft={0}
+        paddingRight={0}
+        fontWeight={MenuButton.FontWeight.BOLD}
+        text={'我的收藏'}
+        link={{ to: InternalRoutes.Favorites, target: '_self' }}
+        onClick={onClose}
+      />
+      <DividerContainer>
+        <Divider />
+      </DividerContainer>
+      {authStatus === 'authenticated' ? (
+        <>
+          <MemberAccountLinks onNavigate={onClose} showIcon={true} />
+          <DividerContainer>
+            <Divider />
+          </DividerContainer>
+        </>
+      ) : null}
       <Title2 onClick={() => openFeedback('hamburger-menu')}>
         <P2 text={'意見回饋'} />
       </Title2>
@@ -135,25 +201,32 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
           <P2 text={'資料更新說明'} />
         </Link>
       </Title2>
-      <Title2>
-        <Link href={ExternalRoutes.AboutTwreporter} target={'_blank'}>
-          <P2 text={'關於我們'} />
-        </Link>
-      </Title2>
-      <Title2>
-        <Link href={ExternalRoutes.TwReporter} target={'_blank'}>
-          <P2 text={'前往《報導者》'} />
-        </Link>
-      </Title2>
-      <Title2>
-        <Link href={ExternalRoutes.Medium} target={'_blank'}>
-          <P2 text={'報導者開放實驗室'} />
-        </Link>
-      </Title2>
-      <DividerContainer>
-        <Divider />
-      </DividerContainer>
+      {authStatus === 'authenticated' ? (
+        <>
+          <DividerContainer>
+            <Divider />
+          </DividerContainer>
+          <Title2>
+            <P2
+              text={'登出'}
+              onClick={async () => {
+                await logout()
+                onClose()
+              }}
+            />
+          </Title2>
+        </>
+      ) : null}
       <PillButtonsContainer>
+        {authStatus === 'authenticated' ? null : (
+          <Link href={getLoginUrl()} target="_self" onClick={onClose}>
+            <StyledPillButton
+              size={PillButton.Size.L}
+              type={PillButton.Type.SECONDARY}
+              text={'登入／註冊'}
+            />
+          </Link>
+        )}
         {pillButtonLinks.map(({ text, href, target, type }, idx) => (
           <Link
             key={`pill-btn-${idx}`}

@@ -13,6 +13,7 @@ import SnackBar from '@/components/snack-bar'
 import Feedback from '@/components/feedback'
 // context
 import { ScrollProvider } from '@/contexts/scroll-context'
+import { AuthProvider } from '@/services/auth/auth-provider'
 // constants
 import { OG_IMAGE_URL } from '@/constants'
 
@@ -67,14 +68,16 @@ export default function RootLayout({
       )}
       <body>
         <StyledComponentsRegistry>
-          <ScrollProvider>
-            <GlobalStyles />
-            <Header />
-            <Feedback />
-            <main>{children}</main>
-            <Footer />
-          </ScrollProvider>
-          <SnackBar />
+          <AuthProvider>
+            <ScrollProvider>
+              <GlobalStyles />
+              <Header />
+              <Feedback />
+              <main>{children}</main>
+              <Footer />
+            </ScrollProvider>
+            <SnackBar />
+          </AuthProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
