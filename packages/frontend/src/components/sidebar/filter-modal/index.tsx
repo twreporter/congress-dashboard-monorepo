@@ -223,6 +223,8 @@ type FilterModalProps = {
   slug: string
   title: string
   link?: string
+  titlePrefix?: string
+  titleSuffix?: string
   subtitle?: string
   initialOption?: FilterOption[]
   placeholder?: string
@@ -237,6 +239,8 @@ type FilterModalProps = {
 const FilterModal: React.FC<FilterModalProps> = ({
   title,
   link,
+  titlePrefix = '',
+  titleSuffix = ' 的相關發言篩選',
   slug,
   subtitle,
   initialOption = [],
@@ -450,8 +454,9 @@ const FilterModal: React.FC<FilterModalProps> = ({
         <TitleBox>
           {link ? (
             <Title>
+              {titlePrefix ? <TitleText>{titlePrefix}</TitleText> : null}
               <TitleLink href={link}>{title}</TitleLink>
-              <TitleText>{' 的相關發言篩選'}</TitleText>
+              <TitleText>{titleSuffix}</TitleText>
             </Title>
           ) : (
             <Title>

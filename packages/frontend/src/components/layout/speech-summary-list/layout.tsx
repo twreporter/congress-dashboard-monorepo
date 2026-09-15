@@ -40,7 +40,7 @@ export const Body = styled.div`
 `
 
 export const SummarySection = styled.div`
-  gap: 32px;
+  gap: 24px;
   display: flex;
   flex-direction: column;
 `

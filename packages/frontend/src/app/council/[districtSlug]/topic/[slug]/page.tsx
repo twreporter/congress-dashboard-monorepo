@@ -9,6 +9,7 @@ import {
   fetchTopicBySlug,
 } from '@/fetchers/server/council-topic'
 import { fetchLatestCouncilMeetingOfACity } from '@/fetchers/server/council-meeting'
+import fetchTopNCouncilorOfATopic from '@/app/api/council-topic/[slug]/councilor/query'
 // utils
 import { isValidCouncil } from '@/utils/council'
 // components
@@ -70,16 +71,30 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       notFound()
     }
 
-    const [topic, councilMeeting] = await Promise.all([
-      fetchTopicBySlug({ slug, districtSlug }),
-      fetchLatestCouncilMeetingOfACity({ city: districtSlug }),
-    ])
-    if (!topic || !councilMeeting) {
+    const councilMeeting = await fetchLatestCouncilMeetingOfACity({
+      city: districtSlug,
+    })
+    if (!councilMeeting) {
       notFound()
     }
 
+    const councilMeetingId = Number(councilMeeting.id)
+    const [topic, councilors] = await Promise.all([
+      fetchTopicBySlug({ slug, districtSlug, councilMeetingId }),
+      fetchTopNCouncilorOfATopic({
+        topicSlug: slug,
+        city: districtSlug,
+        councilMeetingId,
+      }),
+    ])
+    if (!topic) notFound()
+
     return (
-      <CouncilTopicPage topicData={topic} councilMeeting={councilMeeting} />
+      <CouncilTopicPage
+        topicData={topic}
+        councilorsData={councilors}
+        councilMeeting={councilMeeting}
+      />
     )
   } catch (error) {
     console.error('Error fetching council topic data:', error)
