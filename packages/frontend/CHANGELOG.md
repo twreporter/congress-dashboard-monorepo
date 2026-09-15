@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-beta.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-rc.4...@twreporter/congress-dashboard-frontend@1.15.0-beta.0) (2026-09-15)
+
+### Bug Fixes
+
+- **frontend:** address comments ([d03afaa](https://github.com/twreporter/congress-dashboard-monorepo/commit/d03afaa4eea204b513829311bb60a7a23ec0f172))
+- **frontend:** improve error handling for access token storage ([90bc51d](https://github.com/twreporter/congress-dashboard-monorepo/commit/90bc51dfe4566b8537feb09d23b4e92ac1ac6230))
+
+### Features
+
+- **frontend:** account link icon ([4f63350](https://github.com/twreporter/congress-dashboard-monorepo/commit/4f633501366fc3bc0a9f654b1e28d48e2dce5d93))
+- **frontend:** login logic ([7c287d3](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c287d3ec2c58cd77db56f808c979bbb0cc4c08c))
+- **frontend:** user email and name and avatar ([df88b45](https://github.com/twreporter/congress-dashboard-monorepo/commit/df88b45566cf14027b280453f7a99f881ec28b11))
+
 # [1.15.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-rc.3...@twreporter/congress-dashboard-frontend@1.15.0-rc.4) (2026-09-14)
 
 ### Bug Fixes
