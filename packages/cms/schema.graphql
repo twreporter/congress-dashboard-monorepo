@@ -121,6 +121,63 @@ input SystemUserCreateInput {
   updatedAt: DateTime
 }
 
+type Member {
+  id: ID!
+  twreporterUserId: String
+  email: String
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberWhereUniqueInput {
+  id: ID
+  twreporterUserId: String
+  email: String
+}
+
+input MemberWhereInput {
+  AND: [MemberWhereInput!]
+  OR: [MemberWhereInput!]
+  NOT: [MemberWhereInput!]
+  id: IDFilter
+  twreporterUserId: StringFilter
+  email: StringFilter
+  name: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input MemberOrderByInput {
+  id: OrderDirection
+  twreporterUserId: OrderDirection
+  email: OrderDirection
+  name: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input MemberUpdateInput {
+  twreporterUserId: String
+  email: String
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberUpdateArgs {
+  where: MemberWhereUniqueInput!
+  data: MemberUpdateInput!
+}
+
+input MemberCreateInput {
+  twreporterUserId: String
+  email: String
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type Photo {
   id: ID!
   name: String
@@ -1880,6 +1937,12 @@ type Mutation {
   updateSystemUsers(data: [SystemUserUpdateArgs!]!): [SystemUser]
   deleteSystemUser(where: SystemUserWhereUniqueInput!): SystemUser
   deleteSystemUsers(where: [SystemUserWhereUniqueInput!]!): [SystemUser]
+  createMember(data: MemberCreateInput!): Member
+  createMembers(data: [MemberCreateInput!]!): [Member]
+  updateMember(where: MemberWhereUniqueInput!, data: MemberUpdateInput!): Member
+  updateMembers(data: [MemberUpdateArgs!]!): [Member]
+  deleteMember(where: MemberWhereUniqueInput!): Member
+  deleteMembers(where: [MemberWhereUniqueInput!]!): [Member]
   createPhoto(data: PhotoCreateInput!): Photo
   createPhotos(data: [PhotoCreateInput!]!): [Photo]
   updatePhoto(where: PhotoWhereUniqueInput!, data: PhotoUpdateInput!): Photo
@@ -2021,6 +2084,9 @@ type Query {
   systemUser(where: SystemUserWhereUniqueInput!): SystemUser
   systemUsers(where: SystemUserWhereInput! = {}, orderBy: [SystemUserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SystemUserWhereUniqueInput): [SystemUser!]
   systemUsersCount(where: SystemUserWhereInput! = {}): Int
+  member(where: MemberWhereUniqueInput!): Member
+  members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
+  membersCount(where: MemberWhereInput! = {}): Int
   photo(where: PhotoWhereUniqueInput!): Photo
   photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int

@@ -18,9 +18,11 @@ import CouncilTopic from './CouncilTopic'
 import CouncilBill from './CouncilBill'
 import CouncilSpeech from './CouncilSpeech'
 import CouncilImportRecord from './CouncilImportRecord'
+import Member from './Member'
 
 export const listDefinition = {
   SystemUser,
+  Member,
   Photo,
   Selected,
   Speech,
