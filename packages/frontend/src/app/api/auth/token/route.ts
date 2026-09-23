@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import logger from '@/utils/logger'
+import { upsertMember } from './upsert-member'
 
 const getGoApiUrl =
   process.env.NEXT_PUBLIC_TWREPORTER_API_URL ||
@@ -52,7 +54,10 @@ export async function POST(request: NextRequest) {
     }
 
     const claims = decodeAccessToken(accessToken)
-    const userId = claims.user_id ? String(claims.user_id) : undefined
+    const userId =
+      Number.isSafeInteger(claims.user_id) && (claims.user_id ?? 0) > 0
+        ? String(claims.user_id)
+        : undefined
     let name: string | undefined
     let email = claims.email
 
@@ -74,11 +79,30 @@ export async function POST(request: NextRequest) {
           const firstName = profilePayload?.data?.first_name?.trim() || ''
           const lastName = profilePayload?.data?.last_name?.trim() || ''
           name = [firstName, lastName].filter(Boolean).join(' ') || undefined
-          email = profilePayload?.data?.email || email
+          if (typeof profilePayload?.data?.email === 'string') {
+            email = profilePayload.data.email || email
+          }
         }
       } catch {
         // Authentication remains valid when optional profile data is unavailable.
       }
+    }
+
+    if (!userId || !email) {
+      return NextResponse.json(
+        { status: 'error', message: 'User identity is incomplete' },
+        { status: 502 }
+      )
+    }
+
+    try {
+      await upsertMember(userId, email, name || email.split('@')[0])
+    } catch (error) {
+      logger.error({ err: error, userId }, 'Failed to sync member on login')
+      return NextResponse.json(
+        { status: 'error', message: 'Unable to sync member' },
+        { status: 502 }
+      )
     }
 
     return NextResponse.json({
