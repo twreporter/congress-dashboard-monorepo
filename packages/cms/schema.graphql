@@ -178,6 +178,465 @@ input MemberCreateInput {
   updatedAt: DateTime
 }
 
+type MemberFavoriteCouncilMember {
+  id: ID!
+  member: Member
+  councilMember: CouncilMember
+  createdAt: DateTime
+}
+
+input MemberFavoriteCouncilMemberWhereUniqueInput {
+  id: ID
+}
+
+input MemberFavoriteCouncilMemberWhereInput {
+  AND: [MemberFavoriteCouncilMemberWhereInput!]
+  OR: [MemberFavoriteCouncilMemberWhereInput!]
+  NOT: [MemberFavoriteCouncilMemberWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  councilMember: CouncilMemberWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFavoriteCouncilMemberOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFavoriteCouncilMemberUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  councilMember: CouncilMemberRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input MemberRelateToOneForUpdateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouncilMemberRelateToOneForUpdateInput {
+  create: CouncilMemberCreateInput
+  connect: CouncilMemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFavoriteCouncilMemberUpdateArgs {
+  where: MemberFavoriteCouncilMemberWhereUniqueInput!
+  data: MemberFavoriteCouncilMemberUpdateInput!
+}
+
+input MemberFavoriteCouncilMemberCreateInput {
+  member: MemberRelateToOneForCreateInput
+  councilMember: CouncilMemberRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
+input MemberRelateToOneForCreateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
+}
+
+input CouncilMemberRelateToOneForCreateInput {
+  create: CouncilMemberCreateInput
+  connect: CouncilMemberWhereUniqueInput
+}
+
+type MemberFavoriteLegislativeYuanMember {
+  id: ID!
+  member: Member
+  legislativeYuanMember: LegislativeYuanMember
+  createdAt: DateTime
+}
+
+input MemberFavoriteLegislativeYuanMemberWhereUniqueInput {
+  id: ID
+}
+
+input MemberFavoriteLegislativeYuanMemberWhereInput {
+  AND: [MemberFavoriteLegislativeYuanMemberWhereInput!]
+  OR: [MemberFavoriteLegislativeYuanMemberWhereInput!]
+  NOT: [MemberFavoriteLegislativeYuanMemberWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  legislativeYuanMember: LegislativeYuanMemberWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFavoriteLegislativeYuanMemberOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFavoriteLegislativeYuanMemberUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input LegislativeYuanMemberRelateToOneForUpdateInput {
+  create: LegislativeYuanMemberCreateInput
+  connect: LegislativeYuanMemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFavoriteLegislativeYuanMemberUpdateArgs {
+  where: MemberFavoriteLegislativeYuanMemberWhereUniqueInput!
+  data: MemberFavoriteLegislativeYuanMemberUpdateInput!
+}
+
+input MemberFavoriteLegislativeYuanMemberCreateInput {
+  member: MemberRelateToOneForCreateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
+input LegislativeYuanMemberRelateToOneForCreateInput {
+  create: LegislativeYuanMemberCreateInput
+  connect: LegislativeYuanMemberWhereUniqueInput
+}
+
+type MemberFavoriteSpeech {
+  id: ID!
+  member: Member
+  speech: Speech
+  createdAt: DateTime
+}
+
+input MemberFavoriteSpeechWhereUniqueInput {
+  id: ID
+}
+
+input MemberFavoriteSpeechWhereInput {
+  AND: [MemberFavoriteSpeechWhereInput!]
+  OR: [MemberFavoriteSpeechWhereInput!]
+  NOT: [MemberFavoriteSpeechWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  speech: SpeechWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFavoriteSpeechOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFavoriteSpeechUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  speech: SpeechRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input SpeechRelateToOneForUpdateInput {
+  create: SpeechCreateInput
+  connect: SpeechWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFavoriteSpeechUpdateArgs {
+  where: MemberFavoriteSpeechWhereUniqueInput!
+  data: MemberFavoriteSpeechUpdateInput!
+}
+
+input MemberFavoriteSpeechCreateInput {
+  member: MemberRelateToOneForCreateInput
+  speech: SpeechRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
+input SpeechRelateToOneForCreateInput {
+  create: SpeechCreateInput
+  connect: SpeechWhereUniqueInput
+}
+
+type MemberFavoriteCouncilSpeech {
+  id: ID!
+  member: Member
+  councilSpeech: CouncilSpeech
+  createdAt: DateTime
+}
+
+input MemberFavoriteCouncilSpeechWhereUniqueInput {
+  id: ID
+}
+
+input MemberFavoriteCouncilSpeechWhereInput {
+  AND: [MemberFavoriteCouncilSpeechWhereInput!]
+  OR: [MemberFavoriteCouncilSpeechWhereInput!]
+  NOT: [MemberFavoriteCouncilSpeechWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  councilSpeech: CouncilSpeechWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFavoriteCouncilSpeechOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFavoriteCouncilSpeechUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  councilSpeech: CouncilSpeechRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input CouncilSpeechRelateToOneForUpdateInput {
+  create: CouncilSpeechCreateInput
+  connect: CouncilSpeechWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFavoriteCouncilSpeechUpdateArgs {
+  where: MemberFavoriteCouncilSpeechWhereUniqueInput!
+  data: MemberFavoriteCouncilSpeechUpdateInput!
+}
+
+input MemberFavoriteCouncilSpeechCreateInput {
+  member: MemberRelateToOneForCreateInput
+  councilSpeech: CouncilSpeechRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
+input CouncilSpeechRelateToOneForCreateInput {
+  create: CouncilSpeechCreateInput
+  connect: CouncilSpeechWhereUniqueInput
+}
+
+type MemberFavoriteCouncilBill {
+  id: ID!
+  member: Member
+  councilBill: CouncilBill
+  createdAt: DateTime
+}
+
+input MemberFavoriteCouncilBillWhereUniqueInput {
+  id: ID
+}
+
+input MemberFavoriteCouncilBillWhereInput {
+  AND: [MemberFavoriteCouncilBillWhereInput!]
+  OR: [MemberFavoriteCouncilBillWhereInput!]
+  NOT: [MemberFavoriteCouncilBillWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  councilBill: CouncilBillWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFavoriteCouncilBillOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFavoriteCouncilBillUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  councilBill: CouncilBillRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input CouncilBillRelateToOneForUpdateInput {
+  create: CouncilBillCreateInput
+  connect: CouncilBillWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFavoriteCouncilBillUpdateArgs {
+  where: MemberFavoriteCouncilBillWhereUniqueInput!
+  data: MemberFavoriteCouncilBillUpdateInput!
+}
+
+input MemberFavoriteCouncilBillCreateInput {
+  member: MemberRelateToOneForCreateInput
+  councilBill: CouncilBillRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
+input CouncilBillRelateToOneForCreateInput {
+  create: CouncilBillCreateInput
+  connect: CouncilBillWhereUniqueInput
+}
+
+type MemberFavoriteTopicLegislator {
+  id: ID!
+  member: Member
+  topic: Topic
+  legislator: Legislator
+  legislativeMeeting: LegislativeMeeting
+  source: String
+  createdAt: DateTime
+}
+
+input MemberFavoriteTopicLegislatorWhereUniqueInput {
+  id: ID
+}
+
+input MemberFavoriteTopicLegislatorWhereInput {
+  AND: [MemberFavoriteTopicLegislatorWhereInput!]
+  OR: [MemberFavoriteTopicLegislatorWhereInput!]
+  NOT: [MemberFavoriteTopicLegislatorWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  topic: TopicWhereInput
+  legislator: LegislatorWhereInput
+  legislativeMeeting: LegislativeMeetingWhereInput
+  source: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFavoriteTopicLegislatorOrderByInput {
+  id: OrderDirection
+  source: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFavoriteTopicLegislatorUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  topic: TopicRelateToOneForUpdateInput
+  legislator: LegislatorRelateToOneForUpdateInput
+  legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  source: String
+  createdAt: DateTime
+}
+
+input TopicRelateToOneForUpdateInput {
+  create: TopicCreateInput
+  connect: TopicWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislatorRelateToOneForUpdateInput {
+  create: LegislatorCreateInput
+  connect: LegislatorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislativeMeetingRelateToOneForUpdateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFavoriteTopicLegislatorUpdateArgs {
+  where: MemberFavoriteTopicLegislatorWhereUniqueInput!
+  data: MemberFavoriteTopicLegislatorUpdateInput!
+}
+
+input MemberFavoriteTopicLegislatorCreateInput {
+  member: MemberRelateToOneForCreateInput
+  topic: TopicRelateToOneForCreateInput
+  legislator: LegislatorRelateToOneForCreateInput
+  legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  source: String
+  createdAt: DateTime
+}
+
+input TopicRelateToOneForCreateInput {
+  create: TopicCreateInput
+  connect: TopicWhereUniqueInput
+}
+
+input LegislatorRelateToOneForCreateInput {
+  create: LegislatorCreateInput
+  connect: LegislatorWhereUniqueInput
+}
+
+input LegislativeMeetingRelateToOneForCreateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+}
+
+type MemberFavoriteCouncilTopicCouncilor {
+  id: ID!
+  member: Member
+  councilTopic: CouncilTopic
+  councilor: Councilor
+  councilMeeting: CouncilMeeting
+  source: String
+  createdAt: DateTime
+}
+
+input MemberFavoriteCouncilTopicCouncilorWhereUniqueInput {
+  id: ID
+}
+
+input MemberFavoriteCouncilTopicCouncilorWhereInput {
+  AND: [MemberFavoriteCouncilTopicCouncilorWhereInput!]
+  OR: [MemberFavoriteCouncilTopicCouncilorWhereInput!]
+  NOT: [MemberFavoriteCouncilTopicCouncilorWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  councilTopic: CouncilTopicWhereInput
+  councilor: CouncilorWhereInput
+  councilMeeting: CouncilMeetingWhereInput
+  source: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFavoriteCouncilTopicCouncilorOrderByInput {
+  id: OrderDirection
+  source: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFavoriteCouncilTopicCouncilorUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  councilTopic: CouncilTopicRelateToOneForUpdateInput
+  councilor: CouncilorRelateToOneForUpdateInput
+  councilMeeting: CouncilMeetingRelateToOneForUpdateInput
+  source: String
+  createdAt: DateTime
+}
+
+input CouncilTopicRelateToOneForUpdateInput {
+  create: CouncilTopicCreateInput
+  connect: CouncilTopicWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouncilorRelateToOneForUpdateInput {
+  create: CouncilorCreateInput
+  connect: CouncilorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouncilMeetingRelateToOneForUpdateInput {
+  create: CouncilMeetingCreateInput
+  connect: CouncilMeetingWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFavoriteCouncilTopicCouncilorUpdateArgs {
+  where: MemberFavoriteCouncilTopicCouncilorWhereUniqueInput!
+  data: MemberFavoriteCouncilTopicCouncilorUpdateInput!
+}
+
+input MemberFavoriteCouncilTopicCouncilorCreateInput {
+  member: MemberRelateToOneForCreateInput
+  councilTopic: CouncilTopicRelateToOneForCreateInput
+  councilor: CouncilorRelateToOneForCreateInput
+  councilMeeting: CouncilMeetingRelateToOneForCreateInput
+  source: String
+  createdAt: DateTime
+}
+
+input CouncilTopicRelateToOneForCreateInput {
+  create: CouncilTopicCreateInput
+  connect: CouncilTopicWhereUniqueInput
+}
+
+input CouncilorRelateToOneForCreateInput {
+  create: CouncilorCreateInput
+  connect: CouncilorWhereUniqueInput
+}
+
+input CouncilMeetingRelateToOneForCreateInput {
+  create: CouncilMeetingCreateInput
+  connect: CouncilMeetingWhereUniqueInput
+}
+
 type Photo {
   id: ID!
   name: String
@@ -301,18 +760,6 @@ input SelectedUpdateInput {
   updatedAt: DateTime
 }
 
-input LegislatorRelateToOneForUpdateInput {
-  create: LegislatorCreateInput
-  connect: LegislatorWhereUniqueInput
-  disconnect: Boolean
-}
-
-input TopicRelateToOneForUpdateInput {
-  create: TopicCreateInput
-  connect: TopicWhereUniqueInput
-  disconnect: Boolean
-}
-
 input SelectedUpdateArgs {
   where: SelectedWhereUniqueInput!
   data: SelectedUpdateInput!
@@ -324,16 +771,6 @@ input SelectedCreateInput {
   order: Int
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input LegislatorRelateToOneForCreateInput {
-  create: LegislatorCreateInput
-  connect: LegislatorWhereUniqueInput
-}
-
-input TopicRelateToOneForCreateInput {
-  create: TopicCreateInput
-  connect: TopicWhereUniqueInput
 }
 
 type Speech {
@@ -432,21 +869,9 @@ input SpeechUpdateInput {
   updatedAt: DateTime
 }
 
-input LegislativeMeetingRelateToOneForUpdateInput {
-  create: LegislativeMeetingCreateInput
-  connect: LegislativeMeetingWhereUniqueInput
-  disconnect: Boolean
-}
-
 input LegislativeMeetingSessionRelateToOneForUpdateInput {
   create: LegislativeMeetingSessionCreateInput
   connect: LegislativeMeetingSessionWhereUniqueInput
-  disconnect: Boolean
-}
-
-input LegislativeYuanMemberRelateToOneForUpdateInput {
-  create: LegislativeYuanMemberCreateInput
-  connect: LegislativeYuanMemberWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -480,19 +905,9 @@ input SpeechCreateInput {
   updatedAt: DateTime
 }
 
-input LegislativeMeetingRelateToOneForCreateInput {
-  create: LegislativeMeetingCreateInput
-  connect: LegislativeMeetingWhereUniqueInput
-}
-
 input LegislativeMeetingSessionRelateToOneForCreateInput {
   create: LegislativeMeetingSessionCreateInput
   connect: LegislativeMeetingSessionWhereUniqueInput
-}
-
-input LegislativeYuanMemberRelateToOneForCreateInput {
-  create: LegislativeYuanMemberCreateInput
-  connect: LegislativeYuanMemberWhereUniqueInput
 }
 
 input TopicRelateToManyForCreateInput {
@@ -1185,12 +1600,6 @@ input CouncilSpeechUpdateInput {
   updatedAt: DateTime
 }
 
-input CouncilMeetingRelateToOneForUpdateInput {
-  create: CouncilMeetingCreateInput
-  connect: CouncilMeetingWhereUniqueInput
-  disconnect: Boolean
-}
-
 input CouncilMemberRelateToManyForUpdateInput {
   disconnect: [CouncilMemberWhereUniqueInput!]
   set: [CouncilMemberWhereUniqueInput!]
@@ -1216,11 +1625,6 @@ input CouncilSpeechCreateInput {
   topic: CouncilTopicRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input CouncilMeetingRelateToOneForCreateInput {
-  create: CouncilMeetingCreateInput
-  connect: CouncilMeetingWhereUniqueInput
 }
 
 input CouncilMemberRelateToManyForCreateInput {
@@ -1608,12 +2012,6 @@ input CouncilMemberUpdateInput {
   updatedAt: DateTime
 }
 
-input CouncilorRelateToOneForUpdateInput {
-  create: CouncilorCreateInput
-  connect: CouncilorWhereUniqueInput
-  disconnect: Boolean
-}
-
 input CouncilMemberUpdateArgs {
   where: CouncilMemberWhereUniqueInput!
   data: CouncilMemberUpdateInput!
@@ -1636,11 +2034,6 @@ input CouncilMemberCreateInput {
   bill: CouncilBillRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input CouncilorRelateToOneForCreateInput {
-  create: CouncilorCreateInput
-  connect: CouncilorWhereUniqueInput
 }
 
 type CouncilMeeting {
@@ -1943,6 +2336,48 @@ type Mutation {
   updateMembers(data: [MemberUpdateArgs!]!): [Member]
   deleteMember(where: MemberWhereUniqueInput!): Member
   deleteMembers(where: [MemberWhereUniqueInput!]!): [Member]
+  createMemberFavoriteCouncilMember(data: MemberFavoriteCouncilMemberCreateInput!): MemberFavoriteCouncilMember
+  createMemberFavoriteCouncilMembers(data: [MemberFavoriteCouncilMemberCreateInput!]!): [MemberFavoriteCouncilMember]
+  updateMemberFavoriteCouncilMember(where: MemberFavoriteCouncilMemberWhereUniqueInput!, data: MemberFavoriteCouncilMemberUpdateInput!): MemberFavoriteCouncilMember
+  updateMemberFavoriteCouncilMembers(data: [MemberFavoriteCouncilMemberUpdateArgs!]!): [MemberFavoriteCouncilMember]
+  deleteMemberFavoriteCouncilMember(where: MemberFavoriteCouncilMemberWhereUniqueInput!): MemberFavoriteCouncilMember
+  deleteMemberFavoriteCouncilMembers(where: [MemberFavoriteCouncilMemberWhereUniqueInput!]!): [MemberFavoriteCouncilMember]
+  createMemberFavoriteLegislativeYuanMember(data: MemberFavoriteLegislativeYuanMemberCreateInput!): MemberFavoriteLegislativeYuanMember
+  createMemberFavoriteLegislativeYuanMembers(data: [MemberFavoriteLegislativeYuanMemberCreateInput!]!): [MemberFavoriteLegislativeYuanMember]
+  updateMemberFavoriteLegislativeYuanMember(where: MemberFavoriteLegislativeYuanMemberWhereUniqueInput!, data: MemberFavoriteLegislativeYuanMemberUpdateInput!): MemberFavoriteLegislativeYuanMember
+  updateMemberFavoriteLegislativeYuanMembers(data: [MemberFavoriteLegislativeYuanMemberUpdateArgs!]!): [MemberFavoriteLegislativeYuanMember]
+  deleteMemberFavoriteLegislativeYuanMember(where: MemberFavoriteLegislativeYuanMemberWhereUniqueInput!): MemberFavoriteLegislativeYuanMember
+  deleteMemberFavoriteLegislativeYuanMembers(where: [MemberFavoriteLegislativeYuanMemberWhereUniqueInput!]!): [MemberFavoriteLegislativeYuanMember]
+  createMemberFavoriteSpeech(data: MemberFavoriteSpeechCreateInput!): MemberFavoriteSpeech
+  createMemberFavoriteSpeeches(data: [MemberFavoriteSpeechCreateInput!]!): [MemberFavoriteSpeech]
+  updateMemberFavoriteSpeech(where: MemberFavoriteSpeechWhereUniqueInput!, data: MemberFavoriteSpeechUpdateInput!): MemberFavoriteSpeech
+  updateMemberFavoriteSpeeches(data: [MemberFavoriteSpeechUpdateArgs!]!): [MemberFavoriteSpeech]
+  deleteMemberFavoriteSpeech(where: MemberFavoriteSpeechWhereUniqueInput!): MemberFavoriteSpeech
+  deleteMemberFavoriteSpeeches(where: [MemberFavoriteSpeechWhereUniqueInput!]!): [MemberFavoriteSpeech]
+  createMemberFavoriteCouncilSpeech(data: MemberFavoriteCouncilSpeechCreateInput!): MemberFavoriteCouncilSpeech
+  createMemberFavoriteCouncilSpeeches(data: [MemberFavoriteCouncilSpeechCreateInput!]!): [MemberFavoriteCouncilSpeech]
+  updateMemberFavoriteCouncilSpeech(where: MemberFavoriteCouncilSpeechWhereUniqueInput!, data: MemberFavoriteCouncilSpeechUpdateInput!): MemberFavoriteCouncilSpeech
+  updateMemberFavoriteCouncilSpeeches(data: [MemberFavoriteCouncilSpeechUpdateArgs!]!): [MemberFavoriteCouncilSpeech]
+  deleteMemberFavoriteCouncilSpeech(where: MemberFavoriteCouncilSpeechWhereUniqueInput!): MemberFavoriteCouncilSpeech
+  deleteMemberFavoriteCouncilSpeeches(where: [MemberFavoriteCouncilSpeechWhereUniqueInput!]!): [MemberFavoriteCouncilSpeech]
+  createMemberFavoriteCouncilBill(data: MemberFavoriteCouncilBillCreateInput!): MemberFavoriteCouncilBill
+  createMemberFavoriteCouncilBills(data: [MemberFavoriteCouncilBillCreateInput!]!): [MemberFavoriteCouncilBill]
+  updateMemberFavoriteCouncilBill(where: MemberFavoriteCouncilBillWhereUniqueInput!, data: MemberFavoriteCouncilBillUpdateInput!): MemberFavoriteCouncilBill
+  updateMemberFavoriteCouncilBills(data: [MemberFavoriteCouncilBillUpdateArgs!]!): [MemberFavoriteCouncilBill]
+  deleteMemberFavoriteCouncilBill(where: MemberFavoriteCouncilBillWhereUniqueInput!): MemberFavoriteCouncilBill
+  deleteMemberFavoriteCouncilBills(where: [MemberFavoriteCouncilBillWhereUniqueInput!]!): [MemberFavoriteCouncilBill]
+  createMemberFavoriteTopicLegislator(data: MemberFavoriteTopicLegislatorCreateInput!): MemberFavoriteTopicLegislator
+  createMemberFavoriteTopicLegislators(data: [MemberFavoriteTopicLegislatorCreateInput!]!): [MemberFavoriteTopicLegislator]
+  updateMemberFavoriteTopicLegislator(where: MemberFavoriteTopicLegislatorWhereUniqueInput!, data: MemberFavoriteTopicLegislatorUpdateInput!): MemberFavoriteTopicLegislator
+  updateMemberFavoriteTopicLegislators(data: [MemberFavoriteTopicLegislatorUpdateArgs!]!): [MemberFavoriteTopicLegislator]
+  deleteMemberFavoriteTopicLegislator(where: MemberFavoriteTopicLegislatorWhereUniqueInput!): MemberFavoriteTopicLegislator
+  deleteMemberFavoriteTopicLegislators(where: [MemberFavoriteTopicLegislatorWhereUniqueInput!]!): [MemberFavoriteTopicLegislator]
+  createMemberFavoriteCouncilTopicCouncilor(data: MemberFavoriteCouncilTopicCouncilorCreateInput!): MemberFavoriteCouncilTopicCouncilor
+  createMemberFavoriteCouncilTopicCouncilors(data: [MemberFavoriteCouncilTopicCouncilorCreateInput!]!): [MemberFavoriteCouncilTopicCouncilor]
+  updateMemberFavoriteCouncilTopicCouncilor(where: MemberFavoriteCouncilTopicCouncilorWhereUniqueInput!, data: MemberFavoriteCouncilTopicCouncilorUpdateInput!): MemberFavoriteCouncilTopicCouncilor
+  updateMemberFavoriteCouncilTopicCouncilors(data: [MemberFavoriteCouncilTopicCouncilorUpdateArgs!]!): [MemberFavoriteCouncilTopicCouncilor]
+  deleteMemberFavoriteCouncilTopicCouncilor(where: MemberFavoriteCouncilTopicCouncilorWhereUniqueInput!): MemberFavoriteCouncilTopicCouncilor
+  deleteMemberFavoriteCouncilTopicCouncilors(where: [MemberFavoriteCouncilTopicCouncilorWhereUniqueInput!]!): [MemberFavoriteCouncilTopicCouncilor]
   createPhoto(data: PhotoCreateInput!): Photo
   createPhotos(data: [PhotoCreateInput!]!): [Photo]
   updatePhoto(where: PhotoWhereUniqueInput!, data: PhotoUpdateInput!): Photo
@@ -2087,6 +2522,27 @@ type Query {
   member(where: MemberWhereUniqueInput!): Member
   members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
   membersCount(where: MemberWhereInput! = {}): Int
+  memberFavoriteCouncilMember(where: MemberFavoriteCouncilMemberWhereUniqueInput!): MemberFavoriteCouncilMember
+  memberFavoriteCouncilMembers(where: MemberFavoriteCouncilMemberWhereInput! = {}, orderBy: [MemberFavoriteCouncilMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFavoriteCouncilMemberWhereUniqueInput): [MemberFavoriteCouncilMember!]
+  memberFavoriteCouncilMembersCount(where: MemberFavoriteCouncilMemberWhereInput! = {}): Int
+  memberFavoriteLegislativeYuanMember(where: MemberFavoriteLegislativeYuanMemberWhereUniqueInput!): MemberFavoriteLegislativeYuanMember
+  memberFavoriteLegislativeYuanMembers(where: MemberFavoriteLegislativeYuanMemberWhereInput! = {}, orderBy: [MemberFavoriteLegislativeYuanMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFavoriteLegislativeYuanMemberWhereUniqueInput): [MemberFavoriteLegislativeYuanMember!]
+  memberFavoriteLegislativeYuanMembersCount(where: MemberFavoriteLegislativeYuanMemberWhereInput! = {}): Int
+  memberFavoriteSpeech(where: MemberFavoriteSpeechWhereUniqueInput!): MemberFavoriteSpeech
+  memberFavoriteSpeeches(where: MemberFavoriteSpeechWhereInput! = {}, orderBy: [MemberFavoriteSpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFavoriteSpeechWhereUniqueInput): [MemberFavoriteSpeech!]
+  memberFavoriteSpeechesCount(where: MemberFavoriteSpeechWhereInput! = {}): Int
+  memberFavoriteCouncilSpeech(where: MemberFavoriteCouncilSpeechWhereUniqueInput!): MemberFavoriteCouncilSpeech
+  memberFavoriteCouncilSpeeches(where: MemberFavoriteCouncilSpeechWhereInput! = {}, orderBy: [MemberFavoriteCouncilSpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFavoriteCouncilSpeechWhereUniqueInput): [MemberFavoriteCouncilSpeech!]
+  memberFavoriteCouncilSpeechesCount(where: MemberFavoriteCouncilSpeechWhereInput! = {}): Int
+  memberFavoriteCouncilBill(where: MemberFavoriteCouncilBillWhereUniqueInput!): MemberFavoriteCouncilBill
+  memberFavoriteCouncilBills(where: MemberFavoriteCouncilBillWhereInput! = {}, orderBy: [MemberFavoriteCouncilBillOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFavoriteCouncilBillWhereUniqueInput): [MemberFavoriteCouncilBill!]
+  memberFavoriteCouncilBillsCount(where: MemberFavoriteCouncilBillWhereInput! = {}): Int
+  memberFavoriteTopicLegislator(where: MemberFavoriteTopicLegislatorWhereUniqueInput!): MemberFavoriteTopicLegislator
+  memberFavoriteTopicLegislators(where: MemberFavoriteTopicLegislatorWhereInput! = {}, orderBy: [MemberFavoriteTopicLegislatorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFavoriteTopicLegislatorWhereUniqueInput): [MemberFavoriteTopicLegislator!]
+  memberFavoriteTopicLegislatorsCount(where: MemberFavoriteTopicLegislatorWhereInput! = {}): Int
+  memberFavoriteCouncilTopicCouncilor(where: MemberFavoriteCouncilTopicCouncilorWhereUniqueInput!): MemberFavoriteCouncilTopicCouncilor
+  memberFavoriteCouncilTopicCouncilors(where: MemberFavoriteCouncilTopicCouncilorWhereInput! = {}, orderBy: [MemberFavoriteCouncilTopicCouncilorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFavoriteCouncilTopicCouncilorWhereUniqueInput): [MemberFavoriteCouncilTopicCouncilor!]
+  memberFavoriteCouncilTopicCouncilorsCount(where: MemberFavoriteCouncilTopicCouncilorWhereInput! = {}): Int
   photo(where: PhotoWhereUniqueInput!): Photo
   photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int

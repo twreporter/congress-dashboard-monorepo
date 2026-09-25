@@ -19,10 +19,39 @@ import CouncilBill from './CouncilBill'
 import CouncilSpeech from './CouncilSpeech'
 import CouncilImportRecord from './CouncilImportRecord'
 import Member from './Member'
+import {
+  memberFavoriteList,
+  memberFavoriteComboList,
+} from './utils/member-favorite'
 
 export const listDefinition = {
   SystemUser,
   Member,
+  MemberFavoriteCouncilMember: memberFavoriteList(
+    'CouncilMember',
+    '議員屆資',
+    'labelForCMS'
+  ),
+  MemberFavoriteLegislativeYuanMember: memberFavoriteList(
+    'LegislativeYuanMember',
+    '立委屆資',
+    'labelForCMS'
+  ),
+  MemberFavoriteSpeech: memberFavoriteList('Speech', '立法院逐字稿', 'title'),
+  MemberFavoriteCouncilSpeech: memberFavoriteList(
+    'CouncilSpeech',
+    '縣市逐字稿',
+    'title'
+  ),
+  MemberFavoriteCouncilBill: memberFavoriteList(
+    'CouncilBill',
+    '縣市議案',
+    'title'
+  ),
+  MemberFavoriteTopicLegislator: memberFavoriteComboList('TopicLegislator'),
+  MemberFavoriteCouncilTopicCouncilor: memberFavoriteComboList(
+    'CouncilTopicCouncilor'
+  ),
   Photo,
   Selected,
   Speech,
