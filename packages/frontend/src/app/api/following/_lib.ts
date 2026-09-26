@@ -1,54 +1,54 @@
 import type { NextRequest } from 'next/server'
 import keystoneFetch from '@/app/api/_graphql/keystone'
 
-const favorites = {
+const followingTypes = {
   councilMember: {
-    list: 'memberFavoriteCouncilMembers',
-    create: 'createMemberFavoriteCouncilMember',
-    delete: 'deleteMemberFavoriteCouncilMember',
-    input: 'MemberFavoriteCouncilMemberCreateInput',
+    list: 'memberFollowingCouncilMembers',
+    create: 'createMemberFollowingCouncilMember',
+    delete: 'deleteMemberFollowingCouncilMember',
+    input: 'MemberFollowingCouncilMemberCreateInput',
     target: 'councilMember',
     fields: 'id labelForCMS',
   },
   legislativeYuanMember: {
-    list: 'memberFavoriteLegislativeYuanMembers',
-    create: 'createMemberFavoriteLegislativeYuanMember',
-    delete: 'deleteMemberFavoriteLegislativeYuanMember',
-    input: 'MemberFavoriteLegislativeYuanMemberCreateInput',
+    list: 'memberFollowingLegislativeYuanMembers',
+    create: 'createMemberFollowingLegislativeYuanMember',
+    delete: 'deleteMemberFollowingLegislativeYuanMember',
+    input: 'MemberFollowingLegislativeYuanMemberCreateInput',
     target: 'legislativeYuanMember',
     fields: 'id labelForCMS',
   },
   speech: {
-    list: 'memberFavoriteSpeeches',
-    create: 'createMemberFavoriteSpeech',
-    delete: 'deleteMemberFavoriteSpeech',
-    input: 'MemberFavoriteSpeechCreateInput',
+    list: 'memberFollowingSpeeches',
+    create: 'createMemberFollowingSpeech',
+    delete: 'deleteMemberFollowingSpeech',
+    input: 'MemberFollowingSpeechCreateInput',
     target: 'speech',
     fields: 'id title slug',
   },
   councilSpeech: {
-    list: 'memberFavoriteCouncilSpeeches',
-    create: 'createMemberFavoriteCouncilSpeech',
-    delete: 'deleteMemberFavoriteCouncilSpeech',
-    input: 'MemberFavoriteCouncilSpeechCreateInput',
+    list: 'memberFollowingCouncilSpeeches',
+    create: 'createMemberFollowingCouncilSpeech',
+    delete: 'deleteMemberFollowingCouncilSpeech',
+    input: 'MemberFollowingCouncilSpeechCreateInput',
     target: 'councilSpeech',
     fields: 'id title slug',
   },
   councilBill: {
-    list: 'memberFavoriteCouncilBills',
-    create: 'createMemberFavoriteCouncilBill',
-    delete: 'deleteMemberFavoriteCouncilBill',
-    input: 'MemberFavoriteCouncilBillCreateInput',
+    list: 'memberFollowingCouncilBills',
+    create: 'createMemberFollowingCouncilBill',
+    delete: 'deleteMemberFollowingCouncilBill',
+    input: 'MemberFollowingCouncilBillCreateInput',
     target: 'councilBill',
     fields: 'id title slug',
   },
 } as const
 
-export type FavoriteType = (typeof favorites)[keyof typeof favorites]
+export type FollowingType = (typeof followingTypes)[keyof typeof followingTypes]
 
-export function getFavoriteType(type: string): FavoriteType | undefined {
-  return Object.prototype.hasOwnProperty.call(favorites, type)
-    ? favorites[type as keyof typeof favorites]
+export function getFollowingType(type: string): FollowingType | undefined {
+  return Object.prototype.hasOwnProperty.call(followingTypes, type)
+    ? followingTypes[type as keyof typeof followingTypes]
     : undefined
 }
 
@@ -93,7 +93,7 @@ export async function authenticatedUserId(request: NextRequest) {
   return { userId: String(claims.user_id) }
 }
 
-type Favorite = {
+type FollowingRecord = {
   id: string
   createdAt?: string
   [key: string]: unknown
@@ -113,8 +113,8 @@ export async function cmsGraphQL<T>(
   return result.data
 }
 
-export async function listFavorites(
-  type: FavoriteType,
+export async function listFollowing(
+  type: FollowingType,
   userId: string,
   {
     targetId,
@@ -128,12 +128,12 @@ export async function listFavorites(
   }
   const whereInput = type.input.replace('CreateInput', 'WhereInput')
   const list = type.list
-  const query = `query Favorites($where: ${whereInput}!, $take: Int!, $skip: Int!) {
+  const query = `query Following($where: ${whereInput}!, $take: Int!, $skip: Int!) {
     ${list}(where: $where, orderBy: { createdAt: desc }, take: $take, skip: $skip) {
       id createdAt ${type.target} { ${type.fields} }
     }
   }`
-  const data = await cmsGraphQL<Record<string, Favorite[]>>(query, {
+  const data = await cmsGraphQL<Record<string, FollowingRecord[]>>(query, {
     where,
     take: targetId ? 1 : take,
     skip,
@@ -141,13 +141,13 @@ export async function listFavorites(
   return data[type.list]
 }
 
-export async function createFavorite(
-  type: FavoriteType,
+export async function createFollowing(
+  type: FollowingType,
   userId: string,
   targetId: string
 ) {
-  const data = await cmsGraphQL<Record<string, Favorite>>(
-    `mutation AddFavorite($data: ${type.input}!) {
+  const data = await cmsGraphQL<Record<string, FollowingRecord>>(
+    `mutation AddFollowing($data: ${type.input}!) {
       ${type.create}(data: $data) { id createdAt ${type.target} { ${type.fields} } }
     }`,
     {
@@ -160,13 +160,16 @@ export async function createFavorite(
   return data[type.create]
 }
 
-export async function deleteFavorite(type: FavoriteType, favoriteId: string) {
+export async function deleteFollowing(
+  type: FollowingType,
+  followingId: string
+) {
   const whereInput = type.input.replace('CreateInput', 'WhereUniqueInput')
   const data = await cmsGraphQL<Record<string, { id: string }>>(
-    `mutation RemoveFavorite($where: ${whereInput}!) {
+    `mutation RemoveFollowing($where: ${whereInput}!) {
       ${type.delete}(where: $where) { id }
     }`,
-    { where: { id: favoriteId } }
+    { where: { id: followingId } }
   )
   return data[type.delete]
 }

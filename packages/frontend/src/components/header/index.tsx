@@ -377,7 +377,7 @@ const Header: React.FC = () => {
                     )}
                   </SearchContainer>
                 </SearchBox>
-                <Link href={InternalRoutes.Favorites} aria-label="收藏文章">
+                <Link href={InternalRoutes.Following} aria-label="我的追蹤">
                   <IconButton iconComponent={kidStarIcon} />
                 </Link>
                 <AccountContainer>

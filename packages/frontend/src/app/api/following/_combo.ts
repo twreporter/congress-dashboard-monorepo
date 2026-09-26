@@ -2,19 +2,19 @@ import { authenticatedUserId, cmsGraphQL } from './_lib'
 
 const combos = {
   topicLegislator: {
-    prefix: 'MemberFavoriteTopicLegislator',
-    list: 'memberFavoriteTopicLegislators',
-    create: 'createMemberFavoriteTopicLegislator',
-    delete: 'deleteMemberFavoriteTopicLegislator',
+    prefix: 'MemberFollowingTopicLegislator',
+    list: 'memberFollowingTopicLegislators',
+    create: 'createMemberFollowingTopicLegislator',
+    delete: 'deleteMemberFollowingTopicLegislator',
     selection:
       'topic { id title slug } legislator { id name slug } legislativeMeeting { id term }',
     sources: ['topic', 'legislator'],
   },
   councilTopicCouncilor: {
-    prefix: 'MemberFavoriteCouncilTopicCouncilor',
-    list: 'memberFavoriteCouncilTopicCouncilors',
-    create: 'createMemberFavoriteCouncilTopicCouncilor',
-    delete: 'deleteMemberFavoriteCouncilTopicCouncilor',
+    prefix: 'MemberFollowingCouncilTopicCouncilor',
+    list: 'memberFollowingCouncilTopicCouncilors',
+    create: 'createMemberFollowingCouncilTopicCouncilor',
+    delete: 'deleteMemberFollowingCouncilTopicCouncilor',
     selection:
       'councilTopic { id title slug } councilor { id name slug } councilMeeting { id city term }',
     sources: ['topic', 'councilor'],
@@ -30,7 +30,7 @@ export function getCombo(name: string): Combo | undefined {
 }
 
 export function isTopicLegislator(combo: Combo) {
-  return combo.prefix === 'MemberFavoriteTopicLegislator'
+  return combo.prefix === 'MemberFollowingTopicLegislator'
 }
 
 const isSlug = (value: unknown): value is string =>
@@ -49,7 +49,7 @@ type KeyResult =
 
 /**
  * Builds the pair identity from request input. Slugs are resolved to the
- * meeting the member was viewing so the favorite keeps that term snapshot.
+ * meeting the member was viewing so the record keeps that term snapshot.
  */
 export async function resolveComboKey(
   combo: Combo,
@@ -176,15 +176,15 @@ export function validSource(combo: Combo, value: unknown) {
   )
 }
 
-type ComboFavorite = { id: string; [key: string]: unknown }
+type ComboFollowing = { id: string; [key: string]: unknown }
 
-export async function listComboFavorites(
+export async function listComboFollowing(
   combo: Combo,
   userId: string,
   { key, take = 50, skip = 0 }: { key?: ComboKey; take?: number; skip?: number }
 ) {
-  const data = await cmsGraphQL<Record<string, ComboFavorite[]>>(
-    `query ComboFavorites($where: ${combo.prefix}WhereInput!, $take: Int!, $skip: Int!) {
+  const data = await cmsGraphQL<Record<string, ComboFollowing[]>>(
+    `query ComboFollowing($where: ${combo.prefix}WhereInput!, $take: Int!, $skip: Int!) {
       ${combo.list}(where: $where, orderBy: { createdAt: desc }, take: $take, skip: $skip) {
         id createdAt source ${combo.selection}
       }
@@ -201,14 +201,14 @@ export async function listComboFavorites(
   return data[combo.list]
 }
 
-export async function createComboFavorite(
+export async function createComboFollowing(
   combo: Combo,
   userId: string,
   key: ComboKey,
   source: string
 ) {
-  const data = await cmsGraphQL<Record<string, ComboFavorite>>(
-    `mutation AddComboFavorite($data: ${combo.prefix}CreateInput!) {
+  const data = await cmsGraphQL<Record<string, ComboFollowing>>(
+    `mutation AddComboFollowing($data: ${combo.prefix}CreateInput!) {
       ${combo.create}(data: $data) { id createdAt source ${combo.selection} }
     }`,
     {
@@ -222,12 +222,12 @@ export async function createComboFavorite(
   return data[combo.create]
 }
 
-export async function deleteComboFavorite(combo: Combo, favoriteId: string) {
+export async function deleteComboFollowing(combo: Combo, followingId: string) {
   return cmsGraphQL<Record<string, { id: string }>>(
-    `mutation RemoveComboFavorite($where: ${combo.prefix}WhereUniqueInput!) {
+    `mutation RemoveComboFollowing($where: ${combo.prefix}WhereUniqueInput!) {
       ${combo.delete}(where: $where) { id }
     }`,
-    { where: { id: favoriteId } }
+    { where: { id: followingId } }
   )
 }
 

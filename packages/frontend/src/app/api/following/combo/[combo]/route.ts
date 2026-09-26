@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import logger from '@/utils/logger'
 import {
   authenticatedUserId,
-  createComboFavorite,
-  deleteComboFavorite,
+  createComboFollowing,
+  deleteComboFollowing,
   getCombo,
   isTopicLegislator,
-  listComboFavorites,
+  listComboFollowing,
   resolveComboKey,
   validSource,
   type Combo,
@@ -33,7 +33,7 @@ const readSearchParams = (combo: Combo, request: NextRequest) => {
 
 export async function GET(request: NextRequest, { params }: Context) {
   const combo = getCombo((await params).combo)
-  if (!combo) return fail(400, 'Invalid favorite combination')
+  if (!combo) return fail(400, 'Invalid following combination')
 
   try {
     const { userId } = await authenticatedUserId(request)
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest, { params }: Context) {
       return fail(400, 'Invalid pagination')
     }
 
-    // Supplying the full key turns this into an "is it saved?" lookup.
+    // Supplying the full key turns this into an "is it followed?" lookup.
     const input = readSearchParams(combo, request)
     let key
     if (Object.keys(input).length === keyParams(combo).length) {
@@ -59,24 +59,24 @@ export async function GET(request: NextRequest, { params }: Context) {
       key = resolved.key
     }
 
-    const favorites = await listComboFavorites(combo, userId, {
+    const following = await listComboFollowing(combo, userId, {
       key,
       take: Number(take),
       skip: Number(skip),
     })
     return NextResponse.json(
-      { status: 'success', data: favorites },
+      { status: 'success', data: following },
       { headers: { 'Cache-Control': 'private, no-store' } }
     )
   } catch (error) {
-    logger.error({ err: error }, 'Failed to list combo favorites')
-    return fail(502, 'Unable to load favorites')
+    logger.error({ err: error }, 'Failed to list combo following')
+    return fail(502, 'Unable to load following')
   }
 }
 
 export async function POST(request: NextRequest, { params }: Context) {
   const combo = getCombo((await params).combo)
-  if (!combo) return fail(400, 'Invalid favorite combination')
+  if (!combo) return fail(400, 'Invalid following combination')
   if (request.headers.get('origin') !== request.nextUrl.origin) {
     return fail(403, 'Invalid origin')
   }
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest, { params }: Context) {
       return fail(422, 'The pair has no record in this term')
     }
 
-    const existing = await listComboFavorites(combo, userId, {
+    const existing = await listComboFollowing(combo, userId, {
       key: resolved.key,
     })
     if (existing.length) {
@@ -113,20 +113,20 @@ export async function POST(request: NextRequest, { params }: Context) {
 
     const source = (input.source as string) ?? combo.sources[0]
     try {
-      const favorite = await createComboFavorite(
+      const created = await createComboFollowing(
         combo,
         userId,
         resolved.key,
         source
       )
       return NextResponse.json(
-        { status: 'success', data: favorite },
+        { status: 'success', data: created },
         { status: 201 }
       )
     } catch (error) {
       // Concurrent requests can both miss the lookup above. The composite
       // unique key lets one insert win; return that row to both callers.
-      const matching = await listComboFavorites(combo, userId, {
+      const matching = await listComboFollowing(combo, userId, {
         key: resolved.key,
       })
       if (matching.length) {
@@ -135,14 +135,14 @@ export async function POST(request: NextRequest, { params }: Context) {
       throw error
     }
   } catch (error) {
-    logger.error({ err: error }, 'Failed to add combo favorite')
-    return fail(502, 'Unable to add favorite')
+    logger.error({ err: error }, 'Failed to add combo following')
+    return fail(502, 'Unable to add following')
   }
 }
 
 export async function DELETE(request: NextRequest, { params }: Context) {
   const combo = getCombo((await params).combo)
-  if (!combo) return fail(400, 'Invalid favorite combination')
+  if (!combo) return fail(400, 'Invalid following combination')
   if (request.headers.get('origin') !== request.nextUrl.origin) {
     return fail(403, 'Invalid origin')
   }
@@ -160,15 +160,15 @@ export async function DELETE(request: NextRequest, { params }: Context) {
 
     // Scope the lookup to the authenticated member so one member can never
     // delete another member's record.
-    const matching = await listComboFavorites(combo, userId, {
+    const matching = await listComboFollowing(combo, userId, {
       key: resolved.key,
     })
-    if (!matching.length) return fail(404, 'Favorite not found')
+    if (!matching.length) return fail(404, 'Following not found')
 
-    await deleteComboFavorite(combo, matching[0].id)
+    await deleteComboFollowing(combo, matching[0].id)
     return NextResponse.json({ status: 'success' })
   } catch (error) {
-    logger.error({ err: error }, 'Failed to remove combo favorite')
-    return fail(502, 'Unable to remove favorite')
+    logger.error({ err: error }, 'Failed to remove combo following')
+    return fail(502, 'Unable to remove following')
   }
 }

@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import logger from '@/utils/logger'
 import {
   authenticatedUserId,
-  deleteFavorite,
-  getFavoriteType,
-  listFavorites,
+  deleteFollowing,
+  getFollowingType,
+  listFollowing,
   validId,
 } from '../../_lib'
 
@@ -13,10 +13,10 @@ export async function DELETE(
   { params }: { params: Promise<{ type: string; targetId: string }> }
 ) {
   const { type, targetId } = await params
-  const favoriteType = getFavoriteType(type)
-  if (!favoriteType || !validId(targetId)) {
+  const followingType = getFollowingType(type)
+  if (!followingType || !validId(targetId)) {
     return NextResponse.json(
-      { status: 'error', message: 'Invalid favorite type or targetId' },
+      { status: 'error', message: 'Invalid following type or targetId' },
       { status: 400 }
     )
   }
@@ -36,22 +36,22 @@ export async function DELETE(
       )
     }
 
-    // Look the favorite up by the authenticated member so one member can never
+    // Look the record up by the authenticated member so one member can never
     // delete another member's record.
-    const matching = await listFavorites(favoriteType, userId, { targetId })
+    const matching = await listFollowing(followingType, userId, { targetId })
     if (!matching.length) {
       return NextResponse.json(
-        { status: 'error', message: 'Favorite not found' },
+        { status: 'error', message: 'Following not found' },
         { status: 404 }
       )
     }
 
-    await deleteFavorite(favoriteType, matching[0].id)
+    await deleteFollowing(followingType, matching[0].id)
     return NextResponse.json({ status: 'success' })
   } catch (error) {
-    logger.error({ err: error }, 'Failed to remove favorite')
+    logger.error({ err: error }, 'Failed to remove following')
     return NextResponse.json(
-      { status: 'error', message: 'Unable to remove favorite' },
+      { status: 'error', message: 'Unable to remove following' },
       { status: 502 }
     )
   }
