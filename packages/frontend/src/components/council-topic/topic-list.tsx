@@ -54,7 +54,7 @@ const workFilterLabel: Record<WorkFilter, string> = {
 
 const SummaryCount = styled(P1)`
   color: ${colorGrayscale.gray700};
-  margin-bottom: -16px !important;
+  margin-bottom: -8px !important;
 `
 
 const FixedContentFilter = styled.div<{ $show: boolean; $left: number | null }>`
@@ -294,7 +294,7 @@ const TopicList: React.FC<TopicListProps> = ({
         <FilterBox $show={showFilter}>
           {showFilter ? (
             <FilterModal
-              title={`${topic.title} 的相關發言與議案篩選`}
+              title={`討論 ${topic.title} 的議員篩選`}
               slug={topic.slug}
               initialOption={mapToTabItems(councilors)}
               placeholder="篩選議員"

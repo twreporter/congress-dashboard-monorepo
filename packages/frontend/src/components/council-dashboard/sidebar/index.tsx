@@ -142,7 +142,6 @@ const prepareWorkCardProps = (
 
 export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
-  count?: TitleSectionProps['count']
   legislatorList?: TitleSectionProps['tabs'] & { id?: number }
   slug: string
   onClose?: () => void
@@ -152,7 +151,6 @@ export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
 export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   slug,
   title,
-  count,
   legislatorList = [],
   onClose,
   className,
@@ -237,7 +235,6 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
           <TitleSection
             title={title}
             titleDescription="的相關發言與議案摘要"
-            count={count}
             tabs={tabList}
             showTabAvatar={true}
             showTabCount={false}
@@ -314,7 +311,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 
 // sidebar legislator component
 const FollowMoreLegislator = styled.div`
-  gap: 32px;
+  gap: 24px;
   display: flex;
   overflow-x: scroll;
 `
