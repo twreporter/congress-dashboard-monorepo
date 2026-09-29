@@ -75,7 +75,7 @@ const listConfigurations = list({
       label: '所屬議題',
       many: true,
       ui: {
-        labelField: 'title',
+        labelField: 'labelForCMS',
       },
     }),
     createdAt: CREATED_AT(),
