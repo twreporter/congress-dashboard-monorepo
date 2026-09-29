@@ -142,7 +142,6 @@ const prepareWorkCardProps = (
 
 export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
-  count?: TitleSectionProps['count']
   legislatorList?: TitleSectionProps['tabs'] & { id?: number }
   slug: string
   onClose?: () => void

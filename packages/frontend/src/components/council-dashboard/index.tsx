@@ -114,7 +114,6 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [showSidebar, setShowSidebar] = useState(false)
   const [sidebarTopic, setSidebarTopic] = useState<SidebarIssueProps>({
     title: '',
-    count: 0,
     slug: '',
     legislatorList: [],
     districtSlug,
@@ -255,7 +254,6 @@ const Dashboard: React.FC<DashboardProps> = ({
       slug: activeTopic.slug,
       title: activeTopic.title,
       legislatorList: activeTopic.councilors,
-      count: activeTopic.billCount,
       districtSlug,
     })
   }
