@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-rc.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-rc.4...@twreporter/congress-dashboard-frontend@1.15.0-rc.5) (2026-09-29)
+
+### Bug Fixes
+
+- **frontend:** address ui defects ([b3bccc6](https://github.com/twreporter/congress-dashboard-monorepo/commit/b3bccc64afb536ed2de665fd42e754d21033c0d3))
+- **frontend:** remove count prop from SidebarIssue ([4451627](https://github.com/twreporter/congress-dashboard-monorepo/commit/4451627d128932555b592c8332e01969820cd184))
+
 # [1.15.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-rc.3...@twreporter/congress-dashboard-frontend@1.15.0-rc.4) (2026-09-14)
 
 ### Bug Fixes

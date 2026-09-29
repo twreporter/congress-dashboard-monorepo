@@ -57,7 +57,7 @@ const workFilterLabel: Record<WorkFilter, string> = {
 
 const SummaryCount = styled(P1)`
   color: ${colorGrayscale.gray700};
-  margin-bottom: -16px !important;
+  margin-bottom: -8px !important;
 `
 
 const FixedContentFilter = styled.div<{ $show: boolean; $left: number | null }>`
