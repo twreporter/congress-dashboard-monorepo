@@ -8,13 +8,13 @@ type SpeechBaseData = {
 
 export type CouncilSpeechFromRes = SpeechBaseData & {
   summary?: string
-  councilMember: {
+  councilMember?: {
     city: string
     councilor: {
       name: string
       slug: string
     }
-  }
+  }[]
   attendee?: string
   topic?: {
     title: string
@@ -27,11 +27,11 @@ export type CouncilSpeechFromRes = SpeechBaseData & {
 
 export type CouncilSpeechData = SpeechBaseData & {
   summary: string | string[]
-  councilor?: {
+  councilors: {
     name: string
     slug: string
     city: CouncilDistrict
-  }
+  }[]
   attendee: string
   relatedTopics: {
     title: string

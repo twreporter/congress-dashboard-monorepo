@@ -237,6 +237,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
         <div ref={topRef}>
           <TitleSection
             title={title}
+            titleDescription="的相關發言摘要"
             count={count}
             tabs={tabList}
             showTabAvatar={true}
@@ -396,7 +397,10 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
       : undefined
   )
   const legislatorList: LegislatorProps[] = useMemo(
-    () => (followMoreState.legislators || []).filter(({ count }) => count && count > 0),
+    () =>
+      (followMoreState.legislators || []).filter(
+        ({ count }) => count && count > 0
+      ),
     [followMoreState.legislators]
   )
 
@@ -440,6 +444,7 @@ export const SidebarLegislator: React.FC<SidebarLegislatorProps> = ({
         <div ref={topRef}>
           <TitleSection
             title={title}
+            titleDescription="的相關發言摘要"
             subtitle={subtitle}
             tabs={tabList}
             showTabAvatar={false}

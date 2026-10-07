@@ -9,5 +9,6 @@ packages/**/dist
 
 # mac file
 .DS_Store
+*.private
 
 .yarn

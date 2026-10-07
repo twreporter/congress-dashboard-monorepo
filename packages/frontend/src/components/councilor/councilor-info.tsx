@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import styled from 'styled-components'
 // @twreporter
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import {
@@ -9,6 +10,7 @@ import {
 import { OpenInNew } from '@twreporter/react-components/lib/icon'
 // components
 import PartyTag from '@/components/dashboard/card/party-tag'
+import Tooltip from '@/components/dashboard/card/tooltip'
 // enums
 import { TagSize } from '@/components/dashboard/enum'
 // types
@@ -16,6 +18,7 @@ import type { CouncilorForLawmaker } from '@/types/councilor'
 // constants
 import { CITY_LABEL } from '@twreporter/congress-dashboard-shared/lib/constants/city'
 import { CARD_HUMAN_TYPE } from '@/components/dashboard/card/human'
+import { formatAdministrativeDistrict } from '@/utils/councilor'
 // styles
 import { H3Gray900, P1Gray800 } from '@/components/legislator/styles'
 import {
@@ -33,6 +36,11 @@ import {
   BadgeText,
 } from '@/components/legislator/legislator-info'
 
+const TooltipContainer = styled.div`
+  align-self: center;
+  margin-left: -8px;
+`
+
 type CouncilorInfoProps = {
   councilor: CouncilorForLawmaker
 }
@@ -45,6 +53,11 @@ const CouncilorInfo: React.FC<CouncilorInfoProps> = ({ councilor }) => {
   const constituency = `${CITY_LABEL[councilor.councilMeeting.city]}第${
     councilor.constituency
   }選區`
+  const administrativeDistrictString = formatAdministrativeDistrict({
+    city: councilor.city,
+    administrativeDistrict: councilor.administrativeDistrict,
+    memberType: councilor.type,
+  })
 
   return (
     <InfoContainer>
@@ -104,6 +117,13 @@ const CouncilorInfo: React.FC<CouncilorInfoProps> = ({ councilor }) => {
               <P1Gray800 text="選區" />
             </ItemTitle>
             <P1Gray800 weight={P1.Weight.BOLD} text={constituency} />
+            {administrativeDistrictString ? (
+              <TooltipContainer>
+                <Tooltip
+                  tooltip={`選區涵蓋之行政區：${administrativeDistrictString}`}
+                />
+              </TooltipContainer>
+            ) : null}
           </InfoItem>
           <InfoItem>
             <ItemTitle>

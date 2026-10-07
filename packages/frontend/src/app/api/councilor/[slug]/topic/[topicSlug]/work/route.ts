@@ -1,27 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-// fetcher
-import fetchBillsOfACouncilorInATopic from '@/app/api/councilor/[slug]/topic/[topicSlug]/bill/query'
-// util
+import fetchCouncilWork from '@/app/api/councilor/[slug]/topic/[topicSlug]/work/query'
 import logger from '@/utils/logger'
 import { getNumberParams } from '@/app/api/_core/utils'
 import responseHelper, {
   getCachedSuccessStatus,
 } from '@/app/api/_core/response-helper'
-// constant
 import { HttpStatus } from '@/app/api/_core/constants'
 
-type Params = {
-  councilMeetingId: number
-}
-
-const getSearchParams = (searchParams: URLSearchParams): Params => {
-  const res: Partial<Params> = {}
-
-  const meetingId = getNumberParams(searchParams, 'mid', true)
-  res.councilMeetingId = meetingId
-
-  return res as Params
-}
+const getSearchParams = (searchParams: URLSearchParams) => ({
+  councilMeetingId: getNumberParams(searchParams, 'mid', true),
+})
 
 export async function GET(
   req: NextRequest,
@@ -31,18 +19,15 @@ export async function GET(
   if (!slug || !topicSlug) {
     return NextResponse.json(
       responseHelper.error(
-        new Error('invalid parameters, slug should not be empty')
+        new Error('invalid parameters, slugs should not be empty')
       ),
-      {
-        status: HttpStatus.BAD_REQUEST,
-      }
+      { status: HttpStatus.BAD_REQUEST }
     )
   }
 
-  let parsedParams: Params
+  let parsedParams: ReturnType<typeof getSearchParams>
   try {
-    const searchParams = req.nextUrl.searchParams
-    parsedParams = getSearchParams(searchParams)
+    parsedParams = getSearchParams(req.nextUrl.searchParams)
   } catch (err) {
     return NextResponse.json(responseHelper.error(err as Error), {
       status: HttpStatus.BAD_REQUEST,
@@ -50,20 +35,19 @@ export async function GET(
   }
 
   try {
-    const { councilMeetingId } = parsedParams
-    const bills = await fetchBillsOfACouncilorInATopic({
+    const work = await fetchCouncilWork({
       councilorSlug: slug,
       topicSlug,
-      councilMeetingId,
+      councilMeetingId: parsedParams.councilMeetingId,
     })
     return NextResponse.json(
-      responseHelper.success(bills),
+      responseHelper.success(work),
       getCachedSuccessStatus()
     )
   } catch (err) {
     logger.error(
       { errMsg: err },
-      `failed to fetch bills of councilor ${slug} in topic ${topicSlug}`
+      `failed to fetch work of councilor ${slug} in topic ${topicSlug}`
     )
     return NextResponse.json(responseHelper.error(err as Error), {
       status: HttpStatus.INTERNAL_SERVER_ERROR,

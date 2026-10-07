@@ -19,7 +19,7 @@ export const topNTopicsOfCouncilorsTypeDefs = gql`
 
   extend type Query {
     """
-    Get top N topics of council members order by bill count desc
+    Get top N topics of council members ordered by speech count, then bill count
     """
     topNTopicsOfCouncilMembers(
       councilMemberIds: [Int!]!

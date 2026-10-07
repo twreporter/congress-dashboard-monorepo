@@ -4,6 +4,7 @@ export enum ZIndex {
   Header = 1000,
   SearchBarInBody = Header - 1,
   Bar = SearchBarInBody - 1,
+  BackToTopButton = 1020,
   Dropdown = 1050,
   HamburgerMenu = 1100,
   FilterModal = 1200,

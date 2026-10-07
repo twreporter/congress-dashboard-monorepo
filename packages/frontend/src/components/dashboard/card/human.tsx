@@ -236,6 +236,7 @@ export type CardHumanProps = {
   partyAvatar?: string
   size?: CardSize
   selected?: boolean
+  showTagCount?: boolean
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 const CardHuman: React.FC<CardHumanProps> = ({
@@ -250,6 +251,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
   partyAvatar = '',
   size = CardSize.L,
   selected = false,
+  showTagCount = true,
   onClick,
 }: CardHumanProps) => {
   const isShowTag = tags.length > 0
@@ -422,7 +424,7 @@ const CardHuman: React.FC<CardHumanProps> = ({
   )
 
   const popoverContent = hiddenTags
-    .map(({ name, count }: Tag) => `${name}(${count})`)
+    .map(({ name, count }: Tag) => (showTagCount ? `${name}(${count})` : name))
     .join('、')
 
   return (
@@ -459,9 +461,11 @@ const CardHuman: React.FC<CardHumanProps> = ({
                   ref={(el) => setTagRef(el, name)}
                 >
                   <TagName>{name}</TagName>
-                  <TagCount
-                    key={`legislator-${name}-tag-count-${index}`}
-                  >{`(${count})`}</TagCount>
+                  {showTagCount ? (
+                    <TagCount
+                      key={`legislator-${name}-tag-count-${index}`}
+                    >{`(${count})`}</TagCount>
+                  ) : null}
                 </TagItem>
               )
             })}

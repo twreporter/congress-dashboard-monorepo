@@ -1,7 +1,10 @@
 'use client'
 // type
 import type { CouncilDistrict } from '@/types/council'
-import type { CouncilorWithBillCount } from '@/types/councilor'
+import type {
+  CouncilorWithCount,
+  CouncilorWithWorkCounts,
+} from '@/types/councilor'
 import type {
   CouncilTopicForFilter,
   TopNTopicForCouncilors,
@@ -16,27 +19,40 @@ export type FetchTopCouncilorOfATopicParams = {
   districtSlug: CouncilDistrict
   excludeCouncilorSlug: string
 }
-export const fetchTop5CouncilorOfATopic = async ({
+type FetchCouncilorsOfATopicParams = FetchTopCouncilorOfATopicParams & {
+  top?: number
+}
+
+export const fetchCouncilorsOfATopic = async ({
   topicSlug,
   districtSlug,
   excludeCouncilorSlug,
-}: FetchTopCouncilorOfATopicParams): Promise<CouncilorWithBillCount[]> => {
-  const params = new URLSearchParams({
-    city: districtSlug,
-    exclude: excludeCouncilorSlug,
-    top: '5',
-  })
+  top,
+}: FetchCouncilorsOfATopicParams): Promise<CouncilorWithCount[]> => {
+  const params = new URLSearchParams({ city: districtSlug })
+  if (excludeCouncilorSlug) params.set('exclude', excludeCouncilorSlug)
+  if (top) params.set('top', String(top))
   const url = `${apiBase}/council-topic/${topicSlug}/councilor?${params.toString()}`
   const res = await fetch(url, {
     method: 'GET',
   })
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch top 5 councilor of topic ${topicSlug}`)
+    throw new Error(`Failed to fetch councilors of topic ${topicSlug}`)
   }
   const data = await res.json()
-  return data?.data || []
+  const councilors: CouncilorWithWorkCounts[] = data?.data || []
+  return councilors.map(
+    ({ speechCount, billCount: _billCount, ...councilor }) => ({
+      ...councilor,
+      count: speechCount,
+    })
+  )
 }
+
+export const fetchTop5CouncilorOfATopic = (
+  params: FetchTopCouncilorOfATopicParams
+) => fetchCouncilorsOfATopic({ ...params, top: 5 })
 
 type FetchTopicsOfACouncilorParams = {
   councilorSlug: string

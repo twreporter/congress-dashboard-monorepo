@@ -120,6 +120,7 @@ export type CardIssueProps = {
   legislators?: Legislator[]
   size?: CardSize
   selected?: boolean
+  showLegislatorCount?: boolean
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
 }
 const CardIssue: React.FC<CardIssueProps> = ({
@@ -128,6 +129,7 @@ const CardIssue: React.FC<CardIssueProps> = ({
   legislators = [],
   size = CardSize.L,
   selected = false,
+  showLegislatorCount = true,
   onClick,
 }: CardIssueProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -167,7 +169,9 @@ const CardIssue: React.FC<CardIssueProps> = ({
                   ) : null}
                 </AvatarContainer>
                 <Text text={name} />
-                <Text text={`(${count})`} />
+                {showLegislatorCount && count != null ? (
+                  <Text text={`(${count})`} />
+                ) : null}
               </LegislatorItem>
             )
           }

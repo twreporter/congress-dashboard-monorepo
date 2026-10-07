@@ -1058,7 +1058,8 @@ input CommitteeMemberCreateInput {
 type CouncilSpeech {
   id: ID!
   councilMeeting: CouncilMeeting
-  councilMember: CouncilMember
+  councilMember(where: CouncilMemberWhereInput! = {}, orderBy: [CouncilMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilMemberWhereUniqueInput): [CouncilMember!]
+  councilMemberCount(where: CouncilMemberWhereInput! = {}): Int
   date: CalendarDay
   title: String
   slug: String
@@ -1084,7 +1085,7 @@ input CouncilSpeechWhereInput {
   NOT: [CouncilSpeechWhereInput!]
   id: IDFilter
   councilMeeting: CouncilMeetingWhereInput
-  councilMember: CouncilMemberWhereInput
+  councilMember: CouncilMemberManyRelationFilter
   date: CalendarDayFilter
   title: StringFilter
   slug: StringFilter
@@ -1093,6 +1094,12 @@ input CouncilSpeechWhereInput {
   topic: CouncilTopicManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
+}
+
+input CouncilMemberManyRelationFilter {
+  every: CouncilMemberWhereInput
+  some: CouncilMemberWhereInput
+  none: CouncilMemberWhereInput
 }
 
 input CouncilSpeechOrderByInput {
@@ -1108,7 +1115,7 @@ input CouncilSpeechOrderByInput {
 
 input CouncilSpeechUpdateInput {
   councilMeeting: CouncilMeetingRelateToOneForUpdateInput
-  councilMember: CouncilMemberRelateToOneForUpdateInput
+  councilMember: CouncilMemberRelateToManyForUpdateInput
   date: CalendarDay
   title: String
   slug: String
@@ -1127,10 +1134,11 @@ input CouncilMeetingRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input CouncilMemberRelateToOneForUpdateInput {
-  create: CouncilMemberCreateInput
-  connect: CouncilMemberWhereUniqueInput
-  disconnect: Boolean
+input CouncilMemberRelateToManyForUpdateInput {
+  disconnect: [CouncilMemberWhereUniqueInput!]
+  set: [CouncilMemberWhereUniqueInput!]
+  create: [CouncilMemberCreateInput!]
+  connect: [CouncilMemberWhereUniqueInput!]
 }
 
 input CouncilSpeechUpdateArgs {
@@ -1140,7 +1148,7 @@ input CouncilSpeechUpdateArgs {
 
 input CouncilSpeechCreateInput {
   councilMeeting: CouncilMeetingRelateToOneForCreateInput
-  councilMember: CouncilMemberRelateToOneForCreateInput
+  councilMember: CouncilMemberRelateToManyForCreateInput
   date: CalendarDay
   title: String
   slug: String
@@ -1158,9 +1166,9 @@ input CouncilMeetingRelateToOneForCreateInput {
   connect: CouncilMeetingWhereUniqueInput
 }
 
-input CouncilMemberRelateToOneForCreateInput {
-  create: CouncilMemberCreateInput
-  connect: CouncilMemberWhereUniqueInput
+input CouncilMemberRelateToManyForCreateInput {
+  create: [CouncilMemberCreateInput!]
+  connect: [CouncilMemberWhereUniqueInput!]
 }
 
 type CouncilBill {
@@ -1203,12 +1211,6 @@ input CouncilBillWhereInput {
   updatedAt: DateTimeNullableFilter
 }
 
-input CouncilMemberManyRelationFilter {
-  every: CouncilMemberWhereInput
-  some: CouncilMemberWhereInput
-  none: CouncilMemberWhereInput
-}
-
 input CouncilBillOrderByInput {
   id: OrderDirection
   date: OrderDirection
@@ -1234,13 +1236,6 @@ input CouncilBillUpdateInput {
   updatedAt: DateTime
 }
 
-input CouncilMemberRelateToManyForUpdateInput {
-  disconnect: [CouncilMemberWhereUniqueInput!]
-  set: [CouncilMemberWhereUniqueInput!]
-  create: [CouncilMemberCreateInput!]
-  connect: [CouncilMemberWhereUniqueInput!]
-}
-
 input CouncilBillUpdateArgs {
   where: CouncilBillWhereUniqueInput!
   data: CouncilBillUpdateInput!
@@ -1259,11 +1254,6 @@ input CouncilBillCreateInput {
   topic: CouncilTopicRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input CouncilMemberRelateToManyForCreateInput {
-  create: [CouncilMemberCreateInput!]
-  connect: [CouncilMemberWhereUniqueInput!]
 }
 
 type CouncilTopic {
@@ -2097,10 +2087,17 @@ type Query {
   """Get topics order by speech count desc"""
   topicsOrderBySpeechCount(meetingId: Int!, sessionIds: [Int] = [], partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [TopicWithSpeechCountAndLegislators]
 
-  """Get council topics order by bill count desc"""
-  councilTopicsOrderByBillCount(meetingId: Int!, partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [CouncilTopicWithBillCountAndCouncilors]
+  """Get council topics ordered by speech count, then bill count"""
+  councilTopicsOrderByWork(meetingId: Int!, partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [CouncilTopicWithWorkCounts]
 
-  """Get top N topics of council members order by bill count desc"""
+  """
+  Get one councilor's topics ordered by speech, bill, then related councilor count
+  """
+  councilorTopicsOrderByWork(meetingId: Int!, councilorSlug: String!): [CouncilTopicWithWorkCounts]
+
+  """
+  Get top N topics of council members ordered by speech count, then bill count
+  """
   topNTopicsOfCouncilMembers(councilMemberIds: [Int!]!, councilMeetingId: Int!, take: Int = 10): [CouncilMemberWithTopTopics]
 }
 
@@ -2281,7 +2278,7 @@ type TopicWithSpeechCountAndLegislators {
   legislators: [LegislatorForTopic]
 }
 
-"""custom type for councilTopicsOrderByBillCount"""
+"""Custom types for councilTopicsOrderByWork"""
 type CouncilorForTopic {
   id: Int!
   name: String!
@@ -2292,9 +2289,11 @@ type CouncilorForTopic {
   image: CustomImage
 }
 
-type CouncilTopicWithBillCountAndCouncilors {
+type CouncilTopicWithWorkCounts {
   title: String!
   slug: String!
+  type: String
+  speechCount: Int!
   billCount: Int!
   councilorCount: Int!
   councilors: [CouncilorForTopic]

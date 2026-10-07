@@ -4,3 +4,4 @@ keystone.db
 *.log
 public/images
 .eslintcache
+public/files

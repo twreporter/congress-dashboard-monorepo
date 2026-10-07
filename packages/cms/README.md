@@ -41,6 +41,18 @@ or
 npm run dev
 ```
 
+## Deployment
+
+The root `cloudbuild.yaml` builds and deploys this package to Cloud Run. The
+Cloud Build trigger sets `_ENV` to `dev`, `staging`, or `prod`, and the Cloud
+Run service name is derived as `${_ENV}-congress-dashboard-cms`.
+
+Public runtime environment variables live in
+[`deploy/env.${_ENV}.cms.public.yaml`](deploy), and secrets (`DATABASE_URL`,
+`SESSION_SECRET`) are provisioned in Secret Manager via
+`deploy/secrets/create-secrets.sh`. See [`deploy/README.md`](deploy/README.md)
+for the full breakdown, secret naming convention, and rollout notes.
+
 ## Structured logging (Cloud Logging)
 
 We use a small, dependency-free structured logger that prints one JSON object per line to stdout. Logs are compatible with Google Cloud Logging (GCP) and include severity, timestamp, and basic runtime context.

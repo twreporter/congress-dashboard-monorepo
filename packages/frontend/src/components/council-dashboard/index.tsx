@@ -114,7 +114,6 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [showSidebar, setShowSidebar] = useState(false)
   const [sidebarTopic, setSidebarTopic] = useState<SidebarIssueProps>({
     title: '',
-    count: 0,
     slug: '',
     legislatorList: [],
     districtSlug,
@@ -255,7 +254,6 @@ const Dashboard: React.FC<DashboardProps> = ({
       slug: activeTopic.slug,
       title: activeTopic.title,
       legislatorList: activeTopic.councilors,
-      count: activeTopic.billCount,
       districtSlug,
     })
   }
@@ -436,12 +434,22 @@ const Dashboard: React.FC<DashboardProps> = ({
             <CardBox ref={cardRef}>
               <CardIssueBox $active={selectedType === Option.Issue}>
                 {topics.map(
-                  ({ title, billCount, councilorCount, councilors }, index) => (
+                  (
+                    {
+                      title,
+                      speechCount,
+                      billCount,
+                      councilorCount,
+                      councilors,
+                    },
+                    index
+                  ) => (
                     <CardIssueRWD
                       key={`issue-card-${index}`}
                       title={title}
-                      subTitle={`共 ${billCount} 筆相關議案（${councilorCount}人）`}
+                      subTitle={`共 ${speechCount} 筆發言、${billCount} 筆議案（${councilorCount}人）`}
                       legislators={councilors}
+                      showLegislatorCount={false}
                       selected={activeCardIndex === index}
                       onClick={(e: React.MouseEvent<HTMLElement>) =>
                         onClickCard(e, index)
@@ -483,6 +491,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                         onClickCard(e, index)
                       }
                       cardType={CARD_HUMAN_TYPE.Councilor}
+                      showTagCount={false}
                     />
                   )
                 )}

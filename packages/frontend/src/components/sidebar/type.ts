@@ -5,6 +5,7 @@ export type TabProps = {
   count?: number
   avatar?: string
   showAvatar?: boolean
+  showCount?: boolean
   selected?: boolean
   onClick?: (e: React.MouseEvent<HTMLElement>) => void
   className?: string
@@ -15,7 +16,9 @@ export type SelectTagProps = TabProps & {
   isLast?: boolean
 }
 
-export type FilterOption = TabProps & SelectTagProps
+export type FilterOption = SelectTagProps & {
+  isFeatured?: boolean
+}
 
 export type sidebarContextType = {
   closeFilterModal?: () => void

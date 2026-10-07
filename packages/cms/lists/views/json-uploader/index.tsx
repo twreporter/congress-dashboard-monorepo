@@ -272,7 +272,8 @@ const validateJsonData = (
     }
 
     const missingHeaders = listConfig.expectedHeaders.filter(
-      (header) => !(header in item)
+      (header) =>
+        listConfig.requiredFields.includes(header) && !(header in item)
     )
     if (missingHeaders.length > 0) {
       errors.push(`第 ${rowNum} 筆: 缺少欄位 ${missingHeaders.join(', ')}`)

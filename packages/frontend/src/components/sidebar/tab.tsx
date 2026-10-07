@@ -47,6 +47,7 @@ const Tab: React.FC<TabProps> = ({
   selected = false,
   onClick,
   className,
+  showCount = true,
 }: TabProps) => {
   return (
     <Box $active={selected} onClick={onClick} className={className}>
@@ -62,7 +63,10 @@ const Tab: React.FC<TabProps> = ({
           <CircleRaw width={36} height={36} />
         )
       ) : null}
-      <Name text={`${name}${count ? `(${count})` : ''}`} $active={selected} />
+      <Name
+        text={`${name}${showCount && count ? `(${count})` : ''}`}
+        $active={selected}
+      />
     </Box>
   )
 }
