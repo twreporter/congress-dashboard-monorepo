@@ -4,8 +4,14 @@ import {
   authenticatedUserId,
   createFollowing,
   getFollowingType,
+  hasSessions,
   listFollowing,
+  meetingOfLegislativeYuanMember,
+  parseSessionTerms,
+  resolveSessionScope,
+  updateFollowingScope,
   validId,
+  type SessionScope,
 } from '../_lib'
 
 type Context = { params: Promise<{ type: string }> }
@@ -66,19 +72,45 @@ export async function POST(request: NextRequest, { params }: Context) {
     } catch {
       return errorResponse(400, 'Invalid JSON body')
     }
-    const targetId =
-      body !== null && typeof body === 'object' && 'targetId' in body
-        ? body.targetId
-        : undefined
+    if (body === null || typeof body !== 'object') {
+      return errorResponse(400, 'Invalid JSON body')
+    }
+    const input = body as Record<string, unknown>
+    const targetId = input.targetId
     if (!validId(targetId)) return errorResponse(400, 'Invalid targetId')
+
+    let scope: SessionScope | undefined
+    if (hasSessions(followingType)) {
+      const parsed = parseSessionTerms(input.sessionTerms)
+      if ('error' in parsed) return errorResponse(400, parsed.error)
+
+      const meetingWhere = await meetingOfLegislativeYuanMember(targetId)
+      if (!meetingWhere) return errorResponse(400, 'Unknown targetId')
+
+      const resolved = await resolveSessionScope(meetingWhere, parsed.terms)
+      if ('error' in resolved) return errorResponse(400, resolved.error)
+      scope = resolved
+    } else if (input.sessionTerms !== undefined) {
+      return errorResponse(400, 'This following type has no sessions')
+    }
 
     const existing = await listFollowing(followingType, userId, { targetId })
     if (existing.length) {
-      return NextResponse.json({ status: 'success', data: existing[0] })
+      // Following again only adjusts the session scope of the existing row.
+      const updated =
+        scope && hasSessions(followingType)
+          ? await updateFollowingScope(followingType, existing[0].id, scope)
+          : existing[0]
+      return NextResponse.json({ status: 'success', data: updated })
     }
 
     try {
-      const created = await createFollowing(followingType, userId, targetId)
+      const created = await createFollowing(
+        followingType,
+        userId,
+        targetId,
+        scope
+      )
       return NextResponse.json(
         { status: 'success', data: created },
         { status: 201 }

@@ -1,5 +1,6 @@
 'use client'
 import React, { FC } from 'react'
+import { useRouter } from 'next/navigation'
 import styled from 'styled-components'
 // @twreporter
 import {
@@ -13,11 +14,14 @@ import { TextButton } from '@twreporter/react-components/lib/button'
 import { Arrow } from '@twreporter/react-components/lib/icon'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import { H5 } from '@twreporter/react-components/lib/text/headline'
+// constants
+import { getFollowingTabPath } from '@/components/following/constants'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
 const Container = styled.div`
   width: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -110,9 +114,11 @@ type FollowingComboCardProps = {
 export const FollowingComboCard: FC<FollowingComboCardProps> & {
   Type: typeof TYPE
 } = ({ type = TYPE.COMBO, count = 0, followingInfos = [] }) => {
+  const router = useRouter()
   const title =
     type === TYPE.COMBO ? `人物 ✕ 議題 (${count})` : `議題 (${count})`
   const buttonText = type === TYPE.COMBO ? '查看全部組合' : '查看全部議題'
+  const tabKey = type === TYPE.COMBO ? 'following-combo' : 'following-topic'
   const icon = (
     <Arrow direction={Arrow.Direction.RIGHT} releaseBranch={releaseBranch} />
   )
@@ -138,7 +144,11 @@ export const FollowingComboCard: FC<FollowingComboCardProps> & {
             ))}
           </SectionList>
           <ButtonContainer>
-            <TextButton text={buttonText} rightIconComponent={icon} />
+            <TextButton
+              text={buttonText}
+              rightIconComponent={icon}
+              onClick={() => router.push(getFollowingTabPath(tabKey))}
+            />
           </ButtonContainer>
         </>
       ) : (

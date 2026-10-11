@@ -14,9 +14,11 @@ const followingTypes = {
     list: 'memberFollowingLegislativeYuanMembers',
     create: 'createMemberFollowingLegislativeYuanMember',
     delete: 'deleteMemberFollowingLegislativeYuanMember',
+    update: 'updateMemberFollowingLegislativeYuanMember',
     input: 'MemberFollowingLegislativeYuanMemberCreateInput',
     target: 'legislativeYuanMember',
     fields: 'id labelForCMS',
+    sessions: true,
   },
   speech: {
     list: 'memberFollowingSpeeches',
@@ -50,6 +52,88 @@ export function getFollowingType(type: string): FollowingType | undefined {
   return Object.prototype.hasOwnProperty.call(followingTypes, type)
     ? followingTypes[type as keyof typeof followingTypes]
     : undefined
+}
+
+export const hasSessions = (
+  type: FollowingType
+): type is FollowingType & { sessions: true; update: string } =>
+  'sessions' in type && type.sessions === true
+
+export type SessionScope =
+  | { allSessions: true }
+  | { allSessions: false; sessionIds: string[] }
+
+/**
+ * Omitting sessionTerms means "all sessions". That is stored as a flag rather
+ * than an enumerated list so sessions added later stay covered.
+ */
+export function parseSessionTerms(
+  value: unknown
+): { error: string } | { terms?: number[] } {
+  if (value === undefined || value === null) return {}
+  if (!Array.isArray(value) || value.length === 0) {
+    return { error: 'sessionTerms must be a non-empty array, or omitted' }
+  }
+  const terms = [...new Set(value.map(Number))]
+  if (terms.some((term) => !Number.isSafeInteger(term) || term < 1)) {
+    return { error: 'Invalid sessionTerms' }
+  }
+  return { terms }
+}
+
+/**
+ * Resolves session terms inside one meeting, which also prevents attaching a
+ * session from a different term to the follow.
+ */
+export async function resolveSessionScope(
+  meetingWhere: Record<string, unknown>,
+  terms?: number[]
+): Promise<{ error: string } | SessionScope> {
+  if (!terms) return { allSessions: true }
+
+  const data = await cmsGraphQL<{
+    legislativeMeetingSessions?: { id: string; term: number }[]
+  }>(
+    `query Sessions($where: LegislativeMeetingSessionWhereInput!) {
+      legislativeMeetingSessions(where: $where) { id term }
+    }`,
+    { where: { legislativeMeeting: meetingWhere, term: { in: terms } } }
+  )
+  const found = data.legislativeMeetingSessions ?? []
+  if (found.length !== terms.length) {
+    return { error: 'Some sessionTerms do not belong to this meeting' }
+  }
+  return { allSessions: false, sessionIds: found.map(({ id }) => id) }
+}
+
+export const sessionCreateData = (scope: SessionScope) =>
+  scope.allSessions
+    ? { allSessions: true }
+    : {
+        allSessions: false,
+        sessions: { connect: scope.sessionIds.map((id) => ({ id })) },
+      }
+
+export const sessionUpdateData = (scope: SessionScope) =>
+  scope.allSessions
+    ? { allSessions: true, sessions: { set: [] } }
+    : {
+        allSessions: false,
+        sessions: { set: scope.sessionIds.map((id) => ({ id })) },
+      }
+
+/** The meeting a LegislativeYuanMember belongs to, used to scope its sessions. */
+export async function meetingOfLegislativeYuanMember(targetId: string) {
+  const data = await cmsGraphQL<{
+    legislativeYuanMember?: { legislativeMeeting?: { id: string } }
+  }>(
+    `query TargetMeeting($id: ID!) {
+      legislativeYuanMember(where: { id: $id }) { legislativeMeeting { id } }
+    }`,
+    { id: targetId }
+  )
+  const meetingId = data.legislativeYuanMember?.legislativeMeeting?.id
+  return meetingId ? { id: { equals: meetingId } } : undefined
 }
 
 export function validId(value: unknown): value is string {
@@ -128,9 +212,10 @@ export async function listFollowing(
   }
   const whereInput = type.input.replace('CreateInput', 'WhereInput')
   const list = type.list
+  const scope = hasSessions(type) ? 'allSessions sessions { id term }' : ''
   const query = `query Following($where: ${whereInput}!, $take: Int!, $skip: Int!) {
     ${list}(where: $where, orderBy: { createdAt: desc }, take: $take, skip: $skip) {
-      id createdAt ${type.target} { ${type.fields} }
+      id createdAt ${scope} ${type.target} { ${type.fields} }
     }
   }`
   const data = await cmsGraphQL<Record<string, FollowingRecord[]>>(query, {
@@ -144,20 +229,44 @@ export async function listFollowing(
 export async function createFollowing(
   type: FollowingType,
   userId: string,
-  targetId: string
+  targetId: string,
+  scope?: SessionScope
 ) {
+  const fields = hasSessions(type) ? 'allSessions sessions { id term }' : ''
   const data = await cmsGraphQL<Record<string, FollowingRecord>>(
     `mutation AddFollowing($data: ${type.input}!) {
-      ${type.create}(data: $data) { id createdAt ${type.target} { ${type.fields} } }
+      ${type.create}(data: $data) { id createdAt ${fields} ${type.target} { ${type.fields} } }
     }`,
     {
       data: {
         member: { connect: { twreporterUserId: userId } },
         [type.target]: { connect: { id: targetId } },
+        ...(scope ? sessionCreateData(scope) : {}),
       },
     }
   )
   return data[type.create]
+}
+
+/**
+ * Re-following an item only adjusts its session scope; the row keeps the time
+ * the member first followed it.
+ */
+export async function updateFollowingScope(
+  type: FollowingType & { sessions: true; update: string },
+  followingId: string,
+  scope: SessionScope
+) {
+  const prefix = type.input.replace('CreateInput', '')
+  const data = await cmsGraphQL<Record<string, FollowingRecord>>(
+    `mutation UpdateFollowing($where: ${prefix}WhereUniqueInput!, $data: ${prefix}UpdateInput!) {
+      ${type.update}(where: $where, data: $data) {
+        id createdAt allSessions sessions { id term } ${type.target} { ${type.fields} }
+      }
+    }`,
+    { where: { id: followingId }, data: sessionUpdateData(scope) }
+  )
+  return data[type.update]
 }
 
 export async function deleteFollowing(

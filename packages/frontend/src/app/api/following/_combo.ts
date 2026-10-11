@@ -1,19 +1,27 @@
-import { authenticatedUserId, cmsGraphQL } from './_lib'
+import {
+  authenticatedUserId,
+  cmsGraphQL,
+  sessionCreateData,
+  sessionUpdateData,
+  type SessionScope,
+} from './_lib'
 
 const combos = {
   topicLegislator: {
     prefix: 'MemberFollowingTopicLegislator',
     list: 'memberFollowingTopicLegislators',
     create: 'createMemberFollowingTopicLegislator',
+    update: 'updateMemberFollowingTopicLegislator',
     delete: 'deleteMemberFollowingTopicLegislator',
     selection:
-      'topic { id title slug } legislator { id name slug } legislativeMeeting { id term }',
+      'allSessions sessions { id term } topic { id title slug } legislator { id name slug } legislativeMeeting { id term }',
     sources: ['topic', 'legislator'],
   },
   councilTopicCouncilor: {
     prefix: 'MemberFollowingCouncilTopicCouncilor',
     list: 'memberFollowingCouncilTopicCouncilors',
     create: 'createMemberFollowingCouncilTopicCouncilor',
+    update: 'updateMemberFollowingCouncilTopicCouncilor',
     delete: 'deleteMemberFollowingCouncilTopicCouncilor',
     selection:
       'councilTopic { id title slug } councilor { id name slug } councilMeeting { id city term }',
@@ -45,7 +53,12 @@ export type ComboKey = {
 
 type KeyResult =
   | { error: string }
-  | { key: ComboKey; validate: () => Promise<boolean> }
+  | {
+      key: ComboKey
+      validate: () => Promise<boolean>
+      // Present for legislative combos, used to scope session terms.
+      meetingWhere?: Record<string, unknown>
+    }
 
 /**
  * Builds the pair identity from request input. Slugs are resolved to the
@@ -81,6 +94,7 @@ export async function resolveComboKey(
           legislativeMeeting: { connect: { term: meetingTerm } },
         },
       },
+      meetingWhere: { term: { equals: meetingTerm } },
       // Topic and Legislator have no direct relation, so the pair is only
       // meaningful when the legislator spoke on that topic in that term.
       validate: async () => {
@@ -205,7 +219,8 @@ export async function createComboFollowing(
   combo: Combo,
   userId: string,
   key: ComboKey,
-  source: string
+  source: string,
+  scope?: SessionScope
 ) {
   const data = await cmsGraphQL<Record<string, ComboFollowing>>(
     `mutation AddComboFollowing($data: ${combo.prefix}CreateInput!) {
@@ -216,10 +231,31 @@ export async function createComboFollowing(
         member: { connect: { twreporterUserId: userId } },
         ...key.connect,
         source,
+        ...(scope ? sessionCreateData(scope) : {}),
       },
     }
   )
   return data[combo.create]
+}
+
+/**
+ * Following the same pair again only adjusts its session scope, so the row
+ * keeps the time the member first followed it.
+ */
+export async function updateComboScope(
+  combo: Combo,
+  followingId: string,
+  scope: SessionScope
+) {
+  const data = await cmsGraphQL<Record<string, ComboFollowing>>(
+    `mutation UpdateComboFollowing($where: ${combo.prefix}WhereUniqueInput!, $data: ${combo.prefix}UpdateInput!) {
+      ${combo.update}(where: $where, data: $data) {
+        id createdAt source ${combo.selection}
+      }
+    }`,
+    { where: { id: followingId }, data: sessionUpdateData(scope) }
+  )
+  return data[combo.update]
 }
 
 export async function deleteComboFollowing(combo: Combo, followingId: string) {

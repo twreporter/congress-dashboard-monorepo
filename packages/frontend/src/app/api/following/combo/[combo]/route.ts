@@ -8,9 +8,15 @@ import {
   isTopicLegislator,
   listComboFollowing,
   resolveComboKey,
+  updateComboScope,
   validSource,
   type Combo,
 } from '../../_combo'
+import {
+  parseSessionTerms,
+  resolveSessionScope,
+  type SessionScope,
+} from '../../_lib'
 
 type Context = { params: Promise<{ combo: string }> }
 
@@ -104,11 +110,30 @@ export async function POST(request: NextRequest, { params }: Context) {
       return fail(422, 'The pair has no record in this term')
     }
 
+    let scope: SessionScope | undefined
+    if (resolved.meetingWhere) {
+      const parsed = parseSessionTerms(input.sessionTerms)
+      if ('error' in parsed) return fail(400, parsed.error)
+
+      const sessions = await resolveSessionScope(
+        resolved.meetingWhere,
+        parsed.terms
+      )
+      if ('error' in sessions) return fail(400, sessions.error)
+      scope = sessions
+    } else if (input.sessionTerms !== undefined) {
+      return fail(400, 'This combination has no sessions')
+    }
+
     const existing = await listComboFollowing(combo, userId, {
       key: resolved.key,
     })
     if (existing.length) {
-      return NextResponse.json({ status: 'success', data: existing[0] })
+      // Following again only adjusts the session scope of the existing row.
+      const updated = scope
+        ? await updateComboScope(combo, existing[0].id, scope)
+        : existing[0]
+      return NextResponse.json({ status: 'success', data: updated })
     }
 
     const source = (input.source as string) ?? combo.sources[0]
@@ -117,7 +142,8 @@ export async function POST(request: NextRequest, { params }: Context) {
         combo,
         userId,
         resolved.key,
-        source
+        source,
+        scope
       )
       return NextResponse.json(
         { status: 'success', data: created },
