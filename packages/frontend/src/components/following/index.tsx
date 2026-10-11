@@ -116,7 +116,6 @@ const FollowingPeopleCardWrapper = styled.div`
   ${mq.tabletAndAbove`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
     gap: 24px;
   `}
   ${mq.desktopAndAbove`
@@ -265,6 +264,54 @@ export const Following = () => {
                 latestDate="2024/06/01"
               />
             </TabletAndBelow>
+            <TabletAndBelow>
+              <FollowingPeopleCard
+                size={FollowingPeopleCard.Size.S}
+                type={FollowingPeopleCard.Type.LEGISLATOR}
+                avatar="avatar_url"
+                party="Party"
+                name="Name"
+                description="第 11 屆｜台北市第 1 選舉區"
+                count={5}
+                latestDate="2024/06/01"
+              />
+            </TabletAndBelow>
+            <TabletAndBelow>
+              <FollowingPeopleCard
+                size={FollowingPeopleCard.Size.S}
+                type={FollowingPeopleCard.Type.LEGISLATOR}
+                avatar="avatar_url"
+                party="Party"
+                name="Name"
+                description="第 11 屆｜台北市第 1 選舉區"
+                count={5}
+                latestDate="2024/06/01"
+              />
+            </TabletAndBelow>
+            <DesktopAndAbove>
+              <FollowingPeopleCard
+                size={FollowingPeopleCard.Size.L}
+                type={FollowingPeopleCard.Type.LEGISLATOR}
+                avatar="avatar_url"
+                party="Party"
+                name="Name"
+                description="第 11 屆｜台北市第 1 選舉區"
+                count={5}
+                latestDate="2024/06/01"
+              />
+            </DesktopAndAbove>
+            <DesktopAndAbove>
+              <FollowingPeopleCard
+                size={FollowingPeopleCard.Size.L}
+                type={FollowingPeopleCard.Type.LEGISLATOR}
+                avatar="avatar_url"
+                party="Party"
+                name="Name"
+                description="第 11 屆｜台北市第 1 選舉區"
+                count={5}
+                latestDate="2024/06/01"
+              />
+            </DesktopAndAbove>
             <DesktopAndAbove>
               <FollowingPeopleCard
                 size={FollowingPeopleCard.Size.L}
