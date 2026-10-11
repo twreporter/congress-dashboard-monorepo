@@ -16,6 +16,7 @@ CREATE TABLE `MemberFollowingLegislativeYuanMember` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `member` INTEGER NOT NULL,
     `legislativeYuanMember` INTEGER NOT NULL,
+    `allSessions` BOOLEAN NOT NULL DEFAULT true,
     `createdAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `MemberFollowingLegislativeYuanMember_member_legislativeYuanM_key`(`member`, `legislativeYuanMember`),
@@ -63,6 +64,15 @@ CREATE TABLE `MemberFollowingCouncilBill` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `_MemberFollowingLegislativeYuanMember_sessions` (
+    `A` INTEGER NOT NULL,
+    `B` INTEGER NOT NULL,
+
+    UNIQUE INDEX `_MemberFollowingLegislativeYuanMember_sessions_AB_unique`(`A`, `B`),
+    INDEX `_MemberFollowingLegislativeYuanMember_sessions_B_index`(`B`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `MemberFollowingCouncilMember` ADD CONSTRAINT `MemberFollowingCouncilMember_member_fkey` FOREIGN KEY (`member`) REFERENCES `Member`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `MemberFollowingCouncilMember` ADD CONSTRAINT `MemberFollowingCouncilMember_councilMember_fkey` FOREIGN KEY (`councilMember`) REFERENCES `CouncilMember`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -78,3 +88,6 @@ ALTER TABLE `MemberFollowingCouncilSpeech` ADD CONSTRAINT `MemberFollowingCounci
 
 ALTER TABLE `MemberFollowingCouncilBill` ADD CONSTRAINT `MemberFollowingCouncilBill_member_fkey` FOREIGN KEY (`member`) REFERENCES `Member`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `MemberFollowingCouncilBill` ADD CONSTRAINT `MemberFollowingCouncilBill_councilBill_fkey` FOREIGN KEY (`councilBill`) REFERENCES `CouncilBill`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `_MemberFollowingLegislativeYuanMember_sessions` ADD CONSTRAINT `_MemberFollowingLegislativeYuanMember_sessions_A_fkey` FOREIGN KEY (`A`) REFERENCES `LegislativeMeetingSession`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_MemberFollowingLegislativeYuanMember_sessions` ADD CONSTRAINT `_MemberFollowingLegislativeYuanMember_sessions_B_fkey` FOREIGN KEY (`B`) REFERENCES `MemberFollowingLegislativeYuanMember`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

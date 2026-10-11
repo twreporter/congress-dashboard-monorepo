@@ -247,6 +247,9 @@ type MemberFollowingLegislativeYuanMember {
   id: ID!
   member: Member
   legislativeYuanMember: LegislativeYuanMember
+  allSessions: Boolean
+  sessions(where: LegislativeMeetingSessionWhereInput! = {}, orderBy: [LegislativeMeetingSessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingSessionWhereUniqueInput): [LegislativeMeetingSession!]
+  sessionsCount(where: LegislativeMeetingSessionWhereInput! = {}): Int
   createdAt: DateTime
 }
 
@@ -261,17 +264,33 @@ input MemberFollowingLegislativeYuanMemberWhereInput {
   id: IDFilter
   member: MemberWhereInput
   legislativeYuanMember: LegislativeYuanMemberWhereInput
+  allSessions: BooleanFilter
+  sessions: LegislativeMeetingSessionManyRelationFilter
   createdAt: DateTimeNullableFilter
+}
+
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
+input LegislativeMeetingSessionManyRelationFilter {
+  every: LegislativeMeetingSessionWhereInput
+  some: LegislativeMeetingSessionWhereInput
+  none: LegislativeMeetingSessionWhereInput
 }
 
 input MemberFollowingLegislativeYuanMemberOrderByInput {
   id: OrderDirection
+  allSessions: OrderDirection
   createdAt: OrderDirection
 }
 
 input MemberFollowingLegislativeYuanMemberUpdateInput {
   member: MemberRelateToOneForUpdateInput
   legislativeYuanMember: LegislativeYuanMemberRelateToOneForUpdateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForUpdateInput
   createdAt: DateTime
 }
 
@@ -279,6 +298,13 @@ input LegislativeYuanMemberRelateToOneForUpdateInput {
   create: LegislativeYuanMemberCreateInput
   connect: LegislativeYuanMemberWhereUniqueInput
   disconnect: Boolean
+}
+
+input LegislativeMeetingSessionRelateToManyForUpdateInput {
+  disconnect: [LegislativeMeetingSessionWhereUniqueInput!]
+  set: [LegislativeMeetingSessionWhereUniqueInput!]
+  create: [LegislativeMeetingSessionCreateInput!]
+  connect: [LegislativeMeetingSessionWhereUniqueInput!]
 }
 
 input MemberFollowingLegislativeYuanMemberUpdateArgs {
@@ -289,12 +315,19 @@ input MemberFollowingLegislativeYuanMemberUpdateArgs {
 input MemberFollowingLegislativeYuanMemberCreateInput {
   member: MemberRelateToOneForCreateInput
   legislativeYuanMember: LegislativeYuanMemberRelateToOneForCreateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForCreateInput
   createdAt: DateTime
 }
 
 input LegislativeYuanMemberRelateToOneForCreateInput {
   create: LegislativeYuanMemberCreateInput
   connect: LegislativeYuanMemberWhereUniqueInput
+}
+
+input LegislativeMeetingSessionRelateToManyForCreateInput {
+  create: [LegislativeMeetingSessionCreateInput!]
+  connect: [LegislativeMeetingSessionWhereUniqueInput!]
 }
 
 type MemberFollowingSpeech {
@@ -465,6 +498,9 @@ type MemberFollowingTopicLegislator {
   topic: Topic
   legislator: Legislator
   legislativeMeeting: LegislativeMeeting
+  allSessions: Boolean
+  sessions(where: LegislativeMeetingSessionWhereInput! = {}, orderBy: [LegislativeMeetingSessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingSessionWhereUniqueInput): [LegislativeMeetingSession!]
+  sessionsCount(where: LegislativeMeetingSessionWhereInput! = {}): Int
   source: String
   createdAt: DateTime
 }
@@ -482,12 +518,15 @@ input MemberFollowingTopicLegislatorWhereInput {
   topic: TopicWhereInput
   legislator: LegislatorWhereInput
   legislativeMeeting: LegislativeMeetingWhereInput
+  allSessions: BooleanFilter
+  sessions: LegislativeMeetingSessionManyRelationFilter
   source: StringFilter
   createdAt: DateTimeNullableFilter
 }
 
 input MemberFollowingTopicLegislatorOrderByInput {
   id: OrderDirection
+  allSessions: OrderDirection
   source: OrderDirection
   createdAt: OrderDirection
 }
@@ -497,6 +536,8 @@ input MemberFollowingTopicLegislatorUpdateInput {
   topic: TopicRelateToOneForUpdateInput
   legislator: LegislatorRelateToOneForUpdateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForUpdateInput
   source: String
   createdAt: DateTime
 }
@@ -529,6 +570,8 @@ input MemberFollowingTopicLegislatorCreateInput {
   topic: TopicRelateToOneForCreateInput
   legislator: LegislatorRelateToOneForCreateInput
   legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForCreateInput
   source: String
   createdAt: DateTime
 }
@@ -1188,11 +1231,6 @@ input StringNullableFilter {
   startsWith: String
   endsWith: String
   not: StringNullableFilter
-}
-
-input BooleanFilter {
-  equals: Boolean
-  not: BooleanFilter
 }
 
 input LegislativeYuanMemberOrderByInput {

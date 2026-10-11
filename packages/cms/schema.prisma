@@ -54,12 +54,14 @@ model MemberFollowingCouncilMember {
 }
 
 model MemberFollowingLegislativeYuanMember {
-  id                      Int                   @id @default(autoincrement())
-  member                  Member                @relation("MemberFollowingLegislativeYuanMember_member", fields: [memberId], references: [id], onDelete: Cascade)
-  memberId                Int                   @map("member")
-  legislativeYuanMember   LegislativeYuanMember @relation("MemberFollowingLegislativeYuanMember_legislativeYuanMember", fields: [legislativeYuanMemberId], references: [id], onDelete: Cascade)
-  legislativeYuanMemberId Int                   @map("legislativeYuanMember")
-  createdAt               DateTime?             @default(now())
+  id                      Int                         @id @default(autoincrement())
+  member                  Member                      @relation("MemberFollowingLegislativeYuanMember_member", fields: [memberId], references: [id], onDelete: Cascade)
+  memberId                Int                         @map("member")
+  legislativeYuanMember   LegislativeYuanMember       @relation("MemberFollowingLegislativeYuanMember_legislativeYuanMember", fields: [legislativeYuanMemberId], references: [id], onDelete: Cascade)
+  legislativeYuanMemberId Int                         @map("legislativeYuanMember")
+  allSessions             Boolean                     @default(true)
+  sessions                LegislativeMeetingSession[] @relation("MemberFollowingLegislativeYuanMember_sessions")
+  createdAt               DateTime?                   @default(now())
 
   @@unique([memberId, legislativeYuanMemberId])
   @@index([memberId])
@@ -106,17 +108,19 @@ model MemberFollowingCouncilBill {
 }
 
 model MemberFollowingTopicLegislator {
-  id                   Int                @id @default(autoincrement())
-  member               Member             @relation("MemberFollowingTopicLegislator_member", fields: [memberId], references: [id], onDelete: Cascade)
-  memberId             Int                @map("member")
-  topic                Topic              @relation("MemberFollowingTopicLegislator_topic", fields: [topicId], references: [id], onDelete: Cascade)
-  topicId              Int                @map("topic")
-  legislator           Legislator         @relation("MemberFollowingTopicLegislator_legislator", fields: [legislatorId], references: [id], onDelete: Cascade)
-  legislatorId         Int                @map("legislator")
-  legislativeMeeting   LegislativeMeeting @relation("MemberFollowingTopicLegislator_legislativeMeeting", fields: [legislativeMeetingId], references: [id], onDelete: Cascade)
-  legislativeMeetingId Int                @map("legislativeMeeting")
-  source               String             @default("topic")
-  createdAt            DateTime?          @default(now())
+  id                   Int                         @id @default(autoincrement())
+  member               Member                      @relation("MemberFollowingTopicLegislator_member", fields: [memberId], references: [id], onDelete: Cascade)
+  memberId             Int                         @map("member")
+  topic                Topic                       @relation("MemberFollowingTopicLegislator_topic", fields: [topicId], references: [id], onDelete: Cascade)
+  topicId              Int                         @map("topic")
+  legislator           Legislator                  @relation("MemberFollowingTopicLegislator_legislator", fields: [legislatorId], references: [id], onDelete: Cascade)
+  legislatorId         Int                         @map("legislator")
+  legislativeMeeting   LegislativeMeeting          @relation("MemberFollowingTopicLegislator_legislativeMeeting", fields: [legislativeMeetingId], references: [id], onDelete: Cascade)
+  legislativeMeetingId Int                         @map("legislativeMeeting")
+  allSessions          Boolean                     @default(true)
+  sessions             LegislativeMeetingSession[] @relation("MemberFollowingTopicLegislator_sessions")
+  source               String                      @default("topic")
+  createdAt            DateTime?                   @default(now())
 
   @@unique([memberId, topicId, legislatorId, legislativeMeetingId])
   @@index([memberId])
@@ -285,17 +289,19 @@ model LegislativeMeeting {
 }
 
 model LegislativeMeetingSession {
-  id                                             Int                 @id @default(autoincrement())
-  legislativeMeeting                             LegislativeMeeting? @relation("LegislativeMeetingSession_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
-  legislativeMeetingId                           Int?                @map("legislativeMeeting")
-  labelForCMS                                    String              @default("")
-  term                                           Int
-  startTime                                      DateTime            @mysql.Date
-  endTime                                        DateTime            @mysql.Date
-  createdAt                                      DateTime?           @default(now())
-  updatedAt                                      DateTime?           @updatedAt
-  from_Speech_legislativeMeetingSession          Speech[]            @relation("Speech_legislativeMeetingSession")
-  from_CommitteeMember_legislativeMeetingSession CommitteeMember[]   @relation("CommitteeMember_legislativeMeetingSession")
+  id                                                 Int                                    @id @default(autoincrement())
+  legislativeMeeting                                 LegislativeMeeting?                    @relation("LegislativeMeetingSession_legislativeMeeting", fields: [legislativeMeetingId], references: [id])
+  legislativeMeetingId                               Int?                                   @map("legislativeMeeting")
+  labelForCMS                                        String                                 @default("")
+  term                                               Int
+  startTime                                          DateTime                               @mysql.Date
+  endTime                                            DateTime                               @mysql.Date
+  createdAt                                          DateTime?                              @default(now())
+  updatedAt                                          DateTime?                              @updatedAt
+  from_MemberFollowingLegislativeYuanMember_sessions MemberFollowingLegislativeYuanMember[] @relation("MemberFollowingLegislativeYuanMember_sessions")
+  from_MemberFollowingTopicLegislator_sessions       MemberFollowingTopicLegislator[]       @relation("MemberFollowingTopicLegislator_sessions")
+  from_Speech_legislativeMeetingSession              Speech[]                               @relation("Speech_legislativeMeetingSession")
+  from_CommitteeMember_legislativeMeetingSession     CommitteeMember[]                      @relation("CommitteeMember_legislativeMeetingSession")
 
   @@index([legislativeMeetingId])
 }

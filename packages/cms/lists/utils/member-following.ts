@@ -1,10 +1,8 @@
 import { list } from '@keystone-6/core'
-import { relationship, select } from '@keystone-6/core/fields'
+import { checkbox, relationship, select } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
-  allowRoles,
   hideReadOnlyRoles,
-  RoleEnum,
   withReadOnlyRoleFieldMode,
 } from './access-control-list'
 import { CREATED_AT } from './common-field'
@@ -39,10 +37,12 @@ function buildFollowingList({
   targets,
   label,
   source,
+  withSessions = false,
 }: {
   targets: FollowingTarget[]
   label: string
   source?: { value: string; label: string }[]
+  withSessions?: boolean
 }) {
   const targetFields = targets.map(({ model }) => fieldNameOf(model))
 
@@ -63,6 +63,27 @@ function buildFollowingList({
           }),
         ])
       ),
+      // A session set cannot live in the unique key, so the scope is an
+      // attribute of the follow rather than part of its identity. The flag is
+      // stored instead of enumerating sessions so that sessions added later are
+      // still covered by a "all sessions" follow.
+      ...(withSessions
+        ? {
+            allSessions: checkbox({
+              label: '全部會期',
+              defaultValue: true,
+            }),
+            sessions: relationship({
+              ref: 'LegislativeMeetingSession',
+              label: '指定會期',
+              many: true,
+              ui: {
+                labelField: 'labelForCMS',
+                description: '僅在未勾選「全部會期」時使用',
+              },
+            }),
+          }
+        : {}),
       // Records which page the member followed from, so the pair can be shown
       // in the order they encountered it.
       ...(source
@@ -93,7 +114,13 @@ function buildFollowingList({
     ui: {
       label: `會員追蹤${label}`,
       listView: {
-        initialColumns: ['id', 'member', ...targetFields, 'createdAt'],
+        initialColumns: [
+          'id',
+          'member',
+          ...targetFields,
+          ...(withSessions ? ['allSessions'] : []),
+          'createdAt',
+        ],
         initialSort: { field: 'createdAt', direction: 'DESC' },
         pageSize: 50,
       },
@@ -105,7 +132,9 @@ function buildFollowingList({
       operation: {
         query: allowAllRoles(),
         create: allowAllRoles(),
-        update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+        // The session scope is editable after the fact, so the API account
+        // needs update. The validate hook below keeps identity immutable.
+        update: allowAllRoles(),
         delete: allowAllRoles(),
       },
     },
@@ -118,10 +147,12 @@ function buildFollowingList({
           if (missing) addValidationError('必須選擇會員及追蹤對象')
         },
         update: ({ resolvedData, addValidationError }) => {
-          const removed = ['member', ...targetFields].some(
-            (field) => resolvedData[field]?.disconnect
+          // Only the session scope and source may change; repointing a row at
+          // another member or target would hand one member another's record.
+          const repointed = ['member', ...targetFields].some(
+            (field) => resolvedData[field] !== undefined
           )
-          if (removed) addValidationError('追蹤不能移除會員或追蹤對象')
+          if (repointed) addValidationError('追蹤不能變更會員或追蹤對象')
         },
       },
     },
@@ -141,6 +172,9 @@ export function memberFollowingList(
   return buildFollowingList({
     targets: [{ model: target, label, labelField: targetLabelField }],
     label,
+    // The legislator page filters by session, so a follow made there carries
+    // the session scope. A speech already belongs to one session.
+    withSessions: target === 'LegislativeYuanMember',
   })
 }
 
@@ -152,6 +186,7 @@ export function memberFollowingComboList(
   return combo === 'TopicLegislator'
     ? buildFollowingList({
         label: '議題與立委',
+        withSessions: true,
         targets: [
           { model: 'Topic', label: '議題', labelField: 'title' },
           { model: 'Legislator', label: '立委', labelField: 'name' },
