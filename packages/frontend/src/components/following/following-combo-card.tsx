@@ -15,7 +15,10 @@ import { Arrow } from '@twreporter/react-components/lib/icon'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 import { H5 } from '@twreporter/react-components/lib/text/headline'
 // constants
-import { getFollowingTabPath } from '@/components/following/constants'
+import {
+  FOLLOWING_TAB,
+  getFollowingTabPath,
+} from '@/components/following/constants'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
@@ -118,7 +121,8 @@ export const FollowingComboCard: FC<FollowingComboCardProps> & {
   const title =
     type === TYPE.COMBO ? `人物 ✕ 議題 (${count})` : `議題 (${count})`
   const buttonText = type === TYPE.COMBO ? '查看全部組合' : '查看全部議題'
-  const tabKey = type === TYPE.COMBO ? 'following-combo' : 'following-topic'
+  const tabKey =
+    type === TYPE.COMBO ? FOLLOWING_TAB.COMBO : FOLLOWING_TAB.TOPIC
   const icon = (
     <Arrow direction={Arrow.Direction.RIGHT} releaseBranch={releaseBranch} />
   )
