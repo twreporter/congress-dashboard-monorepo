@@ -6,7 +6,7 @@ specification consumed by that deployment.
 
 The Cloud Build trigger must set `_ENV` to `dev`, `staging`, or `prod`. The
 Cloud Run service name is derived as
-`${_ENV}-congress-dashboard-${_TARGET_PACKAGE}` (e.g. `prod-congress-dashboard-frontend`).
+`${_ENV}-lawmaker-${_TARGET_PACKAGE}` (e.g. `prod-lawmaker-frontend`).
 
 This is separate from `_BRANCH_NAME` (`dev`/`staging`/`release`), which only
 controls which build-time `.env.${_BRANCH_NAME}.public` file (at the package
@@ -14,10 +14,8 @@ root, not in this directory) gets inlined into the Next.js bundle as
 `NEXT_PUBLIC_*` values. `_ENV` and `_BRANCH_NAME` are set independently on
 the trigger.
 
-The service runs as
-`sa-cloud-run-runtime@coastal-run-106202.iam.gserviceaccount.com`. Confirm
-that account has the permissions the service needs (SES, etc.) before
-deploying.
+The service uses the environment-specific runtime SA defined in the
+[infrastructure README](https://github.com/nickhsine/gcp-infrastructure/blob/main/projects/lawmaker-reporter/README.md#service-accounts).
 
 ## Public Configuration
 
@@ -39,7 +37,7 @@ Manager values (see below).
 Secret IDs follow this pattern:
 
 ```text
-${ENV}-congress-dashboard-frontend_${secret-key}
+${ENV}-lawmaker-frontend_${secret-key}
 ```
 
 Create a single secret or all secrets from `packages/frontend`:
@@ -50,7 +48,7 @@ ENV=dev ./deploy/secrets/create-secrets.sh --all
 ```
 
 The shared script grants the Cloud Run runtime service account
-(`sa-cloud-run-runtime@coastal-run-106202.iam.gserviceaccount.com`) access to
+for dev/staging or prod access to
 each secret it creates or updates.
 
 Create `api-auth-password`, `feedback-slack-webhook-url`,
@@ -71,3 +69,8 @@ dev/staging run `--min-instances 0 --max-instances 3` on the
 Deploy and verify dev, then staging, then production. Confirm the health
 check, CMS-backed API routes (`/api/_graphql/*`), and the feedback endpoint
 (SES email + Slack webhook) after each deploy.
+
+## Lawmaker project deployment
+
+See the [shared deployment notes](../../../deploy/README.md) for the new
+project, first deployment order, runtime URL overrides and rollout checks.

@@ -3,13 +3,13 @@
 The root `cloudbuild.yaml` builds and deploys cli as a **Cloud Run Job**
 (`gcloud run jobs create`/`update`). The Cloud Build trigger must set `_ENV`
 to `dev`, `staging`, or `prod`. The job name is derived as
-`${_ENV}-congress-dashboard-${_TARGET_PACKAGE}` (e.g.
-`prod-congress-dashboard-cli`).
+`${_ENV}-lawmaker-${_TARGET_PACKAGE}` (e.g.
+`prod-lawmaker-cli`).
 
-The job runs as `sa-cloud-run-runtime@coastal-run-106202.iam.gserviceaccount.com`.
-Confirm that account has the permissions the job needs before deploying.
+The job uses the environment-specific runtime SA defined in the
+[infrastructure README](https://github.com/nickhsine/gcp-infrastructure/blob/main/projects/lawmaker-reporter/README.md#service-accounts).
 
-The job connects through the `twreporter-custom-network` VPC with
+The job connects through the `lawmaker-network` VPC with
 `all-traffic` egress, needed to reach the CMS's internal GraphQL endpoint.
 Subnet is `asia-east1-cloud-run-nonprod` for dev/staging and
 `asia-east1-cloud-run-prod-jobs` for prod.
@@ -36,7 +36,7 @@ Job behavior is controlled by the container's `--args` (not managed by
 Secret IDs follow this pattern:
 
 ```text
-${ENV}-congress-dashboard-cli_${secret-key}
+${ENV}-lawmaker-cli_${secret-key}
 ```
 
 Create a single secret or all secrets from `packages/cli`:
@@ -47,7 +47,7 @@ ENV=dev ./deploy/secrets/create-secrets.sh --all
 ```
 
 The shared script grants the Cloud Run runtime service account
-(`sa-cloud-run-runtime@coastal-run-106202.iam.gserviceaccount.com`) access to
+for dev/staging or prod access to
 each secret it creates or updates.
 
 Create `algolia-write-key` and `headless-account-password` for every
@@ -58,3 +58,8 @@ environment before deploying.
 Confirm a dry-run execution (`LAWMAKER_DRYRUN` defaults to `true`) completes
 successfully and logs the expected Algolia writes before running with
 `--no-dryrun` against production data.
+
+## Lawmaker project deployment
+
+See the [shared deployment notes](../../../deploy/README.md) for the new
+project, first deployment order, runtime URL overrides and rollout checks.
