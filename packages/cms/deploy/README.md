@@ -6,12 +6,10 @@ consumed by that deployment.
 
 The Cloud Build trigger must set `_ENV` to `dev`, `staging`, or `prod`. The
 Cloud Run service name is derived as
-`${_ENV}-congress-dashboard-${_TARGET_PACKAGE}` (e.g. `prod-congress-dashboard-cms`).
+`${_ENV}-lawmaker-${_TARGET_PACKAGE}` (e.g. `prod-lawmaker-cms`).
 
-The service runs as
-`sa-cloud-run-runtime@coastal-run-106202.iam.gserviceaccount.com`. Confirm
-that account has the permissions the service needs (database access, GCS
-mount, etc.) before deploying.
+The service uses the environment-specific runtime SA defined in the
+[infrastructure README](https://github.com/nickhsine/gcp-infrastructure/blob/main/projects/lawmaker-reporter/README.md#service-accounts).
 
 ## Public Configuration
 
@@ -33,7 +31,7 @@ managed here.
 Secret IDs follow this pattern:
 
 ```text
-${ENV}-congress-dashboard-cms_${secret-key}
+${ENV}-lawmaker-cms_${secret-key}
 ```
 
 Create a single secret or all secrets from `packages/cms`:
@@ -44,7 +42,7 @@ ENV=dev ./deploy/secrets/create-secrets.sh --all
 ```
 
 The shared script grants the Cloud Run runtime service account
-(`sa-cloud-run-runtime@coastal-run-106202.iam.gserviceaccount.com`) access to
+for dev/staging or prod access to
 each secret it creates or updates.
 
 Create `database-url` and `session-secret` for every environment before
@@ -68,3 +66,8 @@ dev/staging run `--min-instances 0 --max-instances 3` on the
 Deploy and verify dev, then staging, then production. Confirm the health
 check, CMS login, GCS mount (`run.sh` calls `gcsfuse`), and
 `db-migrate`/Prisma migration output in the deploy logs.
+
+## Lawmaker project deployment
+
+See the [shared deployment notes](../../../deploy/README.md) for the new
+project, first deployment order, runtime URL overrides and rollout checks.
