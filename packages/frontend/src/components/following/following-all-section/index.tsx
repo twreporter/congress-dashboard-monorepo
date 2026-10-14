@@ -19,6 +19,13 @@ import {
   FOLLOWING_TAB,
   getFollowingTabPath,
 } from '@/components/following/constants'
+import {
+  MOCK_COMBO_LIST,
+  MOCK_TOPIC_LIST,
+  MOCK_PEOPLE_LIST,
+  MOCK_SPEECH_LIST,
+  MOCK_BILL_LIST,
+} from '@/components/following/mock-data'
 // styles
 import {
   SectionWrapper,
@@ -123,6 +130,15 @@ const MoreButton = styled(PillButton)`
   `}
 `
 
+const COMBO_LIST = MOCK_COMBO_LIST.slice(0, 2)
+const TOPIC_LIST = MOCK_TOPIC_LIST.slice(0, 2)
+const PEOPLE_LIST = MOCK_PEOPLE_LIST.slice(0, 4)
+const ARTICLE_LIST = [
+  { ...MOCK_SPEECH_LIST[0], type: FollowingArticleCard.Type.SPEECH },
+  { ...MOCK_BILL_LIST[0], type: FollowingArticleCard.Type.BILL },
+  { ...MOCK_SPEECH_LIST[1], type: FollowingArticleCard.Type.SPEECH },
+]
+
 export const FollowingAllSection = () => {
   const router = useRouter()
 
@@ -143,36 +159,13 @@ export const FollowingAllSection = () => {
         <TopicCardContainer>
           <FollowingComboCard
             type={FollowingComboCard.Type.COMBO}
-            count={5}
-            followingInfos={[
-              {
-                title: '苗博雅 ✕ 社會住宅政策',
-                description: '台北市議會｜第 14 屆｜全部會期',
-                billCount: 10,
-                speechCount: 5,
-                latestDataDate: '2024/06/01',
-              },
-            ]}
+            count={MOCK_COMBO_LIST.length}
+            followingInfos={COMBO_LIST}
           />
           <FollowingComboCard
             type={FollowingComboCard.Type.TOPIC}
-            count={5}
-            followingInfos={[
-              {
-                title: '社會住宅政策',
-                description: '立法院｜第 11 屆｜第 1-5 會期',
-                billCount: 10,
-                speechCount: 5,
-                latestDataDate: '2024-06-01',
-              },
-              {
-                title: 'Title 2',
-                description: 'Description 2',
-                billCount: 8,
-                speechCount: 3,
-                latestDataDate: '2024-06-01',
-              },
-            ]}
+            count={MOCK_TOPIC_LIST.length}
+            followingInfos={TOPIC_LIST}
           />
         </TopicCardContainer>
       </TopicsSection>
@@ -182,78 +175,30 @@ export const FollowingAllSection = () => {
           <SectionDescription text="查看你關注的立委與議員" />
         </div>
         <FollowingPeopleCardWrapper>
-          <TabletAndBelow>
-            <FollowingPeopleCard
-              size={FollowingPeopleCard.Size.S}
-              type={FollowingPeopleCard.Type.LEGISLATOR}
-              avatar="https://lawmaker.twreporter.org/images/110007.jpg"
-              party="https://lawmaker.twreporter.org/images/JISgLBhivHWdd0lB9cWimg.png"
-              name="Name"
-              description="第 11 屆｜台北市第 1 選舉區"
-              count={5}
-              latestDate="2024/06/01"
-            />
-          </TabletAndBelow>
-          <TabletAndBelow>
-            <FollowingPeopleCard
-              size={FollowingPeopleCard.Size.S}
-              type={FollowingPeopleCard.Type.LEGISLATOR}
-              avatar="https://lawmaker.twreporter.org/images/110007.jpg"
-              party="https://lawmaker.twreporter.org/images/JISgLBhivHWdd0lB9cWimg.png"
-              name="Name"
-              description="第 11 屆｜台北市第 1 選舉區"
-              count={5}
-              latestDate="2024/06/01"
-            />
-          </TabletAndBelow>
-          <TabletAndBelow>
-            <FollowingPeopleCard
-              size={FollowingPeopleCard.Size.S}
-              type={FollowingPeopleCard.Type.LEGISLATOR}
-              avatar="https://lawmaker.twreporter.org/images/110007.jpg"
-              party="https://lawmaker.twreporter.org/images/JISgLBhivHWdd0lB9cWimg.png"
-              name="Name"
-              description="第 11 屆｜台北市第 1 選舉區"
-              count={5}
-              latestDate="2024/06/01"
-            />
-          </TabletAndBelow>
-          <DesktopAndAbove>
-            <FollowingPeopleCard
-              size={FollowingPeopleCard.Size.L}
-              type={FollowingPeopleCard.Type.LEGISLATOR}
-              avatar="https://lawmaker.twreporter.org/images/110007.jpg"
-              party="https://lawmaker.twreporter.org/images/JISgLBhivHWdd0lB9cWimg.png"
-              name="Name"
-              description="第 11 屆｜台北市第 1 選舉區"
-              count={5}
-              latestDate="2024/06/01"
-            />
-          </DesktopAndAbove>
-          <DesktopAndAbove>
-            <FollowingPeopleCard
-              size={FollowingPeopleCard.Size.L}
-              type={FollowingPeopleCard.Type.LEGISLATOR}
-              avatar="https://lawmaker.twreporter.org/images/110007.jpg"
-              party="https://lawmaker.twreporter.org/images/JISgLBhivHWdd0lB9cWimg.png"
-              name="Name"
-              description="第 11 屆｜台北市第 1 選舉區"
-              count={5}
-              latestDate="2024/06/01"
-            />
-          </DesktopAndAbove>
-          <DesktopAndAbove>
-            <FollowingPeopleCard
-              size={FollowingPeopleCard.Size.L}
-              type={FollowingPeopleCard.Type.LEGISLATOR}
-              avatar="https://lawmaker.twreporter.org/images/110007.jpg"
-              party="https://lawmaker.twreporter.org/images/JISgLBhivHWdd0lB9cWimg.png"
-              name="Name"
-              description="第 11 屆｜台北市第 1 選舉區"
-              count={5}
-              latestDate="2024/06/01"
-            />
-          </DesktopAndAbove>
+          {PEOPLE_LIST.map((people) => {
+            const type =
+              people.type === 'councilor'
+                ? FollowingPeopleCard.Type.COUNCILOR
+                : FollowingPeopleCard.Type.LEGISLATOR
+            return (
+              <React.Fragment key={people.name}>
+                <TabletAndBelow>
+                  <FollowingPeopleCard
+                    {...people}
+                    type={type}
+                    size={FollowingPeopleCard.Size.S}
+                  />
+                </TabletAndBelow>
+                <DesktopAndAbove>
+                  <FollowingPeopleCard
+                    {...people}
+                    type={type}
+                    size={FollowingPeopleCard.Size.L}
+                  />
+                </DesktopAndAbove>
+              </React.Fragment>
+            )
+          })}
         </FollowingPeopleCardWrapper>
         <MoreButtonContainer>
           <MoreButton
@@ -272,22 +217,16 @@ export const FollowingAllSection = () => {
         </div>
         <FollowingArticleSection>
           <FollowingArticleCardWrapper>
-            <FollowingArticleCard
-              type={FollowingArticleCard.Type.SPEECH}
-              place="Place 1"
-              title="Title 1"
-              summary="賴士葆詢問陳淑姿，針對立法院三讀通過的718億元民生總預算是否已准予動支，並強調該預算包含TPASS計畫、包含TPASS計畫包含TPASS計畫"
-              attendee={['Attendee 1']}
-              date="2024/06/01"
-            />
-            <FollowingArticleCard
-              type={FollowingArticleCard.Type.BILL}
-              place="Place 2"
-              title="Title 2"
-              summary="Summary 2"
-              attendee={['Attendee 2', 'Attendee 3', 'Attendee 4']}
-              date="2024/06/01"
-            />
+            {ARTICLE_LIST.map((article, index) =>
+              // only show the third article on desktop and above
+              index < 2 ? (
+                <FollowingArticleCard key={article.title} {...article} />
+              ) : (
+                <DesktopAndAbove key={article.title}>
+                  <FollowingArticleCard {...article} />
+                </DesktopAndAbove>
+              )
+            )}
           </FollowingArticleCardWrapper>
           <MoreButtonContainer>
             <MoreButton

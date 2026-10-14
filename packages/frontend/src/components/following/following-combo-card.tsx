@@ -1,5 +1,5 @@
 'use client'
-import React, { FC } from 'react'
+import React, { type FC } from 'react'
 import { useRouter } from 'next/navigation'
 import styled from 'styled-components'
 // @twreporter
@@ -121,8 +121,7 @@ export const FollowingComboCard: FC<FollowingComboCardProps> & {
   const title =
     type === TYPE.COMBO ? `人物 ✕ 議題 (${count})` : `議題 (${count})`
   const buttonText = type === TYPE.COMBO ? '查看全部組合' : '查看全部議題'
-  const tabKey =
-    type === TYPE.COMBO ? FOLLOWING_TAB.COMBO : FOLLOWING_TAB.TOPIC
+  const tabKey = type === TYPE.COMBO ? FOLLOWING_TAB.COMBO : FOLLOWING_TAB.TOPIC
   const icon = (
     <Arrow direction={Arrow.Direction.RIGHT} releaseBranch={releaseBranch} />
   )

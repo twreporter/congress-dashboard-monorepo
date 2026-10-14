@@ -1,5 +1,5 @@
 'use client'
-import React, { FC } from 'react'
+import React, { type FC } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import { P1, P2 } from '@twreporter/react-components/lib/text/paragraph'
