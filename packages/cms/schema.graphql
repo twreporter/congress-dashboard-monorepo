@@ -121,6 +121,565 @@ input SystemUserCreateInput {
   updatedAt: DateTime
 }
 
+type Member {
+  id: ID!
+  twreporterUserId: String
+  email: String
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberWhereUniqueInput {
+  id: ID
+  twreporterUserId: String
+  email: String
+}
+
+input MemberWhereInput {
+  AND: [MemberWhereInput!]
+  OR: [MemberWhereInput!]
+  NOT: [MemberWhereInput!]
+  id: IDFilter
+  twreporterUserId: StringFilter
+  email: StringFilter
+  name: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input MemberOrderByInput {
+  id: OrderDirection
+  twreporterUserId: OrderDirection
+  email: OrderDirection
+  name: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input MemberUpdateInput {
+  twreporterUserId: String
+  email: String
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberUpdateArgs {
+  where: MemberWhereUniqueInput!
+  data: MemberUpdateInput!
+}
+
+input MemberCreateInput {
+  twreporterUserId: String
+  email: String
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type MemberFollowingCouncilMember {
+  id: ID!
+  member: Member
+  councilMember: CouncilMember
+  createdAt: DateTime
+}
+
+input MemberFollowingCouncilMemberWhereUniqueInput {
+  id: ID
+}
+
+input MemberFollowingCouncilMemberWhereInput {
+  AND: [MemberFollowingCouncilMemberWhereInput!]
+  OR: [MemberFollowingCouncilMemberWhereInput!]
+  NOT: [MemberFollowingCouncilMemberWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  councilMember: CouncilMemberWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFollowingCouncilMemberOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFollowingCouncilMemberUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  councilMember: CouncilMemberRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input MemberRelateToOneForUpdateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouncilMemberRelateToOneForUpdateInput {
+  create: CouncilMemberCreateInput
+  connect: CouncilMemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFollowingCouncilMemberUpdateArgs {
+  where: MemberFollowingCouncilMemberWhereUniqueInput!
+  data: MemberFollowingCouncilMemberUpdateInput!
+}
+
+input MemberFollowingCouncilMemberCreateInput {
+  member: MemberRelateToOneForCreateInput
+  councilMember: CouncilMemberRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
+input MemberRelateToOneForCreateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
+}
+
+input CouncilMemberRelateToOneForCreateInput {
+  create: CouncilMemberCreateInput
+  connect: CouncilMemberWhereUniqueInput
+}
+
+type MemberFollowingLegislativeYuanMember {
+  id: ID!
+  member: Member
+  legislativeYuanMember: LegislativeYuanMember
+  allSessions: Boolean
+  sessions(where: LegislativeMeetingSessionWhereInput! = {}, orderBy: [LegislativeMeetingSessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingSessionWhereUniqueInput): [LegislativeMeetingSession!]
+  sessionsCount(where: LegislativeMeetingSessionWhereInput! = {}): Int
+  createdAt: DateTime
+}
+
+input MemberFollowingLegislativeYuanMemberWhereUniqueInput {
+  id: ID
+}
+
+input MemberFollowingLegislativeYuanMemberWhereInput {
+  AND: [MemberFollowingLegislativeYuanMemberWhereInput!]
+  OR: [MemberFollowingLegislativeYuanMemberWhereInput!]
+  NOT: [MemberFollowingLegislativeYuanMemberWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  legislativeYuanMember: LegislativeYuanMemberWhereInput
+  allSessions: BooleanFilter
+  sessions: LegislativeMeetingSessionManyRelationFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
+input LegislativeMeetingSessionManyRelationFilter {
+  every: LegislativeMeetingSessionWhereInput
+  some: LegislativeMeetingSessionWhereInput
+  none: LegislativeMeetingSessionWhereInput
+}
+
+input MemberFollowingLegislativeYuanMemberOrderByInput {
+  id: OrderDirection
+  allSessions: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFollowingLegislativeYuanMemberUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForUpdateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForUpdateInput
+  createdAt: DateTime
+}
+
+input LegislativeYuanMemberRelateToOneForUpdateInput {
+  create: LegislativeYuanMemberCreateInput
+  connect: LegislativeYuanMemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislativeMeetingSessionRelateToManyForUpdateInput {
+  disconnect: [LegislativeMeetingSessionWhereUniqueInput!]
+  set: [LegislativeMeetingSessionWhereUniqueInput!]
+  create: [LegislativeMeetingSessionCreateInput!]
+  connect: [LegislativeMeetingSessionWhereUniqueInput!]
+}
+
+input MemberFollowingLegislativeYuanMemberUpdateArgs {
+  where: MemberFollowingLegislativeYuanMemberWhereUniqueInput!
+  data: MemberFollowingLegislativeYuanMemberUpdateInput!
+}
+
+input MemberFollowingLegislativeYuanMemberCreateInput {
+  member: MemberRelateToOneForCreateInput
+  legislativeYuanMember: LegislativeYuanMemberRelateToOneForCreateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForCreateInput
+  createdAt: DateTime
+}
+
+input LegislativeYuanMemberRelateToOneForCreateInput {
+  create: LegislativeYuanMemberCreateInput
+  connect: LegislativeYuanMemberWhereUniqueInput
+}
+
+input LegislativeMeetingSessionRelateToManyForCreateInput {
+  create: [LegislativeMeetingSessionCreateInput!]
+  connect: [LegislativeMeetingSessionWhereUniqueInput!]
+}
+
+type MemberFollowingSpeech {
+  id: ID!
+  member: Member
+  speech: Speech
+  createdAt: DateTime
+}
+
+input MemberFollowingSpeechWhereUniqueInput {
+  id: ID
+}
+
+input MemberFollowingSpeechWhereInput {
+  AND: [MemberFollowingSpeechWhereInput!]
+  OR: [MemberFollowingSpeechWhereInput!]
+  NOT: [MemberFollowingSpeechWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  speech: SpeechWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFollowingSpeechOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFollowingSpeechUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  speech: SpeechRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input SpeechRelateToOneForUpdateInput {
+  create: SpeechCreateInput
+  connect: SpeechWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFollowingSpeechUpdateArgs {
+  where: MemberFollowingSpeechWhereUniqueInput!
+  data: MemberFollowingSpeechUpdateInput!
+}
+
+input MemberFollowingSpeechCreateInput {
+  member: MemberRelateToOneForCreateInput
+  speech: SpeechRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
+input SpeechRelateToOneForCreateInput {
+  create: SpeechCreateInput
+  connect: SpeechWhereUniqueInput
+}
+
+type MemberFollowingCouncilSpeech {
+  id: ID!
+  member: Member
+  councilSpeech: CouncilSpeech
+  createdAt: DateTime
+}
+
+input MemberFollowingCouncilSpeechWhereUniqueInput {
+  id: ID
+}
+
+input MemberFollowingCouncilSpeechWhereInput {
+  AND: [MemberFollowingCouncilSpeechWhereInput!]
+  OR: [MemberFollowingCouncilSpeechWhereInput!]
+  NOT: [MemberFollowingCouncilSpeechWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  councilSpeech: CouncilSpeechWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFollowingCouncilSpeechOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFollowingCouncilSpeechUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  councilSpeech: CouncilSpeechRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input CouncilSpeechRelateToOneForUpdateInput {
+  create: CouncilSpeechCreateInput
+  connect: CouncilSpeechWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFollowingCouncilSpeechUpdateArgs {
+  where: MemberFollowingCouncilSpeechWhereUniqueInput!
+  data: MemberFollowingCouncilSpeechUpdateInput!
+}
+
+input MemberFollowingCouncilSpeechCreateInput {
+  member: MemberRelateToOneForCreateInput
+  councilSpeech: CouncilSpeechRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
+input CouncilSpeechRelateToOneForCreateInput {
+  create: CouncilSpeechCreateInput
+  connect: CouncilSpeechWhereUniqueInput
+}
+
+type MemberFollowingCouncilBill {
+  id: ID!
+  member: Member
+  councilBill: CouncilBill
+  createdAt: DateTime
+}
+
+input MemberFollowingCouncilBillWhereUniqueInput {
+  id: ID
+}
+
+input MemberFollowingCouncilBillWhereInput {
+  AND: [MemberFollowingCouncilBillWhereInput!]
+  OR: [MemberFollowingCouncilBillWhereInput!]
+  NOT: [MemberFollowingCouncilBillWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  councilBill: CouncilBillWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFollowingCouncilBillOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFollowingCouncilBillUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  councilBill: CouncilBillRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input CouncilBillRelateToOneForUpdateInput {
+  create: CouncilBillCreateInput
+  connect: CouncilBillWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFollowingCouncilBillUpdateArgs {
+  where: MemberFollowingCouncilBillWhereUniqueInput!
+  data: MemberFollowingCouncilBillUpdateInput!
+}
+
+input MemberFollowingCouncilBillCreateInput {
+  member: MemberRelateToOneForCreateInput
+  councilBill: CouncilBillRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
+input CouncilBillRelateToOneForCreateInput {
+  create: CouncilBillCreateInput
+  connect: CouncilBillWhereUniqueInput
+}
+
+type MemberFollowingTopicLegislator {
+  id: ID!
+  member: Member
+  topic: Topic
+  legislator: Legislator
+  legislativeMeeting: LegislativeMeeting
+  allSessions: Boolean
+  sessions(where: LegislativeMeetingSessionWhereInput! = {}, orderBy: [LegislativeMeetingSessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingSessionWhereUniqueInput): [LegislativeMeetingSession!]
+  sessionsCount(where: LegislativeMeetingSessionWhereInput! = {}): Int
+  source: String
+  createdAt: DateTime
+}
+
+input MemberFollowingTopicLegislatorWhereUniqueInput {
+  id: ID
+}
+
+input MemberFollowingTopicLegislatorWhereInput {
+  AND: [MemberFollowingTopicLegislatorWhereInput!]
+  OR: [MemberFollowingTopicLegislatorWhereInput!]
+  NOT: [MemberFollowingTopicLegislatorWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  topic: TopicWhereInput
+  legislator: LegislatorWhereInput
+  legislativeMeeting: LegislativeMeetingWhereInput
+  allSessions: BooleanFilter
+  sessions: LegislativeMeetingSessionManyRelationFilter
+  source: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFollowingTopicLegislatorOrderByInput {
+  id: OrderDirection
+  allSessions: OrderDirection
+  source: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFollowingTopicLegislatorUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  topic: TopicRelateToOneForUpdateInput
+  legislator: LegislatorRelateToOneForUpdateInput
+  legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForUpdateInput
+  source: String
+  createdAt: DateTime
+}
+
+input TopicRelateToOneForUpdateInput {
+  create: TopicCreateInput
+  connect: TopicWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislatorRelateToOneForUpdateInput {
+  create: LegislatorCreateInput
+  connect: LegislatorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LegislativeMeetingRelateToOneForUpdateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFollowingTopicLegislatorUpdateArgs {
+  where: MemberFollowingTopicLegislatorWhereUniqueInput!
+  data: MemberFollowingTopicLegislatorUpdateInput!
+}
+
+input MemberFollowingTopicLegislatorCreateInput {
+  member: MemberRelateToOneForCreateInput
+  topic: TopicRelateToOneForCreateInput
+  legislator: LegislatorRelateToOneForCreateInput
+  legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForCreateInput
+  source: String
+  createdAt: DateTime
+}
+
+input TopicRelateToOneForCreateInput {
+  create: TopicCreateInput
+  connect: TopicWhereUniqueInput
+}
+
+input LegislatorRelateToOneForCreateInput {
+  create: LegislatorCreateInput
+  connect: LegislatorWhereUniqueInput
+}
+
+input LegislativeMeetingRelateToOneForCreateInput {
+  create: LegislativeMeetingCreateInput
+  connect: LegislativeMeetingWhereUniqueInput
+}
+
+type MemberFollowingCouncilTopicCouncilor {
+  id: ID!
+  member: Member
+  councilTopic: CouncilTopic
+  councilor: Councilor
+  councilMeeting: CouncilMeeting
+  source: String
+  createdAt: DateTime
+}
+
+input MemberFollowingCouncilTopicCouncilorWhereUniqueInput {
+  id: ID
+}
+
+input MemberFollowingCouncilTopicCouncilorWhereInput {
+  AND: [MemberFollowingCouncilTopicCouncilorWhereInput!]
+  OR: [MemberFollowingCouncilTopicCouncilorWhereInput!]
+  NOT: [MemberFollowingCouncilTopicCouncilorWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  councilTopic: CouncilTopicWhereInput
+  councilor: CouncilorWhereInput
+  councilMeeting: CouncilMeetingWhereInput
+  source: StringFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFollowingCouncilTopicCouncilorOrderByInput {
+  id: OrderDirection
+  source: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFollowingCouncilTopicCouncilorUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  councilTopic: CouncilTopicRelateToOneForUpdateInput
+  councilor: CouncilorRelateToOneForUpdateInput
+  councilMeeting: CouncilMeetingRelateToOneForUpdateInput
+  source: String
+  createdAt: DateTime
+}
+
+input CouncilTopicRelateToOneForUpdateInput {
+  create: CouncilTopicCreateInput
+  connect: CouncilTopicWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouncilorRelateToOneForUpdateInput {
+  create: CouncilorCreateInput
+  connect: CouncilorWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouncilMeetingRelateToOneForUpdateInput {
+  create: CouncilMeetingCreateInput
+  connect: CouncilMeetingWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberFollowingCouncilTopicCouncilorUpdateArgs {
+  where: MemberFollowingCouncilTopicCouncilorWhereUniqueInput!
+  data: MemberFollowingCouncilTopicCouncilorUpdateInput!
+}
+
+input MemberFollowingCouncilTopicCouncilorCreateInput {
+  member: MemberRelateToOneForCreateInput
+  councilTopic: CouncilTopicRelateToOneForCreateInput
+  councilor: CouncilorRelateToOneForCreateInput
+  councilMeeting: CouncilMeetingRelateToOneForCreateInput
+  source: String
+  createdAt: DateTime
+}
+
+input CouncilTopicRelateToOneForCreateInput {
+  create: CouncilTopicCreateInput
+  connect: CouncilTopicWhereUniqueInput
+}
+
+input CouncilorRelateToOneForCreateInput {
+  create: CouncilorCreateInput
+  connect: CouncilorWhereUniqueInput
+}
+
+input CouncilMeetingRelateToOneForCreateInput {
+  create: CouncilMeetingCreateInput
+  connect: CouncilMeetingWhereUniqueInput
+}
+
 type Photo {
   id: ID!
   name: String
@@ -244,18 +803,6 @@ input SelectedUpdateInput {
   updatedAt: DateTime
 }
 
-input LegislatorRelateToOneForUpdateInput {
-  create: LegislatorCreateInput
-  connect: LegislatorWhereUniqueInput
-  disconnect: Boolean
-}
-
-input TopicRelateToOneForUpdateInput {
-  create: TopicCreateInput
-  connect: TopicWhereUniqueInput
-  disconnect: Boolean
-}
-
 input SelectedUpdateArgs {
   where: SelectedWhereUniqueInput!
   data: SelectedUpdateInput!
@@ -267,16 +814,6 @@ input SelectedCreateInput {
   order: Int
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input LegislatorRelateToOneForCreateInput {
-  create: LegislatorCreateInput
-  connect: LegislatorWhereUniqueInput
-}
-
-input TopicRelateToOneForCreateInput {
-  create: TopicCreateInput
-  connect: TopicWhereUniqueInput
 }
 
 type Speech {
@@ -375,21 +912,9 @@ input SpeechUpdateInput {
   updatedAt: DateTime
 }
 
-input LegislativeMeetingRelateToOneForUpdateInput {
-  create: LegislativeMeetingCreateInput
-  connect: LegislativeMeetingWhereUniqueInput
-  disconnect: Boolean
-}
-
 input LegislativeMeetingSessionRelateToOneForUpdateInput {
   create: LegislativeMeetingSessionCreateInput
   connect: LegislativeMeetingSessionWhereUniqueInput
-  disconnect: Boolean
-}
-
-input LegislativeYuanMemberRelateToOneForUpdateInput {
-  create: LegislativeYuanMemberCreateInput
-  connect: LegislativeYuanMemberWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -423,19 +948,9 @@ input SpeechCreateInput {
   updatedAt: DateTime
 }
 
-input LegislativeMeetingRelateToOneForCreateInput {
-  create: LegislativeMeetingCreateInput
-  connect: LegislativeMeetingWhereUniqueInput
-}
-
 input LegislativeMeetingSessionRelateToOneForCreateInput {
   create: LegislativeMeetingSessionCreateInput
   connect: LegislativeMeetingSessionWhereUniqueInput
-}
-
-input LegislativeYuanMemberRelateToOneForCreateInput {
-  create: LegislativeYuanMemberCreateInput
-  connect: LegislativeYuanMemberWhereUniqueInput
 }
 
 input TopicRelateToManyForCreateInput {
@@ -716,11 +1231,6 @@ input StringNullableFilter {
   startsWith: String
   endsWith: String
   not: StringNullableFilter
-}
-
-input BooleanFilter {
-  equals: Boolean
-  not: BooleanFilter
 }
 
 input LegislativeYuanMemberOrderByInput {
@@ -1128,12 +1638,6 @@ input CouncilSpeechUpdateInput {
   updatedAt: DateTime
 }
 
-input CouncilMeetingRelateToOneForUpdateInput {
-  create: CouncilMeetingCreateInput
-  connect: CouncilMeetingWhereUniqueInput
-  disconnect: Boolean
-}
-
 input CouncilMemberRelateToManyForUpdateInput {
   disconnect: [CouncilMemberWhereUniqueInput!]
   set: [CouncilMemberWhereUniqueInput!]
@@ -1159,11 +1663,6 @@ input CouncilSpeechCreateInput {
   topic: CouncilTopicRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input CouncilMeetingRelateToOneForCreateInput {
-  create: CouncilMeetingCreateInput
-  connect: CouncilMeetingWhereUniqueInput
 }
 
 input CouncilMemberRelateToManyForCreateInput {
@@ -1551,12 +2050,6 @@ input CouncilMemberUpdateInput {
   updatedAt: DateTime
 }
 
-input CouncilorRelateToOneForUpdateInput {
-  create: CouncilorCreateInput
-  connect: CouncilorWhereUniqueInput
-  disconnect: Boolean
-}
-
 input CouncilMemberUpdateArgs {
   where: CouncilMemberWhereUniqueInput!
   data: CouncilMemberUpdateInput!
@@ -1579,11 +2072,6 @@ input CouncilMemberCreateInput {
   bill: CouncilBillRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input CouncilorRelateToOneForCreateInput {
-  create: CouncilorCreateInput
-  connect: CouncilorWhereUniqueInput
 }
 
 type CouncilMeeting {
@@ -1880,6 +2368,54 @@ type Mutation {
   updateSystemUsers(data: [SystemUserUpdateArgs!]!): [SystemUser]
   deleteSystemUser(where: SystemUserWhereUniqueInput!): SystemUser
   deleteSystemUsers(where: [SystemUserWhereUniqueInput!]!): [SystemUser]
+  createMember(data: MemberCreateInput!): Member
+  createMembers(data: [MemberCreateInput!]!): [Member]
+  updateMember(where: MemberWhereUniqueInput!, data: MemberUpdateInput!): Member
+  updateMembers(data: [MemberUpdateArgs!]!): [Member]
+  deleteMember(where: MemberWhereUniqueInput!): Member
+  deleteMembers(where: [MemberWhereUniqueInput!]!): [Member]
+  createMemberFollowingCouncilMember(data: MemberFollowingCouncilMemberCreateInput!): MemberFollowingCouncilMember
+  createMemberFollowingCouncilMembers(data: [MemberFollowingCouncilMemberCreateInput!]!): [MemberFollowingCouncilMember]
+  updateMemberFollowingCouncilMember(where: MemberFollowingCouncilMemberWhereUniqueInput!, data: MemberFollowingCouncilMemberUpdateInput!): MemberFollowingCouncilMember
+  updateMemberFollowingCouncilMembers(data: [MemberFollowingCouncilMemberUpdateArgs!]!): [MemberFollowingCouncilMember]
+  deleteMemberFollowingCouncilMember(where: MemberFollowingCouncilMemberWhereUniqueInput!): MemberFollowingCouncilMember
+  deleteMemberFollowingCouncilMembers(where: [MemberFollowingCouncilMemberWhereUniqueInput!]!): [MemberFollowingCouncilMember]
+  createMemberFollowingLegislativeYuanMember(data: MemberFollowingLegislativeYuanMemberCreateInput!): MemberFollowingLegislativeYuanMember
+  createMemberFollowingLegislativeYuanMembers(data: [MemberFollowingLegislativeYuanMemberCreateInput!]!): [MemberFollowingLegislativeYuanMember]
+  updateMemberFollowingLegislativeYuanMember(where: MemberFollowingLegislativeYuanMemberWhereUniqueInput!, data: MemberFollowingLegislativeYuanMemberUpdateInput!): MemberFollowingLegislativeYuanMember
+  updateMemberFollowingLegislativeYuanMembers(data: [MemberFollowingLegislativeYuanMemberUpdateArgs!]!): [MemberFollowingLegislativeYuanMember]
+  deleteMemberFollowingLegislativeYuanMember(where: MemberFollowingLegislativeYuanMemberWhereUniqueInput!): MemberFollowingLegislativeYuanMember
+  deleteMemberFollowingLegislativeYuanMembers(where: [MemberFollowingLegislativeYuanMemberWhereUniqueInput!]!): [MemberFollowingLegislativeYuanMember]
+  createMemberFollowingSpeech(data: MemberFollowingSpeechCreateInput!): MemberFollowingSpeech
+  createMemberFollowingSpeeches(data: [MemberFollowingSpeechCreateInput!]!): [MemberFollowingSpeech]
+  updateMemberFollowingSpeech(where: MemberFollowingSpeechWhereUniqueInput!, data: MemberFollowingSpeechUpdateInput!): MemberFollowingSpeech
+  updateMemberFollowingSpeeches(data: [MemberFollowingSpeechUpdateArgs!]!): [MemberFollowingSpeech]
+  deleteMemberFollowingSpeech(where: MemberFollowingSpeechWhereUniqueInput!): MemberFollowingSpeech
+  deleteMemberFollowingSpeeches(where: [MemberFollowingSpeechWhereUniqueInput!]!): [MemberFollowingSpeech]
+  createMemberFollowingCouncilSpeech(data: MemberFollowingCouncilSpeechCreateInput!): MemberFollowingCouncilSpeech
+  createMemberFollowingCouncilSpeeches(data: [MemberFollowingCouncilSpeechCreateInput!]!): [MemberFollowingCouncilSpeech]
+  updateMemberFollowingCouncilSpeech(where: MemberFollowingCouncilSpeechWhereUniqueInput!, data: MemberFollowingCouncilSpeechUpdateInput!): MemberFollowingCouncilSpeech
+  updateMemberFollowingCouncilSpeeches(data: [MemberFollowingCouncilSpeechUpdateArgs!]!): [MemberFollowingCouncilSpeech]
+  deleteMemberFollowingCouncilSpeech(where: MemberFollowingCouncilSpeechWhereUniqueInput!): MemberFollowingCouncilSpeech
+  deleteMemberFollowingCouncilSpeeches(where: [MemberFollowingCouncilSpeechWhereUniqueInput!]!): [MemberFollowingCouncilSpeech]
+  createMemberFollowingCouncilBill(data: MemberFollowingCouncilBillCreateInput!): MemberFollowingCouncilBill
+  createMemberFollowingCouncilBills(data: [MemberFollowingCouncilBillCreateInput!]!): [MemberFollowingCouncilBill]
+  updateMemberFollowingCouncilBill(where: MemberFollowingCouncilBillWhereUniqueInput!, data: MemberFollowingCouncilBillUpdateInput!): MemberFollowingCouncilBill
+  updateMemberFollowingCouncilBills(data: [MemberFollowingCouncilBillUpdateArgs!]!): [MemberFollowingCouncilBill]
+  deleteMemberFollowingCouncilBill(where: MemberFollowingCouncilBillWhereUniqueInput!): MemberFollowingCouncilBill
+  deleteMemberFollowingCouncilBills(where: [MemberFollowingCouncilBillWhereUniqueInput!]!): [MemberFollowingCouncilBill]
+  createMemberFollowingTopicLegislator(data: MemberFollowingTopicLegislatorCreateInput!): MemberFollowingTopicLegislator
+  createMemberFollowingTopicLegislators(data: [MemberFollowingTopicLegislatorCreateInput!]!): [MemberFollowingTopicLegislator]
+  updateMemberFollowingTopicLegislator(where: MemberFollowingTopicLegislatorWhereUniqueInput!, data: MemberFollowingTopicLegislatorUpdateInput!): MemberFollowingTopicLegislator
+  updateMemberFollowingTopicLegislators(data: [MemberFollowingTopicLegislatorUpdateArgs!]!): [MemberFollowingTopicLegislator]
+  deleteMemberFollowingTopicLegislator(where: MemberFollowingTopicLegislatorWhereUniqueInput!): MemberFollowingTopicLegislator
+  deleteMemberFollowingTopicLegislators(where: [MemberFollowingTopicLegislatorWhereUniqueInput!]!): [MemberFollowingTopicLegislator]
+  createMemberFollowingCouncilTopicCouncilor(data: MemberFollowingCouncilTopicCouncilorCreateInput!): MemberFollowingCouncilTopicCouncilor
+  createMemberFollowingCouncilTopicCouncilors(data: [MemberFollowingCouncilTopicCouncilorCreateInput!]!): [MemberFollowingCouncilTopicCouncilor]
+  updateMemberFollowingCouncilTopicCouncilor(where: MemberFollowingCouncilTopicCouncilorWhereUniqueInput!, data: MemberFollowingCouncilTopicCouncilorUpdateInput!): MemberFollowingCouncilTopicCouncilor
+  updateMemberFollowingCouncilTopicCouncilors(data: [MemberFollowingCouncilTopicCouncilorUpdateArgs!]!): [MemberFollowingCouncilTopicCouncilor]
+  deleteMemberFollowingCouncilTopicCouncilor(where: MemberFollowingCouncilTopicCouncilorWhereUniqueInput!): MemberFollowingCouncilTopicCouncilor
+  deleteMemberFollowingCouncilTopicCouncilors(where: [MemberFollowingCouncilTopicCouncilorWhereUniqueInput!]!): [MemberFollowingCouncilTopicCouncilor]
   createPhoto(data: PhotoCreateInput!): Photo
   createPhotos(data: [PhotoCreateInput!]!): [Photo]
   updatePhoto(where: PhotoWhereUniqueInput!, data: PhotoUpdateInput!): Photo
@@ -2021,6 +2557,30 @@ type Query {
   systemUser(where: SystemUserWhereUniqueInput!): SystemUser
   systemUsers(where: SystemUserWhereInput! = {}, orderBy: [SystemUserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SystemUserWhereUniqueInput): [SystemUser!]
   systemUsersCount(where: SystemUserWhereInput! = {}): Int
+  member(where: MemberWhereUniqueInput!): Member
+  members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
+  membersCount(where: MemberWhereInput! = {}): Int
+  memberFollowingCouncilMember(where: MemberFollowingCouncilMemberWhereUniqueInput!): MemberFollowingCouncilMember
+  memberFollowingCouncilMembers(where: MemberFollowingCouncilMemberWhereInput! = {}, orderBy: [MemberFollowingCouncilMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingCouncilMemberWhereUniqueInput): [MemberFollowingCouncilMember!]
+  memberFollowingCouncilMembersCount(where: MemberFollowingCouncilMemberWhereInput! = {}): Int
+  memberFollowingLegislativeYuanMember(where: MemberFollowingLegislativeYuanMemberWhereUniqueInput!): MemberFollowingLegislativeYuanMember
+  memberFollowingLegislativeYuanMembers(where: MemberFollowingLegislativeYuanMemberWhereInput! = {}, orderBy: [MemberFollowingLegislativeYuanMemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingLegislativeYuanMemberWhereUniqueInput): [MemberFollowingLegislativeYuanMember!]
+  memberFollowingLegislativeYuanMembersCount(where: MemberFollowingLegislativeYuanMemberWhereInput! = {}): Int
+  memberFollowingSpeech(where: MemberFollowingSpeechWhereUniqueInput!): MemberFollowingSpeech
+  memberFollowingSpeeches(where: MemberFollowingSpeechWhereInput! = {}, orderBy: [MemberFollowingSpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingSpeechWhereUniqueInput): [MemberFollowingSpeech!]
+  memberFollowingSpeechesCount(where: MemberFollowingSpeechWhereInput! = {}): Int
+  memberFollowingCouncilSpeech(where: MemberFollowingCouncilSpeechWhereUniqueInput!): MemberFollowingCouncilSpeech
+  memberFollowingCouncilSpeeches(where: MemberFollowingCouncilSpeechWhereInput! = {}, orderBy: [MemberFollowingCouncilSpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingCouncilSpeechWhereUniqueInput): [MemberFollowingCouncilSpeech!]
+  memberFollowingCouncilSpeechesCount(where: MemberFollowingCouncilSpeechWhereInput! = {}): Int
+  memberFollowingCouncilBill(where: MemberFollowingCouncilBillWhereUniqueInput!): MemberFollowingCouncilBill
+  memberFollowingCouncilBills(where: MemberFollowingCouncilBillWhereInput! = {}, orderBy: [MemberFollowingCouncilBillOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingCouncilBillWhereUniqueInput): [MemberFollowingCouncilBill!]
+  memberFollowingCouncilBillsCount(where: MemberFollowingCouncilBillWhereInput! = {}): Int
+  memberFollowingTopicLegislator(where: MemberFollowingTopicLegislatorWhereUniqueInput!): MemberFollowingTopicLegislator
+  memberFollowingTopicLegislators(where: MemberFollowingTopicLegislatorWhereInput! = {}, orderBy: [MemberFollowingTopicLegislatorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingTopicLegislatorWhereUniqueInput): [MemberFollowingTopicLegislator!]
+  memberFollowingTopicLegislatorsCount(where: MemberFollowingTopicLegislatorWhereInput! = {}): Int
+  memberFollowingCouncilTopicCouncilor(where: MemberFollowingCouncilTopicCouncilorWhereUniqueInput!): MemberFollowingCouncilTopicCouncilor
+  memberFollowingCouncilTopicCouncilors(where: MemberFollowingCouncilTopicCouncilorWhereInput! = {}, orderBy: [MemberFollowingCouncilTopicCouncilorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingCouncilTopicCouncilorWhereUniqueInput): [MemberFollowingCouncilTopicCouncilor!]
+  memberFollowingCouncilTopicCouncilorsCount(where: MemberFollowingCouncilTopicCouncilorWhereInput! = {}): Int
   photo(where: PhotoWhereUniqueInput!): Photo
   photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int
