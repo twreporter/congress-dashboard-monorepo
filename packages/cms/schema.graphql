@@ -1063,6 +1063,8 @@ type CouncilSpeech {
   date: CalendarDay
   title: String
   slug: String
+  speechGroup: String
+  speechOrder: Int
   summary: JSON
   summaryFallback: String
   content: JSON
@@ -1089,6 +1091,8 @@ input CouncilSpeechWhereInput {
   date: CalendarDayFilter
   title: StringFilter
   slug: StringFilter
+  speechGroup: StringFilter
+  speechOrder: IntFilter
   attendee: StringFilter
   sourceLink: StringFilter
   topic: CouncilTopicManyRelationFilter
@@ -1107,6 +1111,8 @@ input CouncilSpeechOrderByInput {
   date: OrderDirection
   title: OrderDirection
   slug: OrderDirection
+  speechGroup: OrderDirection
+  speechOrder: OrderDirection
   attendee: OrderDirection
   sourceLink: OrderDirection
   createdAt: OrderDirection
@@ -1119,6 +1125,8 @@ input CouncilSpeechUpdateInput {
   date: CalendarDay
   title: String
   slug: String
+  speechGroup: String
+  speechOrder: Int
   summary: JSON
   content: JSON
   attendee: String
@@ -1152,6 +1160,8 @@ input CouncilSpeechCreateInput {
   date: CalendarDay
   title: String
   slug: String
+  speechGroup: String
+  speechOrder: Int
   summary: JSON
   content: JSON
   attendee: String

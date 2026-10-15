@@ -210,6 +210,8 @@ model CouncilSpeech {
   date             DateTime        @mysql.Date
   title            String          @default("")
   slug             String          @unique @default("")
+  speechGroup      String          @default("")
+  speechOrder      Int             @default(0)
   summary          Json?
   content          Json?
   attendee         String          @default("")
@@ -221,6 +223,7 @@ model CouncilSpeech {
   @@index([councilMeetingId])
   @@index([date])
   @@index([title])
+  @@index([speechGroup])
   @@index([updatedAt])
 }
 

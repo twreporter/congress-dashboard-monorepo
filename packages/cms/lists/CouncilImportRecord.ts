@@ -311,6 +311,26 @@ const validateListSpecificData: Record<
           relatedCouncilTopic_slug,
         } = item
 
+        if (
+          item.speechGroup !== undefined &&
+          (typeof item.speechGroup !== 'string' ||
+            item.speechGroup.length > 191)
+        ) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: speechGroup 必須為不超過 191 字的字串`
+          )
+        }
+        if (
+          item.speechOrder !== undefined &&
+          (!Number.isInteger(item.speechOrder) ||
+            item.speechOrder < 0 ||
+            item.speechOrder > 2147483647)
+        ) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: speechOrder 必須為 0 至 2147483647 的整數`
+          )
+        }
+
         if (!isValidDate(date)) {
           validationErrors.push(
             `第 ${rowNum} 筆資料: date 欄位必須為有效的 YYYY-MM-DD 日期`
@@ -849,6 +869,8 @@ const importHandlers: Record<
         content,
         attendee,
         sourceLink: source,
+        speechGroup: item.speechGroup?.trim(),
+        speechOrder: item.speechOrder,
         councilMeeting: { connect: { id: councilMeeting.id } },
         councilMember: { connect: councilMemberIds },
         topic: {
