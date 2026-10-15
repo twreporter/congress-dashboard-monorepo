@@ -1,6 +1,7 @@
 import { list, graphql } from '@keystone-6/core'
 import {
   text,
+  integer,
   relationship,
   calendarDay,
   json,
@@ -49,6 +50,19 @@ const listConfigurations = list({
       isIndexed: true,
     }),
     slug: SLUG,
+    speechGroup: text({
+      label: '發言群組',
+      isIndexed: true,
+      ui: {
+        description:
+          '同一縣市屆期內，相同群組的逐字稿可依順序切換；留空則不分組。',
+      },
+    }),
+    speechOrder: integer({
+      label: '群組內順序',
+      defaultValue: 0,
+      validation: { isRequired: true, min: 0 },
+    }),
     summary: json({
       label: '摘要',
     }),
