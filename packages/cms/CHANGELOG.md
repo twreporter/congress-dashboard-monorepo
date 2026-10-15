@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0...@twreporter/congress-dashboard-cms@1.11.0-rc.0) (2026-10-15)
+
+### Features
+
+- **cms:** add speechGroup & speechCount ([6e26a43](https://github.com/twreporter/congress-dashboard-monorepo/commit/6e26a432c13773ca69a92297ab4a5b7313258d15))
+
 # [1.10.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.5...@twreporter/congress-dashboard-cms@1.10.0) (2026-10-07)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-cms
