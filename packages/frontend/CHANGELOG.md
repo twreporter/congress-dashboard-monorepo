@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.16.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0-rc.0...@twreporter/congress-dashboard-frontend@1.16.0-rc.1) (2026-10-15)
+
+### Bug Fixes
+
+- **frontend:** address revie comments ([cff1272](https://github.com/twreporter/congress-dashboard-monorepo/commit/cff12725679f86fb8750a66b073fadf8d2ad5295))
+- **frontend:** address review comments ([3d29627](https://github.com/twreporter/congress-dashboard-monorepo/commit/3d29627061c02de2103a6f52891f8a1cedd6e620))
+- **frontend:** update wording ([6441bb0](https://github.com/twreporter/congress-dashboard-monorepo/commit/6441bb0ac088015f3c39eaf04baca200f2c1bb9d))
+
 # [1.16.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0...@twreporter/congress-dashboard-frontend@1.16.0-rc.0) (2026-10-15)
 
 ### Features

@@ -171,11 +171,13 @@ const Sliders: React.FC<SlidersProps> = ({ cards }) => {
         <ButtonGroup>
           <IconButton
             disabled={isSwiperBeginning}
+            aria-label="上一個精選議題"
             direction={IconButton.Direction.LEFT}
             onClick={() => swiper?.slidePrev()}
           />
           <IconButton
             disabled={isSwiperEnd}
+            aria-label="下一個精選議題"
             direction={IconButton.Direction.RIGHT}
             onClick={() => swiper?.slideNext()}
           />

@@ -243,18 +243,22 @@ export const ShareButtonGroup: React.FC<ShareButtonGroupProps> = ({
     <OptionsContainer $isShow={isShow}>
       <TabBarButton
         icon={<Facebook releaseBranch={releaseBranch} />}
+        aria-label="分享到 Facebook"
         onClick={handleFBClick}
       />
       <TabBarButton
         icon={<Line releaseBranch={releaseBranch} />}
+        aria-label="分享到 LINE"
         onClick={handleLineClick}
       />
       <TabBarButton
         icon={<Twitter releaseBranch={releaseBranch} />}
+        aria-label="分享到 Twitter"
         onClick={handleTwitterClick}
       />
       <TabBarButton
         icon={<Copy releaseBranch={releaseBranch} />}
+        aria-label="複製連結"
         onClick={handleCopyOnClick}
       />
     </OptionsContainer>
@@ -384,6 +388,7 @@ const SwitchButtonGroup: React.FC<SwitchButtonGroupProps> = ({
             direction={Arrow.Direction.LEFT}
           />
         }
+        aria-label="上一個質詢片段"
         onClick={handlePrevClick}
         disabled={isFirstSpeech}
       />
@@ -394,6 +399,7 @@ const SwitchButtonGroup: React.FC<SwitchButtonGroupProps> = ({
             direction={Arrow.Direction.RIGHT}
           />
         }
+        aria-label="下一個質詢片段"
         onClick={handleNextClick}
         disabled={isLastSpeech}
       />
