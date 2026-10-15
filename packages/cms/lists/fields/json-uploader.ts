@@ -130,6 +130,8 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'attendee',
       'source',
       'relatedCouncilTopic_slug',
+      'speechGroup',
+      'speechOrder',
     ],
     requiredFields: [
       'slug',
@@ -141,7 +143,8 @@ export const councilListConfigs: Record<CouncilListName, ListConfig> = {
       'content',
     ],
     nonDuplicateFields: ['slug'],
-    description: '匯入縣市逐字稿',
+    description:
+      '匯入縣市逐字稿。選填 speechGroup（同縣市屆期內的群組識別字）及 speechOrder（非負整數，由小到大切換，預設 0）；相同順序依 slug 排序。省略欄位保留既有值，speechGroup 空字串可取消分組。',
   },
   [CouncilListName.councilTopicRelatedLegislativeTopic]: {
     value: CouncilListName.councilTopicRelatedLegislativeTopic,

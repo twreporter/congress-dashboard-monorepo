@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.4-rc.0...lawmaker-cli@3.0.4) (2026-10-07)
+
+**Note:** Version bump only for package lawmaker-cli
+
 ## [3.0.4-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.3...lawmaker-cli@3.0.4-rc.0) (2026-09-09)
 
 ### Bug Fixes
