@@ -192,12 +192,14 @@ const CouncilSpeechPage: React.FC<CouncilSpeechPageProps> = ({
             <P1Gray600 weight={P1.Weight.BOLD} text="質詢片段切換" />
             <Spacing $width={12} />
             <IconButton
+              aria-label="上一個質詢片段"
               disabled={isFirstSpeech}
               direction={IconButton.Direction.LEFT}
               onClick={() => handleSwitchSpeech(Direction.PREV)}
             />
             <Spacing $width={8} />
             <IconButton
+              aria-label="下一個質詢片段"
               disabled={isLastSpeech}
               direction={IconButton.Direction.RIGHT}
               onClick={() => handleSwitchSpeech(Direction.NEXT)}
@@ -222,11 +224,13 @@ const CouncilSpeechPage: React.FC<CouncilSpeechPageProps> = ({
               <P1Gray600 weight={P1.Weight.BOLD} text="質詢片段切換" />
               <IvodSwitchButtonContainer>
                 <IconButton
+                  aria-label="上一個質詢片段"
                   disabled={isFirstSpeech}
                   direction={IconButton.Direction.LEFT}
                   onClick={() => handleSwitchSpeech(Direction.PREV)}
                 />
                 <IconButton
+                  aria-label="下一個質詢片段"
                   disabled={isLastSpeech}
                   direction={IconButton.Direction.RIGHT}
                   onClick={() => handleSwitchSpeech(Direction.NEXT)}

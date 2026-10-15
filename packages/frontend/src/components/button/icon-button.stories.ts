@@ -21,6 +21,7 @@ type Story = StoryObj<typeof IconButton>
 
 export const Basic: Story = {
   args: {
+    'aria-label': '上一個項目',
     direction: 'left',
     isLoading: false,
     disabled: false,
