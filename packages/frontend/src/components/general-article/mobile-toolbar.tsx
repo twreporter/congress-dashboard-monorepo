@@ -296,6 +296,7 @@ type SourceMobileToolbarProps = {
   onFontSizeChange: () => void
   sourceLink?: string
   scrollStage: number
+  speechSwitch?: Omit<SwitchButtonGroupProps, 'isShow'>
   feedbackEventName: string
   emptySourceMessage: string
 }
@@ -305,6 +306,7 @@ export const SourceMobileToolbar: React.FC<SourceMobileToolbarProps> = ({
   sourceLink,
   scrollStage,
   feedbackEventName,
+  speechSwitch,
   emptySourceMessage,
 }) => {
   const [buttonGroup, setButtonGroup] = useState<ButtonGroupType>('none')
@@ -325,6 +327,7 @@ export const SourceMobileToolbar: React.FC<SourceMobileToolbarProps> = ({
             context={MobileToolbarContext}
           />
           <ShareButton context={MobileToolbarContext} />
+          {speechSwitch && <SwitchButton />}
           <FontSizeButton
             onClick={onFontSizeChange}
             context={MobileToolbarContext}
@@ -335,6 +338,12 @@ export const SourceMobileToolbar: React.FC<SourceMobileToolbarProps> = ({
             context={MobileToolbarContext}
           />
           <ShareButtonGroup isShow={buttonGroup === 'share'} />
+          {speechSwitch && (
+            <SwitchButtonGroup
+              isShow={buttonGroup === 'switch'}
+              {...speechSwitch}
+            />
+          )}
         </ToolBar>
       </MobileToolbarContainer>
     </MobileToolbarContext.Provider>
