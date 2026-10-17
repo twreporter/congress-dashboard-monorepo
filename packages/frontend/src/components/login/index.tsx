@@ -1,6 +1,7 @@
 'use client'
-
 import { useSearchParams } from 'next/navigation'
+// @twreporter
+import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 
 const nodeEnv = process.env.NODE_ENV
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
@@ -12,10 +13,10 @@ const defaultDestination =
   nodeEnv === 'development'
     ? 'http://localhost:3000'
     : releaseBranch === 'staging'
-      ? 'https://staging-lawmaker.twreporter.org'
-      : releaseBranch === 'dev'
-        ? 'https://dev-lawmaker.twreporter.org'
-        : 'https://lawmaker.twreporter.org'
+    ? 'https://staging-lawmaker.twreporter.org'
+    : releaseBranch === 'dev'
+    ? 'https://dev-lawmaker.twreporter.org'
+    : 'https://lawmaker.twreporter.org'
 const allowedDestinationOrigins = new Set([
   'https://lawmaker.twreporter.org',
   'https://dev-lawmaker.twreporter.org',
@@ -56,10 +57,17 @@ function Login() {
   const { destination } = sanitizeDestination(
     searchParams.get('destination') ?? undefined
   )
-  const iframeSrc = `${loginWidgetUrl}?destination=${encodeURIComponent(destination)}`
+  const iframeSrc = `${loginWidgetUrl}?destination=${encodeURIComponent(
+    destination
+  )}`
   return (
     <iframe
-      style={{ height: '100vh', width: '100vw' }}
+      style={{
+        height: '100vh',
+        width: '100vw',
+        borderWidth: 0,
+        backgroundColor: colorGrayscale.gray100,
+      }}
       src={iframeSrc}
       title="Lawmaker Login widget"
       referrerPolicy="strict-origin-when-cross-origin"
