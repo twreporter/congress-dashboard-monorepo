@@ -49,7 +49,7 @@ const ArrowIcon = styled(Arrow)`
 const Menu = styled.div<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
-  padding: 0px 16px;
+  padding: 0px 16px 8px;
   max-height: ${(props) => (props.$isActive ? '100%' : '0')};
   transition: max-height 300ms ease-in-out;
   overflow: ${(props) => (props.$isActive ? 'visible' : 'hidden')};
