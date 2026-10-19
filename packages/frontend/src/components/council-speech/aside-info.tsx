@@ -48,7 +48,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
         {councilors.length > 0 ? (
           <CouncilorBlock>
             <PersonLabel>
-              <P2Gray600 text="諮詢議員" />
+              <P2Gray600 text="發言議員" />
               <SlashIcon />
             </PersonLabel>
             <CouncilorLinkBlock>

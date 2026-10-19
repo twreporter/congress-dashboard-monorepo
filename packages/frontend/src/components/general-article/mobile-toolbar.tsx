@@ -243,18 +243,22 @@ export const ShareButtonGroup: React.FC<ShareButtonGroupProps> = ({
     <OptionsContainer $isShow={isShow}>
       <TabBarButton
         icon={<Facebook releaseBranch={releaseBranch} />}
+        aria-label="分享到 Facebook"
         onClick={handleFBClick}
       />
       <TabBarButton
         icon={<Line releaseBranch={releaseBranch} />}
+        aria-label="分享到 LINE"
         onClick={handleLineClick}
       />
       <TabBarButton
         icon={<Twitter releaseBranch={releaseBranch} />}
+        aria-label="分享到 Twitter"
         onClick={handleTwitterClick}
       />
       <TabBarButton
         icon={<Copy releaseBranch={releaseBranch} />}
+        aria-label="複製連結"
         onClick={handleCopyOnClick}
       />
     </OptionsContainer>
@@ -296,6 +300,7 @@ type SourceMobileToolbarProps = {
   onFontSizeChange: () => void
   sourceLink?: string
   scrollStage: number
+  speechSwitch?: Omit<SwitchButtonGroupProps, 'isShow'>
   feedbackEventName: string
   emptySourceMessage: string
 }
@@ -305,6 +310,7 @@ export const SourceMobileToolbar: React.FC<SourceMobileToolbarProps> = ({
   sourceLink,
   scrollStage,
   feedbackEventName,
+  speechSwitch,
   emptySourceMessage,
 }) => {
   const [buttonGroup, setButtonGroup] = useState<ButtonGroupType>('none')
@@ -325,6 +331,7 @@ export const SourceMobileToolbar: React.FC<SourceMobileToolbarProps> = ({
             context={MobileToolbarContext}
           />
           <ShareButton context={MobileToolbarContext} />
+          {speechSwitch && <SwitchButton />}
           <FontSizeButton
             onClick={onFontSizeChange}
             context={MobileToolbarContext}
@@ -335,6 +342,12 @@ export const SourceMobileToolbar: React.FC<SourceMobileToolbarProps> = ({
             context={MobileToolbarContext}
           />
           <ShareButtonGroup isShow={buttonGroup === 'share'} />
+          {speechSwitch && (
+            <SwitchButtonGroup
+              isShow={buttonGroup === 'switch'}
+              {...speechSwitch}
+            />
+          )}
         </ToolBar>
       </MobileToolbarContainer>
     </MobileToolbarContext.Provider>
@@ -375,6 +388,7 @@ const SwitchButtonGroup: React.FC<SwitchButtonGroupProps> = ({
             direction={Arrow.Direction.LEFT}
           />
         }
+        aria-label="上一個質詢片段"
         onClick={handlePrevClick}
         disabled={isFirstSpeech}
       />
@@ -385,6 +399,7 @@ const SwitchButtonGroup: React.FC<SwitchButtonGroupProps> = ({
             direction={Arrow.Direction.RIGHT}
           />
         }
+        aria-label="下一個質詢片段"
         onClick={handleNextClick}
         disabled={isLastSpeech}
       />

@@ -210,10 +210,12 @@ model CouncilSpeech {
   date             DateTime        @mysql.Date
   title            String          @default("")
   slug             String          @unique @default("")
+  speechGroup      String          @default("")
+  speechOrder      Int             @default(0)
   summary          Json?
   content          Json?
-  attendee         String          @default("")
-  sourceLink       String          @default("")
+  attendee         String          @default("") @mysql.VarChar(300)
+  sourceLink       String          @default("") @mysql.VarChar(255)
   topic            CouncilTopic[]  @relation("CouncilSpeech_topic")
   createdAt        DateTime?       @default(now())
   updatedAt        DateTime?       @updatedAt
@@ -221,6 +223,7 @@ model CouncilSpeech {
   @@index([councilMeetingId])
   @@index([date])
   @@index([title])
+  @@index([speechGroup])
   @@index([updatedAt])
 }
 

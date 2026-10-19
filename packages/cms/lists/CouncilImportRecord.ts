@@ -306,10 +306,44 @@ const validateListSpecificData: Record<
         const {
           councilMeeting_city,
           councilMeeting_term,
-          councilors,
+          councilors = [],
           date,
           relatedCouncilTopic_slug,
         } = item
+
+        for (const [field, maxLength] of [
+          ['attendee', 300],
+          ['source', 255],
+        ] as const) {
+          if (
+            item[field] !== undefined &&
+            (typeof item[field] !== 'string' || item[field].length > maxLength)
+          ) {
+            validationErrors.push(
+              `第 ${rowNum} 筆資料: ${field} 必須為不超過 ${maxLength} 字的字串`
+            )
+          }
+        }
+
+        if (
+          item.speechGroup !== undefined &&
+          (typeof item.speechGroup !== 'string' ||
+            item.speechGroup.length > 191)
+        ) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: speechGroup 必須為不超過 191 字的字串`
+          )
+        }
+        if (
+          item.speechOrder !== undefined &&
+          (!Number.isInteger(item.speechOrder) ||
+            item.speechOrder < 0 ||
+            item.speechOrder > 2147483647)
+        ) {
+          validationErrors.push(
+            `第 ${rowNum} 筆資料: speechOrder 必須為 0 至 2147483647 的整數`
+          )
+        }
 
         if (!isValidDate(date)) {
           validationErrors.push(
@@ -338,9 +372,9 @@ const validateListSpecificData: Record<
           )
         }
 
-        if (!Array.isArray(councilors) || councilors.length === 0) {
+        if (!Array.isArray(councilors)) {
           validationErrors.push(
-            `第 ${rowNum} 筆資料: councilors 欄位必須為非空陣列`
+            `第 ${rowNum} 筆資料: councilors 欄位必須為陣列`
           )
         } else {
           await Promise.all(
@@ -805,7 +839,7 @@ const importHandlers: Record<
         slug,
         councilMeeting_city,
         councilMeeting_term,
-        councilors,
+        councilors = [],
         date,
         title,
         summary,
@@ -822,20 +856,23 @@ const importHandlers: Record<
         },
         select: { id: true },
       })
-      const councilMembers = await context.prisma.councilMember.findMany({
-        where: {
-          OR: councilors.map(
-            (councilor: { slug: string; term: string | number }) => ({
-              councilor: { slug: councilor.slug },
-              councilMeeting: {
-                city: councilMeeting_city,
-                term: Number(councilor.term),
+      const councilMembers =
+        councilors.length === 0
+          ? []
+          : await context.prisma.councilMember.findMany({
+              where: {
+                OR: councilors.map(
+                  (councilor: { slug: string; term: string | number }) => ({
+                    councilor: { slug: councilor.slug },
+                    councilMeeting: {
+                      city: councilMeeting_city,
+                      term: Number(councilor.term),
+                    },
+                  })
+                ),
               },
+              select: { id: true },
             })
-          ),
-        },
-        select: { id: true },
-      })
       const councilMemberIds = councilMembers.map(
         (councilMember: { id: number }) => ({ id: councilMember.id })
       )
@@ -849,6 +886,8 @@ const importHandlers: Record<
         content,
         attendee,
         sourceLink: source,
+        speechGroup: item.speechGroup?.trim(),
+        speechOrder: item.speechOrder,
         councilMeeting: { connect: { id: councilMeeting.id } },
         councilMember: { connect: councilMemberIds },
         topic: {
