@@ -80,9 +80,13 @@ const listConfigurations = list({
     }),
     attendee: text({
       label: '列席質詢對象',
+      db: { nativeType: 'VarChar(300)' },
+      validation: { length: { max: 300 } },
     }),
     sourceLink: text({
       label: '資料來源連結',
+      db: { nativeType: 'VarChar(255)' },
+      validation: { length: { max: 255 } },
     }),
     topic: relationship({
       ref: 'CouncilTopic.speech',
