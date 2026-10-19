@@ -214,8 +214,8 @@ model CouncilSpeech {
   speechOrder      Int             @default(0)
   summary          Json?
   content          Json?
-  attendee         String          @default("")
-  sourceLink       String          @default("")
+  attendee         String          @default("") @mysql.VarChar(300)
+  sourceLink       String          @default("") @mysql.VarChar(255)
   topic            CouncilTopic[]  @relation("CouncilSpeech_topic")
   createdAt        DateTime?       @default(now())
   updatedAt        DateTime?       @updatedAt
