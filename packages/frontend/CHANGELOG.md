@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.16.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0-rc.1...@twreporter/congress-dashboard-frontend@1.16.0-rc.2) (2026-10-19)
+
+### Bug Fixes
+
+- **frontend:** update wording for 發言議員 ([db81941](https://github.com/twreporter/congress-dashboard-monorepo/commit/db81941cd61e4323a0321f8d31b873124fc73e18))
+
 # [1.16.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0-rc.0...@twreporter/congress-dashboard-frontend@1.16.0-rc.1) (2026-10-15)
 
 ### Bug Fixes
