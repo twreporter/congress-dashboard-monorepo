@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.11.0-rc.0...@twreporter/congress-dashboard-cms@1.11.0-rc.1) (2026-10-19)
+
+### Bug Fixes
+
+- **cms:** address review comment ([4ec4e0f](https://github.com/twreporter/congress-dashboard-monorepo/commit/4ec4e0fbb5fbf4d2b550ce33aae9201638767bc4))
+- **cms:** update attendee, sourceLink max length ([03986b8](https://github.com/twreporter/congress-dashboard-monorepo/commit/03986b8b18f331681a837390226726d29523cfe3))
+
 # [1.11.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0...@twreporter/congress-dashboard-cms@1.11.0-rc.0) (2026-10-15)
 
 ### Features
