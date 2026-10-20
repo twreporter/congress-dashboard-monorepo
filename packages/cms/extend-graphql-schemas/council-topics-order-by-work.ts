@@ -1,5 +1,6 @@
 import type { TypedKeystoneContext } from '../types/context'
 import { gql } from 'graphql-tag'
+import { resolveFeaturedCouncilTopics } from './featured-council-topics'
 // custom sql
 import {
   getCouncilTopicsSql,
@@ -30,6 +31,10 @@ export const councilTopicsOrderByWorkTypeDefs = gql`
     councilors: [CouncilorForTopic]
   }
   extend type Query {
+    """
+    Get all-term featured topics and their top five councilors for a city
+    """
+    featuredCouncilTopics(city: String!): [CouncilTopicWithWorkCounts]
     """
     Get council topics ordered by speech count, then bill count
     """
@@ -172,6 +177,7 @@ const resolveCouncilTopicsOrderByWork = async (
 
 export const councilTopicsOrderByWorkResolver = {
   Query: {
+    featuredCouncilTopics: resolveFeaturedCouncilTopics,
     councilTopicsOrderByWork: resolveCouncilTopicsOrderByWork,
     councilorTopicsOrderByWork: resolveCouncilorTopicsOrderByWork,
   },

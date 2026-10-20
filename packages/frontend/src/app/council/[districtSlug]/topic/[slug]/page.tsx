@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 export const dynamicParams = true
 
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, unstable_rethrow } from 'next/navigation'
 // fetchers
 import {
   fetchATopicName,
@@ -87,7 +87,9 @@ export default async function Page({ params }: { params: Promise<Params> }) {
         councilMeetingId,
       }),
     ])
-    if (!topic) notFound()
+    if (!topic || (topic.speechCount === 0 && topic.billCount === 0)) {
+      notFound()
+    }
 
     return (
       <CouncilTopicPage
@@ -97,6 +99,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
       />
     )
   } catch (error) {
+    unstable_rethrow(error)
     console.error('Error fetching council topic data:', error)
     return <div>Failed to load council topic data. Please try again later.</div>
   }
