@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import logger from '@/utils/logger'
+import {
+  MEMBER_SESSION_COOKIE,
+  createMemberSession,
+  memberSessionCookieOptions,
+} from '@/app/api/_auth/member-session'
 import { upsertMember } from './upsert-member'
 
 const getGoApiUrl =
@@ -105,12 +110,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    return NextResponse.json({
+    // Member features are authorised by this session instead of the browser's
+    // TWReporter token, which is only trusted here at login.
+    const session = createMemberSession(userId)
+    const result = NextResponse.json({
       accessToken,
       userId,
       email,
       name: name || email?.split('@')[0],
     })
+    result.cookies.set(
+      MEMBER_SESSION_COOKIE,
+      session.token,
+      memberSessionCookieOptions(session.maxAge)
+    )
+    return result
   } catch {
     return NextResponse.json(
       { status: 'error', message: 'Authentication service unavailable' },

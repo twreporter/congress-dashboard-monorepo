@@ -47,3 +47,21 @@ export const isFollowingTabKey = (key: string): key is FollowingTabKey =>
 
 export const getFollowingTabPath = (key: string) =>
   key === DEFAULT_FOLLOWING_TAB ? '/following' : `/following/${key}`
+
+// Which institution a section is narrowed down to.
+export const FOLLOWING_SCOPE = {
+  ALL: 'all',
+  LEGISLATIVE: 'legislative',
+  LOCAL: 'local',
+} as const
+
+export type FollowingScope =
+  (typeof FOLLOWING_SCOPE)[keyof typeof FOLLOWING_SCOPE]
+
+export const DEFAULT_FOLLOWING_SCOPE = FOLLOWING_SCOPE.ALL
+
+export const matchesScope = (
+  scope: FollowingScope,
+  // Records without their own scope belong to 立法院.
+  recordScope: 'legislative' | 'local' = 'legislative'
+) => scope === FOLLOWING_SCOPE.ALL || scope === recordScope

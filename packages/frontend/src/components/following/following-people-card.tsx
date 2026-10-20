@@ -129,7 +129,12 @@ export const FollowingPeopleCard: FC<FollowingPeopleCardProps> & {
   return (
     <Container>
       <AvatarContainer>
-        <Avatar src={avatar} $size={size} $cardType={type} />
+        <Avatar
+          src={avatar}
+          alt={`${name}的大頭照`}
+          $size={size}
+          $cardType={type}
+        />
         <Mask $size={size} />
         <Party avatar={party} size={TagSize.L} />
       </AvatarContainer>

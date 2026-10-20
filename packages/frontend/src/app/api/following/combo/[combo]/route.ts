@@ -2,17 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import logger from '@/utils/logger'
 import {
   authenticatedUserId,
+  comboKeyParams,
   createComboFollowing,
+  defaultSource,
   deleteComboFollowing,
   getCombo,
-  isTopicLegislator,
   listComboFollowing,
-  resolveComboKey,
+  resolveComboCreateKey,
+  resolveComboLookupKey,
   updateComboScope,
   validSource,
   type Combo,
 } from '../../_combo'
 import {
+  parsePagination,
   parseSessionTerms,
   resolveSessionScope,
   type SessionScope,
@@ -23,19 +26,18 @@ type Context = { params: Promise<{ combo: string }> }
 const fail = (status: number, message: string) =>
   NextResponse.json({ status: 'error', message }, { status })
 
-const keyParams = (combo: Combo) =>
-  isTopicLegislator(combo)
-    ? ['topicSlug', 'legislatorSlug', 'meetingTerm']
-    : ['councilTopicSlug', 'councilorSlug', 'city']
-
 const readSearchParams = (combo: Combo, request: NextRequest) => {
+  const { required, optional } = comboKeyParams(combo)
   const input: Record<string, unknown> = {}
-  for (const name of keyParams(combo)) {
+  for (const name of [...required, ...optional]) {
     const value = request.nextUrl.searchParams.get(name)
     if (value !== null) input[name] = value
   }
   return input
 }
+
+const hasKeyParams = (combo: Combo, input: Record<string, unknown>) =>
+  comboKeyParams(combo).required.every((name) => name in input)
 
 export async function GET(request: NextRequest, { params }: Context) {
   const combo = getCombo((await params).combo)
@@ -45,30 +47,21 @@ export async function GET(request: NextRequest, { params }: Context) {
     const { userId } = await authenticatedUserId(request)
     if (!userId) return fail(401, 'Unauthorized')
 
-    const take = request.nextUrl.searchParams.get('take') ?? '50'
-    const skip = request.nextUrl.searchParams.get('skip') ?? '0'
-    if (
-      !/^\d+$/.test(take) ||
-      !/^\d+$/.test(skip) ||
-      Number(take) < 1 ||
-      Number(take) > 100
-    ) {
-      return fail(400, 'Invalid pagination')
-    }
+    const pagination = parsePagination(request.nextUrl.searchParams)
+    if ('error' in pagination) return fail(400, pagination.error)
 
     // Supplying the full key turns this into an "is it followed?" lookup.
     const input = readSearchParams(combo, request)
     let key
-    if (Object.keys(input).length === keyParams(combo).length) {
-      const resolved = await resolveComboKey(combo, input)
+    if (hasKeyParams(combo, input)) {
+      const resolved = resolveComboLookupKey(combo, input)
       if ('error' in resolved) return fail(400, resolved.error)
-      key = resolved.key
+      key = resolved
     }
 
     const following = await listComboFollowing(combo, userId, {
       key,
-      take: Number(take),
-      skip: Number(skip),
+      ...pagination,
     })
     return NextResponse.json(
       { status: 'success', data: following },
@@ -103,7 +96,7 @@ export async function POST(request: NextRequest, { params }: Context) {
     const input = body as Record<string, unknown>
     if (!validSource(combo, input.source)) return fail(400, 'Invalid source')
 
-    const resolved = await resolveComboKey(combo, input)
+    const resolved = await resolveComboCreateKey(combo, input)
     if ('error' in resolved) return fail(400, resolved.error)
 
     if (!(await resolved.validate())) {
@@ -124,7 +117,6 @@ export async function POST(request: NextRequest, { params }: Context) {
     } else if (input.sessionTerms !== undefined) {
       return fail(400, 'This combination has no sessions')
     }
-
     const existing = await listComboFollowing(combo, userId, {
       key: resolved.key,
     })
@@ -136,7 +128,7 @@ export async function POST(request: NextRequest, { params }: Context) {
       return NextResponse.json({ status: 'success', data: updated })
     }
 
-    const source = (input.source as string) ?? combo.sources[0]
+    const source = defaultSource(combo, input.source)
     try {
       const created = await createComboFollowing(
         combo,
@@ -178,17 +170,15 @@ export async function DELETE(request: NextRequest, { params }: Context) {
     if (!userId) return fail(401, 'Unauthorized')
 
     const input = readSearchParams(combo, request)
-    if (Object.keys(input).length !== keyParams(combo).length) {
-      return fail(400, `Missing ${keyParams(combo).join(', ')}`)
+    if (!hasKeyParams(combo, input)) {
+      return fail(400, `Missing ${comboKeyParams(combo).required.join(', ')}`)
     }
-    const resolved = await resolveComboKey(combo, input)
+    const resolved = resolveComboLookupKey(combo, input)
     if ('error' in resolved) return fail(400, resolved.error)
 
     // Scope the lookup to the authenticated member so one member can never
     // delete another member's record.
-    const matching = await listComboFollowing(combo, userId, {
-      key: resolved.key,
-    })
+    const matching = await listComboFollowing(combo, userId, { key: resolved })
     if (!matching.length) return fail(404, 'Following not found')
 
     await deleteComboFollowing(combo, matching[0].id)

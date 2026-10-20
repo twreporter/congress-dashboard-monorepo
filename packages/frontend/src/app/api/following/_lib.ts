@@ -1,5 +1,10 @@
 import type { NextRequest } from 'next/server'
 import keystoneFetch from '@/app/api/_graphql/keystone'
+import {
+  MEMBER_SESSION_COOKIE,
+  readMemberSession,
+} from '@/app/api/_auth/member-session'
+import { ensureMember } from '@/app/api/auth/token/upsert-member'
 
 const followingTypes = {
   councilMember: {
@@ -136,6 +141,29 @@ export async function meetingOfLegislativeYuanMember(targetId: string) {
   return meetingId ? { id: { equals: meetingId } } : undefined
 }
 
+/**
+ * `skip` is sent to the CMS as a GraphQL `Int`, so anything above the signed
+ * 32-bit range is rejected here instead of failing inside the CMS.
+ */
+const MAX_GRAPHQL_INT = 2_147_483_647
+
+export function parsePagination(
+  searchParams: URLSearchParams
+): { error: string } | { take: number; skip: number } {
+  const take = searchParams.get('take') ?? '50'
+  const skip = searchParams.get('skip') ?? '0'
+  if (
+    !/^\d+$/.test(take) ||
+    !/^\d+$/.test(skip) ||
+    Number(take) < 1 ||
+    Number(take) > 100 ||
+    Number(skip) > MAX_GRAPHQL_INT
+  ) {
+    return { error: 'Invalid pagination' }
+  }
+  return { take: Number(take), skip: Number(skip) }
+}
+
 export function validId(value: unknown): value is string {
   return (
     typeof value === 'string' &&
@@ -145,6 +173,14 @@ export function validId(value: unknown): value is string {
 }
 
 export async function authenticatedUserId(request: NextRequest) {
+  // The session issued at login is the primary credential for member
+  // features; the TWReporter token is only consulted for browsers that still
+  // hold a valid login from before the session existed.
+  const sessionUserId = readMemberSession(
+    request.cookies.get(MEMBER_SESSION_COOKIE)?.value
+  )
+  if (sessionUserId) return { userId: sessionUserId }
+
   const idToken = request.cookies.get('id_token')?.value
   if (!idToken) return {}
 
@@ -170,11 +206,17 @@ export async function authenticatedUserId(request: NextRequest) {
   // never a token supplied by the browser.
   const claims = JSON.parse(
     Buffer.from(token.split('.')[1], 'base64url').toString('utf8')
-  ) as { user_id?: number }
+  ) as { user_id?: number; email?: string }
   if (!Number.isSafeInteger(claims.user_id) || (claims.user_id ?? 0) <= 0) {
     throw new Error('User ID is missing from access token')
   }
-  return { userId: String(claims.user_id) }
+  if (!claims.email) throw new Error('Email is missing from access token')
+
+  const userId = String(claims.user_id)
+  // The follow below connects to a member row, which this request may be the
+  // first one to need.
+  await ensureMember(userId, claims.email, claims.email.split('@')[0])
+  return { userId }
 }
 
 type FollowingRecord = {

@@ -7,6 +7,7 @@ import {
   hasSessions,
   listFollowing,
   meetingOfLegislativeYuanMember,
+  parsePagination,
   parseSessionTerms,
   resolveSessionScope,
   updateFollowingScope,
@@ -27,22 +28,10 @@ export async function GET(request: NextRequest, { params }: Context) {
     const { userId } = await authenticatedUserId(request)
     if (!userId) return errorResponse(401, 'Unauthorized')
 
-    const take = request.nextUrl.searchParams.get('take') ?? '50'
-    const skip = request.nextUrl.searchParams.get('skip') ?? '0'
-    if (
-      !/^\d+$/.test(take) ||
-      !/^\d+$/.test(skip) ||
-      Number(take) < 1 ||
-      Number(take) > 100 ||
-      !Number.isSafeInteger(Number(skip))
-    ) {
-      return errorResponse(400, 'Invalid pagination')
-    }
+    const pagination = parsePagination(request.nextUrl.searchParams)
+    if ('error' in pagination) return errorResponse(400, pagination.error)
 
-    const following = await listFollowing(followingType, userId, {
-      take: Number(take),
-      skip: Number(skip),
-    })
+    const following = await listFollowing(followingType, userId, pagination)
     return NextResponse.json(
       { status: 'success', data: following },
       {

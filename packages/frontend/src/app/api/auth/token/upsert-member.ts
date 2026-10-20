@@ -13,6 +13,56 @@ async function request<T>(query: string, variables: Record<string, unknown>) {
   return result.data
 }
 
+const MEMBER_QUERY = `
+  query Member($where: MemberWhereUniqueInput!) {
+    member(where: $where) { id email name }
+  }
+`
+
+const CREATE_MEMBER = `
+  mutation CreateMember($data: MemberCreateInput!) {
+    createMember(data: $data) { id }
+  }
+`
+
+const findMember = async (twreporterUserId: string) =>
+  (
+    await request<{ member?: Member }>(MEMBER_QUERY, {
+      where: { twreporterUserId },
+    })
+  ).member
+
+async function createMember(
+  twreporterUserId: string,
+  data: { email: string; name: string }
+) {
+  try {
+    await request<{ createMember: Member }>(CREATE_MEMBER, {
+      data: { twreporterUserId, ...data },
+    })
+    return undefined
+  } catch (error) {
+    // A simultaneous request may have created the member first.
+    const member = await findMember(twreporterUserId)
+    if (!member) throw error
+    return member
+  }
+}
+
+/**
+ * Creates the member row when it is missing without touching an existing one,
+ * so a request that only knows the identity from an access token never
+ * overwrites the profile stored at login.
+ */
+export async function ensureMember(
+  twreporterUserId: string,
+  email: string,
+  name: string
+) {
+  if (await findMember(twreporterUserId)) return
+  await createMember(twreporterUserId, { email, name })
+}
+
 export async function upsertMember(
   twreporterUserId: string,
   email: string,
@@ -20,28 +70,11 @@ export async function upsertMember(
 ) {
   const where = { twreporterUserId }
   const data = { email, name }
-  const query = `
-    query Member($where: MemberWhereUniqueInput!) {
-      member(where: $where) { id email name }
-    }
-  `
 
-  let { member } = await request<{ member?: Member }>(query, { where })
-  if (!member) {
-    try {
-      await request<{ createMember: Member }>(
-        `mutation CreateMember($data: MemberCreateInput!) {
-          createMember(data: $data) { id }
-        }`,
-        { data: { twreporterUserId, ...data } }
-      )
-      return
-    } catch (error) {
-      // A simultaneous token exchange may have created the member first.
-      member = (await request<{ member?: Member }>(query, { where })).member
-      if (!member) throw error
-    }
-  }
+  const member =
+    (await findMember(twreporterUserId)) ??
+    (await createMember(twreporterUserId, data))
+  if (!member) return
 
   if (member.email === email && member.name === name) {
     return

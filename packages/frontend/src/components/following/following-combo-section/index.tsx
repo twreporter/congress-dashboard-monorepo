@@ -1,5 +1,5 @@
 'use client'
-import React, { type FC } from 'react'
+import React, { type FC, useState } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -7,6 +7,12 @@ import mq from '@twreporter/core/lib/utils/media-query'
 import { FollowingTopicCard } from '@/components/following/following-topic-card'
 import { SectionFilter } from '@/components/following/section-filter'
 import { SectionPagination } from '@/components/following/section-pagination'
+// constants
+import {
+  DEFAULT_FOLLOWING_SCOPE,
+  matchesScope,
+  type FollowingScope,
+} from '@/components/following/constants'
 // mock data
 import { MOCK_COMBO_LIST } from '@/components/following/mock-data'
 
@@ -45,22 +51,29 @@ const Filter = styled.div`
 `
 
 export const FollowingComboSection: FC = () => {
-  const peopleList = MOCK_COMBO_LIST.slice(0, 10)
+  const [scope, setScope] = useState<FollowingScope>(DEFAULT_FOLLOWING_SCOPE)
+  const comboList = MOCK_COMBO_LIST.filter((combo) =>
+    matchesScope(scope, combo.scope)
+  ).slice(0, 10)
   return (
     <Container>
       <CardSection>
         <CardWrapper>
-          {peopleList.map((person, index) => (
+          {comboList.map((combo, index) => (
             <FollowingTopicCard
               key={index}
-              {...person}
+              {...combo}
               topicType={FollowingTopicCard.TopicType.COMBO}
-              type={FollowingTopicCard.Type.LEGISLATIVE}
+              type={
+                combo.scope === 'local'
+                  ? FollowingTopicCard.Type.LOCAL
+                  : FollowingTopicCard.Type.LEGISLATIVE
+              }
             />
           ))}
         </CardWrapper>
         <Filter>
-          <SectionFilter />
+          <SectionFilter activeKey={scope} onChange={setScope} />
         </Filter>
       </CardSection>
       <SectionPagination

@@ -1,5 +1,5 @@
 'use client'
-import React, { type FC } from 'react'
+import React, { type FC, useState } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -11,6 +11,12 @@ import {
 import { FollowingPeopleCard } from '@/components/following/following-people-card'
 import { SectionFilter } from '@/components/following/section-filter'
 import { SectionPagination } from '@/components/following/section-pagination'
+// constants
+import {
+  DEFAULT_FOLLOWING_SCOPE,
+  matchesScope,
+  type FollowingScope,
+} from '@/components/following/constants'
 // mock data
 import { MOCK_PEOPLE_LIST } from '@/components/following/mock-data'
 
@@ -49,34 +55,41 @@ const Filter = styled.div`
 `
 
 export const FollowingPeopleSection: FC = () => {
-  const peopleList = MOCK_PEOPLE_LIST.slice(0, 10)
+  const [scope, setScope] = useState<FollowingScope>(DEFAULT_FOLLOWING_SCOPE)
+  const peopleList = MOCK_PEOPLE_LIST.filter((person) =>
+    matchesScope(scope, person.type === 'councilor' ? 'local' : 'legislative')
+  ).slice(0, 10)
   return (
     <Container>
       <CardSection>
         <CardWrapper>
-          {peopleList.map((person, index) => (
-            <>
-              <TabletAndBelow>
-                <FollowingPeopleCard
-                  key={index}
-                  {...person}
-                  type={FollowingPeopleCard.Type.LEGISLATOR}
-                  size={FollowingPeopleCard.Size.S}
-                />
-              </TabletAndBelow>
-              <DesktopAndAbove>
-                <FollowingPeopleCard
-                  key={index}
-                  {...person}
-                  type={FollowingPeopleCard.Type.LEGISLATOR}
-                  size={FollowingPeopleCard.Size.L}
-                />
-              </DesktopAndAbove>
-            </>
-          ))}
+          {peopleList.map((person) => {
+            const type =
+              person.type === 'councilor'
+                ? FollowingPeopleCard.Type.COUNCILOR
+                : FollowingPeopleCard.Type.LEGISLATOR
+            return (
+              <React.Fragment key={person.name}>
+                <TabletAndBelow>
+                  <FollowingPeopleCard
+                    {...person}
+                    type={type}
+                    size={FollowingPeopleCard.Size.S}
+                  />
+                </TabletAndBelow>
+                <DesktopAndAbove>
+                  <FollowingPeopleCard
+                    {...person}
+                    type={type}
+                    size={FollowingPeopleCard.Size.L}
+                  />
+                </DesktopAndAbove>
+              </React.Fragment>
+            )
+          })}
         </CardWrapper>
         <Filter>
-          <SectionFilter />
+          <SectionFilter activeKey={scope} onChange={setScope} />
         </Filter>
       </CardSection>
       <SectionPagination

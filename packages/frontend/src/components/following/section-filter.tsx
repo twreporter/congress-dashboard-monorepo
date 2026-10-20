@@ -1,9 +1,14 @@
 'use client'
-import React, { type FC, useState } from 'react'
+import React, { type FC } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
+// constants
+import {
+  FOLLOWING_SCOPE,
+  type FollowingScope,
+} from '@/components/following/constants'
 
 const Container = styled.div`
   display: flex;
@@ -30,30 +35,37 @@ const Button = styled.button<{ $isActive: boolean }>`
   cursor: pointer;
 `
 
-const BUTTON_CONFIG = [
+const BUTTON_CONFIG: { text: string; key: FollowingScope }[] = [
   {
     text: '全部',
-    key: 'all',
+    key: FOLLOWING_SCOPE.ALL,
   },
   {
     text: '立法院',
-    key: 'legislative',
+    key: FOLLOWING_SCOPE.LEGISLATIVE,
   },
   {
     text: '地方議會',
-    key: 'local',
+    key: FOLLOWING_SCOPE.LOCAL,
   },
 ]
 
-export const SectionFilter: FC = () => {
-  const [activeKey, setActiveKey] = useState('all')
+type SectionFilterProps = {
+  activeKey: FollowingScope
+  onChange: (key: FollowingScope) => void
+}
+
+export const SectionFilter: FC<SectionFilterProps> = ({
+  activeKey,
+  onChange,
+}) => {
   return (
     <Container>
       {BUTTON_CONFIG.map(({ text, key }) => (
         <Button
           key={key}
           $isActive={key === activeKey}
-          onClick={() => setActiveKey(key)}
+          onClick={() => onChange(key)}
         >
           <P1 weight={P1.Weight.BOLD} text={text} />
         </Button>

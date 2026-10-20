@@ -85,7 +85,7 @@ export const FollowingArticleCard: FC<FollowingArticleCardProps> & {
       : `議案｜${place}`
   const attendeeList =
     attendee.length > 1
-      ? `${attendee[0]} 等 ${attendee.length - 1} 人`
+      ? `${attendee[0]} 等 ${attendee.length} 人`
       : attendee[0]
   return (
     <Conatiner>

@@ -1,5 +1,5 @@
 'use client'
-import React, { type FC } from 'react'
+import React, { type FC, useState } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
@@ -7,6 +7,12 @@ import mq from '@twreporter/core/lib/utils/media-query'
 import { FollowingArticleCard } from '@/components/following/following-article-card'
 import { SectionFilter } from '@/components/following/section-filter'
 import { SectionPagination } from '@/components/following/section-pagination'
+// constants
+import {
+  DEFAULT_FOLLOWING_SCOPE,
+  matchesScope,
+  type FollowingScope,
+} from '@/components/following/constants'
 // mock data
 import { MOCK_SPEECH_LIST } from '@/components/following/mock-data'
 
@@ -45,7 +51,10 @@ const Filter = styled.div`
 `
 
 export const FollowingSpeechSection: FC = () => {
-  const speechList = MOCK_SPEECH_LIST.slice(0, 10)
+  const [scope, setScope] = useState<FollowingScope>(DEFAULT_FOLLOWING_SCOPE)
+  const speechList = MOCK_SPEECH_LIST.filter((speech) =>
+    matchesScope(scope, speech.scope)
+  ).slice(0, 10)
   return (
     <Container>
       <CardSection>
@@ -59,7 +68,7 @@ export const FollowingSpeechSection: FC = () => {
           ))}
         </CardWrapper>
         <Filter>
-          <SectionFilter />
+          <SectionFilter activeKey={scope} onChange={setScope} />
         </Filter>
       </CardSection>
       <SectionPagination

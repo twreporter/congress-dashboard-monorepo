@@ -4,12 +4,17 @@ export const MOCK_AVATAR = 'https://lawmaker.twreporter.org/images/110007.jpg'
 export const MOCK_PARTY_AVATAR =
   'https://lawmaker.twreporter.org/images/JISgLBhivHWdd0lB9cWimg.png'
 
+// Which institution a followed record belongs to. Omitted means 立法院.
+export type MockFollowingScope = 'legislative' | 'local'
+
 export type MockFollowingInfo = {
   title: string
   description: string
   billCount: number
   speechCount: number
   latestDataDate: string
+  scope?: MockFollowingScope
+  district?: string
 }
 
 export type MockFollowingPeople = {
@@ -29,6 +34,7 @@ export type MockFollowingArticle = {
   summary: string
   attendee: string[]
   date: string
+  scope?: MockFollowingScope
 }
 
 export const MOCK_COMBO_LIST: MockFollowingInfo[] = [
@@ -38,6 +44,8 @@ export const MOCK_COMBO_LIST: MockFollowingInfo[] = [
     billCount: 10,
     speechCount: 5,
     latestDataDate: '2024/06/01',
+    scope: 'local',
+    district: '台北市',
   },
   {
     title: '王美惠 ✕ 食品安全',
@@ -80,6 +88,8 @@ export const MOCK_COMBO_LIST: MockFollowingInfo[] = [
     billCount: 4,
     speechCount: 6,
     latestDataDate: '2024/05/09',
+    scope: 'local',
+    district: '台北市',
   },
   {
     title: '蘇巧慧 ✕ 能源轉型',
@@ -174,6 +184,8 @@ export const MOCK_TOPIC_LIST: MockFollowingInfo[] = [
     billCount: 5,
     speechCount: 6,
     latestDataDate: '2024/05/18',
+    scope: 'local',
+    district: '台北市',
   },
   {
     title: '交通事故防制',
@@ -223,6 +235,8 @@ export const MOCK_TOPIC_LIST: MockFollowingInfo[] = [
     billCount: 13,
     speechCount: 5,
     latestDataDate: '2024/04/21',
+    scope: 'local',
+    district: '台北市',
   },
   {
     title: '幼兒托育補助',
@@ -478,6 +492,7 @@ export const MOCK_SPEECH_LIST: MockFollowingArticle[] = [
       '苗博雅要求都發局說明社宅完工後周邊托育、長照與交通設施的配套規劃，並檢討里鄰溝通機制。',
     attendee: ['苗博雅'],
     date: '2024/04/25',
+    scope: 'local',
   },
   {
     place: '立法院財政委員會',
@@ -630,5 +645,6 @@ export const MOCK_BILL_LIST: MockFollowingArticle[] = [
     summary: '調整社會住宅租金計算基準與續租年限，並增訂弱勢戶的優先配租比率。',
     attendee: ['苗博雅', '林亮君'],
     date: '2024/04/09',
+    scope: 'local',
   },
 ]
