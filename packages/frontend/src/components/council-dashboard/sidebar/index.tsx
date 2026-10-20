@@ -387,9 +387,11 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
   )
 
   const fetchFilterOptions = () => {
+    if (!formattedFilterValues) return Promise.resolve([])
     return fetchTopicsOfACouncilor({
       councilorSlug: slug,
       districtSlug: districtSlug as CouncilDistrict,
+      councilMeetingId: formattedFilterValues.meetingId,
     })
   }
 
@@ -478,6 +480,8 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
             title={title}
             link={`${InternalRoutes.Councilor(districtSlug)}/${slug}`}
             titleSuffix=" 的相關議題篩選"
+            key={`councilor-topics:${districtSlug}:${slug}:${formattedFilterValues?.meetingId}`}
+            fetchKey={`councilor-topics:${districtSlug}:${slug}:${formattedFilterValues?.meetingId}`}
             slug={slug}
             placeholder={'篩選議題'}
             initialSelectedOption={tabList}

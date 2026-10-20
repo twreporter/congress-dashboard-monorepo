@@ -2100,6 +2100,9 @@ type Query {
   """Get council topics ordered by speech count, then bill count"""
   councilTopicsOrderByWork(meetingId: Int!, partyIds: [Int] = [], take: Int = 10, skip: Int = 0): [CouncilTopicWithWorkCounts]
 
+  """Get latest-term featured topics and their top five councilors for a city"""
+  featuredCouncilTopics(city: String!): [CouncilTopicWithWorkCounts]
+
   """
   Get one councilor's topics ordered by speech, bill, then related councilor count
   """
