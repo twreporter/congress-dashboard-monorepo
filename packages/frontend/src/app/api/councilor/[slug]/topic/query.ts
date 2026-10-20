@@ -7,6 +7,7 @@ import type { CouncilTopicForFilter } from '@/types/council-topic'
 type FetchTopicsOfACouncilorParams = {
   councilorSlug: string
   city: string
+  councilMeetingId?: number
   excludeTopicSlug?: string
   top?: number
 }
@@ -14,19 +15,21 @@ type FetchTopicsOfACouncilorParams = {
 const fetchTopicsOfACouncilor = async ({
   councilorSlug,
   city,
+  councilMeetingId,
   excludeTopicSlug,
   top,
 }: FetchTopicsOfACouncilorParams): Promise<CouncilTopicForFilter[]> => {
   if (!isValidCouncil(city)) return []
 
-  const meeting = await fetchLatestCouncilMeetingOfACity({ city })
-  if (!meeting) return []
+  const meetingId =
+    councilMeetingId ?? (await fetchLatestCouncilMeetingOfACity({ city }))?.id
+  if (!meetingId) return []
 
   // Aggregate in the CMS instead of loading every related work and councilor.
   const topics = await fetchCouncilorTopics({
     slug: councilorSlug,
     districtSlug: city,
-    councilMeetingId: meeting.id,
+    councilMeetingId: meetingId,
   })
   const filteredTopics = topics.filter(({ slug }) => slug !== excludeTopicSlug)
   return top ? filteredTopics.slice(0, top) : filteredTopics
