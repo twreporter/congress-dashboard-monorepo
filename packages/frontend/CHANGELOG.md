@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-beta.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.1...@twreporter/congress-dashboard-frontend@1.15.0-beta.2) (2026-10-20)
+
+### Bug Fixes
+
+- **frontend:** login menu and hamburger menu styled ([394dfec](https://github.com/twreporter/congress-dashboard-monorepo/commit/394dfec46f1d68d91b99c015303ec6ce65c79c0b))
+
 # [1.15.0-beta.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.0...@twreporter/congress-dashboard-frontend@1.15.0-beta.1) (2026-09-21)
 
 ### Bug Fixes

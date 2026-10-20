@@ -7,7 +7,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 // @twreporter
 import mq from '@twreporter/core/lib/utils/media-query'
-import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import {
+  colorGrayscale,
+  colorOpacity,
+} from '@twreporter/core/lib/constants/color'
 import { PillButton, IconButton } from '@twreporter/react-components/lib/button'
 import {
   DesktopAndAbove,
@@ -50,6 +53,7 @@ import { useScrollContext } from '@/contexts/scroll-context'
 const Container = styled.header.attrs<{
   $isHidden: boolean
   $tabTop: number
+  $isHamburgerMenuOpen: boolean
 }>((props) => ({
   style: {
     top: props.$isHidden
@@ -61,7 +65,8 @@ const Container = styled.header.attrs<{
   width: -webkit-fill-available;
   width: -moz-available;
   height: ${HEADER_HEIGHT}px;
-  background-color: ${colorGrayscale.gray100};
+  background-color: ${(props) =>
+    props.$isHamburgerMenuOpen ? colorGrayscale.white : colorGrayscale.gray100};
   position: fixed;
   left: 0px;
   z-index: ${ZIndex.Header};
@@ -86,6 +91,10 @@ const HeaderSection = styled.div`
     margin: 0 auto;
     padding: 0 16px;
   `}
+  ${mq.tabletOnly`
+    padding-left: 0px;
+    padding-right: 0px;
+  `}
   ${mq.mobileOnly`
     padding: 0 24px;
   `}
@@ -97,7 +106,7 @@ const LeftContainer = styled.div`
     height: 24px;
     justify-content: center;
     align-items: center;
-    ${mq.mobileOnly`
+    ${mq.tabletAndBelow`
       height: 20px;
     `}
   }
@@ -163,12 +172,11 @@ const AccountButton = styled.button`
 
 const AccountMenu = styled.div`
   position: absolute;
-  top: 50px;
+  top: 58px;
   right: 0;
   width: 240px;
   background: ${colorGrayscale.white};
   border-radius: 8px;
-  border: 1px solid ${colorGrayscale.gray300};
   box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.1);
 `
 
@@ -185,6 +193,10 @@ const AccountIdentity = styled.div`
   align-items: center;
   gap: 10px;
   padding: 16px 20px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${colorOpacity['black_0.05']};
+  }
 `
 
 const AccountIdentityText = styled.div`
@@ -211,6 +223,9 @@ const AccountMenuItem = styled.button`
   cursor: pointer;
   border: 0;
   background: transparent;
+  &:hover {
+    background-color: ${colorOpacity['black_0.05']};
+  }
 `
 
 const SearchContainer = styled.div<{
@@ -302,6 +317,7 @@ const Header: React.FC = () => {
       <Container
         $isHidden={isHeaderHidden}
         $tabTop={tabTop}
+        $isHamburgerMenuOpen={isHamburgerOpen}
         className="hidden-print"
       >
         <HeaderSection>

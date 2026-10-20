@@ -9,10 +9,7 @@ import { MenuButton, PillButton } from '@twreporter/react-components/lib/button'
 import Divider from '@twreporter/react-components/lib/divider'
 import { P2, P3 } from '@twreporter/react-components/lib/text/paragraph'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
-import {
-  AlgoliaInstantSearch,
-  layoutVariants,
-} from '@/components/search/instant-search'
+import mq from '@twreporter/core/lib/utils/media-query'
 // z-index
 import { ZIndex } from '@/styles/z-index'
 // constants
@@ -44,6 +41,9 @@ const Container = styled.div<{ $isOpen: boolean }>`
   transition: transform 300ms ease-in-out;
   transform: translateX(${(props) => (props.$isOpen ? '100%' : '-100%')});
   overflow: scroll;
+  ${mq.mobileOnly`
+    padding: 16px 24px 0px 24px;
+  `}
 `
 
 const DividerContainer = styled.div`
@@ -62,6 +62,9 @@ const Title2 = styled.div`
 `
 
 const PillButtonsContainer = styled.div`
+  position: sticky;
+  bottom: 0px;
+  background-color: ${colorGrayscale.white};
   display: flex;
   flex-direction: column;
   margin-top: auto;
@@ -71,15 +74,23 @@ const PillButtonsContainer = styled.div`
   a {
     text-decoration: none;
   }
+  ${mq.mobileOnly`
+    flex-direction: row;
+    width: 100%;
+    gap: 24px;
+    a {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  `}
 `
 
 const StyledPillButton = styled(PillButton)`
   width: auto !important;
   justify-content: center;
-`
-
-const SearchSection = styled.div`
-  padding: 16px 0;
+  ${mq.mobileOnly`
+    width: 100% !important;
+  `}
 `
 
 const MemberIdentity = styled.div`
@@ -127,9 +138,6 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
 
   return (
     <Container $isOpen={isOpen}>
-      <SearchSection>
-        <AlgoliaInstantSearch variant={layoutVariants.Menu} />
-      </SearchSection>
       {authStatus === 'authenticated' ? (
         <>
           <MemberIdentity>
@@ -191,7 +199,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
         </>
       ) : null}
       <Title2 onClick={() => openFeedback('hamburger-menu')}>
-        <P2 text={'意見回饋'} />
+        <P2 text={'問題回報'} />
       </Title2>
       <Title2>
         <Link
