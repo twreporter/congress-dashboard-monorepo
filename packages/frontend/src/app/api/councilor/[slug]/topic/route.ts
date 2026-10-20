@@ -12,6 +12,7 @@ import { HttpStatus } from '@/app/api/_core/constants'
 
 type Params = {
   city: string
+  councilMeetingId?: number
   excludeTopicSlug?: string
   top?: number
 }
@@ -23,6 +24,20 @@ const getSearchParams = (searchParams: URLSearchParams): Params => {
     throw new Error(`invalid parameter, city is required.`)
   }
   res.city = city
+
+  if (searchParams.has('mid')) {
+    const meetingId = getNumberParams(searchParams, 'mid', true)
+    if (
+      !Number.isInteger(meetingId) ||
+      meetingId <= 0 ||
+      meetingId > 2147483647
+    ) {
+      throw new Error(
+        'invalid parameter, mid should be a positive GraphQL Int.'
+      )
+    }
+    res.councilMeetingId = meetingId
+  }
 
   const excludeTopicSlug = searchParams.get('exclude')
   if (excludeTopicSlug) {
@@ -64,10 +79,11 @@ export async function GET(
   }
 
   try {
-    const { city, excludeTopicSlug, top } = parsedParams
+    const { city, councilMeetingId, excludeTopicSlug, top } = parsedParams
     const topics = await fetchTopicsOfACouncilor({
       councilorSlug: slug,
       city,
+      councilMeetingId,
       excludeTopicSlug,
       top,
     })

@@ -6,7 +6,7 @@ import type {
   TopNCouncilTopicData,
   FeaturedCouncilTopicData,
 } from '@/types/council-topic'
-import type { SitemapItemWithCity, KeystoneImage } from '@/types'
+import type { SitemapItemWithCity } from '@/types'
 // utils
 import { getImageLink } from '@/fetchers/utils'
 // @twreporter
@@ -245,7 +245,7 @@ export const fetchTopNCouncilTopics = async ({
 }
 
 /**
- * Fetch featured council topics (type = 'twreporter') for a city
+ * Fetch featured council topics (type = 'twreporter') for a city's latest term
  * Returns topics with title, slug, billCount, speechCount, councilorCount, and
  * top 5 councilor avatars
  */
@@ -253,170 +253,46 @@ export type FetchFeaturedCouncilTopicsParams = {
   city: CouncilDistrict
 }
 
-type CouncilMemberFromRes = {
-  councilor: {
-    id: number
-    slug: string
-    name: string
-    imageLink?: string
-    image?: KeystoneImage
-  }
-}
-
-type FeaturedCouncilTopicFromRes = {
-  title: string
-  slug: string
-  bill: {
-    id: number
-    councilMember: CouncilMemberFromRes[]
-  }[]
-  speech: {
-    id: number
-    councilMember: CouncilMemberFromRes[]
-  }[]
-}
-
 export const fetchFeaturedCouncilTopics = async ({
   city,
 }: FetchFeaturedCouncilTopicsParams): Promise<FeaturedCouncilTopicData[]> => {
   const query = `
-    query FeaturedCouncilTopics($where: CouncilTopicWhereInput!) {
-      councilTopics(where: $where) {
+    query FeaturedCouncilTopics($city: String!) {
+      featuredCouncilTopics(city: $city) {
         title
         slug
-        bill {
-          id
-          councilMember {
-            councilor {
-              id
-              slug
-              name
-              imageLink
-              image {
-                imageFile {
-                  url
-                }
-              }
-            }
-          }
-        }
-        speech {
-          id
-          councilMember {
-            councilor {
-              id
-              slug
-              name
-              imageLink
-              image {
-                imageFile {
-                  url
-                }
-              }
+        speechCount
+        billCount
+        councilorCount
+        councilors {
+          imageLink
+          image {
+            imageFile {
+              url
             }
           }
         }
       }
     }
   `
-  const variables = {
-    where: {
-      type: { equals: 'twreporter' },
-      city: { equals: city },
-    },
-  }
 
   try {
     const data = await keystoneFetch<{
-      councilTopics: FeaturedCouncilTopicFromRes[]
-    }>(JSON.stringify({ query, variables }), false)
+      featuredCouncilTopics: TopNCouncilTopicData[]
+    }>(JSON.stringify({ query, variables: { city } }), false)
+    if (data.errors?.length) {
+      throw new Error(data.errors.map(({ message }) => message).join('; '))
+    }
 
-    const topics = data?.data?.councilTopics || []
-
-    return topics
-      .map((topic) => {
-        const billCount = topic.bill?.length ?? 0
-        const speechCount = topic.speech?.length ?? 0
-
-        // Collect the union of councilors from bills and speeches, along with
-        // their unique participation counts for avatar ranking.
-        const councilorCountMap = new Map<
-          number,
-          {
-            councilor: CouncilMemberFromRes['councilor']
-            billIds: Set<number>
-            speechIds: Set<number>
-          }
-        >()
-
-        topic.bill?.forEach((bill) => {
-          bill.councilMember?.forEach((member) => {
-            const councilorId = member.councilor?.id
-            if (councilorId !== undefined) {
-              const existing = councilorCountMap.get(councilorId)
-              if (existing) {
-                existing.billIds.add(bill.id)
-              } else {
-                councilorCountMap.set(councilorId, {
-                  councilor: member.councilor,
-                  billIds: new Set([bill.id]),
-                  speechIds: new Set(),
-                })
-              }
-            }
-          })
-        })
-
-        topic.speech?.forEach((speech) => {
-          speech.councilMember?.forEach((member) => {
-            const councilor = member.councilor
-            const councilorId = councilor?.id
-            if (councilorId !== undefined && councilor) {
-              const existing = councilorCountMap.get(councilorId)
-              if (existing) {
-                existing.speechIds.add(speech.id)
-              } else {
-                councilorCountMap.set(councilorId, {
-                  councilor,
-                  billIds: new Set(),
-                  speechIds: new Set([speech.id]),
-                })
-              }
-            }
-          })
-        })
-
-        const councilorCount = councilorCountMap.size
-
-        // Prioritize speech participation, then bill participation.
-        const sortedCouncilors = Array.from(councilorCountMap.values())
-          .sort(
-            (a, b) =>
-              b.speechIds.size - a.speechIds.size ||
-              b.billIds.size - a.billIds.size
-          )
-          .slice(0, 5)
-
-        const avatars = sortedCouncilors
-          .map(({ councilor }) => getImageLink(councilor))
-          .filter((url) => url !== '')
-
-        return {
-          title: topic.title,
-          slug: topic.slug,
-          city,
-          billCount,
-          speechCount,
-          councilorCount,
-          avatars,
-        }
+    return (data.data?.featuredCouncilTopics || []).map(
+      ({ councilors, ...topic }) => ({
+        ...topic,
+        city,
+        avatars: (councilors || [])
+          .map((councilor) => getImageLink(councilor))
+          .filter((url) => url !== ''),
       })
-      .sort(
-        (a, b) =>
-          b.speechCount - a.speechCount ||
-          b.billCount - a.billCount ||
-          b.councilorCount - a.councilorCount
-      )
+    )
   } catch (err) {
     throw new Error(
       `Failed to fetch featured council topics for city: ${city}, err: ${err}`

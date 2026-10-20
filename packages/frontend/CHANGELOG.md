@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.16.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0...@twreporter/congress-dashboard-frontend@1.16.1-rc.0) (2026-10-20)
+
+### Bug Fixes
+
+- scope council related query to latest term ([4f7c5e7](https://github.com/twreporter/congress-dashboard-monorepo/commit/4f7c5e7f7993b04bb55c511084a361ebc2c07e0b))
+- topic pick & sidebar rule mismatch ([7c6c728](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c6c728c6ed9a41ab730273d78fc7d6b4492aa47))
+- use custom sql to address bad performance ([89e7be9](https://github.com/twreporter/congress-dashboard-monorepo/commit/89e7be96f429bc5afd8741c348946a41b5e70dfb))
+
+# [1.16.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0-rc.2...@twreporter/congress-dashboard-frontend@1.16.0) (2026-10-19)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
 # [1.16.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0-rc.1...@twreporter/congress-dashboard-frontend@1.16.0-rc.2) (2026-10-19)
 
 ### Bug Fixes
