@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-beta.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.4...@twreporter/congress-dashboard-cms@1.10.0-beta.0) (2026-10-20)
+
+### Bug Fixes
+
+- **cms:** member following topic ([e21a08e](https://github.com/twreporter/congress-dashboard-monorepo/commit/e21a08ec47ca7345643c7084d6de25d6a976696a))
+- **fronted,cms:** rename favorite to following ([0c01fdf](https://github.com/twreporter/congress-dashboard-monorepo/commit/0c01fdf50624d5ae153d2df00ca5487c80c776c9))
+
+### Features
+
+- **cms:** follow multi term ([a63dbb9](https://github.com/twreporter/congress-dashboard-monorepo/commit/a63dbb9694e695b9fee19f4dd700f63a32de2a44))
+- **cms:** member favorite combo ([d34d03c](https://github.com/twreporter/congress-dashboard-monorepo/commit/d34d03c3787f06c7d91aa2ae35208a1e2dc9ea0e))
+- **cms:** member list ([ba02b22](https://github.com/twreporter/congress-dashboard-monorepo/commit/ba02b22925eee9d322f945e87ffe7426651f5787))
+
 # [1.10.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.3...@twreporter/congress-dashboard-cms@1.10.0-rc.4) (2026-09-09)
 
 ### Bug Fixes

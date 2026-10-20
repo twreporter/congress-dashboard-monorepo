@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-beta.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.2...@twreporter/congress-dashboard-frontend@1.15.0-beta.3) (2026-10-20)
+
+### Bug Fixes
+
+- **fronted,cms:** rename favorite to following ([0c01fdf](https://github.com/twreporter/congress-dashboard-monorepo/commit/0c01fdf50624d5ae153d2df00ca5487c80c776c9))
+- **frontend:** auth and following filter ([af42129](https://github.com/twreporter/congress-dashboard-monorepo/commit/af421298a1238f2bf661f2796d6dfee387b03d86))
+- **frontend:** grid row ([ecfac7e](https://github.com/twreporter/congress-dashboard-monorepo/commit/ecfac7e092e48c3d365197594e5207d038a4cf60))
+
+### Features
+
+- **frontend:** following page ui ([22bba69](https://github.com/twreporter/congress-dashboard-monorepo/commit/22bba691576e74a4abb2b2706f6513fc7fa69421))
+- **frontend:** following tab page ([9a09871](https://github.com/twreporter/congress-dashboard-monorepo/commit/9a098712c68d8dec710a3ae2e5bcb235ab2d36fe))
+- **frontend:** member favorite combo api ([f626948](https://github.com/twreporter/congress-dashboard-monorepo/commit/f6269489498c8fc7ca19e8cbbbce1f9828e6742b))
+- **frontend:** separate tab index ([d2e0598](https://github.com/twreporter/congress-dashboard-monorepo/commit/d2e059828c75a33d0fcca9970da800379c574ae1))
+- **frontend:** tab route for following ([a9397c2](https://github.com/twreporter/congress-dashboard-monorepo/commit/a9397c20a77c9a986c549bb723c79e66d2c0bce4))
+- **frontend:** upsert member ([67a5765](https://github.com/twreporter/congress-dashboard-monorepo/commit/67a5765dd48db5494b42d6ef87d5d5291637d163))
+
 # [1.15.0-beta.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.1...@twreporter/congress-dashboard-frontend@1.15.0-beta.2) (2026-10-20)
 
 ### Bug Fixes
