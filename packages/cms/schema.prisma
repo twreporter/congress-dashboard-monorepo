@@ -38,6 +38,8 @@ model Member {
   from_MemberFollowingCouncilBill_member           MemberFollowingCouncilBill[]           @relation("MemberFollowingCouncilBill_member")
   from_MemberFollowingTopicLegislator_member       MemberFollowingTopicLegislator[]       @relation("MemberFollowingTopicLegislator_member")
   from_MemberFollowingCouncilTopicCouncilor_member MemberFollowingCouncilTopicCouncilor[] @relation("MemberFollowingCouncilTopicCouncilor_member")
+  from_MemberFollowingTopic_member                 MemberFollowingTopic[]                 @relation("MemberFollowingTopic_member")
+  from_MemberFollowingCouncilTopic_member          MemberFollowingCouncilTopic[]          @relation("MemberFollowingCouncilTopic_member")
 }
 
 model MemberFollowingCouncilMember {
@@ -149,6 +151,40 @@ model MemberFollowingCouncilTopicCouncilor {
   @@index([councilMeetingId])
 }
 
+model MemberFollowingTopic {
+  id                   Int                         @id @default(autoincrement())
+  member               Member                      @relation("MemberFollowingTopic_member", fields: [memberId], references: [id], onDelete: Cascade)
+  memberId             Int                         @map("member")
+  topic                Topic                       @relation("MemberFollowingTopic_topic", fields: [topicId], references: [id], onDelete: Cascade)
+  topicId              Int                         @map("topic")
+  legislativeMeeting   LegislativeMeeting          @relation("MemberFollowingTopic_legislativeMeeting", fields: [legislativeMeetingId], references: [id], onDelete: Cascade)
+  legislativeMeetingId Int                         @map("legislativeMeeting")
+  allSessions          Boolean                     @default(true)
+  sessions             LegislativeMeetingSession[] @relation("MemberFollowingTopic_sessions")
+  createdAt            DateTime?                   @default(now())
+
+  @@unique([memberId, topicId, legislativeMeetingId])
+  @@index([memberId])
+  @@index([topicId])
+  @@index([legislativeMeetingId])
+}
+
+model MemberFollowingCouncilTopic {
+  id               Int            @id @default(autoincrement())
+  member           Member         @relation("MemberFollowingCouncilTopic_member", fields: [memberId], references: [id], onDelete: Cascade)
+  memberId         Int            @map("member")
+  councilTopic     CouncilTopic   @relation("MemberFollowingCouncilTopic_councilTopic", fields: [councilTopicId], references: [id], onDelete: Cascade)
+  councilTopicId   Int            @map("councilTopic")
+  councilMeeting   CouncilMeeting @relation("MemberFollowingCouncilTopic_councilMeeting", fields: [councilMeetingId], references: [id], onDelete: Cascade)
+  councilMeetingId Int            @map("councilMeeting")
+  createdAt        DateTime?      @default(now())
+
+  @@unique([memberId, councilTopicId, councilMeetingId])
+  @@index([memberId])
+  @@index([councilTopicId])
+  @@index([councilMeetingId])
+}
+
 model Photo {
   id                    Int          @id @default(autoincrement())
   name                  String       @default("")
@@ -222,6 +258,7 @@ model Topic {
   createdAt                                 DateTime?                        @default(now())
   updatedAt                                 DateTime?                        @updatedAt
   from_MemberFollowingTopicLegislator_topic MemberFollowingTopicLegislator[] @relation("MemberFollowingTopicLegislator_topic")
+  from_MemberFollowingTopic_topic           MemberFollowingTopic[]           @relation("MemberFollowingTopic_topic")
   from_Selected_topic                       Selected[]                       @relation("Selected_topic")
 
   @@index([title])
@@ -283,6 +320,7 @@ model LegislativeMeeting {
   createdAt                                              DateTime?                        @default(now())
   updatedAt                                              DateTime?                        @updatedAt
   from_MemberFollowingTopicLegislator_legislativeMeeting MemberFollowingTopicLegislator[] @relation("MemberFollowingTopicLegislator_legislativeMeeting")
+  from_MemberFollowingTopic_legislativeMeeting           MemberFollowingTopic[]           @relation("MemberFollowingTopic_legislativeMeeting")
   from_Speech_legislativeMeeting                         Speech[]                         @relation("Speech_legislativeMeeting")
   from_LegislativeYuanMember_legislativeMeeting          LegislativeYuanMember[]          @relation("LegislativeYuanMember_legislativeMeeting")
   from_LegislativeMeetingSession_legislativeMeeting      LegislativeMeetingSession[]      @relation("LegislativeMeetingSession_legislativeMeeting")
@@ -300,6 +338,7 @@ model LegislativeMeetingSession {
   updatedAt                                          DateTime?                              @updatedAt
   from_MemberFollowingLegislativeYuanMember_sessions MemberFollowingLegislativeYuanMember[] @relation("MemberFollowingLegislativeYuanMember_sessions")
   from_MemberFollowingTopicLegislator_sessions       MemberFollowingTopicLegislator[]       @relation("MemberFollowingTopicLegislator_sessions")
+  from_MemberFollowingTopic_sessions                 MemberFollowingTopic[]                 @relation("MemberFollowingTopic_sessions")
   from_Speech_legislativeMeetingSession              Speech[]                               @relation("Speech_legislativeMeetingSession")
   from_CommitteeMember_legislativeMeetingSession     CommitteeMember[]                      @relation("CommitteeMember_legislativeMeetingSession")
 
@@ -398,6 +437,7 @@ model CouncilTopic {
   createdAt                                              DateTime?                              @default(now())
   updatedAt                                              DateTime?                              @updatedAt
   from_MemberFollowingCouncilTopicCouncilor_councilTopic MemberFollowingCouncilTopicCouncilor[] @relation("MemberFollowingCouncilTopicCouncilor_councilTopic")
+  from_MemberFollowingCouncilTopic_councilTopic          MemberFollowingCouncilTopic[]          @relation("MemberFollowingCouncilTopic_councilTopic")
 
   @@index([title])
 }
@@ -460,6 +500,7 @@ model CouncilMeeting {
   createdAt                                                DateTime?                              @default(now())
   updatedAt                                                DateTime?                              @updatedAt
   from_MemberFollowingCouncilTopicCouncilor_councilMeeting MemberFollowingCouncilTopicCouncilor[] @relation("MemberFollowingCouncilTopicCouncilor_councilMeeting")
+  from_MemberFollowingCouncilTopic_councilMeeting          MemberFollowingCouncilTopic[]          @relation("MemberFollowingCouncilTopic_councilMeeting")
   from_CouncilSpeech_councilMeeting                        CouncilSpeech[]                        @relation("CouncilSpeech_councilMeeting")
   from_CouncilBill_councilMeeting                          CouncilBill[]                          @relation("CouncilBill_councilMeeting")
   from_CouncilMember_councilMeeting                        CouncilMember[]                        @relation("CouncilMember_councilMeeting")

@@ -22,6 +22,7 @@ import Member from './Member'
 import {
   memberFollowingList,
   memberFollowingComboList,
+  memberFollowingTopicList,
 } from './utils/member-following'
 
 export const listDefinition = {
@@ -52,6 +53,8 @@ export const listDefinition = {
   MemberFollowingCouncilTopicCouncilor: memberFollowingComboList(
     'CouncilTopicCouncilor'
   ),
+  MemberFollowingTopic: memberFollowingTopicList('Topic'),
+  MemberFollowingCouncilTopic: memberFollowingTopicList('CouncilTopic'),
   Photo,
   Selected,
   Speech,

@@ -214,3 +214,28 @@ export function memberFollowingComboList(
         ],
       })
 }
+
+// A topic is only meaningful within the term the member was viewing, so the
+// follow keeps that meeting the same way the combinations above do.
+export function memberFollowingTopicList(topic: 'Topic' | 'CouncilTopic') {
+  return topic === 'Topic'
+    ? buildFollowingList({
+        label: '議題',
+        withSessions: true,
+        targets: [
+          { model: 'Topic', label: '議題', labelField: 'title' },
+          { model: 'LegislativeMeeting', label: '屆期', labelField: 'term' },
+        ],
+      })
+    : buildFollowingList({
+        label: '縣市議題',
+        targets: [
+          { model: 'CouncilTopic', label: '縣市議題', labelField: 'title' },
+          {
+            model: 'CouncilMeeting',
+            label: '屆期',
+            labelField: 'labelForCMS',
+          },
+        ],
+      })
+}

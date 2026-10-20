@@ -680,6 +680,110 @@ input CouncilMeetingRelateToOneForCreateInput {
   connect: CouncilMeetingWhereUniqueInput
 }
 
+type MemberFollowingTopic {
+  id: ID!
+  member: Member
+  topic: Topic
+  legislativeMeeting: LegislativeMeeting
+  allSessions: Boolean
+  sessions(where: LegislativeMeetingSessionWhereInput! = {}, orderBy: [LegislativeMeetingSessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LegislativeMeetingSessionWhereUniqueInput): [LegislativeMeetingSession!]
+  sessionsCount(where: LegislativeMeetingSessionWhereInput! = {}): Int
+  createdAt: DateTime
+}
+
+input MemberFollowingTopicWhereUniqueInput {
+  id: ID
+}
+
+input MemberFollowingTopicWhereInput {
+  AND: [MemberFollowingTopicWhereInput!]
+  OR: [MemberFollowingTopicWhereInput!]
+  NOT: [MemberFollowingTopicWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  topic: TopicWhereInput
+  legislativeMeeting: LegislativeMeetingWhereInput
+  allSessions: BooleanFilter
+  sessions: LegislativeMeetingSessionManyRelationFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFollowingTopicOrderByInput {
+  id: OrderDirection
+  allSessions: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFollowingTopicUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  topic: TopicRelateToOneForUpdateInput
+  legislativeMeeting: LegislativeMeetingRelateToOneForUpdateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForUpdateInput
+  createdAt: DateTime
+}
+
+input MemberFollowingTopicUpdateArgs {
+  where: MemberFollowingTopicWhereUniqueInput!
+  data: MemberFollowingTopicUpdateInput!
+}
+
+input MemberFollowingTopicCreateInput {
+  member: MemberRelateToOneForCreateInput
+  topic: TopicRelateToOneForCreateInput
+  legislativeMeeting: LegislativeMeetingRelateToOneForCreateInput
+  allSessions: Boolean
+  sessions: LegislativeMeetingSessionRelateToManyForCreateInput
+  createdAt: DateTime
+}
+
+type MemberFollowingCouncilTopic {
+  id: ID!
+  member: Member
+  councilTopic: CouncilTopic
+  councilMeeting: CouncilMeeting
+  createdAt: DateTime
+}
+
+input MemberFollowingCouncilTopicWhereUniqueInput {
+  id: ID
+}
+
+input MemberFollowingCouncilTopicWhereInput {
+  AND: [MemberFollowingCouncilTopicWhereInput!]
+  OR: [MemberFollowingCouncilTopicWhereInput!]
+  NOT: [MemberFollowingCouncilTopicWhereInput!]
+  id: IDFilter
+  member: MemberWhereInput
+  councilTopic: CouncilTopicWhereInput
+  councilMeeting: CouncilMeetingWhereInput
+  createdAt: DateTimeNullableFilter
+}
+
+input MemberFollowingCouncilTopicOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+}
+
+input MemberFollowingCouncilTopicUpdateInput {
+  member: MemberRelateToOneForUpdateInput
+  councilTopic: CouncilTopicRelateToOneForUpdateInput
+  councilMeeting: CouncilMeetingRelateToOneForUpdateInput
+  createdAt: DateTime
+}
+
+input MemberFollowingCouncilTopicUpdateArgs {
+  where: MemberFollowingCouncilTopicWhereUniqueInput!
+  data: MemberFollowingCouncilTopicUpdateInput!
+}
+
+input MemberFollowingCouncilTopicCreateInput {
+  member: MemberRelateToOneForCreateInput
+  councilTopic: CouncilTopicRelateToOneForCreateInput
+  councilMeeting: CouncilMeetingRelateToOneForCreateInput
+  createdAt: DateTime
+}
+
 type Photo {
   id: ID!
   name: String
@@ -2416,6 +2520,18 @@ type Mutation {
   updateMemberFollowingCouncilTopicCouncilors(data: [MemberFollowingCouncilTopicCouncilorUpdateArgs!]!): [MemberFollowingCouncilTopicCouncilor]
   deleteMemberFollowingCouncilTopicCouncilor(where: MemberFollowingCouncilTopicCouncilorWhereUniqueInput!): MemberFollowingCouncilTopicCouncilor
   deleteMemberFollowingCouncilTopicCouncilors(where: [MemberFollowingCouncilTopicCouncilorWhereUniqueInput!]!): [MemberFollowingCouncilTopicCouncilor]
+  createMemberFollowingTopic(data: MemberFollowingTopicCreateInput!): MemberFollowingTopic
+  createMemberFollowingTopics(data: [MemberFollowingTopicCreateInput!]!): [MemberFollowingTopic]
+  updateMemberFollowingTopic(where: MemberFollowingTopicWhereUniqueInput!, data: MemberFollowingTopicUpdateInput!): MemberFollowingTopic
+  updateMemberFollowingTopics(data: [MemberFollowingTopicUpdateArgs!]!): [MemberFollowingTopic]
+  deleteMemberFollowingTopic(where: MemberFollowingTopicWhereUniqueInput!): MemberFollowingTopic
+  deleteMemberFollowingTopics(where: [MemberFollowingTopicWhereUniqueInput!]!): [MemberFollowingTopic]
+  createMemberFollowingCouncilTopic(data: MemberFollowingCouncilTopicCreateInput!): MemberFollowingCouncilTopic
+  createMemberFollowingCouncilTopics(data: [MemberFollowingCouncilTopicCreateInput!]!): [MemberFollowingCouncilTopic]
+  updateMemberFollowingCouncilTopic(where: MemberFollowingCouncilTopicWhereUniqueInput!, data: MemberFollowingCouncilTopicUpdateInput!): MemberFollowingCouncilTopic
+  updateMemberFollowingCouncilTopics(data: [MemberFollowingCouncilTopicUpdateArgs!]!): [MemberFollowingCouncilTopic]
+  deleteMemberFollowingCouncilTopic(where: MemberFollowingCouncilTopicWhereUniqueInput!): MemberFollowingCouncilTopic
+  deleteMemberFollowingCouncilTopics(where: [MemberFollowingCouncilTopicWhereUniqueInput!]!): [MemberFollowingCouncilTopic]
   createPhoto(data: PhotoCreateInput!): Photo
   createPhotos(data: [PhotoCreateInput!]!): [Photo]
   updatePhoto(where: PhotoWhereUniqueInput!, data: PhotoUpdateInput!): Photo
@@ -2581,6 +2697,12 @@ type Query {
   memberFollowingCouncilTopicCouncilor(where: MemberFollowingCouncilTopicCouncilorWhereUniqueInput!): MemberFollowingCouncilTopicCouncilor
   memberFollowingCouncilTopicCouncilors(where: MemberFollowingCouncilTopicCouncilorWhereInput! = {}, orderBy: [MemberFollowingCouncilTopicCouncilorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingCouncilTopicCouncilorWhereUniqueInput): [MemberFollowingCouncilTopicCouncilor!]
   memberFollowingCouncilTopicCouncilorsCount(where: MemberFollowingCouncilTopicCouncilorWhereInput! = {}): Int
+  memberFollowingTopic(where: MemberFollowingTopicWhereUniqueInput!): MemberFollowingTopic
+  memberFollowingTopics(where: MemberFollowingTopicWhereInput! = {}, orderBy: [MemberFollowingTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingTopicWhereUniqueInput): [MemberFollowingTopic!]
+  memberFollowingTopicsCount(where: MemberFollowingTopicWhereInput! = {}): Int
+  memberFollowingCouncilTopic(where: MemberFollowingCouncilTopicWhereUniqueInput!): MemberFollowingCouncilTopic
+  memberFollowingCouncilTopics(where: MemberFollowingCouncilTopicWhereInput! = {}, orderBy: [MemberFollowingCouncilTopicOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberFollowingCouncilTopicWhereUniqueInput): [MemberFollowingCouncilTopic!]
+  memberFollowingCouncilTopicsCount(where: MemberFollowingCouncilTopicWhereInput! = {}): Int
   photo(where: PhotoWhereUniqueInput!): Photo
   photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int
