@@ -207,7 +207,7 @@ const Footer: React.FC = () => {
                 target="_blank"
               />
               <Feedback
-                text="意見回饋"
+                text="問題回報"
                 onClick={() => openFeedback('footer')}
               />
             </LinkGroup>
