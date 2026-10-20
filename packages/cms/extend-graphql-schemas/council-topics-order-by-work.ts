@@ -32,7 +32,7 @@ export const councilTopicsOrderByWorkTypeDefs = gql`
   }
   extend type Query {
     """
-    Get all-term featured topics and their top five councilors for a city
+    Get latest-term featured topics and their top five councilors for a city
     """
     featuredCouncilTopics(city: String!): [CouncilTopicWithWorkCounts]
     """

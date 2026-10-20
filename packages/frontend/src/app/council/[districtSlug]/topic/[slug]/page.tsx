@@ -87,7 +87,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
         councilMeetingId,
       }),
     ])
-    if (!topic || (topic.speechCount === 0 && topic.billCount === 0)) {
+    if (!topic) {
       notFound()
     }
 

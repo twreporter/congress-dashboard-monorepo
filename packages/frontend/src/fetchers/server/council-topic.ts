@@ -245,7 +245,7 @@ export const fetchTopNCouncilTopics = async ({
 }
 
 /**
- * Fetch featured council topics (type = 'twreporter') for a city
+ * Fetch featured council topics (type = 'twreporter') for a city's latest term
  * Returns topics with title, slug, billCount, speechCount, councilorCount, and
  * top 5 councilor avatars
  */
