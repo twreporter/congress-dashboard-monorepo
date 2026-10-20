@@ -30,9 +30,9 @@ deploy/env.staging.frontend.public.yaml
 deploy/env.prod.frontend.public.yaml
 ```
 
-`API_AUTH_PASSWORD`, `FEEDBACK_SLACK_WEBHOOK_URL`, `AWS_ACCESS_KEY_ID`, and
-`AWS_SECRET_ACCESS_KEY` must not be added to these files — they are Secret
-Manager values (see below).
+`API_AUTH_PASSWORD`, `FEEDBACK_SLACK_WEBHOOK_URL`, `AWS_ACCESS_KEY_ID`,
+`AWS_SECRET_ACCESS_KEY`, and `MEMBER_SESSION_SECRET` must not be added to
+these files — they are Secret Manager values (see below).
 
 ## Secrets
 
@@ -54,8 +54,12 @@ The shared script grants the Cloud Run runtime service account
 each secret it creates or updates.
 
 Create `api-auth-password`, `feedback-slack-webhook-url`,
-`aws-access-key-id`, and `aws-secret-access-key` for every environment
-before deploying.
+`aws-access-key-id`, `aws-secret-access-key`, and `member-session-secret`
+for every environment before deploying.
+
+`member-session-secret` signs the member session cookie issued after a
+TWReporter login. Use a random value of at least 32 bytes, keep it different
+per environment, and note that rotating it signs every member out.
 
 ## Resource Configuration
 

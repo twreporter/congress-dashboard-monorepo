@@ -98,7 +98,7 @@ steps:
             concurrency=15
             ingress=internal-and-cloud-load-balancing
             vpc_egress=all-traffic
-            secrets="API_AUTH_PASSWORD=${cloud_run_name}_api-auth-password:latest,FEEDBACK_SLACK_WEBHOOK_URL=${cloud_run_name}_feedback-slack-webhook-url:latest,AWS_ACCESS_KEY_ID=${cloud_run_name}_aws-access-key-id:latest,AWS_SECRET_ACCESS_KEY=${cloud_run_name}_aws-secret-access-key:latest"
+            secrets="API_AUTH_PASSWORD=${cloud_run_name}_api-auth-password:latest,FEEDBACK_SLACK_WEBHOOK_URL=${cloud_run_name}_feedback-slack-webhook-url:latest,AWS_ACCESS_KEY_ID=${cloud_run_name}_aws-access-key-id:latest,AWS_SECRET_ACCESS_KEY=${cloud_run_name}_aws-secret-access-key:latest,MEMBER_SESSION_SECRET=${cloud_run_name}_member-session-secret:latest"
             ;;
           cms)
             memory=2Gi

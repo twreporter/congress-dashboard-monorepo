@@ -184,7 +184,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
         paddingRight={0}
         fontWeight={MenuButton.FontWeight.BOLD}
         text={'我的追蹤'}
-        link={{ to: InternalRoutes.Favorites, target: '_self' }}
+        link={{ to: InternalRoutes.Following, target: '_self' }}
         onClick={onClose}
       />
       <DividerContainer>

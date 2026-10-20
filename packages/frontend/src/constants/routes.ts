@@ -12,7 +12,7 @@ export const InternalRoutes = {
   Councilor: (districtSlug: string) => `/council/${districtSlug}/lawmaker`,
   // council topic routes: /council/<region>/topic/:slug
   CouncilTopic: (districtSlug: string) => `/council/${districtSlug}/topic`,
-  Favorites: '/favorites',
+  Following: '/following',
   Login: '/login',
 }
 

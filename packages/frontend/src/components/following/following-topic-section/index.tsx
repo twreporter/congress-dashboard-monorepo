@@ -1,0 +1,87 @@
+'use client'
+import React, { type FC, useState } from 'react'
+import styled from 'styled-components'
+// @twreporter
+import mq from '@twreporter/core/lib/utils/media-query'
+// components
+import { FollowingTopicCard } from '@/components/following/following-topic-card'
+import { SectionFilter } from '@/components/following/section-filter'
+import { SectionPagination } from '@/components/following/section-pagination'
+// constants
+import {
+  DEFAULT_FOLLOWING_SCOPE,
+  matchesScope,
+  type FollowingScope,
+} from '@/components/following/constants'
+// mock data
+import { MOCK_TOPIC_LIST } from '@/components/following/mock-data'
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding-top: 32px;
+  ${mq.desktopAndAbove`
+    gap: 64px;
+    padding-top: 40px;
+  `}
+`
+
+const CardSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+`
+
+const CardWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  ${mq.tabletAndAbove`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  `}
+`
+
+const Filter = styled.div`
+  display: flex;
+  justify-content: center;
+`
+
+export const FollowingTopicSection: FC = () => {
+  const [scope, setScope] = useState<FollowingScope>(DEFAULT_FOLLOWING_SCOPE)
+  const topicList = MOCK_TOPIC_LIST.filter((topic) =>
+    matchesScope(scope, topic.scope)
+  ).slice(0, 10)
+  return (
+    <Container>
+      <CardSection>
+        <CardWrapper>
+          {topicList.map((topic, index) => (
+            <FollowingTopicCard
+              key={index}
+              {...topic}
+              topicType={FollowingTopicCard.TopicType.TOPIC}
+              type={
+                topic.scope === 'local'
+                  ? FollowingTopicCard.Type.LOCAL
+                  : FollowingTopicCard.Type.LEGISLATIVE
+              }
+            />
+          ))}
+        </CardWrapper>
+        <Filter>
+          <SectionFilter activeKey={scope} onChange={setScope} />
+        </Filter>
+      </CardSection>
+      <SectionPagination
+        currentPage={1}
+        totalPages={10}
+        handleClickPrev={() => {}}
+        handleClickNext={() => {}}
+      />
+    </Container>
+  )
+}
