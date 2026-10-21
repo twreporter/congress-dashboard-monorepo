@@ -14,9 +14,7 @@ import {
 import { PillButton, IconButton } from '@twreporter/react-components/lib/button'
 import {
   DesktopAndAbove,
-  TabletAndAbove,
   TabletAndBelow,
-  MobileOnly,
 } from '@twreporter/react-components/lib/rwd'
 import {
   Hamburger,
@@ -37,6 +35,7 @@ import Tabs from '@/components/header/tabs'
 import MemberAvatar from '@/components/member-avatar'
 // hooks
 import useWindowWidth from '@/hooks/use-window-width'
+import useOutsideClick from '@/hooks/use-outside-click'
 import { useBodyScrollLock } from '@/hooks/use-scroll-lock'
 import { useAuth } from '@/services/auth/auth-provider'
 import { getLoginUrl } from '@/utils/get-login-url'
@@ -193,10 +192,11 @@ const AccountIdentity = styled.div`
   align-items: center;
   gap: 10px;
   padding: 16px 20px;
-  cursor: pointer;
-  &:hover {
+  /* 現階段先不要有 hover 效果 */
+  /* cursor: pointer; */
+  /* &:hover {
     background-color: ${colorOpacity['black_0.05']};
-  }
+  } */
 `
 
 const AccountIdentityText = styled.div`
@@ -254,6 +254,8 @@ const Header: React.FC = () => {
   const windowWidth = useWindowWidth()
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
   const [isAccountOpen, setIsAccountOpen] = useState(false)
+  const closeAccountMenu = useCallback(() => setIsAccountOpen(false), [])
+  const accountContainerRef = useOutsideClick(closeAccountMenu)
   const hamburgerIcon = <Hamburger releaseBranch={releaseBranch} />
   const crossIcon = <Cross releaseBranch={releaseBranch} />
   const memberIcon = <Member releaseBranch={releaseBranch} />
@@ -323,7 +325,7 @@ const Header: React.FC = () => {
         <HeaderSection>
           <LeftContainer>
             <Link href={'/'} target={'_self'}>
-              <TabletAndAbove>
+              <DesktopAndAbove>
                 <Image
                   src={`${logoSrcPrefix}/logo_L.svg`}
                   alt="Twreporter Lawmaker Logo"
@@ -331,8 +333,8 @@ const Header: React.FC = () => {
                   width={180}
                   height={20}
                 />
-              </TabletAndAbove>
-              <MobileOnly>
+              </DesktopAndAbove>
+              <TabletAndBelow>
                 <Image
                   src={`${logoSrcPrefix}/logo_S.svg`}
                   alt="Twreporter Lawmaker Logo"
@@ -340,7 +342,7 @@ const Header: React.FC = () => {
                   width={147}
                   height={20}
                 />
-              </MobileOnly>
+              </TabletAndBelow>
             </Link>
           </LeftContainer>
           <DesktopAndAbove>
@@ -396,7 +398,7 @@ const Header: React.FC = () => {
                 <Link href={InternalRoutes.Following} aria-label="我的追蹤">
                   <IconButton iconComponent={kidStarIcon} />
                 </Link>
-                <AccountContainer>
+                <AccountContainer ref={accountContainerRef}>
                   {desktopAccountControl}
                   {isAccountOpen && (
                     <AccountMenu>
