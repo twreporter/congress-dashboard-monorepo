@@ -68,8 +68,7 @@ const PillButtonsContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: auto;
-  padding-top: 24px;
-  padding-bottom: 32px;
+  padding: 24px 0;
   gap: 16px;
   a {
     text-decoration: none;
@@ -78,6 +77,7 @@ const PillButtonsContainer = styled.div`
     flex-direction: row;
     width: 100%;
     gap: 24px;
+    padding: 16px 0;
     a {
       flex: 1 1 0;
       min-width: 0;
