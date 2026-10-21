@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.16.2-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.1...@twreporter/congress-dashboard-frontend@1.16.2-rc.0) (2026-10-21)
+
+### Bug Fixes
+
+- **frontend:** address bill count 0 case ([4bba7a6](https://github.com/twreporter/congress-dashboard-monorepo/commit/4bba7a6d280647bc9ef9d0332c4b6ab814865e90))
+
 ## [1.16.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.1-rc.0...@twreporter/congress-dashboard-frontend@1.16.1) (2026-10-20)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
