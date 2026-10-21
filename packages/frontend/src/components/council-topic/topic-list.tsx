@@ -228,7 +228,11 @@ const TopicList: React.FC<TopicListProps> = ({
             <SummarySection>
               <SummaryCount
                 weight={P1.Weight.BOLD}
-                text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
+                text={`共 ${workState.speechCount} 筆發言${
+                  workState.billCount === 0
+                    ? ''
+                    : `、${workState.billCount} 筆議案`
+                }`}
               />
               {workByMonth.length === 0 ? (
                 <EmptyStateColumn>

@@ -447,7 +447,9 @@ const Dashboard: React.FC<DashboardProps> = ({
                     <CardIssueRWD
                       key={`issue-card-${index}`}
                       title={title}
-                      subTitle={`共 ${speechCount} 筆發言、${billCount} 筆議案（${councilorCount}人）`}
+                      subTitle={`共 ${speechCount} 筆發言${
+                        billCount === 0 ? '' : `、${billCount} 筆議案`
+                      }（${councilorCount}人）`}
                       legislators={councilors}
                       showLegislatorCount={false}
                       selected={activeCardIndex === index}
