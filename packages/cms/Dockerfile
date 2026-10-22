@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:22.23.1-slim AS build
+FROM node:22.23.4-slim AS build
 
 ENV APP_DIR=/app
 
@@ -23,7 +23,7 @@ RUN yarn workspace @twreporter/congress-dashboard-cms postinstall
 ## Build application bundles
 RUN yarn workspace @twreporter/congress-dashboard-cms build
 
-FROM node:22.23.1-slim AS production-deps
+FROM node:22.23.4-slim AS production-deps
 
 ENV APP_DIR=/app
 
@@ -42,7 +42,7 @@ COPY --from=build $APP_DIR/packages/shared/lib packages/shared/lib
 
 RUN yarn workspace @twreporter/congress-dashboard-cms postinstall
 
-FROM node:22.23.1-slim AS runner
+FROM node:22.23.4-slim AS runner
 
 ## Install system dependencies, `gcsfuse` in particular.
 RUN set -e; \
