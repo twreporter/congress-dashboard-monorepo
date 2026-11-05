@@ -13,6 +13,7 @@ import mq from '@twreporter/core/lib/utils/media-query'
 const Conatiner = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
   padding: 24px;
   flex-direction: column;
   gap: 16px;
@@ -21,11 +22,13 @@ const Conatiner = styled.div`
   background-color: ${colorGrayscale.white};
   cursor: pointer;
   &:hover {
+    border-color: ${colorOpacity['black_0.2']};
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.1);
   }
 `
 const ContentContainer = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   padding-bottom: 12px;
   border-bottom: 1px solid ${colorGrayscale.gray200};
@@ -84,9 +87,10 @@ export const FollowingArticleCard: FC<FollowingArticleCardProps> & {
       ? `發言全文｜${place}`
       : `議案｜${place}`
   const attendeeList =
-    attendee.length > 1
-      ? `${attendee[0]} 等 ${attendee.length} 人`
-      : attendee[0]
+    attendee.length > 1 ? `${attendee[0]}等 ${attendee.length} 人` : attendee[0]
+  const attendeeListText = `${attendeeList}．${
+    type === FollowingArticleCardType.SPEECH ? '發言於' : '議決於'
+  } ${date}`
   return (
     <Conatiner>
       <ContentContainer>
@@ -94,7 +98,7 @@ export const FollowingArticleCard: FC<FollowingArticleCardProps> & {
         <Title text={title} />
         <Summary text={summary} />
       </ContentContainer>
-      <AttendeeAndDate text={`${attendeeList}．發言於 ${date}`} />
+      <AttendeeAndDate text={attendeeListText} />
     </Conatiner>
   )
 }

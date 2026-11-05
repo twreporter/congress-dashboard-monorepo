@@ -45,11 +45,6 @@ const CardWrapper = styled.div`
   `}
 `
 
-const Filter = styled.div`
-  display: flex;
-  justify-content: center;
-`
-
 export const FollowingSpeechSection: FC = () => {
   const [scope, setScope] = useState<FollowingScope>(DEFAULT_FOLLOWING_SCOPE)
   const speechList = MOCK_SPEECH_LIST.filter((speech) =>
@@ -67,9 +62,7 @@ export const FollowingSpeechSection: FC = () => {
             />
           ))}
         </CardWrapper>
-        <Filter>
-          <SectionFilter activeKey={scope} onChange={setScope} />
-        </Filter>
+        <SectionFilter activeKey={scope} onChange={setScope} />
       </CardSection>
       <SectionPagination
         currentPage={1}

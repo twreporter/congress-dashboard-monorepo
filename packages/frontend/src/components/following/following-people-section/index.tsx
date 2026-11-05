@@ -49,11 +49,6 @@ const CardWrapper = styled.div`
   `}
 `
 
-const Filter = styled.div`
-  display: flex;
-  justify-content: center;
-`
-
 export const FollowingPeopleSection: FC = () => {
   const [scope, setScope] = useState<FollowingScope>(DEFAULT_FOLLOWING_SCOPE)
   const peopleList = MOCK_PEOPLE_LIST.filter((person) =>
@@ -88,9 +83,7 @@ export const FollowingPeopleSection: FC = () => {
             )
           })}
         </CardWrapper>
-        <Filter>
-          <SectionFilter activeKey={scope} onChange={setScope} />
-        </Filter>
+        <SectionFilter activeKey={scope} onChange={setScope} />
       </CardSection>
       <SectionPagination
         currentPage={1}

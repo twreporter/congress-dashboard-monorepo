@@ -3,14 +3,23 @@ import React, { type FC } from 'react'
 import styled from 'styled-components'
 // @twreporter
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
+import mq from '@twreporter/core/lib/utils/media-query'
 import { P1 } from '@twreporter/react-components/lib/text/paragraph'
 // constants
 import {
   FOLLOWING_SCOPE,
   type FollowingScope,
 } from '@/components/following/constants'
+// styles
+import { ZIndex } from '@/styles/z-index'
 
 const Container = styled.div`
+  position: sticky;
+  bottom: 16px;
+  align-self: center;
+  margin: 0 auto;
+  width: fit-content;
+  z-index: ${ZIndex.ControlBar};
   display: flex;
   padding: 4px;
   align-items: center;
@@ -18,6 +27,10 @@ const Container = styled.div`
   border-radius: 50px;
   background: ${colorGrayscale.white};
   box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.1);
+
+  ${mq.desktopAndAbove`
+    bottom: 24px;
+  `}
 `
 
 const Button = styled.button<{ $isActive: boolean }>`
