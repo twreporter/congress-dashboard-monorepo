@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-beta.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.4...@twreporter/congress-dashboard-frontend@1.15.0-beta.5) (2026-11-06)
+
+### Bug Fixes
+
+- **frontend:** enhance Following components with layout and styling improvements ([9cf57ea](https://github.com/twreporter/congress-dashboard-monorepo/commit/9cf57ea975a704e5a98ffc48d17c6defa1f69ed8))
+- **frontend:** font family from utils ([91549fb](https://github.com/twreporter/congress-dashboard-monorepo/commit/91549fbf12b1cd5cf630b4e07bc5ef8f3559832d))
+
 # [1.15.0-beta.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.3...@twreporter/congress-dashboard-frontend@1.15.0-beta.4) (2026-10-21)
 
 ### Bug Fixes
