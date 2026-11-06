@@ -45,11 +45,6 @@ const CardWrapper = styled.div`
   `}
 `
 
-const Filter = styled.div`
-  display: flex;
-  justify-content: center;
-`
-
 export const FollowingTopicSection: FC = () => {
   const [scope, setScope] = useState<FollowingScope>(DEFAULT_FOLLOWING_SCOPE)
   const topicList = MOCK_TOPIC_LIST.filter((topic) =>
@@ -72,9 +67,7 @@ export const FollowingTopicSection: FC = () => {
             />
           ))}
         </CardWrapper>
-        <Filter>
-          <SectionFilter activeKey={scope} onChange={setScope} />
-        </Filter>
+        <SectionFilter activeKey={scope} onChange={setScope} />
       </CardSection>
       <SectionPagination
         currentPage={1}

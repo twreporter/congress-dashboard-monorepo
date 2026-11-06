@@ -73,6 +73,7 @@ const FollowingPeopleCardWrapper = styled.div`
   `}
   ${mq.desktopAndAbove`
     padding-top: 24px;
+    padding-bottom: 32px;
   `}
 `
 
@@ -90,6 +91,9 @@ const FollowingArticleSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  ${mq.desktopAndAbove`
+    gap: 32px;
+  `}
 `
 
 const FollowingArticleCardWrapper = styled.div`

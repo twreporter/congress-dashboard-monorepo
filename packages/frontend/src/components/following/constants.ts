@@ -23,7 +23,7 @@ export const TAB_CONFIG: { text: string; key: FollowingTabKey }[] = [
     key: FOLLOWING_TAB.TOPIC,
   },
   {
-    text: '立委/議員',
+    text: '立委／議員',
     key: FOLLOWING_TAB.PEOPLE,
   },
   {
@@ -65,3 +65,10 @@ export const matchesScope = (
   // Records without their own scope belong to 立法院.
   recordScope: 'legislative' | 'local' = 'legislative'
 ) => scope === FOLLOWING_SCOPE.ALL || scope === recordScope
+
+// Institution a record belongs to. Descriptions do not carry this information,
+// so components that need it compose the label from scope & district.
+export const getInstitutionText = (
+  recordScope: 'legislative' | 'local' = 'legislative',
+  district = ''
+) => (recordScope === FOLLOWING_SCOPE.LOCAL ? `${district}議會` : '立法院')

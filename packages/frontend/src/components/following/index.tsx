@@ -22,6 +22,13 @@ import {
   getFollowingTabPath,
 } from '@/components/following/constants'
 import type { FollowingTabKey } from '@/components/following/constants'
+// utils
+import { notoSerif } from '@/utils/font'
+
+const FollowingWrapper = styled.div`
+  width: 100%;
+  background-color: ${colorGrayscale.gray100};
+`
 
 const FollowingContainer = styled.div`
   width: 100%;
@@ -32,6 +39,8 @@ const FollowingContainer = styled.div`
     padding: 32px 32px 80px 32px;
   `}
   ${mq.desktopOnly`
+    width: 928px;
+    margin: auto;
     padding: 48px 48px 120px 48px;
   `}
   ${mq.hdOnly`
@@ -43,6 +52,7 @@ const FollowingContainer = styled.div`
 
 const PageTitle = styled(H1)`
   color: ${colorGrayscale.gray900};
+  font-family: ${notoSerif.style.fontFamily} !important;
 `
 
 const Tabs = styled.div`
@@ -117,27 +127,29 @@ export const Following: React.FC<FollowingProps> = ({
   const Section = SECTION_BY_TAB[selectedTab] ?? FollowingAllSection
 
   return (
-    <FollowingContainer>
-      <PageTitle text="我的追蹤" type={H1.Type.ARTICLE} />
-      <Tabs>
-        <TabsWrapper>
-          {TAB_CONFIG.map((tab) => (
-            <TabItem
-              key={tab.key}
-              ref={(el) => {
-                tabRefs.current[tab.key] = el
-              }}
-            >
-              <Tab
-                text={tab.text}
-                selected={selectedTab === tab.key}
-                onClick={() => handleTabClick(tab.key)}
-              />
-            </TabItem>
-          ))}
-        </TabsWrapper>
-      </Tabs>
-      <Section />
-    </FollowingContainer>
+    <FollowingWrapper>
+      <FollowingContainer>
+        <PageTitle text="我的追蹤" type={H1.Type.ARTICLE} />
+        <Tabs>
+          <TabsWrapper>
+            {TAB_CONFIG.map((tab) => (
+              <TabItem
+                key={tab.key}
+                ref={(el) => {
+                  tabRefs.current[tab.key] = el
+                }}
+              >
+                <Tab
+                  text={tab.text}
+                  selected={selectedTab === tab.key}
+                  onClick={() => handleTabClick(tab.key)}
+                />
+              </TabItem>
+            ))}
+          </TabsWrapper>
+        </Tabs>
+        <Section />
+      </FollowingContainer>
+    </FollowingWrapper>
   )
 }

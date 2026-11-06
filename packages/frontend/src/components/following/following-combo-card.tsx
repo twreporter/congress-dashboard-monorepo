@@ -18,7 +18,10 @@ import { H5 } from '@twreporter/react-components/lib/text/headline'
 import {
   FOLLOWING_TAB,
   getFollowingTabPath,
+  getInstitutionText,
 } from '@/components/following/constants'
+// utils
+import { notoSerif } from '@/utils/font'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
@@ -55,6 +58,7 @@ const CardTitle = styled(H4)`
   display: flex;
   padding: 0 16px;
   align-items: center;
+  font-family: ${notoSerif.style.fontFamily} !important;
 `
 
 const SectionList = styled.div`
@@ -90,7 +94,7 @@ const SectionDescription = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  padding: 0 16px;
+  padding: 0 16px 0 12px;
 `
 
 const EmptyState = styled(P1)`
@@ -108,6 +112,8 @@ type FollowingInfo = {
   billCount?: number
   speechCount?: number
   latestDataDate: string
+  scope?: 'legislative' | 'local'
+  district?: string
 }
 type FollowingComboCardProps = {
   type: (typeof TYPE)[keyof typeof TYPE]
@@ -136,7 +142,11 @@ export const FollowingComboCard: FC<FollowingComboCardProps> & {
               <Section key={index}>
                 <SectionTitle text={info.title} />
                 <SectionDescription>
-                  <P1 text={info.description} />
+                  <P1
+                    text={`${getInstitutionText(info.scope, info.district)}｜${
+                      info.description
+                    }`}
+                  />
                   <P1
                     text={`共 ${info.speechCount ?? 0} 筆發言、${
                       info.billCount ?? 0

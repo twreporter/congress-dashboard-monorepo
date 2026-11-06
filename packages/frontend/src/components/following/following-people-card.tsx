@@ -31,6 +31,7 @@ const Container = styled.div`
   background: ${colorGrayscale.white};
   cursor: pointer;
   &:hover {
+    border-color: ${colorOpacity['black_0.2']};
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.1);
   }
 `
@@ -96,7 +97,7 @@ const Description = styled(P1)`
   align-items: flex-start !important;
 `
 
-const CountAndDate = styled(P2)`
+const LatestSpeechDate = styled(P2)`
   color: ${colorGrayscale.gray800};
 `
 
@@ -107,7 +108,6 @@ type FollowingPeopleCardProps = {
   party: string
   name: string
   description: string
-  count: number
   latestDate: string
   destrict?: string
 }
@@ -121,7 +121,6 @@ export const FollowingPeopleCard: FC<FollowingPeopleCardProps> & {
   party,
   name,
   description,
-  count,
   latestDate,
   destrict = '',
 }) => {
@@ -144,7 +143,7 @@ export const FollowingPeopleCard: FC<FollowingPeopleCardProps> & {
           <Name text={name} />
         </TitleAndName>
         <Description text={description} />
-        <CountAndDate text={`最新${count}筆發言於 ${latestDate}`} />
+        <LatestSpeechDate text={`最近 1 筆發言於 ${latestDate}`} />
       </ContentContainer>
     </Container>
   )
