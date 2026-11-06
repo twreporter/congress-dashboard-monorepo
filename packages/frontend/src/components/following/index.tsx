@@ -22,6 +22,8 @@ import {
   getFollowingTabPath,
 } from '@/components/following/constants'
 import type { FollowingTabKey } from '@/components/following/constants'
+// utils
+import { notoSerif } from '@/utils/font'
 
 const FollowingWrapper = styled.div`
   width: 100%;
@@ -50,7 +52,7 @@ const FollowingContainer = styled.div`
 
 const PageTitle = styled(H1)`
   color: ${colorGrayscale.gray900};
-  font-family: 'Noto Serif TC' !important;
+  font-family: ${notoSerif.style.fontFamily} !important;
 `
 
 const Tabs = styled.div`

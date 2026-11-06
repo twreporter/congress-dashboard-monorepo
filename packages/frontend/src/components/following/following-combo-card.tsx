@@ -20,6 +20,8 @@ import {
   getFollowingTabPath,
   getInstitutionText,
 } from '@/components/following/constants'
+// utils
+import { notoSerif } from '@/utils/font'
 
 const releaseBranch = process.env.NEXT_PUBLIC_RELEASE_BRANCH
 
@@ -56,7 +58,7 @@ const CardTitle = styled(H4)`
   display: flex;
   padding: 0 16px;
   align-items: center;
-  font-family: 'Noto Serif TC' !important;
+  font-family: ${notoSerif.style.fontFamily} !important;
 `
 
 const SectionList = styled.div`
