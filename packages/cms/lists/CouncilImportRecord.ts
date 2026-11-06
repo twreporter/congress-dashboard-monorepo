@@ -903,7 +903,7 @@ const importHandlers: Record<
           update: {
             ...commonData,
             topic: {
-              set: relatedCouncilTopicSlugs.map((topicSlug: string) => ({
+              connect: relatedCouncilTopicSlugs.map((topicSlug: string) => ({
                 slug: topicSlug,
               })),
             },
