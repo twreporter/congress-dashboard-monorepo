@@ -24,6 +24,7 @@ import type {
 import type {
   SpeechRawHit,
   CouncilBillRawHit,
+  CouncilSpeechRawHit,
 } from '@/components/search/result-page/hit'
 import {
   LegislatorHit,
@@ -32,6 +33,7 @@ import {
   CouncilTopicHit,
   SpeechHit,
   CouncilBillHit,
+  CouncilSpeechHit,
 } from '@/components/search/result-page/hit'
 import {
   Configure,
@@ -144,9 +146,9 @@ function shouldRenderStage(
  * Renders Algolia hits from multiple <Index> components
  * in a progressive staged order based on scope.
  *
- * Default order (scope='all'): Legislator → Councilor → Topic → CouncilTopic → Speech → CouncilBill
+ * Default order (scope='all'): Legislator → Councilor → Topic → CouncilTopic → Speech → CouncilSpeech → CouncilBill
  * Legislative scope: Legislator → Topic → Speech
- * Council scopes: Councilor → CouncilTopic → CouncilBill
+ * Council scopes: Councilor → CouncilTopic → CouncilSpeech → CouncilBill
  */
 export const MultiStageHits = ({
   className,
@@ -231,6 +233,18 @@ export const MultiStageHits = ({
             <PrefillQuery query={query} />
             <Configure hitsPerPage={hitsPerPage} />
             <SpeechHitsList />
+          </Index>
+        )}
+
+        {shouldRenderStage(
+          stage,
+          searchStages.CouncilSpeech,
+          searchStagesList
+        ) && (
+          <Index indexName={indexNames.CouncilSpeech}>
+            <PrefillQuery query={query} />
+            <Configure hitsPerPage={hitsPerPage} filters={councilFilter} />
+            <CouncilSpeechHitsList />
           </Index>
         )}
 
@@ -422,6 +436,10 @@ export const Hits = ({
       ListComponent = SpeechHitsList
       break
     }
+    case indexNames.CouncilSpeech: {
+      ListComponent = CouncilSpeechHitsList
+      break
+    }
     case indexNames.CouncilBill: {
       ListComponent = CouncilBillHitsList
       break
@@ -536,4 +554,15 @@ const CouncilBillHitsList = () => {
   })
 
   return <>{hitsJsx}</>
+}
+
+const CouncilSpeechHitsList = () => {
+  const { items }: { items: CouncilSpeechRawHit[] } = useInfiniteHits()
+  return (
+    <>
+      {items.map((hit) => (
+        <CouncilSpeechHit key={hit.objectID} hit={hit} />
+      ))}
+    </>
+  )
 }
