@@ -3,6 +3,70 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.17.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.3...@twreporter/congress-dashboard-frontend@1.17.0-rc.0) (2026-11-10)
+
+### Features
+
+- **frontend:** add council speech search before bills ([a39f345](https://github.com/twreporter/congress-dashboard-monorepo/commit/a39f3450c69c3df2d47e5650e3ff0c780c44a1b1))
+
+## [1.16.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.3-rc.0...@twreporter/congress-dashboard-frontend@1.16.3) (2026-10-27)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+## [1.16.3-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.2...@twreporter/congress-dashboard-frontend@1.16.3-rc.0) (2026-10-27)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+## [1.16.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.2-rc.1...@twreporter/congress-dashboard-frontend@1.16.2) (2026-10-22)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+## [1.16.2-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.2-rc.0...@twreporter/congress-dashboard-frontend@1.16.2-rc.1) (2026-10-22)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+## [1.16.2-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.1...@twreporter/congress-dashboard-frontend@1.16.2-rc.0) (2026-10-21)
+
+### Bug Fixes
+
+- **frontend:** address bill count 0 case ([4bba7a6](https://github.com/twreporter/congress-dashboard-monorepo/commit/4bba7a6d280647bc9ef9d0332c4b6ab814865e90))
+
+## [1.16.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.1-rc.0...@twreporter/congress-dashboard-frontend@1.16.1) (2026-10-20)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+## [1.16.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0...@twreporter/congress-dashboard-frontend@1.16.1-rc.0) (2026-10-20)
+
+### Bug Fixes
+
+- scope council related query to latest term ([4f7c5e7](https://github.com/twreporter/congress-dashboard-monorepo/commit/4f7c5e7f7993b04bb55c511084a361ebc2c07e0b))
+- topic pick & sidebar rule mismatch ([7c6c728](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c6c728c6ed9a41ab730273d78fc7d6b4492aa47))
+- use custom sql to address bad performance ([89e7be9](https://github.com/twreporter/congress-dashboard-monorepo/commit/89e7be96f429bc5afd8741c348946a41b5e70dfb))
+
+# [1.16.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0-rc.2...@twreporter/congress-dashboard-frontend@1.16.0) (2026-10-19)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-frontend
+
+# [1.16.0-rc.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0-rc.1...@twreporter/congress-dashboard-frontend@1.16.0-rc.2) (2026-10-19)
+
+### Bug Fixes
+
+- **frontend:** update wording for 發言議員 ([db81941](https://github.com/twreporter/congress-dashboard-monorepo/commit/db81941cd61e4323a0321f8d31b873124fc73e18))
+
+# [1.16.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.0-rc.0...@twreporter/congress-dashboard-frontend@1.16.0-rc.1) (2026-10-15)
+
+### Bug Fixes
+
+- **frontend:** address revie comments ([cff1272](https://github.com/twreporter/congress-dashboard-monorepo/commit/cff12725679f86fb8750a66b073fadf8d2ad5295))
+- **frontend:** address review comments ([3d29627](https://github.com/twreporter/congress-dashboard-monorepo/commit/3d29627061c02de2103a6f52891f8a1cedd6e620))
+- **frontend:** update wording ([6441bb0](https://github.com/twreporter/congress-dashboard-monorepo/commit/6441bb0ac088015f3c39eaf04baca200f2c1bb9d))
+
+# [1.16.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0...@twreporter/congress-dashboard-frontend@1.16.0-rc.0) (2026-10-15)
+
+### Features
+
+- **frontend:** add switch council speech button ([1d724f0](https://github.com/twreporter/congress-dashboard-monorepo/commit/1d724f07843eed6257ce24ef17524b0a4bb90463))
+
 # [1.15.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-rc.5...@twreporter/congress-dashboard-frontend@1.15.0) (2026-10-07)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend

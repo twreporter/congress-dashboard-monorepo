@@ -230,6 +230,7 @@ type FilterModalProps = {
   placeholder?: string
   initialSelectedOption?: FilterOption[]
   fetcher?: (slug: string) => Promise<FilterOption[]>
+  fetchKey?: string
   includeZeroCountOptions?: boolean
   showOptionCount?: boolean
   groupOptionsByFeatured?: boolean
@@ -247,6 +248,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   placeholder,
   initialSelectedOption = [],
   fetcher,
+  fetchKey,
   includeZeroCountOptions = false,
   showOptionCount = true,
   groupOptionsByFeatured = false,
@@ -271,7 +273,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const [isShowLoading, setIsShowLoading] = useState(!!fetcher) // Only show loading if fetcher exists
   const [isShowError, setIsShowError] = useState(false)
   const { data, error } = useSWR(
-    fetcher ? slug : null,
+    fetcher ? fetchKey ?? slug : null,
     () => fetcher && fetcher(slug)
   )
   const selectedOptionsForShow = useMemo(

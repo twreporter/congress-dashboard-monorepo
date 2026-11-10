@@ -2,13 +2,13 @@
 
 # Lawmaker CLI
 
-A command-line tool to feed legislator, topic, and speech data into Algolia indices.
+A command-line tool to feed Legislative Yuan and city council data into Algolia indices.
 
 ---
 
 ## 🔧 Environment Variables
 
-Create a `.env` file in the root directory with the following variables:
+Create a `.env` file in this package's root directory (`packages/cli`) with the following variables:
 
 ```env
 ALGOLIA_APP_ID=your_algolia_app_id
@@ -28,7 +28,7 @@ GRAPHQL_ENDPOINT=http://localhost:3000/api/graphql
 | `HEADLESS_ACCOUNT_PASSWORD` | Password used for authenticating GraphQL     |
 | `GRAPHQL_ENDPOINT`          | The URL of lawmaker-cms GraphQL API          |
 
-Use a library like `dotenv` (already included) to load these into runtime automatically.
+The CLI loads these variables automatically using `dotenv`. Use staging credentials for testing; running locally with `--no-dryrun` still writes to the configured Algolia application.
 
 ---
 
@@ -56,6 +56,7 @@ For specific values (meeting/session terms, council name) and dryrun, CLI flags 
 | `LAWMAKER_COUNCIL_NAME`     | Same as `--council-name`                 | (none)  |
 | `LAWMAKER_COUNCILORS`       | Same as `--councilor` (boolean)          | `false` |
 | `LAWMAKER_COUNCIL_TOPICS`   | Same as `--council-topic` (boolean)      | `false` |
+| `LAWMAKER_COUNCIL_SPEECHES` | Same as `--speech` (boolean)            | `false` |
 | `LAWMAKER_COUNCIL_BILLS`    | Same as `--council-bill` (boolean)       | `false` |
 
 **Common:**
@@ -84,6 +85,20 @@ Manager via `deploy/secrets/create-secrets.sh`. See
 [`deploy/README.md`](deploy/README.md) for the full breakdown, migration
 notes from the existing `prod-lawmaker-cli` job, and rollout notes.
 
+Deploying the CLI does not execute the job. After configuring the target
+Algolia indices, run the job explicitly. For example, to synchronize council
+speeches and councilor dates in staging:
+
+```bash
+gcloud run jobs execute staging-congress-dashboard-cli \
+  --region asia-east1 \
+  --args="feed-algolia,council,--speech,--councilor,--no-dryrun" --wait
+```
+
+Validate in staging before running production synchronization. See the
+[search documentation](../frontend/src/components/search/README.md) for
+index configuration and rollout order.
+
 ---
 
 ## Installation
@@ -92,9 +107,12 @@ Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/twreporter/congress-dashboard-monorepo.git
-cd congress-dashboard-monorepo/packages/cronjobs
+cd congress-dashboard-monorepo
 yarn install
+cd packages/cli
 ```
+
+The build and usage commands below run from `packages/cli`.
 
 ## Build
 
@@ -181,11 +199,11 @@ yarn lawmaker feed-algolia legislative-yuan --meeting-term 11 --session-term 2 -
 
 #### `feed-algolia council`
 
-Feed city council data (councilors, topics, bills).
+Feed city council data (councilors, topics, speeches, bills).
 
 **Options:**
 
-If no data-type flags are provided, the command runs all data types (councilors, topics, bills).
+If no data types are selected through flags or environment variables, the command runs all data types (councilors, topics, speeches, bills). Multiple data-type selections are additive.
 
 * `--council-name <name>`
   Specific council to update. Valid values: `taipei`, `new-taipei`, `taoyuan`, `taichung`, `tainan`, `kaohsiung`. Omit this option to update all six major cities.
@@ -195,6 +213,9 @@ If no data-type flags are provided, the command runs all data types (councilors,
 
 * `--council-topic`
   Only update council topic records.
+
+* `--speech`
+  Only update council speech records. This council option is singular; the Legislative Yuan option is `--speeches`.
 
 * `--council-bill`
   Only update council bill records.
@@ -214,12 +235,24 @@ yarn lawmaker feed-algolia council
 # Dry run only councilors for Taipei
 yarn lawmaker feed-algolia council --council-name taipei --councilor
 
+# Preview Taipei speeches across all meeting terms without writing to Algolia
+yarn dev feed-algolia council --speech --council-name taipei --dryrun
+
+# Upload Taipei speeches and refresh councilor latest speech dates
+yarn dev feed-algolia council --speech --councilor --council-name taipei --no-dryrun
+
 # Actually upload all data for Kaohsiung
 yarn lawmaker feed-algolia council --council-name kaohsiung --no-dryrun
 
 # Use environment defaults (Cloud Run Job style)
 LAWMAKER_COUNCIL_NAME=taipei LAWMAKER_COUNCILORS=true LAWMAKER_DRYRUN=false yarn lawmaker feed-algolia council
 ```
+
+**Synchronization notes:**
+
+- All matching records across all meeting terms are uploaded, not just recently updated records. Records deleted from CMS are not automatically removed from Algolia.
+- Use `--speech --councilor` to update both speech records and councilor latest speech dates.
+- Dry-run requires CMS access but does not write to Algolia. Specify `--dryrun` explicitly when previewing to override environment defaults.
 
 ## License
 

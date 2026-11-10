@@ -1,6 +1,6 @@
 {
   "name": "lawmaker-cli",
-  "version": "3.0.4",
+  "version": "3.1.0-rc.0",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
@@ -8,6 +8,7 @@
     "directory": "packages/cli"
   },
   "scripts": {
+    "test": "node -r ts-node/register --test test/*.test.cjs",
     "build": "rm -rf lib && tsc && chmod +x lib/index.js",
     "dev": "ts-node src/index.ts",
     "lawmaker": "node lib/index.js"

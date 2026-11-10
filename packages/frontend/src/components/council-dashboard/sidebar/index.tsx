@@ -251,7 +251,11 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
             <SummarySection>
               <SummaryCount
                 weight={P1.Weight.BOLD}
-                text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
+                text={`共 ${workState.speechCount} 筆發言${
+                  workState.billCount === 0
+                    ? ''
+                    : `、${workState.billCount} 筆議案`
+                }`}
               />
               {workByMonth.map((props: CardsOfTheYearProps, index: number) => (
                 <CardsOfTheYear
@@ -387,9 +391,11 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
   )
 
   const fetchFilterOptions = () => {
+    if (!formattedFilterValues) return Promise.resolve([])
     return fetchTopicsOfACouncilor({
       councilorSlug: slug,
       districtSlug: districtSlug as CouncilDistrict,
+      councilMeetingId: formattedFilterValues.meetingId,
     })
   }
 
@@ -436,7 +442,11 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
             <SummarySection>
               <SummaryCount
                 weight={P1.Weight.BOLD}
-                text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
+                text={`共 ${workState.speechCount} 筆發言${
+                  workState.billCount === 0
+                    ? ''
+                    : `、${workState.billCount} 筆議案`
+                }`}
               />
               {workByMonth.map((props: CardsOfTheYearProps, index: number) => (
                 <CardsOfTheYear
@@ -478,6 +488,8 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
             title={title}
             link={`${InternalRoutes.Councilor(districtSlug)}/${slug}`}
             titleSuffix=" 的相關議題篩選"
+            key={`councilor-topics:${districtSlug}:${slug}:${formattedFilterValues?.meetingId}`}
+            fetchKey={`councilor-topics:${districtSlug}:${slug}:${formattedFilterValues?.meetingId}`}
             slug={slug}
             placeholder={'篩選議題'}
             initialSelectedOption={tabList}

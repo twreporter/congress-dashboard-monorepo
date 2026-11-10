@@ -48,7 +48,7 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
         {councilors.length > 0 ? (
           <CouncilorBlock>
             <PersonLabel>
-              <P2Gray600 text="諮詢議員" />
+              <P2Gray600 text="發言議員" />
               <SlashIcon />
             </PersonLabel>
             <CouncilorLinkBlock>
@@ -64,7 +64,9 @@ const AsideInfo: React.FC<AsideInfoProps> = ({
               ))}
             </CouncilorLinkBlock>
           </CouncilorBlock>
-        ) : null}
+        ) : (
+          <P2Gray600 text="本段內容未涉及實質議題討論，因此未列入任何議員發言。" />
+        )}
         {attendee ? <P2Gray600 text={`列席質詢對象／${attendee}`} /> : null}
       </PersonAndAttendeeBlock>
       {relatedTopics.length > 0 ? (

@@ -5,12 +5,14 @@ import styled from 'styled-components'
 import { colorGrayscale } from '@twreporter/core/lib/constants/color'
 import { Arrow } from '@twreporter/react-components/lib/icon'
 
-const ButtonContainer = styled.div<{
+const ButtonContainer = styled.button<{
   $disabled?: boolean
   $isLoading?: boolean
 }>`
   pointer-events: ${(props) =>
     props.$disabled || props.$isLoading ? 'none' : 'auto'};
+  padding: 0;
+  background: transparent;
   width: 40px;
   height: 40px;
   display: flex;
@@ -34,6 +36,10 @@ const ButtonContainer = styled.div<{
         ? colorGrayscale.gray400
         : colorGrayscale.gray600};
   }
+  &:focus-visible {
+    outline: 2px solid ${colorGrayscale.gray800};
+    outline-offset: 3px;
+  }
   &:hover {
     color: ${(props) =>
       props.$disabled || props.$isLoading
@@ -54,7 +60,7 @@ const ButtonContainer = styled.div<{
   }
 `
 
-const LoadingIndicator = styled.div`
+const LoadingIndicator = styled.span`
   display: flex;
   width: 100%;
   justify-content: center;
@@ -82,6 +88,7 @@ const LoadingIndicator = styled.div`
 `
 
 type IconButtonProps = {
+  'aria-label'?: string
   direction?: Arrow.Direction
   disabled?: boolean
   isLoading?: boolean
@@ -91,6 +98,7 @@ type IconButtonComponent = React.FC<IconButtonProps> & {
   Direction: typeof Arrow.Direction
 }
 const IconButton: IconButtonComponent = ({
+  'aria-label': ariaLabel,
   direction = Arrow.Direction.LEFT,
   disabled = false,
   isLoading = false,
@@ -98,6 +106,10 @@ const IconButton: IconButtonComponent = ({
 }) => {
   return (
     <ButtonContainer
+      type="button"
+      aria-label={ariaLabel}
+      aria-busy={isLoading || undefined}
+      disabled={disabled || isLoading}
       $disabled={disabled}
       $isLoading={isLoading}
       onClick={onClick}
