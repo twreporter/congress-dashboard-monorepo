@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.17.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.3...@twreporter/congress-dashboard-frontend@1.17.0-rc.0) (2026-11-10)
+
+### Features
+
+- **frontend:** add council speech search before bills ([a39f345](https://github.com/twreporter/congress-dashboard-monorepo/commit/a39f3450c69c3df2d47e5650e3ff0c780c44a1b1))
+
 ## [1.16.3](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.3-rc.0...@twreporter/congress-dashboard-frontend@1.16.3) (2026-10-27)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
