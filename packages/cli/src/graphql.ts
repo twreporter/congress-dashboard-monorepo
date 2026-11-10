@@ -124,7 +124,7 @@ export type CouncilorModel = {
   constituency?: number
   note: string
   isActive: boolean
-  bill: {
+  speech: {
     date: string
   }[]
 }
@@ -631,7 +631,7 @@ export async function* councilorIterator(
                   }
                 }
               }
-              bill(take: 1, orderBy: [{ date: desc }]) {
+              speech(take: 1, orderBy: [{ date: desc }]) {
                 date
               }
             }
@@ -904,6 +904,130 @@ export async function* councilBillIterator(
     } else {
       cursor = {
         slug: bills?.[bills.length - 1]?.slug,
+      }
+      skip = 1
+    }
+  }
+}
+
+export type CouncilSpeechModel = {
+  id: string
+  slug: string
+  title: string
+  date: string
+  summaryFallback?: string | null
+  councilMeeting?: {
+    city: string
+    term: number
+  } | null
+  councilMember?:
+    | {
+        councilor: {
+          name: string
+        } | null
+      }[]
+    | null
+}
+
+// Async generator for iterating over council speeches in a specific city
+export async function* councilSpeechIterator(
+  councilName: string,
+  take = 10
+): AsyncGenerator<CouncilSpeechModel[], void, unknown> {
+  const keystoneToken = await fetchKeystoneToken()
+  let cursor: { slug: string } | null = null
+  let skip = 0
+  let hasMore = true
+
+  while (hasMore) {
+    let res: AxiosResponse<{
+      errors?: unknown
+      data: {
+        councilSpeeches: CouncilSpeechModel[]
+      }
+    }>
+
+    try {
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query CouncilSpeeches(
+            $orderBy: [CouncilSpeechOrderByInput!]!
+            $take: Int
+            $skip: Int!
+            $cursor: CouncilSpeechWhereUniqueInput
+            $where: CouncilSpeechWhereInput!
+          ) {
+            councilSpeeches(
+              orderBy: $orderBy
+              take: $take
+              skip: $skip
+              cursor: $cursor
+              where: $where
+            ) {
+              id
+              slug
+              title
+              summaryFallback
+              date
+              councilMeeting {
+                city
+                term
+              }
+              councilMember {
+                councilor {
+                  name
+                }
+              }
+            }
+          }
+          `,
+          variables: {
+            take,
+            skip,
+            cursor,
+            orderBy: [{ slug: 'asc' }],
+            where: {
+              councilMeeting: {
+                city: {
+                  equals: councilName,
+                },
+              },
+            },
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
+
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `CouncilSpeeches` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
+
+    const speeches = res.data.data.councilSpeeches
+
+    if (speeches.length === 0) {
+      hasMore = false
+    }
+
+    yield speeches
+
+    if (speeches.length < take) {
+      hasMore = false
+    } else {
+      cursor = {
+        slug: speeches?.[speeches.length - 1]?.slug,
       }
       skip = 1
     }

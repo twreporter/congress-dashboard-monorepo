@@ -5,6 +5,7 @@ import type {
   CouncilorModel,
   CouncilTopicModel,
   CouncilBillModel,
+  CouncilSpeechModel,
 } from './graphql'
 import type {
   LegislatorRecord,
@@ -13,6 +14,7 @@ import type {
   CouncilorRecord,
   CouncilTopicRecord,
   CouncilBillRecord,
+  CouncilSpeechRecord,
 } from './algolia'
 import type { Constituency } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 import {
@@ -22,6 +24,7 @@ import {
 } from '@twreporter/congress-dashboard-shared/lib/constants/legislative-yuan-member'
 import { getUrlOrigin } from './utils'
 import {
+  isValidCouncilName,
   councilDisplayNames,
   councilRankings,
   type CouncilName,
@@ -289,7 +292,7 @@ export function transferCouncilorModelToRecord(
   )
 
   return validModels.map((c) => {
-    const billDate = c.bill?.[0]?.date
+    const speechDate = c.speech?.[0]?.date
     const councilName = c.city as CouncilName
     const councilDisplayName = councilDisplayNames[councilName] || councilName
     const councilorSlug = c.councilor!.slug
@@ -320,9 +323,9 @@ export function transferCouncilorModelToRecord(
 
     let lastSpeechAt = ''
     let lastSpeechAtTs: number | undefined
-    if (billDate) {
-      lastSpeechAt = formatDateToTaipeiTimezone(billDate)
-      lastSpeechAtTs = new Date(billDate).getTime()
+    if (speechDate) {
+      lastSpeechAt = formatDateToTaipeiTimezone(speechDate)
+      lastSpeechAtTs = new Date(speechDate).getTime()
     }
 
     const urlOrigin = getUrlOrigin()
@@ -522,5 +525,44 @@ export function transferCouncilBillModelToRecord(
       councilorCount,
       objectID: `${b.slug}_${councilName}_${meetingTerm}`,
     }
+  })
+}
+
+export function transferCouncilSpeechModelToRecord(
+  models: CouncilSpeechModel[]
+): CouncilSpeechRecord[] {
+  return models.flatMap((speech) => {
+    const meeting = speech.councilMeeting
+    if (!speech.slug || !meeting?.term || !isValidCouncilName(meeting.city)) {
+      console.warn(
+        'Skipping council speech with missing identity or meeting',
+        speech.id
+      )
+      return []
+    }
+    const city = meeting.city as CouncilName
+    return [
+      {
+        objectID: `${speech.slug}_${city}_${meeting.term}`,
+        slug: speech.slug,
+        title: speech.title,
+        summary: speech.summaryFallback
+          ?.replace(/<\/?[a-z][\s\S]*?>/gi, '')
+          .replace(/\r?\n/g, ''),
+        date: speech.date ? formatDateToTaipeiTimezone(speech.date) : '',
+        dateTs: speech.date ? new Date(speech.date).getTime() : undefined,
+        council: councilDisplayNames[city],
+        councilSlug: city,
+        councilRank: councilRankings[city],
+        meetingTerm: meeting.term,
+        councilorNames: [
+          ...new Set(
+            (speech.councilMember || []).flatMap((member) =>
+              member.councilor?.name ? [member.councilor.name] : []
+            )
+          ),
+        ],
+      },
+    ]
   })
 }
