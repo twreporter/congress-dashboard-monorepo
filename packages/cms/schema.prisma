@@ -329,6 +329,7 @@ model CouncilMeeting {
   from_CouncilBill_councilMeeting   CouncilBill[]   @relation("CouncilBill_councilMeeting")
   from_CouncilMember_councilMeeting CouncilMember[] @relation("CouncilMember_councilMeeting")
 
+  @@index([city])
   @@index([term])
 }
 
