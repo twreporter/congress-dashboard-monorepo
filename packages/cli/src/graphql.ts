@@ -935,6 +935,73 @@ export async function* councilSpeechIterator(
   take = 10
 ): AsyncGenerator<CouncilSpeechModel[], void, unknown> {
   const keystoneToken = await fetchKeystoneToken()
+  const meetingPageSize = 100
+  let meetingSkip = 0
+
+  // Filter each speech query by one meeting ID. Filtering by city through
+  // the relation can cause MySQL to sort large transcript rows in memory.
+  while (true) {
+    let res: AxiosResponse<{
+      errors?: unknown
+      data: { councilMeetings: { id: string }[] }
+    }>
+    try {
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+            query CouncilSpeechMeetings(
+              $where: CouncilMeetingWhereInput!
+              $take: Int!
+              $skip: Int!
+            ) {
+              councilMeetings(
+                where: $where
+                orderBy: [{ id: asc }]
+                take: $take
+                skip: $skip
+              ) {
+                id
+              }
+            }
+          `,
+          variables: {
+            where: { city: { equals: councilName } },
+            take: meetingPageSize,
+            skip: meetingSkip,
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `CouncilSpeechMeetings` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
+
+    const meetings = res.data.data.councilMeetings
+    for (const meeting of meetings) {
+      yield* councilSpeechesByMeetingIterator(meeting.id, take, keystoneToken)
+    }
+    if (meetings.length < meetingPageSize) return
+    meetingSkip += meetingPageSize
+  }
+}
+
+async function* councilSpeechesByMeetingIterator(
+  meetingId: string,
+  take: number,
+  keystoneToken: string
+): AsyncGenerator<CouncilSpeechModel[], void, unknown> {
   let cursor: { slug: string } | null = null
   let skip = 0
   let hasMore = true
@@ -990,8 +1057,8 @@ export async function* councilSpeechIterator(
             orderBy: [{ slug: 'asc' }],
             where: {
               councilMeeting: {
-                city: {
-                  equals: councilName,
+                id: {
+                  equals: meetingId,
                 },
               },
             },

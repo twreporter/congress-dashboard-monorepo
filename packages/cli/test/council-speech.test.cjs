@@ -70,14 +70,16 @@ test('councilor uses speech date, never a newer bill date, and clears absent dat
   assert.equal('lastSpeechAtTs' in JSON.parse(JSON.stringify(empty)), false)
 })
 
-test('speech iterator uses city filter, slug cursor and propagates GQL errors', async () => {
+test('speech iterator pages meetings and resets speech cursors between meetings', async () => {
   process.env.GRAPHQL_ENDPOINT = 'https://example.invalid/graphql'
   process.env.HEADLESS_ACCOUNT_EMAIL = 'test'
   process.env.HEADLESS_ACCOUNT_PASSWORD = 'test'
   const axios = require('axios')
   const original = axios.post
   const calls = []
-  let fail = false
+  let failQuery
+  let noMeetings = false
+  const nextSpeech = { ...speech, slug: 'taipei-next' }
   axios.post = async (_url, body) => {
     if (body.query.includes('mutation'))
       return {
@@ -88,9 +90,31 @@ test('speech iterator uses city filter, slug cursor and propagates GQL errors', 
         },
       }
     calls.push(body)
-    if (fail) return { data: { errors: [{ message: 'test failure' }] } }
+    if (failQuery && body.query.includes(failQuery))
+      return { data: { errors: [{ message: 'test failure' }] } }
+    if (body.query.includes('query CouncilSpeechMeetings')) {
+      return {
+        data: {
+          data: {
+            councilMeetings: noMeetings
+              ? []
+              : body.variables.skip === 0
+              ? Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1) }))
+              : [{ id: '101' }],
+          },
+        },
+      }
+    }
+    const meetingId = body.variables.where.councilMeeting.id.equals
+    const speeches = body.variables.cursor
+      ? []
+      : meetingId === '1'
+      ? [speech]
+      : meetingId === '101'
+      ? [nextSpeech]
+      : []
     return {
-      data: { data: { councilSpeeches: calls.length === 1 ? [speech] : [] } },
+      data: { data: { councilSpeeches: speeches } },
     }
   }
   try {
@@ -98,17 +122,59 @@ test('speech iterator uses city filter, slug cursor and propagates GQL errors', 
     const batches = []
     for await (const batch of councilSpeechIterator('taipei', 1))
       batches.push(batch)
-    assert.deepEqual(batches, [[speech], []])
+    assert.deepEqual(batches.flat(), [speech, nextSpeech])
     assert.deepEqual(calls[0].variables.where, {
-      councilMeeting: { city: { equals: 'taipei' } },
+      city: { equals: 'taipei' },
     })
-    assert.deepEqual(calls[1].variables.cursor, { slug: speech.slug })
-    assert.equal(calls[1].variables.skip, 1)
-    fail = true
-    await assert.rejects(async () => {
-      for await (const _ of councilSpeechIterator('taipei')) {
-      }
-    }, /test failure/)
+    const meetingCalls = calls.filter((c) =>
+      c.query.includes('query CouncilSpeechMeetings')
+    )
+    assert.deepEqual(
+      meetingCalls.map((c) => c.variables.skip),
+      [0, 100]
+    )
+    const speechCalls = calls.filter(
+      (c) => !c.query.includes('query CouncilSpeechMeetings')
+    )
+    assert.deepEqual(speechCalls[0].variables.where, {
+      councilMeeting: { id: { equals: '1' } },
+    })
+    assert.deepEqual(speechCalls[1].variables.cursor, { slug: speech.slug })
+    assert.equal(speechCalls[1].variables.skip, 1)
+    for (const id of ['2', '101']) {
+      const firstPage = speechCalls.find(
+        (c) => c.variables.where.councilMeeting.id.equals === id
+      )
+      assert.equal(firstPage.variables.cursor, null)
+      assert.equal(firstPage.variables.skip, 0)
+    }
+    for (const query of [
+      'query CouncilSpeechMeetings',
+      'query CouncilSpeeches(',
+    ]) {
+      failQuery = query
+      await assert.rejects(async () => {
+        for await (const _ of councilSpeechIterator('taipei')) {
+        }
+      }, /test failure/)
+    }
+    failQuery = undefined
+    noMeetings = true
+    calls.length = 0
+    const empty = []
+    for await (const batch of councilSpeechIterator('taipei')) empty.push(batch)
+    assert.deepEqual(empty, [])
+    assert.equal(calls.length, 1)
+    noMeetings = false
+    calls.length = 0
+    // A partial speech page should finish that meeting without another request.
+    for await (const _ of councilSpeechIterator('taipei', 10)) {
+    }
+    assert.equal(
+      calls.filter((c) => c.variables.where.councilMeeting?.id.equals === '1')
+        .length,
+      1
+    )
   } finally {
     axios.post = original
   }
