@@ -538,6 +538,14 @@ export function transferCouncilBillModelToRecord(
 export function transferCouncilSpeechModelToRecord(
   models: CouncilSpeechModel[]
 ): CouncilSpeechRecord[] {
+  const plainText = (value: unknown): string =>
+    typeof value === 'string'
+      ? value
+          .replace(/<\/?[a-z][\s\S]*?>/gi, '')
+          .replace(/\\r\\n|\\[rn]|[\r\n]/g, '')
+          .trim()
+      : ''
+
   return models.flatMap((speech) => {
     const meeting = speech.councilMeeting
     if (!speech.slug || !meeting?.term || !isValidCouncilName(meeting.city)) {
@@ -553,9 +561,10 @@ export function transferCouncilSpeechModelToRecord(
         objectID: `${speech.slug}_${city}_${meeting.term}`,
         slug: speech.slug,
         title: speech.title,
-        summary: speech.summaryFallback
-          ?.replace(/<\/?[a-z][\s\S]*?>/gi, '')
-          .replace(/\r?\n/g, ''),
+        summary:
+          plainText(speech.summaryFallback) ||
+          plainText(speech.content) ||
+          undefined,
         date: speech.date ? formatDateToTaipeiTimezone(speech.date) : '',
         dateTs: speech.date ? new Date(speech.date).getTime() : undefined,
         council: councilDisplayNames[city],

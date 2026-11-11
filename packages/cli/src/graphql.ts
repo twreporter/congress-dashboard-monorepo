@@ -912,6 +912,7 @@ export type CouncilSpeechModel = {
   title: string
   date: string
   summaryFallback?: string | null
+  content?: string | null
   councilMeeting?: {
     city: string
     term: number
@@ -1033,6 +1034,7 @@ async function* councilSpeechesByMeetingIterator(
               slug
               title
               summaryFallback
+              content
               date
               councilMeeting {
                 city
