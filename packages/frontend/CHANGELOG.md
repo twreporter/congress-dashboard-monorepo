@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-beta.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.6...@twreporter/congress-dashboard-frontend@1.15.0-beta.7) (2026-11-11)
+
+### Bug Fixes
+
+- **frontend:** following page padding ([5f03934](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f03934a55fdec22caa71e022d70605dc9090653))
+
 # [1.15.0-beta.6](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.5...@twreporter/congress-dashboard-frontend@1.15.0-beta.6) (2026-11-06)
 
 **Note:** Version bump only for package @twreporter/congress-dashboard-frontend
