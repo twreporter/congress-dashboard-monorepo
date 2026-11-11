@@ -292,7 +292,7 @@ export function transferCouncilorModelToRecord(
   )
 
   return validModels.map((c) => {
-    const speechDate = c.speech?.[0]?.date
+    const speechDate = c.latestSpeechDate
     const councilName = c.city as CouncilName
     const councilDisplayName = councilDisplayNames[councilName] || councilName
     const councilorSlug = c.councilor!.slug
