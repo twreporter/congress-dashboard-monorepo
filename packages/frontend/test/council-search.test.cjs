@@ -28,6 +28,20 @@ const {
   councilScopeValues,
 } = loadSource('components/search/result-page/scope-config')
 
+test('both environments search all bill proposers and retain display highlighting', () => {
+  for (const env of ['staging', 'prod']) {
+    const {
+      settings,
+    } = require(`../src/components/search/algolia-config/${env}/council-bill.settings.json`)
+    assert.deepEqual(settings.searchableAttributes, [
+      'unordered(title)',
+      'councilorNames',
+      'unordered(summary)',
+    ])
+    assert.ok(settings.attributesToHighlight.includes('councilor'))
+  }
+})
+
 test('speech comes before bills in all council scopes and global results', () => {
   for (const scope of councilScopeValues) {
     assert.deepEqual(getScopeSearchStages(scope), [

@@ -22,7 +22,7 @@
 | `council-topic` | 議會議題 | 議題名稱（`name`）、說明（`desc`） |
 | `speech` | 立法院發言全文 | 立委姓名（`legislatorName`）、摘要（`summary`）、標題（`title`） |
 | `council-speech` | 議會發言全文 | 全部關聯議員姓名（`councilorNames`）、摘要（`summary`）、標題（`title`） |
-| `council-bill` | 議會議案 | 標題（`title`）、提案人（`councilor`）、摘要（`summary`） |
+| `council-bill` | 議會議案 | 標題（`title`）、所有提案人（`councilorNames`）、摘要（`summary`） |
 
 「發言全文」是搜尋結果的類型名稱；兩種發言索引都不搜尋逐字稿內文 `content`。
 議會發言每筆逐字稿是一筆結果，卡片顯示全部關聯議員，連到 `/council/a/{slug}`。

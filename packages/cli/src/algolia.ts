@@ -112,6 +112,7 @@ export type CouncilBillRecord = {
   councilRank: number // Ranking order for Algolia custom ranking (1-6)
   meetingTerm: number // Council meeting term number
   councilor: string // First proposer name (e.g., "林亮君")
+  councilorNames: string[] // All distinct proposer names for searching
   councilorCount: number // Total number of proposers (e.g., 15)
   objectID: string // Format: ${slug}_${councilSlug}_${meetingTerm}
 }

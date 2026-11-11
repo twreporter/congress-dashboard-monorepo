@@ -250,6 +250,7 @@ LAWMAKER_COUNCIL_NAME=taipei LAWMAKER_COUNCILORS=true LAWMAKER_DRYRUN=false yarn
 
 **Synchronization notes:**
 
+- Bill records store all proposer names in `councilorNames` for searching and keep `councilor` for the first-name display. Re-sync with `--council-bill` before applying the updated `council-bill` Algolia settings to existing indexes.
 - Councilor synchronization requires the CMS `CouncilMember.latestSpeechDate` field, which uses Prisma's maximum-date aggregate rather than loading and sorting full transcripts. Deploy the updated CMS before updating the CLI; no database migration is required. The field returns `null` for members without speeches.
 - All matching records across all meeting terms are uploaded, not just recently updated records. Records deleted from CMS are not automatically removed from Algolia.
 - Use `--speech --councilor` to update both speech records and councilor latest speech dates.

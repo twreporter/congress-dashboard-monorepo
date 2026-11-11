@@ -522,6 +522,13 @@ export function transferCouncilBillModelToRecord(
       councilRank: councilRankings[councilName as CouncilName] || 999,
       meetingTerm,
       councilor: firstCouncilor,
+      councilorNames: [
+        ...new Set(
+          councilMembers.flatMap((member) =>
+            member.councilor?.name ? [member.councilor.name] : []
+          )
+        ),
+      ],
       councilorCount,
       objectID: `${b.slug}_${councilName}_${meetingTerm}`,
     }
