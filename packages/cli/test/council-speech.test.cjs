@@ -12,6 +12,7 @@ const speech = {
   title: '會議',
   date: '2026-09-30',
   summaryFallback: '<p>測試摘要</p>\n內容',
+  content: '不應覆蓋既有摘要的內文',
   councilMeeting: { city: 'taipei', term: 14 },
   councilMember: [
     { councilor: { name: '甲' } },
@@ -36,7 +37,12 @@ test('speech records preserve all distinct speakers and stable identity', () => 
 
 test('optional relations and summary are not required; invalid identity is skipped', () => {
   const [record] = transferCouncilSpeechModelToRecord([
-    { ...speech, summaryFallback: null, councilMember: [{ councilor: null }] },
+    {
+      ...speech,
+      summaryFallback: null,
+      content: null,
+      councilMember: [{ councilor: null }],
+    },
   ])
   assert.deepEqual(record.councilorNames, [])
   assert.equal(record.summary, undefined)
@@ -49,6 +55,36 @@ test('optional relations and summary are not required; invalid identity is skipp
       transferCouncilSpeechModelToRecord([{ ...speech, ...invalid }]),
       []
     )
+  }
+})
+
+test('empty summaries fall back to plain transcript text without line breaks', () => {
+  for (const summaryFallback of [
+    undefined,
+    null,
+    '',
+    ' \r\n\t ',
+    '<p>\n<br></p>',
+  ]) {
+    const [record] = transferCouncilSpeechModelToRecord([
+      {
+        ...speech,
+        summaryFallback,
+        content:
+          ' <p>第一行</p>\n第二行\r\n第三行\r第四行\\n第五行\\r\\n第六行 ',
+      },
+    ])
+    assert.equal(record.summary, '第一行第二行第三行第四行第五行第六行')
+    assert.equal('content' in record, false)
+  }
+})
+
+test('empty or non-string transcript content leaves absent summaries unset', () => {
+  for (const content of [undefined, null, '', ' \n ', '<p></p>', {}, []]) {
+    const [record] = transferCouncilSpeechModelToRecord([
+      { ...speech, summaryFallback: null, content },
+    ])
+    assert.equal(record.summary, undefined)
   }
 })
 
@@ -138,6 +174,7 @@ test('speech iterator pages meetings and resets speech cursors between meetings'
     const speechCalls = calls.filter(
       (c) => !c.query.includes('query CouncilSpeechMeetings')
     )
+    assert.match(speechCalls[0].query, /\bcontent\b/)
     assert.deepEqual(speechCalls[0].variables.where, {
       councilMeeting: { id: { equals: '1' } },
     })
