@@ -58,13 +58,15 @@ test('councilor uses speech date, never a newer bill date, and clears absent dat
     city: 'taipei',
     councilMeeting: { term: 14 },
     councilor: { name: '甲', slug: 'a' },
-    speech: [{ date: '2026-09-30' }],
+    latestSpeechDate: '2026-09-30',
     bill: [{ date: '2026-10-01' }],
   }
   const [record] = transferCouncilorModelToRecord([member])
   assert.equal(record.lastSpeechAt, '2026/09/30')
   assert.equal(record.objectID, '278_taipei_14')
-  const [empty] = transferCouncilorModelToRecord([{ ...member, speech: [] }])
+  const [empty] = transferCouncilorModelToRecord([
+    { ...member, latestSpeechDate: null },
+  ])
   assert.equal(empty.lastSpeechAt, '')
   assert.equal(empty.lastSpeechAtTs, undefined)
   assert.equal('lastSpeechAtTs' in JSON.parse(JSON.stringify(empty)), false)
@@ -175,6 +177,42 @@ test('speech iterator pages meetings and resets speech cursors between meetings'
         .length,
       1
     )
+  } finally {
+    axios.post = original
+  }
+})
+
+test('councilor query requests the aggregate date instead of sorted speech records', async () => {
+  process.env.GRAPHQL_ENDPOINT = 'https://example.invalid/graphql'
+  process.env.HEADLESS_ACCOUNT_EMAIL = 'test'
+  process.env.HEADLESS_ACCOUNT_PASSWORD = 'test'
+  const axios = require('axios')
+  const original = axios.post
+  let query
+  axios.post = async (_url, body) => {
+    if (body.query.includes('mutation'))
+      return {
+        data: {
+          data: {
+            authenticateSystemUserWithPassword: { sessionToken: 'test' },
+          },
+        },
+      }
+    query = body.query
+    return {
+      data: {
+        data: { councilMembers: [{ id: 67, latestSpeechDate: '2026-07-30' }] },
+      },
+    }
+  }
+  try {
+    const { councilorIterator } = require('../src/graphql')
+    const members = []
+    for await (const batch of councilorIterator('taipei'))
+      members.push(...batch)
+    assert.equal(members[0].latestSpeechDate, '2026-07-30')
+    assert.match(query, /\blatestSpeechDate\b/)
+    assert.doesNotMatch(query, /\bspeech\s*\(/)
   } finally {
     axios.post = original
   }

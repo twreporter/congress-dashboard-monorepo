@@ -124,9 +124,7 @@ export type CouncilorModel = {
   constituency?: number
   note: string
   isActive: boolean
-  speech: {
-    date: string
-  }[]
+  latestSpeechDate: string | null
 }
 
 export type CouncilTopicModel = {
@@ -631,9 +629,7 @@ export async function* councilorIterator(
                   }
                 }
               }
-              speech(take: 1, orderBy: [{ date: desc }]) {
-                date
-              }
+              latestSpeechDate
             }
           }
           `,

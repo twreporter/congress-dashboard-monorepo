@@ -3,6 +3,7 @@
   "version": "1.12.1-rc.0",
   "private": true,
   "scripts": {
+    "test:unit": "node --test test/*.test.cjs",
     "dev": "keystone dev",
     "start": "keystone start",
     "build": "keystone build --no-prisma",
