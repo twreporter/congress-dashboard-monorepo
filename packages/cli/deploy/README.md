@@ -7,7 +7,7 @@ to `dev`, `staging`, or `prod`. The job name is derived as
 `prod-lawmaker-cli`).
 
 The job uses the environment-specific runtime SA defined in the
-[infrastructure README](https://github.com/nickhsine/gcp-infrastructure/blob/main/projects/lawmaker-reporter/README.md#service-accounts).
+[infrastructure README](https://github.com/twreporter/gcp-infrastructure/blob/main/projects/lawmaker-reporter/README.md#service-accounts).
 
 The job connects through the `lawmaker-network` VPC with
 `all-traffic` egress, needed to reach the CMS's internal GraphQL endpoint.
@@ -61,5 +61,5 @@ successfully and logs the expected Algolia writes before running with
 
 ## Lawmaker project deployment
 
-See the [shared deployment notes](../../../deploy/README.md) for the new
-project, first deployment order, runtime URL overrides and rollout checks.
+See the [deployment overview](../../../deploy/README.md) for shared
+configuration and resource naming.
