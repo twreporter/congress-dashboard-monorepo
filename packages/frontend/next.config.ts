@@ -28,11 +28,6 @@ const nextConfig = (phase: string): NextConfig => ({
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/congress',
-        permanent: true,
-      },
-      {
         source: '/lawmaker/:slug*',
         destination: '/congress/lawmaker/:slug*',
         permanent: true,

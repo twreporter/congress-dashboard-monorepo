@@ -19,7 +19,7 @@ const Container = styled.div`
 const Tabs = () => {
   const router = useRouter()
   const pathname = usePathname()
-  const isCongressRoute = pathname?.startsWith(InternalRoutes.Home)
+  const isCongressRoute = pathname?.startsWith(InternalRoutes.Congress)
   const isCouncilRoute = pathname?.startsWith(InternalRoutes.Council)
 
   const handleDropdownItemClick = useCallback(
@@ -30,7 +30,7 @@ const Tabs = () => {
   )
 
   const handleMainTabClick = useCallback(() => {
-    router.push(InternalRoutes.Home)
+    router.push(InternalRoutes.Congress)
   }, [router])
 
   // just for six main cities currently
