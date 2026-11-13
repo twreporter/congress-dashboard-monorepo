@@ -75,22 +75,22 @@ The root `cloudbuild.yaml` builds and deploys this package as a **Cloud Run
 Job** (`gcloud run jobs create`/`update` instead of frontend/cms's `gcloud
 run deploy`). The Cloud Build trigger sets `_ENV` to `dev`, `staging`, or
 `prod`, and the job name is derived as
-`${_ENV}-congress-dashboard-${_TARGET_PACKAGE}` (e.g.
-`prod-congress-dashboard-cli`), same as frontend/cms.
+`${_ENV}-lawmaker-cli` (e.g. `prod-lawmaker-cli`).
 
 Public job configuration (including the `LAWMAKER_*` variables above, when
 overridden) lives in `deploy/env.${_ENV}.cli.public.yaml`, and secrets
 (`ALGOLIA_WRITE_KEY`, `HEADLESS_ACCOUNT_PASSWORD`) are provisioned in Secret
 Manager via `deploy/secrets/create-secrets.sh`. See
-[`deploy/README.md`](deploy/README.md) for the full breakdown, migration
-notes from the existing `prod-lawmaker-cli` job, and rollout notes.
+[`deploy/README.md`](deploy/README.md) for configuration, secret setup,
+and verification steps.
 
 Deploying the CLI does not execute the job. After configuring the target
 Algolia indices, run the job explicitly. For example, to synchronize council
 speeches and councilor dates in staging:
 
 ```bash
-gcloud run jobs execute staging-congress-dashboard-cli \
+gcloud run jobs execute staging-lawmaker-cli \
+  --project lawmaker-reporter \
   --region asia-east1 \
   --args="feed-algolia,council,--speech,--councilor,--no-dryrun" --wait
 ```
@@ -250,6 +250,9 @@ LAWMAKER_COUNCIL_NAME=taipei LAWMAKER_COUNCILORS=true LAWMAKER_DRYRUN=false yarn
 
 **Synchronization notes:**
 
+- Council speech records use transcript content when the summary is empty after removing HTML tags, line breaks, and surrounding whitespace.
+- Bill records store all proposer names in `councilorNames` for searching and keep `councilor` for the first-name display. Re-sync with `--council-bill` before applying the updated `council-bill` Algolia settings to existing indexes.
+- Councilor synchronization requires the CMS `CouncilMember.latestSpeechDate` field, which uses Prisma's maximum-date aggregate rather than loading and sorting full transcripts. Deploy the updated CMS before updating the CLI; no database migration is required. The field returns `null` for members without speeches.
 - All matching records across all meeting terms are uploaded, not just recently updated records. Records deleted from CMS are not automatically removed from Algolia.
 - Use `--speech --councilor` to update both speech records and councilor latest speech dates.
 - Dry-run requires CMS access but does not write to Algolia. Specify `--dryrun` explicitly when previewing to override environment defaults.

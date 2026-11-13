@@ -12,6 +12,7 @@ const speech = {
   title: '會議',
   date: '2026-09-30',
   summaryFallback: '<p>測試摘要</p>\n內容',
+  content: '不應覆蓋既有摘要的內文',
   councilMeeting: { city: 'taipei', term: 14 },
   councilMember: [
     { councilor: { name: '甲' } },
@@ -36,7 +37,12 @@ test('speech records preserve all distinct speakers and stable identity', () => 
 
 test('optional relations and summary are not required; invalid identity is skipped', () => {
   const [record] = transferCouncilSpeechModelToRecord([
-    { ...speech, summaryFallback: null, councilMember: [{ councilor: null }] },
+    {
+      ...speech,
+      summaryFallback: null,
+      content: null,
+      councilMember: [{ councilor: null }],
+    },
   ])
   assert.deepEqual(record.councilorNames, [])
   assert.equal(record.summary, undefined)
@@ -52,32 +58,66 @@ test('optional relations and summary are not required; invalid identity is skipp
   }
 })
 
+test('empty summaries fall back to plain transcript text without line breaks', () => {
+  for (const summaryFallback of [
+    undefined,
+    null,
+    '',
+    ' \r\n\t ',
+    '<p>\n<br></p>',
+  ]) {
+    const [record] = transferCouncilSpeechModelToRecord([
+      {
+        ...speech,
+        summaryFallback,
+        content:
+          ' <p>第一行</p>\n第二行\r\n第三行\r第四行\\n第五行\\r\\n第六行 ',
+      },
+    ])
+    assert.equal(record.summary, '第一行第二行第三行第四行第五行第六行')
+    assert.equal('content' in record, false)
+  }
+})
+
+test('empty or non-string transcript content leaves absent summaries unset', () => {
+  for (const content of [undefined, null, '', ' \n ', '<p></p>', {}, []]) {
+    const [record] = transferCouncilSpeechModelToRecord([
+      { ...speech, summaryFallback: null, content },
+    ])
+    assert.equal(record.summary, undefined)
+  }
+})
+
 test('councilor uses speech date, never a newer bill date, and clears absent date', () => {
   const member = {
     id: 278,
     city: 'taipei',
     councilMeeting: { term: 14 },
     councilor: { name: '甲', slug: 'a' },
-    speech: [{ date: '2026-09-30' }],
+    latestSpeechDate: '2026-09-30',
     bill: [{ date: '2026-10-01' }],
   }
   const [record] = transferCouncilorModelToRecord([member])
   assert.equal(record.lastSpeechAt, '2026/09/30')
   assert.equal(record.objectID, '278_taipei_14')
-  const [empty] = transferCouncilorModelToRecord([{ ...member, speech: [] }])
+  const [empty] = transferCouncilorModelToRecord([
+    { ...member, latestSpeechDate: null },
+  ])
   assert.equal(empty.lastSpeechAt, '')
   assert.equal(empty.lastSpeechAtTs, undefined)
   assert.equal('lastSpeechAtTs' in JSON.parse(JSON.stringify(empty)), false)
 })
 
-test('speech iterator uses city filter, slug cursor and propagates GQL errors', async () => {
+test('speech iterator pages meetings and resets speech cursors between meetings', async () => {
   process.env.GRAPHQL_ENDPOINT = 'https://example.invalid/graphql'
   process.env.HEADLESS_ACCOUNT_EMAIL = 'test'
   process.env.HEADLESS_ACCOUNT_PASSWORD = 'test'
   const axios = require('axios')
   const original = axios.post
   const calls = []
-  let fail = false
+  let failQuery
+  let noMeetings = false
+  const nextSpeech = { ...speech, slug: 'taipei-next' }
   axios.post = async (_url, body) => {
     if (body.query.includes('mutation'))
       return {
@@ -88,9 +128,31 @@ test('speech iterator uses city filter, slug cursor and propagates GQL errors', 
         },
       }
     calls.push(body)
-    if (fail) return { data: { errors: [{ message: 'test failure' }] } }
+    if (failQuery && body.query.includes(failQuery))
+      return { data: { errors: [{ message: 'test failure' }] } }
+    if (body.query.includes('query CouncilSpeechMeetings')) {
+      return {
+        data: {
+          data: {
+            councilMeetings: noMeetings
+              ? []
+              : body.variables.skip === 0
+              ? Array.from({ length: 100 }, (_, i) => ({ id: String(i + 1) }))
+              : [{ id: '101' }],
+          },
+        },
+      }
+    }
+    const meetingId = body.variables.where.councilMeeting.id.equals
+    const speeches = body.variables.cursor
+      ? []
+      : meetingId === '1'
+      ? [speech]
+      : meetingId === '101'
+      ? [nextSpeech]
+      : []
     return {
-      data: { data: { councilSpeeches: calls.length === 1 ? [speech] : [] } },
+      data: { data: { councilSpeeches: speeches } },
     }
   }
   try {
@@ -98,17 +160,96 @@ test('speech iterator uses city filter, slug cursor and propagates GQL errors', 
     const batches = []
     for await (const batch of councilSpeechIterator('taipei', 1))
       batches.push(batch)
-    assert.deepEqual(batches, [[speech], []])
+    assert.deepEqual(batches.flat(), [speech, nextSpeech])
     assert.deepEqual(calls[0].variables.where, {
-      councilMeeting: { city: { equals: 'taipei' } },
+      city: { equals: 'taipei' },
     })
-    assert.deepEqual(calls[1].variables.cursor, { slug: speech.slug })
-    assert.equal(calls[1].variables.skip, 1)
-    fail = true
-    await assert.rejects(async () => {
-      for await (const _ of councilSpeechIterator('taipei')) {
+    const meetingCalls = calls.filter((c) =>
+      c.query.includes('query CouncilSpeechMeetings')
+    )
+    assert.deepEqual(
+      meetingCalls.map((c) => c.variables.skip),
+      [0, 100]
+    )
+    const speechCalls = calls.filter(
+      (c) => !c.query.includes('query CouncilSpeechMeetings')
+    )
+    assert.match(speechCalls[0].query, /\bcontent\b/)
+    assert.deepEqual(speechCalls[0].variables.where, {
+      councilMeeting: { id: { equals: '1' } },
+    })
+    assert.deepEqual(speechCalls[1].variables.cursor, { slug: speech.slug })
+    assert.equal(speechCalls[1].variables.skip, 1)
+    for (const id of ['2', '101']) {
+      const firstPage = speechCalls.find(
+        (c) => c.variables.where.councilMeeting.id.equals === id
+      )
+      assert.equal(firstPage.variables.cursor, null)
+      assert.equal(firstPage.variables.skip, 0)
+    }
+    for (const query of [
+      'query CouncilSpeechMeetings',
+      'query CouncilSpeeches(',
+    ]) {
+      failQuery = query
+      await assert.rejects(async () => {
+        for await (const _ of councilSpeechIterator('taipei')) {
+        }
+      }, /test failure/)
+    }
+    failQuery = undefined
+    noMeetings = true
+    calls.length = 0
+    const empty = []
+    for await (const batch of councilSpeechIterator('taipei')) empty.push(batch)
+    assert.deepEqual(empty, [])
+    assert.equal(calls.length, 1)
+    noMeetings = false
+    calls.length = 0
+    // A partial speech page should finish that meeting without another request.
+    for await (const _ of councilSpeechIterator('taipei', 10)) {
+    }
+    assert.equal(
+      calls.filter((c) => c.variables.where.councilMeeting?.id.equals === '1')
+        .length,
+      1
+    )
+  } finally {
+    axios.post = original
+  }
+})
+
+test('councilor query requests the aggregate date instead of sorted speech records', async () => {
+  process.env.GRAPHQL_ENDPOINT = 'https://example.invalid/graphql'
+  process.env.HEADLESS_ACCOUNT_EMAIL = 'test'
+  process.env.HEADLESS_ACCOUNT_PASSWORD = 'test'
+  const axios = require('axios')
+  const original = axios.post
+  let query
+  axios.post = async (_url, body) => {
+    if (body.query.includes('mutation'))
+      return {
+        data: {
+          data: {
+            authenticateSystemUserWithPassword: { sessionToken: 'test' },
+          },
+        },
       }
-    }, /test failure/)
+    query = body.query
+    return {
+      data: {
+        data: { councilMembers: [{ id: 67, latestSpeechDate: '2026-07-30' }] },
+      },
+    }
+  }
+  try {
+    const { councilorIterator } = require('../src/graphql')
+    const members = []
+    for await (const batch of councilorIterator('taipei'))
+      members.push(...batch)
+    assert.equal(members[0].latestSpeechDate, '2026-07-30')
+    assert.match(query, /\blatestSpeechDate\b/)
+    assert.doesNotMatch(query, /\bspeech\s*\(/)
   } finally {
     axios.post = original
   }
