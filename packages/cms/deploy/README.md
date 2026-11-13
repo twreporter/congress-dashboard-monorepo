@@ -9,7 +9,7 @@ Cloud Run service name is derived as
 `${_ENV}-lawmaker-${_TARGET_PACKAGE}` (e.g. `prod-lawmaker-cms`).
 
 The service uses the environment-specific runtime SA defined in the
-[infrastructure README](https://github.com/nickhsine/gcp-infrastructure/blob/main/projects/lawmaker-reporter/README.md#service-accounts).
+[infrastructure README](https://github.com/twreporter/gcp-infrastructure/blob/main/projects/lawmaker-reporter/README.md#service-accounts).
 
 ## Public Configuration
 
@@ -69,5 +69,5 @@ check, CMS login, GCS mount (`run.sh` calls `gcsfuse`), and
 
 ## Lawmaker project deployment
 
-See the [shared deployment notes](../../../deploy/README.md) for the new
-project, first deployment order, runtime URL overrides and rollout checks.
+See the [deployment overview](../../../deploy/README.md) for shared
+configuration and resource naming.
