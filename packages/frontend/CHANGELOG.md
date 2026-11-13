@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.17.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.17.0-rc.0...@twreporter/congress-dashboard-frontend@1.17.0-rc.1) (2026-11-13)
+
+### Bug Fixes
+
+- **cli:** fall back to transcript for empty council speech summaries ([8cb9031](https://github.com/twreporter/congress-dashboard-monorepo/commit/8cb90318d7e10bdac6a9d07565029c5067da357a))
+- **root:** make all council bill proposers searchable ([7e992d3](https://github.com/twreporter/congress-dashboard-monorepo/commit/7e992d3c8c80579adfb6ad15339de932686c1911))
+
+### Features
+
+- configure deployments for lawmaker project ([b7402ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7402ec46e1d87ea9dd86cb1bd86a6afe6522c3a))
+
 # [1.17.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.16.3...@twreporter/congress-dashboard-frontend@1.17.0-rc.0) (2026-11-10)
 
 ### Features
