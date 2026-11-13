@@ -9,7 +9,34 @@ import { InternalRoutes } from '@/constants/routes'
 export const getCouncilName = (city: CouncilDistrict) =>
   `${CITY_LABEL[city]}議會`
 
-export const getOpenConfig = (pathname: string) => {
+const HOME_BACKGROUND_IMAGE =
+  'https://www.twreporter.org/images/lawmaker/lawmaker-home-page-hero.webp'
+
+type OpenConfig = {
+  title: string
+  description: string[]
+  textColor: string
+  badge?: {
+    text: string
+    textColor: string
+    backgroundColor: string
+  }
+  backgroundImage?: string
+}
+
+export const getOpenConfig = (pathname: string): OpenConfig => {
+  if (pathname === InternalRoutes.Home) {
+    return {
+      title: '報導者觀測站',
+      description: [
+        '你家立委、議員關心什麼？你關注的議題有誰在討論？',
+        '點擊你感興趣的人或話題，觀察他們的發言與提案情形',
+      ],
+      textColor: colorGrayscale.white,
+      backgroundImage: HOME_BACKGROUND_IMAGE,
+    }
+  }
+
   if (pathname.startsWith(InternalRoutes.Council)) {
     const districtSlug = pathname.replace(
       `${InternalRoutes.Council}/`,
@@ -21,6 +48,7 @@ export const getOpenConfig = (pathname: string) => {
         '你家議員關心什麼？你關注的議題有誰在討論？',
         '點擊你感興趣的人或話題，觀察議員的發言與提案情形',
       ],
+      textColor: colorGrayscale.gray900,
       badge: {
         text: getCouncilName(districtSlug),
         textColor: colorGrayscale.white,
@@ -34,6 +62,7 @@ export const getOpenConfig = (pathname: string) => {
         '你家立委關心什麼？你關注的議題有誰在討論？',
         '點擊你感興趣的人或話題，觀察立委的發言與提案情形',
       ],
+      textColor: colorGrayscale.gray900,
       badge: {
         text: '立法院',
         textColor: colorGrayscale.white,
