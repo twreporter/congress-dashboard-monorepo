@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.12.1-rc.0...@twreporter/congress-dashboard-cms@1.13.0-rc.0) (2026-11-13)
+
+### Bug Fixes
+
+- **root:** aggregate councilor latest speech dates ([7733d16](https://github.com/twreporter/congress-dashboard-monorepo/commit/7733d16caba266cfa4e2026f10dfdace582944c9))
+
+### Features
+
+- configure deployments for lawmaker project ([b7402ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7402ec46e1d87ea9dd86cb1bd86a6afe6522c3a))
+
+## [1.12.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.12.0...@twreporter/congress-dashboard-cms@1.12.1-rc.0) (2026-11-10)
+
+### Bug Fixes
+
+- **cms:** add index for council meeting city ([e1de184](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1de184fe98462db0cca62bfd38717eed41ec48d))
+
+# [1.12.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.12.0-rc.0...@twreporter/congress-dashboard-cms@1.12.0) (2026-11-06)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
 # [1.12.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.11.2...@twreporter/congress-dashboard-cms@1.12.0-rc.0) (2026-11-05)
 
 ### Features

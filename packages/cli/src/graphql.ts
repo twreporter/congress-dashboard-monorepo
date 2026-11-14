@@ -124,9 +124,7 @@ export type CouncilorModel = {
   constituency?: number
   note: string
   isActive: boolean
-  bill: {
-    date: string
-  }[]
+  latestSpeechDate: string | null
 }
 
 export type CouncilTopicModel = {
@@ -631,9 +629,7 @@ export async function* councilorIterator(
                   }
                 }
               }
-              bill(take: 1, orderBy: [{ date: desc }]) {
-                date
-              }
+              latestSpeechDate
             }
           }
           `,
@@ -904,6 +900,199 @@ export async function* councilBillIterator(
     } else {
       cursor = {
         slug: bills?.[bills.length - 1]?.slug,
+      }
+      skip = 1
+    }
+  }
+}
+
+export type CouncilSpeechModel = {
+  id: string
+  slug: string
+  title: string
+  date: string
+  summaryFallback?: string | null
+  content?: string | null
+  councilMeeting?: {
+    city: string
+    term: number
+  } | null
+  councilMember?:
+    | {
+        councilor: {
+          name: string
+        } | null
+      }[]
+    | null
+}
+
+// Async generator for iterating over council speeches in a specific city
+export async function* councilSpeechIterator(
+  councilName: string,
+  take = 10
+): AsyncGenerator<CouncilSpeechModel[], void, unknown> {
+  const keystoneToken = await fetchKeystoneToken()
+  const meetingPageSize = 100
+  let meetingSkip = 0
+
+  // Filter each speech query by one meeting ID. Filtering by city through
+  // the relation can cause MySQL to sort large transcript rows in memory.
+  while (true) {
+    let res: AxiosResponse<{
+      errors?: unknown
+      data: { councilMeetings: { id: string }[] }
+    }>
+    try {
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+            query CouncilSpeechMeetings(
+              $where: CouncilMeetingWhereInput!
+              $take: Int!
+              $skip: Int!
+            ) {
+              councilMeetings(
+                where: $where
+                orderBy: [{ id: asc }]
+                take: $take
+                skip: $skip
+              ) {
+                id
+              }
+            }
+          `,
+          variables: {
+            where: { city: { equals: councilName } },
+            take: meetingPageSize,
+            skip: meetingSkip,
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `CouncilSpeechMeetings` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
+
+    const meetings = res.data.data.councilMeetings
+    for (const meeting of meetings) {
+      yield* councilSpeechesByMeetingIterator(meeting.id, take, keystoneToken)
+    }
+    if (meetings.length < meetingPageSize) return
+    meetingSkip += meetingPageSize
+  }
+}
+
+async function* councilSpeechesByMeetingIterator(
+  meetingId: string,
+  take: number,
+  keystoneToken: string
+): AsyncGenerator<CouncilSpeechModel[], void, unknown> {
+  let cursor: { slug: string } | null = null
+  let skip = 0
+  let hasMore = true
+
+  while (hasMore) {
+    let res: AxiosResponse<{
+      errors?: unknown
+      data: {
+        councilSpeeches: CouncilSpeechModel[]
+      }
+    }>
+
+    try {
+      res = await axios.post(
+        apiEndpoint,
+        {
+          query: `
+          query CouncilSpeeches(
+            $orderBy: [CouncilSpeechOrderByInput!]!
+            $take: Int
+            $skip: Int!
+            $cursor: CouncilSpeechWhereUniqueInput
+            $where: CouncilSpeechWhereInput!
+          ) {
+            councilSpeeches(
+              orderBy: $orderBy
+              take: $take
+              skip: $skip
+              cursor: $cursor
+              where: $where
+            ) {
+              id
+              slug
+              title
+              summaryFallback
+              content
+              date
+              councilMeeting {
+                city
+                term
+              }
+              councilMember {
+                councilor {
+                  name
+                }
+              }
+            }
+          }
+          `,
+          variables: {
+            take,
+            skip,
+            cursor,
+            orderBy: [{ slug: 'asc' }],
+            where: {
+              councilMeeting: {
+                id: {
+                  equals: meetingId,
+                },
+              },
+            },
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${keystoneToken}`,
+          },
+        }
+      )
+    } catch (axiosError) {
+      throw errors.helpers.annotateAxiosError(axiosError)
+    }
+
+    if (res.data.errors) {
+      throw new Error(
+        'GQL query `CouncilSpeeches` responses errors object: ' +
+          JSON.stringify(res.data.errors)
+      )
+    }
+
+    const speeches = res.data.data.councilSpeeches
+
+    if (speeches.length === 0) {
+      hasMore = false
+    }
+
+    yield speeches
+
+    if (speeches.length < take) {
+      hasMore = false
+    } else {
+      cursor = {
+        slug: speeches?.[speeches.length - 1]?.slug,
       }
       skip = 1
     }

@@ -1,8 +1,9 @@
 {
   "name": "@twreporter/congress-dashboard-cms",
-  "version": "1.12.0-rc.0",
+  "version": "1.13.0-rc.0",
   "private": true,
   "scripts": {
+    "test:unit": "node --test test/*.test.cjs",
     "dev": "keystone dev",
     "start": "keystone start",
     "build": "keystone build --no-prisma",

@@ -1496,6 +1496,7 @@ type CouncilMember {
   proposalSuccessCount: Int
   relatedLink: JSON
   isActive: Boolean
+  latestSpeechDate: String
   speech(where: CouncilSpeechWhereInput! = {}, orderBy: [CouncilSpeechOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilSpeechWhereUniqueInput): [CouncilSpeech!]
   speechCount(where: CouncilSpeechWhereInput! = {}): Int
   bill(where: CouncilBillWhereInput! = {}, orderBy: [CouncilBillOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouncilBillWhereUniqueInput): [CouncilBill!]

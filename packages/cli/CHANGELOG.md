@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.1.0-rc.0...lawmaker-cli@3.1.0-rc.1) (2026-11-13)
+
+### Bug Fixes
+
+- **cli:** fall back to transcript for empty council speech summaries ([8cb9031](https://github.com/twreporter/congress-dashboard-monorepo/commit/8cb90318d7e10bdac6a9d07565029c5067da357a))
+- **cli:** paginate council speeches by meeting id ([388fe66](https://github.com/twreporter/congress-dashboard-monorepo/commit/388fe66852e546edced2419a44ba12d425fafefc))
+- **root:** aggregate councilor latest speech dates ([7733d16](https://github.com/twreporter/congress-dashboard-monorepo/commit/7733d16caba266cfa4e2026f10dfdace582944c9))
+- **root:** make all council bill proposers searchable ([7e992d3](https://github.com/twreporter/congress-dashboard-monorepo/commit/7e992d3c8c80579adfb6ad15339de932686c1911))
+
+### Features
+
+- configure deployments for lawmaker project ([b7402ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7402ec46e1d87ea9dd86cb1bd86a6afe6522c3a))
+
+# [3.1.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.5...lawmaker-cli@3.1.0-rc.0) (2026-11-10)
+
+### Features
+
+- **cli:** index council speeches and fix latest speech dates ([93064bd](https://github.com/twreporter/congress-dashboard-monorepo/commit/93064bdb149f8c1489b6e25036f8dfe3b9dca856))
+
 ## [3.0.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/lawmaker-cli@3.0.5-rc.0...lawmaker-cli@3.0.5) (2026-10-22)
 
 **Note:** Version bump only for package lawmaker-cli
