@@ -157,7 +157,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ isOpen, onClose }) => {
         paddingRight={0}
         fontWeight={MenuButton.FontWeight.BOLD}
         text={'立法院'}
-        link={{ to: InternalRoutes.Home, target: '_self' }}
+        link={{ to: InternalRoutes.Congress, target: '_self' }}
         onClick={onClose}
       />
       <DropdownMenu
