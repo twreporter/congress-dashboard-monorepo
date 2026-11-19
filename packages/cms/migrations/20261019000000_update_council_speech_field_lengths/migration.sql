@@ -1,0 +1,3 @@
+ALTER TABLE `CouncilSpeech`
+    MODIFY `attendee` VARCHAR(300) NOT NULL DEFAULT '',
+    MODIFY `sourceLink` VARCHAR(255) NOT NULL DEFAULT '';

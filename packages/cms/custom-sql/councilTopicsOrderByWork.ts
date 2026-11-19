@@ -31,8 +31,8 @@ export const getCouncilTopicsSql = ({
       SELECT st.B AS topic_id, s.id AS speech_id, NULL AS bill_id, cm.councilor AS councilor_id
       FROM _CouncilSpeech_topic st
       JOIN CouncilSpeech s ON st.A = s.id
-      JOIN _CouncilMember_speech cms ON cms.B = s.id
-      JOIN CouncilMember cm ON cms.A = cm.id
+      LEFT JOIN _CouncilMember_speech cms ON cms.B = s.id
+      LEFT JOIN CouncilMember cm ON cms.A = cm.id
       WHERE ${Prisma.join(speechWhereClauses, ' AND ')}
 
       UNION ALL

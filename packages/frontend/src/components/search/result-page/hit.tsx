@@ -44,6 +44,60 @@ export type CouncilBillRawHit = Hit<{
   councilorCount: number
 }>
 
+export type CouncilSpeechRawHit = Hit<{
+  slug: string
+  title: string
+  summary?: string
+  date: string
+  council: string
+  councilorNames: string[]
+}>
+
+export function CouncilSpeechHit({ hit }: { hit: CouncilSpeechRawHit }) {
+  const customizedHit = useCustomSnippet(hit, 'summary')
+  return (
+    <Link href={`${InternalRoutes.CouncilSpeech}/${hit.slug}`}>
+      <Container>
+        <Text>
+          <p className="meta">發言全文｜{hit.council}</p>
+          <p>
+            <Highlight
+              classNames={{ root: 'title' }}
+              highlightedTagName="span"
+              attribute="title"
+              hit={hit}
+            />
+          </p>
+          {hit.summary && (
+            <p>
+              <Snippet
+                highlightedTagName="span"
+                attribute="summary"
+                hit={customizedHit}
+              />
+            </p>
+          )}
+          <p className="footnote">
+            {hit.councilorNames?.length > 0 && (
+              <>
+                質詢議員／
+                <Highlight
+                  highlightedTagName="span"
+                  attribute="councilorNames"
+                  separator="、"
+                  hit={hit}
+                />
+                ．
+              </>
+            )}
+            發言於 {hit.date}
+          </p>
+        </Text>
+      </Container>
+    </Link>
+  )
+}
+
 /**
  * `AvatarBorder` is a workaround to address rendering issues when applying a semi-transparent border directly on `Avatar`.
  *

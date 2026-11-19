@@ -21,6 +21,8 @@ export const fetchCouncilSpeech = async ({
         slug
         date
         title
+        speechGroup
+        councilMeeting { id }
         councilMember {
           city
           councilor {
@@ -93,4 +95,30 @@ export const fetchAllCouncilSpeechesSlug = async (): Promise<SitemapItem[]> => {
     }
   }
   return allSpeeches
+}
+
+/** Groups are scoped to a council term; equal positions use slug as a stable tie-breaker. */
+export const fetchCouncilSpeechGroup = async (
+  speech: CouncilSpeechFromRes
+): Promise<string[]> => {
+  if (!speech.speechGroup || !speech.councilMeeting) return []
+
+  const query = `
+    query CouncilSpeechGroup($where: CouncilSpeechWhereInput!) {
+      councilSpeeches(where: $where, orderBy: [{ speechOrder: asc }, { slug: asc }]) {
+        slug
+      }
+    }
+  `
+  const variables = {
+    where: {
+      speechGroup: { equals: speech.speechGroup },
+      councilMeeting: { id: { equals: speech.councilMeeting.id } },
+    },
+  }
+  const result = await keystoneFetch<{
+    councilSpeeches?: { slug: string }[]
+  }>(JSON.stringify({ query, variables }), false)
+  if (result.errors) throw new Error(JSON.stringify(result.errors))
+  return result.data?.councilSpeeches?.map(({ slug }) => slug) ?? []
 }

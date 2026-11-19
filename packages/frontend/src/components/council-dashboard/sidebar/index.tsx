@@ -142,7 +142,6 @@ const prepareWorkCardProps = (
 
 export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
   title: TitleSectionProps['title']
-  count?: TitleSectionProps['count']
   legislatorList?: TitleSectionProps['tabs'] & { id?: number }
   slug: string
   onClose?: () => void
@@ -152,7 +151,6 @@ export interface SidebarIssueProps extends RefAttributes<HTMLDivElement> {
 export const SidebarIssue: React.FC<SidebarIssueProps> = ({
   slug,
   title,
-  count,
   legislatorList = [],
   onClose,
   className,
@@ -237,7 +235,6 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
           <TitleSection
             title={title}
             titleDescription="的相關發言與議案摘要"
-            count={count}
             tabs={tabList}
             showTabAvatar={true}
             showTabCount={false}
@@ -254,7 +251,11 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
             <SummarySection>
               <SummaryCount
                 weight={P1.Weight.BOLD}
-                text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
+                text={`共 ${workState.speechCount} 筆發言${
+                  workState.billCount === 0
+                    ? ''
+                    : `、${workState.billCount} 筆議案`
+                }`}
               />
               {workByMonth.map((props: CardsOfTheYearProps, index: number) => (
                 <CardsOfTheYear
@@ -314,7 +315,7 @@ export const SidebarIssue: React.FC<SidebarIssueProps> = ({
 
 // sidebar legislator component
 const FollowMoreLegislator = styled.div`
-  gap: 32px;
+  gap: 24px;
   display: flex;
   overflow-x: scroll;
 `
@@ -390,9 +391,11 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
   )
 
   const fetchFilterOptions = () => {
+    if (!formattedFilterValues) return Promise.resolve([])
     return fetchTopicsOfACouncilor({
       councilorSlug: slug,
       districtSlug: districtSlug as CouncilDistrict,
+      councilMeetingId: formattedFilterValues.meetingId,
     })
   }
 
@@ -439,7 +442,11 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
             <SummarySection>
               <SummaryCount
                 weight={P1.Weight.BOLD}
-                text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
+                text={`共 ${workState.speechCount} 筆發言${
+                  workState.billCount === 0
+                    ? ''
+                    : `、${workState.billCount} 筆議案`
+                }`}
               />
               {workByMonth.map((props: CardsOfTheYearProps, index: number) => (
                 <CardsOfTheYear
@@ -481,6 +488,8 @@ export const SidebarCouncilor: React.FC<SidebarCouncilorProps> = ({
             title={title}
             link={`${InternalRoutes.Councilor(districtSlug)}/${slug}`}
             titleSuffix=" 的相關議題篩選"
+            key={`councilor-topics:${districtSlug}:${slug}:${formattedFilterValues?.meetingId}`}
+            fetchKey={`councilor-topics:${districtSlug}:${slug}:${formattedFilterValues?.meetingId}`}
             slug={slug}
             placeholder={'篩選議題'}
             initialSelectedOption={tabList}
