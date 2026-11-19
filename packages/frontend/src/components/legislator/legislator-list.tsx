@@ -46,7 +46,7 @@ const mapToTabItems = (items: TabProps[]): TabProps[] =>
   items.map((item) => ({ ...item, showAvatar: false }))
 
 export const LegislatorContainer = styled.div`
-  gap: 32px;
+  gap: 24px;
   display: flex;
   overflow-x: scroll;
   scrollbar-width: none;
@@ -168,7 +168,10 @@ const LegislatorList: React.FC<LegislatorListProps> = ({
         legislatorSlug: slug,
       })
   )
-  const legislatorList = !swrError && selectedTopic ? topLegislators.filter(({ count }) => count > 0) : []
+  const legislatorList =
+    !swrError && selectedTopic
+      ? topLegislators.filter(({ count }) => count > 0)
+      : []
 
   const openFilter = useCallback((e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()

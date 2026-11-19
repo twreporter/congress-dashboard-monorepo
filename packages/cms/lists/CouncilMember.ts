@@ -174,6 +174,37 @@ const listConfigurations = list({
       label: '是否該屆期現任',
       defaultValue: true,
     }),
+    latestSpeechDate: virtual({
+      label: '最新發言日期',
+      field: graphql.field({
+        type: graphql.String,
+        async resolve(item, _args, context) {
+          // Direct Prisma calls bypass Keystone access control. Match the
+          // CouncilSpeech query policy before aggregating its dates.
+          const canReadSpeeches = await allowAllRoles()({
+            context,
+            session: context.session,
+            listKey: 'CouncilSpeech',
+            operation: 'query',
+          })
+          if (!canReadSpeeches) return null
+
+          const result = await context.prisma.councilSpeech.aggregate({
+            where: {
+              councilMember: { some: { id: Number(item.id) } },
+            },
+            _max: { date: true },
+          })
+          // calendarDay is stored as a MySQL DATE; preserve YYYY-MM-DD.
+          return result._max.date?.toISOString().slice(0, 10) ?? null
+        },
+      }),
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'read' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
     speech: scrollableRelationship({
       ref: 'CouncilSpeech.councilMember',
       label: '縣市逐字稿',

@@ -27,11 +27,11 @@ if [[ $# -gt 1 ]]; then
   exit 1
 fi
 
-PROJECT_ID="${PROJECT_ID:-coastal-run-106202}"
+PROJECT_ID="${PROJECT_ID:-lawmaker-reporter}"
 ENV="${ENV:-}"
-CLOUD_RUN_JOB="${ENV}-congress-dashboard-cli"
+CLOUD_RUN_JOB="${ENV}-lawmaker-cli"
 SECRET_PREFIX="$CLOUD_RUN_JOB"
 SECRET_SPEC="${SCRIPT_DIR}/cli.secrets"
-LABELS="env=${ENV},service=congress-dashboard,system=cli,cloud-run-job=${CLOUD_RUN_JOB},resource-type=cloud-run-job,managed-by=deploy-script,data-class=credential"
+LABELS="env=${ENV},service=lawmaker,system=cli,cloud-run-job=${CLOUD_RUN_JOB},resource-type=cloud-run-job,managed-by=deploy-script,data-class=credential"
 export PROJECT_ID ENV SECRET_PREFIX SECRET_SPEC LABELS
 exec "${ROOT_DIR}/scripts/create-cloud-run-secrets.sh" "${1:---all}"

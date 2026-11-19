@@ -32,7 +32,7 @@ Please add a `.env.local` to include both public & server env vars for local dev
 
 The root `cloudbuild.yaml` builds and deploys this package to Cloud Run. The
 Cloud Build trigger sets `_ENV` to `dev`, `staging`, or `prod`, and the Cloud
-Run service name is derived as `${_ENV}-congress-dashboard-frontend`.
+Run service name is derived as `${_ENV}-lawmaker-frontend`.
 
 `NEXT_PUBLIC_*` build-time values come from the `.env.{dev,staging,release}.public`
 files at this package's root, copied to `.env.local` before `docker build`.
@@ -40,7 +40,8 @@ files at this package's root, copied to `.env.local` before `docker build`.
 Server-only runtime environment variables and secrets are managed separately
 in [`deploy/`](deploy/README.md): public values live in
 `deploy/env.${_ENV}.frontend.public.yaml`, and secrets (`API_AUTH_PASSWORD`,
-`FEEDBACK_SLACK_WEBHOOK_URL`) are provisioned in Secret Manager via
+`FEEDBACK_SLACK_WEBHOOK_URL`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`)
+are provisioned in Secret Manager via
 `deploy/secrets/create-secrets.sh`. See [`deploy/README.md`](deploy/README.md)
 for the full breakdown and rollout notes.
 

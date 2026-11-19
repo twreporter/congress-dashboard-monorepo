@@ -6,7 +6,7 @@
     "maxValuesPerFacet": 100,
     "searchableAttributes": [
       "unordered(title)",
-      "councilor",
+      "councilorNames",
       "unordered(summary)"
     ],
     "numericAttributesToIndex": null,
