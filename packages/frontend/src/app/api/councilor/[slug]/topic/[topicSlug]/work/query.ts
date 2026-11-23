@@ -15,29 +15,21 @@ const fetchCouncilWork = async ({
   councilMeetingId,
 }: FetchCouncilWorkParams): Promise<CouncilWorkData> => {
   const query = `
-    query CouncilWork($councilorSlug: String!, $topicSlug: String!, $councilMeetingId: Int!, $take: Int!, $skip: Int!) {
-      councilWorkPage(councilorSlug: $councilorSlug, topicSlug: $topicSlug, councilMeetingId: $councilMeetingId, take: $take, skip: $skip) {
+    query CouncilWork($councilorSlug: String!, $topicSlug: String!, $councilMeetingId: Int!) {
+      councilWork(councilorSlug: $councilorSlug, topicSlug: $topicSlug, councilMeetingId: $councilMeetingId) {
         speeches { date slug summaryFallback title }
         bills { date slug summaryFallback title }
       }
     }
   `
-  const speeches: BillMeta[] = []
-  const bills: BillMeta[] = []
-  const take = 100
-  // Keep the existing complete-list contract while bounding each CMS/DB read.
-  for (let skip = 0; ; skip += take) {
-    const variables = { councilorSlug, topicSlug, councilMeetingId, take, skip }
-    const result = await keystoneFetch<{
-      councilWorkPage: { speeches: BillMeta[]; bills: BillMeta[] }
-    }>(JSON.stringify({ query, variables }), false)
-    if (result.errors?.length) throw new Error(JSON.stringify(result.errors))
-    const page = result.data?.councilWorkPage
-    if (!page) throw new Error('Missing council work page')
-    speeches.push(...page.speeches)
-    bills.push(...page.bills)
-    if (page.speeches.length < take && page.bills.length < take) break
-  }
+  // The CMS collects bounded batches inside one consistent database snapshot.
+  const variables = { councilorSlug, topicSlug, councilMeetingId }
+  const result = await keystoneFetch<{
+    councilWork: { speeches: BillMeta[]; bills: BillMeta[] }
+  }>(JSON.stringify({ query, variables }), false)
+  if (result.errors?.length) throw new Error(JSON.stringify(result.errors))
+  if (!result.data?.councilWork) throw new Error('Missing council work result')
+  const { speeches, bills } = result.data.councilWork
   return {
     work: mergeCouncilWork(speeches, bills),
     speechCount: speeches.length,

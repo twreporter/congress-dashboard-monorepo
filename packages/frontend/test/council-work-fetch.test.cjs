@@ -47,72 +47,46 @@ const items = (count, prefix) =>
     title: 'Title',
   }))
 
-test('collects all pages when bills outnumber speeches without truncating counts', async () => {
+test('fetches the complete snapshot in one request, preserving counts', async () => {
   const calls = []
-  const pages = [
-    { speeches: items(3, 's'), bills: items(100, 'b') },
-    { speeches: [], bills: items(1, 'last') },
-  ]
   const fetch = load(async (body) => {
     calls.push(JSON.parse(body).variables)
-    return { data: { councilWorkPage: pages.shift() } }
+    return {
+      data: {
+        councilWork: { speeches: items(103, 's'), bills: items(201, 'b') },
+      },
+    }
   })
   const result = await fetch(params)
-  assert.equal(result.speechCount, 3)
-  assert.equal(result.billCount, 101)
-  assert.equal(result.work.length, 104)
-  assert.deepEqual(calls, [
-    { ...params, take: 100, skip: 0 },
-    { ...params, take: 100, skip: 100 },
-  ])
+  assert.equal(result.speechCount, 103)
+  assert.equal(result.billCount, 201)
+  assert.equal(result.work.length, 304)
+  assert.deepEqual(calls, [params])
 })
 
-test('full speech page triggers another read even when no bills exist', async () => {
-  let calls = 0
+test('empty snapshot produces zero counts', async () => {
   const fetch = load(async () => ({
-    data: {
-      councilWorkPage: {
-        speeches: calls++ === 0 ? items(100, 's') : [],
-        bills: [],
-      },
-    },
+    data: { councilWork: { speeches: [], bills: [] } },
   }))
-  assert.equal((await fetch(params)).speechCount, 100)
-  assert.equal(calls, 2)
-})
-
-test('empty work stops after the first page', async () => {
-  let calls = 0
-  const fetch = load(async () => {
-    calls++
-    return { data: { councilWorkPage: { speeches: [], bills: [] } } }
-  })
   assert.deepEqual(await fetch(params), {
     work: [],
     speechCount: 0,
     billCount: 0,
   })
-  assert.equal(calls, 1)
 })
 
-test('GraphQL errors and missing pages never become successful empty results', async () => {
+test('GraphQL errors and missing results never become successful empty results', async () => {
   for (const response of [
     { errors: [{ message: 'Prisma error' }] },
     { data: {} },
+    {
+      data: { councilWork: { speeches: items(1, 's'), bills: [] } },
+      errors: [{ message: 'Prisma error' }],
+    },
   ]) {
     await assert.rejects(
       () => load(async () => response)(params),
-      /Prisma error|Missing council work page/
+      /Prisma error|Missing council work result/
     )
   }
-})
-
-test('failure on a later page rejects instead of returning partial counts', async () => {
-  let calls = 0
-  const fetch = load(async () =>
-    calls++ === 0
-      ? { data: { councilWorkPage: { speeches: items(100, 's'), bills: [] } } }
-      : { errors: [{ message: 'Prisma error' }] }
-  )
-  await assert.rejects(() => fetch(params), /Prisma error/)
 })

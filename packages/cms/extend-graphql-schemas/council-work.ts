@@ -12,7 +12,7 @@ export const councilWorkTypeDefs = gql`
     title: String!
     summaryFallback: String
   }
-  type CouncilWorkPage {
+  type CouncilWorkResult {
     speeches: [CouncilWorkPreview!]!
     bills: [CouncilWorkPreview!]!
   }
@@ -20,13 +20,11 @@ export const councilWorkTypeDefs = gql`
     totalSpeechCount: Int!
   }
   extend type Query {
-    councilWorkPage(
+    councilWork(
       councilorSlug: String!
       topicSlug: String!
       councilMeetingId: Int!
-      take: Int! = 100
-      skip: Int! = 0
-    ): CouncilWorkPage!
+    ): CouncilWorkResult!
   }
 `
 
@@ -65,70 +63,95 @@ export const councilWorkResolver = {
     },
   },
   Query: {
-    councilWorkPage: async (
+    councilWork: async (
       _root: unknown,
       {
         councilorSlug,
         topicSlug,
         councilMeetingId,
-        take,
-        skip,
       }: {
         councilorSlug: string
         topicSlug: string
         councilMeetingId: number
-        take: number
-        skip: number
       },
       context: TypedKeystoneContext
     ) => {
       await requireReadAccess(context)
-      if (
-        !Number.isInteger(take) ||
-        take < 1 ||
-        take > 100 ||
-        !Number.isInteger(skip) ||
-        skip < 0
-      ) {
-        throw new GraphQLError(
-          'take must be 1–100 and skip must be nonnegative',
-          {
-            extensions: { code: 'BAD_USER_INPUT' },
+      // All batches (including fallback content) must see the same dataset.
+      // Separate HTTP requests cannot share a database snapshot: imports can
+      // otherwise move rows across offsets or change their membership links.
+      return context.prisma.$transaction(
+        async (tx) => {
+          const where = {
+            councilMeetingId,
+            councilMember: { some: { councilor: { slug: councilorSlug } } },
+            topic: { some: { slug: topicSlug } },
           }
-        )
-      }
-      const args = {
-        where: {
-          councilMeetingId,
-          councilMember: { some: { councilor: { slug: councilorSlug } } },
-          topic: { some: { slug: topicSlug } },
+          const preview = (item: {
+            slug: string
+            date: Date
+            title: string
+            summary: unknown
+          }) => ({
+            slug: item.slug,
+            date: item.date.toISOString().slice(0, 10),
+            title: item.title,
+            summaryFallback: toPlainTextSummary('speech', item.summary),
+          })
+          const speeches: ReturnType<typeof preview>[] = []
+          const bills: ReturnType<typeof preview>[] = []
+          const take = 100
+          for (let skip = 0; ; skip += take) {
+            const args = {
+              where,
+              select: { slug: true, date: true, title: true, summary: true },
+              orderBy: [{ date: 'desc' as const }, { id: 'desc' as const }],
+              take,
+              skip,
+            }
+            const speechBatch = await tx.councilSpeech.findMany(args)
+            const billBatch = await tx.councilBill.findMany(args)
+            const fallbackSlugs = billBatch
+              .filter(
+                (bill) =>
+                  typeof bill.summary !== 'string' || !bill.summary.length
+              )
+              .map((bill) => bill.slug)
+            // Fetch large bill content only when its summary cannot be used.
+            // No speech content is fetched, and the content read has no sort.
+            const fallbackBills = fallbackSlugs.length
+              ? await tx.councilBill.findMany({
+                  where: { slug: { in: fallbackSlugs } },
+                  select: { slug: true, content: true },
+                })
+              : []
+            const fallbackContent = new Map(
+              fallbackBills.map((bill) => [bill.slug, bill.content])
+            )
+            speeches.push(...speechBatch.map(preview))
+            bills.push(
+              ...billBatch.map((bill) => ({
+                ...preview(bill),
+                summaryFallback:
+                  typeof bill.summary === 'string' && bill.summary.length > 0
+                    ? toPlainTextSummary('bill', bill.summary)
+                    : toPlainTextSummary(
+                        'bill',
+                        fallbackContent.get(bill.slug),
+                        100
+                      ),
+              }))
+            )
+            if (speechBatch.length < take && billBatch.length < take) break
+          }
+          return { speeches, bills }
         },
-        // Keystone's generic findMany fetches every scalar, including content.
-        // Select only the metadata needed by the work list, before sorting.
-        select: { slug: true, date: true, title: true, summary: true },
-        orderBy: [{ date: 'desc' as const }, { id: 'desc' as const }],
-        take,
-        skip,
-      }
-      const speeches = await context.prisma.councilSpeech.findMany(args)
-      const bills = await context.prisma.councilBill.findMany(args)
-      const preview =
-        (kind: 'speech' | 'bill') =>
-        (item: {
-          slug: string
-          date: Date
-          title: string
-          summary: unknown
-        }) => ({
-          slug: item.slug,
-          date: item.date.toISOString().slice(0, 10),
-          title: item.title,
-          summaryFallback: toPlainTextSummary(kind, item.summary),
-        })
-      return {
-        speeches: speeches.map(preview('speech')),
-        bills: bills.map(preview('bill')),
-      }
+        {
+          isolationLevel: 'RepeatableRead',
+          // Bound snapshot lifetime; timeout rejects the entire collection.
+          timeout: 30000,
+        }
+      )
     },
   },
 }
