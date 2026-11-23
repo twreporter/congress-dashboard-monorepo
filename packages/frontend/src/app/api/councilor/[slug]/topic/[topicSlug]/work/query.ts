@@ -15,45 +15,21 @@ const fetchCouncilWork = async ({
   councilMeetingId,
 }: FetchCouncilWorkParams): Promise<CouncilWorkData> => {
   const query = `
-    query CouncilWork($speechWhere: CouncilSpeechWhereInput!, $billWhere: CouncilBillWhereInput!, $speechOrderBy: [CouncilSpeechOrderByInput!]!, $billOrderBy: [CouncilBillOrderByInput!]!) {
-      councilSpeeches(where: $speechWhere, orderBy: $speechOrderBy) {
-        date
-        slug
-        summaryFallback
-        title
-      }
-      councilBills(where: $billWhere, orderBy: $billOrderBy) {
-        date
-        slug
-        summaryFallback
-        title
+    query CouncilWork($councilorSlug: String!, $topicSlug: String!, $councilMeetingId: Int!) {
+      councilWork(councilorSlug: $councilorSlug, topicSlug: $topicSlug, councilMeetingId: $councilMeetingId) {
+        speeches { date slug summaryFallback title }
+        bills { date slug summaryFallback title }
       }
     }
   `
-  const topic = { some: { slug: { equals: topicSlug } } }
-  const councilMeeting = { id: { equals: councilMeetingId } }
-  const councilor = { slug: { equals: councilorSlug } }
-  const variables = {
-    speechWhere: {
-      topic,
-      councilMeeting,
-      councilMember: { some: { councilor } },
-    },
-    billWhere: {
-      topic,
-      councilMeeting,
-      councilMember: { some: { councilor } },
-    },
-    speechOrderBy: [{ date: 'desc' }],
-    billOrderBy: [{ date: 'desc' }],
-  }
-  const data = await keystoneFetch<{
-    councilSpeeches: BillMeta[]
-    councilBills: BillMeta[]
+  // The CMS collects bounded batches inside one consistent database snapshot.
+  const variables = { councilorSlug, topicSlug, councilMeetingId }
+  const result = await keystoneFetch<{
+    councilWork: { speeches: BillMeta[]; bills: BillMeta[] }
   }>(JSON.stringify({ query, variables }), false)
-
-  const speeches = data?.data?.councilSpeeches || []
-  const bills = data?.data?.councilBills || []
+  if (result.errors?.length) throw new Error(JSON.stringify(result.errors))
+  if (!result.data?.councilWork) throw new Error('Missing council work result')
+  const { speeches, bills } = result.data.councilWork
   return {
     work: mergeCouncilWork(speeches, bills),
     speechCount: speeches.length,

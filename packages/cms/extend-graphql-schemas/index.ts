@@ -1,5 +1,6 @@
 import type { GraphQLSchema } from 'graphql'
 import { mergeSchemas } from '@graphql-tools/schema'
+import { councilWorkTypeDefs, councilWorkResolver } from './council-work'
 import {
   topNTopicsOfLegislatorsTypeDefs,
   topNTopicsOfLegislatorsResolver,
@@ -21,12 +22,14 @@ const extendGraphqlSchema = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
     schemas: [baseSchema],
     typeDefs: [
+      councilWorkTypeDefs,
       topNTopicsOfLegislatorsTypeDefs,
       topicsOrderBySpeechCountTypeDefs,
       councilTopicsOrderByWorkTypeDefs,
       topNTopicsOfCouncilorsTypeDefs,
     ],
     resolvers: [
+      councilWorkResolver,
       topNTopicsOfLegislatorsResolver,
       topicsOrderBySpeechCountResolver,
       councilTopicsOrderByWorkResolver,
