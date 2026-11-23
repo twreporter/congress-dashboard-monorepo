@@ -15,45 +15,29 @@ const fetchCouncilWork = async ({
   councilMeetingId,
 }: FetchCouncilWorkParams): Promise<CouncilWorkData> => {
   const query = `
-    query CouncilWork($speechWhere: CouncilSpeechWhereInput!, $billWhere: CouncilBillWhereInput!, $speechOrderBy: [CouncilSpeechOrderByInput!]!, $billOrderBy: [CouncilBillOrderByInput!]!) {
-      councilSpeeches(where: $speechWhere, orderBy: $speechOrderBy) {
-        date
-        slug
-        summaryFallback
-        title
-      }
-      councilBills(where: $billWhere, orderBy: $billOrderBy) {
-        date
-        slug
-        summaryFallback
-        title
+    query CouncilWork($councilorSlug: String!, $topicSlug: String!, $councilMeetingId: Int!, $take: Int!, $skip: Int!) {
+      councilWorkPage(councilorSlug: $councilorSlug, topicSlug: $topicSlug, councilMeetingId: $councilMeetingId, take: $take, skip: $skip) {
+        speeches { date slug summaryFallback title }
+        bills { date slug summaryFallback title }
       }
     }
   `
-  const topic = { some: { slug: { equals: topicSlug } } }
-  const councilMeeting = { id: { equals: councilMeetingId } }
-  const councilor = { slug: { equals: councilorSlug } }
-  const variables = {
-    speechWhere: {
-      topic,
-      councilMeeting,
-      councilMember: { some: { councilor } },
-    },
-    billWhere: {
-      topic,
-      councilMeeting,
-      councilMember: { some: { councilor } },
-    },
-    speechOrderBy: [{ date: 'desc' }],
-    billOrderBy: [{ date: 'desc' }],
+  const speeches: BillMeta[] = []
+  const bills: BillMeta[] = []
+  const take = 100
+  // Keep the existing complete-list contract while bounding each CMS/DB read.
+  for (let skip = 0; ; skip += take) {
+    const variables = { councilorSlug, topicSlug, councilMeetingId, take, skip }
+    const result = await keystoneFetch<{
+      councilWorkPage: { speeches: BillMeta[]; bills: BillMeta[] }
+    }>(JSON.stringify({ query, variables }), false)
+    if (result.errors?.length) throw new Error(JSON.stringify(result.errors))
+    const page = result.data?.councilWorkPage
+    if (!page) throw new Error('Missing council work page')
+    speeches.push(...page.speeches)
+    bills.push(...page.bills)
+    if (page.speeches.length < take && page.bills.length < take) break
   }
-  const data = await keystoneFetch<{
-    councilSpeeches: BillMeta[]
-    councilBills: BillMeta[]
-  }>(JSON.stringify({ query, variables }), false)
-
-  const speeches = data?.data?.councilSpeeches || []
-  const bills = data?.data?.councilBills || []
   return {
     work: mergeCouncilWork(speeches, bills),
     speechCount: speeches.length,

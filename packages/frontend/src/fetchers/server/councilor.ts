@@ -83,7 +83,7 @@ export const fetchCouncilor = async ({
   const query = `
     query CouncilMembers($where: CouncilMemberWhereInput!) {
       councilMembers(where: $where) {
-        speechCount
+        speechCount: totalSpeechCount
         councilor {
           name
           image {
@@ -126,6 +126,7 @@ export const fetchCouncilor = async ({
     const data = await keystoneFetch<{
       councilMembers: CouncilorMemberData[]
     }>(JSON.stringify({ query, variables }), false)
+    if (data.errors?.length) throw new Error(JSON.stringify(data.errors))
     return _.get(data, 'data.councilMembers[0]')
   } catch (err) {
     throw new Error(

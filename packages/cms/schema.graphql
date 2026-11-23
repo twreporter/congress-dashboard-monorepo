@@ -1482,6 +1482,7 @@ input CouncilorCreateInput {
 }
 
 type CouncilMember {
+  totalSpeechCount: Int!
   id: ID!
   councilor: Councilor
   labelForCMS: String
@@ -2029,6 +2030,7 @@ input CreateInitialSystemUserInput {
 }
 
 type Query {
+  councilWorkPage(councilorSlug: String!, topicSlug: String!, councilMeetingId: Int!, take: Int! = 100, skip: Int! = 0): CouncilWorkPage!
   systemUser(where: SystemUserWhereUniqueInput!): SystemUser
   systemUsers(where: SystemUserWhereInput! = {}, orderBy: [SystemUserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SystemUserWhereUniqueInput): [SystemUser!]
   systemUsersCount(where: SystemUserWhereInput! = {}): Int
@@ -2326,4 +2328,16 @@ type CouncilTopicWithBillCount {
 type CouncilMemberWithTopTopics {
   id: Int!
   topics: [CouncilTopicWithBillCount]
+}
+
+type CouncilWorkPreview {
+  slug: String!
+  date: String!
+  title: String!
+  summaryFallback: String
+}
+
+type CouncilWorkPage {
+  speeches: [CouncilWorkPreview!]!
+  bills: [CouncilWorkPreview!]!
 }
