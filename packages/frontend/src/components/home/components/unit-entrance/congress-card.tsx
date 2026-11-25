@@ -80,12 +80,12 @@ const CongressCard: FC<CongressCardProps> = ({ latestTerm }) => {
       </HeaderSection>
       <ListSection>
         <InternalLink
-          href={`${InternalRoutes.Congress}/${latestTerm}`}
+          href={InternalRoutes.Congress}
           title="看議題"
           description="查看各公共議題的相關討論"
         />
         <InternalLink
-          href={`${InternalRoutes.Congress}/${latestTerm}`}
+          href={`${InternalRoutes.Congress}?tab=legislator`}
           title="看立委"
           description="查看立委的關注議題與發言紀錄"
         />

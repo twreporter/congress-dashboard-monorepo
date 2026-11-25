@@ -1,6 +1,7 @@
 'use client'
 import React, { type FC } from 'react'
 import styled from 'styled-components'
+import { useRouter } from 'next/navigation'
 // @twreporter
 import {
   colorGrayscale,
@@ -17,6 +18,8 @@ import Chart from '@/components/home/components/recent-focus/chart'
 import type { ChartData } from '@/components/home/components/recent-focus/chart'
 // utils
 import { notoSerif } from '@/utils/font'
+// constants
+import { InternalRoutes } from '@/constants/routes'
 
 const Container = styled.div`
   display: flex;
@@ -91,6 +94,7 @@ type CongressSectionProps = {
   }>
 }
 const CongressSection: FC<CongressSectionProps> = ({ topicData = [] }) => {
+  const router = useRouter()
   const icon = (
     <Arrow direction={Arrow.Direction.RIGHT} releaseBranch={releaseBranch} />
   )
@@ -101,7 +105,11 @@ const CongressSection: FC<CongressSectionProps> = ({ topicData = [] }) => {
           <CongressIcon />
           <Title text="立法院近期焦點" />
         </TitleAndIcon>
-        <TextButton text="查看更多" rightIconComponent={icon} />
+        <TextButton
+          text="查看更多"
+          rightIconComponent={icon}
+          onClick={() => router.push(InternalRoutes.Congress)}
+        />
       </TitleSection>
       <ListContainer>
         {topicData.map((topic, index) => (
