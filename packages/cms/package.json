@@ -1,6 +1,6 @@
 {
   "name": "@twreporter/congress-dashboard-cms",
-  "version": "1.10.0-beta.0",
+  "version": "1.10.0-beta.1",
   "private": true,
   "scripts": {
     "test:unit": "node --test test/*.test.cjs",

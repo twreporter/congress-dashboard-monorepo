@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-beta.8](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.17.0-rc.1...@twreporter/congress-dashboard-frontend@1.15.0-beta.8) (2026-11-25)
+
+### Bug Fixes
+
+- **fronted,cms:** rename favorite to following ([0c01fdf](https://github.com/twreporter/congress-dashboard-monorepo/commit/0c01fdf50624d5ae153d2df00ca5487c80c776c9))
+- **frontend:** address comments ([d03afaa](https://github.com/twreporter/congress-dashboard-monorepo/commit/d03afaa4eea204b513829311bb60a7a23ec0f172))
+- **frontend:** api url to dev env ([f279500](https://github.com/twreporter/congress-dashboard-monorepo/commit/f27950093b9f74d11a952d57375f2bcef01843a9))
+- **frontend:** auth and following filter ([af42129](https://github.com/twreporter/congress-dashboard-monorepo/commit/af421298a1238f2bf661f2796d6dfee387b03d86))
+- **frontend:** enhance Following components with layout and styling improvements ([9cf57ea](https://github.com/twreporter/congress-dashboard-monorepo/commit/9cf57ea975a704e5a98ffc48d17c6defa1f69ed8))
+- **frontend:** following page padding ([5f03934](https://github.com/twreporter/congress-dashboard-monorepo/commit/5f03934a55fdec22caa71e022d70605dc9090653))
+- **frontend:** font family from utils ([91549fb](https://github.com/twreporter/congress-dashboard-monorepo/commit/91549fbf12b1cd5cf630b4e07bc5ef8f3559832d))
+- **frontend:** grid row ([ecfac7e](https://github.com/twreporter/congress-dashboard-monorepo/commit/ecfac7e092e48c3d365197594e5207d038a4cf60))
+- **frontend:** header login styles ([aec6993](https://github.com/twreporter/congress-dashboard-monorepo/commit/aec6993c63a5c1a8369c29fa57ab4ab03fc99213))
+- **frontend:** improve error handling for access token storage ([90bc51d](https://github.com/twreporter/congress-dashboard-monorepo/commit/90bc51dfe4566b8537feb09d23b4e92ac1ac6230))
+- **frontend:** login menu and hamburger menu styled ([394dfec](https://github.com/twreporter/congress-dashboard-monorepo/commit/394dfec46f1d68d91b99c015303ec6ce65c79c0b))
+
+### Features
+
+- **frontend:** account link icon ([4f63350](https://github.com/twreporter/congress-dashboard-monorepo/commit/4f633501366fc3bc0a9f654b1e28d48e2dce5d93))
+- **frontend:** following page ui ([22bba69](https://github.com/twreporter/congress-dashboard-monorepo/commit/22bba691576e74a4abb2b2706f6513fc7fa69421))
+- **frontend:** following tab page ([9a09871](https://github.com/twreporter/congress-dashboard-monorepo/commit/9a098712c68d8dec710a3ae2e5bcb235ab2d36fe))
+- **frontend:** login logic ([7c287d3](https://github.com/twreporter/congress-dashboard-monorepo/commit/7c287d3ec2c58cd77db56f808c979bbb0cc4c08c))
+- **frontend:** member favorite combo api ([f626948](https://github.com/twreporter/congress-dashboard-monorepo/commit/f6269489498c8fc7ca19e8cbbbce1f9828e6742b))
+- **frontend:** separate tab index ([d2e0598](https://github.com/twreporter/congress-dashboard-monorepo/commit/d2e059828c75a33d0fcca9970da800379c574ae1))
+- **frontend:** tab route for following ([a9397c2](https://github.com/twreporter/congress-dashboard-monorepo/commit/a9397c20a77c9a986c549bb723c79e66d2c0bce4))
+- **frontend:** upsert member ([67a5765](https://github.com/twreporter/congress-dashboard-monorepo/commit/67a5765dd48db5494b42d6ef87d5d5291637d163))
+- **frontend:** user email and name and avatar ([df88b45](https://github.com/twreporter/congress-dashboard-monorepo/commit/df88b45566cf14027b280453f7a99f881ec28b11))
+
 # [1.15.0-beta.7](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.6...@twreporter/congress-dashboard-frontend@1.15.0-beta.7) (2026-11-11)
 
 ### Bug Fixes
