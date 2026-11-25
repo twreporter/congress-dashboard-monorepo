@@ -19,6 +19,7 @@ const ALGOLIA_INDEX_NAMES = {
   councilor: 'councilor',
   councilTopic: 'council-topic',
   councilBill: 'council-bill',
+  councilSpeech: 'council-speech',
 } as const
 
 type AlgoliaIndexName =
@@ -31,6 +32,7 @@ type RecordType =
   | 'councilor'
   | 'council topic'
   | 'council bill'
+  | 'council speech'
 
 /**
  * Generic upload function for Algolia records.
@@ -110,6 +112,7 @@ export type CouncilBillRecord = {
   councilRank: number // Ranking order for Algolia custom ranking (1-6)
   meetingTerm: number // Council meeting term number
   councilor: string // First proposer name (e.g., "林亮君")
+  councilorNames: string[] // All distinct proposer names for searching
   councilorCount: number // Total number of proposers (e.g., 15)
   objectID: string // Format: ${slug}_${councilSlug}_${meetingTerm}
 }
@@ -135,7 +138,7 @@ export type CouncilorRecord = {
   councilSlug: string // English identifier for filtering/routing (e.g., "taipei")
   councilRank: number // Ranking order for Algolia custom ranking (1-6)
   meetingTerm: number // Council meeting term number
-  lastSpeechAt: string // Formatted date (YYYY/MM/DD) in UTC+8 of latest bill
+  lastSpeechAt: string // Formatted date (YYYY/MM/DD) in UTC+8 of latest speech
   lastSpeechAtTs?: number // Unix timestamp in milliseconds for Algolia ranking
   desc: string // Formatted description with party, term, constituency info
   objectID: string // Format: ${slug}_${councilSlug}_${meetingTerm}
@@ -184,4 +187,19 @@ export async function uploadCouncilTopics(records: CouncilTopicRecord[]) {
 
 export async function uploadCouncilBills(records: CouncilBillRecord[]) {
   return uploadRecords(ALGOLIA_INDEX_NAMES.councilBill, records, 'council bill')
+}
+
+export type CouncilSpeechRecord = Omit<
+  CouncilBillRecord,
+  'councilor' | 'councilorCount'
+> & {
+  councilorNames: string[]
+}
+
+export async function uploadCouncilSpeeches(records: CouncilSpeechRecord[]) {
+  return uploadRecords(
+    ALGOLIA_INDEX_NAMES.councilSpeech,
+    records,
+    'council speech'
+  )
 }

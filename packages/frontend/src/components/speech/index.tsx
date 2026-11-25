@@ -198,12 +198,14 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
             <Spacing $width={12} />
             <IconButton
               disabled={isFirstSpeech}
+              aria-label="上一個質詢片段"
               direction={IconButton.Direction.LEFT}
               onClick={() => handleSwitchSpeech(Direction.PREV)}
             />
             <Spacing $width={8} />
             <IconButton
               disabled={isLastSpeech}
+              aria-label="下一個質詢片段"
               direction={IconButton.Direction.RIGHT}
               onClick={() => handleSwitchSpeech(Direction.NEXT)}
             />
@@ -228,11 +230,13 @@ const SpeechPage: React.FC<SpeechPageProps> = ({ speech, speechGroup }) => {
               <IvodSwitchButtonContainer>
                 <IconButton
                   disabled={isFirstSpeech}
+                  aria-label="上一個質詢片段"
                   direction={IconButton.Direction.LEFT}
                   onClick={() => handleSwitchSpeech(Direction.PREV)}
                 />
                 <IconButton
                   disabled={isLastSpeech}
+                  aria-label="下一個質詢片段"
                   direction={IconButton.Direction.RIGHT}
                   onClick={() => handleSwitchSpeech(Direction.NEXT)}
                 />

@@ -57,7 +57,7 @@ const workFilterLabel: Record<WorkFilter, string> = {
 
 const SummaryCount = styled(P1)`
   color: ${colorGrayscale.gray700};
-  margin-bottom: -16px !important;
+  margin-bottom: -8px !important;
 `
 
 const FixedContentFilter = styled.div<{ $show: boolean; $left: number | null }>`
@@ -243,7 +243,11 @@ const TopicList: React.FC<TopicListProps> = ({
             <SummarySection>
               <SummaryCount
                 weight={P1.Weight.BOLD}
-                text={`共 ${workState.speechCount} 筆發言、${workState.billCount} 筆議案`}
+                text={`共 ${workState.speechCount} 筆發言${
+                  workState.billCount === 0
+                    ? ''
+                    : `、${workState.billCount} 筆議案`
+                }`}
               />
               {workByMonth.length === 0 ? (
                 <EmptyStateColumn>

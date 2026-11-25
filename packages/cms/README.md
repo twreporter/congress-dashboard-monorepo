@@ -45,7 +45,7 @@ npm run dev
 
 The root `cloudbuild.yaml` builds and deploys this package to Cloud Run. The
 Cloud Build trigger sets `_ENV` to `dev`, `staging`, or `prod`, and the Cloud
-Run service name is derived as `${_ENV}-congress-dashboard-cms`.
+Run service name is derived as `${_ENV}-lawmaker-cms`.
 
 Public runtime environment variables live in
 [`deploy/env.${_ENV}.cms.public.yaml`](deploy), and secrets (`DATABASE_URL`,

@@ -20,8 +20,8 @@ Required:
   LABELS         Labels applied to each managed secret.
 
 Optional:
-  PROJECT_ID                    Defaults to coastal-run-106202.
-  RUNTIME_SECRET_ACCESS_MEMBER  Defaults to the project's sa-cloud-run-runtime service account.
+  PROJECT_ID                    Defaults to lawmaker-reporter.
+  RUNTIME_SECRET_ACCESS_MEMBER  Defaults to the environment's lawmaker runtime service account.
 
 Spec format:
   secret-key
@@ -43,17 +43,22 @@ if [[ $# -ne 1 ]]; then
 fi
 
 SECRET_SELECTOR="$1"
-PROJECT_ID="${PROJECT_ID:-coastal-run-106202}"
+PROJECT_ID="${PROJECT_ID:-lawmaker-reporter}"
 ENV="${ENV:-}"
 SECRET_PREFIX="${SECRET_PREFIX:-}"
 SECRET_SPEC="${SECRET_SPEC:-}"
 LABELS="${LABELS:-}"
-RUNTIME_SECRET_ACCESS_MEMBER="${RUNTIME_SECRET_ACCESS_MEMBER:-serviceAccount:sa-cloud-run-runtime@${PROJECT_ID}.iam.gserviceaccount.com}"
 
 if [[ ! "$ENV" =~ ^(dev|staging|prod)$ ]]; then
   echo "ENV must be dev, staging, or prod." >&2
   exit 1
 fi
+
+identity_environment=nonprod
+if [[ "$ENV" == prod ]]; then
+  identity_environment=prod
+fi
+RUNTIME_SECRET_ACCESS_MEMBER="${RUNTIME_SECRET_ACCESS_MEMBER:-serviceAccount:sa-lawmaker-${identity_environment}-runtime@${PROJECT_ID}.iam.gserviceaccount.com}"
 
 if [[ -z "$SECRET_PREFIX" || -z "$SECRET_SPEC" || -z "$LABELS" ]]; then
   echo "SECRET_PREFIX, SECRET_SPEC, and LABELS are required." >&2

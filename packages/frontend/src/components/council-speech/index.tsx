@@ -1,6 +1,9 @@
 'use client'
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
+import { useRouter } from 'next/navigation'
+import IconButton from '@/components/button/icon-button'
+import { InternalRoutes } from '@/constants/routes'
 // @twreporter
 import {
   DesktopAndAbove,
@@ -25,6 +28,10 @@ import {
   ControlTabTitle,
   ControlItems,
   IvodBlock,
+  IvodSwitchBlock,
+  IvodSwitchButtonContainer,
+  P1Gray600,
+  Spacing,
   ControlTabBadge,
   LeadingBadge,
   LeadingSubtitle,
@@ -46,12 +53,14 @@ import { useScrollContext } from '@/contexts/scroll-context'
 // hooks
 import { useScrollStage } from '@/components/general-article/hooks/use-scroll-stage'
 import {
+  Direction,
   FontSize,
   FontSizeOffset,
 } from '@/components/general-article/constants'
 import { useCouncilSpeechData } from './hook/use-council-speech-data'
 // utils
 import { openFeedback } from '@/utils/feedback'
+import { getSpeechNeighbors } from '@/utils/council-speech-group'
 // types
 import type { CouncilSpeechFromRes } from '@/types/council-speech'
 // @twreporter
@@ -77,8 +86,20 @@ const Donation = TEN_YEAR_ANNIVERSARY ? NewDonationBox : DonationBox
 
 type CouncilSpeechPageProps = {
   speech: CouncilSpeechFromRes
+  speechGroup: string[]
 }
-const CouncilSpeechPage: React.FC<CouncilSpeechPageProps> = ({ speech }) => {
+const CouncilSpeechPage: React.FC<CouncilSpeechPageProps> = ({
+  speech,
+  speechGroup,
+}) => {
+  const router = useRouter()
+  const { previous, next } = getSpeechNeighbors(speechGroup, speech.slug)
+  const isFirstSpeech = !previous
+  const isLastSpeech = !next
+  const handleSwitchSpeech = (direction: Direction) => {
+    const target = direction === Direction.PREV ? previous : next
+    if (target) router.push(`${InternalRoutes.CouncilSpeech}/${target}`)
+  }
   const leadingRef = useRef<HTMLDivElement>(null)
   const { setTabElement, isHeaderHidden } = useScrollContext()
   const [fontSize, setFontSize] = useState(FontSize.SMALL)
@@ -167,6 +188,22 @@ const CouncilSpeechPage: React.FC<CouncilSpeechPageProps> = ({ speech }) => {
               leftIconComponent={<Source releaseBranch={releaseBranch} />}
               text={'資料來源'}
             />
+            <Spacing $width={24} />
+            <P1Gray600 weight={P1.Weight.BOLD} text="質詢片段切換" />
+            <Spacing $width={12} />
+            <IconButton
+              aria-label="上一個質詢片段"
+              disabled={isFirstSpeech}
+              direction={IconButton.Direction.LEFT}
+              onClick={() => handleSwitchSpeech(Direction.PREV)}
+            />
+            <Spacing $width={8} />
+            <IconButton
+              aria-label="下一個質詢片段"
+              disabled={isLastSpeech}
+              direction={IconButton.Direction.RIGHT}
+              onClick={() => handleSwitchSpeech(Direction.NEXT)}
+            />
           </ControlItems>
         </ControlTab>
       </ControlTabContainer>
@@ -183,6 +220,23 @@ const CouncilSpeechPage: React.FC<CouncilSpeechPageProps> = ({ speech }) => {
               leftIconComponent={<Source releaseBranch={releaseBranch} />}
               text={'資料來源'}
             />
+            <IvodSwitchBlock>
+              <P1Gray600 weight={P1.Weight.BOLD} text="質詢片段切換" />
+              <IvodSwitchButtonContainer>
+                <IconButton
+                  aria-label="上一個質詢片段"
+                  disabled={isFirstSpeech}
+                  direction={IconButton.Direction.LEFT}
+                  onClick={() => handleSwitchSpeech(Direction.PREV)}
+                />
+                <IconButton
+                  aria-label="下一個質詢片段"
+                  disabled={isLastSpeech}
+                  direction={IconButton.Direction.RIGHT}
+                  onClick={() => handleSwitchSpeech(Direction.NEXT)}
+                />
+              </IvodSwitchButtonContainer>
+            </IvodSwitchBlock>
           </IvodBlock>
         </DesktopAndAboveWithFlex>
       </LeadingContainer>
@@ -228,6 +282,11 @@ const CouncilSpeechPage: React.FC<CouncilSpeechPageProps> = ({ speech }) => {
           onFontSizeChange={cycleFontSize}
           scrollStage={scrollStage}
           sourceLink={sourceLink}
+          speechSwitch={{
+            onSwitchClick: handleSwitchSpeech,
+            isFirstSpeech,
+            isLastSpeech,
+          }}
           feedbackEventName="council speech mobile toolbar"
           emptySourceMessage="此逐字稿沒有資料來源"
         />

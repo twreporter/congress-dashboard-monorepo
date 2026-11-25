@@ -57,12 +57,17 @@ export const fetchTop5CouncilorOfATopic = (
 type FetchTopicsOfACouncilorParams = {
   councilorSlug: string
   districtSlug: CouncilDistrict
+  councilMeetingId?: number
 }
 export const fetchTopicsOfACouncilor = async ({
   councilorSlug,
   districtSlug,
+  councilMeetingId,
 }: FetchTopicsOfACouncilorParams): Promise<CouncilTopicForFilter[]> => {
   const params = new URLSearchParams({ city: districtSlug })
+  if (councilMeetingId !== undefined) {
+    params.set('mid', String(councilMeetingId))
+  }
   const url = `${apiBase}/councilor/${councilorSlug}/topic?${params.toString()}`
   const res = await fetch(url, {
     method: 'GET',

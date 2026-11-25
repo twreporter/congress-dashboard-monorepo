@@ -150,6 +150,6 @@ We use [Conventional Commits](https://www.conventionalcommits.org/) enforced by 
 ### Debugging Workflows
 
 - Check workflow runs in GitHub Actions tab
-- Verify Node.js version matches workflow requirements (22.17.1)
+- Verify Node.js version matches workflow requirements (22.23.4)
 - Ensure environment secrets are properly configured
 - Check package.json `publishConfig` settings for npm publishing
