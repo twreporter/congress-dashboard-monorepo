@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-beta.9](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.8...@twreporter/congress-dashboard-frontend@1.15.0-beta.9) (2026-11-26)
+
+### Bug Fixes
+
+- **frontend:** address comments ([072d732](https://github.com/twreporter/congress-dashboard-monorepo/commit/072d73210ccdd71a47ce5a2a96766c22267f01e3))
+- **frontend:** new home page env file ([34443d1](https://github.com/twreporter/congress-dashboard-monorepo/commit/34443d1b166b439a88efad61bc7278a3d9cedd78))
+
+### Features
+
+- **frontend:** feature toggle ([e2c129d](https://github.com/twreporter/congress-dashboard-monorepo/commit/e2c129d1298b3b3439464fb8927d966a898728bf))
+- **frontend:** new home page ([bf1d124](https://github.com/twreporter/congress-dashboard-monorepo/commit/bf1d124c75dd49233629392b3ad86583b5ebdae7))
+- **frontend:** new home page activities card ([9201035](https://github.com/twreporter/congress-dashboard-monorepo/commit/9201035ad41f1c500e140e46b697c615db8d24b9))
+- **frontend:** new home page recent focus ([b0dcc14](https://github.com/twreporter/congress-dashboard-monorepo/commit/b0dcc145cd28b246cb919503eff81732a7cfdbf7))
+- **frontend:** new home page unit entrance block ([dc51aa8](https://github.com/twreporter/congress-dashboard-monorepo/commit/dc51aa83daee556f7cf26930c2b0e7cb6fd78fb7))
+
 # [1.15.0-beta.8](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.17.0-rc.1...@twreporter/congress-dashboard-frontend@1.15.0-beta.8) (2026-11-25)
 
 ### Bug Fixes
