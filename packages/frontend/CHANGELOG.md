@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-beta.10](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.9...@twreporter/congress-dashboard-frontend@1.15.0-beta.10) (2026-11-26)
+
+### Bug Fixes
+
+- **frontend:** feature toggle ([21ef2f7](https://github.com/twreporter/congress-dashboard-monorepo/commit/21ef2f7914b98b243a9ae51f223ec992422c331e))
+
 # [1.15.0-beta.9](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.8...@twreporter/congress-dashboard-frontend@1.15.0-beta.9) (2026-11-26)
 
 ### Bug Fixes
