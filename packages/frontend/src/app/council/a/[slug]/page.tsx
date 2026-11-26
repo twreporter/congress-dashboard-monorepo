@@ -6,7 +6,10 @@ import { notFound } from 'next/navigation'
 // components
 import SpeechPage from '@/components/council-speech'
 // fetcher
-import { fetchCouncilSpeech } from '@/fetchers/server/council-speech'
+import {
+  fetchCouncilSpeech,
+  fetchCouncilSpeechGroup,
+} from '@/fetchers/server/council-speech'
 // constants
 import { InternalRoutes } from '@/constants/routes'
 import { OG_IMAGE_URL } from '@/constants'
@@ -58,7 +61,8 @@ export default async function Page({
       notFound()
     }
 
-    return <SpeechPage speech={speech} />
+    const speechGroup = await fetchCouncilSpeechGroup(speech)
+    return <SpeechPage speech={speech} speechGroup={speechGroup} />
   } catch (error) {
     console.error('Error fetching council speech data:', error)
     return (

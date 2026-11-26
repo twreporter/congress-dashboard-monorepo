@@ -41,7 +41,7 @@ const FollowingContainer = styled.div`
   ${mq.desktopOnly`
     width: 928px;
     margin: auto;
-    padding: 48px 48px 120px 48px;
+    padding: 48px 0px 120px 0px;
   `}
   ${mq.hdOnly`
     width: 928px;

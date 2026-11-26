@@ -94,6 +94,7 @@ export const scopeIndexConfig: Record<ScopeValue, SearchStage[]> = {
     searchStages.Topic,
     searchStages.CouncilTopic,
     searchStages.Speech,
+    searchStages.CouncilSpeech,
     searchStages.CouncilBill,
   ],
 
@@ -108,6 +109,7 @@ export const scopeIndexConfig: Record<ScopeValue, SearchStage[]> = {
   [scopeValues.allCouncils]: [
     searchStages.Councilor,
     searchStages.CouncilTopic,
+    searchStages.CouncilSpeech,
     searchStages.CouncilBill,
   ],
 
@@ -115,31 +117,37 @@ export const scopeIndexConfig: Record<ScopeValue, SearchStage[]> = {
   [scopeValues.taipeiCouncil]: [
     searchStages.Councilor,
     searchStages.CouncilTopic,
+    searchStages.CouncilSpeech,
     searchStages.CouncilBill,
   ],
   [scopeValues.newTaipeiCouncil]: [
     searchStages.Councilor,
     searchStages.CouncilTopic,
+    searchStages.CouncilSpeech,
     searchStages.CouncilBill,
   ],
   [scopeValues.taoyuanCouncil]: [
     searchStages.Councilor,
     searchStages.CouncilTopic,
+    searchStages.CouncilSpeech,
     searchStages.CouncilBill,
   ],
   [scopeValues.taichungCouncil]: [
     searchStages.Councilor,
     searchStages.CouncilTopic,
+    searchStages.CouncilSpeech,
     searchStages.CouncilBill,
   ],
   [scopeValues.tainanCouncil]: [
     searchStages.Councilor,
     searchStages.CouncilTopic,
+    searchStages.CouncilSpeech,
     searchStages.CouncilBill,
   ],
   [scopeValues.kaohsiungCouncil]: [
     searchStages.Councilor,
     searchStages.CouncilTopic,
+    searchStages.CouncilSpeech,
     searchStages.CouncilBill,
   ],
 }

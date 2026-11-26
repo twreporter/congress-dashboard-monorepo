@@ -229,6 +229,10 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
           value: searchStages.All,
         },
         {
+          label: '發言全文',
+          value: searchStages.CouncilSpeech,
+        },
+        {
           label: '議案',
           value: searchStages.CouncilBill,
         },
@@ -279,7 +283,8 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
 
     // Show CouncilFilter for "Bill" tab (only when council scope is selected)
     if (
-      activeTab === searchStages.CouncilBill &&
+      (activeTab === searchStages.CouncilBill ||
+        activeTab === searchStages.CouncilSpeech) &&
       isCouncilScope(scopeFilterValue)
     ) {
       return <FilterLabel>{scopeFilterLabel}</FilterLabel>
@@ -324,7 +329,8 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
 
     // Show CouncilFilter for "Bill" tab (only when council scope is selected)
     if (
-      activeTab === searchStages.CouncilBill &&
+      (activeTab === searchStages.CouncilBill ||
+        activeTab === searchStages.CouncilSpeech) &&
       isCouncilScope(scopeFilterValue)
     ) {
       return (
@@ -390,6 +396,16 @@ const SearchResults = ({ className, query }: SearchResultsProps) => {
               indexName={indexNames.Speech}
               query={query}
               filters={speechFilter}
+            />
+          </HitsContainer>
+        )}
+        {mountedTabs.has(searchStages.CouncilSpeech) && (
+          <HitsContainer $hidden={activeTab !== searchStages.CouncilSpeech}>
+            <Hits
+              key={`${indexNames.CouncilSpeech}-${councilFilter}`}
+              indexName={indexNames.CouncilSpeech}
+              query={query}
+              filters={councilFilter}
             />
           </HitsContainer>
         )}

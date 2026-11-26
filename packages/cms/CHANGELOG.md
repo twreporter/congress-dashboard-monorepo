@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0-beta.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.13.0-rc.0...@twreporter/congress-dashboard-cms@1.10.0-beta.1) (2026-11-25)
+
+### Bug Fixes
+
+- **cms:** member following topic ([e21a08e](https://github.com/twreporter/congress-dashboard-monorepo/commit/e21a08ec47ca7345643c7084d6de25d6a976696a))
+- **fronted,cms:** rename favorite to following ([0c01fdf](https://github.com/twreporter/congress-dashboard-monorepo/commit/0c01fdf50624d5ae153d2df00ca5487c80c776c9))
+
+### Features
+
+- **cms:** follow multi term ([a63dbb9](https://github.com/twreporter/congress-dashboard-monorepo/commit/a63dbb9694e695b9fee19f4dd700f63a32de2a44))
+- **cms:** member favorite combo ([d34d03c](https://github.com/twreporter/congress-dashboard-monorepo/commit/d34d03c3787f06c7d91aa2ae35208a1e2dc9ea0e))
+- **cms:** member list ([ba02b22](https://github.com/twreporter/congress-dashboard-monorepo/commit/ba02b22925eee9d322f945e87ffe7426651f5787))
+
 # [1.10.0-beta.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.4...@twreporter/congress-dashboard-cms@1.10.0-beta.0) (2026-10-20)
 
 ### Bug Fixes
@@ -15,6 +28,78 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - **cms:** follow multi term ([a63dbb9](https://github.com/twreporter/congress-dashboard-monorepo/commit/a63dbb9694e695b9fee19f4dd700f63a32de2a44))
 - **cms:** member favorite combo ([d34d03c](https://github.com/twreporter/congress-dashboard-monorepo/commit/d34d03c3787f06c7d91aa2ae35208a1e2dc9ea0e))
 - **cms:** member list ([ba02b22](https://github.com/twreporter/congress-dashboard-monorepo/commit/ba02b22925eee9d322f945e87ffe7426651f5787))
+
+# [1.13.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.12.1-rc.0...@twreporter/congress-dashboard-cms@1.13.0-rc.0) (2026-11-13)
+
+### Bug Fixes
+
+- **root:** aggregate councilor latest speech dates ([7733d16](https://github.com/twreporter/congress-dashboard-monorepo/commit/7733d16caba266cfa4e2026f10dfdace582944c9))
+
+### Features
+
+- configure deployments for lawmaker project ([b7402ec](https://github.com/twreporter/congress-dashboard-monorepo/commit/b7402ec46e1d87ea9dd86cb1bd86a6afe6522c3a))
+
+## [1.12.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.12.0...@twreporter/congress-dashboard-cms@1.12.1-rc.0) (2026-11-10)
+
+### Bug Fixes
+
+- **cms:** add index for council meeting city ([e1de184](https://github.com/twreporter/congress-dashboard-monorepo/commit/e1de184fe98462db0cca62bfd38717eed41ec48d))
+
+# [1.12.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.12.0-rc.0...@twreporter/congress-dashboard-cms@1.12.0) (2026-11-06)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+# [1.12.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.11.2...@twreporter/congress-dashboard-cms@1.12.0-rc.0) (2026-11-05)
+
+### Features
+
+- **cms:** topic set to connet ([5ea9256](https://github.com/twreporter/congress-dashboard-monorepo/commit/5ea9256f6c52bdd7ef922d5b48fb9fd5f67fa0c8))
+
+## [1.11.2](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.11.2-rc.0...@twreporter/congress-dashboard-cms@1.11.2) (2026-10-22)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+## [1.11.2-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.11.1...@twreporter/congress-dashboard-cms@1.11.2-rc.0) (2026-10-22)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+## [1.11.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.11.1-rc.0...@twreporter/congress-dashboard-cms@1.11.1) (2026-10-20)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+## [1.11.1-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.11.0...@twreporter/congress-dashboard-cms@1.11.1-rc.0) (2026-10-20)
+
+### Bug Fixes
+
+- scope council related query to latest term ([4f7c5e7](https://github.com/twreporter/congress-dashboard-monorepo/commit/4f7c5e7f7993b04bb55c511084a361ebc2c07e0b))
+- use custom sql to address bad performance ([89e7be9](https://github.com/twreporter/congress-dashboard-monorepo/commit/89e7be96f429bc5afd8741c348946a41b5e70dfb))
+
+# [1.11.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.11.0-rc.1...@twreporter/congress-dashboard-cms@1.11.0) (2026-10-19)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+# [1.11.0-rc.1](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.11.0-rc.0...@twreporter/congress-dashboard-cms@1.11.0-rc.1) (2026-10-19)
+
+### Bug Fixes
+
+- **cms:** address review comment ([4ec4e0f](https://github.com/twreporter/congress-dashboard-monorepo/commit/4ec4e0fbb5fbf4d2b550ce33aae9201638767bc4))
+- **cms:** update attendee, sourceLink max length ([03986b8](https://github.com/twreporter/congress-dashboard-monorepo/commit/03986b8b18f331681a837390226726d29523cfe3))
+
+# [1.11.0-rc.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0...@twreporter/congress-dashboard-cms@1.11.0-rc.0) (2026-10-15)
+
+### Features
+
+- **cms:** add speechGroup & speechCount ([6e26a43](https://github.com/twreporter/congress-dashboard-monorepo/commit/6e26a432c13773ca69a92297ab4a5b7313258d15))
+
+# [1.10.0](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.5...@twreporter/congress-dashboard-cms@1.10.0) (2026-10-07)
+
+**Note:** Version bump only for package @twreporter/congress-dashboard-cms
+
+# [1.10.0-rc.5](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.4...@twreporter/congress-dashboard-cms@1.10.0-rc.5) (2026-09-29)
+
+### Bug Fixes
+
+- **cms:** use `labelForCMS` for better reads ([1199b6b](https://github.com/twreporter/congress-dashboard-monorepo/commit/1199b6bb8b14f71e416bb76a80fb1c85641d17d8))
 
 # [1.10.0-rc.4](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-cms@1.10.0-rc.3...@twreporter/congress-dashboard-cms@1.10.0-rc.4) (2026-09-09)
 

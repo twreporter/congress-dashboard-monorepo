@@ -10,6 +10,7 @@ import {
   councilorIterator,
   councilTopicIterator,
   councilBillIterator,
+  councilSpeechIterator,
 } from './graphql'
 import {
   transferLegislatorModelToRecord,
@@ -18,6 +19,7 @@ import {
   transferCouncilorModelToRecord,
   transferCouncilTopicModelToRecord,
   transferCouncilBillModelToRecord,
+  transferCouncilSpeechModelToRecord,
 } from './transfer'
 import {
   uploadTopics,
@@ -26,6 +28,7 @@ import {
   uploadCouncilors,
   uploadCouncilTopics,
   uploadCouncilBills,
+  uploadCouncilSpeeches,
 } from './algolia'
 import { dryrunState } from './state/dryrun'
 import { councilNames, isValidCouncilName } from './council-config'
@@ -59,6 +62,8 @@ const defaultLegislators = envLegislators === 'true'
 const defaultSpeeches = envSpeeches === 'true'
 const defaultCouncilors = envCouncilors === 'true'
 const defaultCouncilTopics = envCouncilTopics === 'true'
+const defaultCouncilSpeeches =
+  process.env.LAWMAKER_COUNCIL_SPEECHES?.trim() === 'true'
 const defaultCouncilBills = envCouncilBills === 'true'
 const defaultDryrun = envDryrun !== 'false'
 
@@ -185,13 +190,18 @@ feedAlgolia
 
 feedAlgolia
   .command('council')
-  .description('Feed city council data (councilors, topics, bills)')
+  .description('Feed city council data (councilors, topics, speeches, bills)')
   .option(
     '--council-name <name>',
     `Specific council to update (${councilNames.join(
       ', '
     )}). Omit to update all six major cities`,
     envCouncilName
+  )
+  .option(
+    '--speech',
+    'Only update council speech records',
+    defaultCouncilSpeeches
   )
   .option('--councilor', 'Only update councilor records', defaultCouncilors)
   .option(
@@ -219,7 +229,10 @@ feedAlgolia
       }
 
       const executeAll =
-        !options.councilor && !options.councilTopic && !options.councilBill
+        !options.councilor &&
+        !options.councilTopic &&
+        !options.councilBill &&
+        !options.speech
 
       // Validate council name if provided
       if (options.councilName && !isValidCouncilName(options.councilName)) {
@@ -267,6 +280,14 @@ feedAlgolia
               console.log('Upload council topic records to Algolia.')
               await uploadCouncilTopics(topicRecords)
             }
+          }
+        }
+
+        if (options.speech || executeAll) {
+          console.log(`\n🔎 Fetching council speeches for ${councilName}`)
+          for await (const models of councilSpeechIterator(councilName)) {
+            const records = transferCouncilSpeechModelToRecord(models)
+            if (records.length > 0) await uploadCouncilSpeeches(records)
           }
         }
 

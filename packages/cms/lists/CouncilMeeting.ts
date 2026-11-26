@@ -22,6 +22,7 @@ const listConfigurations = list({
       label: '所屬縣市',
       options: CITY_OPTIONS,
       validation: { isRequired: true },
+      isIndexed: true,
     }),
     term: integer({
       label: '屆期',

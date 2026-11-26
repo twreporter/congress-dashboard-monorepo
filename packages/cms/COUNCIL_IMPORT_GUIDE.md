@@ -318,13 +318,13 @@
 | `slug` | ✅ | string | 逐字稿唯一識別碼；已存在時更新原資料 |
 | `councilMeeting_city` | ✅ | string | 議會所屬縣市，[見限制值](#縣市代碼-city) |
 | `councilMeeting_term` | ✅ | number | 逐字稿所屬議會屆期 |
-| `councilors` | ✅ | array | 議員陣列；每筆須包含 `slug`、`name`、`term` |
+| `councilors` | ❌ | array | 議員陣列，可省略或留空陣列；每筆須包含 `slug`、`name`、`term` |
 | `date` | ✅ | string | 日期（ISO 8601 格式） |
 | `title` | ✅ | string | 標題 |
 | `summary` | ❌ | JSON | 摘要 |
 | `content` | ✅ | JSON | 逐字稿內容 |
-| `attendee` | ❌ | string | 列席質詢對象 |
-| `source` | ❌ | string | 資料來源連結 |
+| `attendee` | ❌ | string | 列席質詢對象，最多 300 字 |
+| `source` | ❌ | string | 資料來源連結，最多 255 字 |
 | `relatedCouncilTopic_slug` | ❌ | string array | 相關縣市議題 slug 陣列 |
 
 每個 `councilors` 項目的 `term` 會和 `councilMeeting_city` 一起用來尋找該議員的屆資。
