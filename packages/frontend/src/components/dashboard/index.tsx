@@ -239,15 +239,17 @@ type DashboardProps = {
   }
   parties?: PartyData[]
   meetings?: LegislativeMeeting[]
+  initialTab?: Option
 }
 const Dashboard: React.FC<DashboardProps> = ({
   initialTopics = [],
   parties = [],
   meetings = [],
+  initialTab = Option.Issue,
 }) => {
   const windowWidth = useWindowWidth()
   const latestMeetingId = useMemo(() => meetings[0]?.id, [meetings])
-  const [selectedType, setSelectedType] = useState(Option.Issue)
+  const [selectedType, setSelectedType] = useState(initialTab)
   const [activeCardIndex, setActiveCardIndex] = useState(-1)
   const [isLoading, setIsLoading] = useState(false)
   const [topics, setTopics] = useState(initialTopics)

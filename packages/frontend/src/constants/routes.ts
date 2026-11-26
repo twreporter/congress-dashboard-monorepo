@@ -1,5 +1,6 @@
 export const InternalRoutes = {
-  Home: '/congress',
+  Home: '/',
+  Congress: '/congress',
   About: '/about',
   Legislator: '/congress/lawmaker',
   Topic: '/congress/topic',

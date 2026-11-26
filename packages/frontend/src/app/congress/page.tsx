@@ -11,13 +11,20 @@ import { getImageLink } from '@/fetchers/utils'
 // components
 import Open from '@/components/open'
 import Dashboard from '@/components/dashboard'
+import { Option } from '@/components/dashboard/enum'
 // lodash
 import { find } from 'lodash'
 const _ = {
   find,
 }
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>
+}) {
+  const { tab } = await searchParams
+  const initialTab = tab === 'legislator' ? Option.Human : Option.Issue
   const [selecteds, meetings] = await Promise.all([
     fetchEditorSelecteds(),
     fetchLegislativeMeeting(),
@@ -50,7 +57,12 @@ export default async function Home() {
   return (
     <div>
       <Open selecteds={selecteds} />
-      <Dashboard initialTopics={topics} parties={parties} meetings={meetings} />
+      <Dashboard
+        initialTopics={topics}
+        parties={parties}
+        meetings={meetings}
+        initialTab={initialTab}
+      />
     </div>
   )
 }

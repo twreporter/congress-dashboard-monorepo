@@ -25,13 +25,24 @@ import {
   TabletAndAbove,
 } from '@twreporter/react-components/lib/rwd'
 
-const Box = styled.div`
+const Box = styled.div<{ $backgroundImage?: string }>`
   width: -webkit-fill-available;
   padding: 72px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: ${colorGrayscale.gray200};
+  ${(props) =>
+    props.$backgroundImage
+      ? css`
+          background: linear-gradient(
+              0deg,
+              rgba(0, 0, 0, 0.6) 0%,
+              rgba(0, 0, 0, 0.6) 100%
+            ),
+            url(${props.$backgroundImage}) lightgray center / cover no-repeat;
+        `
+      : ''}
 
   ${mq.tabletOnly`
     padding: 56px 0;
@@ -40,10 +51,10 @@ const Box = styled.div`
     padding: 40px 24px;  
   `}
 `
-const Title = styled.div`
+const Title = styled.div<{ $textColor: string }>`
   font-size: 48px;
   text-align: center;
-  color: ${colorGrayscale.gray900};
+  color: ${(props) => props.$textColor};
 
   ${mq.tabletOnly`
     font-size: 36px;  
@@ -52,8 +63,8 @@ const Title = styled.div`
     font-size: 28px;  
   `}
 `
-const descriptionCss = css`
-  color: ${colorGrayscale.gray900};
+const descriptionCss = css<{ $textColor: string }>`
+  color: ${(props) => props.$textColor};
   margin-top: 24px;
   margin-bottom: 48px;
   text-align: center;
@@ -75,8 +86,12 @@ const SerifH4 = styled(H4)`
   // override H4 font-family
   font-family: ${notoSerif.style.fontFamily}!important;
 `
-const StyledSelected = styled(Selected)`
+const StyledSelected = styled(Selected)<{ $textColor: string }>`
   margin-top: 24px;
+
+  div {
+    color: ${(props) => props.$textColor};
+  }
 
   ${mq.mobileOnly`
     margin-top: 16px;
@@ -114,7 +129,8 @@ type OpenProps = {
 }
 const Open: React.FC<OpenProps> = ({ selecteds }) => {
   const pathname = usePathname()
-  const { title, description, badge } = getOpenConfig(pathname)
+  const { title, description, badge, backgroundImage, textColor } =
+    getOpenConfig(pathname)
 
   const descriptJSX = description.map((text, index) => (
     <SerifH4 text={text} key={`open-desc-${index}`} />
@@ -131,23 +147,27 @@ const Open: React.FC<OpenProps> = ({ selecteds }) => {
     }
   })
   return (
-    <Box>
-      <BadgeContainer>
-        <Badge
-          text={badge.text}
-          textColor={badge.textColor}
-          backgroundColor={badge.backgroundColor}
-        />
-      </BadgeContainer>
-      <Title className={notoSerif.className}>{title}</Title>
-      <Description>{descriptJSX}</Description>
-      <MobileDescription>
+    <Box $backgroundImage={backgroundImage}>
+      {badge ? (
+        <BadgeContainer>
+          <Badge
+            text={badge.text}
+            textColor={badge.textColor}
+            backgroundColor={badge.backgroundColor}
+          />
+        </BadgeContainer>
+      ) : null}
+      <Title className={notoSerif.className} $textColor={textColor}>
+        {title}
+      </Title>
+      <Description $textColor={textColor}>{descriptJSX}</Description>
+      <MobileDescription $textColor={textColor}>
         <SerifH4 text={description} />
       </MobileDescription>
       <InstantSearchContainer>
         <AlgoliaInstantSearch />
       </InstantSearchContainer>
-      <StyledSelected selecteds={selectedsWithPath} />
+      <StyledSelected selecteds={selectedsWithPath} $textColor={textColor} />
     </Box>
   )
 }
