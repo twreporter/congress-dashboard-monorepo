@@ -15,6 +15,12 @@ import type { EditorSelect } from '@/types/editor-pick'
 const isNewHomePageEnabled = () => process.env.NEW_HOME_PAGE === 'true'
 
 export default async function Home() {
+  // TODO: remove after verifying the value on Cloud Run
+  console.log(
+    'NEW_HOME_PAGE =',
+    process.env.NEW_HOME_PAGE,
+    typeof process.env.NEW_HOME_PAGE
+  )
   if (!isNewHomePageEnabled()) {
     // temporary redirect so browsers won't cache it once the toggle is on
     redirect(InternalRoutes.Congress)
