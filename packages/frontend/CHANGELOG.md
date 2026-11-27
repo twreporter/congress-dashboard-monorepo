@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0-beta.11](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.10...@twreporter/congress-dashboard-frontend@1.15.0-beta.11) (2026-11-27)
+
+### Bug Fixes
+
+- **frontend:** console log env const for test ([aac41bc](https://github.com/twreporter/congress-dashboard-monorepo/commit/aac41bc21d06af5907425e658ea423af1e4c1065))
+
 # [1.15.0-beta.10](https://github.com/twreporter/congress-dashboard-monorepo/compare/@twreporter/congress-dashboard-frontend@1.15.0-beta.9...@twreporter/congress-dashboard-frontend@1.15.0-beta.10) (2026-11-26)
 
 ### Bug Fixes
